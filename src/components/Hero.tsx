@@ -15,7 +15,7 @@ interface HeroProps {
 
 export default function Hero({ data }: HeroProps) {
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-leaf">
+    <section className="relative overflow-hidden rounded-2xl bg-plum">
       {/* Background image */}
       {data.heroImage && (
         <img
@@ -65,7 +65,7 @@ export default function Hero({ data }: HeroProps) {
             {data.primaryButton && (
               <Link
                 to={resolveLinkHref(data.primaryButton)}
-                className="rounded-full bg-grass px-6 py-3 font-heading text-sm font-semibold text-[hsl(var(--leaf))] shadow-lg transition-transform hover:scale-105"
+                className="rounded-full bg-ember px-6 py-3 font-heading text-sm font-semibold text-warm-cream shadow-lg transition-transform hover:scale-105"
               >
                 {data.primaryButton.label}
               </Link>

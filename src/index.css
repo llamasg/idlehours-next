@@ -6,51 +6,52 @@
 
 @layer base {
   :root {
-    /* Idle Hours — Warm editorial palette */
-    --background: 40 33% 97%;
-    --foreground: 183 32% 19%;
+    /* Idle Hours — Muted warm palette */
+    --background: 30 55% 90%;          /* #F4E7D6 warm cream */
+    --foreground: 262 24% 19%;         /* #30253E deep plum */
 
-    --card: 0 0% 100%;
-    --card-foreground: 183 32% 19%;
+    --card: 30 50% 95%;                /* slightly lighter than bg */
+    --card-foreground: 262 24% 19%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 183 32% 19%;
+    --popover: 30 50% 95%;
+    --popover-foreground: 262 24% 19%;
 
-    --primary: 83 89% 42%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 32 91% 49%;             /* #ED850F orange accent — sparingly */
+    --primary-foreground: 30 55% 95%;
 
-    --secondary: 40 20% 94%;
-    --secondary-foreground: 183 32% 19%;
+    --secondary: 18 87% 77%;           /* #F7B293 warm peach */
+    --secondary-foreground: 262 24% 19%;
 
-    --muted: 40 15% 92%;
-    --muted-foreground: 183 15% 45%;
+    --muted: 30 30% 86%;
+    --muted-foreground: 262 15% 42%;
 
-    --accent: 219 100% 63%;
+    --accent: 72 20% 55%;              /* #9BA475 olive green */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 88%;
-    --input: 40 15% 88%;
-    --ring: 83 89% 42%;
+    --border: 262 10% 78%;             /* muted plum border */
+    --input: 262 10% 78%;
+    --ring: 32 91% 49%;
 
     --radius: 1rem;
 
     /* Brand tokens */
-    --leaf: 183 32% 19%;
-    --grass: 83 89% 42%;
-    --bark: 18 43% 22%;
-    --idle-blue: 219 100% 63%;
+    --warm-cream: 30 55% 90%;
+    --peach: 18 87% 77%;
+    --plum: 262 24% 19%;
+    --olive: 72 20% 55%;
+    --ember: 32 91% 49%;
 
-    --sidebar-background: 183 32% 12%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 83 89% 42%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 183 25% 18%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 183 20% 24%;
-    --sidebar-ring: 83 89% 42%;
+    --sidebar-background: 262 24% 14%;
+    --sidebar-foreground: 30 55% 92%;
+    --sidebar-primary: 32 91% 49%;
+    --sidebar-primary-foreground: 30 55% 95%;
+    --sidebar-accent: 262 20% 22%;
+    --sidebar-accent-foreground: 30 55% 92%;
+    --sidebar-border: 262 15% 28%;
+    --sidebar-ring: 32 91% 49%;
   }
 }
 

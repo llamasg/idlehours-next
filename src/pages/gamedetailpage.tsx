@@ -156,7 +156,7 @@ export default function GameDetailPage() {
                   </div>
                 )}
                 {game.coop && (
-                  <span className="rounded-full bg-blue-50 px-3 py-1 font-heading text-xs font-medium text-idle-blue">
+                  <span className="rounded-full bg-blue-50 px-3 py-1 font-heading text-xs font-medium text-olive">
                     Co-op
                   </span>
                 )}
