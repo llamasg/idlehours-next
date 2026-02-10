@@ -1,0 +1,20 @@
+# Files and directories to exclude from deployment
+node_modules/
+src/
+.git/
+.gitignore
+.env
+.env.local
+*.log
+.DS_Store
+Thumbs.db
+*.md
+package.json
+package-lock.json
+tsconfig.json
+vite.config.ts
+deploy.sh
+deploy.ps1
+deploy.js
+.deploy-temp/
+cosyblog/

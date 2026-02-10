@@ -2,19 +2,21 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
-import {codeInput} from '@sanity/code-input' // ← Add this line
+import {codeInput} from '@sanity/code-input'
 
 export default defineConfig({
   name: 'default',
-  title: 'Cosyblog',
+  title: 'Idle Hours',
 
-  projectId: 'fwup7fag',
+  projectId: 'ijj3h2lj',
   dataset: 'production',
 
+  basePath: '/studio',
+
   plugins: [
-    structureTool(), 
+    structureTool(),
     visionTool(),
-    codeInput(), // ← Add this line
+    codeInput(),
   ],
 
   schema: {

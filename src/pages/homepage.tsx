@@ -1,17 +1,24 @@
-import ColorBends from '@/components/ColorBends';
+import Header from '@/components/Header'
+import SiteFooter from '@/components/SiteFooter'
+import SectionRenderer from '@/components/SectionRenderer'
+import { mockHomePage } from '@/data/mock-data'
+
+// In the future, this will fetch from Sanity CMS:
+//   const homePage = await getHomePage()
+// For now we use mock data.
 
 export default function HomePage() {
+  const homePage = mockHomePage
+
   return (
-    <div className="relative w-screen h-screen bg-black overflow-hidden">
-      {/* Background - positioned absolutely to cover entire area */}
-      <div className="absolute inset-0">
-        <ColorBends />
-      </div>
-      
-      {/* Content on top */}
-      <div className="relative z-10 w-full h-full flex items-center justify-center">
-        <h1 className="text-6xl text-white">Hello</h1>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <main className="mx-auto max-w-7xl space-y-10 px-4 py-8 lg:px-8 lg:py-12">
+        <SectionRenderer sections={homePage.sections} />
+      </main>
+
+      <SiteFooter />
     </div>
-  );
+  )
 }

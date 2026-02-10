@@ -3,7 +3,7 @@ import { useMouse } from 'react-use';
 
 export default function PortfolioHero() {
   const ref = useRef<HTMLDivElement>(null);
-  const { docX, docY } = useMouse(ref);
+  const { docX, docY } = useMouse(ref as React.RefObject<Element>);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [echoes, setEchoes] = useState<{ id: number; x: number; y: number }[]>([]);
   const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });

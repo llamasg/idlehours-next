@@ -63,15 +63,57 @@ export default defineType({
       initialValue: () => new Date().toISOString(),
     }),
     
-    // Categories/Tags
+    // Category (reference)
     defineField({
-      name: 'categories',
-      title: 'Categories',
+      name: 'category',
+      title: 'Category',
+      type: 'reference',
+      to: [{type: 'category'}],
+    }),
+
+    // Tags
+    defineField({
+      name: 'tags',
+      title: 'Tags',
       type: 'array',
       of: [{type: 'string'}],
-      options: {
-        layout: 'tags',
-      },
+      options: {layout: 'tags'},
+    }),
+
+    // Legacy categories field (kept for backward compatibility)
+    defineField({
+      name: 'categories',
+      title: 'Categories (legacy)',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {layout: 'tags'},
+      hidden: true,
+    }),
+
+    // Read Time
+    defineField({
+      name: 'readTime',
+      title: 'Read Time (minutes)',
+      type: 'number',
+      validation: (Rule) => Rule.min(1).max(60),
+    }),
+
+    // Featured
+    defineField({
+      name: 'featured',
+      title: 'Featured Post',
+      type: 'boolean',
+      initialValue: false,
+    }),
+
+    // Excerpt
+    defineField({
+      name: 'excerpt',
+      title: 'Excerpt',
+      type: 'text',
+      rows: 3,
+      description: 'Short summary for cards and SEO. Falls back to subheader if empty.',
+      validation: (Rule) => Rule.max(300),
     }),
     
     // Main Content Body
@@ -281,9 +323,112 @@ export default defineType({
             },
           ],
         },
+
+        // Affiliate CTA
+        {
+          type: 'object',
+          name: 'affiliateCTA',
+          title: 'Affiliate CTA',
+          fields: [
+            {
+              name: 'buttonText',
+              type: 'string',
+              title: 'Button Text',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'url',
+              type: 'url',
+              title: 'Affiliate URL',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'disclaimer',
+              type: 'text',
+              title: 'Disclaimer Text',
+              rows: 2,
+              initialValue: 'This is an affiliate link. We may earn a commission at no extra cost to you.',
+            },
+          ],
+          preview: {
+            select: {
+              buttonText: 'buttonText',
+            },
+            prepare({buttonText}) {
+              return {
+                title: `🔗 Affiliate CTA: ${buttonText}`,
+              }
+            },
+          },
+        },
+
+        // Product Callout
+        {
+          type: 'object',
+          name: 'productCallout',
+          title: 'Product Callout',
+          fields: [
+            {
+              name: 'product',
+              type: 'reference',
+              to: [{type: 'product'}],
+              title: 'Product',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'verdict',
+              type: 'text',
+              title: 'Quick Verdict',
+              rows: 2,
+              description: '1-2 sentence recommendation',
+            },
+            {
+              name: 'customBadge',
+              type: 'string',
+              title: 'Custom Badge',
+              description: 'Override product badge (optional)',
+              options: {
+                list: [
+                  {title: 'Best Overall', value: 'Best Overall'},
+                  {title: 'Best Budget', value: 'Best Budget'},
+                  {title: 'Runner-up', value: 'Runner-up'},
+                  {title: 'Best Value', value: 'Best Value'},
+                ],
+              },
+            },
+          ],
+          preview: {
+            select: {
+              productName: 'product.name',
+            },
+            prepare({productName}) {
+              return {
+                title: `📦 Product: ${productName || 'Select product'}`,
+              }
+            },
+          },
+        },
       ],
     }),
-    
+
+    // Related Products
+    defineField({
+      name: 'relatedProducts',
+      title: 'Related Products',
+      type: 'array',
+      of: [{type: 'reference', to: [{type: 'product'}]}],
+      description: 'Products mentioned or recommended in this post',
+    }),
+
+    // Affiliate Disclosure
+    defineField({
+      name: 'affiliateDisclosureRequired',
+      title: 'Show Affiliate Disclosure',
+      type: 'boolean',
+      description: 'Display affiliate disclosure banner on this post',
+      initialValue: false,
+    }),
+
     // SEO Section
     defineField({
       name: 'seo',

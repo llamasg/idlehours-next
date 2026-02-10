@@ -2,16 +2,22 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getPost } from '@/lib/queries'
+import { getPost, getAllPosts } from '@/lib/queries'
 import { PortableText } from '@portabletext/react'
+import Header from '@/components/Header'
+import SiteFooter from '@/components/SiteFooter'
 import { urlFor } from '@/lib/sanity'
-
-// Replace your SocialShare function with this:
+import DisclosureBanner from '@/components/DisclosureBanner'
+import AffiliateCTA from '@/components/AffiliateCTA'
+import ProductCallout from '@/components/ProductCallout'
+import { motion } from 'framer-motion'
 
 
 // Custom components for Portable Text
 const components = {
   types: {
+    affiliateCTA: ({ value }: any) => <AffiliateCTA value={value} />,
+    productCallout: ({ value }: any) => <ProductCallout value={value} />,
     inlineImage: ({ value }: any) => (
       <figure className="my-8">
         <img
@@ -20,7 +26,7 @@ const components = {
           className="w-full rounded-xl"
         />
         {value.caption && (
-          <figcaption className="text-center text-gray-500 mt-3 text-sm italic">
+          <figcaption className="text-center text-muted-foreground mt-3 text-sm italic">
             {value.caption}
           </figcaption>
         )}
@@ -52,21 +58,21 @@ const components = {
     codeBlock: ({ value }: any) => (
       <div className="my-8">
         {value.filename && (
-          <div className="bg-gray-800 px-4 py-2 rounded-t-xl text-gray-400 text-sm font-mono border-b border-gray-700">
+          <div className="bg-muted px-4 py-2 rounded-t-xl text-muted-foreground text-sm font-mono border-b border-border">
             {value.filename}
           </div>
         )}
-        <pre className={`bg-gray-900 p-4 ${value.filename ? 'rounded-b-xl' : 'rounded-xl'} overflow-x-auto`}>
-          <code className="text-green-400 text-sm font-mono">{value.code}</code>
+        <pre className={`bg-muted p-4 ${value.filename ? 'rounded-b-xl' : 'rounded-xl'} overflow-x-auto`}>
+          <code className="text-primary text-sm font-mono">{value.code}</code>
         </pre>
       </div>
     ),
     
     callout: ({ value }: any) => {
       const styles = {
-        info: 'bg-blue-500/10 border-blue-500 text-blue-400',
+        info: 'bg-accent/10 border-accent text-accent',
         warning: 'bg-yellow-500/10 border-yellow-500 text-yellow-400',
-        success: 'bg-green-500/10 border-green-500 text-green-400',
+        success: 'bg-green-500/10 border-green-500 text-primary',
         error: 'bg-red-500/10 border-red-500 text-red-400',
       }
       
@@ -92,30 +98,30 @@ const components = {
     
     divider: ({ value }: any) => {
       if (value.style === 'dots') {
-        return <div className="text-center text-gray-600 text-2xl my-12">• • •</div>
+        return <div className="text-center text-muted-foreground text-2xl my-12">• • •</div>
       }
       if (value.style === 'stars') {
-        return <div className="text-center text-gray-600 text-2xl my-12">✦ ✦ ✦</div>
+        return <div className="text-center text-muted-foreground text-2xl my-12">✦ ✦ ✦</div>
       }
-      return <hr className="border-gray-800 my-12" />
+      return <hr className="border-border my-12" />
     },
   },
   
   block: {
     h2: ({ children }: any) => (
-      <h2 className="text-4xl font-bold text-white mt-12 mb-6">{children}</h2>
+      <h2 className="text-4xl font-bold text-foreground mt-12 mb-6">{children}</h2>
     ),
     h3: ({ children }: any) => (
-      <h3 className="text-3xl font-bold text-white mt-10 mb-5">{children}</h3>
+      <h3 className="text-3xl font-bold text-foreground mt-10 mb-5">{children}</h3>
     ),
     h4: ({ children }: any) => (
-      <h4 className="text-2xl font-bold text-white mt-8 mb-4">{children}</h4>
+      <h4 className="text-2xl font-bold text-foreground mt-8 mb-4">{children}</h4>
     ),
     normal: ({ children }: any) => (
-      <p className="text-gray-300 text-lg leading-relaxed mb-6">{children}</p>
+      <p className="text-muted-foreground text-lg leading-relaxed mb-6">{children}</p>
     ),
     blockquote: ({ children }: any) => (
-      <blockquote className="border-l-4 border-blue-500 pl-6 py-2 italic text-gray-400 text-xl my-8 bg-blue-500/5 rounded-r">
+      <blockquote className="border-l-4 border-accent pl-6 py-2 italic text-muted-foreground text-xl my-8 bg-accent/5 rounded-r">
         {children}
       </blockquote>
     ),
@@ -123,12 +129,12 @@ const components = {
   
   list: {
     bullet: ({ children }: any) => (
-      <ul className="list-disc list-outside text-gray-300 space-y-3 mb-6 ml-6 text-lg">
+      <ul className="list-disc list-outside text-muted-foreground space-y-3 mb-6 ml-6 text-lg">
         {children}
       </ul>
     ),
     number: ({ children }: any) => (
-      <ol className="list-decimal list-outside text-gray-300 space-y-3 mb-6 ml-6 text-lg">
+      <ol className="list-decimal list-outside text-muted-foreground space-y-3 mb-6 ml-6 text-lg">
         {children}
       </ol>
     ),
@@ -136,13 +142,13 @@ const components = {
   
   marks: {
     strong: ({ children }: any) => (
-      <strong className="font-bold text-white">{children}</strong>
+      <strong className="font-bold text-foreground">{children}</strong>
     ),
     em: ({ children }: any) => (
       <em className="italic">{children}</em>
     ),
     code: ({ children }: any) => (
-      <code className="bg-gray-800 px-2 py-1 rounded text-green-400 text-base font-mono">
+      <code className="bg-muted px-2 py-1 rounded text-primary text-base font-mono">
         {children}
       </code>
     ),
@@ -157,7 +163,7 @@ const components = {
        <a href={value.href}
         target={value.blank ? '_blank' : '_self'}
         rel={value.blank ? 'noopener noreferrer' : undefined}
-        className="text-blue-400 hover:text-blue-300 underline decoration-blue-400/30 hover:decoration-blue-300 transition-colors"
+        className="text-accent hover:text-accent underline decoration-accent/30 hover:decoration-accent transition-colors"
       >
         {children}
       </a>
@@ -168,6 +174,7 @@ const components = {
 export default function BlogPostPage() {
   const { slug } = useParams()
   const [post, setPost] = useState<any>(null)
+  const [otherPosts, setOtherPosts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -176,22 +183,29 @@ export default function BlogPostPage() {
         setPost(data)
         setLoading(false)
       })
+
+      // Fetch other recent posts
+      getAllPosts().then((posts) => {
+        // Filter out current post and take first 4
+        const filtered = posts.filter((p: any) => p.slug.current !== slug).slice(0, 4)
+        setOtherPosts(filtered)
+      })
     }
   }, [slug])
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <p className="text-white text-2xl animate-pulse">Loading post...</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-foreground text-2xl animate-pulse">Loading post...</p>
       </div>
     )
   }
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-4">
-        <p className="text-white text-2xl">Post not found</p>
-        <Link to="/blog" className="text-blue-400 hover:text-blue-300 underline">
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+        <p className="text-foreground text-2xl">Post not found</p>
+        <Link to="/blog" className="text-accent hover:text-accent underline">
           ← Back to blog
         </Link>
       </div>
@@ -199,7 +213,9 @@ export default function BlogPostPage() {
   }
 
   return (
-    <article className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background">
+      <Header />
+      <article>
       {/* Header Image */}
       <div className="relative h-[70vh] w-full">
         <img
@@ -212,7 +228,7 @@ export default function BlogPostPage() {
         {/* Back Button */}
         <Link
           to="/blog"
-          className="absolute top-8 left-8 bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-lg hover:bg-black/70 transition-colors flex items-center gap-2"
+          className="absolute top-8 left-8 bg-background/50 backdrop-blur-sm text-foreground px-4 py-2 rounded-lg hover:bg-background/70 transition-colors flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -229,7 +245,7 @@ export default function BlogPostPage() {
             {post.categories.map((cat: string) => (
               <span
                 key={cat}
-                className="bg-blue-500/20 text-blue-400 px-4 py-2 rounded-full text-sm border border-blue-500/30 backdrop-blur-sm"
+                className="bg-accent/20 text-accent px-4 py-2 rounded-full text-sm border border-accent/30 backdrop-blur-sm"
               >
                 {cat}
               </span>
@@ -238,18 +254,18 @@ export default function BlogPostPage() {
         )}
 
         {/* Title */}
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
           {post.title}
         </h1>
 
         {/* Subheader */}
-        <p className="text-2xl md:text-3xl text-gray-400 mb-8 leading-relaxed">
+        <p className="text-2xl md:text-3xl text-muted-foreground mb-8 leading-relaxed">
           {post.subheader}
         </p>
 
         {/* Meta */}
-        <div className="flex items-center gap-4 text-gray-500 mb-8 pb-8 border-b border-gray-800">
-          <span className="text-white font-medium">{post.author}</span>
+        <div className="flex items-center gap-4 text-muted-foreground mb-8 pb-8 border-b border-border">
+          <span className="text-foreground font-medium">{post.author}</span>
           <span>•</span>
           <span>
             {new Date(post.publishedAt).toLocaleDateString('en-US', {
@@ -260,18 +276,60 @@ export default function BlogPostPage() {
           </span>
         </div>
 
+        {/* Affiliate Disclosure */}
+        {post.affiliateDisclosureRequired && <DisclosureBanner />}
+
         {/* Body Content */}
         <div className="prose prose-invert max-w-none">
           <PortableText value={post.body} components={components} />
         </div>
 
-       
+        {/* Other Blogs */}
+        {otherPosts.length > 0 && (
+          <div className="mt-16 pt-12 border-t border-border">
+            <h2 className="mb-6 font-heading text-2xl font-bold text-foreground">
+              Other Blogs You Might Like
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {otherPosts.map((otherPost: any) => (
+                <Link key={otherPost._id} to={`/blog/${otherPost.slug.current}`}>
+                  <motion.article
+                    whileHover={{ y: -4, boxShadow: "0 8px 30px hsl(210 100% 50% / 0.12)" }}
+                    transition={{ duration: 0.2 }}
+                    className="group overflow-hidden rounded-2xl border border-border/40 bg-card"
+                  >
+                    <div className="aspect-[16/10] w-full bg-gradient-to-br from-secondary via-card to-secondary">
+                      {otherPost.headerImage && (
+                        <img
+                          src={otherPost.headerImage}
+                          alt={otherPost.title}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        />
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="mb-2 font-heading text-sm font-bold leading-snug text-foreground line-clamp-2 group-hover:text-primary">
+                        {otherPost.title}
+                      </h3>
+                      <p className="mb-3 text-xs leading-relaxed text-muted-foreground line-clamp-2">
+                        {otherPost.subheader}
+                      </p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {otherPost.author}
+                      </p>
+                    </div>
+                  </motion.article>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Back to Blog Link */}
         <div className="mt-12 text-center">
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors text-lg"
+            className="inline-flex items-center gap-2 text-accent hover:text-accent transition-colors text-lg"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -281,5 +339,7 @@ export default function BlogPostPage() {
         </div>
       </div>
     </article>
+      <SiteFooter />
+    </div>
   )
 }

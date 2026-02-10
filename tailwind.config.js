@@ -55,6 +55,11 @@ export default {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
+  			// Idle Hours brand tokens
+  			leaf: 'hsl(var(--leaf))',
+  			grass: 'hsl(var(--grass))',
+  			bark: 'hsl(var(--bark))',
+  			'idle-blue': 'hsl(var(--idle-blue))',
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',
