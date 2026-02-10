@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import SectionRenderer from '@/components/SectionRenderer'
+import HomeLoader from '@/components/HomeLoader'
 import { mockHomePage } from '@/data/mock-data'
 
 // In the future, this will fetch from Sanity CMS:
@@ -9,16 +11,21 @@ import { mockHomePage } from '@/data/mock-data'
 
 export default function HomePage() {
   const homePage = mockHomePage
+  const [loading, setLoading] = useState(true)
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <>
+      {loading && <HomeLoader onComplete={() => setLoading(false)} />}
 
-      <main className="mx-auto max-w-7xl space-y-10 px-4 py-8 lg:px-8 lg:py-12">
-        <SectionRenderer sections={homePage.sections} />
-      </main>
+      <div className="min-h-screen bg-background">
+        <Header />
 
-      <SiteFooter />
-    </div>
+        <main className="mx-auto max-w-7xl space-y-10 px-4 py-8 lg:px-8 lg:py-12">
+          <SectionRenderer sections={homePage.sections} />
+        </main>
+
+        <SiteFooter />
+      </div>
+    </>
   )
 }

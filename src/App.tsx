@@ -2,6 +2,7 @@
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ClickSpark from '@/components/ClickSpark';
+import CdPlayer from '@/components/CdPlayer';
 import HomePage from '@/pages/homepage';
 import GamesPage from '@/pages/gamespage';
 import GameDetailPage from '@/pages/gamedetailpage';
@@ -26,6 +27,7 @@ function App() {
       duration={400}
     >
       <BrowserRouter>
+        <CdPlayer />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/games" element={<GamesPage />} />

@@ -151,7 +151,7 @@ export default function GameDetailPage() {
                 )}
                 {game.ratings?.snackSafe && (
                   <div className="flex items-center gap-1.5" title="Snack Safe">
-                    <Pizza size={18} className="text-orange-400 fill-orange-400/20" strokeWidth={2} />
+                    <Pizza size={18} className="text-olive fill-olive/20" strokeWidth={2} />
                     <span className="font-heading text-sm text-muted-foreground">Snack Safe</span>
                   </div>
                 )}
@@ -208,7 +208,7 @@ export default function GameDetailPage() {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 font-heading text-sm font-semibold text-primary-foreground transition-transform hover:scale-105"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 font-heading text-sm font-semibold text-white transition-transform hover:scale-105"
                     >
                       {link.label}
                       <ExternalLink size={12} />

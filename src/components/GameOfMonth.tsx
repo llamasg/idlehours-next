@@ -82,7 +82,7 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
               )}
               {game.ratings?.snackSafe && (
                 <div className="flex items-center gap-1" title="Snack Safe">
-                  <Pizza size={16} className="text-orange-400 fill-orange-400/20" strokeWidth={2} />
+                  <Pizza size={16} className="text-olive fill-olive/20" strokeWidth={2} />
                   <span className="font-heading text-xs text-muted-foreground">Snack Safe</span>
                 </div>
               )}
@@ -108,7 +108,7 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
             {/* CTA */}
             <Link
               to={gameLink}
-              className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-primary px-5 py-2.5 font-heading text-sm font-semibold text-primary-foreground transition-transform hover:scale-105"
+              className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-2.5 font-heading text-sm font-semibold text-white transition-transform hover:scale-105"
             >
               {data.buttonLabel || 'Read more'}
               <ArrowRight size={14} />

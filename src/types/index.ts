@@ -149,6 +149,16 @@ export interface NewsletterSection {
   disclaimer?: string
 }
 
+// ─── Music Track ─────────────────────────────────────
+export interface MusicTrack {
+  _id: string
+  title: string
+  artist: string
+  audioUrl: string
+  coverArt?: string
+  order?: number
+}
+
 export type HomepageSection =
   | HeroSection
   | CarouselRowSection

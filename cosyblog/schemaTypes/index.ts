@@ -6,6 +6,7 @@ import product from './product'
 import quiz from './quiz'
 import promoBanner from './promoBanner'
 import game from './game'
+import musicTrack from './musicTrack'
 import siteSettings from './siteSettings'
 import {homePageSchemas} from './homePage'
 
@@ -17,6 +18,7 @@ export const schemaTypes = [
   product,
   game,
   quiz,
+  musicTrack,
   siteSettings,
   promoBanner,
   // Content types
