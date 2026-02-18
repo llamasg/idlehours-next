@@ -1,0 +1,60 @@
+name: Pip — Nightly Job
+
+on:
+  schedule:
+    # Runs at midnight UK time (1am in summer due to BST, adjust if needed)
+    # Cron is in UTC: midnight UTC = midnight GMT (winter) / 11pm GMT (summer)
+    - cron: '0 0 * * *'
+
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (generate but do not write to Sanity)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  pip-nightly:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: pip/package-lock.json
+
+      - name: Install Pip dependencies
+        run: |
+          cd pip
+          npm ci
+
+      - name: Run Pip
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+          SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
+          SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          SEARCH_CONSOLE_SITE_URL: ${{ secrets.SEARCH_CONSOLE_SITE_URL }}
+          PIP_ACTIVE_CLUSTER: ${{ secrets.PIP_ACTIVE_CLUSTER }}
+          PIP_DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          cd pip
+          node index.js
+
+      - name: Report result
+        if: always()
+        run: |
+          echo "Pip run completed at $(date)"
+          echo "Status: ${{ job.status }}"

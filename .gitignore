@@ -24,3 +24,18 @@ un-un-un-dashboard-main
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files — NEVER commit these
+.env
+.env.production
+.secrets
+
+# Build output
+.sanity/
+
+# OS
+Thumbs.db
+
+# Pip backend — Google service account key
+pip/google-service-account.json
+google-service-account.json
