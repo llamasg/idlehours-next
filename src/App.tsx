@@ -16,11 +16,12 @@ import ContactPage from '@/pages/contactpage';
 import DisclosurePage from '@/pages/disclosurepage';
 import PrivacyPage from '@/pages/privacypage';
 import NotFoundPage from '@/pages/notfoundpage';
+import PipApp from '@/pip/PipApp';
 
 function App() {
   return (
     <ClickSpark
-      sparkColor="#ED850F"
+      sparkColor="#c95d0d"
       sparkSize={10}
       sparkRadius={15}
       sparkCount={8}
@@ -41,6 +42,7 @@ function App() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/disclosure" element={<DisclosurePage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/pip/*" element={<PipApp />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

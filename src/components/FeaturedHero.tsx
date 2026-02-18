@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import type { Post } from "@/data/mock-data";
+import type { Post } from "@/types";
 
 interface FeaturedHeroProps {
   post: Post;

@@ -38,9 +38,11 @@ export interface Post {
   slug: { current: string }
   excerpt: string
   mainImage?: string
-  category?: { _id: string; title: string; slug: { current: string } }
+  coverImageUrl?: string
+  category?: any
   tags: string[]
   readTime: number
+  readingTime?: number
   featured: boolean
   publishedAt: string
   author?: string
@@ -53,9 +55,14 @@ export interface Product {
   slug?: { current: string }
   image?: string
   shortDescription: string
+  shortBlurb?: string
   price?: string
+  priceNote?: string
+  badge?: string
   retailerName?: string
   affiliateUrl: string
+  etsyUrl?: string
+  category?: string
   tags: string[]
   featured: boolean
 }
@@ -147,6 +154,24 @@ export interface NewsletterSection {
   placeholderText: string
   buttonLabel: string
   disclaimer?: string
+}
+
+// ─── Quiz ────────────────────────────────────────────
+export interface Quiz {
+  id: string
+  title: string
+  description: string
+  questionCount: number
+  emoji?: string
+  coverImage?: string
+  slug?: { current: string }
+}
+
+// ─── PokemonNominee ──────────────────────────────────
+export interface PokemonNominee {
+  name: string
+  votes: number
+  typeColor: string
 }
 
 // ─── Music Track ─────────────────────────────────────

@@ -128,7 +128,7 @@ export default function GamesPage() {
               onClick={() => setCoopOnly(!coopOnly)}
               className={`rounded-full border px-3 py-1 font-heading text-xs font-medium transition-colors ${
                 coopOnly
-                  ? 'border-olive bg-olive text-white'
+                  ? 'border-accent-green bg-accent-green text-white'
                   : 'border-border bg-card text-muted-foreground hover:bg-secondary'
               }`}
             >

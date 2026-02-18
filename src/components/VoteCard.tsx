@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 import { motion } from "framer-motion";
-import type { PokemonNominee } from "@/data/mock-data";
+import type { PokemonNominee } from "@/types";
 
 interface VoteCardProps {
   nominees: PokemonNominee[];

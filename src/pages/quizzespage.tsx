@@ -4,7 +4,7 @@ import SiteFooter from "@/components/SiteFooter";
 import QuizCard from "@/components/QuizCard";
 import { motion } from "framer-motion";
 import { getAllQuizzes } from "@/lib/queries";
-import type { Quiz } from "@/data/mock-data";
+import type { Quiz } from "@/types";
 
 const sectionVariant = {
   hidden: { opacity: 0, y: 16 },

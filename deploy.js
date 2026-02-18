@@ -2,7 +2,8 @@
 
 /**
  * Hostinger FTP Deployment Script
- * Uploads site and studio to Hostinger with proper mirroring
+ * Builds and uploads site + Sanity Studio to Hostinger via FTP
+ * Usage: node deploy.js [all|site|studio]
  */
 
 import { existsSync, readdirSync, statSync } from 'fs';
@@ -13,15 +14,16 @@ import readline from 'readline';
 const config = {
   host: '77.37.37.242',
   port: 21,
-  user: 'u289779063.paleturquoise-crow-983526.hostingersite.com',
+  user: 'u289779063.AlfieJE',
+  siteUrl: 'https://idlehours.co.uk',
   paths: {
     site: {
       local: 'dist',
-      remote: '/public_html',
+      remote: '/',        // FTP root maps to public_html
     },
     studio: {
       local: 'cosyblog/dist',
-      remote: '/public_html/studio',
+      remote: '/studio',
     },
   },
 };
@@ -37,43 +39,32 @@ function askQuestion(query) {
 
 // Preflight checks
 function preflightChecks(deployTarget = 'all') {
-  console.log('🔍 Running preflight checks...\n');
+  console.log('Running preflight checks...\n');
 
   const checks = [];
 
   if (deployTarget === 'all' || deployTarget === 'site') {
-    // Check site build
-    if (!existsSync('dist')) {
-      console.error('❌ dist/ directory not found');
-      checks.push(false);
-    } else if (!existsSync('dist/index.html')) {
-      console.error('❌ dist/index.html not found');
-      checks.push(false);
-    } else if (!existsSync('dist/assets')) {
-      console.error('❌ dist/assets/ directory not found');
+    if (!existsSync('dist') || !existsSync('dist/index.html') || !existsSync('dist/assets')) {
+      console.error('  FAIL: dist/ build not found or incomplete');
       checks.push(false);
     } else {
       const assets = readdirSync('dist/assets').filter(f => f.endsWith('.js'));
       if (assets.length === 0) {
-        console.error('❌ No .js files found in dist/assets/');
+        console.error('  FAIL: No .js files in dist/assets/');
         checks.push(false);
       } else {
-        console.log('✅ Site build verified (index.html + assets)');
+        console.log('  OK: Site build verified (index.html + assets)');
         checks.push(true);
       }
     }
   }
 
   if (deployTarget === 'all' || deployTarget === 'studio') {
-    // Check studio build
-    if (!existsSync('cosyblog/dist')) {
-      console.error('❌ cosyblog/dist/ directory not found');
-      checks.push(false);
-    } else if (!existsSync('cosyblog/dist/index.html')) {
-      console.error('❌ cosyblog/dist/index.html not found');
+    if (!existsSync('cosyblog/dist') || !existsSync('cosyblog/dist/index.html')) {
+      console.error('  FAIL: cosyblog/dist/ build not found');
       checks.push(false);
     } else {
-      console.log('✅ Studio build verified');
+      console.log('  OK: Studio build verified');
       checks.push(true);
     }
   }
@@ -81,17 +72,16 @@ function preflightChecks(deployTarget = 'all') {
   console.log('');
 
   if (checks.includes(false)) {
-    console.error('❌ Preflight checks failed. Run "npm run build:all" first.\n');
+    console.error('Preflight failed. Run "npm run build:all" first.\n');
     process.exit(1);
   }
 
-  console.log('✅ All preflight checks passed!\n');
+  console.log('All checks passed!\n');
 }
 
 // Recursively get all files in a directory
 function getAllFiles(dirPath, arrayOfFiles = []) {
   const files = readdirSync(dirPath);
-
   files.forEach(file => {
     const filePath = join(dirPath, file);
     if (statSync(filePath).isDirectory()) {
@@ -100,25 +90,12 @@ function getAllFiles(dirPath, arrayOfFiles = []) {
       arrayOfFiles.push(filePath);
     }
   });
-
   return arrayOfFiles;
 }
 
-// Clear remote directory
-async function clearRemoteDirectory(client, remotePath) {
-  try {
-    console.log(`🗑️  Clearing ${remotePath}...`);
-    await client.removeDir(remotePath);
-    await client.ensureDir(remotePath);
-  } catch (err) {
-    // Directory might not exist, that's fine
-    await client.ensureDir(remotePath);
-  }
-}
-
-// Upload directory with progress
+// Upload directory with progress (overwrites existing files, no clearing)
 async function uploadDirectory(client, localPath, remotePath, label) {
-  console.log(`📤 Uploading ${label}...`);
+  console.log(`Uploading ${label}...`);
 
   const files = getAllFiles(localPath);
   const total = files.length;
@@ -126,132 +103,92 @@ async function uploadDirectory(client, localPath, remotePath, label) {
 
   for (const localFile of files) {
     const relativePath = relative(localPath, localFile).replace(/\\/g, '/');
-    const remoteFile = `${remotePath}/${relativePath}`;
+    const remoteFile = remotePath === '/'
+      ? `/${relativePath}`
+      : `${remotePath}/${relativePath}`;
 
     // Ensure remote directory exists
     const remoteDir = remoteFile.substring(0, remoteFile.lastIndexOf('/'));
-    await client.ensureDir(remoteDir);
+    if (remoteDir) {
+      await client.ensureDir(remoteDir);
+    }
 
-    // Upload file
+    // Upload file (overwrites if exists)
     await client.uploadFrom(localFile, remoteFile);
 
     uploaded++;
     const percent = Math.round((uploaded / total) * 100);
-    process.stdout.write(`\r   Progress: ${uploaded}/${total} files (${percent}%)   `);
+    process.stdout.write(`\r   ${uploaded}/${total} files (${percent}%)   `);
   }
 
-  console.log('\n');
+  console.log(`\n   Done: ${total} files uploaded.\n`);
 }
 
 async function deploy(target = 'all') {
-  const deployBoth = target === 'all';
-
-  console.log(`🚀 Starting FTP deployment to Hostinger...\n`);
+  console.log(`\n=== FTP Deploy to Hostinger (${target}) ===\n`);
 
   // Run preflight checks
   preflightChecks(target);
 
   // Get password
-  const password = await askQuestion('Enter FTP password: ');
+  const password = await askQuestion('FTP password: ');
   console.log('');
   rl.close();
 
-  // Connect
   const client = new ftp.Client();
   client.ftp.verbose = false;
 
   try {
-    console.log('🔌 Connecting to Hostinger FTP...');
+    console.log('Connecting to Hostinger FTP...');
     await client.access({
       host: config.host,
       port: config.port,
       user: config.user,
       password: password,
-      secure: false,
+      secure: true,
+      secureOptions: { rejectUnauthorized: false },
     });
-    console.log('✅ Connected successfully!\n');
+    console.log('Connected!\n');
 
     // Deploy site
-    if (deployBoth || target === 'site') {
-      await clearRemoteDirectory(client, config.paths.site.remote);
+    if (target === 'all' || target === 'site') {
       await uploadDirectory(
         client,
         config.paths.site.local,
         config.paths.site.remote,
-        'Site (dist → /public_html)'
+        'Site (dist -> /)'
       );
     }
 
     // Deploy studio
-    if (deployBoth || target === 'studio') {
-      await clearRemoteDirectory(client, config.paths.studio.remote);
+    if (target === 'all' || target === 'studio') {
       await uploadDirectory(
         client,
         config.paths.studio.local,
         config.paths.studio.remote,
-        'Studio (cosyblog/dist → /public_html/studio)'
+        'Studio (cosyblog/dist -> /studio)'
       );
     }
 
-    // Verify deployment
-    console.log('🔍 Verifying deployment...\n');
-
-    const verifications = [];
-
-    if (deployBoth || target === 'site') {
-      try {
-        await client.size('/public_html/index.html');
-        console.log('✅ Site: index.html uploaded');
-        verifications.push(true);
-      } catch {
-        console.log('❌ Site: index.html missing!');
-        verifications.push(false);
-      }
+    console.log('=== Deployment complete! ===\n');
+    if (target === 'all' || target === 'site') {
+      console.log(`  Site:   ${config.siteUrl}`);
     }
-
-    if (deployBoth || target === 'studio') {
-      try {
-        await client.size('/public_html/studio/index.html');
-        console.log('✅ Studio: index.html uploaded');
-
-        const indexContent = await client.downloadTo(Buffer.alloc(0), '/public_html/studio/index.html');
-        const hasCorrectPaths = indexContent.toString().includes('/studio/static/');
-        if (hasCorrectPaths) {
-          console.log('✅ Studio: paths are correct (/studio/static/)');
-          verifications.push(true);
-        } else {
-          console.log('⚠️  Studio: paths may be incorrect');
-          verifications.push(false);
-        }
-      } catch {
-        console.log('❌ Studio: index.html missing!');
-        verifications.push(false);
-      }
-    }
-
-    console.log('');
-    if (verifications.includes(false)) {
-      console.log('⚠️  Some verification checks failed. Please review.\n');
-    }
-
-    console.log('✅ Deployment complete!\n');
-    console.log('🌐 Site: https://paleturquoise-crow-983526.hostingersite.com');
-    if (deployBoth || target === 'studio') {
-      console.log('🎨 Studio: https://paleturquoise-crow-983526.hostingersite.com/studio');
+    if (target === 'all' || target === 'studio') {
+      console.log(`  Studio: ${config.siteUrl}/studio`);
     }
     console.log('');
 
   } catch (err) {
-    console.error('\n❌ Deployment failed:', err.message);
+    console.error('\nDeployment failed:', err.message);
     process.exit(1);
   } finally {
     client.close();
   }
 }
 
-// Parse command line args
-const args = process.argv.slice(2);
-const target = args[0] || 'all'; // 'all', 'site', or 'studio'
+// Parse CLI args
+const target = process.argv[2] || 'all';
 
 if (!['all', 'site', 'studio'].includes(target)) {
   console.error('Usage: node deploy.js [all|site|studio]');

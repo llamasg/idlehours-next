@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import type { Post } from "@/data/mock-data";
+import type { Post } from "@/types";
 
 interface ArticleCardProps {
   post: Post;

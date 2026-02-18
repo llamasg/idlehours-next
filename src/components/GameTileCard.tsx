@@ -55,7 +55,7 @@ export default function GameTileCard({ game }: GameTileCardProps) {
 
           {/* Co-op badge */}
           {game.coop && (
-            <div className="absolute right-2 top-2 rounded-full bg-olive px-2 py-0.5 font-heading text-[10px] font-semibold text-white shadow">
+            <div className="absolute right-2 top-2 rounded-full bg-accent-green px-2 py-0.5 font-heading text-[10px] font-semibold text-white shadow">
               Co-op
             </div>
           )}
@@ -73,7 +73,7 @@ export default function GameTileCard({ game }: GameTileCardProps) {
               <BrainMeter level={game.ratings.brainEffort} />
             )}
             {game.ratings?.snackSafe && (
-              <Pizza size={15} className="text-olive fill-olive/20" strokeWidth={2} title="Snack Safe" />
+              <Pizza size={15} className="text-accent-green fill-accent-green/20" strokeWidth={2} />
             )}
           </div>
 

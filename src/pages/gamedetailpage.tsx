@@ -151,12 +151,12 @@ export default function GameDetailPage() {
                 )}
                 {game.ratings?.snackSafe && (
                   <div className="flex items-center gap-1.5" title="Snack Safe">
-                    <Pizza size={18} className="text-olive fill-olive/20" strokeWidth={2} />
+                    <Pizza size={18} className="text-accent-green fill-accent-green/20" strokeWidth={2} />
                     <span className="font-heading text-sm text-muted-foreground">Snack Safe</span>
                   </div>
                 )}
                 {game.coop && (
-                  <span className="rounded-full bg-blue-50 px-3 py-1 font-heading text-xs font-medium text-olive">
+                  <span className="rounded-full bg-blue-50 px-3 py-1 font-heading text-xs font-medium text-accent-green">
                     Co-op
                   </span>
                 )}

@@ -82,12 +82,12 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
               )}
               {game.ratings?.snackSafe && (
                 <div className="flex items-center gap-1" title="Snack Safe">
-                  <Pizza size={16} className="text-olive fill-olive/20" strokeWidth={2} />
+                  <Pizza size={16} className="text-accent-green fill-accent-green/20" strokeWidth={2} />
                   <span className="font-heading text-xs text-muted-foreground">Snack Safe</span>
                 </div>
               )}
               {game.coop && (
-                <span className="rounded-full bg-blue-50 px-3 py-1 font-heading text-xs font-medium text-olive">
+                <span className="rounded-full bg-blue-50 px-3 py-1 font-heading text-xs font-medium text-accent-green">
                   Co-op
                 </span>
               )}

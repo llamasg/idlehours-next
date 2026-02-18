@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
-import type { Product } from "@/data/mock-data";
+import type { Product } from "@/types";
 
 interface ProductCardProps {
   product: Product;
@@ -36,7 +36,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
       <div className="flex flex-1 flex-col p-4">
         <Badge
-          className={`mb-2 w-fit rounded-full px-2.5 py-0.5 font-heading text-[10px] font-bold uppercase tracking-widest ${badgeColors[product.badge] || "bg-muted text-muted-foreground"}`}
+          className={`mb-2 w-fit rounded-full px-2.5 py-0.5 font-heading text-[10px] font-bold uppercase tracking-widest ${(product.badge && badgeColors[product.badge]) || "bg-muted text-muted-foreground"}`}
         >
           {product.badge}
         </Badge>

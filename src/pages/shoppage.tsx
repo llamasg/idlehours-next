@@ -4,7 +4,7 @@ import SiteFooter from "@/components/SiteFooter";
 import ProductCard from "@/components/ProductCard";
 import { motion } from "framer-motion";
 import { getAllProducts } from "@/lib/queries";
-import type { Product } from "@/data/mock-data";
+import type { Product } from "@/types";
 
 const categories = ["All", "Displays", "Holders", "Storage", "Accessories"];
 
@@ -48,7 +48,7 @@ export default function ShopPage() {
   const filteredProducts =
     selectedCategory === "All"
       ? products
-      : products.filter((p) => p.category === selectedCategory);
+      : products.filter((p) => p.tags?.includes(selectedCategory));
 
   return (
     <div className="min-h-screen bg-background">
@@ -117,7 +117,7 @@ export default function ShopPage() {
           ) : filteredProducts.length > 0 ? (
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product._id} product={product} />
               ))}
             </div>
           ) : (

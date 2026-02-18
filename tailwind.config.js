@@ -56,11 +56,12 @@ export default {
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
   			// Idle Hours brand tokens
-  			plum: 'hsl(var(--plum))',
-  			peach: 'hsl(var(--peach))',
-  			olive: 'hsl(var(--olive))',
-  			ember: 'hsl(var(--ember))',
-  			'warm-cream': 'hsl(var(--warm-cream))',
+  			linen: 'hsl(var(--linen))',
+  			'brand-dark': 'hsl(var(--brand-dark))',
+  			'brand-green': 'hsl(var(--brand-green))',
+  			'accent-green': 'hsl(var(--accent-green))',
+  			'burnt-orange': 'hsl(var(--burnt-orange))',
+  			teal: 'hsl(var(--teal))',
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',
