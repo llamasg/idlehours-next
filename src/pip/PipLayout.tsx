@@ -13,39 +13,77 @@ import {
   Menu,
   X,
 } from 'lucide-react';
-import { StreakBar } from './components/StreakBar';
-import { XpBar } from './components/XpBar';
 import { usePipData } from './hooks/usePipData';
+import { getLevelInfo } from './lib/pipMockData';
 
 interface PipLayoutProps {
   onLogout: () => void;
 }
 
-const navItems = [
-  { to: '/pip', label: 'Home', icon: Home, end: true },
-  { to: '/pip/ideas', label: 'Ideas', icon: Lightbulb },
-  { to: '/pip/clusters', label: 'Clusters', icon: Network },
-  { to: '/pip/seo', label: 'SEO Helper', icon: Search },
-  { to: '/pip/goals', label: 'Goals', icon: Target },
-  { to: '/pip/content', label: 'Content', icon: Film },
-  { to: '/pip/calendar', label: 'Calendar', icon: Calendar },
-  { to: '/pip/analytics', label: 'Analytics', icon: BarChart3 },
-  { to: '/pip/achievements', label: 'Achievements', icon: Trophy },
-] as const;
+interface NavItemDef {
+  to: string;
+  label: string;
+  icon: React.ComponentType<{ size?: number }>;
+  end?: boolean;
+  badge?: number;
+}
+
+function NavItem({ to, label, icon: Icon, end, badge, onClose }: NavItemDef & { onClose: () => void }) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      onClick={onClose}
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+          isActive ? 'bg-white/10 text-white' : 'text-white/60 hover:text-white'
+        }`
+      }
+    >
+      <Icon size={18} />
+      <span>{label}</span>
+      {badge ? (
+        <span className="ml-auto bg-[#7C9B7A] text-white text-xs font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+          {badge}
+        </span>
+      ) : null}
+    </NavLink>
+  );
+}
 
 export default function PipLayout({ onLogout }: PipLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { streak, xp, level } = usePipData();
+  const { streak, xp, ideas } = usePipData();
+  const levelInfo = getLevelInfo(xp);
+
+  const navItems: NavItemDef[] = [
+    { to: '/pip', label: 'Home', icon: Home, end: true },
+    { to: '/pip/ideas', label: 'Ideas', icon: Lightbulb, badge: ideas.length },
+    { to: '/pip/clusters', label: 'Clusters', icon: Network },
+    { to: '/pip/seo', label: 'SEO Helper', icon: Search },
+    { to: '/pip/goals', label: 'Goals', icon: Target },
+    { to: '/pip/content', label: 'Content', icon: Film },
+    { to: '/pip/calendar', label: 'Calendar', icon: Calendar },
+    { to: '/pip/analytics', label: 'Analytics', icon: BarChart3 },
+    { to: '/pip/achievements', label: 'Achievements', icon: Trophy },
+  ];
+
+  // Day dots: Mon=0 … Sun=6
+  const DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  const todayIndex = (new Date().getDay() + 6) % 7;
+  const filledDays = streak > 0 ? Math.min(streak, 7) : 0;
+
+  // XP display
+  const nextThreshold = xp + (levelInfo.xpToNextLevel > 0 ? levelInfo.xpToNextLevel : 0);
 
   const sidebarContent = (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-y-auto">
       {/* Header */}
-      <div className="p-6 space-y-1">
+      <div className="p-6 space-y-1 shrink-0">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold font-serif">
             {'\u{1F916}'} Pip
           </h1>
-          {/* Close button on mobile */}
           <button
             onClick={() => setSidebarOpen(false)}
             className="md:hidden text-white/40 hover:text-white"
@@ -57,36 +95,62 @@ export default function PipLayout({ onLogout }: PipLayoutProps) {
         <p className="text-sm text-white/60">Hey Beth {'\u{1F44B}'}</p>
       </div>
 
-      {/* Streak & XP */}
-      <div className="px-6 space-y-3 mb-4">
-        <StreakBar streak={streak} />
-        <XpBar xp={xp} level={level} />
+      {/* Streak — day dots */}
+      <div className="px-4 pb-4 shrink-0">
+        <div className="text-xs text-white/40 mb-2">Writing streak</div>
+        <div className="flex gap-1.5 mb-2">
+          {DAYS.map((day, i) => {
+            const isDone = i < filledDays;
+            const isToday = i === todayIndex;
+            return (
+              <div key={i} className="flex flex-col items-center gap-1">
+                <div
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold
+                    ${isDone ? 'bg-[#7C9B7A] text-white' : ''}
+                    ${isToday && !isDone ? 'bg-[#E8843A] text-white animate-pulse' : ''}
+                    ${!isDone && !isToday ? 'bg-white/[0.06] text-white/20' : ''}
+                  `}
+                />
+                <span className="text-[9px] text-white/30">{day}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex items-center gap-1.5 text-sm">
+          <span>🔥</span>
+          <span className="font-bold text-white">{streak}</span>
+          <span className="text-white/40 text-xs">day streak — don't break it!</span>
+        </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
-        {navItems.map(({ to, label, icon: Icon, ...rest }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={'end' in rest}
-            onClick={() => setSidebarOpen(false)}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
-                isActive
-                  ? 'bg-white/10 text-white'
-                  : 'text-white/60 hover:text-white'
-              }`
-            }
-          >
-            <Icon size={18} />
-            {label}
-          </NavLink>
+      <nav className="flex-1 px-3 space-y-1 overflow-y-auto min-h-0">
+        {navItems.map((item) => (
+          <NavItem key={item.to} {...item} onClose={() => setSidebarOpen(false)} />
         ))}
       </nav>
 
+      {/* XP Section — bottom of sidebar */}
+      <div className="px-4 pt-4 pb-2 border-t border-white/5 shrink-0">
+        <div className="flex justify-between text-xs mb-1">
+          <span className="text-white/40">Writer XP</span>
+          <span className="text-[#7C9B7A] font-mono font-bold">
+            {xp} / {nextThreshold}
+          </span>
+        </div>
+        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-[#7C9B7A] rounded-full transition-all duration-700"
+            style={{ width: `${levelInfo.progress}%` }}
+          />
+        </div>
+        <div className="text-xs text-white/40 mt-1.5">
+          Rank: <strong className="text-purple-300">{levelInfo.name}</strong> ✨
+        </div>
+      </div>
+
       {/* Logout */}
-      <div className="p-4 mt-auto">
+      <div className="px-4 pb-4 shrink-0">
         <button
           onClick={onLogout}
           className="text-sm text-white/40 hover:text-white transition-colors"
@@ -110,9 +174,7 @@ export default function PipLayout({ onLogout }: PipLayoutProps) {
           className="fixed inset-0 z-40 md:hidden"
           onClick={() => setSidebarOpen(false)}
         >
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-          {/* Sidebar panel */}
           <aside
             className="relative w-[280px] h-full bg-brand-dark text-white flex flex-col"
             onClick={(e) => e.stopPropagation()}
@@ -122,7 +184,7 @@ export default function PipLayout({ onLogout }: PipLayoutProps) {
         </div>
       )}
 
-      {/* Main content */}
+      {/* Main content — full width */}
       <main className="flex-1 bg-background overflow-y-auto">
         {/* Mobile hamburger */}
         <div className="md:hidden p-4">
@@ -135,7 +197,7 @@ export default function PipLayout({ onLogout }: PipLayoutProps) {
           </button>
         </div>
 
-        <div className="p-8">
+        <div className="p-8 w-full">
           <Outlet />
         </div>
       </main>

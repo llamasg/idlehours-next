@@ -1,128 +1,190 @@
 /* ──────────────────────────────────────────────
-   Pip Dashboard v2 — PipGoals (Goals View)
-   Goal tracking + Boost plan generation
+   Pip Dashboard v2 — PipGoals (The Big Picture)
    ────────────────────────────────────────────── */
 
-import { motion } from 'framer-motion';
-
 import { usePipData } from '@/pip/hooks/usePipData';
-import { useBoostPlan } from '@/pip/hooks/useBoostPlan';
-import { GoalTracker } from '@/pip/components/GoalTracker';
-import { BoostPlanView } from '@/pip/components/BoostPlan';
-import type { BoostContext } from '@/pip/lib/pipMockData';
-
-/* ── bouncing dots loader ────────────────────── */
-
-function ThinkingDots() {
-  return (
-    <div className="flex items-center gap-1.5 py-4">
-      {[0, 1, 2].map((i) => (
-        <motion.span
-          key={i}
-          className="inline-block h-2.5 w-2.5 rounded-full bg-burnt-orange"
-          animate={{ y: [0, -8, 0] }}
-          transition={{
-            duration: 0.6,
-            repeat: Infinity,
-            delay: i * 0.15,
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-/* ── main component ──────────────────────────── */
 
 export default function PipGoals() {
-  const { goals, analytics, clusters, streak } = usePipData();
-  const { plan, isGenerating, generate, save } = useBoostPlan();
-
-  if (!goals) return <div className="py-8 px-4 text-muted-foreground">Loading...</div>;
-
-  /* Build BoostContext from live data */
-  const activeCluster = clusters.find((c) =>
-    c.steps.some((s) => s.status !== 'published'),
-  );
-  const clusterPublished = activeCluster
-    ? activeCluster.steps.filter((s) => s.status === 'published').length
-    : 0;
-  const clusterTotal = activeCluster ? activeCluster.steps.length : 0;
-
-  const topPost = analytics.topPosts[0] ?? { title: 'None yet', sessions: 0 };
-  const quickWin = analytics.search.quickWins[0] ?? { query: 'None yet', position: 0 };
-
-  const boostContext: BoostContext = {
-    sessions: analytics.overview.sessions7d,
-    sessionsDelta: analytics.overview.sessionsDelta,
-    totalPosts: analytics.topPosts.length,
-    activeCluster: activeCluster?.name ?? 'None',
-    clusterProgress: clusterPublished,
-    clusterTotal,
-    streak,
-    topPost: { title: topPost.title, sessions: topPost.sessions },
-    quickWin: { query: quickWin.query, position: quickWin.position },
-  };
+  const { analytics, streak, posts } = usePipData();
+  const sessions = analytics.overview.sessions7d;
+  const totalPosts = posts.length;
+  const isEarlyDays = totalPosts < 10 || sessions < 100;
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8 py-8 px-4">
-      {/* Heading */}
-      <motion.h1
-        className="text-3xl font-bold text-stone-900"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        The Big Picture
-      </motion.h1>
+    <div>
+      {/* Topbar */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-[#2C2C2C]">The Big Picture</h1>
+        <p className="text-sm text-[#9B8E82] mt-1">For the days when you wonder if it's working</p>
+      </div>
 
-      {/* Goal tracker */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-      >
-        <GoalTracker goal={goals} />
-      </motion.div>
-
-      {/* Boost section */}
-      <motion.div
-        className="mt-8"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.2 }}
-      >
-        <div className="rounded-2xl bg-brand-dark p-6 text-white">
-          <h2 className="text-xl font-semibold">
-            {'\uD83D\uDE80'} Things feeling slow?
-          </h2>
-          <p className="mt-2 text-white/70">
-            Let Pip analyse your analytics, clusters, and search data to build a
-            personalised sprint plan that moves the needle.
-          </p>
-
-          {!plan && !isGenerating && (
-            <motion.button
-              onClick={() => generate(boostContext)}
-              className="mt-4 rounded-full bg-burnt-orange px-8 py-3 font-semibold text-white shadow-lg transition-transform hover:scale-105 hover:shadow-burnt-orange/25"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Generate my boost plan →
-            </motion.button>
+      {/* Pip speech bubble */}
+      <div className="flex gap-3 mb-8 bg-white rounded-2xl p-5 shadow-sm border border-[#E8E0D5]">
+        <div className="text-2xl flex-shrink-0">🌱</div>
+        <p className="text-sm text-[#4A4A4A] leading-relaxed">
+          {isEarlyDays ? (
+            <>
+              This page is for the hard days. The ones where you publish something and it gets 12 views
+              and you think "why am I even doing this."{' '}
+              <strong>Open this page on those days.</strong> The numbers are real. The trajectory is real.
+              It's working — it's just slow at first, and then it isn't.
+            </>
+          ) : (
+            <>
+              You're past the hardest part. The foundation is built. Now it's about consistency and
+              compound interest — every post you publish makes the ones before it more valuable.
+            </>
           )}
+        </p>
+      </div>
 
-          {isGenerating && <ThinkingDots />}
+      {/* Goal card */}
+      <div className="bg-[#1C1C1E] rounded-2xl p-6 mb-6 text-white">
+        <div className="text-xs font-bold text-[#7C9B7A] uppercase tracking-wider mb-2">
+          🎯 The mission
+        </div>
+        <h2 className="text-xl font-bold mb-1">£500/month from a blog about games you love</h2>
+        <p className="text-sm text-white/50 mb-6">Realistic target: 10,000 sessions/month + affiliate income.</p>
+
+        {/* Stats row */}
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          <div>
+            <div className="text-2xl font-bold font-mono">{sessions}</div>
+            <div className="text-xs text-white/40 mt-0.5">sessions this week</div>
+            <div className="text-xs text-[#7C9B7A] mt-0.5">
+              {analytics.overview.sessionsDelta > 0
+                ? `↑ ${analytics.overview.sessionsDelta}% growth`
+                : 'building'}
+            </div>
+          </div>
+          <div>
+            <div className="text-2xl font-bold font-mono">{totalPosts}</div>
+            <div className="text-xs text-white/40 mt-0.5">posts published</div>
+            <div className="text-xs text-white/30 mt-0.5">building compound</div>
+          </div>
+          <div>
+            <div className="text-2xl font-bold font-mono">£0</div>
+            <div className="text-xs text-white/40 mt-0.5">estimated monthly</div>
+            <div className="text-xs text-white/30 mt-0.5">affiliate goes live at 1k sessions</div>
+          </div>
         </div>
 
-        {/* Rendered plan */}
-        {plan && (
-          <div className="mt-6">
-            <BoostPlanView plan={plan} onSave={save} />
+        {/* Progress bar with milestones */}
+        <div className="mb-4">
+          <div className="flex justify-between text-xs text-white/40 mb-2">
+            <span>Progress to £500/month</span>
+            <span>{sessions < 1000 ? 'phase 1: building traffic' : 'phase 2: monetising'}</span>
           </div>
-        )}
-      </motion.div>
+          <div className="relative h-3 bg-white/10 rounded-full overflow-visible">
+            <div
+              className="h-full bg-[#7C9B7A] rounded-full transition-all duration-700"
+              style={{ width: `${Math.min((sessions / 10000) * 100, 100)}%` }}
+            />
+            {[
+              { label: '1k', pct: 10 },
+              { label: '5k', pct: 50 },
+              { label: '10k', pct: 100 },
+            ].map((m) => (
+              <div
+                key={m.label}
+                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2
+                  border-white bg-[#1C1C1E] -translate-x-1/2"
+                style={{ left: `${m.pct}%` }}
+                title={`${m.label} sessions/week`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Milestone pills */}
+        <div className="flex flex-wrap gap-2">
+          {[
+            { label: '100 sessions/wk', reached: sessions >= 100 },
+            { label: '500 sessions/wk', reached: sessions >= 500 },
+            { label: '1k sessions/wk', reached: sessions >= 1000 },
+            { label: 'First affiliate click', reached: false },
+            { label: 'First £1 earned', reached: false },
+            { label: '£500/month 🎯', reached: false },
+          ].map((m) => (
+            <span
+              key={m.label}
+              className={`text-xs px-3 py-1 rounded-full font-medium ${
+                m.reached ? 'bg-[#7C9B7A] text-white' : 'bg-white/10 text-white/40'
+              }`}
+            >
+              {m.reached ? '✓ ' : '→ '}
+              {m.label}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Two column: growth projection + what's working */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E0D5]">
+          <h3 className="font-bold text-sm text-[#2C2C2C] mb-4">📈 Growth projection</h3>
+          {[
+            { label: 'Today', width: Math.min((sessions / 10000) * 100, 8), val: `${sessions}/wk`, color: '#2C2C2C' },
+            { label: 'Month 3', width: 22, val: '~2.5k', color: '#7C9B7A' },
+            { label: 'Month 6', width: 55, val: '~6k', color: '#E8843A' },
+            { label: 'Month 9', width: 85, val: '~10k+ 🎯', color: '#7B6CF6' },
+          ].map((row) => (
+            <div key={row.label} className="flex items-center gap-3 mb-3">
+              <div className="text-xs text-[#9B8E82] w-16 flex-shrink-0">{row.label}</div>
+              <div className="flex-1 h-2 bg-[#F0EBE3] rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-700"
+                  style={{ width: `${row.width}%`, background: row.color }}
+                />
+              </div>
+              <div className="text-xs font-bold font-mono text-[#2C2C2C] w-14">{row.val}</div>
+            </div>
+          ))}
+          <p className="text-xs text-[#9B8E82] mt-2 leading-relaxed">
+            Based on consistent posting. Clusters compound — each completed cluster accelerates the next.
+          </p>
+        </div>
+
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E0D5]">
+          <h3 className="font-bold text-sm text-[#2C2C2C] mb-4">💚 What's actually working</h3>
+          <div className="flex flex-col gap-2">
+            {streak >= 3 && (
+              <div className="bg-green-50 rounded-xl p-3 border border-green-200">
+                <div className="text-xs font-bold text-green-700 mb-1">🔥 {streak}-day streak</div>
+                <div className="text-xs text-green-600">
+                  Consistency is the only thing that matters right now. You're doing it.
+                </div>
+              </div>
+            )}
+            {sessions > 0 && (
+              <div className="bg-green-50 rounded-xl p-3 border border-green-200">
+                <div className="text-xs font-bold text-green-700 mb-1">👀 Real traffic</div>
+                <div className="text-xs text-green-600">
+                  {sessions} sessions this week. Real people found your writing.
+                </div>
+              </div>
+            )}
+            {totalPosts > 0 && (
+              <div className="bg-green-50 rounded-xl p-3 border border-green-200">
+                <div className="text-xs font-bold text-green-700 mb-1">
+                  📝 {totalPosts} post{totalPosts !== 1 ? 's' : ''} published
+                </div>
+                <div className="text-xs text-green-600">
+                  Each post is a permanent asset. They compound over time.
+                </div>
+              </div>
+            )}
+            {totalPosts === 0 && sessions === 0 && (
+              <div className="bg-amber-50 rounded-xl p-3 border border-amber-200">
+                <div className="text-xs font-bold text-amber-700 mb-1">🌱 Day one</div>
+                <div className="text-xs text-amber-600">
+                  Every blog you've ever read started exactly here. Write the first post.
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

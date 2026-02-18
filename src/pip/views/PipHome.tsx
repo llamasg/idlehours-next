@@ -8,20 +8,14 @@ import { BarChart3, Clock, Flame, Zap } from 'lucide-react';
 
 import { usePipData } from '@/pip/hooks/usePipData';
 import { StatCard } from '@/pip/components/StatCard';
-import { PipSpeech } from '@/pip/components/PipSpeech';
 
 /* ── helpers ─────────────────────────────────── */
 
-function getGreeting(streak: number, sessions: number, delta: number): string {
+function getTimeOfDay(): string {
   const hour = new Date().getHours();
-
-  if (hour < 12) {
-    return `Good morning, Beth! ☀️ You're on a ${streak}-day streak — let's keep it going.`;
-  }
-  if (hour < 18) {
-    return `Afternoon, Beth! ☕ Your site had ${sessions.toLocaleString()} sessions this week, up ${delta}%.`;
-  }
-  return `Evening, Beth! 🌙 Winding down? Here's what's happening with Idle Hours.`;
+  if (hour < 12) return 'Morning';
+  if (hour < 18) return 'Afternoon';
+  return 'Evening';
 }
 
 function formatReadTime(seconds: number): string {
@@ -56,7 +50,15 @@ const sectionVariants = {
   }),
 };
 
-function Section({ index, children, className = '' }: { index: number; children: React.ReactNode; className?: string }) {
+function Section({
+  index,
+  children,
+  className = '',
+}: {
+  index: number;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <motion.section
       custom={index}
@@ -74,14 +76,7 @@ function Section({ index, children, className = '' }: { index: number; children:
 
 export default function PipHome() {
   const { ideas, analytics, clusters, streak, xp, morningMessage } = usePipData();
-
-  // Use Pip's generated morning message if available, otherwise fall back to a
-  // time-based greeting while data is loading or if Pip hasn't run yet.
-  const greeting = morningMessage || getGreeting(
-    streak,
-    analytics.overview.sessions7d,
-    analytics.overview.sessionsDelta,
-  );
+  const timeOfDay = getTimeOfDay();
 
   /* Active cluster = first cluster with at least one non-published step */
   const activeCluster = clusters.find((c) =>
@@ -98,10 +93,32 @@ export default function PipHome() {
   const topIdeas = ideas.slice(0, 3);
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8 py-8 px-4">
-      {/* A — Greeting */}
+    <div className="space-y-8">
+      {/* A — Topbar */}
       <Section index={0}>
-        <PipSpeech message={greeting} />
+        <div className="pb-6 border-b border-[#E8E0D5] mb-6">
+          <h1 className="text-2xl font-bold text-[#2C2C2C]">
+            Good {timeOfDay}, Beth 🌿
+          </h1>
+        </div>
+
+        {/* Pip speech bubble */}
+        {morningMessage && (
+          <div className="flex gap-3 bg-white rounded-2xl p-4 shadow-sm border border-[#E8E0D5]">
+            <img
+              src="/pip-avatar.png"
+              className="w-8 h-8 rounded-full flex-shrink-0"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).style.display = 'none';
+              }}
+              alt="Pip"
+            />
+            <div>
+              <div className="text-xs font-bold text-[#7C9B7A] mb-1">Pip's morning message</div>
+              <p className="text-sm text-[#4A4A4A] leading-relaxed">{morningMessage}</p>
+            </div>
+          </div>
+        )}
       </Section>
 
       {/* B — Stat cards */}
@@ -135,14 +152,11 @@ export default function PipHome() {
       {activeCluster && (
         <Section index={2}>
           <div className="rounded-xl bg-white p-5 shadow-sm">
-            <h3 className="text-lg font-bold text-stone-900">
-              {activeCluster.name}
-            </h3>
+            <h3 className="text-lg font-bold text-stone-900">{activeCluster.name}</h3>
             <p className="mt-1 text-sm text-stone-500">
               {publishedCount}/{totalSteps} published
             </p>
 
-            {/* Progress bar */}
             <div className="mt-3 h-2 w-full rounded-full bg-muted overflow-hidden">
               <div
                 className="h-full rounded-full bg-accent-green transition-all"
@@ -171,13 +185,10 @@ export default function PipHome() {
               className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm"
             >
               <span className="text-lg select-none">{idea.typeEmoji}</span>
-
               <span className="flex-1 truncate text-sm font-medium text-stone-800">
                 {idea.title}
               </span>
-
               {difficultyDots(idea.difficulty)}
-
               {idea.trending && (
                 <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-burnt-orange">
                   Trending
