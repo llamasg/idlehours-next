@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.24.3",
+    "@google-analytics/data": "^5.2.1",
     "@sanity/client": "^6.29.1",
-    "dotenv": "^16.6.1"
+    "dotenv": "^16.6.1",
+    "googleapis": "^171.4.0"
   },
   "devDependencies": {
     "node": ">=20.0.0"
