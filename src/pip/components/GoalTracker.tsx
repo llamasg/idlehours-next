@@ -49,14 +49,6 @@ export function GoalTracker({ goal }: GoalTrackerProps) {
       <div className="mt-4 flex flex-wrap gap-2">
         {goal.milestones.map((ms) => {
           const reached = goal.current >= ms;
-          const isNext =
-            !reached &&
-            goal.milestones.filter((m) => goal.current >= m).length ===
-              goal.milestones.indexOf(ms) -
-                goal.milestones.filter((m) => goal.current >= m).length +
-                goal.milestones.filter((m) => goal.current >= m).length;
-
-          // Simpler logic: find the first milestone not reached
           const firstUnreached = goal.milestones.find((m) => goal.current < m);
           const isNextMilestone = !reached && ms === firstUnreached;
 

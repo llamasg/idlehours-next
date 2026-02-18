@@ -399,17 +399,20 @@ export async function getGame(slug: string) {
   return game
 }
 
-// Get site settings
+// Get site settings (singleton — document ID: "siteSettings")
 export async function getSiteSettings() {
   const settings = await client.fetch(`
     *[_type == "siteSettings"][0] {
       _id,
       siteTitle,
-      siteDescription,
+      siteTagline,
+      metaDescription,
+      "defaultSocialImageUrl": defaultSocialImage.asset->url,
+      "defaultSocialImageAlt": defaultSocialImage.alt,
+      "faviconUrl": favicon.asset->url,
       "logo": logo.asset->url,
       navLinks,
-      socialLinks,
-      "defaultOgImage": defaultOgImage.asset->url
+      socialLinks
     }
   `)
   return settings

@@ -36,7 +36,7 @@ function ThinkingDots() {
 export default function YesAndInput() {
   const { response, isThinking, ask, clear } = useYesAnd();
   const [input, setInput] = useState('');
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;

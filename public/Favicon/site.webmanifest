@@ -1,0 +1,23 @@
+{
+  "name": "Idle Hours",
+  "short_name": "Idle Hours",
+  "description": "Cosy games and calm spaces",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#5c7a5c",
+  "background_color": "#f5f0e8",
+  "icons": [
+    {
+      "src": "/Favicon/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/Favicon/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
