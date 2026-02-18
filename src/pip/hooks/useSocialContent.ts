@@ -118,7 +118,7 @@ Return ONLY valid JSON in this exact shape — no markdown, no explanation:
   ]
 }
 
-Generate 4 reels (mix of platforms) and 4 Pinterest pins. Make every 'why' field genuinely specific — cite actual platform behaviour, not generic advice. UK spelling throughout.`;
+Generate 2 reels and 2 Pinterest pins only. Keep each field concise — 'why' max 1 sentence, 'concept' max 1 sentence, shotList exactly 3 items. UK spelling.`;
 }
 
 // ── Hook ──────────────────────────────────────
@@ -142,7 +142,7 @@ export function useSocialContent(): UseSocialContentReturn {
     try {
       const message = await anthropic.messages.create({
         model: 'claude-sonnet-4-5',
-        max_tokens: 4000,
+        max_tokens: 3000,
         messages: [{ role: 'user', content: buildPrompt(ctx) }],
       });
 
