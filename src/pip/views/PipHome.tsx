@@ -73,9 +73,11 @@ function Section({ index, children, className = '' }: { index: number; children:
 /* ── main component ──────────────────────────── */
 
 export default function PipHome() {
-  const { ideas, analytics, clusters, streak, xp } = usePipData();
+  const { ideas, analytics, clusters, streak, xp, morningMessage } = usePipData();
 
-  const greeting = getGreeting(
+  // Use Pip's generated morning message if available, otherwise fall back to a
+  // time-based greeting while data is loading or if Pip hasn't run yet.
+  const greeting = morningMessage || getGreeting(
     streak,
     analytics.overview.sessions7d,
     analytics.overview.sessionsDelta,

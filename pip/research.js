@@ -14,41 +14,41 @@ import dotenv from 'dotenv'
 // Load .env.local first (takes priority), then fall back to .env
 dotenv.config({ path: '.env.local' })
 dotenv.config()
+import { readFileSync } from 'fs'
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
 import { google } from 'googleapis'
 
 // ── AUTH ─────────────────────────────────────────────────────────────────
 
 function getGoogleAuth() {
+  const scopes = [
+    'https://www.googleapis.com/auth/analytics.readonly',
+    'https://www.googleapis.com/auth/webmasters.readonly',
+  ]
+
   // In GitHub Actions, the JSON is passed as an env var string
-  // Locally, we use the file path in GOOGLE_APPLICATION_CREDENTIALS
   if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
     const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
-    return new google.auth.GoogleAuth({
-      credentials,
-      scopes: [
-        'https://www.googleapis.com/auth/analytics.readonly',
-        'https://www.googleapis.com/auth/webmasters.readonly',
-      ],
-    })
+    return new google.auth.GoogleAuth({ credentials, scopes })
   }
 
-  // Local dev — uses file path
-  return new google.auth.GoogleAuth({
-    keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-    scopes: [
-      'https://www.googleapis.com/auth/analytics.readonly',
-      'https://www.googleapis.com/auth/webmasters.readonly',
-    ],
-  })
+  // Local dev — explicitly read and parse the JSON file
+  const keyFile = process.env.GOOGLE_APPLICATION_CREDENTIALS
+  const credentials = JSON.parse(readFileSync(keyFile, 'utf8'))
+  return new google.auth.GoogleAuth({ credentials, scopes })
 }
 
 function getAnalyticsClient() {
+  // In GitHub Actions, the JSON is passed as an env var string
   if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
     const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
     return new BetaAnalyticsDataClient({ credentials })
   }
-  return new BetaAnalyticsDataClient()
+
+  // Local dev — explicitly read and parse the JSON file
+  const keyFile = process.env.GOOGLE_APPLICATION_CREDENTIALS
+  const credentials = JSON.parse(readFileSync(keyFile, 'utf8'))
+  return new BetaAnalyticsDataClient({ credentials })
 }
 
 // ── GA4 ──────────────────────────────────────────────────────────────────
@@ -65,33 +65,39 @@ async function fetchGA4Data() {
   console.log('📊 Fetching GA4 data...')
 
   try {
-    // ── Sessions: this week vs last week ──
-    const [sessionsResponse] = await client.runReport({
-      property: `properties/${propertyId}`,
-      dateRanges: [
-        { startDate: '7daysAgo', endDate: 'today', name: 'this_week' },
-        { startDate: '14daysAgo', endDate: '8daysAgo', name: 'last_week' },
-      ],
-      metrics: [
-        { name: 'sessions' },
-        { name: 'averageSessionDuration' },
-        { name: 'newUsers' },
-        { name: 'returningUsers' },
-      ],
-    })
+    // ── Sessions: this week vs last week (two separate calls — GA4 requires
+    //    at least one dimension for multi-range comparisons, so we split) ──
+    const metrics = [
+      { name: 'sessions' },
+      { name: 'averageSessionDuration' },
+      { name: 'newUsers' },
+      { name: 'totalUsers' },
+    ]
+    const [[thisWeekResp], [lastWeekResp]] = await Promise.all([
+      client.runReport({
+        property: `properties/${propertyId}`,
+        dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
+        metrics,
+      }),
+      client.runReport({
+        property: `properties/${propertyId}`,
+        dateRanges: [{ startDate: '14daysAgo', endDate: '8daysAgo' }],
+        metrics,
+      }),
+    ])
 
-    const thisWeek = sessionsResponse.rows?.find(r => r.dimensionValues?.[0]?.value === 'this_week')
-    const lastWeek = sessionsResponse.rows?.find(r => r.dimensionValues?.[0]?.value === 'last_week')
+    const thisWeekRow = thisWeekResp.rows?.[0]
+    const lastWeekRow = lastWeekResp.rows?.[0]
 
-    const sessions7d = parseInt(thisWeek?.metricValues?.[0]?.value || 0)
-    const sessions7dPrev = parseInt(lastWeek?.metricValues?.[0]?.value || 0)
+    const sessions7d = parseInt(thisWeekRow?.metricValues?.[0]?.value || 0)
+    const sessions7dPrev = parseInt(lastWeekRow?.metricValues?.[0]?.value || 0)
     const sessionsDelta = sessions7dPrev > 0
       ? Math.round(((sessions7d - sessions7dPrev) / sessions7dPrev) * 100)
       : 0
-    const avgSessionDuration = parseFloat(thisWeek?.metricValues?.[1]?.value || 0)
-    const newUsers = parseInt(thisWeek?.metricValues?.[2]?.value || 0)
-    const returningUsers = parseInt(thisWeek?.metricValues?.[3]?.value || 0)
-    const totalUsers = newUsers + returningUsers
+    const avgSessionDuration = parseFloat(thisWeekRow?.metricValues?.[1]?.value || 0)
+    const newUsers = parseInt(thisWeekRow?.metricValues?.[2]?.value || 0)
+    const totalUsers = parseInt(thisWeekRow?.metricValues?.[3]?.value || 0)
+    const returningUsers = Math.max(0, totalUsers - newUsers)
     const returnVisitorPct = totalUsers > 0 ? Math.round((returningUsers / totalUsers) * 100) : 0
 
     // ── Top pages ──

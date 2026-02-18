@@ -3,7 +3,7 @@
    Tinder-style card deck logic for post ideas
    ────────────────────────────────────────────── */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import type { PipIdea } from '../lib/pipMockData';
 
 const LS_KEY = 'pip_dismissed_ideas';
@@ -47,6 +47,17 @@ export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
   const [deck, setDeck] = useState<PipIdea[]>(() =>
     ideas.filter((i) => !getDismissedFromStorage().includes(i.id)),
   );
+
+  // When ideas transitions from mock → live Sanity data the IDs change.
+  // useState initializers only run once, so we need an effect to reset the deck.
+  const ideasKeyRef = useRef(ideas.map((i) => i.id).join(','));
+  useEffect(() => {
+    const newKey = ideas.map((i) => i.id).join(',');
+    if (newKey !== ideasKeyRef.current) {
+      ideasKeyRef.current = newKey;
+      setDeck(ideas.filter((i) => !getDismissedFromStorage().includes(i.id)));
+    }
+  }, [ideas]);
   const [saved, setSaved] = useState<PipIdea[]>([]);
   const [lastAction, setLastAction] = useState<'dismiss' | 'save' | 'select' | null>(null);
 
