@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { BarChart3, Clock, Flame, Zap } from 'lucide-react';
 
 import { usePipData } from '@/pip/hooks/usePipData';
+import { useMorningMessage } from '@/pip/hooks/useMorningMessage';
 import { StatCard } from '@/pip/components/StatCard';
 
 /* ── helpers ─────────────────────────────────── */
@@ -75,8 +76,15 @@ function Section({
 /* ── main component ──────────────────────────── */
 
 export default function PipHome() {
-  const { ideas, analytics, clusters, streak, xp, morningMessage } = usePipData();
+  const { ideas, analytics, clusters, streak, xp, posts, isLoading } = usePipData();
   const timeOfDay = getTimeOfDay();
+
+  const { message: morningMessage, isLoading: messageLoading } = useMorningMessage({
+    streak,
+    sessions7d: analytics.overview.sessions7d,
+    totalPosts: posts.length,
+    isDataLoading: isLoading,
+  });
 
   /* Active cluster = first cluster with at least one non-published step */
   const activeCluster = clusters.find((c) =>
@@ -103,7 +111,7 @@ export default function PipHome() {
         </div>
 
         {/* Pip speech bubble */}
-        {morningMessage && (
+        {(morningMessage || messageLoading) && (
           <div className="flex gap-3 bg-white rounded-2xl p-4 shadow-sm border border-[#E8E0D5]">
             <img
               src="/pip-avatar.png"
@@ -113,9 +121,21 @@ export default function PipHome() {
               }}
               alt="Pip"
             />
-            <div>
+            <div className="flex-1">
               <div className="text-xs font-bold text-[#7C9B7A] mb-1">Pip's morning message</div>
-              <p className="text-sm text-[#4A4A4A] leading-relaxed">{morningMessage}</p>
+              {messageLoading ? (
+                <div className="flex items-center gap-1.5 py-1">
+                  {[0, 1, 2].map((i) => (
+                    <span
+                      key={i}
+                      className="inline-block h-1.5 w-1.5 rounded-full bg-[#7C9B7A] animate-bounce"
+                      style={{ animationDelay: `${i * 150}ms` }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-[#4A4A4A] leading-relaxed">{morningMessage}</p>
+              )}
             </div>
           </div>
         )}
