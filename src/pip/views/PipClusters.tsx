@@ -63,6 +63,27 @@ export default function PipClusters() {
         automatically. Takes 5 seconds.
       </div>
 
+      {/* Empty state — no clusters from Sanity yet */}
+      {clusters.length === 0 && (
+        <div className="rounded-2xl bg-white border border-[#E8E0D5] p-8 text-center">
+          <div className="text-4xl mb-4">🗂️</div>
+          <h2 className="text-lg font-semibold text-stone-800 mb-2">No clusters yet</h2>
+          <p className="text-sm text-stone-500 max-w-md mx-auto leading-relaxed">
+            Clusters group related posts into topical hubs that compound over time.
+            Once you have a few posts published, add a <code className="bg-stone-100 px-1 rounded text-xs">cluster</code> field
+            to them in Sanity Studio — they'll appear here automatically.
+          </p>
+          <div className="mt-6 inline-block rounded-lg bg-stone-50 border border-stone-200 px-4 py-3 text-left text-sm text-stone-600 max-w-sm">
+            <div className="font-medium mb-1">How to create a cluster:</div>
+            <ol className="list-decimal pl-4 space-y-1 text-xs">
+              <li>Open Sanity Studio → Posts</li>
+              <li>Add a cluster name to 3–5 related posts</li>
+              <li>Pip picks it up on the next daily run</li>
+            </ol>
+          </div>
+        </div>
+      )}
+
       {/* Cluster cards */}
       <div className="space-y-3">
         {clusters.map((cluster) => {

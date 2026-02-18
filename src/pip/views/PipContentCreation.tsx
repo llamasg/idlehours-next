@@ -1,291 +1,347 @@
 /* ──────────────────────────────────────────────
    Pip Dashboard — Content Creation View
-   Three tabs: Video & Reels, Pinterest, Instagram
+   Social content plan powered by Claude.
+   Ideas persist until user requests a refresh.
+   Tabs: Video & Reels | Pinterest
    ────────────────────────────────────────────── */
 
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePipData } from '@/pip/hooks/usePipData';
-import type { ContentIdea } from '@/pip/lib/pipMockData';
+import {
+  useSocialContent,
+  type ReelIdea,
+  type PinterestIdea,
+  type BlogContext,
+} from '@/pip/hooks/useSocialContent';
 
 /* ── Constants ────────────────────────────────── */
 
-const TABS = ['\u{1F4F8} Video & Reels', '\u{1F4CC} Pinterest', '\u{1F4F7} Instagram'] as const;
+const TABS = ['📹 Video & Reels', '📌 Pinterest'] as const;
 type Tab = (typeof TABS)[number];
 
-const PINTEREST_SEARCH_TERMS = [
-  'cosy games',
-  'relaxing switch games',
-  'games for anxiety',
-  'cottagecore games',
-  'gaming aesthetic',
-];
-
-const PINTEREST_KEYWORDS = [
-  'cosy games for anxiety',
-  'relaxing indie games',
-  'no fail state games',
-  'spiritfarer review',
-  'games like stardew valley',
-  'short cosy games',
-];
+const NICHE = 'Idle Hours — cosy & indie games blog';
 
 /* ── Helpers ──────────────────────────────────── */
 
-function moodPillClasses(mood: string): string {
-  const lower = mood.toLowerCase();
-  if (lower.includes('atmospheric') || lower.includes('asmr') || lower.includes('gentle'))
-    return 'bg-indigo-100 text-indigo-700';
-  if (lower.includes('funny') || lower.includes('upbeat') || lower.includes('quick'))
-    return 'bg-yellow-100 text-yellow-700';
-  return 'bg-orange-100 text-orange-700';
+function effortDots(effort: 1 | 2 | 3): string {
+  if (effort === 1) return '●○○ Easy';
+  if (effort === 2) return '●●○ Medium';
+  return '●●● Worth it';
 }
 
-function effortLabel(effort: 1 | 2 | 3): { dots: string; label: string } {
-  if (effort === 1) return { dots: '●○○', label: 'Easy' };
-  if (effort === 2) return { dots: '●●○', label: 'Medium' };
-  return { dots: '●●●', label: 'Worth it' };
+function platformPill(platform: ReelIdea['platform']): { label: string; cls: string } {
+  if (platform === 'tiktok')    return { label: 'TikTok first',          cls: 'bg-pink-100 text-pink-700' };
+  if (platform === 'instagram') return { label: 'Instagram first',       cls: 'bg-purple-100 text-purple-700' };
+  return                               { label: 'TikTok + Instagram',    cls: 'bg-indigo-100 text-indigo-700' };
 }
 
-async function copyToClipboard(text: string) {
-  await navigator.clipboard.writeText(text);
+function relativeDate(iso: string): string {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000);
+  if (days === 0) return 'Generated today';
+  if (days === 1) return 'Generated yesterday';
+  return `Generated ${days} days ago`;
 }
 
-/* ── Video Card ───────────────────────────────── */
+/* ── Empty state ──────────────────────────────── */
 
-function VideoCard({
-  idea,
-  compact,
+function EmptyState({
+  onGenerate,
+  isGenerating,
 }: {
-  idea: ContentIdea;
-  compact?: boolean;
+  onGenerate: () => void;
+  isGenerating: boolean;
 }) {
-  const { dots, label } = effortLabel(idea.effort);
+  return (
+    <div className="flex flex-col items-center justify-center py-20 text-center">
+      <span className="text-5xl">🌱</span>
+      <h2 className="mt-4 text-xl font-semibold text-stone-900">No social plan yet</h2>
+      <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+        Pip will analyse your top posts and search data to generate evidence-based ideas
+        for Reels and Pinterest — built to actually perform, not just look busy.
+      </p>
+      <GenerateButton onClick={onGenerate} loading={isGenerating} className="mt-6" />
+    </div>
+  );
+}
+
+/* ── Generate button ──────────────────────────── */
+
+function GenerateButton({
+  onClick,
+  loading,
+  label = 'Find new ideas',
+  className = '',
+}: {
+  onClick: () => void;
+  loading: boolean;
+  label?: string;
+  className?: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={loading}
+      className={`inline-flex items-center gap-2 rounded-full bg-burnt-orange px-5 py-2.5 text-sm font-semibold text-white shadow transition-transform hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
+    >
+      {loading ? (
+        <>
+          <span className="animate-spin">⏳</span> Pip is thinking…
+        </>
+      ) : (
+        <>✨ {label}</>
+      )}
+    </button>
+  );
+}
+
+/* ── Thinking animation ───────────────────────── */
+
+function ThinkingState() {
+  return (
+    <div className="flex flex-col items-center gap-4 py-20">
+      <div className="flex items-center gap-1.5">
+        {[0, 1, 2].map((i) => (
+          <motion.span
+            key={i}
+            className="inline-block h-2.5 w-2.5 rounded-full bg-burnt-orange"
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15, ease: 'easeInOut' }}
+          />
+        ))}
+      </div>
+      <p className="text-sm text-muted-foreground">Pip is researching winning strategies…</p>
+    </div>
+  );
+}
+
+/* ── Reel Card ────────────────────────────────── */
+
+function ReelCard({ idea }: { idea: ReelIdea }) {
+  const [copied, setCopied] = useState(false);
+  const pill = platformPill(idea.platform);
+
+  async function handleCopy() {
+    const text = `${idea.hook}\n\n${idea.shotList.map((s, i) => `${i + 1}. ${s}`).join('\n')}`;
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   return (
-    <div className="rounded-xl border border-border bg-white p-5">
-      {compact && (
-        <span className="mb-2 inline-block rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-          15–30s
-        </span>
-      )}
-
-      {/* Top row: emoji + mood pill */}
-      <div className="flex items-center gap-3">
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="rounded-xl border border-border bg-white p-5"
+    >
+      <div className="flex items-center gap-3 flex-wrap">
         <span className="text-3xl">{idea.emoji}</span>
-        <span
-          className={`rounded-full px-2 py-1 text-xs font-medium ${moodPillClasses(idea.mood)}`}
-        >
+        <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${pill.cls}`}>
+          {pill.label}
+        </span>
+        <span className="rounded-full bg-stone-100 px-2.5 py-1 text-xs text-stone-600">
           {idea.mood}
         </span>
       </div>
 
-      {/* Title */}
-      <h3 className="mt-2 text-lg font-semibold">{idea.title}</h3>
+      <h3 className="mt-3 text-base font-semibold text-stone-900 leading-snug">
+        "{idea.hook}"
+      </h3>
+      <p className="mt-1 text-sm text-stone-700">{idea.concept}</p>
 
-      {/* Why */}
-      <p className="mt-1 text-sm italic text-muted-foreground">
-        Why it&rsquo;ll do well: {idea.why}
-      </p>
+      {/* Why it'll work */}
+      <div className="mt-3 rounded-lg bg-accent-green/10 border border-accent-green/20 px-3 py-2">
+        <p className="text-xs font-medium text-accent-green mb-0.5">Why it'll work</p>
+        <p className="text-xs text-stone-700 leading-relaxed">{idea.why}</p>
+      </div>
 
-      {/* Shot list */}
-      {idea.shotList && idea.shotList.length > 0 && (
-        <ul className="mt-2 list-disc pl-4 text-sm">
+      {idea.shotList.length > 0 && (
+        <ul className="mt-3 space-y-1">
           {idea.shotList.map((shot, i) => (
-            <li key={i}>{shot}</li>
+            <li key={i} className="flex gap-2 text-sm text-stone-600">
+              <span className="text-burnt-orange font-medium">{i + 1}.</span>
+              {shot}
+            </li>
           ))}
         </ul>
       )}
 
-      {/* Bottom row */}
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-sm text-muted-foreground">
-          {dots} {label}
-        </span>
-        <div className="flex items-center gap-4">
-          <button className="text-sm font-medium text-burnt-orange">
-            Caption ready &rarr;
-          </button>
-          <button className="text-sm font-medium text-accent-green">
-            Mark as done &check;
-          </button>
-        </div>
+        <span className="text-xs text-muted-foreground">{effortDots(idea.effort)}</span>
+        <button
+          className="text-sm font-medium text-burnt-orange transition-opacity hover:opacity-70"
+          onClick={handleCopy}
+        >
+          {copied ? '✓ Copied' : 'Copy shot list →'}
+        </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-/* ── Pinterest Tab ────────────────────────────── */
+/* ── Pinterest Card ───────────────────────────── */
 
-function PinterestTab() {
-  const { pinterestPins } = usePipData();
+function PinterestCard({ pin }: { pin: PinterestIdea }) {
+  const [copied, setCopied] = useState(false);
 
-  return (
-    <div className="space-y-8">
-      {/* Pin these posts */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Pin these posts</h2>
-        {pinterestPins.map((pin) => (
-          <div key={pin.id} className="rounded-xl border border-border bg-white p-5">
-            <p className="text-sm text-muted-foreground">{pin.postTitle}</p>
-            <h3 className="text-lg font-semibold">{pin.pinTitle}</h3>
-            <p className="mt-1 text-sm">{pin.description}</p>
-            <span className="mt-2 inline-block rounded-full bg-accent-green/10 px-2 py-1 text-xs text-accent-green">
-              {pin.board}
-            </span>
-            <p className="mt-2 text-sm italic text-muted-foreground">
-              {"\u{1F4F8}"} Image brief: {pin.imageBrief}
-            </p>
-            <button
-              className="mt-3 text-sm font-medium text-burnt-orange"
-              onClick={() => copyToClipboard(`${pin.pinTitle}\n\n${pin.description}`)}
-            >
-              Copy pin text &rarr;
-            </button>
-          </div>
-        ))}
-      </section>
-
-      {/* Pinterest SEO */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Pinterest SEO</h2>
-
-        <div>
-          <h3 className="text-sm font-medium text-muted-foreground">
-            Top Pinterest search terms
-          </h3>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {PINTEREST_SEARCH_TERMS.map((term) => (
-              <span key={term} className="rounded-full bg-muted px-3 py-1 text-sm">
-                {term}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <h3 className="text-sm font-medium text-muted-foreground">
-            Your pins are searchable for:
-          </h3>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {PINTEREST_KEYWORDS.map((kw) => (
-              <span key={kw} className="rounded-full bg-muted px-2 py-0.5 text-xs">
-                {kw}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
-/* ── Instagram Tab ────────────────────────────── */
-
-function CaptionCard({
-  caption,
-}: {
-  caption: { id: string; postTitle: string; hookLine: string; fullCaption: string; suggestedTime: string };
-}) {
-  const [expanded, setExpanded] = useState(false);
-
-  const previewLines = caption.fullCaption.split('\n').slice(0, 2).join('\n');
+  async function handleCopy() {
+    await navigator.clipboard.writeText(`${pin.pinTitle}\n\n${pin.description}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   return (
-    <div className="rounded-xl border border-border bg-white p-5">
-      <p className="text-sm text-muted-foreground">{caption.postTitle}</p>
-      <p className="mt-1 text-base font-medium">{caption.hookLine}</p>
-
-      <div className="mt-2 text-sm whitespace-pre-line">
-        {expanded ? caption.fullCaption : previewLines}
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="rounded-xl border border-border bg-white p-5"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-base font-semibold text-stone-900">{pin.pinTitle}</h3>
+          <span className="mt-1 inline-block rounded-full bg-accent-green/10 px-2 py-0.5 text-xs text-accent-green">
+            {pin.board}
+          </span>
+        </div>
+        <span className="text-2xl">📌</span>
       </div>
-      <button
-        className="mt-1 text-xs font-medium text-burnt-orange"
-        onClick={() => setExpanded(!expanded)}
-      >
-        {expanded ? 'Hide full caption' : 'Show full caption'}
-      </button>
 
-      <p className="mt-2 text-xs text-muted-foreground">
-        Best to post: {caption.suggestedTime}
+      <p className="mt-2 text-sm text-stone-700 leading-relaxed">{pin.description}</p>
+
+      {/* Why it'll rank */}
+      <div className="mt-3 rounded-lg bg-burnt-orange/5 border border-burnt-orange/15 px-3 py-2">
+        <p className="text-xs font-medium text-burnt-orange mb-0.5">Why it'll rank</p>
+        <p className="text-xs text-stone-700 leading-relaxed">{pin.why}</p>
+      </div>
+
+      <p className="mt-3 text-sm text-muted-foreground">
+        📸 <span className="italic">Image brief:</span> {pin.imageBrief}
       </p>
 
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {pin.searchTerms.map((term) => (
+          <span key={term} className="rounded-full bg-muted px-2.5 py-0.5 text-xs text-stone-600">
+            {term}
+          </span>
+        ))}
+      </div>
+
       <button
-        className="mt-3 text-sm font-medium text-burnt-orange"
-        onClick={() => copyToClipboard(caption.fullCaption)}
+        className="mt-4 text-sm font-medium text-burnt-orange transition-opacity hover:opacity-70"
+        onClick={handleCopy}
       >
-        Copy caption &rarr;
+        {copied ? '✓ Copied' : 'Copy pin text →'}
       </button>
-    </div>
-  );
-}
-
-function InstagramTab() {
-  const { instagramCaptions, videoIdeas } = usePipData();
-
-  /* Reuse first 3 video ideas as reel ideas */
-  const reelIdeas = videoIdeas.slice(0, 3);
-
-  return (
-    <div className="space-y-8">
-      {/* Caption bank */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Caption bank</h2>
-        {instagramCaptions.map((cap) => (
-          <CaptionCard key={cap.id} caption={cap} />
-        ))}
-      </section>
-
-      {/* Reel ideas */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Reel ideas</h2>
-        <p className="text-sm italic text-muted-foreground">
-          Reels get 3x the reach of static posts right now.
-        </p>
-        {reelIdeas.map((idea) => (
-          <VideoCard key={idea.id} idea={idea} compact />
-        ))}
-      </section>
-    </div>
+    </motion.div>
   );
 }
 
 /* ── Main Component ───────────────────────────── */
 
 export default function PipContentCreation() {
-  const { videoIdeas } = usePipData();
+  const { analytics } = usePipData();
+  const { plan, isGenerating, error, generate } = useSocialContent();
   const [activeTab, setActiveTab] = useState<Tab>(TABS[0]);
+
+  const blogContext: BlogContext = {
+    niche: NICHE,
+    topPosts: analytics.topPosts.slice(0, 5).map((p) => ({
+      title: p.title,
+      sessions: p.sessions,
+    })),
+    topQueries: analytics.search.topQueries.slice(0, 5).map((q) => ({
+      query: q.query,
+      impressions: q.impressions,
+    })),
+  };
 
   return (
     <div className="space-y-6">
-      {/* ── Tab Bar ───────────────────────────── */}
-      <div className="inline-flex rounded-full bg-muted p-1">
-        {TABS.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === tab
-                ? 'bg-white shadow-sm text-stone-900'
-                : 'text-stone-500 hover:text-stone-700'
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
+
+      {/* ── Header row ──────────────────────────── */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="inline-flex rounded-full bg-muted p-1">
+          {TABS.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                activeTab === tab
+                  ? 'bg-white shadow-sm text-stone-900'
+                  : 'text-stone-500 hover:text-stone-700'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {plan && !isGenerating && (
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-muted-foreground">
+              {relativeDate(plan.generatedAt)}
+            </span>
+            <GenerateButton
+              onClick={() => generate(blogContext)}
+              loading={isGenerating}
+            />
+          </div>
+        )}
       </div>
 
-      {/* ── Tab Content ──────────────────────── */}
-      {activeTab === '\u{1F4F8} Video & Reels' && (
-        <div className="space-y-4">
-          {videoIdeas.map((idea) => (
-            <VideoCard key={idea.id} idea={idea} />
-          ))}
+      {/* ── Error ───────────────────────────────── */}
+      {error && (
+        <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          Something went wrong: {error}. Try again?
         </div>
       )}
 
-      {activeTab === '\u{1F4CC} Pinterest' && <PinterestTab />}
+      {/* ── Content ─────────────────────────────── */}
+      <AnimatePresence mode="wait">
+        {isGenerating ? (
+          <ThinkingState key="thinking" />
+        ) : !plan ? (
+          <EmptyState
+            key="empty"
+            onGenerate={() => generate(blogContext)}
+            isGenerating={isGenerating}
+          />
+        ) : (
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="space-y-4"
+          >
+            {activeTab === TABS[0] && (
+              <>
+                <p className="text-sm text-muted-foreground italic">
+                  Short-form video built for discovery — each idea is rooted in what's actually working right now.
+                </p>
+                {plan.reels.map((idea) => (
+                  <ReelCard key={idea.id} idea={idea} />
+                ))}
+              </>
+            )}
 
-      {activeTab === '\u{1F4F7} Instagram' && <InstagramTab />}
+            {activeTab === TABS[1] && (
+              <>
+                <p className="text-sm text-muted-foreground italic">
+                  Pinterest is a search engine first. These pins are built to rank for terms your audience is already looking for.
+                </p>
+                {plan.pinterest.map((pin) => (
+                  <PinterestCard key={pin.id} pin={pin} />
+                ))}
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }

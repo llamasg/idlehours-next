@@ -9,17 +9,14 @@ import { createClient } from '@sanity/client';
 import {
   mockIdeas,
   mockAnalytics,
-  mockClusters,
   mockAchievements,
   mockGoal,
   mockSeoSuggestions,
-  mockVideoIdeas,
-  mockPinterestPins,
-  mockInstagramCaptions,
   allAchievements,
   checkAchievement,
   type PipIdea,
   type AnalyticsData,
+  type PipCluster,
 } from '../lib/pipMockData';
 
 // Dedicated pip client — useCdn: false ensures fresh data every time
@@ -154,6 +151,9 @@ export function usePipData() {
     milestones: mockGoal.milestones,
   };
 
+  // ── Clusters — no mock data; show empty until Sanity has real clusters ─────
+  const clusters: PipCluster[] = [];
+
   return {
     ideas,
     morningMessage,
@@ -162,14 +162,11 @@ export function usePipData() {
     level,
     analytics,
     isLoading,
-    clusters: mockClusters,
+    clusters,
     achievements,
-    calendar: [], // calendar is now derived from `posts` in PipCalendar
+    calendar: [], // calendar is derived from `posts` in PipCalendar
     goals,
     seoSuggestions: mockSeoSuggestions,
-    videoIdeas: mockVideoIdeas,
-    pinterestPins: mockPinterestPins,
-    instagramCaptions: mockInstagramCaptions,
     posts,
   };
 }

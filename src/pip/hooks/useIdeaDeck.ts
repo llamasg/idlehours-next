@@ -1,30 +1,36 @@
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — useIdeaDeck
-   Tinder-style card deck logic for post ideas
+   Tinder-style card deck logic for post ideas.
+   Both dismissed + saved ideas persist via localStorage.
    ────────────────────────────────────────────── */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import type { PipIdea } from '../lib/pipMockData';
 import { markIdeaSelected } from '../lib/pipSanityClient';
 
-const LS_KEY = 'pip_dismissed_ideas';
+const LS_DISMISSED = 'pip_dismissed_ideas';
+const LS_SAVED     = 'pip_saved_ideas';
 
-function getDismissedFromStorage(): string[] {
+function getFromStorage<T>(key: string, fallback: T): T {
   try {
-    const raw = localStorage.getItem(LS_KEY);
-    return raw ? (JSON.parse(raw) as string[]) : [];
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
-    return [];
+    return fallback;
   }
 }
 
-function persistDismissed(ids: string[]) {
-  localStorage.setItem(LS_KEY, JSON.stringify(ids));
+function persistToStorage<T>(key: string, value: T) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // quota exceeded — fail silently
+  }
 }
 
 export interface UseIdeaDeckReturn {
   currentCard: PipIdea | null;
-  behindCards: PipIdea[]; // next 2 cards for stack effect
+  behindCards: PipIdea[];
   deckSize: number;
   dismissed: string[];
   saved: PipIdea[];
@@ -36,19 +42,27 @@ export interface UseIdeaDeckReturn {
   addIdeas: (ideas: PipIdea[]) => void;
   refreshDeck: () => void;
   isEmpty: boolean;
-  /** Last action — used by IdeaDeck to decide exit animation direction */
   lastAction: 'dismiss' | 'save' | 'select' | null;
 }
 
 export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
-  // Keep a stable ref to the full ideas list for cycling on refresh
   const allIdeasRef = useRef(ideas);
   allIdeasRef.current = ideas;
 
-  const [dismissed, setDismissed] = useState<string[]>(getDismissedFromStorage);
-  const [deck, setDeck] = useState<PipIdea[]>(() =>
-    ideas.filter((i) => !getDismissedFromStorage().includes(i.id)),
+  const [dismissed, setDismissed] = useState<string[]>(() =>
+    getFromStorage<string[]>(LS_DISMISSED, []),
   );
+
+  const [saved, setSaved] = useState<PipIdea[]>(() =>
+    getFromStorage<PipIdea[]>(LS_SAVED, []),
+  );
+
+  // Exclude both dismissed AND already-saved ideas from the live deck on init
+  const [deck, setDeck] = useState<PipIdea[]>(() => {
+    const dismissedIds = getFromStorage<string[]>(LS_DISMISSED, []);
+    const savedIds = new Set(getFromStorage<PipIdea[]>(LS_SAVED, []).map((i) => i.id));
+    return ideas.filter((i) => !dismissedIds.includes(i.id) && !savedIds.has(i.id));
+  });
 
   // When ideas transitions from mock → live Sanity data the IDs change.
   // useState initializers only run once, so we need an effect to reset the deck.
@@ -57,14 +71,13 @@ export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
     const newKey = ideas.map((i) => i.id).join(',');
     if (newKey !== ideasKeyRef.current) {
       ideasKeyRef.current = newKey;
-      setDeck(ideas.filter((i) => !getDismissedFromStorage().includes(i.id)));
+      const d = getFromStorage<string[]>(LS_DISMISSED, []);
+      const s = new Set(getFromStorage<PipIdea[]>(LS_SAVED, []).map((i) => i.id));
+      setDeck(ideas.filter((i) => !d.includes(i.id) && !s.has(i.id)));
     }
   }, [ideas]);
 
-  const [saved, setSaved] = useState<PipIdea[]>([]);
   const [lastAction, setLastAction] = useState<'dismiss' | 'save' | 'select' | null>(null);
-
-  // Cycle index for refreshDeck — tracks where we left off
   const cycleIndexRef = useRef(0);
 
   const dismiss = useCallback((id: string) => {
@@ -72,7 +85,7 @@ export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
     setDeck((prev) => prev.filter((c) => c.id !== id));
     setDismissed((prev) => {
       const next = [...prev, id];
-      persistDismissed(next);
+      persistToStorage(LS_DISMISSED, next);
       return next;
     });
   }, []);
@@ -81,27 +94,51 @@ export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
     setLastAction('save');
     setDeck((prev) => {
       const card = prev.find((c) => c.id === id);
-      if (card) setSaved((s) => [...s, card]);
+      if (card) {
+        setSaved((s) => {
+          const next = [...s, card];
+          persistToStorage(LS_SAVED, next);
+          return next;
+        });
+      }
       return prev.filter((c) => c.id !== id);
     });
   }, []);
 
   const select = useCallback((id: string) => {
     setLastAction('select');
-    setDeck((prev) => prev.filter((c) => c.id !== id));
+    setDeck((prev) => {
+      const card = prev.find((c) => c.id === id);
+      if (card) {
+        // Push into saved so "I'll write this" survives a page refresh
+        setSaved((s) => {
+          if (s.some((i) => i.id === id)) return s;
+          const next = [...s, card];
+          persistToStorage(LS_SAVED, next);
+          return next;
+        });
+      }
+      return prev.filter((c) => c.id !== id);
+    });
     markIdeaSelected(id);
   }, []);
 
   const removeSaved = useCallback((id: string) => {
-    setSaved((prev) => prev.filter((c) => c.id !== id));
+    setSaved((prev) => {
+      const next = prev.filter((c) => c.id !== id);
+      persistToStorage(LS_SAVED, next);
+      return next;
+    });
   }, []);
 
   const selectSaved = useCallback((id: string) => {
-    setSaved((prev) => prev.filter((c) => c.id !== id));
-    // In future this could trigger the SEO helper flow
+    setSaved((prev) => {
+      const next = prev.filter((c) => c.id !== id);
+      persistToStorage(LS_SAVED, next);
+      return next;
+    });
   }, []);
 
-  /** Prepend Claude-generated ideas to the front of the deck */
   const addIdeas = useCallback((newIdeas: PipIdea[]) => {
     setDeck((prev) => {
       const existingIds = new Set(prev.map((c) => c.id));
@@ -115,46 +152,52 @@ export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
     if (all.length === 0) return;
 
     setDismissed((currentDismissed) => {
-      setDeck((currentDeck) => {
-        const currentIds = new Set([
-          ...currentDeck.map((c) => c.id),
-          ...currentDismissed,
-        ]);
+      setSaved((currentSaved) => {
+        const savedIds = new Set(currentSaved.map((i) => i.id));
 
-        const candidates = all.filter((i) => !currentIds.has(i.id));
-        let toAdd: PipIdea[] = [];
+        setDeck((currentDeck) => {
+          const currentIds = new Set([
+            ...currentDeck.map((c) => c.id),
+            ...currentDismissed,
+            ...savedIds,
+          ]);
 
-        if (candidates.length >= 3) {
-          toAdd = candidates.slice(0, 3);
-        } else {
-          // Cycle through all ideas, skipping dismissed
-          toAdd = [];
-          let idx = cycleIndexRef.current;
-          const nonDismissed = all.filter((i) => !currentDismissed.includes(i.id));
-          if (nonDismissed.length === 0) return currentDeck;
+          const candidates = all.filter((i) => !currentIds.has(i.id));
+          let toAdd: PipIdea[] = [];
 
-          for (let added = 0; added < 3; added++) {
-            const idea = nonDismissed[idx % nonDismissed.length];
-            if (!currentIds.has(idea.id)) {
-              toAdd.push(idea);
-              currentIds.add(idea.id);
-            }
-            idx++;
-          }
-          cycleIndexRef.current = idx;
+          if (candidates.length >= 3) {
+            toAdd = candidates.slice(0, 3);
+          } else {
+            let idx = cycleIndexRef.current;
+            const nonDismissed = all.filter(
+              (i) => !currentDismissed.includes(i.id) && !savedIds.has(i.id),
+            );
+            if (nonDismissed.length === 0) return currentDeck;
 
-          // If we still got nothing (all in deck already), force-add copies
-          if (toAdd.length === 0) {
-            idx = cycleIndexRef.current;
             for (let added = 0; added < 3; added++) {
-              toAdd.push(nonDismissed[idx % nonDismissed.length]);
+              const idea = nonDismissed[idx % nonDismissed.length];
+              if (!currentIds.has(idea.id)) {
+                toAdd.push(idea);
+                currentIds.add(idea.id);
+              }
               idx++;
             }
             cycleIndexRef.current = idx;
-          }
-        }
 
-        return [...currentDeck, ...toAdd];
+            if (toAdd.length === 0) {
+              idx = cycleIndexRef.current;
+              for (let added = 0; added < 3; added++) {
+                toAdd.push(nonDismissed[idx % nonDismissed.length]);
+                idx++;
+              }
+              cycleIndexRef.current = idx;
+            }
+          }
+
+          return [...currentDeck, ...toAdd];
+        });
+
+        return currentSaved;
       });
 
       return currentDismissed;
