@@ -49,10 +49,21 @@ function getEventsForDay(events: CalendarEvent[], day: Date): CalendarEvent[] {
 /* ── main component ──────────────────────────── */
 
 export default function PipCalendar() {
-  const { calendar } = usePipData();
+  const { posts } = usePipData();
 
-  /* Month navigation — start at Feb 2026 */
-  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 1, 1));
+  // Map real published posts to calendar events
+  const calendarEvents: CalendarEvent[] = posts
+    .filter((p) => p.publishedAt)
+    .map((p) => ({
+      id: p._id,
+      date: p.publishedAt.slice(0, 10),
+      title: p.title,
+      type: 'published' as const,
+    }));
+
+  /* Month navigation — start at current month */
+  const now = new Date();
+  const [currentMonth, setCurrentMonth] = useState(new Date(now.getFullYear(), now.getMonth(), 1));
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
 
   const monthStart = startOfMonth(currentMonth);
@@ -61,7 +72,7 @@ export default function PipCalendar() {
   const calendarEnd = endOfWeek(monthEnd, { weekStartsOn: 1 });
   const days = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
 
-  const selectedEvents = selectedDay ? getEventsForDay(calendar, selectedDay) : [];
+  const selectedEvents = selectedDay ? getEventsForDay(calendarEvents, selectedDay) : [];
 
   return (
     <div className="mx-auto max-w-3xl space-y-8 py-8 px-4">
@@ -126,7 +137,7 @@ export default function PipCalendar() {
           {days.map((day) => {
             const inMonth = isSameMonth(day, currentMonth);
             const today = isToday(day);
-            const dayEvents = getEventsForDay(calendar, day);
+            const dayEvents = getEventsForDay(calendarEvents, day);
             const isSelected = selectedDay ? isSameDay(day, selectedDay) : false;
 
             return (

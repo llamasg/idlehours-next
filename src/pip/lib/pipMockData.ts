@@ -542,3 +542,95 @@ export const mockBoostContext: BoostContext = {
   topPost: { title: 'Spiritfarer review', sessions: 312 },
   quickWin: { query: 'cosy games for anxiety', position: 14 },
 };
+
+// ─── All Achievements (25) ────────────────────
+
+export const allAchievements: PipAchievement[] = [
+  // Writing milestones
+  { id: 'first-post', emoji: '🌱', name: 'First Word', description: 'Published your very first post. The hardest one.', earned: false },
+  { id: 'five-posts', emoji: '✋', name: 'High Five', description: 'Five posts published. You have a blog now.', earned: false },
+  { id: 'ten-posts', emoji: '🔟', name: 'Double Digits', description: 'Ten posts. This is a real thing.', earned: false },
+  { id: 'twenty-five-posts', emoji: '🌿', name: 'Growing', description: 'Twenty-five posts. Google is starting to notice.', earned: false },
+  { id: 'fifty-posts', emoji: '🌳', name: 'Forest', description: 'Fifty posts. You built something significant.', earned: false },
+
+  // Streak achievements
+  { id: 'streak-3', emoji: '🔥', name: 'On a Roll', description: '3-day writing streak.', earned: false },
+  { id: 'streak-7', emoji: '🔥🔥', name: 'Week Warrior', description: '7-day writing streak. A whole week.', earned: false },
+  { id: 'streak-30', emoji: '💫', name: 'Monthly', description: "30-day streak. That's dedication.", earned: false },
+
+  // Traffic milestones
+  { id: 'sessions-100', emoji: '👀', name: 'First 100', description: '100 sessions in a week. Real people, reading your words.', earned: false },
+  { id: 'sessions-500', emoji: '📈', name: 'Momentum', description: '500 sessions in a week. Something is working.', earned: false },
+  { id: 'sessions-1000', emoji: '🚀', name: 'Four Figures', description: '1,000 sessions in a week. This is a real blog.', earned: false },
+  { id: 'sessions-5000', emoji: '🌟', name: 'Destination', description: '5,000 sessions in a week. People come here on purpose.', earned: false },
+
+  // SEO achievements
+  { id: 'page-one', emoji: '🎯', name: 'Page One', description: 'A post ranked in the top 10 for a real keyword.', earned: false },
+  { id: 'position-one', emoji: '🏆', name: 'Top of the World', description: 'Position 1 for a keyword. You beat everyone.', earned: false },
+  { id: 'quick-win', emoji: '⚡', name: 'Quick Win', description: 'Moved a post from page 2 to page 1.', earned: false },
+
+  // Cluster achievements
+  { id: 'cluster-started', emoji: '🧩', name: 'The Plan', description: 'Started your first content cluster.', earned: false },
+  { id: 'cluster-halfway', emoji: '🏗️', name: 'Halfway There', description: 'Published 3 posts in a single cluster.', earned: false },
+  { id: 'cluster-complete', emoji: '🌳', name: 'Full Cluster', description: 'All 5 posts in a cluster published. Compound interest starts now.', earned: false },
+  { id: 'two-clusters', emoji: '🌲🌲', name: 'Growing Forest', description: 'Two complete clusters. Topical authority building.', earned: false },
+
+  // Revenue
+  { id: 'first-click', emoji: '💰', name: 'First Click', description: 'First affiliate click. Someone trusted you enough to buy.', earned: false },
+  { id: 'first-pound', emoji: '£', name: 'First £1', description: "The blog made money. It's real now.", earned: false },
+  { id: 'fifty-pounds', emoji: '💵', name: 'Fifty Quid', description: '£50 earned. This is income.', earned: false },
+  { id: 'five-hundred', emoji: '🎉', name: 'The Goal', description: '£500/month. You did it.', earned: false },
+
+  // Special
+  { id: 'return-visitors', emoji: '💚', name: 'They Came Back', description: '30% return visitor rate. People like it here.', earned: false },
+  { id: 'viral', emoji: '🦠', name: 'It Spread', description: 'A post got shared more than 50 times.', earned: false },
+];
+
+export function checkAchievement(
+  id: string,
+  data: { totalPosts: number; sessions7d: number; streak: number; returnVisitorPct: number },
+): boolean {
+  switch (id) {
+    case 'first-post': return data.totalPosts >= 1;
+    case 'five-posts': return data.totalPosts >= 5;
+    case 'ten-posts': return data.totalPosts >= 10;
+    case 'twenty-five-posts': return data.totalPosts >= 25;
+    case 'fifty-posts': return data.totalPosts >= 50;
+    case 'streak-3': return data.streak >= 3;
+    case 'streak-7': return data.streak >= 7;
+    case 'streak-30': return data.streak >= 30;
+    case 'sessions-100': return data.sessions7d >= 100;
+    case 'sessions-500': return data.sessions7d >= 500;
+    case 'sessions-1000': return data.sessions7d >= 1000;
+    case 'sessions-5000': return data.sessions7d >= 5000;
+    case 'return-visitors': return data.returnVisitorPct >= 30;
+    default: return false; // Revenue + SEO achievements wired when data exists
+  }
+}
+
+// ─── XP Levels ───────────────────────────────
+
+export const XP_LEVELS = [
+  { level: 1, name: 'Lurker', xpRequired: 0 },
+  { level: 2, name: 'Curious Writer', xpRequired: 500 },
+  { level: 3, name: 'Cosy Correspondent', xpRequired: 1500 },
+  { level: 4, name: 'Regular Contributor', xpRequired: 3000 },
+  { level: 5, name: 'Idle Hours Author', xpRequired: 5000 },
+  { level: 6, name: 'Established Voice', xpRequired: 8000 },
+  { level: 7, name: 'Niche Authority', xpRequired: 12000 },
+  { level: 8, name: 'Idle Hours Editor', xpRequired: 17000 },
+];
+
+export function getLevelInfo(xp: number) {
+  const current = XP_LEVELS.filter((l) => xp >= l.xpRequired).pop() ?? XP_LEVELS[0];
+  const nextIndex = XP_LEVELS.findIndex((l) => l.xpRequired > xp);
+  const next = nextIndex >= 0 ? XP_LEVELS[nextIndex] : null;
+  return {
+    level: current.level,
+    name: current.name,
+    xpToNextLevel: next ? next.xpRequired - xp : 0,
+    progress: next
+      ? ((xp - current.xpRequired) / (next.xpRequired - current.xpRequired)) * 100
+      : 100,
+  };
+}

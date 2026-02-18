@@ -5,6 +5,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import type { PipIdea } from '../lib/pipMockData';
+import { markIdeaSelected } from '../lib/pipSanityClient';
 
 const LS_KEY = 'pip_dismissed_ideas';
 
@@ -32,6 +33,7 @@ export interface UseIdeaDeckReturn {
   select: (id: string) => void;
   removeSaved: (id: string) => void;
   selectSaved: (id: string) => void;
+  addIdeas: (ideas: PipIdea[]) => void;
   refreshDeck: () => void;
   isEmpty: boolean;
   /** Last action — used by IdeaDeck to decide exit animation direction */
@@ -58,6 +60,7 @@ export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
       setDeck(ideas.filter((i) => !getDismissedFromStorage().includes(i.id)));
     }
   }, [ideas]);
+
   const [saved, setSaved] = useState<PipIdea[]>([]);
   const [lastAction, setLastAction] = useState<'dismiss' | 'save' | 'select' | null>(null);
 
@@ -86,6 +89,7 @@ export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
   const select = useCallback((id: string) => {
     setLastAction('select');
     setDeck((prev) => prev.filter((c) => c.id !== id));
+    markIdeaSelected(id);
   }, []);
 
   const removeSaved = useCallback((id: string) => {
@@ -95,6 +99,15 @@ export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
   const selectSaved = useCallback((id: string) => {
     setSaved((prev) => prev.filter((c) => c.id !== id));
     // In future this could trigger the SEO helper flow
+  }, []);
+
+  /** Prepend Claude-generated ideas to the front of the deck */
+  const addIdeas = useCallback((newIdeas: PipIdea[]) => {
+    setDeck((prev) => {
+      const existingIds = new Set(prev.map((c) => c.id));
+      const unique = newIdeas.filter((i) => !existingIds.has(i.id));
+      return [...unique, ...prev];
+    });
   }, []);
 
   const refreshDeck = useCallback(() => {
@@ -162,6 +175,7 @@ export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
     select,
     removeSaved,
     selectSaved,
+    addIdeas,
     refreshDeck,
     isEmpty: deck.length === 0,
     lastAction,

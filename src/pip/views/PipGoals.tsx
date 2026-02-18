@@ -39,6 +39,8 @@ export default function PipGoals() {
   const { goals, analytics, clusters, streak } = usePipData();
   const { plan, isGenerating, generate, save } = useBoostPlan();
 
+  if (!goals) return <div className="py-8 px-4 text-muted-foreground">Loading...</div>;
+
   /* Build BoostContext from live data */
   const activeCluster = clusters.find((c) =>
     c.steps.some((s) => s.status !== 'published'),
@@ -48,8 +50,8 @@ export default function PipGoals() {
     : 0;
   const clusterTotal = activeCluster ? activeCluster.steps.length : 0;
 
-  const topPost = analytics.topPosts[0];
-  const quickWin = analytics.search.quickWins[0];
+  const topPost = analytics.topPosts[0] ?? { title: 'None yet', sessions: 0 };
+  const quickWin = analytics.search.quickWins[0] ?? { query: 'None yet', position: 0 };
 
   const boostContext: BoostContext = {
     sessions: analytics.overview.sessions7d,

@@ -9,6 +9,8 @@ import type { UseIdeaDeckReturn } from '../hooks/useIdeaDeck';
 
 interface IdeaDeckProps {
   deck: UseIdeaDeckReturn;
+  onFreshIdeas?: () => void;
+  isRefreshing?: boolean;
 }
 
 /* ── Exit animation variants keyed on last action ── */
@@ -18,7 +20,7 @@ const exitVariants = {
   select: { x: 300, opacity: 0, rotate: 5, transition: { duration: 0.3 } },
 } as const;
 
-export function IdeaDeck({ deck }: IdeaDeckProps) {
+export function IdeaDeck({ deck, onFreshIdeas, isRefreshing }: IdeaDeckProps) {
   const {
     currentCard,
     behindCards,
@@ -30,6 +32,8 @@ export function IdeaDeck({ deck }: IdeaDeckProps) {
     lastAction,
   } = deck;
 
+  const handleFresh = onFreshIdeas ?? refreshDeck;
+
   /* ── Empty state ── */
   if (isEmpty) {
     return (
@@ -39,10 +43,11 @@ export function IdeaDeck({ deck }: IdeaDeckProps) {
         </p>
         <button
           type="button"
-          onClick={refreshDeck}
-          className="bg-burnt-orange text-white rounded-full px-8 py-3 font-semibold hover:opacity-90 transition-opacity"
+          onClick={handleFresh}
+          disabled={isRefreshing}
+          className="bg-burnt-orange text-white rounded-full px-8 py-3 font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
         >
-          ✨ Find more ideas
+          {isRefreshing ? '⏳ Getting ideas...' : '✨ Find more ideas'}
         </button>
       </div>
     );
@@ -119,10 +124,11 @@ export function IdeaDeck({ deck }: IdeaDeckProps) {
       {/* ── Fresh ideas link ── */}
       <button
         type="button"
-        onClick={refreshDeck}
-        className="mt-4 text-burnt-orange hover:underline text-sm font-medium transition-colors"
+        onClick={handleFresh}
+        disabled={isRefreshing}
+        className="mt-4 text-burnt-orange hover:underline text-sm font-medium transition-colors disabled:opacity-50"
       >
-        ✨ Fresh ideas
+        {isRefreshing ? '⏳ Getting ideas...' : '✨ Fresh ideas'}
       </button>
     </div>
   );

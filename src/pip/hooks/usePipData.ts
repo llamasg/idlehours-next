@@ -11,12 +11,13 @@ import {
   mockAnalytics,
   mockClusters,
   mockAchievements,
-  mockCalendarEvents,
   mockGoal,
   mockSeoSuggestions,
   mockVideoIdeas,
   mockPinterestPins,
   mockInstagramCaptions,
+  allAchievements,
+  checkAchievement,
   type PipIdea,
   type AnalyticsData,
 } from '../lib/pipMockData';
@@ -81,7 +82,9 @@ function mapAnalytics(raw: any, searchConsole: any): AnalyticsData {
 export function usePipData() {
   const [dashboardDoc, setDashboardDoc] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [posts, setPosts] = useState<Array<{ _id: string; title: string; publishedAt: string }>>([]);
 
+  // Fetch pip-dashboard-singleton
   useEffect(() => {
     pipClient
       .fetch(`*[_id == "pip-dashboard-singleton"][0]`)
@@ -93,6 +96,14 @@ export function usePipData() {
         console.warn('[Pip] Could not fetch live data — using mock', e);
       })
       .finally(() => setIsLoading(false));
+  }, []);
+
+  // Fetch real posts for calendar and achievement calculations
+  useEffect(() => {
+    pipClient
+      .fetch(`*[_type == "post"] | order(publishedAt desc) { _id, title, publishedAt }`)
+      .then((docs: any[]) => setPosts(docs ?? []))
+      .catch(() => {});
   }, []);
 
   // ── Ideas ─────────────────────────────────────────────────────────────────
@@ -122,6 +133,27 @@ export function usePipData() {
     ? mapAnalytics(dashboardDoc.analytics, dashboardDoc.searchConsole)
     : mockAnalytics;
 
+  // ── Achievements — calculate from real data when available ────────────────
+  const achievements = dashboardDoc
+    ? allAchievements.map((ach) => ({
+        ...ach,
+        earned: checkAchievement(ach.id, {
+          totalPosts: posts.length,
+          sessions7d: dashboardDoc.analytics?.sessions7d ?? 0,
+          streak: dashboardDoc.siteStats?.streak ?? 0,
+          returnVisitorPct: dashboardDoc.analytics?.returnVisitorPct ?? 0,
+        }),
+      }))
+    : mockAchievements;
+
+  // ── Goals — use live session count ────────────────────────────────────────
+  const goals = {
+    title: mockGoal.title,
+    current: dashboardDoc?.analytics?.sessions7d ?? mockGoal.current,
+    target: mockGoal.target,
+    milestones: mockGoal.milestones,
+  };
+
   return {
     ideas,
     morningMessage,
@@ -131,13 +163,13 @@ export function usePipData() {
     analytics,
     isLoading,
     clusters: mockClusters,
-    achievements: mockAchievements,
-    calendar: mockCalendarEvents,
-    goals: mockGoal,
+    achievements,
+    calendar: [], // calendar is now derived from `posts` in PipCalendar
+    goals,
     seoSuggestions: mockSeoSuggestions,
     videoIdeas: mockVideoIdeas,
     pinterestPins: mockPinterestPins,
     instagramCaptions: mockInstagramCaptions,
-    posts: [] as Array<{ _id: string; title: string; publishedAt: string }>,
+    posts,
   };
 }

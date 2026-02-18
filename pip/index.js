@@ -40,7 +40,7 @@ async function run() {
   console.log('\n' + '─'.repeat(50))
 
   // ── Step 3: Generate with Claude ─────────────────
-  const generated = await generateContent(research)
+  const generated = await generateContent(research, posts)
 
   console.log('\n' + '─'.repeat(50))
 

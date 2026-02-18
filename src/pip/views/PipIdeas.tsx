@@ -6,19 +6,31 @@
 import { useState } from 'react';
 import { usePipData } from '../hooks/usePipData';
 import { useIdeaDeck } from '../hooks/useIdeaDeck';
+import { useIdeasRefresh } from '../hooks/useIdeasRefresh';
 import { IdeaDeck } from '../components/IdeaDeck';
 
 export default function PipIdeas() {
   const { ideas } = usePipData();
   const deck = useIdeaDeck(ideas);
+  const { fetchFreshIdeas, isRefreshing } = useIdeasRefresh();
   const [savedOpen, setSavedOpen] = useState(false);
+
+  async function handleFreshIdeas() {
+    const existingTitles = ideas.map((i) => i.title);
+    const newIdeas = await fetchFreshIdeas(existingTitles);
+    if (newIdeas.length > 0) {
+      deck.addIdeas(newIdeas);
+    } else {
+      deck.refreshDeck();
+    }
+  }
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold font-serif text-foreground mb-8">Post Ideas</h1>
 
       {/* Card deck */}
-      <IdeaDeck deck={deck} />
+      <IdeaDeck deck={deck} onFreshIdeas={handleFreshIdeas} isRefreshing={isRefreshing} />
 
       {/* Saved ideas section */}
       {deck.saved.length > 0 && (

@@ -28,6 +28,13 @@ const TYPE_EMOJIS = {
   'Guide': '\u{1F4D6}',
 }
 
+function getTimeOfDay() {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Morning'
+  if (hour < 17) return 'Afternoon'
+  return 'Evening'
+}
+
 // ── IDEAS ─────────────────────────────────────────────────────────────────
 
 async function generateIdeas(research) {
@@ -124,47 +131,60 @@ Respond with a JSON array ONLY. No markdown fences, no explanation, just the arr
 
 // ── MORNING MESSAGE ───────────────────────────────────────────────────────
 
-async function generateMorningMessage(research) {
-  const { ga4, searchConsole } = research
-  const activeCluster = process.env.PIP_ACTIVE_CLUSTER || 'Cosy Lifestyle'
+async function generateMorningMessage(research, streak = 0, activeCluster, totalPosts = 0) {
+  const { ga4 } = research
+  const cluster = activeCluster || process.env.PIP_ACTIVE_CLUSTER || 'Cosy Lifestyle'
+  const timeOfDay = getTimeOfDay()
+
+  const isNewBlog = totalPosts < 10
+  const hasTraffic = (ga4?.sessions7d ?? 0) > 50
+
+  const contextNote = isNewBlog
+    ? `IMPORTANT: This blog is brand new with only ${totalPosts} post(s). Pip is in her first weeks on the job. The tone should be warm and encouraging about getting started — NOT analytical or warning about growth problems. At this stage, ANY traffic is great. Focus on momentum and the next post.`
+    : hasTraffic
+    ? `The blog has ${ga4.sessions7d} sessions this week. You can start referencing specific data and growth patterns.`
+    : `Traffic is still building. Keep the tone encouraging and focused on content quality.`
 
   const statsLines = []
-
   if (ga4) {
     const trend = ga4.sessionsDelta > 0 ? `up ${ga4.sessionsDelta}%` : ga4.sessionsDelta < 0 ? `down ${Math.abs(ga4.sessionsDelta)}%` : 'flat'
     statsLines.push(`Traffic: ${ga4.sessions7d} sessions this week, ${trend} on last week`)
     if (ga4.topPages[0]) {
-      statsLines.push(`Top post: "${ga4.topPages[0].title}" (${ga4.topPages[0].sessions} sessions, avg ${Math.round(ga4.topPages[0].avgReadTime / 60 * 10) / 10} min read time)`)
+      statsLines.push(`Top post: "${ga4.topPages[0].title}" (${ga4.topPages[0].sessions} sessions)`)
     }
     statsLines.push(`Return visitors: ${ga4.returnVisitorPct}%`)
   } else {
     statsLines.push('Analytics data not available today')
   }
 
-  if (searchConsole) {
-    statsLines.push(`Posts ranking in top 20: ${searchConsole.rankingPosts}`)
-    if (searchConsole.quickWins[0]) {
-      const w = searchConsole.quickWins[0]
-      statsLines.push(`Closest quick win: "${w.query}" at position ${w.position} (${w.impressions} impressions)`)
-    }
-  }
+  const prompt = `You are Pip, Beth's creative partner for idlehours.co.uk — a UK cosy games blog.
 
-  const prompt = `You are Pip, Beth's warm and quietly perceptive content strategist. Write today's morning message for her.
+${contextNote}
 
-Beth runs idlehours.co.uk — a cosy gaming and mental wellness blog. She writes alone, cares about quality over quantity, and doesn't need hype. She needs honest perspective and a clear nudge for today.
-
-TODAY'S DATA:
+Current stats:
 ${statsLines.join('\n')}
 
-Active cluster she's working on: ${activeCluster}
+Writing streak: ${streak} days
+Active cluster: ${cluster}
+Total posts published: ${totalPosts}
 
-Write 2-3 short paragraphs. Be specific and warm. Reference the actual numbers. End with one concrete thing she could do today — not a long list, just one thing. No opening greeting like "Good morning" — start with a real observation. Don't be sycophantic. Write as Pip.`
+Write a morning message for Beth. Rules:
+- Maximum 2 sentences (strictly — not 3, not 4, TWO)
+- Start with "${timeOfDay}, Beth!"
+- If the blog is new (under 10 posts): be warm and focus on the next post, not analytics
+- If there's real traffic: mention ONE specific number that's genuinely interesting
+- End with something that makes her want to open her writing app
+- Never use phrases like "not a crisis", "signal", "worth sitting with"
+- Sound like a friend who's excited about this project, not a consultant
+- UK spelling
+
+Return ONLY the message, nothing else.`
 
   console.log('✉️  Generating morning message with Claude Sonnet...')
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 600,
+    max_tokens: 100,
     messages: [{ role: 'user', content: prompt }],
   })
 
@@ -173,7 +193,7 @@ Write 2-3 short paragraphs. Be specific and warm. Reference the actual numbers. 
 
 // ── MAIN EXPORT ───────────────────────────────────────────────────────────
 
-export async function generateContent(research) {
+export async function generateContent(research, posts = []) {
   console.log('\n✨ Generating content with Claude...')
 
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -181,10 +201,13 @@ export async function generateContent(research) {
     return null
   }
 
+  const activeCluster = process.env.PIP_ACTIVE_CLUSTER || 'Cosy Lifestyle'
+  const totalPosts = posts.length
+
   try {
     const [ideas, morningMessage] = await Promise.all([
       generateIdeas(research),
-      generateMorningMessage(research),
+      generateMorningMessage(research, 0, activeCluster, totalPosts),
     ])
 
     console.log(`✅ Generated ${ideas.length} ideas + morning message`)
@@ -205,8 +228,10 @@ export async function generateContent(research) {
 
 if (process.argv[1].endsWith('generate.js')) {
   const { fetchResearchData } = await import('./research.js')
+  const { fetchPosts } = await import('./sanity.js')
   const research = await fetchResearchData()
-  const generated = await generateContent(research)
+  const posts = await fetchPosts()
+  const generated = await generateContent(research, posts)
 
   if (generated) {
     console.log('\n📋 Morning message:\n')
