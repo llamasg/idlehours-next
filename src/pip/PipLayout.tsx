@@ -73,9 +73,6 @@ export default function PipLayout({ onLogout }: PipLayoutProps) {
   const todayIndex = (new Date().getDay() + 6) % 7;
   const filledDays = streak > 0 ? Math.min(streak, 7) : 0;
 
-  // XP display
-  const nextThreshold = xp + (levelInfo.xpToNextLevel > 0 ? levelInfo.xpToNextLevel : 0);
-
   const sidebarContent = (
     <div className="flex flex-col h-full overflow-y-auto">
       {/* Header */}
@@ -132,10 +129,12 @@ export default function PipLayout({ onLogout }: PipLayoutProps) {
 
       {/* XP Section — bottom of sidebar */}
       <div className="px-4 pt-4 pb-2 border-t border-white/5 shrink-0">
-        <div className="flex justify-between text-xs mb-1">
-          <span className="text-white/40">Writer XP</span>
-          <span className="text-[#7C9B7A] font-mono font-bold">
-            {xp} / {nextThreshold}
+        <div className="flex items-center gap-2 mb-2">
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#7C9B7A] text-xs font-bold text-white">
+            {levelInfo.level}
+          </div>
+          <span className="text-xs font-semibold text-white">
+            Level {levelInfo.level} · {levelInfo.name}
           </span>
         </div>
         <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
@@ -145,7 +144,10 @@ export default function PipLayout({ onLogout }: PipLayoutProps) {
           />
         </div>
         <div className="text-xs text-white/40 mt-1.5">
-          Rank: <strong className="text-purple-300">{levelInfo.name}</strong> ✨
+          {levelInfo.xpToNextLevel > 0
+            ? <>{levelInfo.xpToNextLevel.toLocaleString()} XP to <span className="text-purple-300">{levelInfo.nextLevelName}</span></>
+            : <span className="text-[#7C9B7A]">Max level reached ✨</span>
+          }
         </div>
       </div>
 

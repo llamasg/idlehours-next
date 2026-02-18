@@ -628,6 +628,7 @@ export function getLevelInfo(xp: number) {
   return {
     level: current.level,
     name: current.name,
+    nextLevelName: next ? next.name : null,
     xpToNextLevel: next ? next.xpRequired - xp : 0,
     progress: next
       ? ((xp - current.xpRequired) / (next.xpRequired - current.xpRequired)) * 100

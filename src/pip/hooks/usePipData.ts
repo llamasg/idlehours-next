@@ -19,6 +19,34 @@ import {
   type PipCluster,
 } from '../lib/pipMockData';
 
+// ── XP Calculation ────────────────────────────────────────────────────────
+
+function calculateXP(data: {
+  totalPosts: number;
+  streak: number;
+  sessions7d: number;
+  clustersCompleted: number;
+}): number {
+  let xp = 0;
+
+  // Posts
+  xp += data.totalPosts * 100;
+
+  // Streak bonuses (non-cumulative — highest tier only)
+  if (data.streak >= 30) xp += 500;
+  else if (data.streak >= 7) xp += 150;
+
+  // Traffic milestones (cumulative — earn each tier once)
+  if (data.sessions7d >= 1000) xp += 1000;
+  else if (data.sessions7d >= 500) xp += 500;
+  else if (data.sessions7d >= 100) xp += 200;
+
+  // Completed content clusters
+  xp += data.clustersCompleted * 300;
+
+  return xp;
+}
+
 // Dedicated pip client — useCdn: false ensures fresh data every time
 const pipClient = createClient({
   projectId: 'ijj3h2lj',
@@ -122,8 +150,17 @@ export function usePipData() {
 
   // ── Streak + XP ──────────────────────────────────────────────────────────
   const streak: number = dashboardDoc?.siteStats?.streak ?? 0;
-  const xp: number = 0;
-  const level: number = 1;
+  const sessions7d: number = dashboardDoc?.analytics?.sessions7d ?? 0;
+  const clustersCompleted = clusters.filter((c) =>
+    c.steps.length > 0 && c.steps.every((s) => s.status === 'published'),
+  ).length;
+
+  const xp = calculateXP({
+    totalPosts: posts.length,
+    streak,
+    sessions7d,
+    clustersCompleted,
+  });
 
   // ── Analytics ────────────────────────────────────────────────────────────
   const analytics: AnalyticsData = dashboardDoc?.analytics
@@ -159,7 +196,6 @@ export function usePipData() {
     morningMessage,
     streak,
     xp,
-    level,
     analytics,
     isLoading,
     clusters,

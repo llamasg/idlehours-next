@@ -142,12 +142,20 @@ export function useSocialContent(): UseSocialContentReturn {
     try {
       const message = await anthropic.messages.create({
         model: 'claude-sonnet-4-6',
-        max_tokens: 2000,
+        max_tokens: 4000,
         messages: [{ role: 'user', content: buildPrompt(ctx) }],
       });
 
       const text = message.content[0].type === 'text' ? message.content[0].text : '';
-      const parsed = JSON.parse(text.replace(/```json|```/g, '').trim()) as {
+      console.log('[Pip] Social content raw response:', text);
+
+      // Extract outermost { ... } block — handles text before/after the JSON
+      const jsonStart = text.indexOf('{');
+      const jsonEnd = text.lastIndexOf('}');
+      if (jsonStart === -1 || jsonEnd === -1 || jsonEnd <= jsonStart) {
+        throw new Error('No JSON object found in response');
+      }
+      const parsed = JSON.parse(text.slice(jsonStart, jsonEnd + 1)) as {
         reels: ReelIdea[];
         pinterest: PinterestIdea[];
       };

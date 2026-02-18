@@ -63,30 +63,36 @@ export default function YesAndInput() {
         Tell Pip what you're thinking &mdash; no wrong answers.
       </p>
 
-      <div className="relative">
-        <textarea
-          value={input}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Tell me what's on your mind..."
-          rows={3}
-          className="w-full bg-white border-2 border-border rounded-2xl p-5 pr-14 text-base resize-none min-h-[80px] focus:border-burnt-orange focus:ring-0 outline-none transition"
-        />
+      <textarea
+        value={input}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        placeholder="Tell me what's on your mind..."
+        rows={3}
+        className="w-full bg-white border-2 border-border rounded-2xl p-5 text-base resize-none min-h-[80px] focus:border-burnt-orange focus:ring-0 outline-none transition"
+      />
+
+      <div className="flex justify-end mt-2">
         <button
           type="button"
           onClick={submit}
           disabled={!canSend}
-          aria-label="Ask Pip"
-          className="absolute bottom-4 right-4 flex items-center justify-center w-9 h-9 rounded-xl bg-burnt-orange text-white transition-opacity disabled:opacity-30 hover:enabled:opacity-80"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-burnt-orange text-white text-sm font-medium transition-colors hover:bg-burnt-orange/80 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isThinking ? (
-            <motion.span
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-              className="block w-4 h-4 border-2 border-white/40 border-t-white rounded-full"
-            />
+            <>
+              <motion.span
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                className="block w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full"
+              />
+              Thinking…
+            </>
           ) : (
-            <Send className="w-4 h-4" />
+            <>
+              Ask Pip
+              <Send className="w-3.5 h-3.5" />
+            </>
           )}
         </button>
       </div>
