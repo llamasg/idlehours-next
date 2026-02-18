@@ -1,6 +1,7 @@
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — BoostPlan
-   Renders a generated growth plan inline
+   Renders a generated growth plan inline.
+   Designed for dark (#1C1C1E) background context.
    ────────────────────────────────────────────── */
 
 import { motion } from 'framer-motion';
@@ -12,9 +13,9 @@ interface BoostPlanProps {
 }
 
 const effortStyles = {
-  low: 'bg-green-100 text-green-700',
-  medium: 'bg-amber-100 text-amber-700',
-  high: 'bg-red-100 text-red-700',
+  low:    'bg-green-900/50 text-green-400',
+  medium: 'bg-amber-900/50 text-amber-400',
+  high:   'bg-red-900/50 text-red-400',
 } as const;
 
 export function BoostPlanView({ plan, onSave }: BoostPlanProps) {
@@ -26,52 +27,45 @@ export function BoostPlanView({ plan, onSave }: BoostPlanProps) {
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className="overflow-hidden"
     >
-      <div className="space-y-6 pt-2">
-        {/* Headline */}
-        <h2 className="text-2xl font-bold text-stone-900">
-          {'\uD83D\uDE80'} {plan.headline}
-        </h2>
+      <div className="space-y-5 pt-2">
 
-        {/* Target */}
-        <p className="text-muted-foreground">Target: {plan.target}</p>
+        {/* Headline */}
+        <div>
+          <h2 className="text-xl font-bold text-white">
+            🚀 {plan.headline}
+          </h2>
+          <p className="mt-1 text-sm text-white/50">🎯 {plan.target}</p>
+        </div>
 
         {/* Honest assessment */}
-        <div>
-          <p className="text-sm font-semibold text-stone-700">
-            Pip's honest take:
+        <div className="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p className="text-xs font-bold text-white/40 uppercase tracking-wider mb-2">
+            Honest assessment
           </p>
-          <div className="mt-2 rounded-xl bg-muted p-4 italic text-stone-700">
+          <p className="text-sm text-white/80 leading-relaxed italic">
             {plan.honestAssessment}
-          </div>
+          </p>
         </div>
 
         {/* Week sections */}
         {plan.weeks.map((week, idx) => (
-          <div key={idx}>
-            <div className="flex items-center gap-3">
-              <h3 className="text-lg font-semibold text-stone-900">
-                {week.weekRange}
-              </h3>
-              <div className="h-px flex-1 bg-stone-200" />
+          <div key={idx} className="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <span className="font-semibold text-sm text-white">{week.weekRange}</span>
+              <span className="text-xs text-white/40 italic">{week.focus}</span>
             </div>
-
-            <p className="mt-1 italic text-muted-foreground">{week.focus}</p>
-
-            <div className="mt-3 space-y-2">
+            <div className="space-y-2">
               {week.tasks.map((t, tIdx) => (
-                <div
-                  key={tIdx}
-                  className="rounded-xl bg-white p-4 shadow-sm"
-                >
-                  <p className="font-medium text-stone-900">{t.task}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Why: {t.why}
-                  </p>
+                <div key={tIdx} className="flex gap-3">
                   <span
-                    className={`mt-2 inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${effortStyles[t.effort]}`}
+                    className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 h-fit mt-0.5 font-medium ${effortStyles[t.effort]}`}
                   >
-                    {t.effort} effort
+                    {t.effort}
                   </span>
+                  <div>
+                    <p className="text-sm font-medium text-white">{t.task}</p>
+                    <p className="text-xs text-white/50 mt-0.5">{t.why}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -79,32 +73,29 @@ export function BoostPlanView({ plan, onSave }: BoostPlanProps) {
         ))}
 
         {/* Big Bet */}
-        <div>
-          <h3 className="text-lg font-semibold text-stone-900">
-            {'\uD83C\uDFAF'} The Big Bet
-          </h3>
-          <div className="mt-2 rounded-r-xl border-l-4 border-burnt-orange bg-burnt-orange/5 p-4 text-stone-800">
-            {plan.bigBet}
-          </div>
+        <div className="rounded-xl bg-[#7C9B7A]/20 border border-[#7C9B7A]/30 p-4">
+          <p className="text-xs font-bold text-[#7C9B7A] uppercase tracking-wider mb-2">
+            Big bet
+          </p>
+          <p className="text-sm text-white/80">{plan.bigBet}</p>
         </div>
 
         {/* Pip's note */}
-        <div>
-          <h3 className="text-lg font-semibold text-stone-900">
-            {'\uD83D\uDC8C'} Pip's note
-          </h3>
-          <div className="mt-2 rounded-r-xl border-l-4 border-accent-green bg-accent-green/5 p-4 italic text-stone-800">
-            {plan.pipNote}
-          </div>
+        <div className="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p className="text-xs font-bold text-white/40 uppercase tracking-wider mb-2">
+            From Pip
+          </p>
+          <p className="text-sm text-white/70 leading-relaxed italic">"{plan.pipNote}"</p>
         </div>
 
-        {/* Save button */}
+        {/* Save button — hidden via onSave no-op when auto-saved */}
         <button
           onClick={onSave}
-          className="rounded-full bg-burnt-orange px-6 py-3 font-semibold text-white transition-transform hover:scale-105"
+          className="text-xs text-white/30 hover:text-white/60 transition-colors"
         >
-          Save this plan
+          Saved automatically ✓
         </button>
+
       </div>
     </motion.div>
   );
