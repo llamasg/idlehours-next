@@ -148,6 +148,9 @@ export function usePipData() {
   // ── Morning message ───────────────────────────────────────────────────────
   const morningMessage: string = dashboardDoc?.morningMessage ?? '';
 
+  // ── Clusters — no mock data; show empty until Sanity has real clusters ─────
+  const clusters: PipCluster[] = [];
+
   // ── Streak + XP ──────────────────────────────────────────────────────────
   const streak: number = dashboardDoc?.siteStats?.streak ?? 0;
   const sessions7d: number = dashboardDoc?.analytics?.sessions7d ?? 0;
@@ -187,9 +190,6 @@ export function usePipData() {
     target: mockGoal.target,
     milestones: mockGoal.milestones,
   };
-
-  // ── Clusters — no mock data; show empty until Sanity has real clusters ─────
-  const clusters: PipCluster[] = [];
 
   return {
     ideas,
