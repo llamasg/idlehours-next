@@ -8,6 +8,7 @@ import { usePipData } from '../hooks/usePipData';
 import { useIdeaDeck } from '../hooks/useIdeaDeck';
 import { useIdeasRefresh } from '../hooks/useIdeasRefresh';
 import { IdeaDeck } from '../components/IdeaDeck';
+import YesAndInput from '../components/YesAndInput';
 
 export default function PipIdeas() {
   const { ideas } = usePipData();
@@ -31,6 +32,9 @@ export default function PipIdeas() {
 
       {/* Card deck */}
       <IdeaDeck deck={deck} onFreshIdeas={handleFreshIdeas} isRefreshing={isRefreshing} />
+
+      {/* YES AND input */}
+      <YesAndInput />
 
       {/* Saved ideas section */}
       {deck.saved.length > 0 && (

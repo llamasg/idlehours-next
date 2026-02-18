@@ -3,7 +3,7 @@
    Conversational "Yes, And" brainstorm input
    ────────────────────────────────────────────── */
 
-import { useState, useRef, type ChangeEvent, type KeyboardEvent } from 'react';
+import { useState, type ChangeEvent, type KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useYesAnd } from '../hooks/useYesAnd';
 import { PipSpeech } from './PipSpeech';
@@ -34,24 +34,19 @@ function ThinkingDots() {
 }
 
 export default function YesAndInput() {
-  const { response, isThinking, ask, clear } = useYesAnd();
+  const { response, isThinking, ask, askDebounced, clear } = useYesAnd();
   const [input, setInput] = useState('');
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setInput(value);
     clear();
-    clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      if (value.trim()) ask(value);
-    }, 800);
+    askDebounced(value);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      clearTimeout(debounceRef.current);
       if (input.trim()) ask(input);
     }
   };
@@ -101,7 +96,10 @@ export default function YesAndInput() {
                   <button
                     key={angle}
                     type="button"
-                    onClick={() => console.log('[YesAnd] angle selected:', angle)}
+                    onClick={() => {
+                      setInput(angle);
+                      ask(angle);
+                    }}
                     className="bg-burnt-orange/10 text-burnt-orange border border-burnt-orange/20 rounded-full px-4 py-2 text-sm hover:bg-burnt-orange/20 cursor-pointer transition"
                   >
                     {angle} &rarr;

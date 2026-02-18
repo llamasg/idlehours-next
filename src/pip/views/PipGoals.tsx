@@ -3,12 +3,32 @@
    ────────────────────────────────────────────── */
 
 import { usePipData } from '@/pip/hooks/usePipData';
+import { useBoostPlan } from '../hooks/useBoostPlan';
+import { BoostPlanView } from '../components/BoostPlan';
+import type { BoostContext } from '../lib/pipMockData';
 
 export default function PipGoals() {
-  const { analytics, streak, posts } = usePipData();
+  const { analytics, streak, posts, clusters } = usePipData();
   const sessions = analytics.overview.sessions7d;
   const totalPosts = posts.length;
   const isEarlyDays = totalPosts < 10 || sessions < 100;
+  const { plan, isGenerating, generate, clear } = useBoostPlan();
+
+  const boostContext: BoostContext = {
+    sessions: analytics.overview.sessions7d,
+    sessionsDelta: analytics.overview.sessionsDelta,
+    totalPosts,
+    activeCluster: clusters[0]?.name ?? 'Getting Started',
+    clusterProgress: clusters[0]?.steps.filter((s) => s.status === 'published').length ?? 0,
+    clusterTotal: clusters[0]?.steps.length ?? 5,
+    streak,
+    topPost: analytics.topPosts[0]
+      ? { title: analytics.topPosts[0].title, sessions: analytics.topPosts[0].sessions }
+      : { title: 'your first post', sessions: 0 },
+    quickWin: analytics.search.quickWins[0]
+      ? { query: analytics.search.quickWins[0].query, position: analytics.search.quickWins[0].position }
+      : { query: 'cosy games', position: 20 },
+  };
 
   return (
     <div>
@@ -184,6 +204,47 @@ export default function PipGoals() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Boost Plan */}
+      <div className="mt-6 bg-[#1C1C1E] rounded-2xl p-6 text-white">
+        <div className="mb-2">
+          <div className="text-lg font-bold">🚀 Things feeling slow?</div>
+          <p className="text-sm text-white/50 mt-1">
+            Let Pip analyse your data and build a personalised sprint plan.
+          </p>
+        </div>
+
+        {!plan && (
+          <button
+            onClick={() => generate(boostContext)}
+            disabled={isGenerating}
+            className="mt-4 px-5 py-2.5 bg-[#E8843A] text-white rounded-xl
+              font-semibold text-sm hover:bg-[#D4762F] transition-colors
+              disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            {isGenerating ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Pip is thinking...
+              </>
+            ) : (
+              'Generate my boost plan →'
+            )}
+          </button>
+        )}
+
+        {plan && (
+          <div className="mt-4">
+            <BoostPlanView plan={plan} onSave={() => {}} />
+            <button
+              onClick={clear}
+              className="mt-3 text-xs text-white/30 hover:text-white/60 transition-colors"
+            >
+              Generate a new plan
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
