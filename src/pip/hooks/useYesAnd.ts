@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { askPipYesAnd } from '../lib/pipClaude';
 
 export function useYesAnd() {
@@ -7,10 +7,9 @@ export function useYesAnd() {
     angles: string[];
   } | null>(null);
   const [isThinking, setIsThinking] = useState(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const ask = useCallback(async (input: string) => {
-    if (!input.trim() || input.trim().length < 3) return;
+    if (!input.trim()) return;
     setIsThinking(true);
     setResponse(null);
     try {
@@ -27,12 +26,5 @@ export function useYesAnd() {
     }
   }, []);
 
-  const askDebounced = useCallback((input: string) => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => ask(input), 800);
-  }, [ask]);
-
-  const clear = useCallback(() => setResponse(null), []);
-
-  return { response, isThinking, ask, askDebounced, clear };
+  return { response, isThinking, ask };
 }

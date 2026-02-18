@@ -5,6 +5,7 @@
 
 import { useState, type ChangeEvent, type KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Send } from 'lucide-react';
 import { useYesAnd } from '../hooks/useYesAnd';
 import { PipSpeech } from './PipSpeech';
 
@@ -34,20 +35,24 @@ function ThinkingDots() {
 }
 
 export default function YesAndInput() {
-  const { response, isThinking, ask, askDebounced, clear } = useYesAnd();
+  const { response, isThinking, ask } = useYesAnd();
   const [input, setInput] = useState('');
 
+  const canSend = input.trim().length > 0 && !isThinking;
+
+  const submit = () => {
+    if (!canSend) return;
+    ask(input);
+  };
+
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    setInput(value);
-    clear();
-    askDebounced(value);
+    setInput(e.target.value);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (input.trim()) ask(input);
+      submit();
     }
   };
 
@@ -58,14 +63,33 @@ export default function YesAndInput() {
         Tell Pip what you're thinking &mdash; no wrong answers.
       </p>
 
-      <textarea
-        value={input}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        placeholder="Tell me what's on your mind..."
-        rows={3}
-        className="w-full bg-white border-2 border-border rounded-2xl p-5 text-base resize-none min-h-[80px] focus:border-burnt-orange focus:ring-0 outline-none transition"
-      />
+      <div className="relative">
+        <textarea
+          value={input}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          placeholder="Tell me what's on your mind..."
+          rows={3}
+          className="w-full bg-white border-2 border-border rounded-2xl p-5 pr-14 text-base resize-none min-h-[80px] focus:border-burnt-orange focus:ring-0 outline-none transition"
+        />
+        <button
+          type="button"
+          onClick={submit}
+          disabled={!canSend}
+          aria-label="Ask Pip"
+          className="absolute bottom-4 right-4 flex items-center justify-center w-9 h-9 rounded-xl bg-burnt-orange text-white transition-opacity disabled:opacity-30 hover:enabled:opacity-80"
+        >
+          {isThinking ? (
+            <motion.span
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+              className="block w-4 h-4 border-2 border-white/40 border-t-white rounded-full"
+            />
+          ) : (
+            <Send className="w-4 h-4" />
+          )}
+        </button>
+      </div>
 
       <AnimatePresence mode="wait">
         {isThinking && (
