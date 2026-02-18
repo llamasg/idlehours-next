@@ -36,6 +36,7 @@ un-un-un-dashboard-main
 # OS
 Thumbs.db
 
-# Pip backend — Google service account key
+# Pip backend — Google service account key (never commit private keys)
 pip/google-service-account.json
 google-service-account.json
+pip/idle-hours-pip-*.json

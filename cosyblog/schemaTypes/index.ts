@@ -9,6 +9,7 @@ import game from './game'
 import musicTrack from './musicTrack'
 import siteSettings from './siteSettings'
 import {homePageSchemas} from './homePage'
+import pipDashboard from './pipDashboard'
 
 export const schemaTypes = [
   // Documents
@@ -21,6 +22,8 @@ export const schemaTypes = [
   musicTrack,
   siteSettings,
   promoBanner,
+  // Pip — nightly job results (singleton, written by backend)
+  pipDashboard,
   // Content types
   blockContent,
   // Homepage (document + section objects)
