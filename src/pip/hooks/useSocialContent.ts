@@ -6,6 +6,7 @@
 
 import { useState, useCallback } from 'react';
 import Anthropic from '@anthropic-ai/sdk';
+import { jsonrepair } from 'jsonrepair';
 
 // ── Anthropic client ──────────────────────────
 
@@ -118,7 +119,9 @@ Return ONLY valid JSON in this exact shape — no markdown, no explanation:
   ]
 }
 
-Generate 2 reels and 2 Pinterest pins only. Keep each field concise — 'why' max 1 sentence, 'concept' max 1 sentence, shotList exactly 3 items. UK spelling.`;
+Generate 2 reels and 2 Pinterest pins only. Keep each field concise — 'why' max 1 sentence, 'concept' max 1 sentence, shotList exactly 3 items. UK spelling.
+
+IMPORTANT: All string values must be valid JSON. Never use double-quote characters (") inside a string value — use single quotes (') if you need to quote something within a field.`;
 }
 
 // ── Hook ──────────────────────────────────────
@@ -149,13 +152,16 @@ export function useSocialContent(): UseSocialContentReturn {
       const text = message.content[0].type === 'text' ? message.content[0].text : '';
       console.log('[Pip] Social content raw response:', text);
 
-      // Extract outermost { ... } block — handles text before/after the JSON
+      // Extract outermost { ... } block, then repair before parsing.
+      // jsonrepair fixes unescaped quotes inside string values — the most
+      // common way Claude produces invalid JSON.
       const jsonStart = text.indexOf('{');
       const jsonEnd = text.lastIndexOf('}');
       if (jsonStart === -1 || jsonEnd === -1 || jsonEnd <= jsonStart) {
         throw new Error('No JSON object found in response');
       }
-      const parsed = JSON.parse(text.slice(jsonStart, jsonEnd + 1)) as {
+      const repaired = jsonrepair(text.slice(jsonStart, jsonEnd + 1));
+      const parsed = JSON.parse(repaired) as {
         reels: ReelIdea[];
         pinterest: PinterestIdea[];
       };
