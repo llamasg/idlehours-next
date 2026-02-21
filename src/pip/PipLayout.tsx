@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react';
+import type { ReactNode, ComponentType } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -20,18 +21,17 @@ import { getLevelInfo } from './lib/pipMockData';
 import { usePipAuth } from './auth/usePipAuth';
 
 interface PipLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 interface NavItemDef {
   to: string;
   label: string;
-  icon: React.ComponentType<{ size?: number }>;
-  end?: boolean;
+  icon: ComponentType<{ size?: number }>;
   badge?: number;
 }
 
-function NavItem({ to, label, icon: Icon, end, badge, onClose }: NavItemDef & { onClose: () => void }) {
+function NavItem({ to, label, icon: Icon, badge, onClose }: NavItemDef & { onClose: () => void }) {
   const pathname = usePathname();
   const isActive = pathname === to;
   return (
@@ -60,7 +60,7 @@ export default function PipLayout({ children }: PipLayoutProps) {
   const levelInfo = getLevelInfo(xp);
 
   const navItems: NavItemDef[] = [
-    { to: '/pip/home', label: 'Home', icon: Home, end: true },
+    { to: '/pip/home', label: 'Home', icon: Home },
     { to: '/pip/ideas', label: 'Ideas', icon: Lightbulb, badge: ideas.length },
     { to: '/pip/clusters', label: 'Clusters', icon: Network },
     { to: '/pip/seo', label: 'SEO Helper', icon: Search },
