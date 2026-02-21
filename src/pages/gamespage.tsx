@@ -1,14 +1,15 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Search, Filter, X } from 'lucide-react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import GameTileCard from '@/components/GameTileCard'
-import { mockGames } from '@/data/mock-data'
+import { getAllGames } from '@/lib/queries'
+import type { Game } from '@/types'
 
 const platforms = ['All', 'PC', 'Switch', 'PS5', 'Xbox', 'Mobile']
 const sortOptions = [
-  { label: 'Coziest First', value: 'cozy' },
+  { label: 'Highest Rated', value: 'score' },
   { label: 'Newest', value: 'newest' },
   { label: 'A-Z', value: 'alpha' },
 ]
@@ -16,11 +17,20 @@ const sortOptions = [
 export default function GamesPage() {
   const [search, setSearch] = useState('')
   const [platform, setPlatform] = useState('All')
-  const [sort, setSort] = useState('cozy')
+  const [sort, setSort] = useState('score')
   const [coopOnly, setCoopOnly] = useState(false)
+  const [games, setGames] = useState<Game[]>([])
+  const [gamesLoading, setGamesLoading] = useState(true)
+
+  useEffect(() => {
+    getAllGames()
+      .then((data) => setGames(data ?? []))
+      .catch(() => setGames([]))
+      .finally(() => setGamesLoading(false))
+  }, [])
 
   const filtered = useMemo(() => {
-    let result = [...mockGames]
+    let result = [...games]
 
     // Search
     if (search.trim()) {
@@ -44,8 +54,8 @@ export default function GamesPage() {
     }
 
     // Sort
-    if (sort === 'cozy') {
-      result.sort((a, b) => (b.ratings?.cozyPercent ?? 0) - (a.ratings?.cozyPercent ?? 0))
+    if (sort === 'score') {
+      result.sort((a, b) => (b.openCriticScore ?? -1) - (a.openCriticScore ?? -1))
     } else if (sort === 'newest') {
       result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     } else {
@@ -53,7 +63,7 @@ export default function GamesPage() {
     }
 
     return result
-  }, [search, platform, sort, coopOnly])
+  }, [search, platform, sort, coopOnly, games])
 
   const activeFilters = (platform !== 'All' ? 1 : 0) + (coopOnly ? 1 : 0)
 
@@ -154,7 +164,13 @@ export default function GamesPage() {
         </p>
 
         {/* Game grid */}
-        {filtered.length > 0 ? (
+        {gamesLoading ? (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="aspect-[4/3] animate-pulse rounded-2xl bg-secondary" />
+            ))}
+          </div>
+        ) : filtered.length > 0 ? (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {filtered.map((game) => (
               <GameTileCard key={game._id} game={game} />
