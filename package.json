@@ -21,6 +21,7 @@
     "@react-three/fiber": "^9.5.0",
     "@sanity/client": "^7.14.1",
     "@sanity/image-url": "^2.0.3",
+    "@sanity/vision": "^5.11.0",
     "@splinetool/loader": "^1.12.51",
     "@types/three": "^0.182.0",
     "class-variance-authority": "^0.7.1",
