@@ -107,20 +107,29 @@ function mapAnalytics(raw: any, searchConsole: any): AnalyticsData {
 export function usePipData() {
   const [dashboardDoc, setDashboardDoc] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastRefreshedAt, setLastRefreshedAt] = useState<Date | null>(null);
   const [posts, setPosts] = useState<Array<{ _id: string; title: string; publishedAt: string }>>([]);
 
-  // Fetch pip-dashboard-singleton
+  const fetchDashboard = async (initial = false) => {
+    if (initial) setIsLoading(true);
+    else setIsRefreshing(true);
+    try {
+      const doc = await pipClient.fetch(`*[_id == "pip-dashboard-singleton"][0]`);
+      console.log('[Pip] Fetched dashboard doc:', doc?._id, 'sessions:', doc?.analytics?.sessions7d);
+      setDashboardDoc(doc ?? null);
+      setLastRefreshedAt(new Date());
+    } catch (e: unknown) {
+      console.warn('[Pip] Could not fetch live data — using mock', e);
+    } finally {
+      if (initial) setIsLoading(false);
+      else setIsRefreshing(false);
+    }
+  };
+
+  // Fetch pip-dashboard-singleton on mount
   useEffect(() => {
-    pipClient
-      .fetch(`*[_id == "pip-dashboard-singleton"][0]`)
-      .then((doc: any) => {
-        console.log('[Pip] Fetched dashboard doc:', doc?._id, 'sessions:', doc?.analytics?.sessions7d);
-        setDashboardDoc(doc ?? null);
-      })
-      .catch((e: unknown) => {
-        console.warn('[Pip] Could not fetch live data — using mock', e);
-      })
-      .finally(() => setIsLoading(false));
+    fetchDashboard(true);
   }, []);
 
   // Fetch real posts for calendar and achievement calculations
@@ -198,6 +207,9 @@ export function usePipData() {
     xp,
     analytics,
     isLoading,
+    isRefreshing,
+    lastRefreshedAt,
+    refetch: () => fetchDashboard(false),
     clusters,
     achievements,
     calendar: [], // calendar is derived from `posts` in PipCalendar

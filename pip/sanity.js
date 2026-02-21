@@ -106,15 +106,15 @@ export async function writeToDashboard({ research, generated, posts = [] }) {
   const streak = calculateStreak(posts)
 
   // Flatten analytics for Sanity (all primitives — no nested _key issues)
-  const analyticsDoc = research.ga4 ? {
-    sessions7d: research.ga4.sessions7d,
-    sessionsDelta: research.ga4.sessionsDelta,
-    avgSessionDuration: Math.round(research.ga4.avgSessionDuration),
-    returnVisitorPct: research.ga4.returnVisitorPct,
-    newVisitorPct: research.ga4.newVisitorPct,
-    trafficSources: research.ga4.trafficSources,
-    weeklyTrend: research.ga4.weeklyTrend,
-    topPages: research.ga4.topPages.map(p => ({
+  const analyticsDoc = research.plausible ? {
+    sessions7d: research.plausible.sessions7d,
+    sessionsDelta: research.plausible.sessionsDelta,
+    avgSessionDuration: Math.round(research.plausible.avgSessionDuration),
+    returnVisitorPct: research.plausible.returnVisitorPct,
+    newVisitorPct: research.plausible.newVisitorPct,
+    trafficSources: research.plausible.trafficSources,
+    weeklyTrend: research.plausible.weeklyTrend,
+    topPages: research.plausible.topPages.map(p => ({
       _key: p.path.replace(/\//g, '_').replace(/^_/, '') || 'home',
       title: p.title,
       path: p.path,
@@ -122,7 +122,7 @@ export async function writeToDashboard({ research, generated, posts = [] }) {
       avgReadTime: p.avgReadTime,
       bounceRate: p.bounceRate,
     })),
-    topCountries: research.ga4.topCountries.map(c => ({
+    topCountries: research.plausible.topCountries.map(c => ({
       _key: c.country.toLowerCase().replace(/\s/g, '_'),
       country: c.country,
       sessions: c.sessions,

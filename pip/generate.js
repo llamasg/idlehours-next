@@ -38,7 +38,7 @@ function getTimeOfDay() {
 // ── IDEAS ─────────────────────────────────────────────────────────────────
 
 async function generateIdeas(research) {
-  const { ga4, searchConsole } = research
+  const { plausible: ga4, searchConsole } = research
   const activeCluster = process.env.PIP_ACTIVE_CLUSTER || 'Cosy Lifestyle'
 
   // Build a concise context block for the prompt
@@ -132,7 +132,7 @@ Respond with a JSON array ONLY. No markdown fences, no explanation, just the arr
 // ── MORNING MESSAGE ───────────────────────────────────────────────────────
 
 async function generateMorningMessage(research, streak = 0, activeCluster, totalPosts = 0) {
-  const { ga4 } = research
+  const { plausible: ga4 } = research
   const cluster = activeCluster || process.env.PIP_ACTIVE_CLUSTER || 'Cosy Lifestyle'
   const timeOfDay = getTimeOfDay()
 

@@ -1,27 +1,52 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Trophy, ArrowRight, Brain, Pizza } from 'lucide-react'
+import { Trophy, ArrowRight, Disc3 } from 'lucide-react'
 import type { GameOfMonthSection } from '@/types'
+
+function ocColor(score: number): string {
+  if (score >= 90) return 'bg-purple-600 text-white'
+  if (score >= 75) return 'bg-rose-500 text-white'
+  if (score >= 50) return 'bg-green-600 text-white'
+  return 'bg-blue-500 text-white'
+}
+
+function DifficultyLabel({ level }: { level: 1 | 2 | 3 }) {
+  const labels = { 1: 'Beginner', 2: 'Intermediate', 3: 'Experienced' } as const
+  return (
+    <div className="flex items-center gap-1" title={labels[level]}>
+      {([1, 2, 3] as const).map((i) => (
+        <span
+          key={i}
+          className={`inline-block h-2 w-2 rounded-full ${i <= level ? 'bg-amber-500' : 'bg-muted-foreground/20'}`}
+        />
+      ))}
+      <span className="ml-1 font-heading text-xs text-muted-foreground">{labels[level]}</span>
+    </div>
+  )
+}
+
+function ReplayMeter({ value }: { value: number }) {
+  return (
+    <div className="flex items-center gap-0.5" title={`Replayability: ${value}/5`}>
+      {[1, 2, 3, 4, 5].map((i) => {
+        const filled = value >= i
+        const half = !filled && value >= i - 0.5
+        return (
+          <span
+            key={i}
+            className={`inline-block h-2 w-2 rounded-full ${
+              filled ? 'bg-accent-green' : half ? 'bg-accent-green/50' : 'bg-muted-foreground/20'
+            }`}
+          />
+        )
+      })}
+      <span className="ml-1 font-heading text-xs text-muted-foreground">{value}/5 replay</span>
+    </div>
+  )
+}
 
 interface GameOfMonthProps {
   data: GameOfMonthSection
-}
-
-function BrainMeter({ level }: { level: 'Low' | 'Medium' | 'High' }) {
-  const filled = level === 'Low' ? 1 : level === 'Medium' ? 2 : 3
-  return (
-    <div className="flex items-center gap-1" title={`Brain Effort: ${level}`}>
-      {[1, 2, 3].map((i) => (
-        <Brain
-          key={i}
-          size={16}
-          className={i <= filled ? 'text-amber-500 fill-amber-500/30' : 'text-muted-foreground/30'}
-          strokeWidth={i <= filled ? 2.2 : 1.5}
-        />
-      ))}
-      <span className="ml-1 font-heading text-xs text-muted-foreground">{level}</span>
-    </div>
-  )
 }
 
 export default function GameOfMonth({ data }: GameOfMonthProps) {
@@ -60,13 +85,6 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
                 <span className="font-heading text-muted-foreground">No image</span>
               </div>
             )}
-
-            {/* Cozy badge overlay */}
-            {game.ratings?.cozyPercent != null && (
-              <div className="absolute bottom-3 left-3 rounded-full bg-card/90 px-3 py-1 font-heading text-sm font-bold text-primary shadow-md backdrop-blur-sm">
-                {game.ratings.cozyPercent}% Cozy
-              </div>
-            )}
           </div>
 
           {/* Info */}
@@ -75,15 +93,23 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
               {game.title}
             </h3>
 
-            {/* Rating icons */}
-            <div className="mt-3 flex flex-wrap items-center gap-4">
-              {game.ratings?.brainEffort && (
-                <BrainMeter level={game.ratings.brainEffort} />
+            {/* Ratings row */}
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              {game.openCriticScore != null && (
+                <span className={`rounded-full px-3 py-1 font-heading text-sm font-bold shadow ${ocColor(game.openCriticScore)}`}>
+                  {game.openCriticScore} OpenCritic
+                </span>
               )}
-              {game.ratings?.snackSafe && (
-                <div className="flex items-center gap-1" title="Snack Safe">
-                  <Pizza size={16} className="text-accent-green fill-accent-green/20" strokeWidth={2} />
-                  <span className="font-heading text-xs text-muted-foreground">Snack Safe</span>
+              {game.difficulty != null && (
+                <DifficultyLabel level={game.difficulty} />
+              )}
+              {game.replayability != null && (
+                <ReplayMeter value={game.replayability} />
+              )}
+              {game.greatSoundtrack && (
+                <div className="flex items-center gap-1" title="Great Soundtrack">
+                  <Disc3 size={16} className="text-accent fill-accent/20" strokeWidth={2} />
+                  <span className="font-heading text-xs text-muted-foreground">Great Soundtrack</span>
                 </div>
               )}
               {game.coop && (

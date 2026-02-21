@@ -20,11 +20,20 @@ export interface Game {
   genres: string[]
   tags: string[]
   coop: boolean
-  ratings: {
-    cozyPercent: number
-    brainEffort: 'Low' | 'Medium' | 'High'
-    snackSafe: boolean
+  /** Legacy ratings — kept for existing data, not shown in UI */
+  ratings?: {
+    cozyPercent?: number
+    brainEffort?: 'Low' | 'Medium' | 'High'
+    snackSafe?: boolean
   }
+  openCriticScore?: number
+  difficulty?: 1 | 2 | 3
+  replayability?: number
+  greatSoundtrack?: boolean
+  genre?: string[]
+  currentPrice?: number
+  isFree?: boolean
+  lastPriceUpdated?: string
   affiliateLinks?: { label: string; url: string }[]
   longDescription?: any[] // Portable Text blocks
   featured: boolean

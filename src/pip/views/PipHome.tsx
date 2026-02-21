@@ -4,7 +4,7 @@
 
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BarChart3, Clock, Flame, Zap } from 'lucide-react';
+import { BarChart3, Clock, Flame, RefreshCw, Zap } from 'lucide-react';
 
 import { usePipData } from '@/pip/hooks/usePipData';
 import { useMorningMessage } from '@/pip/hooks/useMorningMessage';
@@ -75,8 +75,15 @@ function Section({
 
 /* ── main component ──────────────────────────── */
 
+function formatTimeAgo(date: Date): string {
+  const mins = Math.floor((Date.now() - date.getTime()) / 60000);
+  if (mins < 1) return 'just now';
+  if (mins === 1) return '1 min ago';
+  return `${mins} mins ago`;
+}
+
 export default function PipHome() {
-  const { ideas, analytics, clusters, streak, xp, posts, isLoading } = usePipData();
+  const { ideas, analytics, clusters, streak, xp, posts, isLoading, isRefreshing, lastRefreshedAt, refetch } = usePipData();
   const timeOfDay = getTimeOfDay();
 
   const { message: morningMessage, isLoading: messageLoading } = useMorningMessage({
@@ -143,6 +150,22 @@ export default function PipHome() {
 
       {/* B — Stat cards */}
       <Section index={1}>
+        <div className="flex items-center justify-end gap-2 mb-3">
+          {lastRefreshedAt && (
+            <span className="text-xs text-stone-400">
+              Updated {formatTimeAgo(lastRefreshedAt)}
+            </span>
+          )}
+          <button
+            onClick={refetch}
+            disabled={isRefreshing}
+            title="Refresh data"
+            className="flex items-center gap-1 text-xs text-stone-400 hover:text-stone-600 transition-colors disabled:opacity-40"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span>Refresh</span>
+          </button>
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard
             label="Sessions this week"

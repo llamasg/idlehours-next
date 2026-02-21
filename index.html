@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <!-- FAVICONS — files live in /public/Favicon/, generated at realfavicongenerator.net -->
     <link rel="icon" type="image/png" href="/Favicon/favicon-96x96.png" sizes="96x96" />
@@ -16,12 +16,19 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MFZGBD4ZMC"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-MFZGBD4ZMC');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-MFZGBD4ZMC');
     </script>
-  </head>
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script async src="https://plausible.io/js/pa-QjCt4KKUOCtpcYOHIrnD1.js"></script>
+    <script>
+        window.plausible = window.plausible || function () { (plausible.q = plausible.q || []).push(arguments) }, plausible.init = plausible.init || function (i) { plausible.o = i || {} };
+        plausible.init()
+    </script>
+
+</head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

@@ -2,7 +2,7 @@
  * Pip — Research Module
  *
  * Fetches data from:
- *   - Google Analytics 4 (sessions, top pages, traffic sources, trends)
+ *   - Plausible Analytics (sessions, top pages, traffic sources, countries)
  *   - Google Search Console (queries, positions, CTR, quick wins)
  *
  * Returns a structured research object that generate.js uses as context.
@@ -15,14 +15,12 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '.env.local' })
 dotenv.config()
 import { readFileSync } from 'fs'
-import { BetaAnalyticsDataClient } from '@google-analytics/data'
 import { google } from 'googleapis'
 
-// ── AUTH ─────────────────────────────────────────────────────────────────
+// ── SEARCH CONSOLE AUTH ───────────────────────────────────────────────────
 
 function getGoogleAuth() {
   const scopes = [
-    'https://www.googleapis.com/auth/analytics.readonly',
     'https://www.googleapis.com/auth/webmasters.readonly',
   ]
 
@@ -38,178 +36,129 @@ function getGoogleAuth() {
   return new google.auth.GoogleAuth({ credentials, scopes })
 }
 
-function getAnalyticsClient() {
-  // In GitHub Actions, the JSON is passed as an env var string
-  if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
-    const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
-    return new BetaAnalyticsDataClient({ credentials })
-  }
+// ── PLAUSIBLE ─────────────────────────────────────────────────────────────
 
-  // Local dev — explicitly read and parse the JSON file
-  const keyFile = process.env.GOOGLE_APPLICATION_CREDENTIALS
-  const credentials = JSON.parse(readFileSync(keyFile, 'utf8'))
-  return new BetaAnalyticsDataClient({ credentials })
-}
+async function fetchPlausibleData() {
+  const apiKey = process.env.PLAUSIBLE_API_KEY
+  const siteId = 'idlehours.co.uk'
+  const baseUrl = 'https://plausible.io/api/v1/stats'
 
-// ── GA4 ──────────────────────────────────────────────────────────────────
-
-async function fetchGA4Data() {
-  const client = getAnalyticsClient()
-  const propertyId = process.env.GA4_PROPERTY_ID
-
-  if (!propertyId) {
-    console.warn('⚠️  GA4_PROPERTY_ID not set — skipping GA4')
+  if (!apiKey) {
+    console.warn('⚠️  PLAUSIBLE_API_KEY not set — skipping Plausible')
     return null
   }
 
-  console.log('📊 Fetching GA4 data...')
+  console.log('📊 Fetching Plausible data...')
+
+  const headers = { Authorization: `Bearer ${apiKey}` }
 
   try {
-    // ── Sessions: this week vs last week (two separate calls — GA4 requires
-    //    at least one dimension for multi-range comparisons, so we split) ──
-    const metrics = [
-      { name: 'sessions' },
-      { name: 'averageSessionDuration' },
-      { name: 'newUsers' },
-      { name: 'totalUsers' },
-    ]
-    const [[thisWeekResp], [lastWeekResp]] = await Promise.all([
-      client.runReport({
-        property: `properties/${propertyId}`,
-        dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-        metrics,
-      }),
-      client.runReport({
-        property: `properties/${propertyId}`,
-        dateRanges: [{ startDate: '14daysAgo', endDate: '8daysAgo' }],
-        metrics,
-      }),
+    // Previous 7-day window for delta (days 14–8 ago)
+    const today = new Date()
+    const prevEnd = new Date(today)
+    prevEnd.setDate(today.getDate() - 8)
+    const prevStart = new Date(today)
+    prevStart.setDate(today.getDate() - 14)
+    const prevEndStr = prevEnd.toISOString().split('T')[0]
+    const prevStartStr = prevStart.toISOString().split('T')[0]
+
+    const [thisWeekResp, prevWeekResp, pagesResp, sourcesResp, countriesResp] = await Promise.all([
+      fetch(`${baseUrl}/aggregate?site_id=${siteId}&period=7d&metrics=visitors,pageviews,visit_duration,bounce_rate`, { headers }),
+      fetch(`${baseUrl}/aggregate?site_id=${siteId}&period=custom&date=${prevStartStr},${prevEndStr}&metrics=visitors`, { headers }),
+      fetch(`${baseUrl}/breakdown?site_id=${siteId}&period=7d&property=event:page&metrics=visitors&limit=10`, { headers }),
+      fetch(`${baseUrl}/breakdown?site_id=${siteId}&period=7d&property=visit:source&metrics=visitors&limit=10`, { headers }),
+      fetch(`${baseUrl}/breakdown?site_id=${siteId}&period=7d&property=visit:country&metrics=visitors&limit=5`, { headers }),
     ])
 
-    const thisWeekRow = thisWeekResp.rows?.[0]
-    const lastWeekRow = lastWeekResp.rows?.[0]
+    const [thisWeek, prevWeek, pages, sources, countries] = await Promise.all([
+      thisWeekResp.json(),
+      prevWeekResp.json(),
+      pagesResp.json(),
+      sourcesResp.json(),
+      countriesResp.json(),
+    ])
 
-    const sessions7d = parseInt(thisWeekRow?.metricValues?.[0]?.value || 0)
-    const sessions7dPrev = parseInt(lastWeekRow?.metricValues?.[0]?.value || 0)
+    // Sessions / visitors
+    const sessions7d = thisWeek.results?.visitors?.value ?? 0
+    const sessions7dPrev = prevWeek.results?.visitors?.value ?? 0
     const sessionsDelta = sessions7dPrev > 0
       ? Math.round(((sessions7d - sessions7dPrev) / sessions7dPrev) * 100)
       : 0
-    const avgSessionDuration = parseFloat(thisWeekRow?.metricValues?.[1]?.value || 0)
-    const newUsers = parseInt(thisWeekRow?.metricValues?.[2]?.value || 0)
-    const totalUsers = parseInt(thisWeekRow?.metricValues?.[3]?.value || 0)
-    const returningUsers = Math.max(0, totalUsers - newUsers)
-    const returnVisitorPct = totalUsers > 0 ? Math.round((returningUsers / totalUsers) * 100) : 0
+    const avgSessionDuration = thisWeek.results?.visit_duration?.value ?? 0
 
-    // ── Top pages ──
-    const [pagesResponse] = await client.runReport({
-      property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-      dimensions: [{ name: 'pageTitle' }, { name: 'pagePath' }],
-      metrics: [
-        { name: 'sessions' },
-        { name: 'averageSessionDuration' },
-        { name: 'bounceRate' },
-      ],
-      orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
-      limit: 10,
-      dimensionFilter: {
-        notExpression: {
-          filter: {
-            fieldName: 'pagePath',
-            stringFilter: { matchType: 'EXACT', value: '/' },
-          },
-        },
-      },
-    })
-
-    const topPages = (pagesResponse.rows || [])
-      .filter(row => !row.dimensionValues[1].value.includes('/pip'))
+    // Top pages (filter out /pip, convert path to display title)
+    const topPages = (pages.results || [])
+      .filter(p => !p.page.includes('/pip'))
       .slice(0, 5)
-      .map(row => ({
-        title: row.dimensionValues[0].value,
-        path: row.dimensionValues[1].value,
-        sessions: parseInt(row.metricValues[0].value),
-        avgReadTime: Math.round(parseFloat(row.metricValues[1].value)),
-        bounceRate: Math.round(parseFloat(row.metricValues[2].value) * 100),
+      .map(p => ({
+        title: pathToTitle(p.page),
+        path: p.page,
+        sessions: p.visitors,
+        avgReadTime: 0,
+        bounceRate: 0,
       }))
 
-    // ── Traffic sources ──
-    const [sourcesResponse] = await client.runReport({
-      property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-      dimensions: [{ name: 'sessionDefaultChannelGroup' }],
-      metrics: [{ name: 'sessions' }],
-      orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
-    })
+    // Traffic sources — map to organic / direct / social / referral
+    const organicSources = ['google', 'bing', 'duckduckgo', 'yahoo', 'yandex', 'baidu', 'ecosia']
+    const socialSources = ['twitter', 'facebook', 'instagram', 'pinterest', 'tiktok', 'reddit', 'linkedin', 'threads', 'bluesky', 'mastodon']
 
-    const sourceMap = {}
-    for (const row of sourcesResponse.rows || []) {
-      const channel = row.dimensionValues[0].value.toLowerCase()
-      const count = parseInt(row.metricValues[0].value)
-      if (channel.includes('organic')) sourceMap.organic = (sourceMap.organic || 0) + count
-      else if (channel.includes('direct')) sourceMap.direct = (sourceMap.direct || 0) + count
-      else if (channel.includes('social')) sourceMap.social = (sourceMap.social || 0) + count
-      else sourceMap.referral = (sourceMap.referral || 0) + count
+    const sourceMap = { organic: 0, direct: 0, social: 0, referral: 0 }
+    for (const row of sources.results || []) {
+      const src = (row.source || '').toLowerCase()
+      const count = row.visitors || 0
+      if (!src || src === 'direct / none' || src === 'direct') {
+        sourceMap.direct += count
+      } else if (organicSources.some(s => src.includes(s))) {
+        sourceMap.organic += count
+      } else if (socialSources.some(s => src.includes(s))) {
+        sourceMap.social += count
+      } else {
+        sourceMap.referral += count
+      }
     }
 
-    const totalSessions = Object.values(sourceMap).reduce((a, b) => a + b, 0)
+    const totalSourceSessions = Object.values(sourceMap).reduce((a, b) => a + b, 0)
     const trafficSources = {
-      organic: totalSessions > 0 ? Math.round((sourceMap.organic || 0) / totalSessions * 100) : 0,
-      direct: totalSessions > 0 ? Math.round((sourceMap.direct || 0) / totalSessions * 100) : 0,
-      social: totalSessions > 0 ? Math.round((sourceMap.social || 0) / totalSessions * 100) : 0,
-      referral: totalSessions > 0 ? Math.round((sourceMap.referral || 0) / totalSessions * 100) : 0,
+      organic: totalSourceSessions > 0 ? Math.round(sourceMap.organic / totalSourceSessions * 100) : 0,
+      direct: totalSourceSessions > 0 ? Math.round(sourceMap.direct / totalSourceSessions * 100) : 0,
+      social: totalSourceSessions > 0 ? Math.round(sourceMap.social / totalSourceSessions * 100) : 0,
+      referral: totalSourceSessions > 0 ? Math.round(sourceMap.referral / totalSourceSessions * 100) : 0,
     }
 
-    // ── 8-week trend ──
-    const [trendResponse] = await client.runReport({
-      property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '56daysAgo', endDate: 'today' }],
-      dimensions: [{ name: 'week' }],
-      metrics: [{ name: 'sessions' }],
-      orderBys: [{ dimension: { dimensionName: 'week' }, desc: false }],
-    })
-
-    const weeklyTrend = (trendResponse.rows || [])
-      .slice(-8)
-      .map(row => parseInt(row.metricValues[0].value))
-
-    // ── Top countries ──
-    const [countriesResponse] = await client.runReport({
-      property: `properties/${propertyId}`,
-      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
-      dimensions: [{ name: 'country' }],
-      metrics: [{ name: 'sessions' }],
-      orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
-      limit: 5,
-    })
-
-    const totalCountrySessions = (countriesResponse.rows || [])
-      .reduce((sum, row) => sum + parseInt(row.metricValues[0].value), 0)
-
-    const topCountries = (countriesResponse.rows || []).map(row => ({
-      country: row.dimensionValues[0].value,
-      sessions: parseInt(row.metricValues[0].value),
-      pct: Math.round(parseInt(row.metricValues[0].value) / totalCountrySessions * 100),
+    // Top countries
+    const totalCountryVisitors = (countries.results || []).reduce((s, r) => s + (r.visitors || 0), 0)
+    const topCountries = (countries.results || []).map(r => ({
+      country: r.country,
+      sessions: r.visitors,
+      pct: totalCountryVisitors > 0 ? Math.round(r.visitors / totalCountryVisitors * 100) : 0,
     }))
 
-    console.log(`✅ GA4: ${sessions7d} sessions this week (${sessionsDelta > 0 ? '+' : ''}${sessionsDelta}%)`)
+    console.log(`✅ Plausible: ${sessions7d} visitors this week (${sessionsDelta > 0 ? '+' : ''}${sessionsDelta}%)`)
 
     return {
       sessions7d,
       sessionsDelta,
       avgSessionDuration,
-      returnVisitorPct,
-      newVisitorPct: 100 - returnVisitorPct,
+      returnVisitorPct: 0,
+      newVisitorPct: 100,
       topPages,
       trafficSources,
-      weeklyTrend,
+      weeklyTrend: [],
       topCountries,
     }
 
   } catch (error) {
-    console.error('❌ GA4 error:', error.message)
+    console.error('❌ Plausible error:', error.message)
     return null
   }
+}
+
+// Convert a URL path to a readable title: /posts/my-post → My Post
+function pathToTitle(path) {
+  const slug = path.split('/').filter(Boolean).pop() || path
+  return slug
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase())
 }
 
 // ── SEARCH CONSOLE ────────────────────────────────────────────────────────
@@ -318,33 +267,32 @@ function generateOpportunityNote(query) {
 export async function fetchResearchData() {
   console.log('\n🌱 Pip is doing her research...\n')
 
-  const [ga4, searchConsole] = await Promise.all([
-    fetchGA4Data(),
+  const [plausible, searchConsole] = await Promise.all([
+    fetchPlausibleData(),
     fetchSearchConsoleData(),
   ])
 
   const research = {
     fetchedAt: new Date().toISOString(),
-    ga4,
+    plausible,
     searchConsole,
-    summary: buildSummary(ga4, searchConsole),
+    summary: buildSummary(plausible, searchConsole),
   }
 
   return research
 }
 
-function buildSummary(ga4, searchConsole) {
+function buildSummary(plausible, searchConsole) {
   const lines = []
 
-  if (ga4) {
-    lines.push(`Traffic this week: ${ga4.sessions7d} sessions (${ga4.sessionsDelta > 0 ? '+' : ''}${ga4.sessionsDelta}% vs last week)`)
-    lines.push(`Avg session duration: ${Math.round(ga4.avgSessionDuration)}s`)
-    lines.push(`Return visitors: ${ga4.returnVisitorPct}%`)
-    if (ga4.topPages.length > 0) {
-      lines.push(`Top post: "${ga4.topPages[0].title}" (${ga4.topPages[0].sessions} sessions, ${Math.round(ga4.topPages[0].avgReadTime / 60 * 10) / 10} min read time)`)
+  if (plausible) {
+    lines.push(`Traffic this week: ${plausible.sessions7d} visitors (${plausible.sessionsDelta > 0 ? '+' : ''}${plausible.sessionsDelta}% vs last week)`)
+    lines.push(`Avg session duration: ${Math.round(plausible.avgSessionDuration)}s`)
+    if (plausible.topPages.length > 0) {
+      lines.push(`Top post: "${plausible.topPages[0].title}" (${plausible.topPages[0].sessions} visitors)`)
     }
   } else {
-    lines.push('GA4 data unavailable')
+    lines.push('Plausible data unavailable')
   }
 
   if (searchConsole) {

@@ -145,8 +145,7 @@ async function deploy(target = 'all') {
       port: config.port,
       user: config.user,
       password: password,
-      secure: true,
-      secureOptions: { rejectUnauthorized: false },
+      secure: false,
     });
     console.log('Connected!\n');
 
