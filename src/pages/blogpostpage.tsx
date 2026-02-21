@@ -10,6 +10,7 @@ import { urlFor } from '@/lib/sanity'
 import DisclosureBanner from '@/components/DisclosureBanner'
 import AffiliateCTA from '@/components/AffiliateCTA'
 import ProductCallout from '@/components/ProductCallout'
+import GameReferenceBlock from '@/components/GameReferenceBlock'
 import { motion } from 'framer-motion'
 
 
@@ -32,6 +33,7 @@ const components = {
   types: {
     affiliateCTA: ({ value }: any) => <AffiliateCTA value={value} />,
     productCallout: ({ value }: any) => <ProductCallout value={value} />,
+    gameReference: ({ value }: any) => <GameReferenceBlock value={value} />,
     inlineImage: ({ value }: any) => (
       <figure className="my-8">
         <img
