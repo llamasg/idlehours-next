@@ -129,7 +129,7 @@ export default function GameReferenceBlock({ value }: { value: GameReferenceValu
             <div className="flex flex-wrap gap-2">
               {game.affiliateLinks.map((link) => (
                 <a
-                  key={link.url}
+                  key={`${link.label}-${link.url}`}
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
