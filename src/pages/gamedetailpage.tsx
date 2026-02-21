@@ -1,11 +1,13 @@
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ExternalLink, Brain, Pizza } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Disc3 } from 'lucide-react'
 import { PortableText } from '@portabletext/react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import GameTileCard from '@/components/GameTileCard'
-import { mockGames } from '@/data/mock-data'
+import { getGame, getAllGames } from '@/lib/queries'
+import type { Game } from '@/types'
 
 // Portable Text components (shared style with blog)
 const bodyComponents = {
@@ -49,56 +51,94 @@ const bodyComponents = {
   },
 }
 
-function BrainMeter({ level, showLabel }: { level: 'Low' | 'Medium' | 'High'; showLabel?: boolean }) {
-  const filled = level === 'Low' ? 1 : level === 'Medium' ? 2 : 3
+function ocColor(score: number): string {
+  if (score >= 90) return 'bg-purple-600 text-white'
+  if (score >= 75) return 'bg-rose-500 text-white'
+  if (score >= 50) return 'bg-green-600 text-white'
+  return 'bg-blue-500 text-white'
+}
+
+function DifficultyLabel({ level }: { level: 1 | 2 | 3 }) {
+  const labels = { 1: 'Beginner', 2: 'Intermediate', 3: 'Experienced' } as const
   return (
-    <div className="flex items-center gap-1" title={`Brain Effort: ${level}`}>
-      {[1, 2, 3].map((i) => (
-        <Brain
+    <div className="flex items-center gap-1.5" title={labels[level]}>
+      {([1, 2, 3] as const).map((i) => (
+        <span
           key={i}
-          size={18}
-          className={i <= filled ? 'text-amber-500 fill-amber-500/30' : 'text-muted-foreground/25'}
-          strokeWidth={i <= filled ? 2.2 : 1.5}
+          className={`inline-block h-2.5 w-2.5 rounded-full ${i <= level ? 'bg-amber-500' : 'bg-muted-foreground/20'}`}
         />
       ))}
-      {showLabel && <span className="ml-1 font-heading text-sm text-muted-foreground">{level}</span>}
+      <span className="ml-1 font-heading text-sm text-muted-foreground">{labels[level]}</span>
+    </div>
+  )
+}
+
+function ReplayMeter({ value }: { value: number }) {
+  return (
+    <div className="flex items-center gap-1" title={`Replayability: ${value}/5`}>
+      {[1, 2, 3, 4, 5].map((i) => {
+        const filled = value >= i
+        const half = !filled && value >= i - 0.5
+        return (
+          <span
+            key={i}
+            className={`inline-block h-2.5 w-2.5 rounded-full ${
+              filled ? 'bg-accent-green' : half ? 'bg-accent-green/50' : 'bg-muted-foreground/20'
+            }`}
+          />
+        )
+      })}
+      <span className="ml-1 font-heading text-sm text-muted-foreground">{value}/5 replay</span>
     </div>
   )
 }
 
 export default function GameDetailPage() {
   const { slug } = useParams<{ slug: string }>()
-  const game = mockGames.find((g) => g.slug.current === slug)
+  const [game, setGame] = useState<Game | null>(null)
+  const [related, setRelated] = useState<Game[]>([])
+  const [loading, setLoading] = useState(true)
 
-  if (!game) {
+  useEffect(() => {
+    if (!slug) return
+    setLoading(true)
+
+    Promise.all([
+      getGame(slug),
+      getAllGames(),
+    ]).then(([gameData, allGames]) => {
+      setGame(gameData ?? null)
+      const others = (allGames ?? []).filter((g: Game) => g.slug.current !== slug)
+      setRelated(others.slice(0, 4))
+    }).catch(() => {
+      setGame(null)
+    }).finally(() => setLoading(false))
+  }, [slug])
+
+  if (loading) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <main className="mx-auto max-w-7xl px-4 py-16 text-center lg:px-8">
-          <h1 className="font-heading text-2xl font-bold text-foreground">Game not found</h1>
-          <p className="mt-2 text-muted-foreground">We couldn't find that game.</p>
-          <Link
-            to="/games"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 font-heading text-sm font-semibold text-primary-foreground"
-          >
-            <ArrowLeft size={14} />
-            Back to Game Library
-          </Link>
+        <main className="mx-auto max-w-7xl px-4 py-16 lg:px-8 flex items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
         </main>
         <SiteFooter />
       </div>
     )
   }
 
-  // Related games: same genre or tags
-  const related = mockGames
-    .filter(
-      (g) =>
-        g._id !== game._id &&
-        (g.genres.some((genre) => game.genres.includes(genre)) ||
-          g.tags.some((tag) => game.tags.includes(tag)))
+  if (!game) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="mx-auto max-w-7xl px-4 py-16 text-center lg:px-8">
+          <p className="font-heading text-xl font-semibold text-foreground">Game not found</p>
+          <Link to="/games" className="mt-4 inline-block text-primary underline">Back to games</Link>
+        </main>
+        <SiteFooter />
+      </div>
     )
-    .slice(0, 5)
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -141,18 +181,21 @@ export default function GameDetailPage() {
 
               {/* Rating icons */}
               <div className="mt-4 flex flex-wrap items-center gap-4">
-                {game.ratings?.cozyPercent != null && (
-                  <span className="rounded-full bg-primary/10 px-3 py-1 font-heading text-sm font-bold text-primary">
-                    {game.ratings.cozyPercent}% Cozy
+                {game.openCriticScore != null && (
+                  <span className={`rounded-full px-3 py-1 font-heading text-sm font-bold shadow ${ocColor(game.openCriticScore)}`}>
+                    {game.openCriticScore} OpenCritic
                   </span>
                 )}
-                {game.ratings?.brainEffort && (
-                  <BrainMeter level={game.ratings.brainEffort} showLabel />
+                {game.difficulty != null && (
+                  <DifficultyLabel level={game.difficulty} />
                 )}
-                {game.ratings?.snackSafe && (
-                  <div className="flex items-center gap-1.5" title="Snack Safe">
-                    <Pizza size={18} className="text-accent-green fill-accent-green/20" strokeWidth={2} />
-                    <span className="font-heading text-sm text-muted-foreground">Snack Safe</span>
+                {game.replayability != null && (
+                  <ReplayMeter value={game.replayability} />
+                )}
+                {game.greatSoundtrack && (
+                  <div className="flex items-center gap-1.5" title="Great Soundtrack">
+                    <Disc3 size={18} className="text-accent fill-accent/20" strokeWidth={2} />
+                    <span className="font-heading text-sm text-muted-foreground">Great Soundtrack</span>
                   </div>
                 )}
                 {game.coop && (
