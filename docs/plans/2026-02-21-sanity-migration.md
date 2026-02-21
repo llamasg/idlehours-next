@@ -13,7 +13,7 @@
 ### Task 1: Remove `ratings` from game schema, add `openCriticId` + `steamAppId`
 
 **Files:**
-- Modify: `cosyblog/schemaTypes/game.ts`
+- Modify: `studio/schemaTypes/game.ts`
 
 **Step 1: Open the file and locate the `ratings` field block**
 
@@ -55,14 +55,14 @@ defineField({
 
 **Step 3: Verify**
 
-In Sanity Studio, restart the dev server (`cd cosyblog && npm run dev`). Open a game document. Confirm:
+In Sanity Studio, restart the dev server (`cd studio && npm run dev`). Open a game document. Confirm:
 - The "Idle Hours Ratings" section no longer appears
 - "OpenCritic ID" and "Steam App ID" fields appear below the OpenCritic Score field
 
 **Step 4: Commit**
 
 ```bash
-git add cosyblog/schemaTypes/game.ts
+git add studio/schemaTypes/game.ts
 git commit -m "feat(schema): remove ratings object, add openCriticId + steamAppId to game"
 ```
 
@@ -796,7 +796,7 @@ Expected: same output with ✅ instead of 🌱, no errors.
 
 **Step 4: Verify in Sanity Studio**
 
-Open Sanity Studio (`cd cosyblog && npm run dev`). Confirm:
+Open Sanity Studio (`cd studio && npm run dev`). Confirm:
 - "Game" document type shows 10 documents
 - Stardew Valley has a cover image and longDescription
 - The 3 games without images (Cozy Grove, Dorfromantik, Potion Craft) have no cover image — that's expected

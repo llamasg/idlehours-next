@@ -27,7 +27,7 @@ npm install basic-ftp --save-dev
 npm run build:all
 ```
 
-This builds both the main site (`dist/`) and Sanity Studio (`cosyblog/dist/`).
+This builds both the main site (`dist/`) and Sanity Studio (`studio/dist/`).
 
 ## Deployment Scripts
 
@@ -40,11 +40,11 @@ Deploys both site and studio to Hostinger.
 2. ✅ Runs preflight checks:
    - Verifies `dist/index.html` exists
    - Verifies `dist/assets/*.js` files exist
-   - Verifies `cosyblog/dist/index.html` exists
+   - Verifies `studio/dist/index.html` exists
 3. ✅ Prompts for FTP password
 4. ✅ Clears remote directories
 5. ✅ Uploads site: `dist/*` → `/public_html/`
-6. ✅ Uploads studio: `cosyblog/dist/*` → `/public_html/studio/`
+6. ✅ Uploads studio: `studio/dist/*` → `/public_html/studio/`
 7. ✅ Shows live URLs
 
 **Usage:**
@@ -78,7 +78,7 @@ npm run deploy:studio
 
 **Paths:**
 - Site: `dist/` → `/public_html/`
-- Studio: `cosyblog/dist/` → `/public_html/studio/`
+- Studio: `studio/dist/` → `/public_html/studio/`
 
 **Important:** This Hostinger plan does NOT support SSH/SFTP. Only FTP on port 21 works.
 
@@ -94,7 +94,7 @@ After successful deployment, your Hostinger `/public_html` should contain:
 │   ├── index-[hash].css
 │   └── ...
 ├── studio/
-│   ├── index.html          (from cosyblog/dist/index.html)
+│   ├── index.html          (from studio/dist/index.html)
 │   ├── static/
 │   └── ...
 ```
@@ -156,7 +156,7 @@ If automated deployment fails, use an FTP client:
 
 3. **Upload:**
    - Upload `dist/*` → `/public_html/`
-   - Upload `cosyblog/dist/*` → `/public_html/studio/`
+   - Upload `studio/dist/*` → `/public_html/studio/`
 
 **Recommended FTP Clients:**
 - FileZilla (Windows/Mac/Linux)
@@ -167,7 +167,7 @@ If automated deployment fails, use an FTP client:
 
 ✅ **Deployed:**
 - Built site files (`dist/`)
-- Sanity Studio (`cosyblog/dist/`)
+- Sanity Studio (`studio/dist/`)
 
 ❌ **NOT Deployed:**
 - Source files (`src/`, `*.tsx`)
@@ -233,7 +233,7 @@ npm run deploy
 **Check:**
 ```bash
 # Verify studio built
-ls cosyblog/dist
+ls studio/dist
 
 # Should show:
 # index.html  static/  ...
@@ -257,7 +257,7 @@ Double-check your FTP password. The correct username is:
 
 The deployment script:
 - Clears remote directories first
-- Uploads ALL files from `dist/` and `cosyblog/dist/`
+- Uploads ALL files from `dist/` and `studio/dist/`
 - Shows progress with file count
 
 Typical upload time: 2-5 minutes depending on connection.
@@ -266,7 +266,7 @@ If upload was suspiciously fast (< 30s), check:
 ```bash
 # Verify builds exist
 ls dist/
-ls cosyblog/dist/
+ls studio/dist/
 ```
 
 ## Live URLs

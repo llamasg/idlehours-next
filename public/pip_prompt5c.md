@@ -138,7 +138,7 @@ Return ONLY valid JSON:
 }
 ```
 
-Make sure `VITE_ANTHROPIC_API_KEY` is in the cosyblog root `.env.local`:
+Make sure `VITE_ANTHROPIC_API_KEY` is in the studio root `.env.local`:
 ```
 VITE_ANTHROPIC_API_KEY=sk-ant-...
 ```

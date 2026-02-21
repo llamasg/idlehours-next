@@ -1,4 +1,4 @@
-// cosyblog/schemaTypes/post.ts
+// studio/schemaTypes/post.ts
 
 import {defineField, defineType} from 'sanity'
 

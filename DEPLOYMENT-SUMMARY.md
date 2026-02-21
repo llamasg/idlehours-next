@@ -27,7 +27,6 @@ dist/
 ├── fonts/
 │   └── Striker PersonalUseOnly.woff
 └── images/
-    ├── full_logo_vector_hashai.svg
     └── hash ai logo-10.png
 ```
 
@@ -35,7 +34,7 @@ dist/
 
 **Studio Build (`npm run build:studio`):**
 ```
-cosyblog/dist/
+studio/dist/
 ├── index.html
 └── static/
 ```
@@ -49,7 +48,7 @@ cosyblog/dist/
 1. **Preflight Checks** - Prevents bad deploys
    - ✅ Verifies `dist/index.html` exists
    - ✅ Verifies `dist/assets/*.js` files exist
-   - ✅ Verifies `cosyblog/dist/index.html` exists
+   - ✅ Verifies `studio/dist/index.html` exists
    - ❌ Fails fast if builds missing
 
 2. **Proper FTP Mirroring**
@@ -60,7 +59,7 @@ cosyblog/dist/
 
 3. **Correct File Uploads**
    - ✅ Uploads `dist/*` contents → `/public_html/`
-   - ✅ Uploads `cosyblog/dist/*` contents → `/public_html/studio/`
+   - ✅ Uploads `studio/dist/*` contents → `/public_html/studio/`
    - ❌ NO temp folders
    - ❌ NO source files
 
@@ -108,9 +107,8 @@ After running `npm run deploy`, your `/public_html` should look like:
 ├── fonts/
 │   └── Striker PersonalUseOnly.woff
 ├── images/
-│   ├── full_logo_vector_hashai.svg
 │   └── hash ai logo-10.png
-└── studio/                 (from cosyblog/dist/)
+└── studio/                 (from studio/dist/)
     ├── index.html
     └── static/
 ```
@@ -161,9 +159,9 @@ npm run deploy:site
 
 **For CMS schema changes:**
 ```bash
-# 1. Make changes to cosyblog/schemaTypes/
+# 1. Make changes to studio/schemaTypes/
 # 2. Test locally
-cd cosyblog && npm run dev
+cd studio && npm run dev
 
 # 3. Deploy studio
 npm run deploy:studio
@@ -201,7 +199,7 @@ npm run deploy
 **Unchanged but verified:**
 - `vite.config.ts` - Correct (base: "/")
 - `dist/` - Verified build output structure
-- `cosyblog/dist/` - Verified studio build
+- `studio/dist/` - Verified studio build
 
 ---
 
@@ -265,7 +263,7 @@ npm run deploy
 **Build System:**
 - Vite for main site (React + TypeScript)
 - Sanity CLI for studio
-- Output: dist/ and cosyblog/dist/
+- Output: dist/ and studio/dist/
 - Assets: Hashed filenames for cache busting
 
 ---

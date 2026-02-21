@@ -18,7 +18,7 @@ Even though `basePath: '/studio'` was set in `sanity.config.ts`, Sanity's build 
 
 ### 1. Post-Build Path Fixer
 
-Created `cosyblog/fix-paths.js` that runs after build:
+Created `studio/fix-paths.js` that runs after build:
 - Automatically replaces `/static/` with `/studio/static/` in index.html
 - Runs automatically via `npm run build` in studio
 
@@ -38,7 +38,7 @@ Created `cosyblog/fix-paths.js` that runs after build:
 - Serves static files directly
 - Falls back to index.html for SPA routes
 
-**Studio** (`cosyblog/dist/.htaccess`):
+**Studio** (`studio/dist/.htaccess`):
 - Serves static assets directly
 - Falls back to index.html for studio routing
 
@@ -55,16 +55,16 @@ Updated `deploy.js` with post-deployment checks:
 ## Files Modified
 
 **Modified:**
-- `cosyblog/package.json` - Added `"type": "module"` and updated build script
-- `cosyblog/sanity.config.ts` - Already had `basePath: '/studio'` (no change needed)
+- `studio/package.json` - Added `"type": "module"` and updated build script
+- `studio/sanity.config.ts` - Already had `basePath: '/studio'` (no change needed)
 - `vite.config.ts` - Added `publicDir: "public"` to copy .htaccess
 - `deploy.js` - Added verification checks
 
 **Created:**
-- `cosyblog/fix-paths.js` - Post-build path fixer
-- `cosyblog/vite.config.ts` - Vite config for studio
+- `studio/fix-paths.js` - Post-build path fixer
+- `studio/vite.config.ts` - Vite config for studio
 - `public/.htaccess` - Main site routing
-- `cosyblog/dist/.htaccess` - Studio routing
+- `studio/dist/.htaccess` - Studio routing
 
 ---
 
@@ -78,7 +78,7 @@ npm run build:studio
 **Steps:**
 1. Runs `sanity build`
 2. Runs `fix-paths.js` to fix asset paths
-3. Outputs to `cosyblog/dist/` with correct paths
+3. Outputs to `studio/dist/` with correct paths
 
 ### Full Build:
 ```bash
@@ -88,9 +88,9 @@ npm run build:all
 **Steps:**
 1. Builds main site → `dist/`
 2. Copies `public/.htaccess` → `dist/.htaccess`
-3. Builds studio → `cosyblog/dist/`
+3. Builds studio → `studio/dist/`
 4. Fixes paths in studio index.html
-5. Copies `cosyblog/dist/.htaccess`
+5. Copies `studio/dist/.htaccess`
 
 ---
 

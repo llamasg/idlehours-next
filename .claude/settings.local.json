@@ -2,7 +2,6 @@
   "permissions": {
     "allow": [
       "Bash(npm run deploy:*)",
-      "Bash(for file in aboutpage.tsx blogpage.tsx contactpage.tsx disclosurepage.tsx homepage.tsx notfoundpage.tsx pokemonarchivepage.tsx privacypage.tsx quizpage.tsx quizzespage.tsx shoppage.tsx)",
       "Bash(do sed -i 's|@/components/Navbar|@/components/navbar|g' \"$file\")",
       "Bash(done)",
       "Bash(npm run build:*)",
@@ -12,9 +11,6 @@
       "Bash(npx vite build:*)",
       "Bash(powershell -Command:*)",
       "Bash(node -e:*)",
-      "Bash(del \"d:\\\\websites\\\\Cosyblog\\\\cosyblog\\\\schemaTypes\\\\pokemonMonth.ts\")",
-      "Bash(del \"d:\\\\websites\\\\Cosyblog\\\\src\\\\pages\\\\pokemonmonthpage.tsx\")",
-      "Bash(del \"d:\\\\websites\\\\Cosyblog\\\\src\\\\pages\\\\pokemonarchivepage.tsx\")",
       "Bash(git status:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
@@ -57,7 +53,8 @@
       "Bash(bash /tmp/check_duplicates.sh)",
       "Bash(/tmp/final_check.sh:*)",
       "Bash(bash /tmp/final_check.sh)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git mv:*)"
     ]
   }
 }

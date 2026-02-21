@@ -38,12 +38,12 @@ mkdir -p .deploy-temp
 cp -r dist/* .deploy-temp/
 
 # Check if Sanity studio is built
-if [ -d "cosyblog/dist" ]; then
+if [ -d "studio/dist" ]; then
   echo "📦 Including Sanity Studio..."
   mkdir -p .deploy-temp/studio
-  cp -r cosyblog/dist/* .deploy-temp/studio/
+  cp -r studio/dist/* .deploy-temp/studio/
 else
-  echo "⚠️  Warning: cosyblog/dist not found. Skipping Sanity Studio deployment."
+  echo "⚠️  Warning: studio/dist not found. Skipping Sanity Studio deployment."
 fi
 
 # Prompt for password

@@ -26,12 +26,12 @@ New-Item -ItemType Directory -Force -Path ".deploy-temp" | Out-Null
 Copy-Item -Path "dist\*" -Destination ".deploy-temp\" -Recurse -Force
 
 # Check if Sanity studio is built
-if (Test-Path "cosyblog\dist") {
+if (Test-Path "studio\dist") {
     Write-Host "📦 Including Sanity Studio..." -ForegroundColor Yellow
     New-Item -ItemType Directory -Force -Path ".deploy-temp\studio" | Out-Null
-    Copy-Item -Path "cosyblog\dist\*" -Destination ".deploy-temp\studio\" -Recurse -Force
+    Copy-Item -Path "studio\dist\*" -Destination ".deploy-temp\studio\" -Recurse -Force
 } else {
-    Write-Host "⚠️  Warning: cosyblog\dist not found. Skipping Sanity Studio deployment." -ForegroundColor Yellow
+    Write-Host "⚠️  Warning: studio\dist not found. Skipping Sanity Studio deployment." -ForegroundColor Yellow
 }
 
 # Get password

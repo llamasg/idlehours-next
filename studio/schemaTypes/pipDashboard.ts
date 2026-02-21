@@ -1,4 +1,4 @@
-// cosyblog/schemaTypes/pipDashboard.ts
+// studio/schemaTypes/pipDashboard.ts
 // Singleton document written nightly by the Pip backend job.
 // Beth sees this in Sanity Studio as a read-only reference.
 

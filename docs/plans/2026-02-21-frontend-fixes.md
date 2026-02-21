@@ -466,7 +466,7 @@ git commit -m "feat: replace platform pills with searchable dropdowns and expand
 ## Task 4: Add gameReference block to Sanity post schema
 
 **Files:**
-- Modify: `cosyblog/schemaTypes/post.ts`
+- Modify: `studio/schemaTypes/post.ts`
 
 Add a new block to the `body` array, after the `productCallout` block (before the closing `]` of the `of` array):
 
@@ -512,18 +512,18 @@ Add a new block to the `body` array, after the `productCallout` block (before th
 **Step 2: Build the studio locally to verify no schema errors**
 
 ```bash
-cd cosyblog && npm run build 2>&1 | tail -5
+cd studio && npm run build 2>&1 | tail -5
 ```
 Expected: build succeeds, `fix-paths.js` runs cleanly
 
 **Step 3: Commit**
 
 ```bash
-git add cosyblog/schemaTypes/post.ts cosyblog/dist
+git add studio/schemaTypes/post.ts studio/dist
 git commit -m "feat: add gameReference block type to blog post body schema"
 ```
 
-> **Note for deployment:** After this task, the updated `cosyblog/dist/` is committed. The user must run `node deploy.js studio` and enter the FTP password to push the new studio build live.
+> **Note for deployment:** After this task, the updated `studio/dist/` is committed. The user must run `node deploy.js studio` and enter the FTP password to push the new studio build live.
 
 ---
 
@@ -824,7 +824,7 @@ Expected: TypeScript compiles, Vite bundles, Sanity Studio builds with path fix 
 node deploy.js all
 ```
 
-When prompted for FTP password, enter it. This uploads both `dist/` (site) and `cosyblog/dist/` (studio) to Hostinger.
+When prompted for FTP password, enter it. This uploads both `dist/` (site) and `studio/dist/` (studio) to Hostinger.
 
 Expected output: upload complete for both site and studio targets.
 

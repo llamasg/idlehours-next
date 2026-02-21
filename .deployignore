@@ -17,4 +17,4 @@ deploy.sh
 deploy.ps1
 deploy.js
 .deploy-temp/
-cosyblog/
+studio/

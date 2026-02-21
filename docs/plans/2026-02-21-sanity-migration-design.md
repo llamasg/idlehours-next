@@ -11,7 +11,7 @@ Remove all mock data from the Idle Hours frontend and replace it with real Sanit
 
 ---
 
-## 1 — Schema Changes (`cosyblog/schemaTypes/game.ts`)
+## 1 — Schema Changes (`studio/schemaTypes/game.ts`)
 
 **Remove** the `ratings` object field entirely (cozyPercent, brainEffort, snackSafe). These were replaced in a previous session with dedicated top-level fields.
 
@@ -110,7 +110,7 @@ potion-craft            → (missing — skip)
 
 | File | Change |
 |------|--------|
-| `cosyblog/schemaTypes/game.ts` | Remove ratings object, add openCriticId + steamAppId |
+| `studio/schemaTypes/game.ts` | Remove ratings object, add openCriticId + steamAppId |
 | `pip/opencritic.js` | New: OpenCritic fetch module |
 | `pip/index.js` | Add Step 0 (updateOpenCriticScores) |
 | `scripts/migrate-to-sanity.js` | New: one-time migration script |

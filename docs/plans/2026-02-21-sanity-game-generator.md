@@ -16,7 +16,7 @@
 1. Go to https://dev.twitch.tv/console/apps and create an app (category: "Application Integration")
 2. Note `Client ID` and generate a `Client Secret`
 
-**Step 2: Create `cosyblog/.env.local`**
+**Step 2: Create `studio/.env.local`**
 ```
 VITE_TWITCH_CLIENT_ID=your_client_id_here
 VITE_TWITCH_CLIENT_SECRET=your_client_secret_here
@@ -30,14 +30,14 @@ This file is gitignored by Vite by default (`.env.local` is always excluded).
 ## Task 1: Mappings + slug utility
 
 **Files:**
-- Create: `cosyblog/components/gameGenerator/mappings.ts`
+- Create: `studio/components/gameGenerator/mappings.ts`
 
 **What this does:** Defines platform/genre mapping from IGDB names → our schema values, and a `slugify` helper.
 
 **Step 1: Create the mappings file**
 
 ```ts
-// cosyblog/components/gameGenerator/mappings.ts
+// studio/components/gameGenerator/mappings.ts
 
 /** Maps IGDB platform name substrings → our platform values */
 export const PLATFORM_MAP: Record<string, string> = {
@@ -123,13 +123,13 @@ export function truncate(text: string, maxLength: number): string {
 
 **Step 2: Verify the file exists**
 ```bash
-ls cosyblog/components/gameGenerator/
+ls studio/components/gameGenerator/
 # Expected: mappings.ts
 ```
 
 **Step 3: Commit**
 ```bash
-git add cosyblog/components/gameGenerator/mappings.ts
+git add studio/components/gameGenerator/mappings.ts
 git commit -m "feat: add IGDB→schema field mappings and slug utility"
 ```
 
@@ -138,14 +138,14 @@ git commit -m "feat: add IGDB→schema field mappings and slug utility"
 ## Task 2: IGDB API client
 
 **Files:**
-- Create: `cosyblog/components/gameGenerator/igdb.ts`
+- Create: `studio/components/gameGenerator/igdb.ts`
 
 **What this does:** Fetches a Twitch OAuth bearer token, then queries IGDB for game data.
 
 **Step 1: Create the IGDB client**
 
 ```ts
-// cosyblog/components/gameGenerator/igdb.ts
+// studio/components/gameGenerator/igdb.ts
 
 export interface IgdbGame {
   id: number
@@ -167,7 +167,7 @@ export async function getTwitchToken(): Promise<string> {
   const clientSecret = import.meta.env.VITE_TWITCH_CLIENT_SECRET as string
 
   if (!clientId || !clientSecret) {
-    throw new Error('VITE_TWITCH_CLIENT_ID and VITE_TWITCH_CLIENT_SECRET must be set in cosyblog/.env.local')
+    throw new Error('VITE_TWITCH_CLIENT_ID and VITE_TWITCH_CLIENT_SECRET must be set in studio/.env.local')
   }
 
   const res = await fetch(
@@ -219,7 +219,7 @@ export async function searchIGDB(query: string): Promise<IgdbGame[]> {
 
 **Step 2: Commit**
 ```bash
-git add cosyblog/components/gameGenerator/igdb.ts
+git add studio/components/gameGenerator/igdb.ts
 git commit -m "feat: add IGDB Twitch auth + game search client"
 ```
 
@@ -228,14 +228,14 @@ git commit -m "feat: add IGDB Twitch auth + game search client"
 ## Task 3: OpenCritic API client
 
 **Files:**
-- Create: `cosyblog/components/gameGenerator/openCritic.ts`
+- Create: `studio/components/gameGenerator/openCritic.ts`
 
 **What this does:** Searches OpenCritic for a game name and returns the top match's ID and score.
 
 **Step 1: Create the OpenCritic client**
 
 ```ts
-// cosyblog/components/gameGenerator/openCritic.ts
+// studio/components/gameGenerator/openCritic.ts
 
 export interface OpenCriticResult {
   id: number
@@ -278,7 +278,7 @@ export async function searchOpenCritic(gameName: string): Promise<OpenCriticResu
 
 **Step 2: Commit**
 ```bash
-git add cosyblog/components/gameGenerator/openCritic.ts
+git add studio/components/gameGenerator/openCritic.ts
 git commit -m "feat: add OpenCritic search client"
 ```
 
@@ -287,8 +287,8 @@ git commit -m "feat: add OpenCritic search client"
 ## Task 4: Build the GameGeneratorInput component (search UI + preview panel)
 
 **Files:**
-- Create: `cosyblog/components/gameGenerator/GameGeneratorInput.tsx`
-- Modify: `cosyblog/schemaTypes/game.ts` — add `_generate` helper field at top
+- Create: `studio/components/gameGenerator/GameGeneratorInput.tsx`
+- Modify: `studio/schemaTypes/game.ts` — add `_generate` helper field at top
 
 This is the main component. It renders:
 1. A text input for the game name
@@ -299,7 +299,7 @@ This is the main component. It renders:
 **Step 1: Create the component**
 
 ```tsx
-// cosyblog/components/gameGenerator/GameGeneratorInput.tsx
+// studio/components/gameGenerator/GameGeneratorInput.tsx
 
 import {useState} from 'react'
 import {
@@ -573,7 +573,7 @@ export function GameGeneratorInput() {
 
 **Step 2: Add the helper field to the game schema**
 
-Open `cosyblog/schemaTypes/game.ts`. Add this as the FIRST item in the `fields` array (before `title`):
+Open `studio/schemaTypes/game.ts`. Add this as the FIRST item in the `fields` array (before `title`):
 
 ```ts
 // At top of file, add import:
@@ -594,13 +594,13 @@ The `_generate` field is a hidden helper — the component never calls `onChange
 
 **Step 3: Verify the studio starts without errors**
 ```bash
-cd cosyblog && npm run dev
+cd studio && npm run dev
 ```
 Expected: Studio starts, no TypeScript/import errors. Open a Game document and the generate panel appears at the top.
 
 **Step 4: Commit**
 ```bash
-git add cosyblog/components/gameGenerator/GameGeneratorInput.tsx cosyblog/schemaTypes/game.ts
+git add studio/components/gameGenerator/GameGeneratorInput.tsx studio/schemaTypes/game.ts
 git commit -m "feat: add GameGeneratorInput component and wire to game schema"
 ```
 
@@ -609,9 +609,9 @@ git commit -m "feat: add GameGeneratorInput component and wire to game schema"
 ## Task 5: Build and manual verification
 
 **Files:**
-- Modify: `cosyblog/schemaTypes/game.ts` — if any adjustments needed from testing
+- Modify: `studio/schemaTypes/game.ts` — if any adjustments needed from testing
 
-**Step 1: Create `cosyblog/.env.local` with your Twitch credentials**
+**Step 1: Create `studio/.env.local` with your Twitch credentials**
 ```
 VITE_TWITCH_CLIENT_ID=<your client id>
 VITE_TWITCH_CLIENT_SECRET=<your client secret>
@@ -619,7 +619,7 @@ VITE_TWITCH_CLIENT_SECRET=<your client secret>
 
 **Step 2: Run the Studio dev server**
 ```bash
-cd cosyblog && npm run dev
+cd studio && npm run dev
 ```
 Open http://localhost:3333/studio
 
@@ -649,7 +649,7 @@ Open a new Game document:
 
 **Step 5: Build the studio**
 ```bash
-cd cosyblog && npm run build
+cd studio && npm run build
 ```
 Expected: Build succeeds with no errors.
 
@@ -669,7 +669,7 @@ Enter FTP password when prompted.
 
 ## IGDB CORS Note
 
-If the browser console shows CORS errors when calling `https://api.igdb.com/v4/games`, add a Vite dev proxy to `cosyblog/vite.config.ts`:
+If the browser console shows CORS errors when calling `https://api.igdb.com/v4/games`, add a Vite dev proxy to `studio/vite.config.ts`:
 
 ```ts
 import {defineConfig} from 'vite'

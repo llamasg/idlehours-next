@@ -22,7 +22,7 @@ const config = {
       remote: '/',        // FTP root maps to public_html
     },
     studio: {
-      local: 'cosyblog/dist',
+      local: 'studio/dist',
       remote: '/studio',
     },
   },
@@ -60,8 +60,8 @@ function preflightChecks(deployTarget = 'all') {
   }
 
   if (deployTarget === 'all' || deployTarget === 'studio') {
-    if (!existsSync('cosyblog/dist') || !existsSync('cosyblog/dist/index.html')) {
-      console.error('  FAIL: cosyblog/dist/ build not found');
+    if (!existsSync('studio/dist') || !existsSync('studio/dist/index.html')) {
+      console.error('  FAIL: studio/dist/ build not found');
       checks.push(false);
     } else {
       console.log('  OK: Studio build verified');
@@ -165,7 +165,7 @@ async function deploy(target = 'all') {
         client,
         config.paths.studio.local,
         config.paths.studio.remote,
-        'Studio (cosyblog/dist -> /studio)'
+        'Studio (studio/dist -> /studio)'
       );
     }
 
