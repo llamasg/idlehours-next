@@ -408,6 +408,41 @@ export default defineType({
             },
           },
         },
+
+        // Game Reference
+        {
+          type: 'object',
+          name: 'gameReference',
+          title: 'Game Reference',
+          fields: [
+            {
+              name: 'game',
+              type: 'reference',
+              to: [{type: 'game'}],
+              title: 'Game',
+              validation: (Rule: any) => Rule.required(),
+            },
+            {
+              name: 'position',
+              type: 'number',
+              title: 'Position (optional)',
+              description: 'Position number e.g. 1 = #1 in a top list',
+              validation: (Rule: any) => Rule.integer().min(1),
+            },
+          ],
+          preview: {
+            select: {
+              gameName: 'game.title',
+              position: 'position',
+            },
+            prepare({gameName, position}: {gameName?: string; position?: number}) {
+              return {
+                title: position ? `#${position} — ${gameName || 'Select game'}` : (gameName || 'Select game'),
+                subtitle: 'Game Reference',
+              }
+            },
+          },
+        },
       ],
     }),
 
