@@ -1,6 +1,7 @@
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import { getAllQuizzes } from '@/lib/queries'
+import type { Quiz } from '@/types'
 
 export const metadata = { title: 'Quizzes' }
 
@@ -17,8 +18,8 @@ export default async function QuizzesPage() {
         </div>
         {quizzes && quizzes.length > 0 ? (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {quizzes.map((quiz: { _id: string; title: string; description?: string; emoji?: string }) => (
-              <div key={quiz._id} className="rounded-2xl border border-border/40 bg-card p-6">
+            {quizzes.map((quiz: Quiz) => (
+              <div key={quiz.id} className="rounded-2xl border border-border/40 bg-card p-6">
                 {quiz.emoji && <div className="mb-3 text-4xl">{quiz.emoji}</div>}
                 <h2 className="mb-2 font-heading text-xl font-bold text-foreground">{quiz.title}</h2>
                 {quiz.description && (

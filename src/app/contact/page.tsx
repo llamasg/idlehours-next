@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import Header from "@/components/Header";
 import SiteFooter from "@/components/SiteFooter";
 import ContactForm from "@/components/ContactForm";
@@ -37,12 +38,12 @@ export default function ContactPage() {
               For business inquiries, product feedback, or collaboration opportunities
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <a
+              <Link
                 href="/about"
                 className="text-primary transition-colors hover:text-primary/80 hover:underline"
               >
                 About Us
-              </a>
+              </Link>
             </div>
           </div>
         </motion.div>
