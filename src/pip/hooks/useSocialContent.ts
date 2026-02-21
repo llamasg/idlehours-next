@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — useSocialContent
    Generates social content ideas via Claude Sonnet.

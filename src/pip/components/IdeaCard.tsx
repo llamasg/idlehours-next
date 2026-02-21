@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — IdeaCard
    Large card showing a single post idea

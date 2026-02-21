@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — StatCard
    Small stat display with optional delta indicator

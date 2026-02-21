@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard — Analytics Charts
    Reusable Recharts wrappers for the analytics view

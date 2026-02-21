@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — YesAndInput
    Conversational "Yes, And" brainstorm input

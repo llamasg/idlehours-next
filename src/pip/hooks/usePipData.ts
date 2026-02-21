@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — Central Data Hook
    Fetches live data from the pip-dashboard-singleton Sanity document.

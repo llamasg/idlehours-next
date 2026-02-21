@@ -1,16 +1,21 @@
+'use client'
 import { useState } from 'react';
+import { usePipAuth } from './usePipAuth';
 
 interface PipAuthGateProps {
-  onAuth: (password: string) => boolean;
+  children: React.ReactNode;
 }
 
-export default function PipAuthGate({ onAuth }: PipAuthGateProps) {
+export default function PipAuthGate({ children }: PipAuthGateProps) {
+  const { authed, login } = usePipAuth();
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
 
+  if (authed) return <>{children}</>;
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const success = onAuth(password);
+    const success = login(password);
     if (!success) {
       setError(true);
       setPassword('');

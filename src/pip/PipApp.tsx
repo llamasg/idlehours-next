@@ -1,3 +1,4 @@
+'use client'
 import { Routes, Route } from 'react-router-dom';
 import { usePipAuth } from './auth/usePipAuth';
 import PipAuthGate from './auth/PipAuthGate';

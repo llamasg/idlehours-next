@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — IdeaDeck
    Tinder-style swipeable card stack for post ideas

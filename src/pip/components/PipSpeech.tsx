@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — PipSpeech
    Robot avatar + animated speech bubble

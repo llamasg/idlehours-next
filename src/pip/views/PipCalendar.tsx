@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — PipCalendar (Content Calendar)
    Monthly calendar with event dots & day-click detail

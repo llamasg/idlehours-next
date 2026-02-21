@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard — Content Creation View
    Social content plan powered by Claude.

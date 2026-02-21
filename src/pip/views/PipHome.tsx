@@ -1,8 +1,9 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — PipHome (Landing View)
    ────────────────────────────────────────────── */
 
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { BarChart3, Clock, Flame, RefreshCw, Zap } from 'lucide-react';
 
@@ -208,7 +209,7 @@ export default function PipHome() {
             </div>
 
             <Link
-              to="/pip/clusters"
+              href="/pip/clusters"
               className="mt-4 inline-block text-sm font-medium text-burnt-orange hover:underline"
             >
               Continue working &rarr;
@@ -242,7 +243,7 @@ export default function PipHome() {
         </div>
 
         <Link
-          to="/pip/ideas"
+          href="/pip/ideas"
           className="mt-3 inline-block text-sm font-medium text-burnt-orange hover:underline"
         >
           See all ideas &rarr;
@@ -255,19 +256,19 @@ export default function PipHome() {
 
         <div className="flex flex-wrap gap-3">
           <Link
-            to="/pip/ideas"
+            href="/pip/ideas"
             className="rounded-lg bg-burnt-orange px-4 py-2 text-sm font-medium text-white shadow-sm hover:opacity-90 transition-opacity"
           >
             ✍️ Write something new
           </Link>
           <Link
-            to="/pip/analytics"
+            href="/pip/analytics"
             className="rounded-lg border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 shadow-sm hover:bg-stone-50 transition-colors"
           >
             📊 Check analytics
           </Link>
           <Link
-            to="/pip/calendar"
+            href="/pip/calendar"
             className="rounded-lg border border-stone-300 bg-white px-4 py-2 text-sm font-medium text-stone-700 shadow-sm hover:bg-stone-50 transition-colors"
           >
             📅 Plan content

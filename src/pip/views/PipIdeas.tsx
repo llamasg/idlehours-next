@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — PipIdeas view
    Post ideas page with Tinder-style card deck

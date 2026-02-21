@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard — Analytics View
    Tabbed analytics dashboard: Overview, Content, Audience, Search

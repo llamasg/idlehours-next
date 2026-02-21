@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — useMorningMessage
    Generates a daily morning message via Claude.

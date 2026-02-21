@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — Claude API
    Real Anthropic calls for the /pip interface.

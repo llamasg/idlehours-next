@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — PipAchievements (Badges View)
    Achievement cards with earned / locked states

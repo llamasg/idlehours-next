@@ -1,5 +1,7 @@
+'use client'
 import { useState } from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   Home,
   Lightbulb,
@@ -15,9 +17,10 @@ import {
 } from 'lucide-react';
 import { usePipData } from './hooks/usePipData';
 import { getLevelInfo } from './lib/pipMockData';
+import { usePipAuth } from './auth/usePipAuth';
 
 interface PipLayoutProps {
-  onLogout: () => void;
+  children: React.ReactNode;
 }
 
 interface NavItemDef {
@@ -29,16 +32,15 @@ interface NavItemDef {
 }
 
 function NavItem({ to, label, icon: Icon, end, badge, onClose }: NavItemDef & { onClose: () => void }) {
+  const pathname = usePathname();
+  const isActive = pathname === to;
   return (
-    <NavLink
-      to={to}
-      end={end}
+    <Link
+      href={to}
       onClick={onClose}
-      className={({ isActive }) =>
-        `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
-          isActive ? 'bg-white/10 text-white' : 'text-white/60 hover:text-white'
-        }`
-      }
+      className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+        isActive ? 'bg-white/10 text-white' : 'text-white/60 hover:text-white'
+      }`}
     >
       <Icon size={18} />
       <span>{label}</span>
@@ -47,17 +49,18 @@ function NavItem({ to, label, icon: Icon, end, badge, onClose }: NavItemDef & { 
           {badge}
         </span>
       ) : null}
-    </NavLink>
+    </Link>
   );
 }
 
-export default function PipLayout({ onLogout }: PipLayoutProps) {
+export default function PipLayout({ children }: PipLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { streak, xp, ideas } = usePipData();
+  const { logout } = usePipAuth();
   const levelInfo = getLevelInfo(xp);
 
   const navItems: NavItemDef[] = [
-    { to: '/pip', label: 'Home', icon: Home, end: true },
+    { to: '/pip/home', label: 'Home', icon: Home, end: true },
     { to: '/pip/ideas', label: 'Ideas', icon: Lightbulb, badge: ideas.length },
     { to: '/pip/clusters', label: 'Clusters', icon: Network },
     { to: '/pip/seo', label: 'SEO Helper', icon: Search },
@@ -154,7 +157,7 @@ export default function PipLayout({ onLogout }: PipLayoutProps) {
       {/* Logout */}
       <div className="px-4 pb-4 shrink-0">
         <button
-          onClick={onLogout}
+          onClick={logout}
           className="text-sm text-white/40 hover:text-white transition-colors"
         >
           Logout
@@ -200,7 +203,7 @@ export default function PipLayout({ onLogout }: PipLayoutProps) {
         </div>
 
         <div className="p-8 w-full">
-          <Outlet />
+          {children}
         </div>
       </main>
     </div>

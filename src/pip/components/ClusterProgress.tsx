@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — ClusterProgress
    Compact / full progress bar for a content cluster

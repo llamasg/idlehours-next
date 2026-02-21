@@ -1,3 +1,4 @@
+'use client'
 /* ──────────────────────────────────────────────
    Pip Dashboard v2 — Browser-side Sanity helpers
    Write operations use localStorage until a
