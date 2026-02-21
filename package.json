@@ -8,8 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:studio": "cd studio && npm run build",
-    "deploy:studio": "cd studio && npx sanity deploy"
+    "deploy:studio": "echo 'Deploy studio separately from its own directory'"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.76.0",
