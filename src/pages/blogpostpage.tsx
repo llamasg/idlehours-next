@@ -13,6 +13,20 @@ import ProductCallout from '@/components/ProductCallout'
 import { motion } from 'framer-motion'
 
 
+// ── Read time ─────────────────────────────────────────────────────────────
+function estimateReadTime(body: any[]): string {
+  if (!Array.isArray(body)) return '1 min read'
+  const words = body.reduce((count, block) => {
+    if (block._type === 'block' && Array.isArray(block.children)) {
+      const text = block.children.map((c: any) => c.text ?? '').join(' ')
+      return count + text.split(/\s+/).filter(Boolean).length
+    }
+    return count
+  }, 0)
+  const mins = Math.max(1, Math.ceil(words / 200))
+  return `${mins} min read`
+}
+
 // Custom components for Portable Text
 const components = {
   types: {
@@ -216,129 +230,125 @@ export default function BlogPostPage() {
     <div className="min-h-screen bg-background">
       <Header />
       <article>
-      {/* Header Image */}
-      <div className="relative h-[70vh] w-full">
-        <img
-          src={post.headerImage}
-          alt={post.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-        
-        {/* Back Button */}
-        <Link
-          to="/blog"
-          className="absolute top-8 left-8 bg-background/50 backdrop-blur-sm text-foreground px-4 py-2 rounded-lg hover:bg-background/70 transition-colors flex items-center gap-2"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Blog
-        </Link>
-      </div>
-
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 -mt-32 relative z-10 pb-20">
-        {/* Categories */}
-        {post.categories && post.categories.length > 0 && (
-          <div className="flex gap-2 mb-6 flex-wrap">
-            {post.categories.map((cat: string) => (
-              <span
-                key={cat}
-                className="bg-accent/20 text-accent px-4 py-2 rounded-full text-sm border border-accent/30 backdrop-blur-sm"
-              >
-                {cat}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Title */}
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
-          {post.title}
-        </h1>
-
-        {/* Subheader */}
-        <p className="text-2xl md:text-3xl text-muted-foreground mb-8 leading-relaxed">
-          {post.subheader}
-        </p>
-
-        {/* Meta */}
-        <div className="flex items-center gap-4 text-muted-foreground mb-8 pb-8 border-b border-border">
-          <span className="text-foreground font-medium">{post.author}</span>
-          <span>•</span>
-          <span>
-            {new Date(post.publishedAt).toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </span>
+        {/* Full-width header image — no overlay, no text */}
+        <div className="w-full">
+          <img
+            src={post.headerImage}
+            alt={post.title}
+            className="w-full max-h-[70vh] object-cover"
+          />
         </div>
 
-        {/* Affiliate Disclosure */}
-        {post.affiliateDisclosureRequired && <DisclosureBanner />}
-
-        {/* Body Content */}
-        <div className="prose prose-invert max-w-none">
-          <PortableText value={post.body} components={components} />
-        </div>
-
-        {/* Other Blogs */}
-        {otherPosts.length > 0 && (
-          <div className="mt-16 pt-12 border-t border-border">
-            <h2 className="mb-6 font-heading text-2xl font-bold text-foreground">
-              Other Blogs You Might Like
-            </h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {otherPosts.map((otherPost: any) => (
-                <Link key={otherPost._id} to={`/blog/${otherPost.slug.current}`}>
-                  <motion.article
-                    whileHover={{ y: -4, boxShadow: "0 8px 30px hsl(210 100% 50% / 0.12)" }}
-                    transition={{ duration: 0.2 }}
-                    className="group overflow-hidden rounded-2xl border border-border/40 bg-card"
-                  >
-                    <div className="aspect-[16/10] w-full bg-gradient-to-br from-secondary via-card to-secondary">
-                      {otherPost.headerImage && (
-                        <img
-                          src={otherPost.headerImage}
-                          alt={otherPost.title}
-                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-                        />
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <h3 className="mb-2 font-heading text-sm font-bold leading-snug text-foreground line-clamp-2 group-hover:text-primary">
-                        {otherPost.title}
-                      </h3>
-                      <p className="mb-3 text-xs leading-relaxed text-muted-foreground line-clamp-2">
-                        {otherPost.subheader}
-                      </p>
-                      <p className="text-[11px] text-muted-foreground">
-                        {otherPost.author}
-                      </p>
-                    </div>
-                  </motion.article>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Back to Blog Link */}
-        <div className="mt-12 text-center">
+        {/* Content column */}
+        <div className="max-w-4xl mx-auto px-4 py-8 pb-20">
+          {/* Back button — in content column, not over image */}
           <Link
             to="/blog"
-            className="inline-flex items-center gap-2 text-accent hover:text-accent transition-colors text-lg"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm mb-8 transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Back to all posts
+            Back to Blog
           </Link>
+
+          {/* Categories */}
+          {post.categories && post.categories.length > 0 && (
+            <div className="flex gap-2 mb-4 flex-wrap">
+              {post.categories.map((cat: string) => (
+                <span key={cat} className="bg-accent/20 text-accent px-3 py-1 rounded-full text-xs border border-accent/30">
+                  {cat}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Title */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-foreground">
+            {post.title}
+          </h1>
+
+          {/* Subheader */}
+          <p className="text-xl md:text-2xl mb-6 leading-relaxed text-muted-foreground">
+            {post.subheader}
+          </p>
+
+          {/* Meta */}
+          <div className="flex items-center gap-2 text-muted-foreground mb-8 pb-8 border-b border-border text-sm">
+            <span>{estimateReadTime(post.body)}</span>
+            <span>·</span>
+            <span>
+              {new Date(post.publishedAt).toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })}
+            </span>
+          </div>
+
+          {/* Affiliate Disclosure */}
+          {post.affiliateDisclosureRequired && <DisclosureBanner />}
+
+          {/* Body Content */}
+          <div className="prose prose-invert max-w-none">
+            <PortableText value={post.body} components={components} />
+          </div>
+
+          {/* Other Blogs */}
+          {otherPosts.length > 0 && (
+            <div className="mt-16 pt-12 border-t border-border">
+              <h2 className="mb-6 font-heading text-2xl font-bold text-foreground">
+                Other Blogs You Might Like
+              </h2>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {otherPosts.map((otherPost: any) => (
+                  <Link key={otherPost._id} to={`/blog/${otherPost.slug.current}`}>
+                    <motion.article
+                      whileHover={{ y: -4, boxShadow: "0 8px 30px hsl(210 100% 50% / 0.12)" }}
+                      transition={{ duration: 0.2 }}
+                      className="group overflow-hidden rounded-2xl border border-border/40 bg-card"
+                    >
+                      <div className="aspect-[16/10] w-full bg-gradient-to-br from-secondary via-card to-secondary">
+                        {otherPost.headerImage && (
+                          <img
+                            src={otherPost.headerImage}
+                            alt={otherPost.title}
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                          />
+                        )}
+                      </div>
+                      <div className="p-4">
+                        <h3 className="mb-2 font-heading text-sm font-bold leading-snug text-foreground line-clamp-2 group-hover:text-primary">
+                          {otherPost.title}
+                        </h3>
+                        <p className="mb-3 text-xs leading-relaxed text-muted-foreground line-clamp-2">
+                          {otherPost.subheader}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground">
+                          {otherPost.author}
+                        </p>
+                      </div>
+                    </motion.article>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Back to Blog Link */}
+          <div className="mt-12 text-center">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 text-accent hover:text-accent transition-colors text-lg"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to all posts
+            </Link>
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
       <SiteFooter />
     </div>
   )
