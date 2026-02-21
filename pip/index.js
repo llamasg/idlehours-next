@@ -3,7 +3,7 @@
  *
  * Runs every night via GitHub Actions.
  * Sequence:
- *   1. Fetch GA4 + Search Console data (research.js)
+ *   1. Fetch Plausible + Search Console data (research.js)
  *   2. Fetch existing posts from Sanity (sanity.js)
  *   3. Generate ideas + morning message via Claude (generate.js)
  *   4. Write results back to Sanity (sanity.js)
@@ -18,6 +18,7 @@ dotenv.config()
 import { fetchResearchData } from './research.js'
 import { generateContent } from './generate.js'
 import { fetchPosts, writeToDashboard } from './sanity.js'
+import { updateOpenCriticScores } from './opencritic.js'
 
 const DRY_RUN = process.env.PIP_DRY_RUN === 'true'
 
@@ -28,6 +29,15 @@ async function run() {
   console.log(`Mode: ${DRY_RUN ? '🌱 DRY RUN (no Sanity writes)' : '🔴 LIVE'}`)
   console.log(`Date: ${new Date().toISOString()}\n`)
   console.log('─'.repeat(50))
+
+  // ── Step 0: Update OpenCritic scores ─────────────
+  try {
+    await updateOpenCriticScores()
+  } catch (err) {
+    console.warn('⚠️  OpenCritic update failed (non-fatal):', err.message)
+  }
+
+  console.log('\n' + '─'.repeat(50))
 
   // ── Step 1: Research ──────────────────────────────
   const research = await fetchResearchData()
