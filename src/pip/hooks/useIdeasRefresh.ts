@@ -10,7 +10,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import type { PipIdea } from '../lib/pipMockData';
 
 const anthropic = new Anthropic({
-  apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
+  apiKey: process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY,
   dangerouslyAllowBrowser: true,
 });
 

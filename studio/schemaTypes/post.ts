@@ -208,7 +208,8 @@ export default defineType({
               description: 'Paste the full YouTube URL',
               validation: (Rule) =>
                 Rule.required().custom((url) => {
-                  if (url && !url.includes('youtube.com') && !url.includes('youtu.be')) {
+                  const urlStr = url as string
+                  if (urlStr && !urlStr.includes('youtube.com') && !urlStr.includes('youtu.be')) {
                     return 'Must be a valid YouTube URL'
                   }
                   return true

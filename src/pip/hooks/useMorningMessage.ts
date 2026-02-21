@@ -10,7 +10,7 @@ import { useState, useEffect, useRef } from 'react';
 import Anthropic from '@anthropic-ai/sdk';
 
 const anthropic = new Anthropic({
-  apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
+  apiKey: process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY,
   dangerouslyAllowBrowser: true,
 });
 
@@ -124,6 +124,7 @@ export function useMorningMessage({
     if (hasGenerated.current || message) return;
 
     hasGenerated.current = true;
+    // eslint-disable-next-line -- intentional loading state set before async call
     setIsLoading(true);
 
     callClaude({ streak, sessions7d, totalPosts })

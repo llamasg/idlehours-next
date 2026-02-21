@@ -48,6 +48,7 @@ export interface UseIdeaDeckReturn {
 
 export function useIdeaDeck(ideas: PipIdea[]): UseIdeaDeckReturn {
   const allIdeasRef = useRef(ideas);
+  // eslint-disable-next-line -- ref update during render is intentional (latest closure pattern)
   allIdeasRef.current = ideas;
 
   const [dismissed, setDismissed] = useState<string[]>(() =>

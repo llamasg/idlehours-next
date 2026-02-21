@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import { Suspense, useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Header from '@/components/Header'
@@ -23,7 +23,7 @@ interface Post {
 const CATEGORIES = ['All', 'Lists', 'Opinions', 'Recommendations']
 const POSTS_PER_PAGE = 9
 
-export default function BlogPage() {
+function BlogContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [posts, setPosts] = useState<Post[]>([])
@@ -210,5 +210,21 @@ export default function BlogPage() {
       </main>
       <SiteFooter />
     </div>
+  )
+}
+
+export default function BlogPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="mx-auto max-w-7xl px-4 py-12">
+          <div className="h-64 animate-pulse rounded-3xl bg-muted/40" />
+        </main>
+        <SiteFooter />
+      </div>
+    }>
+      <BlogContent />
+    </Suspense>
   )
 }
