@@ -8,35 +8,24 @@
   :root {
     --background: 30 47% 93%;
     --foreground: 36 20% 10%;
-
     --card: 0 0% 100%;
     --card-foreground: 36 20% 10%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 36 20% 10%;
-
     --primary: 25 89% 42%;
     --primary-foreground: 0 0% 100%;
-
     --secondary: 210 20% 98%;
     --secondary-foreground: 36 20% 10%;
-
     --muted: 30 20% 90%;
     --muted-foreground: 220 9% 46%;
-
     --accent: 153 39% 52%;
     --accent-foreground: 0 0% 100%;
-
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-
     --border: 30 15% 82%;
     --input: 30 15% 82%;
     --ring: 25 89% 42%;
-
     --radius: 1rem;
-
-    /* Brand tokens */
     --linen: 30 47% 93%;
     --brand-dark: 36 20% 10%;
     --brand-green: 155 41% 30%;
@@ -47,34 +36,20 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
+  * { @apply border-border; }
   body {
     @apply bg-background text-foreground;
     font-family: 'Lora', Georgia, serif;
   }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Lora', Georgia, serif;
-  }
+  h1, h2, h3, h4, h5, h6 { font-family: 'Lora', Georgia, serif; }
 }
 
 @layer utilities {
-  .font-heading {
-    font-family: 'Lora', Georgia, serif;
-  }
-
-  .font-body {
-    font-family: 'Lora', Georgia, serif;
-  }
-
+  .font-heading { font-family: 'Lora', Georgia, serif; }
+  .font-body    { font-family: 'Lora', Georgia, serif; }
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
 }
