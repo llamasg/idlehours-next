@@ -1,23 +1,88 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Search, Filter, X } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import GameTileCard from '@/components/GameTileCard'
 import { getAllGames } from '@/lib/queries'
 import type { Game } from '@/types'
 
-const platforms = ['All', 'PC', 'Switch', 'PS5', 'Xbox', 'Mobile']
-const sortOptions = [
-  { label: 'Highest Rated', value: 'score' },
-  { label: 'Newest', value: 'newest' },
-  { label: 'A-Z', value: 'alpha' },
-]
+// ── FilterSelect — searchable dropdown ─────────────────────────────────────
+interface FilterSelectProps {
+  label: string
+  value: string
+  options: string[]
+  onChange: (v: string) => void
+}
+
+function FilterSelect({ label, value, options, onChange }: FilterSelectProps) {
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  const filtered = options.filter((o) =>
+    o.toLowerCase().includes(query.toLowerCase())
+  )
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => { setOpen(!open); setQuery('') }}
+        className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 font-heading text-xs text-foreground hover:bg-secondary transition-colors"
+      >
+        <span className="text-muted-foreground">{label}:</span>
+        <span className={value === 'All' ? 'text-muted-foreground' : 'text-primary font-semibold'}>{value}</span>
+        <svg className="w-3 h-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute left-0 top-full mt-1 z-20 w-44 rounded-xl border border-border bg-card shadow-lg overflow-hidden">
+          <div className="p-2 border-b border-border">
+            <input
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Type to filter..."
+              className="w-full rounded-lg bg-muted/40 px-2 py-1 font-body text-xs text-foreground placeholder:text-muted-foreground focus:outline-none"
+            />
+          </div>
+          <div className="max-h-48 overflow-y-auto">
+            {filtered.map((o) => (
+              <button
+                key={o}
+                onClick={() => { onChange(o); setOpen(false) }}
+                className={`w-full px-3 py-2 text-left font-heading text-xs transition-colors hover:bg-secondary ${
+                  o === value ? 'text-primary font-semibold bg-primary/5' : 'text-foreground'
+                }`}
+              >
+                {o}
+              </button>
+            ))}
+            {filtered.length === 0 && (
+              <p className="px-3 py-2 text-xs text-muted-foreground">No matches</p>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function GamesPage() {
   const [search, setSearch] = useState('')
   const [platform, setPlatform] = useState('All')
-  const [sort, setSort] = useState('score')
+  const [genre, setGenre] = useState('All')
+  const [sort, setSort] = useState('score-desc')
   const [coopOnly, setCoopOnly] = useState(false)
   const [games, setGames] = useState<Game[]>([])
   const [gamesLoading, setGamesLoading] = useState(true)
@@ -28,6 +93,12 @@ export default function GamesPage() {
       .catch(() => setGames([]))
       .finally(() => setGamesLoading(false))
   }, [])
+
+  const genreOptions = useMemo(() => {
+    const all = new Set<string>()
+    games.forEach((g) => (g.genre ?? []).forEach((gen) => all.add(gen)))
+    return ['All', ...Array.from(all).sort()]
+  }, [games])
 
   const filtered = useMemo(() => {
     let result = [...games]
@@ -48,24 +119,50 @@ export default function GamesPage() {
       result = result.filter((g) => g.platforms.includes(platform))
     }
 
+    // Genre
+    if (genre !== 'All') {
+      result = result.filter((g) => (g.genre ?? []).includes(genre))
+    }
+
     // Co-op
     if (coopOnly) {
       result = result.filter((g) => g.coop)
     }
 
     // Sort
-    if (sort === 'score') {
-      result.sort((a, b) => (b.openCriticScore ?? -1) - (a.openCriticScore ?? -1))
-    } else if (sort === 'newest') {
+    const nullLast = (a: number | null | undefined, b: number | null | undefined, dir: 1 | -1) => {
+      if (a == null && b == null) return 0
+      if (a == null) return 1
+      if (b == null) return -1
+      return (a - b) * dir
+    }
+
+    if (sort === 'score-desc') result.sort((a, b) => nullLast(b.openCriticScore, a.openCriticScore, 1))
+    else if (sort === 'score-asc') result.sort((a, b) => nullLast(a.openCriticScore, b.openCriticScore, 1))
+    else if (sort === 'replay-desc') result.sort((a, b) => nullLast(b.replayability, a.replayability, 1))
+    else if (sort === 'replay-asc') result.sort((a, b) => nullLast(a.replayability, b.replayability, 1))
+    else if (sort === 'diff-asc') result.sort((a, b) => nullLast(a.difficulty, b.difficulty, 1))
+    else if (sort === 'diff-desc') result.sort((a, b) => nullLast(b.difficulty, a.difficulty, 1))
+    else if (sort === 'price-asc') {
+      result.sort((a, b) => {
+        const pa = a.isFree ? 0 : (a.currentPrice ?? Infinity)
+        const pb = b.isFree ? 0 : (b.currentPrice ?? Infinity)
+        return pa - pb
+      })
+    } else if (sort === 'price-desc') {
+      result.sort((a, b) => {
+        const pa = a.isFree ? 0 : (a.currentPrice ?? -Infinity)
+        const pb = b.isFree ? 0 : (b.currentPrice ?? -Infinity)
+        return pb - pa
+      })
+    } else if (sort === 'date-desc') {
       result.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-    } else {
-      result.sort((a, b) => a.title.localeCompare(b.title))
+    } else if (sort === 'date-asc') {
+      result.sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime())
     }
 
     return result
-  }, [search, platform, sort, coopOnly, games])
-
-  const activeFilters = (platform !== 'All' ? 1 : 0) + (coopOnly ? 1 : 0)
+  }, [search, platform, genre, sort, coopOnly, games])
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,7 +185,7 @@ export default function GamesPage() {
         </motion.div>
 
         {/* Search + Filters */}
-        <div className="mb-6 space-y-4">
+        <div className="mb-6 space-y-3">
           {/* Search bar */}
           <div className="relative max-w-md">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -110,50 +207,51 @@ export default function GamesPage() {
           </div>
 
           {/* Filter row */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Filter size={14} />
-              <span className="font-heading font-medium">Filters{activeFilters > 0 && ` (${activeFilters})`}</span>
-            </div>
-
-            {/* Platform pills */}
-            <div className="flex flex-wrap gap-1.5">
-              {platforms.map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPlatform(p)}
-                  className={`rounded-full border px-3 py-1 font-heading text-xs font-medium transition-colors ${
-                    platform === p
-                      ? 'border-primary bg-primary text-primary-foreground'
-                      : 'border-border bg-card text-muted-foreground hover:bg-secondary'
-                  }`}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <FilterSelect
+              label="Platform"
+              value={platform}
+              options={['All', 'PC', 'Switch', 'PS5', 'Xbox', 'Mobile']}
+              onChange={setPlatform}
+            />
+            <FilterSelect
+              label="Genre"
+              value={genre}
+              options={genreOptions}
+              onChange={setGenre}
+            />
 
             {/* Co-op toggle */}
             <button
               onClick={() => setCoopOnly(!coopOnly)}
-              className={`rounded-full border px-3 py-1 font-heading text-xs font-medium transition-colors ${
+              className={`rounded-full border px-3 py-1.5 font-heading text-xs font-medium transition-colors ${
                 coopOnly
                   ? 'border-accent-green bg-accent-green text-white'
                   : 'border-border bg-card text-muted-foreground hover:bg-secondary'
               }`}
             >
-              Co-op
+              Co-op only
             </button>
+          </div>
 
-            {/* Sort */}
+          {/* Sort row */}
+          <div className="flex items-center gap-2">
+            <span className="font-heading text-xs text-muted-foreground">Sort:</span>
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="rounded-full border border-border bg-card px-3 py-1 font-heading text-xs text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              className="rounded-full border border-border bg-card px-3 py-1.5 font-heading text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             >
-              {sortOptions.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
+              <option value="score-desc">OC Score: High → Low</option>
+              <option value="score-asc">OC Score: Low → High</option>
+              <option value="replay-desc">Replayability: High → Low</option>
+              <option value="replay-asc">Replayability: Low → High</option>
+              <option value="diff-asc">Difficulty: Beginner first</option>
+              <option value="diff-desc">Difficulty: Experienced first</option>
+              <option value="price-asc">Price: Low → High</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="date-desc">Release: Newest</option>
+              <option value="date-asc">Release: Oldest</option>
             </select>
           </div>
         </div>
