@@ -112,6 +112,7 @@ export default function GameDetailPage() {
       setRelated(others.slice(0, 4))
     }).catch(() => {
       setGame(null)
+      setRelated([])
     }).finally(() => setLoading(false))
   }, [slug])
 
@@ -270,9 +271,9 @@ export default function GameDetailPage() {
           transition={{ duration: 0.4, delay: 0.15 }}
           className="mx-auto mt-10 max-w-3xl"
         >
-          {(game as any).longDescription && (game as any).longDescription.length > 0 ? (
+          {game.longDescription && game.longDescription.length > 0 ? (
             <div className="rounded-2xl border border-border/40 bg-card p-6 md:p-10">
-              <PortableText value={(game as any).longDescription} components={bodyComponents} />
+              <PortableText value={game.longDescription} components={bodyComponents} />
             </div>
           ) : (
             <div className="rounded-2xl border border-border/40 bg-card p-6 md:p-10">
