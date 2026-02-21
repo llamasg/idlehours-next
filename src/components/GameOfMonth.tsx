@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Trophy, ArrowRight, Disc3 } from 'lucide-react'
 import type { GameOfMonthSection } from '@/types'
@@ -133,7 +135,7 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
 
             {/* CTA */}
             <Link
-              to={gameLink}
+              href={gameLink}
               className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-2.5 font-heading text-sm font-semibold text-white transition-transform hover:scale-105"
             >
               {data.buttonLabel || 'Read more'}

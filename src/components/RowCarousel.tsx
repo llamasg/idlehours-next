@@ -1,5 +1,7 @@
+'use client'
+
 import { useRef, useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { CmsLink } from '@/types'
@@ -7,7 +9,7 @@ import type { CmsLink } from '@/types'
 function resolveLinkHref(link?: CmsLink): string {
   if (!link) return '#'
   if (link.linkType === 'external' && link.externalUrl) return link.externalUrl
-  if (link.internalRef?.slug?.current) return link.internalRef.slug.current
+  if (link.internalRef?.slug?.current) return '/' + link.internalRef.slug.current
   return '#'
 }
 
@@ -65,7 +67,7 @@ export default function RowCarousel({ title, subtitle, seeAllLink, children }: R
         <div className="flex items-center gap-2">
           {seeAllLink && (
             <Link
-              to={resolveLinkHref(seeAllLink)}
+              href={resolveLinkHref(seeAllLink)}
               className="whitespace-nowrap rounded-full border border-border px-3 py-1.5 font-heading text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
               {seeAllLink.label}

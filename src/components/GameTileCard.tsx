@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Disc3 } from 'lucide-react'
 import type { Game } from '@/types'
@@ -46,7 +48,7 @@ interface GameTileCardProps {
 
 export default function GameTileCard({ game }: GameTileCardProps) {
   return (
-    <Link to={`/games/${game.slug.current}`} className="block w-full">
+    <Link href={`/games/${game.slug.current}`} className="block w-full">
       <motion.article
         whileHover={{ y: -6, scale: 1.02 }}
         transition={{ duration: 0.2 }}

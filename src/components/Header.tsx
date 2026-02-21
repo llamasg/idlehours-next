@@ -1,5 +1,7 @@
+'use client'
+
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Menu, X, Sparkles } from 'lucide-react'
 
@@ -18,7 +20,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-card/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
         {/* Logo */}
-        <Link to="/" className="font-heading text-xl font-bold tracking-tight text-foreground">
+        <Link href="/" className="font-heading text-xl font-bold tracking-tight text-foreground">
           idle hours
         </Link>
 
@@ -27,7 +29,7 @@ export default function Header() {
           {navLinks.map((link) => (
             <Link
               key={link.href}
-              to={link.href}
+              href={link.href}
               className="rounded-full px-4 py-2 font-heading text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
               {link.label}
@@ -45,7 +47,7 @@ export default function Header() {
           </button>
 
           <Link
-            to="/quizzes"
+            href="/quizzes"
             className="hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 font-heading text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 sm:flex"
           >
             <Sparkles size={14} />
@@ -77,7 +79,7 @@ export default function Header() {
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
-                  to={link.href}
+                  href={link.href}
                   onClick={() => setMobileOpen(false)}
                   className="rounded-lg px-3 py-2.5 font-heading text-sm font-medium text-foreground transition-colors hover:bg-secondary"
                 >
@@ -85,7 +87,7 @@ export default function Header() {
                 </Link>
               ))}
               <Link
-                to="/quizzes"
+                href="/quizzes"
                 onClick={() => setMobileOpen(false)}
                 className="mt-2 flex items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 font-heading text-sm font-semibold text-primary-foreground"
               >

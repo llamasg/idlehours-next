@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 import type { QuizCtaSection, CmsLink } from '@/types'
@@ -6,7 +8,7 @@ import type { QuizCtaSection, CmsLink } from '@/types'
 function resolveLinkHref(link?: CmsLink): string {
   if (!link) return '#'
   if (link.linkType === 'external' && link.externalUrl) return link.externalUrl
-  if (link.internalRef?.slug?.current) return link.internalRef.slug.current
+  if (link.internalRef?.slug?.current) return '/' + link.internalRef.slug.current
   return '#'
 }
 
@@ -43,7 +45,7 @@ export default function QuizCta({ data }: QuizCtaProps) {
         )}
 
         <Link
-          to={resolveLinkHref(data.link)}
+          href={resolveLinkHref(data.link)}
           className="mt-6 inline-flex items-center gap-2 rounded-full bg-burnt-orange px-6 py-3 font-heading text-sm font-semibold text-background shadow-lg transition-transform hover:scale-105"
         >
           <Sparkles size={14} />

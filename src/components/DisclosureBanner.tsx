@@ -1,5 +1,5 @@
 import { Info } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const DisclosureBanner = () => {
   return (
@@ -12,7 +12,7 @@ const DisclosureBanner = () => {
             links. If you purchase through these links, we may earn a small
             commission at no extra cost to you.{" "}
             <Link
-              to="/disclosure"
+              href="/disclosure"
               className="text-primary underline hover:text-primary/80"
             >
               Learn more

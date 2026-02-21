@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import ProductTileCard from './ProductTileCard'
@@ -7,7 +9,7 @@ import type { ProductFeatureSection, CmsLink } from '@/types'
 function resolveLinkHref(link?: CmsLink): string {
   if (!link) return '#'
   if (link.linkType === 'external' && link.externalUrl) return link.externalUrl
-  if (link.internalRef?.slug?.current) return link.internalRef.slug.current
+  if (link.internalRef?.slug?.current) return '/' + link.internalRef.slug.current
   return '#'
 }
 
@@ -35,7 +37,7 @@ export default function ProductFeature({ data }: ProductFeatureProps) {
         </div>
         {data.cta && (
           <Link
-            to={resolveLinkHref(data.cta)}
+            href={resolveLinkHref(data.cta)}
             className="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-border px-3 py-1.5 font-heading text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
           >
             {data.cta.label}

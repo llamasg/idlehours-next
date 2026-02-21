@@ -1,11 +1,13 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { HeroSection, CmsLink } from '@/types'
 
 function resolveLinkHref(link?: CmsLink): string {
   if (!link) return '#'
   if (link.linkType === 'external' && link.externalUrl) return link.externalUrl
-  if (link.internalRef?.slug?.current) return link.internalRef.slug.current
+  if (link.internalRef?.slug?.current) return '/' + link.internalRef.slug.current
   return '#'
 }
 
@@ -64,7 +66,7 @@ export default function Hero({ data }: HeroProps) {
           <div className="mt-8 flex flex-wrap gap-3">
             {data.primaryButton && (
               <Link
-                to={resolveLinkHref(data.primaryButton)}
+                href={resolveLinkHref(data.primaryButton)}
                 className="rounded-full bg-burnt-orange px-6 py-3 font-heading text-sm font-semibold text-background shadow-lg transition-transform hover:scale-105"
               >
                 {data.primaryButton.label}
@@ -72,7 +74,7 @@ export default function Hero({ data }: HeroProps) {
             )}
             {data.secondaryButton && (
               <Link
-                to={resolveLinkHref(data.secondaryButton)}
+                href={resolveLinkHref(data.secondaryButton)}
                 className="rounded-full border border-white/30 bg-white/10 px-6 py-3 font-heading text-sm font-semibold text-white backdrop-blur-sm transition-transform hover:scale-105 hover:bg-white/20"
               >
                 {data.secondaryButton.label}

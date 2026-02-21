@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { Post } from '@/types'
 
@@ -8,7 +10,7 @@ interface BlogTileCardProps {
 
 export default function BlogTileCard({ post }: BlogTileCardProps) {
   return (
-    <Link to={`/blog/${post.slug.current}`} className="block snap-start w-[260px] sm:w-[280px] shrink-0">
+    <Link href={`/blog/${post.slug.current}`} className="block snap-start w-[260px] sm:w-[280px] shrink-0">
       <motion.article
         whileHover={{ y: -4 }}
         transition={{ duration: 0.2 }}

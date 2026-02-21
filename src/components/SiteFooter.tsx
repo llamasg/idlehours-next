@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 
 const footerColumns = [
@@ -34,7 +34,7 @@ export default function SiteFooter() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <Link to="/" className="font-heading text-lg font-bold tracking-tight text-foreground">
+            <Link href="/" className="font-heading text-lg font-bold tracking-tight text-foreground">
               idle hours
             </Link>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
@@ -52,7 +52,7 @@ export default function SiteFooter() {
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link
-                      to={link.href}
+                      href={link.href}
                       className="text-sm text-foreground/70 transition-colors hover:text-foreground"
                     >
                       {link.label}

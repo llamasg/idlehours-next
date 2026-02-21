@@ -1,6 +1,6 @@
 // src/components/GameReferenceBlock.tsx
 
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Disc3 } from 'lucide-react'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -43,7 +43,7 @@ export default function GameReferenceBlock({ value }: { value: GameReferenceValu
     <div className="relative my-8 rounded-2xl border border-border/60 bg-card overflow-hidden">
       {/* Stretched link — makes the whole card clickable */}
       <Link
-        to={`/games/${game.slug.current}`}
+        href={`/games/${game.slug.current}`}
         className="absolute inset-0 z-0"
         aria-label={`View ${game.title}`}
       />

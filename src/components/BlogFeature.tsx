@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import type { BlogFeatureSection } from '@/types'
 
@@ -29,7 +31,7 @@ export default function BlogFeature({ data }: BlogFeatureProps) {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {posts.map((post) => (
-          <Link key={post._id} to={`/blog/${post.slug.current}`}>
+          <Link key={post._id} href={`/blog/${post.slug.current}`}>
             <motion.article
               whileHover={{ y: -4 }}
               transition={{ duration: 0.2 }}
