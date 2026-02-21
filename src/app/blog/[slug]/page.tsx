@@ -119,7 +119,9 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const posts = await getAllPosts()
-  return posts.map((p: any) => ({ slug: p.slug.current }))
+  return posts
+    .filter((p: any) => p.slug?.current)
+    .map((p: any) => ({ slug: p.slug.current }))
 }
 
 export default async function BlogPostPage({
@@ -132,7 +134,7 @@ export default async function BlogPostPage({
   if (!post) notFound()
 
   const otherPosts = allPosts
-    .filter((p: any) => p.slug.current !== slug)
+    .filter((p: any) => p.slug?.current && p.slug.current !== slug)
     .slice(0, 4)
 
   return (
