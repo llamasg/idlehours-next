@@ -22,40 +22,19 @@ function OpenCriticBadge({ score }: { score?: number }) {
   )
 }
 
-// ── Difficulty dots ───────────────────────────────────────────────────────
+// ── Difficulty badge — gradient opacity ───────────────────────────────────
 
-function DifficultyDots({ level }: { level: 1 | 2 | 3 }) {
-  const labels = { 1: 'Beginner', 2: 'Intermediate', 3: 'Experienced' } as const
+function DifficultyBadge({ level }: { level: 1 | 2 | 3 }) {
+  const config = {
+    1: { label: 'Easy',   cls: 'bg-orange-500/20 text-orange-500' },
+    2: { label: 'Medium', cls: 'bg-orange-500/40 text-orange-500' },
+    3: { label: 'Hard',   cls: 'bg-orange-500 text-white' },
+  } as const
+  const { label, cls } = config[level]
   return (
-    <div className="flex items-center gap-0.5" title={labels[level]}>
-      {([1, 2, 3] as const).map((i) => (
-        <span
-          key={i}
-          className={`inline-block h-1.5 w-1.5 rounded-full ${i <= level ? 'bg-amber-500' : 'bg-muted-foreground/20'}`}
-        />
-      ))}
-    </div>
-  )
-}
-
-// ── Replayability dots ────────────────────────────────────────────────────
-
-function ReplayMeter({ value }: { value: number }) {
-  return (
-    <div className="flex items-center gap-0.5" title={`Replayability: ${value}/5`}>
-      {[1, 2, 3, 4, 5].map((i) => {
-        const filled = value >= i
-        const half = !filled && value >= i - 0.5
-        return (
-          <span
-            key={i}
-            className={`inline-block h-1.5 w-1.5 rounded-full ${
-              filled ? 'bg-accent-green' : half ? 'bg-accent-green/50' : 'bg-muted-foreground/20'
-            }`}
-          />
-        )
-      })}
-    </div>
+    <span className={`rounded-full px-2 py-0.5 font-heading text-[10px] font-semibold ${cls}`}>
+      {label}
+    </span>
   )
 }
 
@@ -67,14 +46,14 @@ interface GameTileCardProps {
 
 export default function GameTileCard({ game }: GameTileCardProps) {
   return (
-    <Link to={`/games/${game.slug.current}`} className="block snap-start w-[220px] sm:w-[240px] shrink-0">
+    <Link to={`/games/${game.slug.current}`} className="block w-full">
       <motion.article
         whileHover={{ y: -6, scale: 1.02 }}
         transition={{ duration: 0.2 }}
-        className="group w-full cursor-pointer overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm"
+        className="group w-full cursor-pointer overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm flex flex-col h-[360px]"
       >
-        {/* Image */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-secondary">
+        {/* Image — fixed height */}
+        <div className="relative h-[200px] w-full shrink-0 overflow-hidden bg-secondary">
           {game.coverImage ? (
             <img
               src={game.coverImage}
@@ -100,41 +79,34 @@ export default function GameTileCard({ game }: GameTileCardProps) {
         </div>
 
         {/* Info */}
-        <div className="p-3">
-          <h3 className="font-heading text-sm font-semibold leading-snug text-foreground line-clamp-2">
+        <div className="flex-1 overflow-hidden p-4">
+          <h3 className="font-heading text-base font-semibold leading-snug text-foreground line-clamp-2">
             {game.title}
           </h3>
 
-          {/* Ratings row */}
-          <div className="mt-2 flex items-center gap-3">
+          {/* Badges row */}
+          <div className="mt-2 flex flex-wrap items-center gap-2">
             {game.difficulty != null && (
-              <DifficultyDots level={game.difficulty} />
-            )}
-            {game.replayability != null && (
-              <ReplayMeter value={game.replayability} />
+              <DifficultyBadge level={game.difficulty} />
             )}
             {game.greatSoundtrack && (
               <span title="Great Soundtrack">
-  <Disc3
-    size={13}
-    className="text-accent fill-accent/20"
-    strokeWidth={2}
-  />
-</span>
+                <Disc3 size={13} className="text-accent fill-accent/20" strokeWidth={2} />
+              </span>
             )}
           </div>
 
           {/* Platforms */}
           {game.platforms && game.platforms.length > 0 && (
-            <p className="mt-2 font-heading text-[10px] text-muted-foreground">
+            <p className="mt-2 font-heading text-xs text-muted-foreground">
               {game.platforms.join(' · ')}
             </p>
           )}
         </div>
 
         {/* View button */}
-        <div className="px-3 pb-3">
-          <div className="rounded-xl bg-accent/10 py-1.5 text-center font-heading text-xs font-semibold text-accent transition-colors group-hover:bg-accent group-hover:text-white">
+        <div className="shrink-0 px-4 pb-4">
+          <div className="rounded-xl bg-accent/10 py-2 text-center font-heading text-sm font-semibold text-accent transition-colors group-hover:bg-accent group-hover:text-white">
             View Game
           </div>
         </div>

@@ -45,7 +45,9 @@ export default function SectionRenderer({ sections }: SectionRendererProps) {
               >
                 {section.rowType === 'games' &&
                   section.curatedGames?.map((game) => (
-                    <GameTileCard key={game._id} game={game} />
+                    <div key={game._id} className="w-[220px] sm:w-[240px] shrink-0 snap-start">
+                      <GameTileCard game={game} />
+                    </div>
                   ))}
                 {section.rowType === 'posts' &&
                   section.curatedPosts?.map((post) => (

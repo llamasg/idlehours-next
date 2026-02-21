@@ -312,13 +312,13 @@ export default function GamesPage() {
 
         {/* Game grid */}
         {gamesLoading ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
             {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="aspect-[4/3] animate-pulse rounded-2xl bg-secondary" />
+              <div key={i} className="h-[360px] animate-pulse rounded-2xl bg-secondary" />
             ))}
           </div>
         ) : filtered.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
             {filtered.map((game) => (
               <GameTileCard key={game._id} game={game} />
             ))}
