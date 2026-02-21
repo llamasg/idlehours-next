@@ -53,8 +53,8 @@ const bodyComponents = {
 
 function ocColor(score: number): string {
   if (score >= 90) return 'bg-purple-600 text-white'
-  if (score >= 75) return 'bg-rose-500 text-white'
-  if (score >= 50) return 'bg-green-600 text-white'
+  if (score >= 75) return 'bg-green-500 text-white'
+  if (score >= 50) return 'bg-green-700 text-white'
   return 'bg-blue-500 text-white'
 }
 

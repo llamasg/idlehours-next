@@ -1,26 +1,68 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Brain, Pizza } from 'lucide-react'
+import { Disc3 } from 'lucide-react'
 import type { Game } from '@/types'
 
-interface GameTileCardProps {
-  game: Game
+// ── OpenCritic badge ──────────────────────────────────────────────────────
+
+function ocColor(score: number): string {
+  if (score >= 90) return 'bg-purple-600 text-white'
+  if (score >= 75) return 'bg-green-500 text-white'
+  if (score >= 50) return 'bg-green-700 text-white'
+  return 'bg-blue-500 text-white'
 }
 
-function BrainMeter({ level }: { level: 'Low' | 'Medium' | 'High' }) {
-  const filled = level === 'Low' ? 1 : level === 'Medium' ? 2 : 3
+function OpenCriticBadge({ score }: { score?: number }) {
+  const colorClass = score != null ? ocColor(score) : 'bg-card/90 text-muted-foreground'
+  const label = score != null ? `${score}%` : 'No score'
   return (
-    <div className="flex items-center gap-0.5" title={`Brain Effort: ${level}`}>
-      {[1, 2, 3].map((i) => (
-        <Brain
+    <div className={`absolute bottom-2 left-2 rounded-full px-2.5 py-1 font-heading text-xs font-bold shadow backdrop-blur-sm ${colorClass}`}>
+      {label}
+    </div>
+  )
+}
+
+// ── Difficulty dots ───────────────────────────────────────────────────────
+
+function DifficultyDots({ level }: { level: 1 | 2 | 3 }) {
+  const labels = { 1: 'Beginner', 2: 'Intermediate', 3: 'Experienced' } as const
+  return (
+    <div className="flex items-center gap-0.5" title={labels[level]}>
+      {([1, 2, 3] as const).map((i) => (
+        <span
           key={i}
-          size={13}
-          className={i <= filled ? 'text-amber-500 fill-amber-500/30' : 'text-muted-foreground/30'}
-          strokeWidth={i <= filled ? 2.2 : 1.5}
+          className={`inline-block h-1.5 w-1.5 rounded-full ${i <= level ? 'bg-amber-500' : 'bg-muted-foreground/20'}`}
         />
       ))}
     </div>
   )
+}
+
+// ── Replayability dots ────────────────────────────────────────────────────
+
+function ReplayMeter({ value }: { value: number }) {
+  return (
+    <div className="flex items-center gap-0.5" title={`Replayability: ${value}/5`}>
+      {[1, 2, 3, 4, 5].map((i) => {
+        const filled = value >= i
+        const half = !filled && value >= i - 0.5
+        return (
+          <span
+            key={i}
+            className={`inline-block h-1.5 w-1.5 rounded-full ${
+              filled ? 'bg-accent-green' : half ? 'bg-accent-green/50' : 'bg-muted-foreground/20'
+            }`}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────
+
+interface GameTileCardProps {
+  game: Game
 }
 
 export default function GameTileCard({ game }: GameTileCardProps) {
@@ -46,12 +88,8 @@ export default function GameTileCard({ game }: GameTileCardProps) {
             </div>
           )}
 
-          {/* Cozy % badge */}
-          {game.ratings?.cozyPercent != null && (
-            <div className="absolute bottom-2 left-2 rounded-full bg-card/90 px-2.5 py-1 font-heading text-xs font-bold text-primary shadow backdrop-blur-sm">
-              {game.ratings.cozyPercent}% cozy
-            </div>
-          )}
+          {/* OpenCritic badge */}
+          <OpenCriticBadge score={game.openCriticScore} />
 
           {/* Co-op badge */}
           {game.coop && (
@@ -67,13 +105,22 @@ export default function GameTileCard({ game }: GameTileCardProps) {
             {game.title}
           </h3>
 
-          {/* Icon ratings row */}
+          {/* Ratings row */}
           <div className="mt-2 flex items-center gap-3">
-            {game.ratings?.brainEffort && (
-              <BrainMeter level={game.ratings.brainEffort} />
+            {game.difficulty != null && (
+              <DifficultyDots level={game.difficulty} />
             )}
-            {game.ratings?.snackSafe && (
-              <Pizza size={15} className="text-accent-green fill-accent-green/20" strokeWidth={2} />
+            {game.replayability != null && (
+              <ReplayMeter value={game.replayability} />
+            )}
+            {game.greatSoundtrack && (
+              <span title="Great Soundtrack">
+  <Disc3
+    size={13}
+    className="text-accent fill-accent/20"
+    strokeWidth={2}
+  />
+</span>
             )}
           </div>
 

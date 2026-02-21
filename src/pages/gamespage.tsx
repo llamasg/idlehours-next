@@ -36,7 +36,7 @@ function FilterSelect({ label, value, options, onChange }: FilterSelectProps) {
     <div ref={ref} className="relative">
       <button
         onClick={() => { setOpen(!open); setQuery('') }}
-        className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 font-heading text-xs text-foreground hover:bg-secondary transition-colors"
+        className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 font-heading text-sm text-foreground hover:bg-secondary transition-colors"
       >
         <span className="text-muted-foreground">{label}:</span>
         <span className={value === 'All' ? 'text-muted-foreground' : 'text-primary font-semibold'}>{value}</span>
@@ -46,22 +46,22 @@ function FilterSelect({ label, value, options, onChange }: FilterSelectProps) {
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full mt-1 z-20 w-44 rounded-xl border border-border bg-card shadow-lg overflow-hidden">
+        <div className="absolute left-0 top-full mt-1 z-20 w-48 rounded-xl border border-border bg-card shadow-lg overflow-hidden">
           <div className="p-2 border-b border-border">
             <input
               autoFocus
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Type to filter..."
-              className="w-full rounded-lg bg-muted/40 px-2 py-1 font-body text-xs text-foreground placeholder:text-muted-foreground focus:outline-none"
+              className="w-full rounded-lg bg-muted/40 px-2 py-1.5 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
             />
           </div>
-          <div className="max-h-48 overflow-y-auto">
+          <div className="max-h-52 overflow-y-auto">
             {filtered.map((o) => (
               <button
                 key={o}
                 onClick={() => { onChange(o); setOpen(false) }}
-                className={`w-full px-3 py-2 text-left font-heading text-xs transition-colors hover:bg-secondary ${
+                className={`w-full px-3 py-2.5 text-left font-heading text-sm transition-colors hover:bg-secondary ${
                   o === value ? 'text-primary font-semibold bg-primary/5' : 'text-foreground'
                 }`}
               >
@@ -69,8 +69,64 @@ function FilterSelect({ label, value, options, onChange }: FilterSelectProps) {
               </button>
             ))}
             {filtered.length === 0 && (
-              <p className="px-3 py-2 text-xs text-muted-foreground">No matches</p>
+              <p className="px-3 py-2 text-sm text-muted-foreground">No matches</p>
             )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── SortSelect — custom styled sort dropdown ────────────────────────────────
+interface SortOption { label: string; value: string }
+interface SortSelectProps {
+  value: string
+  options: SortOption[]
+  onChange: (v: string) => void
+}
+
+function SortSelect({ value, options, onChange }: SortSelectProps) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  const current = options.find((o) => o.value === value)
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 font-heading text-sm text-foreground hover:bg-secondary transition-colors"
+      >
+        <span className="text-muted-foreground">Sort:</span>
+        <span className="text-primary font-semibold">{current?.label ?? value}</span>
+        <svg className="w-3 h-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-1 z-20 w-60 rounded-xl border border-border bg-card shadow-lg overflow-hidden">
+          <div className="max-h-64 overflow-y-auto">
+            {options.map((o) => (
+              <button
+                key={o.value}
+                onClick={() => { onChange(o.value); setOpen(false) }}
+                className={`w-full px-3 py-2.5 text-left font-heading text-sm transition-colors hover:bg-secondary ${
+                  o.value === value ? 'text-primary font-semibold bg-primary/5' : 'text-foreground'
+                }`}
+              >
+                {o.label}
+              </button>
+            ))}
           </div>
         </div>
       )}
@@ -206,7 +262,7 @@ export default function GamesPage() {
             )}
           </div>
 
-          {/* Filter row */}
+          {/* Filters + Sort — single row */}
           <div className="flex flex-wrap items-center gap-2">
             <FilterSelect
               label="Platform"
@@ -220,11 +276,9 @@ export default function GamesPage() {
               options={genreOptions}
               onChange={setGenre}
             />
-
-            {/* Co-op toggle */}
             <button
               onClick={() => setCoopOnly(!coopOnly)}
-              className={`rounded-full border px-3 py-1.5 font-heading text-xs font-medium transition-colors ${
+              className={`rounded-full border px-4 py-2 font-heading text-sm font-medium transition-colors ${
                 coopOnly
                   ? 'border-accent-green bg-accent-green text-white'
                   : 'border-border bg-card text-muted-foreground hover:bg-secondary'
@@ -232,27 +286,22 @@ export default function GamesPage() {
             >
               Co-op only
             </button>
-          </div>
-
-          {/* Sort row */}
-          <div className="flex items-center gap-2">
-            <span className="font-heading text-xs text-muted-foreground">Sort:</span>
-            <select
+            <SortSelect
               value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="rounded-full border border-border bg-card px-3 py-1.5 font-heading text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-            >
-              <option value="score-desc">OC Score: High → Low</option>
-              <option value="score-asc">OC Score: Low → High</option>
-              <option value="replay-desc">Replayability: High → Low</option>
-              <option value="replay-asc">Replayability: Low → High</option>
-              <option value="diff-asc">Difficulty: Beginner first</option>
-              <option value="diff-desc">Difficulty: Experienced first</option>
-              <option value="price-asc">Price: Low → High</option>
-              <option value="price-desc">Price: High → Low</option>
-              <option value="date-desc">Release: Newest</option>
-              <option value="date-asc">Release: Oldest</option>
-            </select>
+              options={[
+                { label: 'Score: High → Low', value: 'score-desc' },
+                { label: 'Score: Low → High', value: 'score-asc' },
+                { label: 'Replayability: High → Low', value: 'replay-desc' },
+                { label: 'Replayability: Low → High', value: 'replay-asc' },
+                { label: 'Difficulty: Beginner first', value: 'diff-asc' },
+                { label: 'Difficulty: Experienced first', value: 'diff-desc' },
+                { label: 'Price: Low → High', value: 'price-asc' },
+                { label: 'Price: High → Low', value: 'price-desc' },
+                { label: 'Release: Newest', value: 'date-desc' },
+                { label: 'Release: Oldest', value: 'date-asc' },
+              ]}
+              onChange={setSort}
+            />
           </div>
         </div>
 

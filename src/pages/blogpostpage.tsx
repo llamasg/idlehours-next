@@ -242,7 +242,7 @@ export default function BlogPostPage() {
         </div>
 
         {/* Content column */}
-        <div className="max-w-4xl mx-auto px-4 py-8 pb-20">
+        <div className="max-w-5xl mx-auto px-4 py-8 pb-20">
           {/* Back button — in content column, not over image */}
           <Link
             to="/blog"
