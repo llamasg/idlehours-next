@@ -73,39 +73,6 @@ export default defineType({
       initialValue: false,
     }),
     defineField({
-      name: 'ratings',
-      title: 'Idle Hours Ratings',
-      type: 'object',
-      fields: [
-        {
-          name: 'cozyPercent',
-          title: 'Cozy %',
-          type: 'number',
-          validation: (Rule) => Rule.min(0).max(100),
-        },
-        {
-          name: 'brainEffort',
-          title: 'Brain Effort',
-          type: 'string',
-          options: {
-            list: [
-              {title: 'Low', value: 'Low'},
-              {title: 'Medium', value: 'Medium'},
-              {title: 'High', value: 'High'},
-            ],
-            layout: 'radio',
-          },
-        },
-        {
-          name: 'snackSafe',
-          title: 'Snack Safe?',
-          type: 'boolean',
-          description: 'Can you eat snacks while playing? (no frantic inputs)',
-          initialValue: true,
-        },
-      ],
-    }),
-    defineField({
       name: 'affiliateLinks',
       title: 'Buy Links',
       type: 'array',
@@ -128,6 +95,85 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'openCriticScore',
+      title: 'OpenCritic Score',
+      type: 'number',
+      description: '0–100 score from OpenCritic (leave blank if not yet scored)',
+      validation: (Rule) => Rule.min(0).max(100),
+    }),
+    defineField({
+      name: 'openCriticId',
+      title: 'OpenCritic ID',
+      type: 'string',
+      description: 'Integer ID from OpenCritic URL (e.g. "10703" for Stardew Valley). Used by nightly job to auto-fetch score.',
+    }),
+    defineField({
+      name: 'steamAppId',
+      title: 'Steam App ID',
+      type: 'string',
+      description: 'Steam numeric App ID (e.g. "413150" for Stardew Valley). Used for future price fetching.',
+    }),
+    defineField({
+      name: 'difficulty',
+      title: 'Difficulty',
+      type: 'number',
+      description: '1 = Beginner friendly, 2 = Intermediate, 3 = Experienced players',
+      options: {
+        list: [
+          {title: '1 — Beginner friendly', value: 1},
+          {title: '2 — Intermediate', value: 2},
+          {title: '3 — Experienced players', value: 3},
+        ],
+        layout: 'radio',
+      },
+      validation: (Rule) => Rule.min(1).max(3).integer(),
+    }),
+    defineField({
+      name: 'replayability',
+      title: 'Replayability',
+      type: 'number',
+      description: '1–5, supports 0.5 increments (e.g. 3.5)',
+      validation: (Rule) => Rule.min(1).max(5),
+    }),
+    defineField({
+      name: 'greatSoundtrack',
+      title: 'Great Soundtrack',
+      type: 'boolean',
+      description: 'Does this game have a standout soundtrack?',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'genre',
+      title: 'Genre Tags',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {
+        list: [
+          'farming', 'survival', 'roguelike', 'turn-based', 'puzzle',
+          'platformer', 'adventure', 'RPG', 'simulation', 'sandbox',
+          'visual novel', 'horror',
+        ],
+        layout: 'tags',
+      },
+    }),
+    defineField({
+      name: 'currentPrice',
+      title: 'Current Price (£)',
+      type: 'number',
+      description: 'Updated by nightly job',
+    }),
+    defineField({
+      name: 'isFree',
+      title: 'Free to Play',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'lastPriceUpdated',
+      title: 'Last Price Updated',
+      type: 'datetime',
+    }),
+    defineField({
       name: 'featured',
       title: 'Featured',
       type: 'boolean',
@@ -144,12 +190,12 @@ export default defineType({
     select: {
       title: 'title',
       media: 'coverImage',
-      cozy: 'ratings.cozyPercent',
+      score: 'openCriticScore',
     },
-    prepare({title, media, cozy}) {
+    prepare({title, media, score}) {
       return {
         title,
-        subtitle: cozy != null ? `Cozy: ${cozy}%` : '',
+        subtitle: score != null ? `OpenCritic: ${score}` : '',
         media,
       }
     },
