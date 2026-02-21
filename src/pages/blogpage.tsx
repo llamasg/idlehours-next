@@ -20,7 +20,7 @@ interface Post {
   categories: string[];
 }
 
-const categories = ["All", "Guides", "Opinions", "Care & Display"];
+const categories = ["All", "Lists", "Opinions", "Recommendations"];
 const POSTS_PER_PAGE = 9;
 
 export default function BlogPage() {
@@ -97,7 +97,7 @@ export default function BlogPage() {
           className="mb-12 text-center"
         >
           <h1 className="mb-4 font-heading text-4xl font-black text-foreground md:text-5xl lg:text-6xl">
-            Guides & Gentle Reads
+            Posts
           </h1>
           <p className="text-lg text-muted-foreground">
             Tips, reviews, and thoughtful takes on the cozy gaming life

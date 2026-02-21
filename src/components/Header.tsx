@@ -6,7 +6,7 @@ import { Search, Menu, X, Sparkles } from 'lucide-react'
 const navLinks = [
   { label: 'Game Library', href: '/games' },
   { label: 'Quizzes', href: '/quizzes' },
-  { label: 'Guides', href: '/blog' },
+  { label: 'Posts', href: '/blog' },
   { label: 'Desk Setup', href: '/shop' },
   { label: 'About', href: '/about' },
 ]
