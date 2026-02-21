@@ -50,6 +50,26 @@ export async function getPost(slug: string) {
         _type == "inlineImage" => {
           ...,
           "asset": asset->
+        },
+        _type == "gameReference" => {
+          ...,
+          game-> {
+            _id,
+            title,
+            slug,
+            "coverImage": coverImage.asset->url,
+            shortDescription,
+            platforms,
+            genre,
+            coop,
+            openCriticScore,
+            difficulty,
+            replayability,
+            greatSoundtrack,
+            currentPrice,
+            isFree,
+            affiliateLinks
+          }
         }
       },
       seo,
@@ -288,8 +308,9 @@ export async function getHomePage() {
           sourceType,
           "curatedGames": curatedGames[]-> {
             _id, title, slug, "coverImage": coverImage.asset->url,
-            shortDescription, platforms, tags, coop,
-            ratings, affiliateLinks, featured, publishedAt
+            shortDescription, platforms, tags, genre, coop,
+            ratings, openCriticScore, difficulty, replayability,
+            greatSoundtrack, currentPrice, isFree, affiliateLinks, featured, publishedAt
           },
           "curatedPosts": curatedPosts[]-> {
             _id, title, slug, excerpt, "mainImage": headerImage.asset->url,
@@ -314,8 +335,9 @@ export async function getHomePage() {
           title,
           "featuredGame": featuredGame-> {
             _id, title, slug, "coverImage": coverImage.asset->url,
-            shortDescription, platforms, tags, coop,
-            ratings, affiliateLinks, featured, publishedAt
+            shortDescription, platforms, tags, genre, coop,
+            ratings, openCriticScore, difficulty, replayability,
+            greatSoundtrack, currentPrice, isFree, affiliateLinks, featured, publishedAt
           },
           customBlurb, buttonLabel, link
         },
@@ -363,8 +385,15 @@ export async function getAllGames() {
       platforms,
       "genres": genres[]->{ _id, title, slug },
       tags,
+      genre,
       coop,
       ratings,
+      openCriticScore,
+      difficulty,
+      replayability,
+      greatSoundtrack,
+      currentPrice,
+      isFree,
       affiliateLinks,
       featured,
       publishedAt
@@ -387,8 +416,15 @@ export async function getGame(slug: string) {
       platforms,
       "genres": genres[]->{ _id, title, slug },
       tags,
+      genre,
       coop,
       ratings,
+      openCriticScore,
+      difficulty,
+      replayability,
+      greatSoundtrack,
+      currentPrice,
+      isFree,
       affiliateLinks,
       featured,
       publishedAt
