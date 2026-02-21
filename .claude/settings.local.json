@@ -52,7 +52,12 @@
       "Bash(node:*)",
       "Bash(DRY_RUN=true node:*)",
       "Bash(git rm:*)",
-      "Bash(npm run build:studio:*)"
+      "Bash(npm run build:studio:*)",
+      "Bash(/tmp/check_duplicates.sh:*)",
+      "Bash(bash /tmp/check_duplicates.sh)",
+      "Bash(/tmp/final_check.sh:*)",
+      "Bash(bash /tmp/final_check.sh)",
+      "Bash(find:*)"
     ]
   }
 }
