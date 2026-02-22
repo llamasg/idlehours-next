@@ -1,4 +1,4 @@
-// src/app/games/Skill_Issue/lib/scoring.ts
+// src/app/play/skill-issue/lib/scoring.ts
 
 import type { SkillIssueGame } from '../data/games'
 

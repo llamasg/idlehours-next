@@ -42,7 +42,7 @@ export default function ShareCard({
       lines.push(`Lifelines: ${lifelinesUsedCount}`)
     }
 
-    lines.push('idlehours.co.uk/games/Skill_Issue')
+    lines.push('idlehours.co.uk/play/skill-issue')
     lines.push('')
     lines.push(gameTitle)
 
