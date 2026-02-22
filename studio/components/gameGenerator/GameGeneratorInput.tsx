@@ -16,6 +16,7 @@ import {
 import {useClient, useFormValue} from 'sanity'
 import {searchIGDB, type IgdbGame} from './igdb'
 import {searchOpenCritic} from './openCritic'
+import {generateDescription, type GameDescription} from './description'
 import {mapPlatforms, mapGenres, slugify, truncate} from './mappings'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -24,13 +25,16 @@ interface GeneratedData {
   title: string
   slug: string
   shortDescription: string
-  coverImageUrl: string | null  // raw IGDB CDN URL (https://...)
+  coverImageUrl: string | null
   platforms: string[]
   genre: string[]
   coop: boolean
   openCriticScore: number | null
   openCriticId: string | null
   steamAppId: string | null
+  affiliateLinks: {_key: string; label: string; url: string}[]
+  longDescriptionBlocks: any[] | null
+  descriptionPreview: GameDescription | null
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -44,7 +48,6 @@ export function GameGeneratorInput() {
   const [applied, setApplied] = useState(false)
   const [imageWarning, setImageWarning] = useState<string | null>(null)
 
-  // The current document's draft ID (e.g. "drafts.abc123" or "abc123")
   const documentId = useFormValue(['_id']) as string | undefined
   const client = useClient({apiVersion: '2024-01-01'})
 
@@ -73,7 +76,6 @@ export function GameGeneratorInput() {
       const game: IgdbGame = igdbResults[0]
 
       // Prefer horizontal artwork over vertical cover
-      // artworks → t_screenshot_huge (1280x720), cover → t_cover_big (264x374)
       let coverImageUrl: string | null = null
       const rawUrl = game.artworks?.[0]?.url ?? game.cover?.url
       if (rawUrl) {
@@ -83,23 +85,51 @@ export function GameGeneratorInput() {
           : url.replace('t_thumb', 't_cover_big')
       }
 
+      const platforms = mapPlatforms((game.platforms ?? []).map((p) => p.name))
+      const genre = mapGenres([
+        ...(game.genres ?? []).map((g) => g.name),
+        ...(game.themes ?? []).map((t) => t.name),
+      ])
+      const coop = (game.multiplayer_modes ?? []).some(
+        (m) => m.offlinecoop || m.onlinecoop,
+      )
+      const steamAppId =
+        (game.external_games ?? []).find((e) => e.external_game_source === 1)
+          ?.uid ?? null
+
+      // Build affiliate links from known IDs
+      const affiliateLinks: {_key: string; label: string; url: string}[] = []
+      if (steamAppId) {
+        affiliateLinks.push({
+          _key: 'steam',
+          label: 'Steam',
+          url: `https://store.steampowered.com/app/${steamAppId}/`,
+        })
+      }
+
+      // Generate long description with Claude (non-blocking, don't fail the whole generate)
+      const descResult = await generateDescription(
+        game.name,
+        game.summary ?? '',
+        platforms,
+        genre,
+        coop,
+      ).catch(() => null)
+
       const generated: GeneratedData = {
         title: game.name,
         slug: slugify(game.name),
         shortDescription: truncate(game.summary ?? '', 247),
         coverImageUrl,
-        platforms: mapPlatforms((game.platforms ?? []).map((p) => p.name)),
-        genre: mapGenres([
-          ...(game.genres ?? []).map((g) => g.name),
-          ...(game.themes ?? []).map((t) => t.name),
-        ]),
-        coop:
-          (game.multiplayer_modes ?? []).some(
-            (m) => m.offlinecoop || m.onlinecoop,
-          ),
+        platforms,
+        genre,
+        coop,
         openCriticScore: ocResult?.topCriticScore ?? null,
         openCriticId: ocResult?.id != null ? String(ocResult.id) : null,
-        steamAppId: (game.external_games ?? []).find((e) => e.external_game_source === 1)?.uid ?? null,
+        steamAppId,
+        affiliateLinks,
+        longDescriptionBlocks: descResult?.blocks ?? null,
+        descriptionPreview: descResult?.desc ?? null,
       }
 
       setPreview(generated)
@@ -119,7 +149,6 @@ export function GameGeneratorInput() {
     setImageWarning(null)
 
     try {
-      // Build the patch object with all non-image fields
       const patch: Record<string, any> = {
         title: preview.title,
         slug: {_type: 'slug', current: preview.slug},
@@ -138,6 +167,12 @@ export function GameGeneratorInput() {
       if (preview.steamAppId != null) {
         patch.steamAppId = preview.steamAppId
       }
+      if (preview.affiliateLinks.length > 0) {
+        patch.affiliateLinks = preview.affiliateLinks
+      }
+      if (preview.longDescriptionBlocks) {
+        patch.longDescription = preview.longDescriptionBlocks
+      }
 
       // Upload cover image to Sanity assets if available
       if (preview.coverImageUrl) {
@@ -152,14 +187,15 @@ export function GameGeneratorInput() {
             asset: {_type: 'reference', _ref: asset._id},
           }
         } catch {
-          // Image upload failed — skip it, user can upload manually
-          setImageWarning('Cover image could not be uploaded — all other fields applied. Upload the image manually.')
+          setImageWarning(
+            'Cover image could not be uploaded. All other fields applied. Upload the image manually.',
+          )
         }
       }
 
-      // New documents may not exist in the datastore yet (only in Studio memory).
-      // Use a transaction to create the draft if needed, then patch it.
-      const patchId = documentId.startsWith('drafts.') ? documentId : `drafts.${documentId}`
+      const patchId = documentId.startsWith('drafts.')
+        ? documentId
+        : `drafts.${documentId}`
       await client
         .transaction()
         .createIfNotExists({_id: patchId, _type: 'game'})
@@ -180,7 +216,7 @@ export function GameGeneratorInput() {
     <Card padding={4} radius={2} shadow={1} tone="primary">
       <Stack space={3}>
         <Text size={1} weight="semibold">
-          Auto-fill with IGDB + OpenCritic
+          Auto-fill with IGDB + OpenCritic + Pip
         </Text>
 
         {/* Search row */}
@@ -189,7 +225,9 @@ export function GameGeneratorInput() {
             <TextInput
               value={query}
               onChange={(e) => setQuery(e.currentTarget.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleGenerate() }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleGenerate()
+              }}
               placeholder="e.g. Stardew Valley"
               disabled={loading || applying}
             />
@@ -213,11 +251,13 @@ export function GameGeneratorInput() {
         {/* Success confirmation */}
         {applied && (
           <Card padding={3} tone="positive" radius={2}>
-            <Text size={1}>✓ Fields applied! Review and adjust as needed, then publish.</Text>
+            <Text size={1}>
+              Fields applied! Review and adjust as needed, then publish.
+            </Text>
           </Card>
         )}
 
-        {/* Image warning — survives success banner */}
+        {/* Image warning */}
         {imageWarning && (
           <Card padding={3} tone="caution" radius={2}>
             <Text size={1}>{imageWarning}</Text>
@@ -237,43 +277,101 @@ export function GameGeneratorInput() {
                     <img
                       src={preview.coverImageUrl}
                       alt={preview.title}
-                      style={{width: 80, height: 110, objectFit: 'cover', borderRadius: 4}}
+                      style={{
+                        width: 80,
+                        height: 110,
+                        objectFit: 'cover',
+                        borderRadius: 4,
+                      }}
                     />
                   </Box>
                 )}
 
                 <Stack space={2} flex={1}>
                   <Text size={1} muted>
-                    <strong>Description:</strong> {preview.shortDescription || '—'}
+                    <strong>Description:</strong>{' '}
+                    {preview.shortDescription || '—'}
                   </Text>
 
                   <Flex gap={1} wrap="wrap">
                     {preview.platforms.map((p) => (
-                      <Badge key={p} tone="primary" mode="outline">{p}</Badge>
+                      <Badge key={p} tone="primary" mode="outline">
+                        {p}
+                      </Badge>
                     ))}
                     {preview.genre.map((g) => (
-                      <Badge key={g} tone="default" mode="outline">{g}</Badge>
+                      <Badge key={g} tone="default" mode="outline">
+                        {g}
+                      </Badge>
                     ))}
                     {preview.coop && <Badge tone="positive">Co-op</Badge>}
                     {preview.openCriticScore != null && (
-                      <Badge tone="caution">{preview.openCriticScore}% OC</Badge>
+                      <Badge tone="caution">
+                        {preview.openCriticScore}% OC
+                      </Badge>
                     )}
                     {preview.steamAppId && (
                       <Badge tone="default">Steam {preview.steamAppId}</Badge>
                     )}
                   </Flex>
 
+                  {/* Buy links preview */}
+                  {preview.affiliateLinks.length > 0 && (
+                    <Text size={1} muted>
+                      <strong>Buy links:</strong>{' '}
+                      {preview.affiliateLinks.map((l) => l.label).join(', ')}
+                    </Text>
+                  )}
+
+                  {/* Warnings */}
                   {!preview.coverImageUrl && (
-                    <Text size={1} muted>No cover image found — upload manually.</Text>
+                    <Text size={1} muted>
+                      No cover image found. Upload manually.
+                    </Text>
                   )}
                   {preview.openCriticScore == null && (
-                    <Text size={1} muted>OpenCritic score not found — set manually or let nightly job fetch it.</Text>
+                    <Text size={1} muted>
+                      OpenCritic score not found. Set manually or let nightly
+                      job fetch it.
+                    </Text>
                   )}
                   {!preview.steamAppId && (
-                    <Text size={1} muted>Steam App ID not found — set manually if needed.</Text>
+                    <Text size={1} muted>
+                      Steam App ID not found. Set manually if needed.
+                    </Text>
                   )}
                 </Stack>
               </Flex>
+
+              {/* Long description preview */}
+              {preview.descriptionPreview && (
+                <Card padding={3} radius={2} tone="default" border>
+                  <Stack space={3}>
+                    <Text size={1} weight="semibold">
+                      Long Description Preview
+                    </Text>
+                    <Text size={1} style={{fontStyle: 'italic'}}>
+                      {preview.descriptionPreview.hook}
+                    </Text>
+                    <Flex gap={1} wrap="wrap">
+                      <Badge mode="outline">Gameplay</Badge>
+                      <Badge mode="outline">Story</Badge>
+                      <Badge mode="outline">Length</Badge>
+                      <Badge mode="outline">Atmosphere</Badge>
+                      <Badge mode="outline">Replayability</Badge>
+                      <Badge mode="outline">
+                        {preview.descriptionPreview.uniqueAngle.label}
+                      </Badge>
+                    </Flex>
+                  </Stack>
+                </Card>
+              )}
+              {!preview.descriptionPreview && (
+                <Text size={1} muted>
+                  Long description could not be generated. You can write one
+                  manually.
+                </Text>
+              )}
 
               {/* Action buttons */}
               <Flex gap={2}>
