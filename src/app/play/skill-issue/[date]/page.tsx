@@ -218,6 +218,7 @@ export default function SkillIssueDayPage({
         <WinModal
           dateStr={date}
           gameTitle={answer.title}
+          gameSlug={answer.id}
           score={state.score}
           guesses={state.guesses}
           lifelinesUsedCount={state.lifelinesUsed.length}

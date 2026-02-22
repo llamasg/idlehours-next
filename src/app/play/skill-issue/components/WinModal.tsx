@@ -3,12 +3,15 @@
 import { useEffect, useMemo } from 'react'
 import type { GuessRecord } from '../lib/storage'
 import ShareCard from './ShareCard'
+import GamePromoCard from './GamePromoCard'
+import { useSanityGame } from '../lib/useSanityGame'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
 interface WinModalProps {
   dateStr: string
   gameTitle: string
+  gameSlug?: string
   score: number
   guesses: GuessRecord[]
   lifelinesUsedCount: number
@@ -76,11 +79,14 @@ function Confetti() {
 export default function WinModal({
   dateStr,
   gameTitle,
+  gameSlug,
   score,
   guesses,
   lifelinesUsedCount,
   onClose,
 }: WinModalProps) {
+  const { game: sanityGame } = useSanityGame(gameSlug ?? null)
+
   // Close on Escape key
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -136,6 +142,13 @@ export default function WinModal({
             <p className="mb-4 text-center font-heading text-sm text-muted-foreground">
               Lifelines used: {lifelinesUsedCount}
             </p>
+          )}
+
+          {/* Sanity game promo card */}
+          {sanityGame && (
+            <div className="mb-4">
+              <GamePromoCard game={sanityGame} />
+            </div>
           )}
 
           {/* Actions */}
