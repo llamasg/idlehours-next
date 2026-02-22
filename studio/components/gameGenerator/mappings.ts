@@ -60,7 +60,7 @@ export function mapPlatforms(igdbPlatformNames: string[]): string[] {
       }
     }
   }
-  return Array.from(result).filter((p) => VALID_PLATFORMS.includes(p as any))
+  return Array.from(result).filter((p) => (VALID_PLATFORMS as readonly string[]).includes(p))
 }
 
 /** Map IGDB genre + theme names to our genre tag list (deduped) */
@@ -68,7 +68,7 @@ export function mapGenres(igdbNames: string[]): string[] {
   const result = new Set<string>()
   for (const name of igdbNames) {
     const mapped = GENRE_MAP[name]
-    if (mapped && VALID_GENRES.includes(mapped as any)) {
+    if (mapped && (VALID_GENRES as readonly string[]).includes(mapped)) {
       result.add(mapped)
     }
   }
