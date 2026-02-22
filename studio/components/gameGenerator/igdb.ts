@@ -56,8 +56,8 @@ export async function searchIGDB(query: string): Promise<IgdbGame[]> {
     `limit 5;`,
   ].join(' ')
 
-  // TODO Task 5: change to /igdb/games once Vite proxy is configured
-  const res = await fetch('https://api.igdb.com/v4/games', {
+  // Proxied via Vite dev server (studio/vite.config.ts) to avoid CORS
+  const res = await fetch('/igdb/games', {
     method: 'POST',
     headers: {
       'Client-ID': clientId,
