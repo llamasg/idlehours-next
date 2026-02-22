@@ -11,12 +11,15 @@ export interface IgdbGame {
   multiplayer_modes?: { offlinecoop?: boolean; onlinecoop?: boolean }[]
 }
 
+/** Vite bundles VITE_ vars into the client bundle. This studio is local-only — never deploy publicly with these credentials. */
+const CLIENT_ID = import.meta.env.VITE_TWITCH_CLIENT_ID as string
+
 /** Fetch a client_credentials token from Twitch. Caches in sessionStorage. */
 export async function getTwitchToken(): Promise<string> {
   const cached = sessionStorage.getItem('twitch_token')
   if (cached) return cached
 
-  const clientId = import.meta.env.VITE_TWITCH_CLIENT_ID as string
+  const clientId = CLIENT_ID
   const clientSecret = import.meta.env.VITE_TWITCH_CLIENT_SECRET as string
 
   if (!clientId || !clientSecret) {
@@ -30,7 +33,10 @@ export async function getTwitchToken(): Promise<string> {
   if (!res.ok) throw new Error(`Twitch auth failed: ${res.status}`)
 
   const data = await res.json()
-  const token = data.access_token as string
+  if (typeof data.access_token !== 'string') {
+    throw new Error('Twitch returned unexpected token response')
+  }
+  const token = data.access_token
   sessionStorage.setItem('twitch_token', token)
   return token
 }
@@ -40,16 +46,17 @@ export async function getTwitchToken(): Promise<string> {
  * Returns up to 5 main-game results with the fields we need.
  */
 export async function searchIGDB(query: string): Promise<IgdbGame[]> {
-  const clientId = import.meta.env.VITE_TWITCH_CLIENT_ID as string
+  const clientId = CLIENT_ID
   const token = await getTwitchToken()
 
   const body = [
     `fields name,summary,cover.url,platforms.name,genres.name,themes.name,multiplayer_modes.offlinecoop,multiplayer_modes.onlinecoop;`,
-    `search "${query.replace(/"/g, '')}";`,
+    `search "${query.replace(/[";\\]/g, '')}";`,
     `where category = 0;`,  // main games only (no DLC, ports, etc.)
     `limit 5;`,
   ].join(' ')
 
+  // TODO Task 5: change to /igdb/games once Vite proxy is configured
   const res = await fetch('https://api.igdb.com/v4/games', {
     method: 'POST',
     headers: {
