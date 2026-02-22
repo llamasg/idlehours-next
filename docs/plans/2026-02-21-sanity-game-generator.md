@@ -1,31 +1,35 @@
-# Sanity Studio "Generate Game" Plugin — Implementation Plan
+Before starting any tasks, create and switch to a new git branch:
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+cd D:\websites\IdleHours
+git checkout -b dev
 
-**Goal:** Add a custom Sanity Studio input component to the game document that auto-fills fields by searching IGDB and OpenCritic when an editor types a game name and clicks "Generate".
+All work should be done on this branch. Do not touch main.
 
-**Architecture:** A custom React input component registered on a helper field (`_generate`) placed at the top of the game schema. The component fetches data from Twitch (for an IGDB bearer token), IGDB (game metadata + cover), and OpenCritic (review score), shows a preview panel, then uses Sanity's `useClient` to upload the cover image and patch all document fields in one transaction.
+At the end of Task 7, after sanity deploy succeeds, commit everything
+and push the branch:
 
-**Tech Stack:** React 19, Sanity v5.8.1, `@sanity/ui` (Card, Stack, Text, TextInput, Button, Spinner), `useClient` + `useFormValue` from `'sanity'`, IGDB API v4, OpenCritic public API.
+git add .
+git commit -m "feat: game generator plugin"
+git push origin dev
 
----
+Do not merge to main — that will be done manually after review.
 
-## Prerequisites (manual steps by developer before running tasks)
+# Sanity Studio "Generate Game" Plugin
 
-**Step 1: Register a Twitch/IGDB application**
-1. Go to https://dev.twitch.tv/console/apps and create an app (category: "Application Integration")
-2. Note `Client ID` and generate a `Client Secret`
+## Context
+- Main site: Next.js, deployed to Vercel via git push
+- Sanity Studio: lives locally at D:\websites\IdleHours\studio\
+- Studio deploys separately via: cd studio && sanity deploy
+- Studio is NOT part of the Next.js build or git deployment
+- All plugin work happens inside the studio/ folder only
 
-**Step 2: Create `studio/.env.local`**
-```
-VITE_TWITCH_CLIENT_ID=your_client_id_here
-VITE_TWITCH_CLIENT_SECRET=your_client_secret_here
-```
-This file is gitignored by Vite by default (`.env.local` is always excluded).
-
-**Security note:** `VITE_` prefix exposes values in the browser bundle. This is acceptable for a private, self-hosted studio only you access. Never commit `.env.local`.
-
----
+## Prerequisites (already done)
+- Twitch app registered at dev.twitch.tv
+- Add to studio/.env.local (this file is gitignored):
+  VITE_TWITCH_CLIENT_ID=your_client_id
+  VITE_TWITCH_CLIENT_SECRET=your_client_secret
+- Note: VITE_ prefix is correct — Sanity Studio uses Vite internally
+  regardless of the main site using Next.js
 
 ## Task 1: Mappings + slug utility
 
@@ -604,79 +608,13 @@ git add studio/components/gameGenerator/GameGeneratorInput.tsx studio/schemaType
 git commit -m "feat: add GameGeneratorInput component and wire to game schema"
 ```
 
----
+## Task 5: CORS proxy for local dev
 
-## Task 5: Build and manual verification
+IGDB blocks browser requests so add a Vite proxy to studio/vite.config.ts:
 
-**Files:**
-- Modify: `studio/schemaTypes/game.ts` — if any adjustments needed from testing
-
-**Step 1: Create `studio/.env.local` with your Twitch credentials**
-```
-VITE_TWITCH_CLIENT_ID=<your client id>
-VITE_TWITCH_CLIENT_SECRET=<your client secret>
-```
-
-**Step 2: Run the Studio dev server**
-```bash
-cd studio && npm run dev
-```
-Open http://localhost:3333/studio
-
-**Step 3: Manual test checklist**
-
-Open a new Game document:
-- [ ] The "Auto-fill with IGDB + OpenCritic" card appears at the very top
-- [ ] Type "Stardew Valley" and click "Generate with Pip" (or press Enter)
-- [ ] After a few seconds, the preview panel shows:
-  - Title: "Stardew Valley"
-  - Description: truncated IGDB summary
-  - Cover image thumbnail
-  - Platforms: PC, Switch, etc.
-  - Genres: farming, simulation, etc. (or closest matches)
-  - OpenCritic score badge (e.g. "89% OC")
-- [ ] Click "Apply to Document" — all fields populate in the form
-- [ ] Cover image appears in the coverImage field
-- [ ] Title, description, platforms, genre, coop, OC score are all set
-- [ ] Slug is populated from the title
-- [ ] Difficulty, replayability, greatSoundtrack remain blank (manual)
-
-**Step 4: Edge cases to verify**
-
-- Type a misspelled name (e.g. "Stardew Valey") — verify a reasonable result still comes through or a helpful error appears
-- Type a game not on OpenCritic — verify it applies IGDB data and shows "OpenCritic score not found" message
-- Check the document in Sanity Vision (GROQ) to confirm `_generate` field is NOT stored in the document
-
-**Step 5: Build the studio**
-```bash
-cd studio && npm run build
-```
-Expected: Build succeeds with no errors.
-
-**Step 6: Commit**
-```bash
-git add -A
-git commit -m "feat: Sanity Studio game generator — IGDB + OpenCritic auto-fill"
-```
-
-**Step 7: Deploy the studio**
-```bash
-cd .. && node deploy.js studio
-```
-Enter FTP password when prompted.
-
----
-
-## IGDB CORS Note
-
-If the browser console shows CORS errors when calling `https://api.igdb.com/v4/games`, add a Vite dev proxy to `studio/vite.config.ts`:
-
-```ts
 import {defineConfig} from 'vite'
 
 export default defineConfig({
-  base: '/studio/',
-  build: { outDir: 'dist' },
   server: {
     proxy: {
       '/igdb': {
@@ -687,7 +625,37 @@ export default defineConfig({
     },
   },
 })
-```
 
-Then change the IGDB fetch URL in `igdb.ts` from `https://api.igdb.com/v4/games` to `/igdb/games`.
-This proxy only applies during `npm run dev`. If the deployed studio also needs it, consider using a free CORS proxy (e.g. Cloudflare Worker) or just use the studio exclusively in dev mode for game entry.
+In studio/components/gameGenerator/igdb.ts, change the fetch URL from:
+https://api.igdb.com/v4/games
+To:
+/igdb/games
+
+This proxy only works during local npm run dev — that is fine because
+game generation will always be done locally, not on the deployed studio.
+
+## Task 6: Test locally
+
+cd studio && npm run dev
+
+Open http://localhost:3333 and test with "roblox".
+
+Checklist:
+- [ ] Generate with Pip button appears on game documents
+- [ ] Preview shows title, cover image, platforms, genres, OC score
+- [ ] Apply to Document patches all fields in Sanity
+- [ ] difficulty, replayability, greatSoundtrack left blank for manual entry
+- [ ] _generate field does NOT appear in the Sanity document data
+
+## Task 7: Build and deploy Studio
+
+cd studio && npm run build
+cd studio && sanity deploy
+
+Do NOT run git push for studio changes — studio deploys via
+sanity deploy only, completely separate from the Next.js site.
+
+## Important
+Do not touch anything outside of the studio/ folder.
+Do not modify package.json at the project root.
+Do not add studio dependencies to the Next.js project.
