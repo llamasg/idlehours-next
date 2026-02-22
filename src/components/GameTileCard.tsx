@@ -99,9 +99,9 @@ export default function GameTileCard({ game }: GameTileCardProps) {
           </div>
 
           {/* Platforms */}
-          {game.platforms && game.platforms.length > 0 && (
+          {(game.platforms ?? []).length > 0 && (
             <p className="mt-2 font-heading text-xs text-muted-foreground">
-              {game.platforms.join(' · ')}
+              {(game.platforms ?? []).join(' · ')}
             </p>
           )}
         </div>

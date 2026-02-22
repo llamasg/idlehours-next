@@ -168,13 +168,13 @@ export default function GamesPage() {
         (g) =>
           g.title.toLowerCase().includes(q) ||
           g.shortDescription.toLowerCase().includes(q) ||
-          g.tags.some((t) => t.toLowerCase().includes(q))
+          (g.tags ?? []).some((t) => t.toLowerCase().includes(q))
       )
     }
 
     // Platform
     if (platform !== 'All') {
-      result = result.filter((g) => g.platforms.includes(platform))
+      result = result.filter((g) => (g.platforms ?? []).includes(platform))
     }
 
     // Genre

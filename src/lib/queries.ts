@@ -59,8 +59,8 @@ export async function getPost(slug: string) {
             slug,
             "coverImage": coverImage.asset->url,
             shortDescription,
-            platforms,
-            genre,
+            "platforms": coalesce(platforms, []),
+            "genre": coalesce(genre, []),
             coop,
             openCriticScore,
             difficulty,
@@ -68,7 +68,7 @@ export async function getPost(slug: string) {
             greatSoundtrack,
             currentPrice,
             isFree,
-            affiliateLinks
+            "affiliateLinks": coalesce(affiliateLinks, [])
           }
         }
       },
@@ -308,9 +308,10 @@ export async function getHomePage() {
           sourceType,
           "curatedGames": curatedGames[]-> {
             _id, title, slug, "coverImage": coverImage.asset->url,
-            shortDescription, platforms, tags, genre, coop,
+            shortDescription, "platforms": coalesce(platforms, []), "tags": coalesce(tags, []),
+            "genre": coalesce(genre, []), coop,
             ratings, openCriticScore, difficulty, replayability,
-            greatSoundtrack, currentPrice, isFree, affiliateLinks, featured, publishedAt
+            greatSoundtrack, currentPrice, isFree, "affiliateLinks": coalesce(affiliateLinks, []), featured, publishedAt
           },
           "curatedPosts": curatedPosts[]-> {
             _id, title, slug, excerpt, "mainImage": headerImage.asset->url,
@@ -335,9 +336,10 @@ export async function getHomePage() {
           title,
           "featuredGame": featuredGame-> {
             _id, title, slug, "coverImage": coverImage.asset->url,
-            shortDescription, platforms, tags, genre, coop,
+            shortDescription, "platforms": coalesce(platforms, []), "tags": coalesce(tags, []),
+            "genre": coalesce(genre, []), coop,
             ratings, openCriticScore, difficulty, replayability,
-            greatSoundtrack, currentPrice, isFree, affiliateLinks, featured, publishedAt
+            greatSoundtrack, currentPrice, isFree, "affiliateLinks": coalesce(affiliateLinks, []), featured, publishedAt
           },
           customBlurb, buttonLabel, link
         },
@@ -382,10 +384,10 @@ export async function getAllGames() {
       slug,
       "coverImage": coverImage.asset->url,
       shortDescription,
-      platforms,
+      "platforms": coalesce(platforms, []),
       "genres": genres[]->{ _id, title, slug },
-      tags,
-      genre,
+      "tags": coalesce(tags, []),
+      "genre": coalesce(genre, []),
       coop,
       ratings,
       openCriticScore,
@@ -394,7 +396,7 @@ export async function getAllGames() {
       greatSoundtrack,
       currentPrice,
       isFree,
-      affiliateLinks,
+      "affiliateLinks": coalesce(affiliateLinks, []),
       featured,
       publishedAt
     }
@@ -413,10 +415,10 @@ export async function getGame(slug: string) {
       "coverImage": coverImage.asset->url,
       shortDescription,
       longDescription,
-      platforms,
+      "platforms": coalesce(platforms, []),
       "genres": genres[]->{ _id, title, slug },
-      tags,
-      genre,
+      "tags": coalesce(tags, []),
+      "genre": coalesce(genre, []),
       coop,
       ratings,
       openCriticScore,
@@ -425,7 +427,7 @@ export async function getGame(slug: string) {
       greatSoundtrack,
       currentPrice,
       isFree,
-      affiliateLinks,
+      "affiliateLinks": coalesce(affiliateLinks, []),
       featured,
       publishedAt
     }

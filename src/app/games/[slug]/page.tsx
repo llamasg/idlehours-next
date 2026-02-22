@@ -205,13 +205,13 @@ export default async function GameDetailPage({
               </p>
 
               {/* Platforms */}
-              {game.platforms.length > 0 && (
+              {(game.platforms ?? []).length > 0 && (
                 <div className="mt-5">
                   <h3 className="font-heading text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     Platforms
                   </h3>
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    {game.platforms.map((p: string) => (
+                    {(game.platforms ?? []).map((p: string) => (
                       <span key={p} className="rounded-full border border-border bg-background px-3 py-1 font-heading text-xs text-foreground">
                         {p}
                       </span>
@@ -221,13 +221,13 @@ export default async function GameDetailPage({
               )}
 
               {/* Tags */}
-              {game.tags?.length > 0 && (
+              {(game.tags ?? []).length > 0 && (
                 <div className="mt-4">
                   <h3 className="font-heading text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     Tags
                   </h3>
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    {game.tags.map((tag: string) => (
+                    {(game.tags ?? []).map((tag: string) => (
                       <span key={tag} className="rounded-full bg-muted px-2.5 py-0.5 font-heading text-[11px] text-muted-foreground">
                         {tag}
                       </span>
@@ -237,9 +237,9 @@ export default async function GameDetailPage({
               )}
 
               {/* Buy links */}
-              {game.affiliateLinks && game.affiliateLinks.length > 0 && (
+              {(game.affiliateLinks ?? []).length > 0 && (
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {game.affiliateLinks.map((link: { label: string; url: string }) => (
+                  {(game.affiliateLinks ?? []).map((link: { label: string; url: string }) => (
                     <a
                       key={link.label}
                       href={link.url}
@@ -259,7 +259,7 @@ export default async function GameDetailPage({
 
         {/* Body content (long description / write-up) */}
         <div className="mx-auto mt-10 max-w-3xl">
-          {game.longDescription && game.longDescription.length > 0 ? (
+          {(game.longDescription ?? []).length > 0 ? (
             <div className="rounded-2xl border border-border/40 bg-card p-6 md:p-10">
               <PortableText value={game.longDescription} components={bodyComponents} />
             </div>
