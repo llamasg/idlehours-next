@@ -1,10 +1,19 @@
 import {defineField, defineType} from 'sanity'
+import {GameGeneratorInput} from '../components/gameGenerator/GameGeneratorInput'
 
 export default defineType({
   name: 'game',
   title: 'Game',
   type: 'document',
   fields: [
+    defineField({
+      name: '_generate',
+      title: 'Auto-fill',
+      type: 'string',
+      components: {
+        input: GameGeneratorInput,
+      },
+    }),
     defineField({
       name: 'title',
       title: 'Title',
