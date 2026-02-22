@@ -11,16 +11,16 @@ export interface IgdbGame {
   multiplayer_modes?: { offlinecoop?: boolean; onlinecoop?: boolean }[]
 }
 
-/** Vite bundles VITE_ vars into the client bundle. This studio is local-only — never deploy publicly with these credentials. */
-const CLIENT_ID = (import.meta.env?.VITE_TWITCH_CLIENT_ID ?? '') as string
-
 /** Fetch a client_credentials token from Twitch. Caches in sessionStorage. */
 export async function getTwitchToken(): Promise<string> {
   const cached = sessionStorage.getItem('twitch_token')
   if (cached) return cached
 
-  const clientId = CLIENT_ID
-  const clientSecret = (import.meta.env?.VITE_TWITCH_CLIENT_SECRET ?? '') as string
+  // Vite bundles VITE_ vars into the client bundle. This studio is local-only.
+  // Env vars are read inside the function (not at module level) so Vite's static
+  // replacement and dev-mode live access both work correctly.
+  const clientId = import.meta.env.VITE_TWITCH_CLIENT_ID ?? ''
+  const clientSecret = import.meta.env.VITE_TWITCH_CLIENT_SECRET ?? ''
 
   if (!clientId || !clientSecret) {
     throw new Error('VITE_TWITCH_CLIENT_ID and VITE_TWITCH_CLIENT_SECRET must be set in studio/.env.local')
@@ -46,7 +46,7 @@ export async function getTwitchToken(): Promise<string> {
  * Returns up to 5 main-game results with the fields we need.
  */
 export async function searchIGDB(query: string): Promise<IgdbGame[]> {
-  const clientId = CLIENT_ID
+  const clientId = import.meta.env.VITE_TWITCH_CLIENT_ID ?? ''
   const token = await getTwitchToken()
 
   const body = [
