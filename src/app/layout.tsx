@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import ClientProviders from '@/components/ClientProviders'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 export const metadata: Metadata = {
   title: {
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ClientProviders>
           {children}
         </ClientProviders>
+        <SpeedInsights />
       </body>
     </html>
   )
