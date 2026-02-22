@@ -11,9 +11,14 @@ export default {
           '0%': { opacity: '0.6', transform: 'scale(1)' },
           '100%': { opacity: '0', transform: 'scale(1.2)' },
         },
+        'confetti-fall': {
+          '0%': { transform: 'translateY(0) rotate(0deg)', opacity: '1' },
+          '100%': { transform: 'translateY(100vh) rotate(720deg)', opacity: '0' },
+        },
       },
       animation: {
         echo: 'echo 0.6s ease-out',
+        'confetti-fall': 'confetti-fall 2.5s ease-in forwards',
       },
   		borderRadius: {
   			lg: 'var(--radius)',
