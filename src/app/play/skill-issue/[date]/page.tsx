@@ -117,7 +117,7 @@ export default function SkillIssueDayPage({
           <div className="mb-6 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-700">
             You&apos;re playing a previous day.{' '}
             <Link
-              href="/games/Skill_Issue"
+              href="/play/skill-issue"
               className="font-semibold underline underline-offset-2 transition-colors hover:text-amber-900"
             >
               Jump to today &rarr;
@@ -145,7 +145,7 @@ export default function SkillIssueDayPage({
               This game isn&apos;t available yet. Check back on the right day!
             </p>
             <Link
-              href="/games/Skill_Issue"
+              href="/play/skill-issue"
               className="mt-3 inline-block font-heading text-sm font-semibold text-primary transition-colors hover:text-primary/80"
             >
               Go to today&apos;s game &rarr;
@@ -203,7 +203,7 @@ export default function SkillIssueDayPage({
         {/* Archive link */}
         <div className="text-center">
           <Link
-            href="/games/Skill_Issue/archive"
+            href="/play/skill-issue/archive"
             className="font-heading text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             Browse the archive &rarr;

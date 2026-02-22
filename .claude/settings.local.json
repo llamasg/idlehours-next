@@ -54,7 +54,9 @@
       "Bash(/tmp/final_check.sh:*)",
       "Bash(bash /tmp/final_check.sh)",
       "Bash(find:*)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(\"D:/websites/IdleHours/src/app/games/Skill_Issue/data/games.ts\":*)",
+      "Bash(npx next build:*)"
     ]
   }
 }

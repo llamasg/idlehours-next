@@ -45,7 +45,7 @@ export default function SkillIssueArchivePage() {
       <Header />
       <main className="mx-auto max-w-xl px-4 py-10">
         <Link
-          href="/games/Skill_Issue"
+          href="/play/skill-issue"
           className="mb-6 inline-block font-body text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           &larr; Back to today
@@ -88,7 +88,7 @@ export default function SkillIssueArchivePage() {
                   </span>
                 )}
                 <Link
-                  href={`/games/Skill_Issue/${row.date}`}
+                  href={`/play/skill-issue/${row.date}`}
                   className="rounded-full bg-primary/10 px-4 py-1.5 font-heading text-xs font-medium text-primary transition-colors hover:bg-primary/20"
                 >
                   {row.played ? 'View' : 'Play'}

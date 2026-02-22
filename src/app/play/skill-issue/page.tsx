@@ -10,7 +10,7 @@ export default function SkillIssueTodayPage() {
   const router = useRouter()
 
   useEffect(() => {
-    router.replace(`/games/Skill_Issue/${getTodayDateString()}`)
+    router.replace(`/play/skill-issue/${getTodayDateString()}`)
   }, [router])
 
   return null

@@ -1,4 +1,4 @@
-// src/app/games/Skill_Issue/data/games.ts
+// src/app/play/skill-issue/data/games.ts
 // Skill Issue — game database for the daily guessing game
 
 export interface SkillIssueGame {
