@@ -157,9 +157,9 @@ export default async function GameDetailPage({
         <div className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
           <div className="grid gap-0 lg:grid-cols-[1.4fr_1fr]">
             {/* Cover image */}
-            <div className="relative aspect-[16/10] overflow-hidden bg-secondary lg:max-h-[500px]">
+            <div className="relative aspect-[16/9] overflow-hidden bg-secondary">
               {game.coverImage ? (
-                <img src={game.coverImage} alt={game.title} className="h-full w-full object-cover" />
+                <img src={game.coverImage} alt={game.title} className="absolute inset-0 h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full items-center justify-center bg-gradient-to-br from-secondary to-muted">
                   <span className="font-heading text-muted-foreground">No image</span>
