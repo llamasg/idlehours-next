@@ -21,6 +21,7 @@ export async function searchOpenCritic(gameName: string): Promise<OpenCriticResu
     if (!results.length) return null
 
     const top = results[0]
+    if (typeof top?.id !== 'number') return null
 
     // The search result may not include score; fetch the game detail to get it
     const detailRes = await fetch(`https://api.opencritic.com/api/game/${top.id}`)
