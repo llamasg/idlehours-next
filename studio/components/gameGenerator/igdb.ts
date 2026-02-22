@@ -12,7 +12,7 @@ export interface IgdbGame {
 }
 
 /** Vite bundles VITE_ vars into the client bundle. This studio is local-only — never deploy publicly with these credentials. */
-const CLIENT_ID = import.meta.env.VITE_TWITCH_CLIENT_ID as string
+const CLIENT_ID = (import.meta.env?.VITE_TWITCH_CLIENT_ID ?? '') as string
 
 /** Fetch a client_credentials token from Twitch. Caches in sessionStorage. */
 export async function getTwitchToken(): Promise<string> {
@@ -20,7 +20,7 @@ export async function getTwitchToken(): Promise<string> {
   if (cached) return cached
 
   const clientId = CLIENT_ID
-  const clientSecret = import.meta.env.VITE_TWITCH_CLIENT_SECRET as string
+  const clientSecret = (import.meta.env?.VITE_TWITCH_CLIENT_SECRET ?? '') as string
 
   if (!clientId || !clientSecret) {
     throw new Error('VITE_TWITCH_CLIENT_ID and VITE_TWITCH_CLIENT_SECRET must be set in studio/.env.local')

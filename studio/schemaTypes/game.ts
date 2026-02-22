@@ -7,7 +7,7 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: '_generate',
+      name: 'pipAutofill',
       title: 'Auto-fill',
       type: 'string',
       components: {
