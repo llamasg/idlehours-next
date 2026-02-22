@@ -15,7 +15,7 @@ import {
 } from '@sanity/ui'
 import {useClient, useFormValue} from 'sanity'
 import {searchIGDB, type IgdbGame} from './igdb'
-import {searchOpenCritic, type OpenCriticResult} from './openCritic'
+import {searchOpenCritic} from './openCritic'
 import {mapPlatforms, mapGenres, slugify, truncate} from './mappings'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -41,6 +41,7 @@ export function GameGeneratorInput() {
   const [preview, setPreview] = useState<GeneratedData | null>(null)
   const [applying, setApplying] = useState(false)
   const [applied, setApplied] = useState(false)
+  const [imageWarning, setImageWarning] = useState<string | null>(null)
 
   // The current document's draft ID (e.g. "drafts.abc123" or "abc123")
   const documentId = useFormValue(['_id']) as string | undefined
@@ -54,6 +55,7 @@ export function GameGeneratorInput() {
     setError(null)
     setPreview(null)
     setApplied(false)
+    setImageWarning(null)
 
     try {
       // Fetch IGDB + OpenCritic in parallel
@@ -110,6 +112,7 @@ export function GameGeneratorInput() {
     if (!preview || !documentId) return
     setApplying(true)
     setError(null)
+    setImageWarning(null)
 
     try {
       // Build the patch object with all non-image fields
@@ -143,7 +146,7 @@ export function GameGeneratorInput() {
           }
         } catch {
           // Image upload failed — skip it, user can upload manually
-          setError('Cover image could not be uploaded — all other fields applied. Upload the image manually.')
+          setImageWarning('Cover image could not be uploaded — all other fields applied. Upload the image manually.')
         }
       }
 
@@ -198,6 +201,13 @@ export function GameGeneratorInput() {
         {applied && (
           <Card padding={3} tone="positive" radius={2}>
             <Text size={1}>✓ Fields applied! Review and adjust as needed, then publish.</Text>
+          </Card>
+        )}
+
+        {/* Image warning — survives success banner */}
+        {imageWarning && (
+          <Card padding={3} tone="caution" radius={2}>
+            <Text size={1}>{imageWarning}</Text>
           </Card>
         )}
 
