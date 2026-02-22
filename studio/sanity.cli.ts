@@ -34,19 +34,8 @@ export default defineCliConfig({
       ...config,
       define: {
         ...config.define,
-        'import.meta.env.VITE_TWITCH_CLIENT_ID': JSON.stringify(env.VITE_TWITCH_CLIENT_ID || ''),
-        'import.meta.env.VITE_TWITCH_CLIENT_SECRET': JSON.stringify(env.VITE_TWITCH_CLIENT_SECRET || ''),
         'import.meta.env.VITE_ANTHROPIC_API_KEY': JSON.stringify(env.VITE_ANTHROPIC_API_KEY || ''),
-      },
-      server: {
-        ...config.server,
-        proxy: {
-          '/igdb': {
-            target: 'https://api.igdb.com/v4',
-            changeOrigin: true,
-            rewrite: (path: string) => path.replace(/^\/igdb/, ''),
-          },
-        },
+        'import.meta.env.VITE_IGDB_PROXY_URL': JSON.stringify(env.VITE_IGDB_PROXY_URL || ''),
       },
     }
   },
