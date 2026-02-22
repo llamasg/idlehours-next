@@ -157,7 +157,7 @@ export default async function GameDetailPage({
         <div className="overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm">
           <div className="grid gap-0 lg:grid-cols-[1.4fr_1fr]">
             {/* Cover image */}
-            <div className="relative aspect-[16/10] overflow-hidden bg-secondary lg:aspect-auto lg:min-h-[400px]">
+            <div className="relative aspect-[16/10] overflow-hidden bg-secondary lg:max-h-[500px]">
               {game.coverImage ? (
                 <img src={game.coverImage} alt={game.title} className="h-full w-full object-cover" />
               ) : (
@@ -221,7 +221,7 @@ export default async function GameDetailPage({
               )}
 
               {/* Tags */}
-              {game.tags.length > 0 && (
+              {game.tags?.length > 0 && (
                 <div className="mt-4">
                   <h3 className="font-heading text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     Tags

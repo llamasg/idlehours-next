@@ -30,6 +30,7 @@ interface GeneratedData {
   coop: boolean
   openCriticScore: number | null
   openCriticId: string | null
+  steamAppId: string | null
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -71,13 +72,15 @@ export function GameGeneratorInput() {
 
       const game: IgdbGame = igdbResults[0]
 
-      // Build cover image URL (upgrade thumb → cover_big)
+      // Prefer horizontal artwork over vertical cover
+      // artworks → t_screenshot_huge (1280x720), cover → t_cover_big (264x374)
       let coverImageUrl: string | null = null
-      if (game.cover?.url) {
-        const url = game.cover.url.startsWith('//')
-          ? `https:${game.cover.url}`
-          : game.cover.url
-        coverImageUrl = url.replace('t_thumb', 't_cover_big')
+      const rawUrl = game.artworks?.[0]?.url ?? game.cover?.url
+      if (rawUrl) {
+        const url = rawUrl.startsWith('//') ? `https:${rawUrl}` : rawUrl
+        coverImageUrl = game.artworks?.[0]
+          ? url.replace('t_thumb', 't_screenshot_huge')
+          : url.replace('t_thumb', 't_cover_big')
       }
 
       const generated: GeneratedData = {
@@ -96,6 +99,7 @@ export function GameGeneratorInput() {
           ),
         openCriticScore: ocResult?.topCriticScore ?? null,
         openCriticId: ocResult?.id != null ? String(ocResult.id) : null,
+        steamAppId: (game.external_games ?? []).find((e) => e.external_game_source === 1)?.uid ?? null,
       }
 
       setPreview(generated)
@@ -131,6 +135,9 @@ export function GameGeneratorInput() {
       if (preview.openCriticId != null) {
         patch.openCriticId = preview.openCriticId
       }
+      if (preview.steamAppId != null) {
+        patch.steamAppId = preview.steamAppId
+      }
 
       // Upload cover image to Sanity assets if available
       if (preview.coverImageUrl) {
@@ -150,8 +157,14 @@ export function GameGeneratorInput() {
         }
       }
 
-      // Apply the patch to the document
-      await client.patch(documentId).set(patch).commit()
+      // New documents may not exist in the datastore yet (only in Studio memory).
+      // Use a transaction to create the draft if needed, then patch it.
+      const patchId = documentId.startsWith('drafts.') ? documentId : `drafts.${documentId}`
+      await client
+        .transaction()
+        .createIfNotExists({_id: patchId, _type: 'game'})
+        .patch(patchId, (p) => p.set(patch))
+        .commit()
       setApplied(true)
       setPreview(null)
     } catch (err: any) {
@@ -245,6 +258,9 @@ export function GameGeneratorInput() {
                     {preview.openCriticScore != null && (
                       <Badge tone="caution">{preview.openCriticScore}% OC</Badge>
                     )}
+                    {preview.steamAppId && (
+                      <Badge tone="default">Steam {preview.steamAppId}</Badge>
+                    )}
                   </Flex>
 
                   {!preview.coverImageUrl && (
@@ -252,6 +268,9 @@ export function GameGeneratorInput() {
                   )}
                   {preview.openCriticScore == null && (
                     <Text size={1} muted>OpenCritic score not found — set manually or let nightly job fetch it.</Text>
+                  )}
+                  {!preview.steamAppId && (
+                    <Text size={1} muted>Steam App ID not found — set manually if needed.</Text>
                   )}
                 </Stack>
               </Flex>

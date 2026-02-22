@@ -1,4 +1,23 @@
 import {defineCliConfig} from 'sanity/cli'
+import {readFileSync} from 'fs'
+import {resolve} from 'path'
+
+/** Read VITE_ vars from .env and .env.local in the studio directory. */
+function loadStudioEnv(): Record<string, string> {
+  const env: Record<string, string> = {}
+  for (const file of ['.env', '.env.local']) {
+    try {
+      const content = readFileSync(resolve(__dirname, file), 'utf8')
+      for (const line of content.split('\n')) {
+        const match = line.match(/^(VITE_\w+)=(.*)$/)
+        if (match) env[match[1]] = match[2].trim()
+      }
+    } catch {
+      // file doesn't exist — skip
+    }
+  }
+  return env
+}
 
 export default defineCliConfig({
   api: {
@@ -6,12 +25,29 @@ export default defineCliConfig({
     dataset: 'production'
   },
   deployment: {
-    /**
-     * Disable auto-updates to avoid appId warning.
-     * To enable version-controlled updates, add an appId from:
-     * https://www.sanity.io/manage/project/ijj3h2lj/studios
-     */
     appId: 'tsb3bjdq1gp4n843g7hn7t26',
     autoUpdates: false,
-  }
+  },
+  vite: (config) => {
+    const env = loadStudioEnv()
+    return {
+      ...config,
+      define: {
+        ...config.define,
+        'import.meta.env.VITE_TWITCH_CLIENT_ID': JSON.stringify(env.VITE_TWITCH_CLIENT_ID || ''),
+        'import.meta.env.VITE_TWITCH_CLIENT_SECRET': JSON.stringify(env.VITE_TWITCH_CLIENT_SECRET || ''),
+        'import.meta.env.VITE_ANTHROPIC_API_KEY': JSON.stringify(env.VITE_ANTHROPIC_API_KEY || ''),
+      },
+      server: {
+        ...config.server,
+        proxy: {
+          '/igdb': {
+            target: 'https://api.igdb.com/v4',
+            changeOrigin: true,
+            rewrite: (path: string) => path.replace(/^\/igdb/, ''),
+          },
+        },
+      },
+    }
+  },
 })

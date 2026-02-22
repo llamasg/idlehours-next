@@ -5,10 +5,12 @@ export interface IgdbGame {
   name: string
   summary?: string
   cover?: { url: string }
+  artworks?: { url: string }[]
   platforms?: { name: string }[]
   genres?: { name: string }[]
   themes?: { name: string }[]
   multiplayer_modes?: { offlinecoop?: boolean; onlinecoop?: boolean }[]
+  external_games?: { external_game_source: number; uid: string }[]
 }
 
 /** Fetch a client_credentials token from Twitch. Caches in sessionStorage. */
@@ -16,14 +18,13 @@ export async function getTwitchToken(): Promise<string> {
   const cached = sessionStorage.getItem('twitch_token')
   if (cached) return cached
 
-  // Vite bundles VITE_ vars into the client bundle. This studio is local-only.
-  // Env vars are read inside the function (not at module level) so Vite's static
-  // replacement and dev-mode live access both work correctly.
+  // Env vars are injected by Vite via the `define` config in sanity.cli.ts.
+  // Read inside the function body so CJS schema extraction doesn't crash.
   const clientId = import.meta.env.VITE_TWITCH_CLIENT_ID ?? ''
   const clientSecret = import.meta.env.VITE_TWITCH_CLIENT_SECRET ?? ''
 
   if (!clientId || !clientSecret) {
-    throw new Error('VITE_TWITCH_CLIENT_ID and VITE_TWITCH_CLIENT_SECRET must be set in studio/.env.local')
+    throw new Error('VITE_TWITCH_CLIENT_ID and VITE_TWITCH_CLIENT_SECRET must be set in studio/.env')
   }
 
   const res = await fetch(
@@ -50,13 +51,12 @@ export async function searchIGDB(query: string): Promise<IgdbGame[]> {
   const token = await getTwitchToken()
 
   const body = [
-    `fields name,summary,cover.url,platforms.name,genres.name,themes.name,multiplayer_modes.offlinecoop,multiplayer_modes.onlinecoop;`,
+    `fields name,summary,cover.url,artworks.url,platforms.name,genres.name,themes.name,multiplayer_modes.offlinecoop,multiplayer_modes.onlinecoop,external_games.*;`,
     `search "${query.replace(/[";\\]/g, '')}";`,
-    `where category = 0;`,  // main games only (no DLC, ports, etc.)
     `limit 5;`,
   ].join(' ')
 
-  // Proxied via Vite dev server (studio/vite.config.ts) to avoid CORS
+  // Proxied via Vite dev server (sanity.cli.ts) to avoid CORS
   const res = await fetch('/igdb/games', {
     method: 'POST',
     headers: {
