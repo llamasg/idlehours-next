@@ -35,7 +35,6 @@ export default defineCliConfig({
       define: {
         ...config.define,
         'import.meta.env.VITE_ANTHROPIC_API_KEY': JSON.stringify(env.VITE_ANTHROPIC_API_KEY || ''),
-        'import.meta.env.VITE_IGDB_PROXY_URL': JSON.stringify(env.VITE_IGDB_PROXY_URL || ''),
       },
     }
   },
