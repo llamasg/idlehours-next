@@ -286,7 +286,7 @@ export default function ParallaxPage() {
         style={{ clipPath: 'inset(0px 0px 0px 0px round 0px)' }}
       >
         {/* Scene container — scaled up to hide edges, transform controlled by JS */}
-        <div ref={sceneRef} className="absolute inset-0" style={{ transform: 'scale(1.1)' }}>
+        <div ref={sceneRef} className="absolute inset-0 overflow-hidden" style={{ transform: 'scale(1.1)' }}>
           {/* Sky gradient */}
           <div
             className="absolute inset-0"
