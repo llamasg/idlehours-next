@@ -11,11 +11,11 @@ const LAYERS = [
   { src: '/parallax/layer-04-trees-mid.svg', alt: 'Mid trees', multiplier: 3 },
 ]
 
-const LOGO = {
-  src: '/parallax/idle-hours-logo.svg',
-  alt: 'Idle Hours',
-  multiplier: 3.5,
-}
+const LOGO_FRAMES = Array.from({ length: 10 }, (_, i) =>
+  `/parallax/logo_animation_Frames/logo_anim_Frame___${String(i + 1).padStart(2, '0')}.svg`
+)
+const LOGO_MULTIPLIER = 3.5
+const LOGO_FPS = 18
 
 const FRONT_LAYERS = [
   { src: '/parallax/layer-03-trees-near.svg', alt: 'Near trees', multiplier: 4 },
@@ -24,7 +24,7 @@ const FRONT_LAYERS = [
 
 const ALL_MULTIPLIERS = [
   ...LAYERS.map((l) => l.multiplier),
-  LOGO.multiplier,
+  LOGO_MULTIPLIER,
   ...FRONT_LAYERS.map((l) => l.multiplier),
 ]
 
@@ -70,10 +70,18 @@ export default function ParallaxPage() {
   const navIconsRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const [logoVisible, setLogoVisible] = useState(false)
+  const [frameIndex, setFrameIndex] = useState(0)
 
   useEffect(() => {
     const timer = setTimeout(() => setLogoVisible(true), 50)
     return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setFrameIndex((prev) => (prev + 1) % LOGO_FRAMES.length)
+    }, Math.round(1000 / LOGO_FPS))
+    return () => clearInterval(id)
   }, [])
 
   const setRef = useCallback(
@@ -300,12 +308,25 @@ export default function ParallaxPage() {
                     'transform 0.8s ease-out 0.3s, opacity 0.8s ease-out 0.3s',
                 }}
               >
-                <img
-                  src={LOGO.src}
-                  alt={LOGO.alt}
-                  className="w-[min(50vw,500px)]"
-                  draggable={false}
-                />
+                <div
+                  role="img"
+                  aria-label="Idle Hours"
+                  className="relative w-[min(50vw,500px)]"
+                  style={{ aspectRatio: '1812.4 / 946.84' }}
+                >
+                  {LOGO_FRAMES.map((src, i) => (
+                    <img
+                      key={src}
+                      src={src}
+                      alt=""
+                      draggable={false}
+                      className="absolute inset-0 w-full h-full"
+                      style={{ opacity: i === frameIndex ? 1 : 0 }}
+                      fetchPriority={i === 0 ? 'high' : 'auto'}
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                    />
+                  ))}
+                </div>
                 <p
                   className="text-white/70 text-base tracking-widest"
                   style={{ fontFamily: "'Montserrat', sans-serif" }}
