@@ -3,11 +3,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 // --- Layer config ---
-const LAYERS = [
+interface LayerConfig {
+  src: string
+  alt: string
+  multiplier: number
+  /** If present, layer floats gently up/down via CSS translate animation */
+  float?: { duration: number; delay: number }
+}
+
+// Rendered back-to-front (sky → foreground)
+const BACK_LAYERS: LayerConfig[] = [
   { src: '/parallax/layer-08-sun.svg', alt: 'Sun', multiplier: 0.5 },
+  { src: '/parallax/layer_bird 4.svg', alt: '', multiplier: 0.75, float: { duration: 3.0, delay: 0.3 } },
   { src: '/parallax/layer-07-mountains.svg', alt: 'Mountains', multiplier: 1 },
+  { src: '/parallax/layer_bird 3.svg', alt: '', multiplier: 1.25, float: { duration: 3.5, delay: 1.4 } },
   { src: '/parallax/layer-06-hills-mid.svg', alt: 'Distant hills', multiplier: 1.5 },
+  { src: '/parallax/layer_bird 2.svg', alt: '', multiplier: 1.75, float: { duration: 2.8, delay: 0.7 } },
   { src: '/parallax/layer-05-hills-near.svg', alt: 'Near hills', multiplier: 2 },
+  { src: '/parallax/layer_bird 1.svg', alt: '', multiplier: 2.5, float: { duration: 3.2, delay: 0.0 } },
   { src: '/parallax/layer-04-trees-mid.svg', alt: 'Mid trees', multiplier: 3 },
 ]
 
@@ -15,15 +28,15 @@ const LOGO_FRAMES = Array.from({ length: 10 }, (_, i) =>
   `/parallax/logo_animation_Frames/logo_anim_Frame___${String(i + 1).padStart(2, '0')}.svg`
 )
 const LOGO_MULTIPLIER = 3.5
-const LOGO_FPS = 18
+const LOGO_FPS = 12
 
-const FRONT_LAYERS = [
+const FRONT_LAYERS: LayerConfig[] = [
   { src: '/parallax/layer-03-trees-near.svg', alt: 'Near trees', multiplier: 4 },
   { src: '/parallax/layer-02-foreground.svg', alt: 'Foreground', multiplier: 6 },
 ]
 
 const ALL_MULTIPLIERS = [
-  ...LAYERS.map((l) => l.multiplier),
+  ...BACK_LAYERS.map((l) => l.multiplier),
   LOGO_MULTIPLIER,
   ...FRONT_LAYERS.map((l) => l.multiplier),
 ]
@@ -208,6 +221,15 @@ export default function ParallaxPage() {
         rel="stylesheet"
       />
 
+      {/* Bird float keyframe — uses CSS `translate` property so it composes with
+          JS-driven `transform` on the same element without conflict */}
+      <style>{`
+        @keyframes bird-float {
+          0%, 100% { translate: 0 0; }
+          50%       { translate: 0 -4px; }
+        }
+      `}</style>
+
       {/* Nav */}
       <nav
         ref={navRef}
@@ -274,14 +296,17 @@ export default function ParallaxPage() {
             }}
           />
 
-          {/* Back layers */}
-          {LAYERS.map((layer) => {
+          {/* Back layers (sky → trees, birds interleaved) */}
+          {BACK_LAYERS.map((layer) => {
             const idx = layerIndex++
             return (
               <div
                 key={layer.src}
                 ref={setRef(idx)}
                 className="absolute inset-0 will-change-transform"
+                style={layer.float ? {
+                  animation: `bird-float ${layer.float.duration}s ease-in-out ${layer.float.delay}s infinite`,
+                } : undefined}
               >
                 <img
                   src={layer.src}
@@ -353,7 +378,7 @@ export default function ParallaxPage() {
             </div>
           </div>
 
-          {/* Front layers */}
+          {/* Front layers (near trees → foreground) */}
           {FRONT_LAYERS.map((layer) => {
             const idx = layerIndex++
             return (
