@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -27,6 +27,7 @@ export default function Header({ transparent = false }: { transparent?: boolean 
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   const isDark = mounted && resolvedTheme === 'dark'
+  const hasClickedTheme = useRef(false)
 
   useEffect(() => {
     if (!transparent) return
@@ -52,7 +53,7 @@ export default function Header({ transparent = false }: { transparent?: boolean 
       {/* Spacer — reserves space in the document flow for the fixed header */}
       {!transparent && <div className="h-16" />}
       <header className="fixed top-0 left-0 right-0 z-50">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
+        <div className="relative mx-auto flex max-w-7xl items-center justify-between px-4 py-3 lg:px-8">
           {/* Logo pill — desktop: wide text, mobile: circular icon */}
           <Link
             href="/"
@@ -83,7 +84,7 @@ export default function Header({ transparent = false }: { transparent?: boolean 
 
           {/* Nav pill — desktop */}
           <nav
-            className="hidden md:flex items-center gap-6 rounded-full px-2 py-2"
+            className="hidden md:flex items-center gap-6 rounded-full px-2 py-2 absolute left-1/2 -translate-x-1/2"
             style={pillStyle}
           >
             {NAV_LINKS.map((link) => (
@@ -108,7 +109,7 @@ export default function Header({ transparent = false }: { transparent?: boolean 
 
           {/* Theme toggle pill — desktop */}
           <button
-            onClick={() => setTheme(isDark ? 'light' : 'dark')}
+            onClick={() => { hasClickedTheme.current = true; setTheme(isDark ? 'light' : 'dark') }}
             className="hidden md:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden text-white/70 transition-colors hover:text-white"
             style={pillStyle}
             aria-label="Toggle theme"
@@ -117,7 +118,7 @@ export default function Header({ transparent = false }: { transparent?: boolean 
               <AnimatePresence mode="wait">
                 <motion.div
                   key={isDark ? 'dark' : 'light'}
-                  initial={{ y: 20, opacity: 0 }}
+                  initial={hasClickedTheme.current ? { y: 20, opacity: 0 } : false}
                   animate={{ y: 0, opacity: 1, transition: { type: 'spring', stiffness: 400, damping: 12 } }}
                   exit={{ y: [0, 4, -20], opacity: [1, 1, 0], transition: { duration: 0.35, times: [0, 0.3, 1] } }}
                   className="flex items-center justify-center"

@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import Header from '@/components/Header'
 import ParallaxHero from '@/components/ParallaxHero'
 import SectionLabel from '@/components/SectionLabel'
@@ -29,6 +29,16 @@ interface HomepageClientProps {
 
 export default function HomepageClient({ games, posts, featuredPost }: HomepageClientProps) {
   const contentRef = useRef<HTMLDivElement>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const minDelay = new Promise<void>(resolve => setTimeout(resolve, 800))
+    const pageLoad = new Promise<void>(resolve => {
+      if (document.readyState === 'complete') resolve()
+      else window.addEventListener('load', () => resolve(), { once: true })
+    })
+    Promise.all([minDelay, pageLoad]).then(() => setLoading(false))
+  }, [])
 
   // Featured/curated games for "What We're Playing" — featured first, pad with remaining
   const featured = games.filter((g) => g.featured)
@@ -41,6 +51,40 @@ export default function HomepageClient({ games, posts, featuredPost }: HomepageC
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Loading overlay */}
+      <AnimatePresence>
+        {loading && (
+          <motion.div
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background"
+          >
+            <style>{`
+              @keyframes logo-tilt {
+                0%, 100% { transform: rotate(-8deg); }
+                50% { transform: rotate(8deg); }
+              }
+              @keyframes loading-fill {
+                0% { width: 0%; }
+                100% { width: 100%; }
+              }
+            `}</style>
+            <img
+              src="/images/IH_ICON_LOGO.svg"
+              alt="Loading..."
+              className="h-12 w-12"
+              style={{ animation: 'logo-tilt 1.2s ease-in-out infinite' }}
+            />
+            <div className="mt-4 h-1 w-32 overflow-hidden rounded-full bg-border">
+              <div
+                className="h-full rounded-full bg-burnt-orange"
+                style={{ animation: 'loading-fill 1.5s ease-out forwards' }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <Header transparent />
       <ParallaxHero contentRef={contentRef} />
 
