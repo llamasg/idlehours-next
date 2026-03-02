@@ -42,11 +42,6 @@ export default defineType({
       validation: (Rule) => Rule.required().max(250),
     }),
     defineField({
-      name: 'longDescription',
-      title: 'Long Description',
-      type: 'blockContent',
-    }),
-    defineField({
       name: 'platforms',
       title: 'Platforms',
       type: 'array',
