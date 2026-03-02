@@ -122,7 +122,7 @@ export default function GameLightbox() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.97 }}
             transition={{ duration: 0.25 }}
-            className="relative w-full max-w-[860px] rounded-2xl bg-card shadow-2xl outline-none"
+            className="relative w-full max-w-7xl rounded-2xl bg-card shadow-2xl outline-none"
           >
             {/* Close button */}
             <button
@@ -139,7 +139,7 @@ export default function GameLightbox() {
             <div className="overflow-hidden rounded-t-2xl">
               <div className="grid gap-0 lg:grid-cols-[1.4fr_1fr]">
                 {/* Cover image */}
-                <div className="relative aspect-[16/9] overflow-hidden bg-secondary lg:aspect-auto lg:min-h-[300px]">
+                <div className="relative aspect-[16/9] overflow-hidden bg-secondary lg:aspect-auto lg:min-h-[250px]">
                   {game.coverImage ? (
                     <img src={game.coverImage} alt={game.title} className="absolute inset-0 h-full w-full object-cover" />
                   ) : (
@@ -201,7 +201,15 @@ export default function GameLightbox() {
                       </div>
                     )}
                     {game.coop && (
-                      <span className="rounded-full bg-blue-50 px-3 py-1 font-heading text-xs font-medium text-accent-green">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 font-heading text-xs font-medium text-accent-green">
+                        <span
+                          className="inline-block shrink-0 bg-current"
+                          style={{
+                            width: 12, height: 12,
+                            WebkitMask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
+                            mask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
+                          }}
+                        />
                         Co-op
                       </span>
                     )}
@@ -215,10 +223,18 @@ export default function GameLightbox() {
                   {/* Platforms */}
                   {(game.platforms ?? []).length > 0 && (
                     <div className="mt-4">
-                      <h3 className="font-heading text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Platforms
-                      </h3>
-                      <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      <div className="flex items-center gap-1.5 text-muted-foreground mb-1.5">
+                        <span
+                          className="inline-block shrink-0 bg-current"
+                          style={{
+                            width: 14, height: 14,
+                            WebkitMask: 'url(/images/icons/icon_handheld-console-platform-gameboy-retro.svg) no-repeat center / contain',
+                            mask: 'url(/images/icons/icon_handheld-console-platform-gameboy-retro.svg) no-repeat center / contain',
+                          }}
+                        />
+                        <span className="font-heading text-xs font-semibold uppercase tracking-wider">Platforms</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
                         {(game.platforms ?? []).map((p: string) => (
                           <span key={p} className="rounded-full border border-border bg-background px-3 py-1 font-heading text-xs text-foreground">
                             {p}

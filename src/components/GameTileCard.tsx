@@ -97,7 +97,15 @@ export default function GameTileCard({ game }: GameTileCardProps) {
                 )
               })()}
               {game.coop && (
-                <span className="rounded-full bg-white/15 backdrop-blur-sm px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/90">
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/15 backdrop-blur-sm px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/90">
+                  <span
+                    className="inline-block shrink-0 bg-current"
+                    style={{
+                      width: 9, height: 9,
+                      WebkitMask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
+                      mask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
+                    }}
+                  />
                   Co-op
                 </span>
               )}
@@ -123,14 +131,22 @@ export default function GameTileCard({ game }: GameTileCardProps) {
 
         {/* Info — serif title, muted platform list */}
         <div className="flex flex-col flex-1 p-4 pb-2">
-          <h3 className="font-body text-[15px] font-medium leading-snug text-foreground line-clamp-2">
+          <h3 className="font-heading text-[15px] font-bold leading-snug text-foreground line-clamp-2">
             {game.title}
           </h3>
 
           {(game.platforms ?? []).length > 0 && (
-            <p className="mt-1 text-[11px] tracking-wide text-muted-foreground">
-              {(game.platforms ?? []).join(' · ')}
-            </p>
+            <div className="mt-1 flex items-center gap-1 text-muted-foreground">
+              <span
+                className="inline-block shrink-0 bg-current"
+                style={{
+                  width: 10, height: 10,
+                  WebkitMask: 'url(/images/icons/icon_handheld-console-platform-gameboy-retro.svg) no-repeat center / contain',
+                  mask: 'url(/images/icons/icon_handheld-console-platform-gameboy-retro.svg) no-repeat center / contain',
+                }}
+              />
+              <span className="text-[11px] tracking-wide">{(game.platforms ?? []).join(' · ')}</span>
+            </div>
           )}
         </div>
 

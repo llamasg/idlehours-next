@@ -180,11 +180,23 @@ function GameListCard({ game }: { game: Game }) {
           <h3 className="font-heading text-xl font-bold text-foreground">
             {game.title}
           </h3>
+          {/* Genre row with tag icon */}
           {(game.genre ?? []).length > 0 && (
-            <p className="mt-1 font-heading text-xs font-bold uppercase tracking-widest text-muted-foreground">
-              {(game.genre ?? []).join(' \u00b7 ')}
-            </p>
+            <div className="mt-1 flex items-center gap-1.5">
+              <span
+                className="inline-block shrink-0 bg-current"
+                style={{
+                  width: 12, height: 12, color: '#4199f1',
+                  WebkitMask: 'url(/images/icons/icon_tag-genre-filter.svg) no-repeat center / contain',
+                  mask: 'url(/images/icons/icon_tag-genre-filter.svg) no-repeat center / contain',
+                }}
+              />
+              <p className="font-heading text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                {(game.genre ?? []).join(' · ')}
+              </p>
+            </div>
           )}
+          {/* Badges row */}
           <div className="mt-2 flex flex-wrap items-center gap-2">
             {game.openCriticScore != null && (
               <span
@@ -204,8 +216,25 @@ function GameListCard({ game }: { game: Game }) {
                 </span>
               </span>
             )}
+            {game.difficulty != null && (() => {
+              const labels = { 1: 'Easy', 2: 'Avg', 3: 'Hard' } as const
+              const colors = { 1: 'bg-green-500/20 text-green-700', 2: 'bg-amber-500/20 text-amber-700', 3: 'bg-red-500/20 text-red-700' } as const
+              return (
+                <span className={`rounded-full px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-wider ${colors[game.difficulty]}`}>
+                  {labels[game.difficulty]}
+                </span>
+              )
+            })()}
             {game.coop && (
-              <span className="rounded-full bg-blue-50 px-2.5 py-0.5 font-heading text-[10px] font-medium text-accent-green">
+              <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 font-heading text-[10px] font-medium text-accent-green">
+                <span
+                  className="inline-block shrink-0 bg-current"
+                  style={{
+                    width: 10, height: 10,
+                    WebkitMask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
+                    mask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
+                  }}
+                />
                 Co-op
               </span>
             )}
@@ -213,10 +242,19 @@ function GameListCard({ game }: { game: Game }) {
           <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
             {game.shortDescription}
           </p>
+          {/* Platforms with icon */}
           {(game.platforms ?? []).length > 0 && (
-            <p className="mt-2 text-[11px] tracking-wide text-muted-foreground">
-              {(game.platforms ?? []).join(' \u00b7 ')}
-            </p>
+            <div className="mt-2 flex items-center gap-1 text-muted-foreground">
+              <span
+                className="inline-block shrink-0 bg-current"
+                style={{
+                  width: 11, height: 11,
+                  WebkitMask: 'url(/images/icons/icon_handheld-console-platform-gameboy-retro.svg) no-repeat center / contain',
+                  mask: 'url(/images/icons/icon_handheld-console-platform-gameboy-retro.svg) no-repeat center / contain',
+                }}
+              />
+              <span className="text-[11px] tracking-wide">{(game.platforms ?? []).join(' · ')}</span>
+            </div>
           )}
           <span className="mt-3 text-[11px] font-heading font-semibold uppercase tracking-wider text-muted-foreground/50 transition-colors group-hover:text-primary">
             View Game
