@@ -2,12 +2,27 @@
 
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Search, X } from 'lucide-react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import GameTileCard from '@/components/GameTileCard'
 import { getAllGames } from '@/lib/queries'
+import { useGameLightbox } from '@/context/GameLightboxContext'
 import type { Game } from '@/types'
+
+// ── Mask icon helper ─────────────────────────────────────────────────────────
+function MaskIcon({ src, size = 16, className = '' }: { src: string; size?: number; className?: string }) {
+  return (
+    <span
+      className={`inline-block shrink-0 bg-current ${className}`}
+      style={{
+        width: size,
+        height: size,
+        WebkitMask: `url(${src}) no-repeat center / contain`,
+        mask: `url(${src}) no-repeat center / contain`,
+      }}
+    />
+  )
+}
 
 // ── FilterSelect — searchable dropdown ─────────────────────────────────────
 interface FilterSelectProps {
@@ -15,9 +30,10 @@ interface FilterSelectProps {
   value: string
   options: string[]
   onChange: (v: string) => void
+  icon?: string
 }
 
-function FilterSelect({ label, value, options, onChange }: FilterSelectProps) {
+function FilterSelect({ label, value, options, onChange, icon }: FilterSelectProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const ref = useRef<HTMLDivElement>(null)
@@ -40,6 +56,7 @@ function FilterSelect({ label, value, options, onChange }: FilterSelectProps) {
         onClick={() => { setOpen(!open); setQuery('') }}
         className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 font-heading text-sm text-foreground hover:bg-secondary transition-colors"
       >
+        {icon && <MaskIcon src={icon} size={14} className="text-electric-blue" />}
         <span className="text-muted-foreground">{label}:</span>
         <span className={value === 'All' ? 'text-muted-foreground' : 'text-primary font-semibold'}>{value}</span>
         <svg className="w-3 h-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,6 +125,7 @@ function SortSelect({ value, options, onChange }: SortSelectProps) {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 font-heading text-sm text-foreground hover:bg-secondary transition-colors"
       >
+        <MaskIcon src="/images/icons/icon_refresh-reset-reload-filter-highlow-swap-change.svg" size={14} className="text-electric-blue" />
         <span className="text-muted-foreground">Sort:</span>
         <span className="text-primary font-semibold">{current?.label ?? value}</span>
         <svg className="w-3 h-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +154,7 @@ function SortSelect({ value, options, onChange }: SortSelectProps) {
   )
 }
 
-export default function GamesPage() {
+export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug?: string }) {
   const [search, setSearch] = useState('')
   const [platform, setPlatform] = useState('All')
   const [genre, setGenre] = useState('All')
@@ -151,6 +169,20 @@ export default function GamesPage() {
       .catch(() => setGames([]))
       .finally(() => setGamesLoading(false))
   }, [])
+
+  // Auto-open lightbox if initialLightboxSlug is provided (direct URL visit)
+  const { openLightbox } = useGameLightbox()
+  const initialSlugHandled = useRef(false)
+
+  useEffect(() => {
+    if (initialLightboxSlug && !initialSlugHandled.current && games.length > 0) {
+      const match = games.find((g) => g.slug.current === initialLightboxSlug)
+      if (match) {
+        openLightbox(match)
+        initialSlugHandled.current = true
+      }
+    }
+  }, [initialLightboxSlug, games, openLightbox])
 
   const genreOptions = useMemo(() => {
     const all = new Set<string>()
@@ -234,10 +266,14 @@ export default function GamesPage() {
           transition={{ duration: 0.4 }}
           className="mb-8"
         >
-          <h1 className="font-heading text-3xl font-bold text-foreground sm:text-4xl">
-            Game Library
-          </h1>
-          <p className="mt-2 max-w-lg text-muted-foreground">
+          <div className="flex items-center gap-3 mb-2">
+            <MaskIcon src="/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg" size={28} className="text-electric-blue" />
+            <MaskIcon src="/images/icons/icon_controller-gaming-ps5-xbox-joystick.svg" size={28} className="text-electric-blue" />
+            <h1 className="font-heading text-3xl font-black uppercase tracking-widest text-foreground sm:text-4xl">
+              Game Library
+            </h1>
+          </div>
+          <p className="max-w-lg text-muted-foreground">
             Browse our curated collection of cozy games. Filter by platform, sort by cosiness, or just scroll and see what catches your eye.
           </p>
         </motion.div>
@@ -246,7 +282,7 @@ export default function GamesPage() {
         <div className="mb-6 space-y-3">
           {/* Search bar */}
           <div className="relative max-w-md">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 inline-block shrink-0 text-electric-blue bg-current" style={{ width: '16px', height: '16px', WebkitMask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain' }} />
             <input
               type="text"
               value={search}
@@ -259,7 +295,7 @@ export default function GamesPage() {
                 onClick={() => setSearch('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
-                <X size={14} />
+                <span className="inline-block shrink-0 bg-current" style={{ width: '14px', height: '14px', WebkitMask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain' }} />
               </button>
             )}
           </div>
@@ -271,21 +307,24 @@ export default function GamesPage() {
               value={platform}
               options={['All', 'PC', 'Switch', 'PS5', 'Xbox', 'Mobile']}
               onChange={setPlatform}
+              icon="/images/icons/icon_handheld-console-platform-gameboy-retro.svg"
             />
             <FilterSelect
               label="Genre"
               value={genre}
               options={genreOptions}
               onChange={setGenre}
+              icon="/images/icons/icon_tag-genre-filter.svg"
             />
             <button
               onClick={() => setCoopOnly(!coopOnly)}
-              className={`rounded-full border px-4 py-2 font-heading text-sm font-medium transition-colors ${
+              className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 font-heading text-sm font-medium transition-colors ${
                 coopOnly
-                  ? 'border-accent-green bg-accent-green text-white'
+                  ? 'border-electric-blue bg-electric-blue text-white'
                   : 'border-border bg-card text-muted-foreground hover:bg-secondary'
               }`}
             >
+              <MaskIcon src="/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg" size={14} />
               Co-op only
             </button>
             <SortSelect
