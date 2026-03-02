@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+
 import ProductTileCard from './ProductTileCard'
 import type { ProductFeatureSection, CmsLink } from '@/types'
 
@@ -41,7 +41,7 @@ export default function ProductFeature({ data }: ProductFeatureProps) {
             className="flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-border px-3 py-1.5 font-heading text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
           >
             {data.cta.label}
-            <ArrowRight size={12} />
+            <span className="inline-block shrink-0 bg-current" style={{ width: '12px', height: '12px', WebkitMask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain' }} />
           </Link>
         )}
       </div>

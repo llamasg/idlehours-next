@@ -16,7 +16,6 @@ import {
 import {useClient, useFormValue} from 'sanity'
 import {searchIGDB, type IgdbGame} from './igdb'
 import {searchOpenCritic} from './openCritic'
-import {generateDescription, type GameDescription} from './description'
 import {mapPlatforms, mapGenres, slugify, truncate} from './mappings'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -33,8 +32,6 @@ interface GeneratedData {
   openCriticId: string | null
   steamAppId: string | null
   affiliateLinks: {_key: string; label: string; url: string}[]
-  longDescriptionBlocks: any[] | null
-  descriptionPreview: GameDescription | null
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -107,15 +104,6 @@ export function GameGeneratorInput() {
         })
       }
 
-      // Generate long description with Claude (non-blocking, don't fail the whole generate)
-      const descResult = await generateDescription(
-        game.name,
-        game.summary ?? '',
-        platforms,
-        genre,
-        coop,
-      ).catch(() => null)
-
       const generated: GeneratedData = {
         title: game.name,
         slug: slugify(game.name),
@@ -128,8 +116,6 @@ export function GameGeneratorInput() {
         openCriticId: ocResult?.id != null ? String(ocResult.id) : null,
         steamAppId,
         affiliateLinks,
-        longDescriptionBlocks: descResult?.blocks ?? null,
-        descriptionPreview: descResult?.desc ?? null,
       }
 
       setPreview(generated)
@@ -170,10 +156,6 @@ export function GameGeneratorInput() {
       if (preview.affiliateLinks.length > 0) {
         patch.affiliateLinks = preview.affiliateLinks
       }
-      if (preview.longDescriptionBlocks) {
-        patch.longDescription = preview.longDescriptionBlocks
-      }
-
       // Upload cover image to Sanity assets if available
       if (preview.coverImageUrl) {
         try {
@@ -342,36 +324,6 @@ export function GameGeneratorInput() {
                   )}
                 </Stack>
               </Flex>
-
-              {/* Long description preview */}
-              {preview.descriptionPreview && (
-                <Card padding={3} radius={2} tone="default" border>
-                  <Stack space={3}>
-                    <Text size={1} weight="semibold">
-                      Long Description Preview
-                    </Text>
-                    <Text size={1} style={{fontStyle: 'italic'}}>
-                      {preview.descriptionPreview.hook}
-                    </Text>
-                    <Flex gap={1} wrap="wrap">
-                      <Badge mode="outline">Gameplay</Badge>
-                      <Badge mode="outline">Story</Badge>
-                      <Badge mode="outline">Length</Badge>
-                      <Badge mode="outline">Atmosphere</Badge>
-                      <Badge mode="outline">Replayability</Badge>
-                      <Badge mode="outline">
-                        {preview.descriptionPreview.uniqueAngle.label}
-                      </Badge>
-                    </Flex>
-                  </Stack>
-                </Card>
-              )}
-              {!preview.descriptionPreview && (
-                <Text size={1} muted>
-                  Long description could not be generated. You can write one
-                  manually.
-                </Text>
-              )}
 
               {/* Action buttons */}
               <Flex gap={2}>

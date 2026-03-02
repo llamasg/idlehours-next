@@ -44,7 +44,7 @@ export default function Hero({ data }: HeroProps) {
               {data.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full bg-white/15 px-3 py-1 font-heading text-xs font-medium text-white/80"
+                  className="rounded-full bg-background/15 px-3 py-1 font-heading text-xs font-medium text-background/80"
                 >
                   {tag}
                 </span>
@@ -52,12 +52,12 @@ export default function Hero({ data }: HeroProps) {
             </div>
           )}
 
-          <h1 className="font-heading text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+          <h1 className="font-heading text-3xl font-bold leading-tight text-background sm:text-4xl lg:text-5xl">
             {data.headline}
           </h1>
 
           {data.subheadline && (
-            <p className="mt-4 max-w-lg text-lg leading-relaxed text-white/80">
+            <p className="mt-4 max-w-lg text-lg leading-relaxed text-background/80">
               {data.subheadline}
             </p>
           )}
@@ -75,7 +75,7 @@ export default function Hero({ data }: HeroProps) {
             {data.secondaryButton && (
               <Link
                 href={resolveLinkHref(data.secondaryButton)}
-                className="rounded-full border border-white/30 bg-white/10 px-6 py-3 font-heading text-sm font-semibold text-white backdrop-blur-sm transition-transform hover:scale-105 hover:bg-white/20"
+                className="rounded-full border border-background/30 bg-background/10 px-6 py-3 font-heading text-sm font-semibold text-background backdrop-blur-sm transition-transform hover:scale-105 hover:bg-background/20"
               >
                 {data.secondaryButton.label}
               </Link>

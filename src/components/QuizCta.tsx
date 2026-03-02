@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Sparkles } from 'lucide-react'
+
 import type { QuizCtaSection, CmsLink } from '@/types'
 
 function resolveLinkHref(link?: CmsLink): string {
@@ -31,15 +31,15 @@ export default function QuizCta({ data }: QuizCtaProps) {
 
       <div className="relative z-10">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-burnt-orange/20">
-          <Sparkles size={24} className="text-burnt-orange" />
+          <span className="inline-block shrink-0 text-burnt-orange bg-current" style={{ width: '24px', height: '24px', WebkitMask: 'url(/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg) no-repeat center / contain' }} />
         </div>
 
-        <h2 className="font-heading text-2xl font-bold text-white sm:text-3xl">
+        <h2 className="font-heading text-2xl font-bold text-background sm:text-3xl">
           {data.title}
         </h2>
 
         {data.description && (
-          <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-white/75">
+          <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-background/75">
             {data.description}
           </p>
         )}
@@ -48,7 +48,7 @@ export default function QuizCta({ data }: QuizCtaProps) {
           href={resolveLinkHref(data.link)}
           className="mt-6 inline-flex items-center gap-2 rounded-full bg-burnt-orange px-6 py-3 font-heading text-sm font-semibold text-background shadow-lg transition-transform hover:scale-105"
         >
-          <Sparkles size={14} />
+          <span className="inline-block shrink-0 bg-current" style={{ width: '14px', height: '14px', WebkitMask: 'url(/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg) no-repeat center / contain' }} />
           {data.buttonLabel}
         </Link>
       </div>

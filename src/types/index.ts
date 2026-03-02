@@ -28,14 +28,12 @@ export interface Game {
   }
   openCriticScore?: number
   difficulty?: 1 | 2 | 3
-  replayability?: number
   greatSoundtrack?: boolean
   genre?: string[]
   currentPrice?: number
   isFree?: boolean
   lastPriceUpdated?: string
   affiliateLinks?: { label: string; url: string }[]
-  longDescription?: any[] // Portable Text blocks
   featured: boolean
   publishedAt: string
 }
@@ -181,16 +179,6 @@ export interface PokemonNominee {
   name: string
   votes: number
   typeColor: string
-}
-
-// ─── Music Track ─────────────────────────────────────
-export interface MusicTrack {
-  _id: string
-  title: string
-  artist: string
-  audioUrl: string
-  coverArt?: string
-  order?: number
 }
 
 export type HomepageSection =

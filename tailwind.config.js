@@ -66,6 +66,10 @@ export default {
   			'accent-green': 'hsl(var(--accent-green))',
   			'burnt-orange': 'hsl(var(--burnt-orange))',
   			teal: 'hsl(var(--teal))',
+		'electric-blue': '#4199f1',
+		'diff-easy':     '#00e116',
+		'diff-avg':      '#f3a740',
+		'diff-hard':     '#e8134b',
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',

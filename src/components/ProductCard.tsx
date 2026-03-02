@@ -1,6 +1,5 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Product } from "@/types";
 
@@ -67,7 +66,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             className="w-full rounded-full border-border/60 font-heading text-[10px] uppercase tracking-wider text-foreground hover:bg-secondary"
           >
             View on Etsy
-            <ExternalLink className="ml-1.5 h-3 w-3" />
+            <span className="ml-1.5 inline-block shrink-0 bg-current" style={{ width: '12px', height: '12px', WebkitMask: 'url(/images/icons/icon_click-hover-mouse-tap-cursor.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_click-hover-mouse-tap-cursor.svg) no-repeat center / contain' }} />
           </Button>
         </a>
       </div>

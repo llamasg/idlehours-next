@@ -2,12 +2,27 @@
 
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Search, X } from 'lucide-react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import GameTileCard from '@/components/GameTileCard'
 import { getAllGames } from '@/lib/queries'
+import { useGameLightbox } from '@/context/GameLightboxContext'
 import type { Game } from '@/types'
+
+// ── Mask icon helper ─────────────────────────────────────────────────────────
+function MaskIcon({ src, size = 16, className = '' }: { src: string; size?: number; className?: string }) {
+  return (
+    <span
+      className={`inline-block shrink-0 bg-current ${className}`}
+      style={{
+        width: size,
+        height: size,
+        WebkitMask: `url(${src}) no-repeat center / contain`,
+        mask: `url(${src}) no-repeat center / contain`,
+      }}
+    />
+  )
+}
 
 // ── FilterSelect — searchable dropdown ─────────────────────────────────────
 interface FilterSelectProps {
@@ -15,9 +30,10 @@ interface FilterSelectProps {
   value: string
   options: string[]
   onChange: (v: string) => void
+  icon?: string
 }
 
-function FilterSelect({ label, value, options, onChange }: FilterSelectProps) {
+function FilterSelect({ label, value, options, onChange, icon }: FilterSelectProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const ref = useRef<HTMLDivElement>(null)
@@ -40,6 +56,7 @@ function FilterSelect({ label, value, options, onChange }: FilterSelectProps) {
         onClick={() => { setOpen(!open); setQuery('') }}
         className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 font-heading text-sm text-foreground hover:bg-secondary transition-colors"
       >
+        {icon && <MaskIcon src={icon} size={14} className="text-foreground" />}
         <span className="text-muted-foreground">{label}:</span>
         <span className={value === 'All' ? 'text-muted-foreground' : 'text-primary font-semibold'}>{value}</span>
         <svg className="w-3 h-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,6 +125,7 @@ function SortSelect({ value, options, onChange }: SortSelectProps) {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 font-heading text-sm text-foreground hover:bg-secondary transition-colors"
       >
+        <MaskIcon src="/images/icons/icon_refresh-reset-reload-filter-highlow-swap-change.svg" size={14} className="text-foreground" />
         <span className="text-muted-foreground">Sort:</span>
         <span className="text-primary font-semibold">{current?.label ?? value}</span>
         <svg className="w-3 h-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,7 +154,118 @@ function SortSelect({ value, options, onChange }: SortSelectProps) {
   )
 }
 
-export default function GamesPage() {
+// ── GameListCard — horizontal list-view card ────────────────────────────────
+function GameListCard({ game }: { game: Game }) {
+  const { openLightbox } = useGameLightbox()
+
+  return (
+    <div
+      onClick={() => openLightbox(game)}
+      className="group cursor-pointer overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm transition-shadow hover:shadow-md"
+    >
+      <div className="grid gap-0 sm:grid-cols-[1.2fr_1fr]">
+        {/* Cover image */}
+        <div className="relative aspect-[16/9] overflow-hidden bg-secondary sm:aspect-auto sm:min-h-[220px]">
+          {game.coverImage ? (
+            <img src={game.coverImage} alt={game.title} className="absolute inset-0 h-full w-full object-cover" />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-gradient-to-br from-secondary to-muted">
+              <span className="font-heading text-muted-foreground">No image</span>
+            </div>
+          )}
+        </div>
+
+        {/* Info panel */}
+        <div className="flex flex-col justify-center p-5 sm:p-6">
+          <h3 className="font-heading text-xl font-bold text-foreground">
+            {game.title}
+          </h3>
+          {/* Genre row with tag icon */}
+          {(game.genre ?? []).length > 0 && (
+            <div className="mt-1 flex items-center gap-1.5">
+              <span
+                className="inline-block shrink-0 bg-current"
+                style={{
+                  width: 12, height: 12, color: '#4199f1',
+                  WebkitMask: 'url(/images/icons/icon_tag-genre-filter.svg) no-repeat center / contain',
+                  mask: 'url(/images/icons/icon_tag-genre-filter.svg) no-repeat center / contain',
+                }}
+              />
+              <p className="font-heading text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                {(game.genre ?? []).join(' · ')}
+              </p>
+            </div>
+          )}
+          {/* Badges row */}
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            {game.openCriticScore != null && (
+              <span
+                className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 shadow"
+                style={{ backgroundColor: game.openCriticScore >= 90 ? '#9333ea' : game.openCriticScore >= 75 ? '#22c55e' : game.openCriticScore >= 50 ? '#15803d' : '#3b82f6' }}
+              >
+                <span
+                  className="inline-block shrink-0 bg-white"
+                  style={{
+                    width: 12, height: 12,
+                    WebkitMask: 'url(/images/icons/icon_fire-hot-streak.svg) no-repeat center / contain',
+                    mask: 'url(/images/icons/icon_fire-hot-streak.svg) no-repeat center / contain',
+                  }}
+                />
+                <span className="font-heading text-xs font-bold text-white" style={{ letterSpacing: '0.05em' }}>
+                  {game.openCriticScore}
+                </span>
+              </span>
+            )}
+            {game.difficulty != null && (() => {
+              const labels = { 1: 'Easy', 2: 'Medium', 3: 'Hard' } as const
+              const colors = { 1: 'bg-green-500/20 text-green-700', 2: 'bg-amber-500/20 text-amber-700', 3: 'bg-red-500/20 text-red-700' } as const
+              return (
+                <span className={`rounded-full px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-wider ${colors[game.difficulty]}`}>
+                  {labels[game.difficulty]}
+                </span>
+              )
+            })()}
+            {game.coop && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 font-heading text-[10px] font-medium text-accent-green">
+                <span
+                  className="inline-block shrink-0 bg-current"
+                  style={{
+                    width: 10, height: 10,
+                    WebkitMask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
+                    mask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
+                  }}
+                />
+                Co-op
+              </span>
+            )}
+          </div>
+          <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+            {game.shortDescription}
+          </p>
+          {/* Platforms with icon */}
+          {(game.platforms ?? []).length > 0 && (
+            <div className="mt-2 flex items-center gap-1 text-muted-foreground">
+              <span
+                className="inline-block shrink-0 bg-current"
+                style={{
+                  width: 11, height: 11,
+                  WebkitMask: 'url(/images/icons/icon_handheld-console-platform-gameboy-retro.svg) no-repeat center / contain',
+                  mask: 'url(/images/icons/icon_handheld-console-platform-gameboy-retro.svg) no-repeat center / contain',
+                }}
+              />
+              <span className="text-[11px] tracking-wide">{(game.platforms ?? []).join(' · ')}</span>
+            </div>
+          )}
+          <span className="mt-3 text-[11px] font-heading font-semibold uppercase tracking-wider text-muted-foreground/50 transition-colors group-hover:text-primary">
+            View Game
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug?: string }) {
   const [search, setSearch] = useState('')
   const [platform, setPlatform] = useState('All')
   const [genre, setGenre] = useState('All')
@@ -144,6 +273,18 @@ export default function GamesPage() {
   const [coopOnly, setCoopOnly] = useState(false)
   const [games, setGames] = useState<Game[]>([])
   const [gamesLoading, setGamesLoading] = useState(true)
+  const [view, setView] = useState<'grid' | 'list'>('grid')
+
+  // Restore view preference from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('ih-library-view')
+    if (saved === 'grid' || saved === 'list') setView(saved)
+  }, [])
+
+  function toggleView(v: 'grid' | 'list') {
+    setView(v)
+    localStorage.setItem('ih-library-view', v)
+  }
 
   useEffect(() => {
     getAllGames()
@@ -151,6 +292,20 @@ export default function GamesPage() {
       .catch(() => setGames([]))
       .finally(() => setGamesLoading(false))
   }, [])
+
+  // Auto-open lightbox if initialLightboxSlug is provided (direct URL visit)
+  const { openLightbox } = useGameLightbox()
+  const initialSlugHandled = useRef(false)
+
+  useEffect(() => {
+    if (initialLightboxSlug && !initialSlugHandled.current && games.length > 0) {
+      const match = games.find((g) => g.slug.current === initialLightboxSlug)
+      if (match) {
+        openLightbox(match)
+        initialSlugHandled.current = true
+      }
+    }
+  }, [initialLightboxSlug, games, openLightbox])
 
   const genreOptions = useMemo(() => {
     const all = new Set<string>()
@@ -197,8 +352,6 @@ export default function GamesPage() {
 
     if (sort === 'score-desc') result.sort((a, b) => nullLast(b.openCriticScore, a.openCriticScore, 1))
     else if (sort === 'score-asc') result.sort((a, b) => nullLast(a.openCriticScore, b.openCriticScore, 1))
-    else if (sort === 'replay-desc') result.sort((a, b) => nullLast(b.replayability, a.replayability, 1))
-    else if (sort === 'replay-asc') result.sort((a, b) => nullLast(a.replayability, b.replayability, 1))
     else if (sort === 'diff-asc') result.sort((a, b) => nullLast(a.difficulty, b.difficulty, 1))
     else if (sort === 'diff-desc') result.sort((a, b) => nullLast(b.difficulty, a.difficulty, 1))
     else if (sort === 'price-asc') {
@@ -234,10 +387,24 @@ export default function GamesPage() {
           transition={{ duration: 0.4 }}
           className="mb-8"
         >
-          <h1 className="font-heading text-3xl font-bold text-foreground sm:text-4xl">
-            Game Library
-          </h1>
-          <p className="mt-2 max-w-lg text-muted-foreground">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="relative" style={{ width: 36, height: 36 }}>
+              <MaskIcon src="/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg" size={36} className="text-electric-blue absolute inset-0" />
+              <span
+                className="absolute inline-block shrink-0 bg-foreground"
+                style={{
+                  width: 16, height: 16,
+                  top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                  WebkitMask: 'url(/images/icons/icon_controller-gaming-ps5-xbox-joystick.svg) no-repeat center / contain',
+                  mask: 'url(/images/icons/icon_controller-gaming-ps5-xbox-joystick.svg) no-repeat center / contain',
+                }}
+              />
+            </div>
+            <h1 className="font-heading text-3xl font-black uppercase tracking-widest text-foreground sm:text-4xl">
+              Game Library
+            </h1>
+          </div>
+          <p className="max-w-lg text-muted-foreground">
             Browse our curated collection of cozy games. Filter by platform, sort by cosiness, or just scroll and see what catches your eye.
           </p>
         </motion.div>
@@ -246,7 +413,7 @@ export default function GamesPage() {
         <div className="mb-6 space-y-3">
           {/* Search bar */}
           <div className="relative max-w-md">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 inline-block shrink-0 text-foreground bg-current" style={{ width: '16px', height: '16px', WebkitMask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain' }} />
             <input
               type="text"
               value={search}
@@ -259,33 +426,36 @@ export default function GamesPage() {
                 onClick={() => setSearch('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
-                <X size={14} />
+                <span className="inline-block shrink-0 bg-current" style={{ width: '14px', height: '14px', WebkitMask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain' }} />
               </button>
             )}
           </div>
 
-          {/* Filters + Sort — single row */}
+          {/* Filters + Sort + View toggle — single row */}
           <div className="flex flex-wrap items-center gap-2">
             <FilterSelect
               label="Platform"
               value={platform}
               options={['All', 'PC', 'Switch', 'PS5', 'Xbox', 'Mobile']}
               onChange={setPlatform}
+              icon="/images/icons/icon_handheld-console-platform-gameboy-retro.svg"
             />
             <FilterSelect
               label="Genre"
               value={genre}
               options={genreOptions}
               onChange={setGenre}
+              icon="/images/icons/icon_tag-genre-filter.svg"
             />
             <button
               onClick={() => setCoopOnly(!coopOnly)}
-              className={`rounded-full border px-4 py-2 font-heading text-sm font-medium transition-colors ${
+              className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 font-heading text-sm font-medium transition-colors ${
                 coopOnly
-                  ? 'border-accent-green bg-accent-green text-white'
+                  ? 'border-foreground bg-foreground text-background'
                   : 'border-border bg-card text-muted-foreground hover:bg-secondary'
               }`}
             >
+              <MaskIcon src="/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg" size={14} />
               Co-op only
             </button>
             <SortSelect
@@ -293,8 +463,6 @@ export default function GamesPage() {
               options={[
                 { label: 'Score: High → Low', value: 'score-desc' },
                 { label: 'Score: Low → High', value: 'score-asc' },
-                { label: 'Replayability: High → Low', value: 'replay-desc' },
-                { label: 'Replayability: Low → High', value: 'replay-asc' },
                 { label: 'Difficulty: Beginner first', value: 'diff-asc' },
                 { label: 'Difficulty: Experienced first', value: 'diff-desc' },
                 { label: 'Price: Low → High', value: 'price-asc' },
@@ -304,6 +472,33 @@ export default function GamesPage() {
               ]}
               onChange={setSort}
             />
+            {/* View toggle — right-aligned */}
+            <div className="ml-auto flex items-center gap-1 rounded-full border border-border bg-card p-1">
+              <span className="pl-2 font-heading text-xs text-muted-foreground">View</span>
+              <button
+                onClick={() => toggleView('grid')}
+                className={`rounded-full p-1.5 transition-colors ${view === 'grid' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                aria-label="Grid view"
+              >
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 16 16">
+                  <rect x="1" y="1" width="6" height="6" rx="1" />
+                  <rect x="9" y="1" width="6" height="6" rx="1" />
+                  <rect x="1" y="9" width="6" height="6" rx="1" />
+                  <rect x="9" y="9" width="6" height="6" rx="1" />
+                </svg>
+              </button>
+              <button
+                onClick={() => toggleView('list')}
+                className={`rounded-full p-1.5 transition-colors ${view === 'list' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                aria-label="List view"
+              >
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 16 16">
+                  <rect x="1" y="1" width="14" height="3" rx="1" />
+                  <rect x="1" y="6.5" width="14" height="3" rx="1" />
+                  <rect x="1" y="12" width="14" height="3" rx="1" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -312,7 +507,7 @@ export default function GamesPage() {
           {filtered.length} game{filtered.length !== 1 ? 's' : ''} found
         </p>
 
-        {/* Game grid */}
+        {/* Game grid / list */}
         {gamesLoading ? (
           <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
             {Array.from({ length: 10 }).map((_, i) => (
@@ -320,11 +515,23 @@ export default function GamesPage() {
             ))}
           </div>
         ) : filtered.length > 0 ? (
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
-            {filtered.map((game) => (
-              <GameTileCard key={game._id} game={game} />
-            ))}
-          </div>
+          view === 'grid' ? (
+            <motion.div layout className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
+              {filtered.map((game) => (
+                <motion.div key={game._id} layout transition={{ duration: 0.3 }}>
+                  <GameTileCard game={game} />
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div layout className="mx-auto flex max-w-[860px] flex-col gap-5">
+              {filtered.map((game) => (
+                <motion.div key={game._id} layout transition={{ duration: 0.3 }}>
+                  <GameListCard game={game} />
+                </motion.div>
+              ))}
+            </motion.div>
+          )
         ) : (
           <div className="rounded-2xl border border-border/60 bg-card px-6 py-16 text-center">
             <p className="font-heading text-lg font-semibold text-foreground">No games found</p>

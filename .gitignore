@@ -40,3 +40,6 @@ Thumbs.db
 pip/google-service-account.json
 google-service-account.json
 pip/idle-hours-pip-*.json
+
+# Next.js build
+.next/

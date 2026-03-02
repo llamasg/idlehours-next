@@ -64,7 +64,6 @@ export async function getPost(slug: string) {
             coop,
             openCriticScore,
             difficulty,
-            replayability,
             greatSoundtrack,
             currentPrice,
             isFree,
@@ -404,39 +403,6 @@ export async function getAllGames() {
   return games
 }
 
-// Get single game by slug
-export async function getGame(slug: string) {
-  const game = await client.fetch(
-    `
-    *[_type == "game" && slug.current == $slug][0] {
-      _id,
-      title,
-      slug,
-      "coverImage": coverImage.asset->url,
-      shortDescription,
-      longDescription,
-      "platforms": coalesce(platforms, []),
-      "genres": genres[]->{ _id, title, slug },
-      "tags": coalesce(tags, []),
-      "genre": coalesce(genre, []),
-      coop,
-      ratings,
-      openCriticScore,
-      difficulty,
-      replayability,
-      greatSoundtrack,
-      currentPrice,
-      isFree,
-      "affiliateLinks": coalesce(affiliateLinks, []),
-      featured,
-      publishedAt
-    }
-  `,
-    { slug }
-  )
-  return game
-}
-
 // Get site settings (singleton — document ID: "siteSettings")
 export async function getSiteSettings() {
   const settings = await client.fetch(`
@@ -454,21 +420,6 @@ export async function getSiteSettings() {
     }
   `)
   return settings
-}
-
-// Get active music tracks for the CD player
-export async function getMusicTracks() {
-  const tracks = await client.fetch(`
-    *[_type == "musicTrack" && active != false] | order(order asc) {
-      _id,
-      title,
-      artist,
-      "audioUrl": audioFile.asset->url,
-      "coverArt": coverArt.asset->url,
-      order
-    }
-  `)
-  return tracks
 }
 
 /*

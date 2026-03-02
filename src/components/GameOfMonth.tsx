@@ -1,9 +1,9 @@
 'use client'
 
-import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Trophy, ArrowRight, Disc3 } from 'lucide-react'
+
 import type { GameOfMonthSection } from '@/types'
+import { useGameLightbox } from '@/context/GameLightboxContext'
 
 function ocColor(score: number): string {
   if (score >= 90) return 'bg-purple-600 text-white'
@@ -12,39 +12,10 @@ function ocColor(score: number): string {
   return 'bg-blue-500 text-white'
 }
 
-function DifficultyLabel({ level }: { level: 1 | 2 | 3 }) {
-  const labels = { 1: 'Beginner', 2: 'Intermediate', 3: 'Experienced' } as const
-  return (
-    <div className="flex items-center gap-1" title={labels[level]}>
-      {([1, 2, 3] as const).map((i) => (
-        <span
-          key={i}
-          className={`inline-block h-2 w-2 rounded-full ${i <= level ? 'bg-amber-500' : 'bg-muted-foreground/20'}`}
-        />
-      ))}
-      <span className="ml-1 font-heading text-xs text-muted-foreground">{labels[level]}</span>
-    </div>
-  )
-}
-
-function ReplayMeter({ value }: { value: number }) {
-  return (
-    <div className="flex items-center gap-0.5" title={`Replayability: ${value}/5`}>
-      {[1, 2, 3, 4, 5].map((i) => {
-        const filled = value >= i
-        const half = !filled && value >= i - 0.5
-        return (
-          <span
-            key={i}
-            className={`inline-block h-2 w-2 rounded-full ${
-              filled ? 'bg-accent-green' : half ? 'bg-accent-green/50' : 'bg-muted-foreground/20'
-            }`}
-          />
-        )
-      })}
-      <span className="ml-1 font-heading text-xs text-muted-foreground">{value}/5 replay</span>
-    </div>
-  )
+const DIFF_META: Record<1 | 2 | 3, { label: string; color: string }> = {
+  1: { label: 'Easy', color: '#00e116' },
+  2: { label: 'Medium', color: '#f3a740' },
+  3: { label: 'Hard', color: '#e8134b' },
 }
 
 interface GameOfMonthProps {
@@ -52,8 +23,9 @@ interface GameOfMonthProps {
 }
 
 export default function GameOfMonth({ data }: GameOfMonthProps) {
+  const { openLightbox, allGames } = useGameLightbox()
   const game = data.featuredGame
-  const gameLink = `/games/${game.slug.current}`
+  const fullGame = allGames.find((g) => g.slug.current === game.slug.current)
 
   return (
     <motion.section
@@ -65,7 +37,7 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
       {/* Section title */}
       {data.title && (
         <div className="mb-4 flex items-center gap-2">
-          <Trophy size={18} className="text-primary" />
+          <span className="inline-block shrink-0 text-primary bg-current" style={{ width: '18px', height: '18px', WebkitMask: 'url(/images/icons/icon_trophy-winner-award-score-achieve.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_trophy-winner-award-score-achieve.svg) no-repeat center / contain' }} />
           <h2 className="font-heading text-lg font-bold text-foreground sm:text-xl">
             {data.title}
           </h2>
@@ -103,14 +75,21 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
                 </span>
               )}
               {game.difficulty != null && (
-                <DifficultyLabel level={game.difficulty} />
-              )}
-              {game.replayability != null && (
-                <ReplayMeter value={game.replayability} />
+                <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-heading text-xs font-bold text-white" style={{ backgroundColor: DIFF_META[game.difficulty].color }}>
+                  <span
+                    className="inline-block shrink-0 bg-white"
+                    style={{
+                      width: 12, height: 12,
+                      WebkitMask: 'url(/images/icons/icon_sword-difficulty-fight-battle-weapon-attack.svg) no-repeat center / contain',
+                      mask: 'url(/images/icons/icon_sword-difficulty-fight-battle-weapon-attack.svg) no-repeat center / contain',
+                    }}
+                  />
+                  {DIFF_META[game.difficulty].label}
+                </span>
               )}
               {game.greatSoundtrack && (
                 <div className="flex items-center gap-1" title="Great Soundtrack">
-                  <Disc3 size={16} className="text-accent fill-accent/20" strokeWidth={2} />
+                  <span className="inline-block shrink-0 text-accent bg-current" style={{ width: '16px', height: '16px', WebkitMask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain' }} />
                   <span className="font-heading text-xs text-muted-foreground">Great Soundtrack</span>
                 </div>
               )}
@@ -134,13 +113,13 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
             )}
 
             {/* CTA */}
-            <Link
-              href={gameLink}
+            <button
+              onClick={() => fullGame && openLightbox(fullGame)}
               className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-2.5 font-heading text-sm font-semibold text-white transition-transform hover:scale-105"
             >
               {data.buttonLabel || 'Read more'}
-              <ArrowRight size={14} />
-            </Link>
+              <span className="inline-block shrink-0 bg-current" style={{ width: '14px', height: '14px', WebkitMask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain' }} />
+            </button>
           </div>
         </div>
       </div>

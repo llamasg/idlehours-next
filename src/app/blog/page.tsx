@@ -6,7 +6,6 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import { motion } from 'framer-motion'
-import { Search } from 'lucide-react'
 import { getAllPosts } from '@/lib/queries'
 
 interface Post {
@@ -96,7 +95,7 @@ function BlogContent() {
 
         <div className="mb-8 space-y-4">
           <div className="relative mx-auto max-w-2xl">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+            <span className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 inline-block shrink-0 text-muted-foreground bg-current" style={{ WebkitMask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain' }} />
             <input
               type="text"
               placeholder="Search articles..."
