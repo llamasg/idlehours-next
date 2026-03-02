@@ -1,14 +1,15 @@
 'use client'
 
-import Link from 'next/link'
-import { ExternalLink } from 'lucide-react'
 import type { SanityGameCard } from '../lib/useSanityGame'
+import { useGameLightbox } from '@/context/GameLightboxContext'
 
 interface GamePromoCardProps {
   game: SanityGameCard
 }
 
 export default function GamePromoCard({ game }: GamePromoCardProps) {
+  const { openLightbox, allGames } = useGameLightbox()
+  const fullGame = allGames.find((g) => g.slug.current === game.slug)
   const firstAffiliateLink = game.affiliateLinks?.[0] ?? null
 
   return (
@@ -39,12 +40,12 @@ export default function GamePromoCard({ game }: GamePromoCardProps) {
         )}
 
         <div className="mt-3 flex items-center gap-2">
-          <Link
-            href={`/games/${game.slug}`}
+          <button
+            onClick={() => fullGame && openLightbox(fullGame)}
             className="rounded-full bg-primary/10 px-4 py-1.5 font-heading text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
           >
             View More
-          </Link>
+          </button>
 
           {firstAffiliateLink && (
             <a
@@ -54,7 +55,7 @@ export default function GamePromoCard({ game }: GamePromoCardProps) {
               className="inline-flex items-center gap-1 rounded-full bg-primary px-4 py-1.5 font-heading text-xs font-semibold text-white transition-transform hover:scale-105"
             >
               {firstAffiliateLink.label}
-              <ExternalLink size={10} />
+              <span className="inline-block shrink-0 bg-current" style={{ width: '10px', height: '10px', WebkitMask: 'url(/images/icons/icon_click-hover-mouse-tap-cursor.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_click-hover-mouse-tap-cursor.svg) no-repeat center / contain' }} />
             </a>
           )}
         </div>

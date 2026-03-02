@@ -1,7 +1,9 @@
+'use client'
+
 // src/components/GameReferenceBlock.tsx
 
-import Link from 'next/link'
-import { Disc3 } from 'lucide-react'
+import { useGameLightbox } from '@/context/GameLightboxContext'
+
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -36,15 +38,17 @@ interface GameReferenceValue {
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function GameReferenceBlock({ value }: { value: GameReferenceValue }) {
+  const { openLightbox, allGames } = useGameLightbox()
   const game = value?.game
   if (!game) return null
+  const fullGame = allGames.find((g) => g.slug.current === game.slug.current)
 
   return (
     <div className="relative my-8 rounded-2xl border border-border/60 bg-card overflow-hidden">
-      {/* Stretched link — makes the whole card clickable */}
-      <Link
-        href={`/games/${game.slug.current}`}
-        className="absolute inset-0 z-0"
+      {/* Stretched button — makes the whole card clickable */}
+      <button
+        onClick={() => fullGame && openLightbox(fullGame)}
+        className="absolute inset-0 z-0 cursor-pointer"
         aria-label={`View ${game.title}`}
       />
 
@@ -93,7 +97,7 @@ export default function GameReferenceBlock({ value }: { value: GameReferenceValu
               )}
               {game.greatSoundtrack && (
                 <span title="Great Soundtrack" className="flex items-center gap-1 font-heading text-xs text-accent">
-                  <Disc3 size={12} className="fill-accent/20" />
+                  <span className="inline-block shrink-0 bg-current" style={{ width: '12px', height: '12px', WebkitMask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain' }} />
                   Soundtrack
                 </span>
               )}

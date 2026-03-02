@@ -1,9 +1,9 @@
 'use client'
 
-import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Trophy, ArrowRight, Disc3 } from 'lucide-react'
+
 import type { GameOfMonthSection } from '@/types'
+import { useGameLightbox } from '@/context/GameLightboxContext'
 
 function ocColor(score: number): string {
   if (score >= 90) return 'bg-purple-600 text-white'
@@ -52,8 +52,9 @@ interface GameOfMonthProps {
 }
 
 export default function GameOfMonth({ data }: GameOfMonthProps) {
+  const { openLightbox, allGames } = useGameLightbox()
   const game = data.featuredGame
-  const gameLink = `/games/${game.slug.current}`
+  const fullGame = allGames.find((g) => g.slug.current === game.slug.current)
 
   return (
     <motion.section
@@ -65,7 +66,7 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
       {/* Section title */}
       {data.title && (
         <div className="mb-4 flex items-center gap-2">
-          <Trophy size={18} className="text-primary" />
+          <span className="inline-block shrink-0 text-primary bg-current" style={{ width: '18px', height: '18px', WebkitMask: 'url(/images/icons/icon_trophy-winner-award-score-achieve.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_trophy-winner-award-score-achieve.svg) no-repeat center / contain' }} />
           <h2 className="font-heading text-lg font-bold text-foreground sm:text-xl">
             {data.title}
           </h2>
@@ -110,7 +111,7 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
               )}
               {game.greatSoundtrack && (
                 <div className="flex items-center gap-1" title="Great Soundtrack">
-                  <Disc3 size={16} className="text-accent fill-accent/20" strokeWidth={2} />
+                  <span className="inline-block shrink-0 text-accent bg-current" style={{ width: '16px', height: '16px', WebkitMask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain' }} />
                   <span className="font-heading text-xs text-muted-foreground">Great Soundtrack</span>
                 </div>
               )}
@@ -134,13 +135,13 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
             )}
 
             {/* CTA */}
-            <Link
-              href={gameLink}
+            <button
+              onClick={() => fullGame && openLightbox(fullGame)}
               className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-2.5 font-heading text-sm font-semibold text-white transition-transform hover:scale-105"
             >
               {data.buttonLabel || 'Read more'}
-              <ArrowRight size={14} />
-            </Link>
+              <span className="inline-block shrink-0 bg-current" style={{ width: '14px', height: '14px', WebkitMask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain' }} />
+            </button>
           </div>
         </div>
       </div>

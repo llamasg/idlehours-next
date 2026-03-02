@@ -1,44 +1,48 @@
 'use client'
 
-import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Disc3 } from 'lucide-react'
+
 import type { Game } from '@/types'
+import { useGameLightbox } from '@/context/GameLightboxContext'
 
-// ── OpenCritic badge ──────────────────────────────────────────────────────
+// ── ScoreBadge ────────────────────────────────────────────────────────────
 
-function ocColor(score: number): string {
-  if (score >= 90) return 'bg-purple-600 text-white'
-  if (score >= 75) return 'bg-green-500 text-white'
-  if (score >= 50) return 'bg-green-700 text-white'
-  return 'bg-blue-500 text-white'
+function scoreBgColor(score: number): string {
+  if (score >= 90) return '#9333ea'
+  if (score >= 75) return '#22c55e'
+  if (score >= 50) return '#15803d'
+  return '#3b82f6'
 }
 
-function OpenCriticBadge({ score }: { score?: number }) {
-  const colorClass = score != null ? ocColor(score) : 'bg-card/90 text-muted-foreground'
-  const label = score != null ? `${score}%` : 'No score'
+function ScoreBadge({ score }: { score: number }) {
   return (
-    <div className={`absolute bottom-2 left-2 rounded-full px-2.5 py-1 font-heading text-xs font-bold shadow backdrop-blur-sm ${colorClass}`}>
-      {label}
+    <div className="relative" style={{ width: 52, height: 25 }}>
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundColor: scoreBgColor(score),
+          WebkitMask: 'url(/images/icons/icon_uicardSCORE-opencritic-rating-score.svg) no-repeat center / contain',
+          mask: 'url(/images/icons/icon_uicardSCORE-opencritic-rating-score.svg) no-repeat center / contain',
+          filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.4))',
+        }}
+      />
+      <span
+        className="absolute font-heading font-black text-white"
+        style={{ fontSize: 11, lineHeight: 1, left: 24, top: '50%', transform: 'translateY(-50%)' }}
+      >
+        {score}
+      </span>
     </div>
   )
 }
 
-// ── Difficulty badge — gradient opacity ───────────────────────────────────
+// ── Difficulty label config ───────────────────────────────────────────────
 
-function DifficultyBadge({ level }: { level: 1 | 2 | 3 }) {
-  const config = {
-    1: { label: 'Easy',   cls: 'bg-orange-500/20 text-orange-500' },
-    2: { label: 'Medium', cls: 'bg-orange-500/40 text-orange-500' },
-    3: { label: 'Hard',   cls: 'bg-orange-500 text-white' },
-  } as const
-  const { label, cls } = config[level]
-  return (
-    <span className={`rounded-full px-2 py-0.5 font-heading text-[10px] font-semibold ${cls}`}>
-      {label}
-    </span>
-  )
-}
+const DIFF_META = {
+  1: { label: 'Easy',  bg: 'bg-green-500/25' },
+  2: { label: 'Avg',   bg: 'bg-amber-500/25' },
+  3: { label: 'Hard',  bg: 'bg-red-500/25' },
+} as const
 
 // ── Card ──────────────────────────────────────────────────────────────────
 
@@ -47,14 +51,17 @@ interface GameTileCardProps {
 }
 
 export default function GameTileCard({ game }: GameTileCardProps) {
+  const { openLightbox } = useGameLightbox()
+  const hasBadges = game.difficulty != null || game.coop || game.greatSoundtrack
+
   return (
-    <Link href={`/games/${game.slug.current}`} className="block w-full">
+    <div className="block w-full" onClick={() => openLightbox(game)}>
       <motion.article
-        whileHover={{ y: -6, scale: 1.02 }}
-        transition={{ duration: 0.2 }}
-        className="group w-full cursor-pointer overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm flex flex-col h-[360px]"
+        whileHover={{ y: -4 }}
+        transition={{ duration: 0.25 }}
+        className="group w-full cursor-pointer overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm flex flex-col"
       >
-        {/* Image — fixed height */}
+        {/* Image */}
         <div className="relative h-[200px] w-full shrink-0 overflow-hidden bg-secondary">
           {game.coverImage ? (
             <img
@@ -64,55 +71,77 @@ export default function GameTileCard({ game }: GameTileCardProps) {
               loading="lazy"
             />
           ) : (
-            <div className="flex h-full items-center justify-center font-heading text-sm text-muted-foreground">
+            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
               No image
             </div>
           )}
 
-          {/* OpenCritic badge */}
-          <OpenCriticBadge score={game.openCriticScore} />
+          {/* Score badge — top-left */}
+          {game.openCriticScore != null && (
+            <div className="absolute top-3 left-3 z-10">
+              <ScoreBadge score={game.openCriticScore} />
+            </div>
+          )}
 
-          {/* Co-op badge */}
-          {game.coop && (
-            <div className="absolute right-2 top-2 rounded-full bg-accent-green px-2 py-0.5 font-heading text-[10px] font-semibold text-white shadow">
-              Co-op
+          {/* Metadata badges — subtle overlay at image bottom */}
+          {hasBadges && (
+            <div
+              className="absolute bottom-0 inset-x-0 z-10 flex items-center gap-1.5 px-3 py-2"
+              style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%)' }}
+            >
+              {game.difficulty != null && (() => {
+                const d = DIFF_META[game.difficulty]
+                return (
+                  <span className={`rounded-full ${d.bg} backdrop-blur-sm px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/90`}>
+                    {d.label}
+                  </span>
+                )
+              })()}
+              {game.coop && (
+                <span className="rounded-full bg-white/15 backdrop-blur-sm px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/90">
+                  Co-op
+                </span>
+              )}
+              {game.greatSoundtrack && (
+                <span
+                  className="relative inline-flex items-center justify-center rounded-full bg-white/15 backdrop-blur-sm px-1.5 py-0.5"
+                  title="Great Soundtrack"
+                >
+                  <span
+                    className="inline-block shrink-0 bg-white/80"
+                    style={{
+                      width: 10,
+                      height: 10,
+                      WebkitMask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain',
+                      mask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain',
+                    }}
+                  />
+                </span>
+              )}
             </div>
           )}
         </div>
 
-        {/* Info */}
-        <div className="flex-1 overflow-hidden p-4">
-          <h3 className="font-heading text-base font-semibold leading-snug text-foreground line-clamp-2">
+        {/* Info — serif title, muted platform list */}
+        <div className="flex flex-col flex-1 p-4 pb-2">
+          <h3 className="font-body text-[15px] font-medium leading-snug text-foreground line-clamp-2">
             {game.title}
           </h3>
 
-          {/* Badges row */}
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            {game.difficulty != null && (
-              <DifficultyBadge level={game.difficulty} />
-            )}
-            {game.greatSoundtrack && (
-              <span title="Great Soundtrack">
-                <Disc3 size={13} className="text-accent fill-accent/20" strokeWidth={2} />
-              </span>
-            )}
-          </div>
-
-          {/* Platforms */}
           {(game.platforms ?? []).length > 0 && (
-            <p className="mt-2 font-heading text-xs text-muted-foreground">
+            <p className="mt-1 text-[11px] tracking-wide text-muted-foreground">
               {(game.platforms ?? []).join(' · ')}
             </p>
           )}
         </div>
 
-        {/* View button */}
-        <div className="shrink-0 px-4 pb-4">
-          <div className="rounded-xl bg-accent/10 py-2 text-center font-heading text-sm font-semibold text-accent transition-colors group-hover:bg-accent group-hover:text-white">
+        {/* Quiet text-only action */}
+        <div className="mt-auto px-4 pb-3">
+          <span className="text-[11px] font-heading font-semibold uppercase tracking-wider text-muted-foreground/50 transition-colors group-hover:text-primary">
             View Game
-          </div>
+          </span>
         </div>
       </motion.article>
-    </Link>
+    </div>
   )
 }
