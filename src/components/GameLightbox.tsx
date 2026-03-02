@@ -81,19 +81,19 @@ export default function GameLightbox() {
     }
   }, [game])
 
-  // Related games — up to 3, filtered by matching genre, exclude current
+  // Related games — up to 4, filtered by matching genre, exclude current
   const related: Game[] = game
     ? allGames
         .filter((g) => g._id !== game._id)
         .filter((g) => (g.genre ?? []).some((gen) => (game.genre ?? []).includes(gen)))
-        .slice(0, 3)
+        .slice(0, 4)
     : []
 
   // If not enough genre matches, pad with random games
-  if (game && related.length < 3) {
+  if (game && related.length < 4) {
     const ids = new Set([game._id, ...related.map((g) => g._id)])
     for (const g of allGames) {
-      if (related.length >= 3) break
+      if (related.length >= 4) break
       if (!ids.has(g._id)) {
         related.push(g)
         ids.add(g._id)
@@ -109,11 +109,9 @@ export default function GameLightbox() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 flex flex-col items-center overflow-y-auto bg-black/70 px-4 py-8 sm:py-12"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-y-auto bg-black/70 backdrop-blur-[6px] px-4 py-8 sm:py-12"
           onClick={(e) => { if (e.target === e.currentTarget) closeLightbox() }}
         >
-          {/* Spacer to vertically center the hero card */}
-          <div className="flex-1" />
 
           <motion.div
             ref={dialogRef}
@@ -289,16 +287,13 @@ export default function GameLightbox() {
               <h3 className="mb-3 font-heading text-sm font-bold text-white/90">
                 Similar games
               </h3>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {related.map((g) => (
                   <GameTileCard key={g._id} game={g} />
                 ))}
               </div>
             </div>
           )}
-
-          {/* Spacer to vertically center the hero card */}
-          <div className="flex-1" />
         </motion.div>
       )}
     </AnimatePresence>
