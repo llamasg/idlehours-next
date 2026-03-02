@@ -8,11 +8,11 @@ import type { Game } from '@/types'
 
 // ── Helpers (same as current detail page) ─────────────────────────────────
 
-function ocColor(score: number): string {
-  if (score >= 90) return 'bg-purple-600 text-white'
-  if (score >= 75) return 'bg-green-500 text-white'
-  if (score >= 50) return 'bg-green-700 text-white'
-  return 'bg-blue-500 text-white'
+function scoreBgColor(score: number): string {
+  if (score >= 90) return '#9333ea'
+  if (score >= 75) return '#22c55e'
+  if (score >= 50) return '#15803d'
+  return '#3b82f6'
 }
 
 function DifficultyLabel({ level }: { level: 1 | 2 | 3 }) {
@@ -81,19 +81,19 @@ export default function GameLightbox() {
     }
   }, [game])
 
-  // Related games — up to 4, filtered by matching genre, exclude current
+  // Related games — up to 3, filtered by matching genre, exclude current
   const related: Game[] = game
     ? allGames
         .filter((g) => g._id !== game._id)
         .filter((g) => (g.genre ?? []).some((gen) => (game.genre ?? []).includes(gen)))
-        .slice(0, 4)
+        .slice(0, 3)
     : []
 
   // If not enough genre matches, pad with random games
-  if (game && related.length < 4) {
+  if (game && related.length < 3) {
     const ids = new Set([game._id, ...related.map((g) => g._id)])
     for (const g of allGames) {
-      if (related.length >= 4) break
+      if (related.length >= 3) break
       if (!ids.has(g._id)) {
         related.push(g)
         ids.add(g._id)
@@ -109,7 +109,7 @@ export default function GameLightbox() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 px-4 py-8 sm:py-12"
+          className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/70 px-4 py-8 sm:py-12"
           onClick={(e) => { if (e.target === e.currentTarget) closeLightbox() }}
         >
           <motion.div
@@ -127,17 +127,12 @@ export default function GameLightbox() {
             {/* Close button */}
             <button
               onClick={closeLightbox}
-              className="absolute right-3 top-3 z-20 rounded-full bg-black/40 p-1.5 text-white/80 backdrop-blur-sm transition-colors hover:bg-black/60 hover:text-white"
+              className="absolute right-3 top-3 z-20 rounded-full bg-black/40 p-2 text-white/80 backdrop-blur-sm transition-colors hover:bg-black/60 hover:text-white"
               aria-label="Close"
             >
-              <span
-                className="inline-block shrink-0 bg-current"
-                style={{
-                  width: 16, height: 16,
-                  WebkitMask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain',
-                  mask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain',
-                }}
-              />
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
 
             {/* Hero card — same layout as the former detail page */}
@@ -180,8 +175,21 @@ export default function GameLightbox() {
                   {/* Ratings */}
                   <div className="mt-3 flex flex-wrap items-center gap-3">
                     {game.openCriticScore != null && (
-                      <span className={`rounded-full px-3 py-1 font-heading text-sm font-bold shadow ${ocColor(game.openCriticScore)}`}>
-                        {game.openCriticScore} OpenCritic
+                      <span
+                        className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 shadow"
+                        style={{ backgroundColor: scoreBgColor(game.openCriticScore) }}
+                      >
+                        <span
+                          className="inline-block shrink-0 bg-white"
+                          style={{
+                            width: 16, height: 16,
+                            WebkitMask: 'url(/images/icons/icon_fire-hot-streak.svg) no-repeat center / contain',
+                            mask: 'url(/images/icons/icon_fire-hot-streak.svg) no-repeat center / contain',
+                          }}
+                        />
+                        <span className="font-heading text-sm font-bold text-white" style={{ letterSpacing: '0.05em' }}>
+                          {game.openCriticScore}
+                        </span>
                       </span>
                     )}
                     {game.difficulty != null && <DifficultyLabel level={game.difficulty} />}
@@ -260,7 +268,7 @@ export default function GameLightbox() {
                 <h3 className="mb-3 font-heading text-sm font-bold text-foreground">
                   You might also like
                 </h3>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                   {related.map((g) => (
                     <GameTileCard key={g._id} game={g} />
                   ))}

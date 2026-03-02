@@ -16,26 +16,22 @@ function scoreBgColor(score: number): string {
 
 function ScoreBadge({ score }: { score: number }) {
   return (
-    <div className="relative" style={{ width: 52, height: 25 }}>
-      <div
-        className="absolute inset-0"
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 shadow-md"
+      style={{ backgroundColor: scoreBgColor(score), filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.3))' }}
+    >
+      <span
+        className="inline-block shrink-0 bg-white"
         style={{
-          backgroundColor: scoreBgColor(score),
-          WebkitMask: 'url(/images/icons/icon_uicardSCORE-opencritic-rating-score.svg) no-repeat center / contain',
-          mask: 'url(/images/icons/icon_uicardSCORE-opencritic-rating-score.svg) no-repeat center / contain',
-          filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.4))',
+          width: 14, height: 14,
+          WebkitMask: 'url(/images/icons/icon_fire-hot-streak.svg) no-repeat center / contain',
+          mask: 'url(/images/icons/icon_fire-hot-streak.svg) no-repeat center / contain',
         }}
       />
-      <span
-        className="absolute font-heading font-black text-white rounded-full"
-        style={{
-          fontSize: 11, lineHeight: 1, left: 29, top: '50%', transform: 'translateY(-50%)',
-          backgroundColor: 'rgba(0,0,0,0.3)', padding: '2px 4px',
-        }}
-      >
+      <span className="font-heading font-black text-white" style={{ fontSize: 13, letterSpacing: '0.05em' }}>
         {score}
       </span>
-    </div>
+    </span>
   )
 }
 

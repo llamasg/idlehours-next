@@ -187,8 +187,21 @@ function GameListCard({ game }: { game: Game }) {
           )}
           <div className="mt-2 flex flex-wrap items-center gap-2">
             {game.openCriticScore != null && (
-              <span className={`rounded-full px-2.5 py-0.5 font-heading text-xs font-bold shadow ${game.openCriticScore >= 90 ? 'bg-purple-600 text-white' : game.openCriticScore >= 75 ? 'bg-green-500 text-white' : game.openCriticScore >= 50 ? 'bg-green-700 text-white' : 'bg-blue-500 text-white'}`}>
-                {game.openCriticScore} OpenCritic
+              <span
+                className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 shadow"
+                style={{ backgroundColor: game.openCriticScore >= 90 ? '#9333ea' : game.openCriticScore >= 75 ? '#22c55e' : game.openCriticScore >= 50 ? '#15803d' : '#3b82f6' }}
+              >
+                <span
+                  className="inline-block shrink-0 bg-white"
+                  style={{
+                    width: 12, height: 12,
+                    WebkitMask: 'url(/images/icons/icon_fire-hot-streak.svg) no-repeat center / contain',
+                    mask: 'url(/images/icons/icon_fire-hot-streak.svg) no-repeat center / contain',
+                  }}
+                />
+                <span className="font-heading text-xs font-bold text-white" style={{ letterSpacing: '0.05em' }}>
+                  {game.openCriticScore}
+                </span>
               </span>
             )}
             {game.coop && (
