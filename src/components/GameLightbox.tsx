@@ -15,39 +15,10 @@ function scoreBgColor(score: number): string {
   return '#3b82f6'
 }
 
-function DifficultyLabel({ level }: { level: 1 | 2 | 3 }) {
-  const labels = { 1: 'Beginner', 2: 'Intermediate', 3: 'Experienced' } as const
-  return (
-    <div className="flex items-center gap-1.5" title={labels[level]}>
-      {([1, 2, 3] as const).map((i) => (
-        <span
-          key={i}
-          className={`inline-block h-2.5 w-2.5 rounded-full ${i <= level ? 'bg-amber-500' : 'bg-muted-foreground/20'}`}
-        />
-      ))}
-      <span className="ml-1 font-heading text-sm text-muted-foreground">{labels[level]}</span>
-    </div>
-  )
-}
-
-function ReplayMeter({ value }: { value: number }) {
-  return (
-    <div className="flex items-center gap-1" title={`Replayability: ${value}/5`}>
-      {[1, 2, 3, 4, 5].map((i) => {
-        const filled = value >= i
-        const half = !filled && value >= i - 0.5
-        return (
-          <span
-            key={i}
-            className={`inline-block h-2.5 w-2.5 rounded-full ${
-              filled ? 'bg-accent-green' : half ? 'bg-accent-green/50' : 'bg-muted-foreground/20'
-            }`}
-          />
-        )
-      })}
-      <span className="ml-1 font-heading text-sm text-muted-foreground">{value}/5 replay</span>
-    </div>
-  )
+const DIFF_META: Record<1 | 2 | 3, { label: string; color: string }> = {
+  1: { label: 'Easy', color: '#00e116' },
+  2: { label: 'Medium', color: '#f3a740' },
+  3: { label: 'Hard', color: '#e8134b' },
 }
 
 // ── GameLightbox ──────────────────────────────────────────────────────────
@@ -137,10 +108,10 @@ export default function GameLightbox() {
             </button>
 
             {/* Hero card — same layout as the former detail page */}
-            <div className="overflow-hidden rounded-t-2xl">
+            <div className="overflow-hidden rounded-2xl">
               <div className="grid gap-0 lg:grid-cols-[1.4fr_1fr]">
                 {/* Cover image */}
-                <div className="relative aspect-[16/9] overflow-hidden bg-secondary lg:aspect-auto lg:min-h-[250px]">
+                <div className="relative aspect-[16/9] overflow-hidden bg-secondary lg:aspect-auto lg:min-h-[300px]">
                   {game.coverImage ? (
                     <img src={game.coverImage} alt={game.title} className="absolute inset-0 h-full w-full object-cover" />
                   ) : (
@@ -193,8 +164,19 @@ export default function GameLightbox() {
                         </span>
                       </span>
                     )}
-                    {game.difficulty != null && <DifficultyLabel level={game.difficulty} />}
-                    {game.replayability != null && <ReplayMeter value={game.replayability} />}
+                    {game.difficulty != null && (
+                      <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-heading text-sm font-bold text-white" style={{ backgroundColor: DIFF_META[game.difficulty].color }}>
+                        <span
+                          className="inline-block shrink-0 bg-white"
+                          style={{
+                            width: 14, height: 14,
+                            WebkitMask: 'url(/images/icons/icon_sword-difficulty-fight-battle-weapon-attack.svg) no-repeat center / contain',
+                            mask: 'url(/images/icons/icon_sword-difficulty-fight-battle-weapon-attack.svg) no-repeat center / contain',
+                          }}
+                        />
+                        {DIFF_META[game.difficulty].label}
+                      </span>
+                    )}
                     {game.greatSoundtrack && (
                       <div className="flex items-center gap-1.5" title="Great Soundtrack">
                         <span className="inline-block shrink-0 text-accent bg-current" style={{ width: 16, height: 16, WebkitMask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain' }} />
@@ -245,19 +227,6 @@ export default function GameLightbox() {
                     </div>
                   )}
 
-                  {/* Tags */}
-                  {(game.tags ?? []).length > 0 && (
-                    <div className="mt-3">
-                      <div className="flex flex-wrap gap-1.5">
-                        {(game.tags ?? []).map((tag: string) => (
-                          <span key={tag} className="rounded-full bg-muted px-2.5 py-0.5 font-heading text-[11px] text-muted-foreground">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
                   {/* Affiliate links */}
                   {(game.affiliateLinks ?? []).length > 0 && (
                     <div className="mt-5 flex flex-wrap gap-2">
@@ -289,7 +258,7 @@ export default function GameLightbox() {
               </h3>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {related.map((g) => (
-                  <GameTileCard key={g._id} game={g} />
+                  <GameTileCard key={g._id} game={g} muted />
                 ))}
               </div>
             </div>

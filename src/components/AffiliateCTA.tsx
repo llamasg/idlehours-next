@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
 
 interface AffiliateCTAProps {
   value: {
@@ -20,7 +19,7 @@ const AffiliateCTA = ({ value }: AffiliateCTAProps) => {
       >
         <Button className="w-full rounded-full font-heading text-sm uppercase tracking-wider sm:w-auto">
           {value.buttonText}
-          <ExternalLink className="ml-2 h-4 w-4" />
+          <span className="ml-2 inline-block shrink-0 bg-current" style={{ width: '16px', height: '16px', WebkitMask: 'url(/images/icons/icon_click-hover-mouse-tap-cursor.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_click-hover-mouse-tap-cursor.svg) no-repeat center / contain' }} />
         </Button>
       </a>
       {value.disclaimer && (

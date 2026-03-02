@@ -1,100 +1,68 @@
-# Idle Hours — Homepage Redesign Design Document
+Idle Hours — Homepage Layout Build
+Context
+We have an existing parallax hero page and a separate homepage. The task is to migrate the parallax hero into the homepage as the primary hero, remove all dummy/skeleton content from the parallax file, and build out the full homepage content layout beneath it. The parallax hero file should be retired after migration — all its functionality lives in the homepage going forward.
 
-**Date:** 2026-02-17
-**Status:** Approved
-**Spec:** `public/prompt.md` + `BRAND_DOCUMENT_v2.pdf`
+Step 1 — Migrate the parallax hero
+Take everything from i and bring it into the homepage component:
 
----
+The sticky scroll mechanic (full screen → postcard zoom-out)
+The cursor parallax layer system with all SVG layers
+The time-of-day palette system (morning / midday / twilight / night) with the toggle UI bottom-left
+The time/location stamp ("21:18 · Mon 2 Mar · At Idle Hours HQ")
+The nav behaviour (transparent over hero, solid on scroll)
+Remove all skeleton/dummy block content that was below the hero in the parallax file — everything below the postcard state gets replaced by the new homepage sections below
 
-## Approach
+The hero content (logo, subhead, two CTAs) stays as-is inside the full-screen state. The postcard state shows just the landscape scene with no text overlay — clean thumbnail of the forest, no repeated branding.
 
-Option A: Clean rebuild of homepage. Build all 11 sections as new components. Other pages (game library, game detail, quizzes, shop) keep current layouts but inherit new palette via Tailwind config.
+Step 2 — Homepage content sections
+All sections sit below the postcard hero in a single scrollable page. Max content width 1200px, centred, consistent horizontal padding.
 
-## Architecture
+Section 1 — Play Our Games
+Label: PLAY A GAME in small uppercase mono, with a horizontal rule extending to the right.
+A horizontally draggable carousel showing exactly 3 cards visible at full width simultaneously — each card takes up roughly one third of the content width. Cards are image-only (no text rendered by the component — the title treatment is baked into the image itself). Aspect ratio approximately 4:3. Rounded corners consistent with site card style. Subtle drag affordance on first load ("drag to explore" hint that fades after interaction). On mobile, snaps to each card.
+Games to show: Skill Issue, the box art guessing game, placeholder slot for upcoming game. Each card links to its respective game page.
 
-### New Component Structure
+Section 2 — Latest Posts
+Label: LATEST POSTS
+Mixed editorial grid layout — not a uniform grid. First row: one wide card (spanning 2 columns) plus two standard cards beside it. Subsequent rows: standard 3 or 4 column grid. The wide card signals editorial hierarchy — this post matters more — without requiring any special configuration.
+Each post card shows: cover image, category label in small uppercase, post title in serif font, author name, read time. No excerpt needed. Clicking navigates to the post.
 
-```
-src/components/homepage/
-  NavBar.tsx          — sticky nav with serif wordmark, centre links, CTA
-  Hero.tsx            — full-width dark hero with CSS fireflies
-  PhilosophyStrip.tsx — 3-column values strip
-  MoodTiles.tsx       — 2x2 mood grid linking to /mood/[slug]
-  EditorialPicks.tsx  — horizontal scroll "This week's idle hours" cards
-  BlogSection.tsx     — 3-column blog cards with gradient thumbnails
-  ReleaseCalendar.tsx — 2-panel calendar + game detail sidebar
-  MoodQuizBanner.tsx  — full-width dark CTA
-  GameOfMonth.tsx     — 2-column feature card
-  CosyCorner.tsx      — horizontal scroll product cards
-  Footer.tsx          — 3-column dark footer
-```
+Section 3 — Today's Pick + Quiz
+A 3-column row. No section label needed — the content is self-explanatory.
+Columns 1–2 (two thirds width): Today's Game
+A large featured card for the current daily Skill Issue challenge. Shows the game's cover art as background, "Today's Challenge" label top-left, the Skill Issue logo/title treatment centred, a short one-line hook ("Can you guess today's game in 6 clues?"), and a prominent play button. If the user has already played today, show their result instead ("You got it in 3. Come back tomorrow.") using localStorage to detect completion state.
+Column 3 (one third width): Mood Quiz CTA
+A tall card matching the height of the today's game card. Solid colour background using one of the brand palette colours (forest green or amber). Headline: "Not sure what to play?" in serif. Subhead: "Answer five questions. Get a game that fits your mood." Single CTA button: "Find My Game". Links to the quiz page.
 
-### Homepage Composition
+Section 4 — What We're Playing
+Label: WHAT WE'RE PLAYING
+A horizontally scrollable strip of game UI cards — 4 cards visible at once on desktop, hinting at a 5th. Uses the compact GameTileCard component. Each card shows cover image, score badge, title, platform list. Clicking any card triggers the lightbox. This list is editorially curated — pulled from a manually ordered collection in Sanity, not algorithmic.
 
-`homepage.tsx` directly composes all 11 sections in order. No SectionRenderer. HomeLoader curtain animation retained.
+Section 5 — Newsletter
+Full-width section, generous vertical padding. Not a generic signup block — give it personality.
+Headline in large serif: "Good games. Good reads. Once a week."
+Subhead in small mono: "No noise. No aggregation. Just things worth your time."
+Email input field + submit button inline. Input styled to match the site — no default browser styling.
+Below the input, a single reassurance line: "We send one email a week. Unsubscribe any time."
+Background: a slightly darker tint of the cream base colour to distinguish it from surrounding sections without being visually loud.
 
-### Existing Code
+Section 6 — Long Read
+Label: LONG READ
+A single full-width editorial feature card. Large image taking up left half, content on the right: category label, headline in large serif (3–4 lines), opening paragraph (first 2–3 sentences visible), author name, estimated read time, and a quiet "Read More" text link. This slot is manually curated in Sanity — a single pinned "featured long read" field on the homepage singleton document.
+This section signals depth. Give it more vertical breathing room than other sections.
 
-- `Header.tsx` and `SiteFooter.tsx` remain for non-homepage pages
-- `CdPlayer.tsx` stays mounted globally in App.tsx
-- Game library, detail, quizzes, shop pages untouched
-- `ClickSpark` stays in App.tsx
+Section 7 — Footer
+Three column layout:
+Left: Idle Hours logo mark + one-sentence about blurb. "A cozy games blog for people who play games to feel something."
+Centre: Nav links (Posts, Play, Library, About, Newsletter) stacked vertically in small mono.
+Right: Repeat newsletter signup — just the input and button, no headline. For people who scrolled all the way down without signing up mid-page.
+Below the three columns: a full-width rule, then a single line: © Idle Hours · idlehours.co.uk · Made with too much free time — left aligned, small mono, muted colour.
 
-## Palette Migration
+General notes
 
-Replace current HSL CSS variables in `index.css` and update `tailwind.config.js`:
-
-```
-linen:        #f5ede4  (background)
-brand-dark:   #1e1a14  (foreground/text)
-brand-green:  #2d6a4f  (primary brand)
-accent-green: #52b788  (accent)
-burnt-orange: #c95d0d  (CTA/primary action)
-teal:         #137034  (secondary green)
-muted:        #6b7280  (muted text)
-card:         #ffffff  (card backgrounds)
-off-white:    #f9fafb  (subtle bg variation)
-```
-
-Map to existing Tailwind tokens (background, foreground, primary, accent, card, muted) so other pages inherit the new colours automatically.
-
-## Font
-
-Keep Lora (already loaded, all weights). No change needed.
-
-## Technical Decisions
-
-1. **Hero fireflies** — CSS `@keyframes` with absolute-positioned dots. No canvas.
-2. **Release Calendar** — Pure React state for month nav and day selection. Lavender palette scoped to component. Wishlist in localStorage. Remind-me modal with console.log endpoint.
-3. **Animations** — Framer Motion for scroll reveals (viewport `once: true`), hover scale/shadow on tiles and cards.
-4. **Responsive** — Mobile-first. Mood tiles 1-col mobile, 2x2 tablet+. Calendar stacks vertically on mobile. Nav hamburger on mobile.
-5. **Mock data** — All mock content hardcoded in components per prompt spec. No CMS dependency.
-6. **Gradient thumbnails** — Blog cards use CSS gradients from brand palette as image placeholders.
-
-## Sections (scroll order)
-
-1. NavBar (sticky)
-2. Hero (full-width, dark, fireflies)
-3. Philosophy Strip (3 columns, white bg)
-4. For Your Mood (2x2 mood tiles)
-5. This Week's Idle Hours (editorial picks, horizontal scroll)
-6. From the Blog (3-column grid)
-7. Release Calendar (2-panel, lavender accent)
-8. Mood Quiz CTA Banner (full-width dark)
-9. Game of the Month (2-column feature)
-10. Cosy Corner (horizontal scroll products)
-11. Footer (3-column dark)
-
-## Quality Checklist
-
-- "cosy" not "cozy" throughout
-- Hero communicates Idle Hours philosophy
-- Balatro + Celeste visible in editorial picks
-- Calendar with working month navigation
-- Wishlist persists in localStorage
-- Mobile layout works at 375px
-- Gradient placeholders (no broken images)
-- Blog section visible with mock content
-- Philosophy strip is first section after hero
-- Mood tiles link to /mood/[slug]
-- Footer includes music player reference
+Remove all <div class="card-skeleton"> and placeholder content from the migrated parallax file
+Section labels should all use the same style: small uppercase DM Mono, muted colour, with a horizontal rule extending to fill remaining width — consistent across every section
+Maintain the existing colour palette: cream base, forest green, amber, dusty rose, near-black
+All game cards that link to individual games should trigger the lightbox, not navigate to a page
+Smooth scroll behaviour throughout
+The time-of-day system should affect only the hero — content sections below always render in the standard cream/light palette regardless of time

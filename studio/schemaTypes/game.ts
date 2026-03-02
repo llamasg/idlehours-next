@@ -132,14 +132,7 @@ export default defineType({
       },
       validation: (Rule) => Rule.min(1).max(3).integer(),
     }),
-    defineField({
-      name: 'replayability',
-      title: 'Replayability',
-      type: 'number',
-      description: '1–5, supports 0.5 increments (e.g. 3.5)',
-      validation: (Rule) => Rule.min(1).max(5),
-    }),
-    defineField({
+defineField({
       name: 'greatSoundtrack',
       title: 'Great Soundtrack',
       type: 'boolean',

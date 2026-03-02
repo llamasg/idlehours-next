@@ -56,7 +56,7 @@ function FilterSelect({ label, value, options, onChange, icon }: FilterSelectPro
         onClick={() => { setOpen(!open); setQuery('') }}
         className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 font-heading text-sm text-foreground hover:bg-secondary transition-colors"
       >
-        {icon && <MaskIcon src={icon} size={14} className="text-electric-blue" />}
+        {icon && <MaskIcon src={icon} size={14} className="text-foreground" />}
         <span className="text-muted-foreground">{label}:</span>
         <span className={value === 'All' ? 'text-muted-foreground' : 'text-primary font-semibold'}>{value}</span>
         <svg className="w-3 h-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,7 +125,7 @@ function SortSelect({ value, options, onChange }: SortSelectProps) {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 font-heading text-sm text-foreground hover:bg-secondary transition-colors"
       >
-        <MaskIcon src="/images/icons/icon_refresh-reset-reload-filter-highlow-swap-change.svg" size={14} className="text-electric-blue" />
+        <MaskIcon src="/images/icons/icon_refresh-reset-reload-filter-highlow-swap-change.svg" size={14} className="text-foreground" />
         <span className="text-muted-foreground">Sort:</span>
         <span className="text-primary font-semibold">{current?.label ?? value}</span>
         <svg className="w-3 h-3 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,7 +217,7 @@ function GameListCard({ game }: { game: Game }) {
               </span>
             )}
             {game.difficulty != null && (() => {
-              const labels = { 1: 'Easy', 2: 'Avg', 3: 'Hard' } as const
+              const labels = { 1: 'Easy', 2: 'Medium', 3: 'Hard' } as const
               const colors = { 1: 'bg-green-500/20 text-green-700', 2: 'bg-amber-500/20 text-amber-700', 3: 'bg-red-500/20 text-red-700' } as const
               return (
                 <span className={`rounded-full px-2.5 py-0.5 font-heading text-[10px] font-semibold uppercase tracking-wider ${colors[game.difficulty]}`}>
@@ -352,8 +352,6 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
 
     if (sort === 'score-desc') result.sort((a, b) => nullLast(b.openCriticScore, a.openCriticScore, 1))
     else if (sort === 'score-asc') result.sort((a, b) => nullLast(a.openCriticScore, b.openCriticScore, 1))
-    else if (sort === 'replay-desc') result.sort((a, b) => nullLast(b.replayability, a.replayability, 1))
-    else if (sort === 'replay-asc') result.sort((a, b) => nullLast(a.replayability, b.replayability, 1))
     else if (sort === 'diff-asc') result.sort((a, b) => nullLast(a.difficulty, b.difficulty, 1))
     else if (sort === 'diff-desc') result.sort((a, b) => nullLast(b.difficulty, a.difficulty, 1))
     else if (sort === 'price-asc') {
@@ -390,12 +388,93 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
           className="mb-8"
         >
           <div className="flex items-center gap-3 mb-2">
-            <MaskIcon src="/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg" size={28} className="text-electric-blue" />
-            <MaskIcon src="/images/icons/icon_controller-gaming-ps5-xbox-joystick.svg" size={28} className="text-electric-blue" />
+            <div className="relative" style={{ width: 36, height: 36 }}>
+              <MaskIcon src="/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg" size={36} className="text-electric-blue absolute inset-0" />
+              <span
+                className="absolute inline-block shrink-0 bg-foreground"
+                style={{
+                  width: 16, height: 16,
+                  top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                  WebkitMask: 'url(/images/icons/icon_controller-gaming-ps5-xbox-joystick.svg) no-repeat center / contain',
+                  mask: 'url(/images/icons/icon_controller-gaming-ps5-xbox-joystick.svg) no-repeat center / contain',
+                }}
+              />
+            </div>
             <h1 className="font-heading text-3xl font-black uppercase tracking-widest text-foreground sm:text-4xl">
               Game Library
             </h1>
+          </div>
+          <p className="max-w-lg text-muted-foreground">
+            Browse our curated collection of cozy games. Filter by platform, sort by cosiness, or just scroll and see what catches your eye.
+          </p>
+        </motion.div>
+
+        {/* Search + Filters */}
+        <div className="mb-6 space-y-3">
+          {/* Search bar */}
+          <div className="relative max-w-md">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 inline-block shrink-0 text-foreground bg-current" style={{ width: '16px', height: '16px', WebkitMask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain' }} />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search games, tags..."
+              className="w-full rounded-full border border-border bg-card py-2.5 pl-9 pr-4 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                <span className="inline-block shrink-0 bg-current" style={{ width: '14px', height: '14px', WebkitMask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain' }} />
+              </button>
+            )}
+          </div>
+
+          {/* Filters + Sort + View toggle — single row */}
+          <div className="flex flex-wrap items-center gap-2">
+            <FilterSelect
+              label="Platform"
+              value={platform}
+              options={['All', 'PC', 'Switch', 'PS5', 'Xbox', 'Mobile']}
+              onChange={setPlatform}
+              icon="/images/icons/icon_handheld-console-platform-gameboy-retro.svg"
+            />
+            <FilterSelect
+              label="Genre"
+              value={genre}
+              options={genreOptions}
+              onChange={setGenre}
+              icon="/images/icons/icon_tag-genre-filter.svg"
+            />
+            <button
+              onClick={() => setCoopOnly(!coopOnly)}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 font-heading text-sm font-medium transition-colors ${
+                coopOnly
+                  ? 'border-foreground bg-foreground text-background'
+                  : 'border-border bg-card text-muted-foreground hover:bg-secondary'
+              }`}
+            >
+              <MaskIcon src="/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg" size={14} />
+              Co-op only
+            </button>
+            <SortSelect
+              value={sort}
+              options={[
+                { label: 'Score: High → Low', value: 'score-desc' },
+                { label: 'Score: Low → High', value: 'score-asc' },
+                { label: 'Difficulty: Beginner first', value: 'diff-asc' },
+                { label: 'Difficulty: Experienced first', value: 'diff-desc' },
+                { label: 'Price: Low → High', value: 'price-asc' },
+                { label: 'Price: High → Low', value: 'price-desc' },
+                { label: 'Release: Newest', value: 'date-desc' },
+                { label: 'Release: Oldest', value: 'date-asc' },
+              ]}
+              onChange={setSort}
+            />
+            {/* View toggle — right-aligned */}
             <div className="ml-auto flex items-center gap-1 rounded-full border border-border bg-card p-1">
+              <span className="pl-2 font-heading text-xs text-muted-foreground">View</span>
               <button
                 onClick={() => toggleView('grid')}
                 className={`rounded-full p-1.5 transition-colors ${view === 'grid' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}
@@ -420,77 +499,6 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
                 </svg>
               </button>
             </div>
-          </div>
-          <p className="max-w-lg text-muted-foreground">
-            Browse our curated collection of cozy games. Filter by platform, sort by cosiness, or just scroll and see what catches your eye.
-          </p>
-        </motion.div>
-
-        {/* Search + Filters */}
-        <div className="mb-6 space-y-3">
-          {/* Search bar */}
-          <div className="relative max-w-md">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 inline-block shrink-0 text-electric-blue bg-current" style={{ width: '16px', height: '16px', WebkitMask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_search-lookup-find.svg) no-repeat center / contain' }} />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search games, tags..."
-              className="w-full rounded-full border border-border bg-card py-2.5 pl-9 pr-4 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-            />
-            {search && (
-              <button
-                onClick={() => setSearch('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
-                <span className="inline-block shrink-0 bg-current" style={{ width: '14px', height: '14px', WebkitMask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_sad-cancel-failure-leave-bad-negative.svg) no-repeat center / contain' }} />
-              </button>
-            )}
-          </div>
-
-          {/* Filters + Sort — single row */}
-          <div className="flex flex-wrap items-center gap-2">
-            <FilterSelect
-              label="Platform"
-              value={platform}
-              options={['All', 'PC', 'Switch', 'PS5', 'Xbox', 'Mobile']}
-              onChange={setPlatform}
-              icon="/images/icons/icon_handheld-console-platform-gameboy-retro.svg"
-            />
-            <FilterSelect
-              label="Genre"
-              value={genre}
-              options={genreOptions}
-              onChange={setGenre}
-              icon="/images/icons/icon_tag-genre-filter.svg"
-            />
-            <button
-              onClick={() => setCoopOnly(!coopOnly)}
-              className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 font-heading text-sm font-medium transition-colors ${
-                coopOnly
-                  ? 'border-electric-blue bg-electric-blue text-white'
-                  : 'border-border bg-card text-muted-foreground hover:bg-secondary'
-              }`}
-            >
-              <MaskIcon src="/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg" size={14} />
-              Co-op only
-            </button>
-            <SortSelect
-              value={sort}
-              options={[
-                { label: 'Score: High → Low', value: 'score-desc' },
-                { label: 'Score: Low → High', value: 'score-asc' },
-                { label: 'Replayability: High → Low', value: 'replay-desc' },
-                { label: 'Replayability: Low → High', value: 'replay-asc' },
-                { label: 'Difficulty: Beginner first', value: 'diff-asc' },
-                { label: 'Difficulty: Experienced first', value: 'diff-desc' },
-                { label: 'Price: Low → High', value: 'price-asc' },
-                { label: 'Price: High → Low', value: 'price-desc' },
-                { label: 'Release: Newest', value: 'date-desc' },
-                { label: 'Release: Oldest', value: 'date-asc' },
-              ]}
-              onChange={setSort}
-            />
           </div>
         </div>
 

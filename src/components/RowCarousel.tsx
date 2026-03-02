@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+
 import type { CmsLink } from '@/types'
 
 function resolveLinkHref(link?: CmsLink): string {
@@ -81,7 +81,7 @@ export default function RowCarousel({ title, subtitle, seeAllLink, children }: R
               className="rounded-full border border-border p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:opacity-30"
               aria-label="Scroll left"
             >
-              <ChevronLeft size={16} />
+              <span className="inline-block shrink-0 bg-current scale-x-[-1]" style={{ width: '16px', height: '16px', WebkitMask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain' }} />
             </button>
             <button
               onClick={() => scroll('right')}
@@ -89,7 +89,7 @@ export default function RowCarousel({ title, subtitle, seeAllLink, children }: R
               className="rounded-full border border-border p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:opacity-30"
               aria-label="Scroll right"
             >
-              <ChevronRight size={16} />
+              <span className="inline-block shrink-0 bg-current" style={{ width: '16px', height: '16px', WebkitMask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_arrow-next-right.svg) no-repeat center / contain' }} />
             </button>
           </div>
         </div>

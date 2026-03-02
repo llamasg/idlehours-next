@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -81,7 +80,7 @@ export default function ContactForm() {
         animate={{ opacity: 1, scale: 1 }}
         className="rounded-2xl border border-border/40 bg-card p-8 text-center"
       >
-        <CheckCircle2 className="mx-auto mb-4 h-16 w-16 text-primary" />
+        <span className="block mx-auto mb-4 h-16 w-16 text-primary bg-current" style={{ WebkitMask: 'url(/images/icons/icon_Success-Positive-happy-Confirm.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_Success-Positive-happy-Confirm.svg) no-repeat center / contain' }} />
         <h3 className="mb-2 font-heading text-2xl font-bold text-foreground">
           Message Received!
         </h3>

@@ -38,27 +38,28 @@ function ScoreBadge({ score }: { score: number }) {
 // ── Difficulty label config ───────────────────────────────────────────────
 
 const DIFF_META = {
-  1: { label: 'Easy',  bg: 'bg-green-500/25' },
-  2: { label: 'Avg',   bg: 'bg-amber-500/25' },
-  3: { label: 'Hard',  bg: 'bg-red-500/25' },
+  1: { label: 'Easy',   bg: 'bg-green-500/25' },
+  2: { label: 'Medium', bg: 'bg-amber-500/25' },
+  3: { label: 'Hard',   bg: 'bg-red-500/25' },
 } as const
 
 // ── Card ──────────────────────────────────────────────────────────────────
 
 interface GameTileCardProps {
   game: Game
+  muted?: boolean
 }
 
-export default function GameTileCard({ game }: GameTileCardProps) {
+export default function GameTileCard({ game, muted }: GameTileCardProps) {
   const { openLightbox } = useGameLightbox()
-  const hasBadges = game.difficulty != null || game.coop || game.greatSoundtrack
+  const hasBadges = game.difficulty != null || game.coop
 
   return (
     <div className="block w-full" onClick={() => openLightbox(game)}>
       <motion.article
         whileHover={{ y: -4 }}
         transition={{ duration: 0.25 }}
-        className="group w-full cursor-pointer overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm flex flex-col"
+        className={`group w-full cursor-pointer overflow-hidden rounded-2xl flex flex-col ${muted ? 'bg-muted shadow-none' : 'border border-border/60 bg-card shadow-sm'}`}
       >
         {/* Image */}
         <div className="relative h-[200px] w-full shrink-0 overflow-hidden bg-secondary">
@@ -91,38 +92,14 @@ export default function GameTileCard({ game }: GameTileCardProps) {
               {game.difficulty != null && (() => {
                 const d = DIFF_META[game.difficulty]
                 return (
-                  <span className={`rounded-full ${d.bg} backdrop-blur-sm px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/90`}>
+                  <span className={`rounded-full ${d.bg} backdrop-blur-sm px-2 py-0.5 font-heading text-[10px] font-bold uppercase tracking-wider text-white`}>
                     {d.label}
                   </span>
                 )
               })()}
               {game.coop && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/15 backdrop-blur-sm px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-white/90">
-                  <span
-                    className="inline-block shrink-0 bg-current"
-                    style={{
-                      width: 9, height: 9,
-                      WebkitMask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
-                      mask: 'url(/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg) no-repeat center / contain',
-                    }}
-                  />
+                <span className="rounded-full bg-white/15 backdrop-blur-sm px-2 py-0.5 font-heading text-[10px] font-bold uppercase tracking-wider text-white">
                   Co-op
-                </span>
-              )}
-              {game.greatSoundtrack && (
-                <span
-                  className="relative inline-flex items-center justify-center rounded-full bg-white/15 backdrop-blur-sm px-1.5 py-0.5"
-                  title="Great Soundtrack"
-                >
-                  <span
-                    className="inline-block shrink-0 bg-white/80"
-                    style={{
-                      width: 10,
-                      height: 10,
-                      WebkitMask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain',
-                      mask: 'url(/images/icons/icon_music-soundtrack-headphones-sound-audio.svg) no-repeat center / contain',
-                    }}
-                  />
                 </span>
               )}
             </div>
@@ -131,7 +108,7 @@ export default function GameTileCard({ game }: GameTileCardProps) {
 
         {/* Info — serif title, muted platform list */}
         <div className="flex flex-col flex-1 p-4 pb-2">
-          <h3 className="font-heading text-[15px] font-bold leading-snug text-foreground line-clamp-2">
+          <h3 className="font-heading text-[15px] font-bold leading-snug text-foreground line-clamp-1">
             {game.title}
           </h3>
 

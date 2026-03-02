@@ -1,11 +1,10 @@
-import { Info } from "lucide-react";
 import Link from "next/link";
 
 const DisclosureBanner = () => {
   return (
     <div className="my-8 rounded-xl border border-primary/30 bg-primary/5 p-4">
       <div className="flex items-start gap-3">
-        <Info className="h-5 w-5 flex-shrink-0 text-primary" />
+        <span className="inline-block h-5 w-5 flex-shrink-0 text-primary bg-current" style={{ WebkitMask: 'url(/images/icons/icon_peace-chill-relax-about-info-headsup-quote.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_peace-chill-relax-about-info-headsup-quote.svg) no-repeat center / contain' }} />
         <div className="flex-1">
           <p className="text-sm leading-relaxed text-foreground">
             <strong>Affiliate Disclosure:</strong> This post contains affiliate

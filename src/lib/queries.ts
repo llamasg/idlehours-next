@@ -64,7 +64,6 @@ export async function getPost(slug: string) {
             coop,
             openCriticScore,
             difficulty,
-            replayability,
             greatSoundtrack,
             currentPrice,
             isFree,
@@ -421,21 +420,6 @@ export async function getSiteSettings() {
     }
   `)
   return settings
-}
-
-// Get active music tracks for the CD player
-export async function getMusicTracks() {
-  const tracks = await client.fetch(`
-    *[_type == "musicTrack" && active != false] | order(order asc) {
-      _id,
-      title,
-      artist,
-      "audioUrl": audioFile.asset->url,
-      "coverArt": coverArt.asset->url,
-      order
-    }
-  `)
-  return tracks
 }
 
 /*

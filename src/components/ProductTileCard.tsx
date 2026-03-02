@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ExternalLink } from 'lucide-react'
+
 import type { Product } from '@/types'
 
 interface ProductTileCardProps {
@@ -56,7 +56,7 @@ export default function ProductTileCard({ product }: ProductTileCardProps) {
             </span>
           )}
           <span className="flex items-center gap-1 font-heading text-xs font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
-            View <ExternalLink size={10} />
+            View <span className="inline-block shrink-0 bg-current" style={{ width: '10px', height: '10px', WebkitMask: 'url(/images/icons/icon_click-hover-mouse-tap-cursor.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_click-hover-mouse-tap-cursor.svg) no-repeat center / contain' }} />
           </span>
         </div>
       </div>

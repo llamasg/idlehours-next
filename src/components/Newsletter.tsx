@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail } from 'lucide-react'
+
 import type { NewsletterSection } from '@/types'
 
 interface NewsletterProps {
@@ -28,7 +28,7 @@ export default function Newsletter({ data }: NewsletterProps) {
       className="rounded-2xl border border-border/60 bg-card px-6 py-10 text-center shadow-sm sm:px-10 sm:py-14"
     >
       <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-        <Mail size={20} className="text-primary" />
+        <span className="inline-block shrink-0 text-primary bg-current" style={{ width: '20px', height: '20px', WebkitMask: 'url(/images/icons/icon_email-letter.svg) no-repeat center / contain', mask: 'url(/images/icons/icon_email-letter.svg) no-repeat center / contain' }} />
       </div>
 
       <h2 className="font-heading text-2xl font-bold text-foreground sm:text-3xl">

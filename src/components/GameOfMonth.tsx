@@ -12,39 +12,10 @@ function ocColor(score: number): string {
   return 'bg-blue-500 text-white'
 }
 
-function DifficultyLabel({ level }: { level: 1 | 2 | 3 }) {
-  const labels = { 1: 'Beginner', 2: 'Intermediate', 3: 'Experienced' } as const
-  return (
-    <div className="flex items-center gap-1" title={labels[level]}>
-      {([1, 2, 3] as const).map((i) => (
-        <span
-          key={i}
-          className={`inline-block h-2 w-2 rounded-full ${i <= level ? 'bg-amber-500' : 'bg-muted-foreground/20'}`}
-        />
-      ))}
-      <span className="ml-1 font-heading text-xs text-muted-foreground">{labels[level]}</span>
-    </div>
-  )
-}
-
-function ReplayMeter({ value }: { value: number }) {
-  return (
-    <div className="flex items-center gap-0.5" title={`Replayability: ${value}/5`}>
-      {[1, 2, 3, 4, 5].map((i) => {
-        const filled = value >= i
-        const half = !filled && value >= i - 0.5
-        return (
-          <span
-            key={i}
-            className={`inline-block h-2 w-2 rounded-full ${
-              filled ? 'bg-accent-green' : half ? 'bg-accent-green/50' : 'bg-muted-foreground/20'
-            }`}
-          />
-        )
-      })}
-      <span className="ml-1 font-heading text-xs text-muted-foreground">{value}/5 replay</span>
-    </div>
-  )
+const DIFF_META: Record<1 | 2 | 3, { label: string; color: string }> = {
+  1: { label: 'Easy', color: '#00e116' },
+  2: { label: 'Medium', color: '#f3a740' },
+  3: { label: 'Hard', color: '#e8134b' },
 }
 
 interface GameOfMonthProps {
@@ -104,10 +75,17 @@ export default function GameOfMonth({ data }: GameOfMonthProps) {
                 </span>
               )}
               {game.difficulty != null && (
-                <DifficultyLabel level={game.difficulty} />
-              )}
-              {game.replayability != null && (
-                <ReplayMeter value={game.replayability} />
+                <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-heading text-xs font-bold text-white" style={{ backgroundColor: DIFF_META[game.difficulty].color }}>
+                  <span
+                    className="inline-block shrink-0 bg-white"
+                    style={{
+                      width: 12, height: 12,
+                      WebkitMask: 'url(/images/icons/icon_sword-difficulty-fight-battle-weapon-attack.svg) no-repeat center / contain',
+                      mask: 'url(/images/icons/icon_sword-difficulty-fight-battle-weapon-attack.svg) no-repeat center / contain',
+                    }}
+                  />
+                  {DIFF_META[game.difficulty].label}
+                </span>
               )}
               {game.greatSoundtrack && (
                 <div className="flex items-center gap-1" title="Great Soundtrack">

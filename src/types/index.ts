@@ -28,7 +28,6 @@ export interface Game {
   }
   openCriticScore?: number
   difficulty?: 1 | 2 | 3
-  replayability?: number
   greatSoundtrack?: boolean
   genre?: string[]
   currentPrice?: number
@@ -180,16 +179,6 @@ export interface PokemonNominee {
   name: string
   votes: number
   typeColor: string
-}
-
-// ─── Music Track ─────────────────────────────────────
-export interface MusicTrack {
-  _id: string
-  title: string
-  artist: string
-  audioUrl: string
-  coverArt?: string
-  order?: number
 }
 
 export type HomepageSection =
