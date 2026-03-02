@@ -154,6 +154,66 @@ function SortSelect({ value, options, onChange }: SortSelectProps) {
   )
 }
 
+// ── GameListCard — horizontal list-view card ────────────────────────────────
+function GameListCard({ game }: { game: Game }) {
+  const { openLightbox } = useGameLightbox()
+
+  return (
+    <div
+      onClick={() => openLightbox(game)}
+      className="group cursor-pointer overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm transition-shadow hover:shadow-md"
+    >
+      <div className="grid gap-0 sm:grid-cols-[1.2fr_1fr]">
+        {/* Cover image */}
+        <div className="relative aspect-[16/9] overflow-hidden bg-secondary sm:aspect-auto sm:min-h-[220px]">
+          {game.coverImage ? (
+            <img src={game.coverImage} alt={game.title} className="absolute inset-0 h-full w-full object-cover" />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-gradient-to-br from-secondary to-muted">
+              <span className="font-heading text-muted-foreground">No image</span>
+            </div>
+          )}
+        </div>
+
+        {/* Info panel */}
+        <div className="flex flex-col justify-center p-5 sm:p-6">
+          <h3 className="font-heading text-xl font-bold text-foreground">
+            {game.title}
+          </h3>
+          {(game.genre ?? []).length > 0 && (
+            <p className="mt-1 font-heading text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              {(game.genre ?? []).join(' \u00b7 ')}
+            </p>
+          )}
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            {game.openCriticScore != null && (
+              <span className={`rounded-full px-2.5 py-0.5 font-heading text-xs font-bold shadow ${game.openCriticScore >= 90 ? 'bg-purple-600 text-white' : game.openCriticScore >= 75 ? 'bg-green-500 text-white' : game.openCriticScore >= 50 ? 'bg-green-700 text-white' : 'bg-blue-500 text-white'}`}>
+                {game.openCriticScore} OpenCritic
+              </span>
+            )}
+            {game.coop && (
+              <span className="rounded-full bg-blue-50 px-2.5 py-0.5 font-heading text-[10px] font-medium text-accent-green">
+                Co-op
+              </span>
+            )}
+          </div>
+          <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+            {game.shortDescription}
+          </p>
+          {(game.platforms ?? []).length > 0 && (
+            <p className="mt-2 text-[11px] tracking-wide text-muted-foreground">
+              {(game.platforms ?? []).join(' \u00b7 ')}
+            </p>
+          )}
+          <span className="mt-3 text-[11px] font-heading font-semibold uppercase tracking-wider text-muted-foreground/50 transition-colors group-hover:text-primary">
+            View Game
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug?: string }) {
   const [search, setSearch] = useState('')
   const [platform, setPlatform] = useState('All')
@@ -162,6 +222,18 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
   const [coopOnly, setCoopOnly] = useState(false)
   const [games, setGames] = useState<Game[]>([])
   const [gamesLoading, setGamesLoading] = useState(true)
+  const [view, setView] = useState<'grid' | 'list'>('grid')
+
+  // Restore view preference from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('ih-library-view')
+    if (saved === 'grid' || saved === 'list') setView(saved)
+  }, [])
+
+  function toggleView(v: 'grid' | 'list') {
+    setView(v)
+    localStorage.setItem('ih-library-view', v)
+  }
 
   useEffect(() => {
     getAllGames()
@@ -272,6 +344,31 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
             <h1 className="font-heading text-3xl font-black uppercase tracking-widest text-foreground sm:text-4xl">
               Game Library
             </h1>
+            <div className="ml-auto flex items-center gap-1 rounded-full border border-border bg-card p-1">
+              <button
+                onClick={() => toggleView('grid')}
+                className={`rounded-full p-1.5 transition-colors ${view === 'grid' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                aria-label="Grid view"
+              >
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 16 16">
+                  <rect x="1" y="1" width="6" height="6" rx="1" />
+                  <rect x="9" y="1" width="6" height="6" rx="1" />
+                  <rect x="1" y="9" width="6" height="6" rx="1" />
+                  <rect x="9" y="9" width="6" height="6" rx="1" />
+                </svg>
+              </button>
+              <button
+                onClick={() => toggleView('list')}
+                className={`rounded-full p-1.5 transition-colors ${view === 'list' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}
+                aria-label="List view"
+              >
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 16 16">
+                  <rect x="1" y="1" width="14" height="3" rx="1" />
+                  <rect x="1" y="6.5" width="14" height="3" rx="1" />
+                  <rect x="1" y="12" width="14" height="3" rx="1" />
+                </svg>
+              </button>
+            </div>
           </div>
           <p className="max-w-lg text-muted-foreground">
             Browse our curated collection of cozy games. Filter by platform, sort by cosiness, or just scroll and see what catches your eye.
@@ -351,7 +448,7 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
           {filtered.length} game{filtered.length !== 1 ? 's' : ''} found
         </p>
 
-        {/* Game grid */}
+        {/* Game grid / list */}
         {gamesLoading ? (
           <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
             {Array.from({ length: 10 }).map((_, i) => (
@@ -359,11 +456,23 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
             ))}
           </div>
         ) : filtered.length > 0 ? (
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
-            {filtered.map((game) => (
-              <GameTileCard key={game._id} game={game} />
-            ))}
-          </div>
+          view === 'grid' ? (
+            <motion.div layout className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
+              {filtered.map((game) => (
+                <motion.div key={game._id} layout transition={{ duration: 0.3 }}>
+                  <GameTileCard game={game} />
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div layout className="mx-auto flex max-w-[860px] flex-col gap-5">
+              {filtered.map((game) => (
+                <motion.div key={game._id} layout transition={{ duration: 0.3 }}>
+                  <GameListCard game={game} />
+                </motion.div>
+              ))}
+            </motion.div>
+          )
         ) : (
           <div className="rounded-2xl border border-border/60 bg-card px-6 py-16 text-center">
             <p className="font-heading text-lg font-semibold text-foreground">No games found</p>
