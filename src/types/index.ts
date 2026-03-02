@@ -35,7 +35,6 @@ export interface Game {
   isFree?: boolean
   lastPriceUpdated?: string
   affiliateLinks?: { label: string; url: string }[]
-  longDescription?: any[] // Portable Text blocks
   featured: boolean
   publishedAt: string
 }
