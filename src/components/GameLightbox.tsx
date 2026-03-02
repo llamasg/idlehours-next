@@ -109,9 +109,12 @@ export default function GameLightbox() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/70 px-4 py-8 sm:py-12"
+          className="fixed inset-0 z-50 flex flex-col items-center overflow-y-auto bg-black/70 px-4 py-8 sm:py-12"
           onClick={(e) => { if (e.target === e.currentTarget) closeLightbox() }}
         >
+          {/* Spacer to vertically center the hero card */}
+          <div className="flex-1" />
+
           <motion.div
             ref={dialogRef}
             role="dialog"
@@ -278,20 +281,24 @@ export default function GameLightbox() {
               </div>
             </div>
 
-            {/* Related games */}
-            {related.length > 0 && (
-              <div className="border-t border-border/40 p-6">
-                <h3 className="mb-3 font-heading text-sm font-bold text-foreground">
-                  You might also like
-                </h3>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                  {related.map((g) => (
-                    <GameTileCard key={g._id} game={g} />
-                  ))}
-                </div>
-              </div>
-            )}
           </motion.div>
+
+          {/* Related games — outside the hero card, on the dark overlay */}
+          {related.length > 0 && (
+            <div className="w-full max-w-7xl px-2 pt-6 pb-2">
+              <h3 className="mb-3 font-heading text-sm font-bold text-white/90">
+                Similar games
+              </h3>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                {related.map((g) => (
+                  <GameTileCard key={g._id} game={g} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Spacer to vertically center the hero card */}
+          <div className="flex-1" />
         </motion.div>
       )}
     </AnimatePresence>
