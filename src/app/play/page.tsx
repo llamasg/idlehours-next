@@ -7,6 +7,7 @@ import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import { getTodayDateString as getGameSenseToday } from './game-sense/lib/dateUtils'
 import { getTodayDateString as getStreetDateToday } from './street-date/lib/dateUtils'
+import { getTodayDateString as getShelfPriceToday } from './shelf-price/lib/dateUtils'
 
 const GAMES = [
   {
@@ -32,6 +33,18 @@ const GAMES = [
     accentBorder: 'border-amber-500/20',
     accentText: 'text-amber-600 dark:text-amber-400',
     accentBg: 'bg-amber-600 hover:bg-amber-700',
+  },
+  {
+    title: 'Shelf Price',
+    description: 'Guess the launch price of a video game.',
+    icon: '💰',
+    playTime: '2 min',
+    getHref: () => `/play/shelf-price/${getShelfPriceToday()}`,
+    archiveHref: '/play/shelf-price/archive',
+    color: 'from-emerald-500/10 to-emerald-500/5',
+    accentBorder: 'border-emerald-500/20',
+    accentText: 'text-emerald-600 dark:text-emerald-400',
+    accentBg: 'bg-emerald-600 hover:bg-emerald-700',
   },
 ]
 

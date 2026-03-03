@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { getTodayDateString as getGameSenseToday } from '@/app/play/game-sense/lib/dateUtils'
 import { getTodayDateString as getStreetDateToday } from '@/app/play/street-date/lib/dateUtils'
+import { getTodayDateString as getShelfPriceToday } from '@/app/play/shelf-price/lib/dateUtils'
 
 const CYCLE_MS = 10_000
 
@@ -25,12 +26,12 @@ const GAMES = [
     getHref: () => `/play/street-date/${getStreetDateToday()}`,
   },
   {
-    title: 'Coming Soon',
-    subtitle: 'Something new is brewing',
+    title: 'Shelf Price',
+    subtitle: 'Guess the launch price. How well do you know your games?',
     src: '/videos/game3.gif',
     type: 'gif' as const,
     playTime: '2 min',
-    getHref: () => '#',
+    getHref: () => `/play/shelf-price/${getShelfPriceToday()}`,
   },
 ]
 
