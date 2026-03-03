@@ -15,10 +15,15 @@ export default {
           '0%': { transform: 'translateY(0) rotate(0deg)', opacity: '1' },
           '100%': { transform: 'translateY(100vh) rotate(720deg)', opacity: '0' },
         },
+        'sticker-slap': {
+          '0%': { opacity: '0', transform: 'scale(2) rotate(var(--rot))' },
+          '100%': { opacity: '1', transform: 'scale(1) rotate(var(--rot))' },
+        },
       },
       animation: {
         echo: 'echo 0.6s ease-out',
         'confetti-fall': 'confetti-fall 2.5s ease-in forwards',
+        'sticker-slap': 'sticker-slap 0.3s ease-out forwards',
       },
   		borderRadius: {
   			lg: 'var(--radius)',

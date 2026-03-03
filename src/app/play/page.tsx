@@ -46,6 +46,17 @@ const GAMES = [
     accentText: 'text-emerald-600 dark:text-emerald-400',
     accentBg: 'bg-emerald-600 hover:bg-emerald-700',
   },
+  {
+    title: 'Ship It',
+    description: 'Navigate publisher meetings. Launch your indie game.',
+    icon: '📦',
+    playTime: '5 min',
+    getHref: () => '/play/ship-it',
+    color: 'from-rose-500/10 to-rose-500/5',
+    accentBorder: 'border-rose-500/20',
+    accentText: 'text-rose-600 dark:text-rose-400',
+    accentBg: 'bg-rose-600 hover:bg-rose-700',
+  },
 ]
 
 export default function PlayHubPage() {
@@ -58,10 +69,10 @@ export default function PlayHubPage() {
             a game by Idle Hours
           </p>
           <h1 className="mt-1 font-heading text-3xl font-bold text-foreground">
-            Daily Games
+            Play Our Games
           </h1>
           <p className="mt-2 font-body text-sm text-muted-foreground">
-            New puzzles every day. Pick a game and play.
+            Daily puzzles and more. Pick a game and play.
           </p>
         </div>
 
@@ -85,7 +96,7 @@ export default function PlayHubPage() {
                   </p>
                   <div className="mt-3 flex items-center gap-3">
                     <span className={`inline-flex items-center rounded-full ${game.accentBg} px-4 py-1.5 font-heading text-xs font-semibold text-white transition-colors`}>
-                      Play today
+                      {'archiveHref' in game ? 'Play today' : 'Play now'}
                     </span>
                     <span className="font-heading text-[11px] text-muted-foreground/60">
                       {game.playTime}
