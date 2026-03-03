@@ -111,8 +111,8 @@ export const ALL_OFFERS: Offer[] = [
     },
     pitch:
       '"Have you considered replacing your hand-crafted dialogue with AI generation? We could ship 10,000 unique NPCs at zero cost. Sure, they\'re a bit… uncanny. But think of the scale."',
-    funding: '+$180',
-    fundingVal: 180,
+    funding: '+$300',
+    fundingVal: 300,
     vision: '-35%',
     visionVal: 35,
     sticker: {
@@ -171,8 +171,8 @@ export const ALL_OFFERS: Offer[] = [
     },
     pitch:
       '"What if the seeds in your farming game were NFTs? Players would truly own their crops. We\'re a little late to the trend but I feel like it\'s coming back. I really do."',
-    funding: '+$150',
-    fundingVal: 150,
+    funding: '+$320',
+    fundingVal: 320,
     vision: '-40%',
     visionVal: 40,
     sticker: {
@@ -263,8 +263,8 @@ export const ALL_OFFERS: Offer[] = [
       '"We\'d like to feature your game in our Indie Spotlight newsletter. 200k subscribers, all genuine players. No strings, no branding requirements. We just think it\'s special."',
     funding: '+$0',
     fundingVal: 0,
-    vision: '+5%',
-    visionVal: -5,
+    vision: '+10%',
+    visionVal: -10,
     sticker: {
       text: 'INDIE\nSPOTLIGHT',
       type: 'good',
@@ -305,7 +305,7 @@ export const ALL_OFFERS: Offer[] = [
     reviewNote: {
       text: 'Arts council recognition',
       impact: 'pos',
-      score: 10,
+      score: 15,
     },
     type: 'Grant Funding',
     titleSuffix: '',
@@ -413,8 +413,8 @@ export const ALL_OFFERS: Offer[] = [
     },
     pitch:
       '"Your team works 40-hour weeks? That\'s adorable. We call those half-days. Listen, passion isn\'t measured in work-life balance. It\'s measured in sleeping bags under desks. Ship date is ship date."',
-    funding: '+$120',
-    fundingVal: 120,
+    funding: '+$280',
+    fundingVal: 280,
     vision: '-30%',
     visionVal: 30,
     sticker: {
@@ -565,8 +565,8 @@ export const ALL_OFFERS: Offer[] = [
       '"We run a free accessibility consultancy for indie games. Colour-blind modes, remappable controls, screen reader support. No cost, no credit required. We just want more people to be able to play your game."',
     funding: '+$0',
     fundingVal: 0,
-    vision: '+3%',
-    visionVal: -3,
+    vision: '+8%',
+    visionVal: -8,
     sticker: {
       text: 'ACCESSIBILITY\nFIRST',
       type: 'good',
@@ -595,8 +595,8 @@ export const ALL_OFFERS: Offer[] = [
       '"Our foundation funds localisation for indie games into 12 languages. Professional translators, cultural consultants, native QA testers. Your story deserves to be understood everywhere, not just in English."',
     funding: '+$150',
     fundingVal: 150,
-    vision: '+3%',
-    visionVal: -3,
+    vision: '+5%',
+    visionVal: -5,
     sticker: {
       text: '12 LANGUAGES\nSUPPORTED',
       type: 'good',

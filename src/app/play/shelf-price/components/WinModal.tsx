@@ -130,7 +130,7 @@ export default function WinModal({
 
             {/* Score */}
             <p className="mb-4 font-heading text-xl font-bold text-foreground">
-              {score} pts
+              {stars * 200} pts
             </p>
 
             {/* Actual price */}

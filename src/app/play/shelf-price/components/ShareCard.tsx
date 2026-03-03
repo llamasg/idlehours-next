@@ -22,13 +22,10 @@ export default function ShareCard({
 
   function buildShareText(): string {
     const number = formatGameNumber(dateStr)
-    const starLine =
-      '\u2605'.repeat(stars) +
-      '\u2606'.repeat(5 - stars) +
-      ` \u00b7 ${stars * 100} pts`
+    const starLine = '\u2605'.repeat(stars) + '\u2606'.repeat(5 - stars)
 
     const lines: string[] = [
-      `Shelf Price ${number}`,
+      `Shelf Price ${number} \u00b7 ${stars * 200}/1000`,
       starLine,
       'idlehours.co.uk/play/shelf-price',
     ]

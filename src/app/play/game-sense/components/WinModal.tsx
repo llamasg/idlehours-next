@@ -121,7 +121,7 @@ export default function WinModal({
           <div className="mb-4 grid grid-cols-2 gap-3">
             <div className="rounded-xl bg-muted/50 px-4 py-3 text-center">
               <p className="font-heading text-2xl font-bold text-foreground">
-                {score}
+                {score}/1000
               </p>
               <p className="font-heading text-xs uppercase tracking-wide text-muted-foreground">
                 Score

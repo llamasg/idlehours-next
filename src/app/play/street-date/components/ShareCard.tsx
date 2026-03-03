@@ -19,11 +19,10 @@ export default function ShareCard({
 
   function buildShareText(): string {
     const number = formatGameNumber(dateStr)
-    const starLine =
-      '★'.repeat(stars) + '☆'.repeat(5 - stars) + ` · ${stars * 100} pts`
+    const starLine = '\u2605'.repeat(stars) + '\u2606'.repeat(5 - stars)
 
     const lines: string[] = [
-      `Street Date ${number}`,
+      `Street Date ${number} \u00b7 ${stars * 200}/1000`,
       starLine,
       'idlehours.co.uk/play/street-date',
     ]

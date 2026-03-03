@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { Offer } from '../data/offers'
 import { PUBLISHERS, JOB_BOARDS } from '../data/constants'
 import DiscoverMore from '@/components/DiscoverMore'
@@ -123,6 +123,25 @@ export default function EndScreen({
         degradedTitle: dt,
       }
     }, [acceptedOffers, balance, vision, gameName])
+
+  // ── Share ──────────────────────────────────────────────────────────────
+
+  const [copied, setCopied] = useState(false)
+
+  async function handleShare() {
+    const lines = [
+      `Ship It \u00b7 ${verdict.label} (${score}%)`,
+      `\u201c${degradedTitle}\u201d`,
+      'idlehours.co.uk/play/ship-it',
+    ]
+    try {
+      await navigator.clipboard.writeText(lines.join('\n'))
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Clipboard API unavailable
+    }
+  }
 
   // ── Render ───────────────────────────────────────────────────────────────
 
@@ -287,12 +306,23 @@ export default function EndScreen({
         </div>
       </div>
 
-      {/* 7. Discover more */}
+      {/* 7. Share */}
+      <div className="mt-6 text-center">
+        <button
+          type="button"
+          onClick={handleShare}
+          className="rounded-full bg-primary px-6 py-2.5 font-heading text-sm font-semibold text-white transition-transform hover:scale-105"
+        >
+          {copied ? 'Copied!' : 'Share Result'}
+        </button>
+      </div>
+
+      {/* 8. Discover more */}
       <div className="mt-8">
         <DiscoverMore currentGame="ship-it" />
       </div>
 
-      {/* 8. Play again */}
+      {/* 10. Play again */}
       <button
         type="button"
         onClick={onPlayAgain}
