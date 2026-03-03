@@ -1,6 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
+import { getTodayDateString as getGameSenseToday } from '@/app/play/game-sense/lib/dateUtils'
+import { getTodayDateString as getStreetDateToday } from '@/app/play/street-date/lib/dateUtils'
 
 const CYCLE_MS = 10_000
 
@@ -11,15 +14,15 @@ const GAMES = [
     src: '/videos/skill issue.mp4',
     type: 'video' as const,
     playTime: '3 min',
-    href: '/play/game-sense',
+    getHref: () => `/play/game-sense/${getGameSenseToday()}`,
   },
   {
-    title: 'Box Art Challenge',
-    subtitle: 'Name the game from its cover art',
+    title: 'Street Date',
+    subtitle: 'Five covers. One year. How close can you get?',
     src: '/videos/box art.gif',
     type: 'gif' as const,
-    playTime: '5 min',
-    href: '#',
+    playTime: '2 min',
+    getHref: () => `/play/street-date/${getStreetDateToday()}`,
   },
   {
     title: 'Coming Soon',
@@ -27,7 +30,7 @@ const GAMES = [
     src: '/videos/game3.gif',
     type: 'gif' as const,
     playTime: '2 min',
-    href: '#',
+    getHref: () => '#',
   },
 ]
 
@@ -130,6 +133,17 @@ export default function PlayOurGames() {
                 <p className={`mt-0.5 text-xs ${isActive ? 'text-muted-foreground' : 'text-muted-foreground/60'}`}>
                   {game.subtitle}
                 </p>
+                {isActive && game.getHref() !== '#' && (
+                  <Link
+                    href={game.getHref()}
+                    className="mt-2 inline-flex items-center gap-1 font-heading text-xs font-semibold text-primary transition-colors hover:text-primary/80"
+                  >
+                    Play now
+                    <svg className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                )}
               </div>
             </div>
           )
