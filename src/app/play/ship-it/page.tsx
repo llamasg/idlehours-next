@@ -224,8 +224,12 @@ export default function ShipItPage() {
   return (
     <>
       <Header />
-      <main className="mx-auto max-w-2xl px-4 py-8">
-        {state.phase === 'start' && <StartScreen onStart={handleStart} />}
+      <main className="mx-auto px-4 py-8">
+        {state.phase === 'start' && (
+          <div className="mx-auto max-w-lg">
+            <StartScreen onStart={handleStart} />
+          </div>
+        )}
 
         {(state.phase === 'playing' || state.phase === 'transition') && (
           <div className="mx-auto max-w-4xl">
@@ -253,23 +257,27 @@ export default function ShipItPage() {
         )}
 
         {state.phase === 'end' && (
-          <EndScreen
-            gameName={state.gameName}
-            acceptedOffers={state.acceptedOffers}
-            balance={state.balance}
-            vision={state.vision}
-            onPlayAgain={handlePlayAgain}
-          />
+          <div className="mx-auto max-w-lg">
+            <EndScreen
+              gameName={state.gameName}
+              acceptedOffers={state.acceptedOffers}
+              balance={state.balance}
+              vision={state.vision}
+              onPlayAgain={handlePlayAgain}
+            />
+          </div>
         )}
 
         {state.phase === 'lose' && (
-          <LoseScreen
-            gameName={state.gameName}
-            balance={state.balance}
-            vision={state.vision}
-            round={state.round}
-            onPlayAgain={handlePlayAgain}
-          />
+          <div className="mx-auto max-w-lg">
+            <LoseScreen
+              gameName={state.gameName}
+              balance={state.balance}
+              vision={state.vision}
+              round={state.round}
+              onPlayAgain={handlePlayAgain}
+            />
+          </div>
         )}
       </main>
       <SiteFooter />
