@@ -1,5 +1,7 @@
 'use client'
 
+import { PUBLISHERS } from '../data/constants'
+
 interface LoseScreenProps {
   gameName: string
   balance: number
@@ -7,41 +9,6 @@ interface LoseScreenProps {
   round: number
   onPlayAgain: () => void
 }
-
-// ── Publisher data (shared with EndScreen) ────────────────────────────────────
-
-const PUBLISHERS = [
-  {
-    name: 'Devolver Digital',
-    url: 'https://devolverdigital.com',
-    desc: 'Weird, bold, trusted',
-  },
-  {
-    name: 'Annapurna Interactive',
-    url: 'https://annapurnainteractive.com',
-    desc: 'Artful, emotional',
-  },
-  {
-    name: 'Raw Fury',
-    url: 'https://rawfury.com',
-    desc: 'Developer-first',
-  },
-  {
-    name: 'Finji',
-    url: 'https://finji.co',
-    desc: 'Night in the Woods folk',
-  },
-  {
-    name: 'Fellow Traveller',
-    url: 'https://fellowtraveller.games',
-    desc: 'Narrative-led games',
-  },
-  {
-    name: 'tinyBuild',
-    url: 'https://tinybuild.com',
-    desc: 'Indie-friendly',
-  },
-]
 
 const ROUND_NAMES = ['Pitch Round', 'Development', 'Pre-Launch']
 
@@ -77,7 +44,7 @@ export default function LoseScreen({
       <div className="overflow-hidden rounded-b-2xl border border-border/60">
         {/* Top area */}
         <div className="flex items-center gap-5 bg-[#2a1a1a] px-7 py-5 dark:bg-red-950/30">
-          <span className="shrink-0 text-5xl">&#128367;&#65039;</span>
+          <span className="shrink-0 text-5xl">🕯️</span>
           <div>
             <h2 className="font-heading text-xl font-bold text-red-400">
               The lights went out.

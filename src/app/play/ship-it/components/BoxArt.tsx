@@ -69,7 +69,14 @@ export default function BoxArt({ gameName, stickers, vision }: BoxArtProps) {
             {vision}%
           </span>
         </div>
-        <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-muted/50">
+        <div
+          className="mt-1 h-2 w-full overflow-hidden rounded-full bg-muted/50"
+          role="progressbar"
+          aria-valuenow={vision}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`Vision: ${vision}%`}
+        >
           <div
             className={`h-full rounded-full transition-all duration-500 ${visionColour}`}
             style={{ width: `${Math.max(0, Math.min(100, vision))}%` }}

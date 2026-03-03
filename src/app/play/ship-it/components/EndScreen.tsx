@@ -1,6 +1,8 @@
 'use client'
 
+import { useMemo } from 'react'
 import type { Offer } from '../data/offers'
+import { PUBLISHERS, JOB_BOARDS } from '../data/constants'
 
 interface EndScreenProps {
   gameName: string
@@ -9,47 +11,6 @@ interface EndScreenProps {
   vision: number
   onPlayAgain: () => void
 }
-
-// ── Publisher & Job board data ────────────────────────────────────────────────
-
-const PUBLISHERS = [
-  {
-    name: 'Devolver Digital',
-    url: 'https://devolverdigital.com',
-    desc: 'Weird, bold, trusted',
-  },
-  {
-    name: 'Annapurna Interactive',
-    url: 'https://annapurnainteractive.com',
-    desc: 'Artful, emotional',
-  },
-  {
-    name: 'Raw Fury',
-    url: 'https://rawfury.com',
-    desc: 'Developer-first',
-  },
-  {
-    name: 'Finji',
-    url: 'https://finji.co',
-    desc: 'Night in the Woods folk',
-  },
-  {
-    name: 'Fellow Traveller',
-    url: 'https://fellowtraveller.games',
-    desc: 'Narrative-led games',
-  },
-  {
-    name: 'tinyBuild',
-    url: 'https://tinybuild.com',
-    desc: 'Indie-friendly',
-  },
-]
-
-const JOB_BOARDS = [
-  { name: 'Games Jobs Direct', url: 'https://gamesjobsdirect.com' },
-  { name: 'Hitmarker', url: 'https://hitmarker.net' },
-  { name: 'Work With Indies', url: 'https://workwithindies.com' },
-]
 
 // ── Verdict helpers ──────────────────────────────────────────────────────────
 
@@ -83,74 +44,84 @@ export default function EndScreen({
 }: EndScreenProps) {
   // ── Score calculation ────────────────────────────────────────────────────
 
-  let score = 75
-  const breakdownItems: { text: string; impact: string; score: number }[] = []
+  const { score, breakdownItems, verdict, verdictMessage, degradedTitle } =
+    useMemo(() => {
+      let s = 75
+      const items: { text: string; impact: 'neg' | 'pos' | 'neutral'; score: number }[] = []
 
-  // Vision bonus
-  if (vision >= 80) {
-    score += 15
-    breakdownItems.push({
-      text: 'Kept your original vision intact',
-      impact: 'pos',
-      score: 15,
-    })
-  } else if (vision >= 50) {
-    score += 5
-    breakdownItems.push({
-      text: 'Maintained most of your vision',
-      impact: 'pos',
-      score: 5,
-    })
-  } else {
-    score -= 10
-    breakdownItems.push({
-      text: 'Vision compromised heavily',
-      impact: 'neg',
-      score: -10,
-    })
-  }
+      // Vision bonus
+      if (vision >= 80) {
+        s += 15
+        items.push({
+          text: 'Kept your original vision intact',
+          impact: 'pos',
+          score: 15,
+        })
+      } else if (vision >= 50) {
+        s += 5
+        items.push({
+          text: 'Maintained most of your vision',
+          impact: 'pos',
+          score: 5,
+        })
+      } else {
+        s -= 10
+        items.push({
+          text: 'Vision compromised heavily',
+          impact: 'neg',
+          score: -10,
+        })
+      }
 
-  // Per accepted offer
-  acceptedOffers.forEach((o) => {
-    score += o.reviewNote.score
-    breakdownItems.push({
-      text: o.reviewNote.text,
-      impact: o.reviewNote.impact,
-      score: o.reviewNote.score,
-    })
-  })
+      // Per accepted offer
+      acceptedOffers.forEach((o) => {
+        s += o.reviewNote.score
+        items.push({
+          text: o.reviewNote.text,
+          impact: o.reviewNote.impact,
+          score: o.reviewNote.score,
+        })
+      })
 
-  // Balance bonus
-  if (balance >= 300) {
-    score += 5
-    breakdownItems.push({
-      text: 'Financially independent at launch',
-      impact: 'pos',
-      score: 5,
-    })
-  } else if (balance <= 0) {
-    score -= 10
-    breakdownItems.push({
-      text: 'Launched on fumes',
-      impact: 'neg',
-      score: -10,
-    })
-  }
+      // Balance bonus
+      if (balance >= 300) {
+        s += 5
+        items.push({
+          text: 'Financially independent at launch',
+          impact: 'pos',
+          score: 5,
+        })
+      } else if (balance <= 0) {
+        s -= 10
+        items.push({
+          text: 'Launched on fumes',
+          impact: 'neg',
+          score: -10,
+        })
+      }
 
-  score = Math.max(0, Math.min(100, score))
+      s = Math.max(0, Math.min(100, s))
 
-  const verdict = getVerdict(score)
-  const verdictMessage = getVerdictMessage(score)
+      const v = getVerdict(s)
+      const vm = getVerdictMessage(s)
 
-  // ── Degraded title ───────────────────────────────────────────────────────
+      // Degraded title
+      const suffixes = acceptedOffers
+        .filter((o) => o.titleSuffix)
+        .map((o) => o.titleSuffix)
+      const dt =
+        suffixes.length > 0
+          ? `${gameName}: ${suffixes.join(', ')}`
+          : gameName
 
-  const suffixes = acceptedOffers
-    .filter((o) => o.titleSuffix)
-    .map((o) => o.titleSuffix)
-  const degradedTitle =
-    suffixes.length > 0
-      ? `${gameName}: ${suffixes.join(', ')}`
-      : gameName
+      return {
+        score: s,
+        breakdownItems: items,
+        verdict: v,
+        verdictMessage: vm,
+        degradedTitle: dt,
+      }
+    }, [acceptedOffers, balance, vision, gameName])
 
   // ── Render ───────────────────────────────────────────────────────────────
 
@@ -186,7 +157,14 @@ export default function EndScreen({
         {/* Body */}
         <div className="rounded-b-xl border border-t-0 border-border/60 bg-card p-5">
           {/* Score bar */}
-          <div className="flex h-3 gap-0.5 overflow-hidden rounded-full border border-border/60">
+          <div
+            className="flex h-3 gap-0.5 overflow-hidden rounded-full border border-border/60"
+            role="progressbar"
+            aria-valuenow={score}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`Steam user score: ${score}% positive`}
+          >
             <div
               className="bg-green-500 transition-all duration-1000"
               style={{ width: `${score}%` }}
