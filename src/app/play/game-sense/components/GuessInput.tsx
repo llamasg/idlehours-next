@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { GAMES, type SkillIssueGame } from '../data/games'
+import { GAMES, type GameSenseGame } from '../data/games'
 
 interface GuessInputProps {
-  onGuess: (game: SkillIssueGame) => void
+  onGuess: (game: GameSenseGame) => void
   guessedIds: string[]
   disabled: boolean
 }
@@ -57,7 +57,7 @@ export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInput
   }, [highlightIndex])
 
   const selectGame = useCallback(
-    (game: SkillIssueGame) => {
+    (game: GameSenseGame) => {
       onGuess(game)
       setQuery('')
       setIsOpen(false)

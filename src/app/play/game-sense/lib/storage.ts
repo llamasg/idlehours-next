@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Skill Issue – localStorage helpers
+// Game Sense – localStorage helpers
 // ---------------------------------------------------------------------------
 
 export interface GuessRecord {
@@ -22,7 +22,7 @@ export const STARTING_SCORE = 1000;
 // ---------------------------------------------------------------------------
 
 function storageKey(dateStr: string): string {
-  return `skill_issue_${dateStr}`;
+  return `game_sense_${dateStr}`;
 }
 
 // ---------------------------------------------------------------------------

@@ -1,7 +1,7 @@
-// src/app/play/skill-issue/data/games.ts
-// Skill Issue — game database for the daily guessing game
+// src/app/play/game-sense/data/games.ts
+// Game Sense — game database for the daily guessing game
 
-export interface SkillIssueGame {
+export interface GameSenseGame {
   /** Kebab-case slug, e.g. "stardew-valley" */
   id: string
   title: string
@@ -20,7 +20,7 @@ export interface SkillIssueGame {
   tags: string[]
 }
 
-export const GAMES: SkillIssueGame[] = [
+export const GAMES: GameSenseGame[] = [
   {
     id: 'stardew-valley',
     title: 'Stardew Valley',
