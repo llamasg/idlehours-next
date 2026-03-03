@@ -33,6 +33,14 @@ const GAMES = [
     playTime: '2 min',
     getHref: () => `/play/shelf-price/${getShelfPriceToday()}`,
   },
+  {
+    title: 'Ship It',
+    subtitle: 'Navigate publisher meetings. Keep your vision. Launch your game.',
+    src: '/videos/game4.gif',
+    type: 'gif' as const,
+    playTime: '5 min',
+    getHref: () => '/play/ship-it',
+  },
 ]
 
 export default function PlayOurGames() {
@@ -70,7 +78,7 @@ export default function PlayOurGames() {
         }
       `}</style>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {GAMES.map((game, i) => {
           const isActive = i === active
           return (
