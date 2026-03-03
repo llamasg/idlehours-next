@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import type { Offer } from '../data/offers'
 import { PUBLISHERS, JOB_BOARDS } from '../data/constants'
+import DiscoverMore from '@/components/DiscoverMore'
 
 interface EndScreenProps {
   gameName: string
@@ -286,7 +287,12 @@ export default function EndScreen({
         </div>
       </div>
 
-      {/* 7. Play again */}
+      {/* 7. Discover more */}
+      <div className="mt-8">
+        <DiscoverMore currentGame="ship-it" />
+      </div>
+
+      {/* 8. Play again */}
       <button
         type="button"
         onClick={onPlayAgain}

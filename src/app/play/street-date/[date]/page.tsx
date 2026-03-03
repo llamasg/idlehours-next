@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect, useCallback, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
+import DiscoverMore from '@/components/DiscoverMore'
 import Link from 'next/link'
 import {
   getYearForDate,
@@ -242,6 +243,13 @@ export default function StreetDateDayPage({
             >
               View results
             </button>
+          </div>
+        )}
+
+        {/* Discover more — after game ends */}
+        {state.finished && !showModal && (
+          <div className="mb-8">
+            <DiscoverMore currentGame="street-date" />
           </div>
         )}
 

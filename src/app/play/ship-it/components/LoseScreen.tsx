@@ -1,6 +1,7 @@
 'use client'
 
 import { PUBLISHERS } from '../data/constants'
+import DiscoverMore from '@/components/DiscoverMore'
 
 interface LoseScreenProps {
   gameName: string
@@ -131,7 +132,12 @@ export default function LoseScreen({
         </div>
       </div>
 
-      {/* 5. Try again */}
+      {/* 5. Discover more */}
+      <div className="mt-8">
+        <DiscoverMore currentGame="ship-it" />
+      </div>
+
+      {/* 6. Try again */}
       <button
         type="button"
         onClick={onPlayAgain}

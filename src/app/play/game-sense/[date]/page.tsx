@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect, useCallback, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
+import DiscoverMore from '@/components/DiscoverMore'
 import Link from 'next/link'
 import { GAMES, type GameSenseGame } from '../data/games'
 import {
@@ -197,6 +198,13 @@ export default function GameSenseDayPage({
         {playable && state.guesses.length > 0 && (
           <div className="mb-8">
             <GuessList guesses={state.guesses} answerYear={answerYear} />
+          </div>
+        )}
+
+        {/* Discover more — after game ends */}
+        {state.won && !showWinModal && (
+          <div className="mb-8">
+            <DiscoverMore currentGame="game-sense" />
           </div>
         )}
 
