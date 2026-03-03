@@ -6,12 +6,12 @@ const CYCLE_MS = 10_000
 
 const GAMES = [
   {
-    title: 'Skill Issue',
-    subtitle: 'Guess the game from cryptic clues',
+    title: 'Game Sense',
+    subtitle: 'Guess the game from clues. Daily.',
     src: '/videos/skill issue.mp4',
     type: 'video' as const,
     playTime: '3 min',
-    href: '/play/skill-issue',
+    href: '/play/game-sense',
   },
   {
     title: 'Box Art Challenge',

@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const FOOTER_LINKS = [
   { label: 'Posts', href: '/blog' },
-  { label: 'Play', href: '/play/skill-issue' },
+  { label: 'Play', href: '/play/game-sense' },
   { label: 'Library', href: '/games' },
   { label: 'About', href: '/about' },
   { label: 'Quizzes', href: '/quizzes' },

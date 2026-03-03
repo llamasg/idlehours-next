@@ -1,12 +1,12 @@
 'use client'
 
-import type { SkillIssueGame } from '../data/games'
+import type { GameSenseGame } from '../data/games'
 
 export interface Lifeline {
   key: string
   label: string
   cost: number
-  reveal: (game: SkillIssueGame) => string | number | boolean | string[]
+  reveal: (game: GameSenseGame) => string | number | boolean | string[]
   format: (value: any) => string
 }
 
@@ -70,7 +70,7 @@ export const LIFELINES: Lifeline[] = [
 ]
 
 interface LifelinePanelProps {
-  answer: SkillIssueGame
+  answer: GameSenseGame
   lifelinesUsed: string[]
   lifelinesRevealed: Record<string, any>
   score: number

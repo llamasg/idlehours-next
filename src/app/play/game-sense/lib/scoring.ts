@@ -1,6 +1,6 @@
-// src/app/play/skill-issue/lib/scoring.ts
+// src/app/play/game-sense/lib/scoring.ts
 
-import type { SkillIssueGame } from '../data/games'
+import type { GameSenseGame } from '../data/games'
 
 /** Jaccard distance: 1 - (intersection / union). Returns 0-1. */
 function jaccardDistance(a: string[], b: string[]): number {
@@ -26,8 +26,8 @@ function pegiDistance(a: number, b: number): number {
  * Returns 1–1000 where 1 = correct, 1000 = maximally far.
  */
 export function calculateProximity(
-  guess: SkillIssueGame,
-  answer: SkillIssueGame,
+  guess: GameSenseGame,
+  answer: GameSenseGame,
 ): number {
   if (guess.id === answer.id) return 1
 

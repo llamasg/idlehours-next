@@ -33,7 +33,7 @@ export default function ShareCard({
     const emojiRow = guesses.map((g) => proximityEmoji(g.proximity)).join('')
 
     const lines: string[] = [
-      `Skill_Issue ${number}`,
+      `Game_Sense ${number}`,
       `Score: ${score} | Guesses: ${guesses.length}`,
       emojiRow,
     ]
@@ -42,7 +42,7 @@ export default function ShareCard({
       lines.push(`Lifelines: ${lifelinesUsedCount}`)
     }
 
-    lines.push('idlehours.co.uk/play/skill-issue')
+    lines.push('idlehours.co.uk/play/game-sense')
     lines.push('')
     lines.push(gameTitle)
 

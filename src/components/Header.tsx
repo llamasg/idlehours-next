@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 const NAV_LINKS = [
   { label: 'POSTS', href: '/blog', icon: '/images/IH_ICON_PENCIL.svg' },
-  { label: 'PLAY', href: '/play/skill-issue', icon: '/images/IH_ICON_GAME.svg' },
+  { label: 'PLAY', href: '/play/game-sense', icon: '/images/IH_ICON_GAME.svg' },
   { label: 'LIBRARY', href: '/games', icon: '/images/IH_ICON_READ.svg' },
   { label: 'ABOUT', href: '/about', icon: '/images/IH_ICON_HAND.svg' },
 ]

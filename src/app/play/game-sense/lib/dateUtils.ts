@@ -2,7 +2,7 @@ import { GAMES } from '../data/games';
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-/** The date Skill Issue launched, as a YYYY-MM-DD string. */
+/** The date Game Sense launched, as a YYYY-MM-DD string. */
 export const LAUNCH_DATE = '2026-02-22';
 
 /** Midnight UTC on launch day — the epoch from which day offsets are counted. */

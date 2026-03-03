@@ -531,7 +531,7 @@ export default function ParallaxHero({ contentRef }: ParallaxHeroProps) {
                     READ THE BLOG
                   </a>
                   <a
-                    href="/play/skill-issue"
+                    href="/play/game-sense"
                     className="px-5 py-2.5 bg-white/15 backdrop-blur-sm rounded-full text-white text-sm font-bold tracking-wider hover:bg-white/30 hover:scale-105 active:scale-95 transition-all duration-200"
                     style={{ fontFamily: "'Montserrat', sans-serif" }}
                   >
