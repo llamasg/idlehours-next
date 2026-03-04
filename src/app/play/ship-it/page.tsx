@@ -30,6 +30,7 @@ interface GameState {
   acceptedOffers: Offer[]
   stickers: Sticker[]
   roundQueue: Offer[][]
+  decisions: ('accept' | 'pass')[]
   phase: GamePhase
 }
 
@@ -44,6 +45,7 @@ const INITIAL_STATE: GameState = {
   acceptedOffers: [],
   stickers: [],
   roundQueue: [],
+  decisions: [],
   phase: 'start',
 }
 
@@ -106,6 +108,7 @@ export default function ShipItPage() {
       )
       const newAccepted = [...prev.acceptedOffers, offer]
       const newStickers = [...prev.stickers, offer.sticker]
+      const newDecisions = [...prev.decisions, 'accept' as const]
       const nextOfferInRound = prev.offerInRound + 1
 
       // Check bankruptcy
@@ -116,6 +119,7 @@ export default function ShipItPage() {
           vision: newVision,
           acceptedOffers: newAccepted,
           stickers: newStickers,
+          decisions: newDecisions,
           offerInRound: nextOfferInRound,
           phase: 'lose' as GamePhase,
         }
@@ -130,6 +134,7 @@ export default function ShipItPage() {
             vision: newVision,
             acceptedOffers: newAccepted,
             stickers: newStickers,
+            decisions: newDecisions,
             offerInRound: nextOfferInRound,
             phase: 'transition' as GamePhase,
           }
@@ -141,6 +146,7 @@ export default function ShipItPage() {
           vision: newVision,
           acceptedOffers: newAccepted,
           stickers: newStickers,
+          decisions: newDecisions,
           offerInRound: nextOfferInRound,
           phase: 'end' as GamePhase,
         }
@@ -153,6 +159,7 @@ export default function ShipItPage() {
         vision: newVision,
         acceptedOffers: newAccepted,
         stickers: newStickers,
+        decisions: newDecisions,
         offerInRound: nextOfferInRound,
       }
     })
@@ -163,6 +170,7 @@ export default function ShipItPage() {
   const handlePass = useCallback(() => {
     setState((prev) => {
       const newBalance = prev.balance - 100 // burn rate only
+      const newDecisions = [...prev.decisions, 'pass' as const]
       const nextOfferInRound = prev.offerInRound + 1
 
       // Check bankruptcy
@@ -170,6 +178,7 @@ export default function ShipItPage() {
         return {
           ...prev,
           balance: 0,
+          decisions: newDecisions,
           offerInRound: nextOfferInRound,
           phase: 'lose' as GamePhase,
         }
@@ -181,6 +190,7 @@ export default function ShipItPage() {
           return {
             ...prev,
             balance: newBalance,
+            decisions: newDecisions,
             offerInRound: nextOfferInRound,
             phase: 'transition' as GamePhase,
           }
@@ -188,6 +198,7 @@ export default function ShipItPage() {
         return {
           ...prev,
           balance: newBalance,
+          decisions: newDecisions,
           offerInRound: nextOfferInRound,
           phase: 'end' as GamePhase,
         }
@@ -196,6 +207,7 @@ export default function ShipItPage() {
       return {
         ...prev,
         balance: newBalance,
+        decisions: newDecisions,
         offerInRound: nextOfferInRound,
       }
     })
@@ -232,7 +244,7 @@ export default function ShipItPage() {
         )}
 
         {(state.phase === 'playing' || state.phase === 'transition') && (
-          <div className="mx-auto max-w-4xl">
+          <div className="mx-auto max-w-6xl">
             <GameScreen
               gameName={state.gameName}
               balance={state.balance}
@@ -240,6 +252,7 @@ export default function ShipItPage() {
               round={state.round}
               offerInRound={state.offerInRound}
               stickers={state.stickers}
+              decisions={state.decisions}
               currentOffer={
                 state.phase === 'playing'
                   ? (state.roundQueue[state.round]?.[state.offerInRound] ??
@@ -257,12 +270,13 @@ export default function ShipItPage() {
         )}
 
         {state.phase === 'end' && (
-          <div className="mx-auto max-w-lg">
+          <div className="mx-auto max-w-5xl">
             <EndScreen
               gameName={state.gameName}
               acceptedOffers={state.acceptedOffers}
               balance={state.balance}
               vision={state.vision}
+              stickers={state.stickers}
               onPlayAgain={handlePlayAgain}
             />
           </div>

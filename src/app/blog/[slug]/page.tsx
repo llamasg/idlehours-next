@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { PortableText } from '@portabletext/react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
+import BlogEngagement from '@/components/BlogEngagement'
 import DisclosureBanner from '@/components/DisclosureBanner'
 import AffiliateCTA from '@/components/AffiliateCTA'
 import ProductCallout from '@/components/ProductCallout'
@@ -192,6 +193,8 @@ export default async function BlogPostPage({
           <div className="prose max-w-none">
             <PortableText value={post.body} components={ptComponents} />
           </div>
+
+          <BlogEngagement />
 
           {otherPosts.length > 0 && (
             <div className="mt-16 border-t border-border pt-12">

@@ -33,18 +33,17 @@ export default function ShareCard({
     const emojiRow = guesses.map((g) => proximityEmoji(g.proximity)).join('')
 
     const lines: string[] = [
-      `Game_Sense ${number}`,
-      `Score: ${score} | Guesses: ${guesses.length}`,
+      `Game Sense ${number} \u00b7 ${score}/1000`,
       emojiRow,
     ]
 
     if (lifelinesUsedCount > 0) {
-      lines.push(`Lifelines: ${lifelinesUsedCount}`)
+      lines.push(`${guesses.length} guesses \u00b7 ${lifelinesUsedCount} lifelines`)
+    } else {
+      lines.push(`${guesses.length} guesses`)
     }
 
     lines.push('idlehours.co.uk/play/game-sense')
-    lines.push('')
-    lines.push(gameTitle)
 
     return lines.join('\n')
   }
