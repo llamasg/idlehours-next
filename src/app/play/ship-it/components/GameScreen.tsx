@@ -4,6 +4,7 @@ import type { Offer, Sticker } from '../data/offers'
 import BoxArt from './BoxArt'
 import OfferCard from './OfferCard'
 import TransitionCard from './TransitionCard'
+import ProgressBar from './ProgressBar'
 
 interface GameScreenProps {
   gameName: string
@@ -16,6 +17,7 @@ interface GameScreenProps {
   showTransition: boolean
   transitionData: { title: string; text: string } | null
   roundName: string
+  decisions: ('accept' | 'pass')[]
   onAccept: () => void
   onPass: () => void
   onContinue: () => void
@@ -32,6 +34,7 @@ export default function GameScreen({
   showTransition,
   transitionData,
   roundName,
+  decisions,
   onAccept,
   onPass,
   onContinue,
@@ -41,66 +44,42 @@ export default function GameScreen({
       ? 'text-red-500'
       : balance < 200
         ? 'text-amber-500'
-        : 'text-foreground'
+        : 'text-amber-700 dark:text-amber-400'
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-6">
-      {/* Top bar */}
-      <div className="mb-4 flex items-center justify-between rounded-xl border border-border/60 bg-card px-4 py-3">
-        <span className="font-heading text-sm font-bold text-foreground">
-          &#9670; Ship It
-        </span>
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <p className="font-heading text-[10px] uppercase tracking-wider text-muted-foreground">
-              Balance
-            </p>
-            <p className={`font-heading text-sm font-bold ${balanceColour}`}>
-              ${balance}
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="font-heading text-[10px] uppercase tracking-wider text-muted-foreground">
-              Burn / day
-            </p>
-            <p className="font-heading text-sm font-bold text-amber-500">
-              $100
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="font-heading text-[10px] uppercase tracking-wider text-muted-foreground">
-              Offers today
-            </p>
-            <p className="font-heading text-sm font-bold text-foreground">
-              {3 - offerInRound}
-            </p>
-          </div>
+    <div className="mx-auto max-w-6xl px-4 py-6">
+      {/* Top bar — NYT-style stat pills, large */}
+      <div className="mb-8 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+        <div className="min-w-[140px] rounded-xl border border-border/40 bg-white px-6 py-4 text-center shadow-sm dark:bg-card sm:min-w-[160px] sm:px-8">
+          <p className="font-heading text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            Balance
+          </p>
+          <p className={`font-heading text-3xl font-black ${balanceColour}`}>
+            ${balance}
+          </p>
+        </div>
+        <div className="min-w-[140px] rounded-xl border border-border/40 bg-white px-6 py-4 text-center shadow-sm dark:bg-card sm:min-w-[160px] sm:px-8">
+          <p className="font-heading text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            Daily Costs
+          </p>
+          <p className="font-heading text-3xl font-black text-amber-600 dark:text-amber-400">
+            $100
+          </p>
+        </div>
+        <div className="min-w-[140px] rounded-xl border border-border/40 bg-white px-6 py-4 text-center shadow-sm dark:bg-card sm:min-w-[160px] sm:px-8">
+          <p className="font-heading text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            Offers
+          </p>
+          <p className="font-heading text-3xl font-black text-black dark:text-foreground">
+            {3 - offerInRound}
+          </p>
         </div>
       </div>
 
-      {/* Stage dots */}
-      <div className="mb-6 flex items-center justify-center gap-2">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className={`h-2.5 w-2.5 rounded-full ${
-              i < round
-                ? 'bg-primary'
-                : i === round
-                  ? 'bg-primary ring-2 ring-primary/30'
-                  : 'bg-muted/50'
-            }`}
-          />
-        ))}
-        <span className="ml-2 font-heading text-xs text-muted-foreground">
-          {roundName}
-        </span>
-      </div>
-
-      {/* Two-panel layout */}
-      <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
+      {/* Two-panel layout — wider on desktop */}
+      <div className="lg:grid lg:grid-cols-[1fr_1.4fr] lg:gap-10 lg:items-center xl:gap-14">
         {/* Left: Box art */}
-        <div className="mb-6 lg:mb-0">
+        <div className="mb-8 lg:mb-0">
           <BoxArt gameName={gameName} stickers={stickers} vision={vision} />
         </div>
 
@@ -124,6 +103,14 @@ export default function GameScreen({
           ) : null}
         </div>
       </div>
+
+      {/* Progress bar */}
+      <ProgressBar
+        decisions={decisions}
+        round={round}
+        offerInRound={offerInRound}
+        showTransition={showTransition}
+      />
     </div>
   )
 }

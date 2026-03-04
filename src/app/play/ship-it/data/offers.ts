@@ -3,7 +3,8 @@
 export interface Exec {
   name: string
   title: string
-  avatar: string // Emoji now, will be replaced with image later
+  avatar: string // Emoji fallback
+  image: string // Filename in /images/ship_it_characters/
 }
 
 export interface Sticker {
@@ -45,9 +46,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'microtx',
     exec: {
-      name: 'Derek Huang',
+      name: 'Hay Billed',
       title: 'VP of Monetisation Strategy',
       avatar: '💼',
+      image: 'hay billed - season pass.png',
     },
     pitch:
       '"Love the emotional core. We\'re thinking — what if grief had a season pass? Players pay £4.99 a month to unlock the sadder endings. Engagement metrics through the roof."',
@@ -75,9 +77,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'liveservice',
     exec: {
-      name: 'Sarah Chen',
+      name: 'Kon Cord',
       title: 'Head of Live Operations',
       avatar: '📊',
+      image: 'Kon Cord - Live service.png',
     },
     pitch:
       '"One-time purchases are dead. We need daily quests, weekly challenges, seasonal events. Players should feel like missing a day has consequences. FOMO is a feature."',
@@ -105,9 +108,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'ai',
     exec: {
-      name: 'Marcus Webb',
+      name: 'Arti Fishal',
       title: 'Chief Innovation Officer',
       avatar: '🤖',
+      image: 'Arti Fishal - AI generation.png',
     },
     pitch:
       '"Have you considered replacing your hand-crafted dialogue with AI generation? We could ship 10,000 unique NPCs at zero cost. Sure, they\'re a bit… uncanny. But think of the scale."',
@@ -135,9 +139,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'battlepass',
     exec: {
-      name: 'Tiffany Monroe',
+      name: 'Payaton Winsalot',
       title: 'Director of Player Engagement',
       avatar: '🎯',
+      image: 'Payaton Winsalot - battle pass.png',
     },
     pitch:
       '"A battle pass. Hear me out. Not a violent one — a cozy battle pass. Seasonal cosmetics, exclusive crops. Players love it. We\'ve seen it work in everything. Literally everything."',
@@ -165,9 +170,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'nft',
     exec: {
-      name: 'Brendan Frost',
+      name: 'Shill Koi.N',
       title: 'Web3 Synergy Lead',
       avatar: '🪙',
+      image: 'Shill Koi. N - NFTs.png',
     },
     pitch:
       '"What if the seeds in your farming game were NFTs? Players would truly own their crops. We\'re a little late to the trend but I feel like it\'s coming back. I really do."',
@@ -195,9 +201,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'mobile',
     exec: {
-      name: 'Lisa Park',
+      name: 'Port A. Bull',
       title: 'Platform Expansion Director',
       avatar: '📱',
+      image: 'Port a. bull - mobile port.png',
     },
     pitch:
       '"We need a mobile version by launch. Same game, different screen. The development team said six months — I said six weeks. They\'ll figure it out. The market is huge."',
@@ -225,9 +232,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'sequel',
     exec: {
-      name: 'Tom Bradley',
+      name: 'Fran Chives',
       title: 'Franchise Strategy VP',
       avatar: '🎬',
+      image: 'Fran Chives - Origins edition.png',
     },
     pitch:
       '"Add \'Origins\' to the title. It implies there\'s more coming. Creates franchise expectation. We don\'t need to have the sequel planned — we just need the market to think we do."',
@@ -255,9 +263,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'goodpress',
     exec: {
-      name: 'Anya Kowalski',
+      name: 'Al Truist',
       title: 'Head of Indie Relations',
       avatar: '🌿',
+      image: 'Al truist - indie spotlight.png',
     },
     pitch:
       '"We\'d like to feature your game in our Indie Spotlight newsletter. 200k subscribers, all genuine players. No strings, no branding requirements. We just think it\'s special."',
@@ -285,9 +294,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'goodgrant',
     exec: {
-      name: 'James Osei',
+      name: 'Grant Fundsworth',
       title: 'Arts Council Gaming Fund',
       avatar: '🏛️',
+      image: 'Grant fundsworth - culture grant funding.png',
     },
     pitch:
       '"We provide grants to games with genuine cultural merit. No equity stake, no creative control, no obligations beyond a 500-word report. Your game qualifies on every criterion."',
@@ -317,9 +327,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'exclusive',
     exec: {
-      name: 'Victor Nash',
+      name: 'Nim Ken Doh',
       title: 'Strategic Partnerships Director',
       avatar: '🔒',
+      image: 'Nim Ken Doh - platform exclusive.png',
     },
     pitch:
       '"We\'ll put your game on the front page of our store for a full week. All we need is two years of exclusivity. Your fans on other platforms? They\'ll wait. They always wait. They have no choice."',
@@ -347,9 +358,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'earlyaccess',
     exec: {
-      name: 'Doug Mercer',
+      name: 'Earl E. Access',
       title: 'Release Strategy Consultant',
       avatar: '🚧',
+      image: 'Earl E. Access - early access.png',
     },
     pitch:
       '"Why finish the game when you can launch it now? Call it Early Access. Charge full price. Promise a roadmap. If the roadmap takes three years, that\'s three years of community engagement. It\'s genius."',
@@ -377,9 +389,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'influencer',
     exec: {
-      name: 'Chloe Ramirez',
+      name: 'Lily Padd',
       title: 'Influencer Partnerships Manager',
       avatar: '🎥',
+      image: 'lily padd- influencers.png',
     },
     pitch:
       '"We\'ve got a streamer lined up. 2 million followers. He\'s never played a cozy game. He doesn\'t know what your game is. But he\'ll act surprised for exactly 45 minutes and his chat will spam emotes. That\'s marketing."',
@@ -407,9 +420,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'crunch',
     exec: {
-      name: 'Richard Hale',
+      name: 'Noel Ife',
       title: 'Production Efficiency Director',
       avatar: '⏰',
+      image: 'Noel ife - crunch culture.png',
     },
     pitch:
       '"Your team works 40-hour weeks? That\'s adorable. We call those half-days. Listen, passion isn\'t measured in work-life balance. It\'s measured in sleeping bags under desks. Ship date is ship date."',
@@ -437,9 +451,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'gacha',
     exec: {
-      name: 'Karen Whitfield',
+      name: 'Lew T. Goblin',
       title: 'Surprise Mechanics Designer',
       avatar: '🎰',
+      image: 'lew t. goblin - loot boxes.png',
     },
     pitch:
       '"Loot boxes are just surprise mechanics. Players love surprises. What if every harvest gave you a random seed? You might get a golden pumpkin, you might get nothing. The dopamine hit is the real crop."',
@@ -467,9 +482,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'telemetry',
     exec: {
-      name: 'Alan Briggs',
+      name: 'Anna Lytics',
       title: 'Player Insights Architect',
       avatar: '👁️',
+      image: 'anna lytics - analytics.png',
     },
     pitch:
       '"We need to track everything. Mouse movement, pause frequency, how long they stare at the sunset. If a player cries, we want to know which pixel did it. Privacy policy? That\'s legal\'s problem."',
@@ -497,9 +513,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'branddeal',
     exec: {
-      name: 'Patricia Lowell',
+      name: 'Mark E. Ting',
       title: 'Brand Integration Specialist',
       avatar: '🏷️',
+      image: 'Mark E. Ting - product placement.png',
     },
     pitch:
       '"What if your character drank real energy drinks? We\'ve got a deal with a major brand. They\'ll sponsor your entire harvest festival if every scarecrow wears their logo. It\'s synergy. It\'s beautiful."',
@@ -527,9 +544,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'alwayson',
     exec: {
-      name: 'Greg Tanaka',
+      name: 'Greg Arious',
       title: 'Social Features Evangelist',
       avatar: '🌐',
+      image: 'greg arious - always online.png',
     },
     pitch:
       '"Single-player is a red flag for investors. We need always-online. Co-op. Leaderboards. What if you could see other players\' farms? Competition drives retention. Solitude is a bug, not a feature."',
@@ -557,9 +575,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'goodaccess',
     exec: {
-      name: 'Mei-Lin Torres',
+      name: 'Andy Capp',
       title: 'Accessibility Partnerships Lead',
       avatar: '♿',
+      image: 'Andy Capp - Accessibility.png',
     },
     pitch:
       '"We run a free accessibility consultancy for indie games. Colour-blind modes, remappable controls, screen reader support. No cost, no credit required. We just want more people to be able to play your game."',
@@ -587,9 +606,10 @@ export const ALL_OFFERS: Offer[] = [
   {
     id: 'goodlocal',
     exec: {
-      name: 'Sofia Andersson',
+      name: 'Lin Guist',
       title: 'Global Games Initiative',
       avatar: '🌍',
+      image: 'lin guist - language support.png',
     },
     pitch:
       '"Our foundation funds localisation for indie games into 12 languages. Professional translators, cultural consultants, native QA testers. Your story deserves to be understood everywhere, not just in English."',
