@@ -140,7 +140,7 @@ function Blank({ blank, answer, revealed, score, disabled, onReveal }: BlankProp
   const canAfford = score >= blank.cost
   const value = blank.reveal(answer)
 
-  if (revealed || disabled) {
+  if (revealed) {
     return (
       <span
         className="inline-flex items-center justify-center rounded-[6px] px-[14px] text-[0.85em] font-bold text-white"

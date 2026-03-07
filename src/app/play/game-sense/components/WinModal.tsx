@@ -92,11 +92,11 @@ export default function WinModal({
         <div className="mx-4 w-full max-w-sm overflow-hidden rounded-2xl bg-card shadow-xl font-game">
           {/* Cover hero */}
           {coverUrl && (
-            <div className="relative h-[160px] w-full overflow-hidden bg-secondary">
+            <div className="relative w-full overflow-hidden bg-secondary" style={{ maxHeight: '280px' }}>
               <img
                 src={coverUrl}
                 alt={answer.title}
-                className="h-full w-full object-cover"
+                className="w-full object-contain"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-3 left-4 right-4">

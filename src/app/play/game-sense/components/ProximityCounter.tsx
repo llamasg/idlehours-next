@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { GAMES } from '../data/games'
 
 const TOTAL = GAMES.length
+const DURATION = 3500 // fixed 3.5s for every reveal
 
 interface ProximityCounterProps {
   gameTitle: string
@@ -12,10 +13,14 @@ interface ProximityCounterProps {
 }
 
 /**
- * Pointless-style animated countdown.
- * Two phases:
- *  1. Fast sweep from TOTAL down to ~targetRank+10 using RAF
- *  2. Stepped ticks for the final stretch with increasing delays
+ * Pointless-style animated countdown. Always takes 3.5s.
+ *
+ * Easing adapts to the range:
+ * - Large range (900 numbers): power-6 ease-out, zooms through bulk,
+ *   crawls through last ~20, near-frozen for last 3
+ * - Small range (30 numbers): power-2, much more linear feel
+ *
+ * The last few numbers always get dramatic pauses via stepped ticks.
  */
 export default function ProximityCounter({
   gameTitle,
@@ -23,7 +28,7 @@ export default function ProximityCounter({
   onComplete,
 }: ProximityCounterProps) {
   const [displayValue, setDisplayValue] = useState(TOTAL)
-  const [phase, setPhase] = useState<'counting' | 'landed' | 'correct'>('counting')
+  const [phase, setPhase] = useState<'counting' | 'stepped' | 'landed' | 'correct'>('counting')
   const cancelledRef = useRef(false)
 
   useEffect(() => {
@@ -31,53 +36,60 @@ export default function ProximityCounter({
     let raf = 0
 
     const isCorrect = targetRank === 1
-    // Where the slow phase kicks in
-    const slowThreshold = Math.min(targetRank + 12, TOTAL)
-    // Fast phase goes from TOTAL down to slowThreshold
-    const fastRange = TOTAL - slowThreshold
-    const fastDuration = Math.min(2000, 400 + fastRange * 1.5)
+    const range = TOTAL - targetRank
+
+    // How many numbers to handle in the stepped (tick-by-tick) final phase
+    const steppedCount = isCorrect ? 10 : Math.min(8, Math.max(3, Math.round(range * 0.03)))
+    const steppedTarget = targetRank + steppedCount
+    const rafRange = TOTAL - steppedTarget
+
+    // RAF phase gets ~65% of total time, stepped phase gets ~35%
+    const rafDuration = DURATION * 0.65
+    const steppedBudget = DURATION * 0.35
+
+    // Easing power adapts: more numbers = more aggressive curve
+    // Small range (< 50): power ~2 (nearly linear)
+    // Large range (> 500): power ~6 (extreme end-weight)
+    const power = Math.max(2, Math.min(6, 1.5 + (range / 150)))
 
     const startTime = Date.now()
 
-    function fastPhase() {
+    function rafPhase() {
       if (cancelledRef.current) return
       const elapsed = Date.now() - startTime
-      const progress = Math.min(1, elapsed / fastDuration)
+      const progress = Math.min(1, elapsed / rafDuration)
 
-      // Aggressive ease-out: power of 5 for extreme deceleration
-      const eased = 1 - Math.pow(1 - progress, 5)
-      const current = Math.round(TOTAL - eased * fastRange)
-      setDisplayValue(current)
+      // Adaptive ease-out
+      const eased = 1 - Math.pow(1 - progress, power)
+      const current = Math.round(TOTAL - eased * rafRange)
+      setDisplayValue(Math.max(current, steppedTarget))
 
       if (progress < 1) {
-        raf = requestAnimationFrame(fastPhase)
+        raf = requestAnimationFrame(rafPhase)
       } else {
-        setDisplayValue(slowThreshold)
-        slowPhase(slowThreshold)
+        setDisplayValue(steppedTarget)
+        setPhase('stepped')
+        steppedPhase()
       }
     }
 
-    async function slowPhase(from: number) {
-      // Step through each number from `from` down to targetRank
-      for (let n = from - 1; n >= targetRank; n--) {
+    async function steppedPhase() {
+      // Distribute steppedBudget across steppedCount ticks
+      // Weight: later ticks (closer to target) get exponentially more time
+      const weights: number[] = []
+      for (let i = 0; i < steppedCount; i++) {
+        // i=0 is furthest from target, i=steppedCount-1 is last tick
+        const w = Math.pow(1.8, i)
+        weights.push(w)
+      }
+      const totalWeight = weights.reduce((a, b) => a + b, 0)
+
+      for (let i = 0; i < steppedCount; i++) {
         if (cancelledRef.current) return
-
-        // Delay increases as we get closer to target
-        const remaining = n - targetRank
-        let delay: number
-        if (remaining <= 2) {
-          delay = isCorrect ? 600 : 350
-        } else if (remaining <= 5) {
-          delay = isCorrect ? 400 : 200
-        } else if (remaining <= 10) {
-          delay = isCorrect ? 200 : 120
-        } else {
-          delay = 60
-        }
-
+        const delay = (weights[i] / totalWeight) * steppedBudget
         await new Promise((r) => setTimeout(r, delay))
         if (cancelledRef.current) return
-        setDisplayValue(n)
+        setDisplayValue(steppedTarget - 1 - i)
       }
 
       if (cancelledRef.current) return
@@ -95,12 +107,12 @@ export default function ProximityCounter({
       }
     }
 
-    // Kick off
-    if (fastRange <= 0) {
-      // Target is very close to TOTAL, skip fast phase
-      slowPhase(TOTAL)
+    // Edge case: range is tiny, skip RAF phase
+    if (rafRange <= 0) {
+      setPhase('stepped')
+      steppedPhase()
     } else {
-      raf = requestAnimationFrame(fastPhase)
+      raf = requestAnimationFrame(rafPhase)
     }
 
     return () => {
@@ -136,7 +148,7 @@ export default function ProximityCounter({
           height: '64px',
         }}
       >
-        {/* Fill bar — no CSS transition, driven directly by displayValue */}
+        {/* Fill bar — driven directly by displayValue, no CSS transition */}
         <div
           className="absolute inset-y-0 left-0"
           style={{
@@ -159,13 +171,8 @@ export default function ProximityCounter({
 
       {/* Status text */}
       <div className="mt-2 text-center" style={{ minHeight: '28px' }}>
-        {phase === 'counting' && displayValue > targetRank + 12 && (
+        {(phase === 'counting' || phase === 'stepped') && (
           <p className="text-xs font-semibold text-muted-foreground">
-            &nbsp;
-          </p>
-        )}
-        {phase === 'counting' && displayValue <= targetRank + 12 && (
-          <p className="text-xs font-semibold text-muted-foreground animate-pulse">
             &nbsp;
           </p>
         )}

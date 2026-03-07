@@ -86,7 +86,6 @@ export default function GameSenseDayPage({
     const newState: DayState = {
       ...state,
       guesses: [...state.guesses, { gameId: game.id, proximity }],
-      score: Math.max(0, state.score - GUESS_COST),
       won,
     }
 
