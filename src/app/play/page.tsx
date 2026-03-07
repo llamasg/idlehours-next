@@ -9,53 +9,62 @@ import { getTodayDateString as getGameSenseToday } from './game-sense/lib/dateUt
 import { getTodayDateString as getStreetDateToday } from './street-date/lib/dateUtils'
 import { getTodayDateString as getShelfPriceToday } from './shelf-price/lib/dateUtils'
 
-const GAMES = [
+interface GameCard {
+  title: string
+  subtitle: string
+  icon: string
+  playTime: string
+  getHref: () => string
+  archiveHref?: string
+  // Visual
+  gradient: string
+  iconBg: string
+  btnColor: string
+}
+
+const GAMES: GameCard[] = [
   {
     title: 'Game Sense',
-    description: 'Guess the game from clues. A new challenge every day.',
+    subtitle: 'Guess the game from clues',
     icon: '🎮',
     playTime: '3 min',
     getHref: () => `/play/game-sense/${getGameSenseToday()}`,
     archiveHref: '/play/game-sense/archive',
-    color: 'from-violet-500/10 to-violet-500/5',
-    accentBorder: 'border-violet-500/20',
-    accentText: 'text-violet-600 dark:text-violet-400',
-    accentBg: 'bg-violet-600 hover:bg-violet-700',
+    gradient: 'from-[#4A8FE8]/20 via-[#4A8FE8]/10 to-[#2D6BC4]/5',
+    iconBg: 'bg-[#4A8FE8]/15',
+    btnColor: 'bg-[#4A8FE8] hover:bg-[#2D6BC4]',
   },
   {
     title: 'Street Date',
-    description: 'Five covers. One year. How close can you get?',
+    subtitle: 'Five covers. One year. How close?',
     icon: '📅',
     playTime: '2 min',
     getHref: () => `/play/street-date/${getStreetDateToday()}`,
     archiveHref: '/play/street-date/archive',
-    color: 'from-amber-500/10 to-amber-500/5',
-    accentBorder: 'border-amber-500/20',
-    accentText: 'text-amber-600 dark:text-amber-400',
-    accentBg: 'bg-amber-600 hover:bg-amber-700',
+    gradient: 'from-amber-500/15 via-amber-500/8 to-orange-600/5',
+    iconBg: 'bg-amber-500/15',
+    btnColor: 'bg-amber-600 hover:bg-amber-700',
   },
   {
     title: 'Shelf Price',
-    description: 'Guess the launch price of a video game.',
+    subtitle: 'Which game cost more at launch?',
     icon: '💰',
     playTime: '2 min',
     getHref: () => `/play/shelf-price/${getShelfPriceToday()}`,
     archiveHref: '/play/shelf-price/archive',
-    color: 'from-emerald-500/10 to-emerald-500/5',
-    accentBorder: 'border-emerald-500/20',
-    accentText: 'text-emerald-600 dark:text-emerald-400',
-    accentBg: 'bg-emerald-600 hover:bg-emerald-700',
+    gradient: 'from-emerald-500/15 via-emerald-500/8 to-teal-600/5',
+    iconBg: 'bg-emerald-500/15',
+    btnColor: 'bg-emerald-600 hover:bg-emerald-700',
   },
   {
     title: 'Ship It',
-    description: 'Navigate publisher meetings. Launch your indie game.',
+    subtitle: 'Navigate publishers. Launch your indie game.',
     icon: '📦',
     playTime: '5 min',
     getHref: () => '/play/ship-it',
-    color: 'from-rose-500/10 to-rose-500/5',
-    accentBorder: 'border-rose-500/20',
-    accentText: 'text-rose-600 dark:text-rose-400',
-    accentBg: 'bg-rose-600 hover:bg-rose-700',
+    gradient: 'from-rose-500/15 via-rose-500/8 to-pink-600/5',
+    iconBg: 'bg-rose-500/15',
+    btnColor: 'bg-rose-600 hover:bg-rose-700',
   },
 ]
 
@@ -63,7 +72,7 @@ export default function PlayHubPage() {
   return (
     <>
       <Header />
-      <main className="mx-auto max-w-2xl px-4 py-12">
+      <main className="mx-auto max-w-3xl px-4 py-12">
         <div className="mb-10 text-center">
           <p className="font-heading text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             a game by Idle Hours
@@ -76,44 +85,56 @@ export default function PlayHubPage() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {GAMES.map((game) => (
-            <Link
+            <div
               key={game.title}
-              href={game.getHref()}
-              className={`group relative overflow-hidden rounded-2xl border ${game.accentBorder} bg-gradient-to-br ${game.color} p-6 transition-all hover:shadow-lg hover:scale-[1.01]`}
+              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${game.gradient} border border-border/40`}
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{game.icon}</span>
-                    <h2 className="font-heading text-xl font-bold text-foreground">
-                      {game.title}
-                    </h2>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {game.description}
-                  </p>
-                  <div className="mt-3 flex items-center gap-3">
-                    <span className={`inline-flex items-center rounded-full ${game.accentBg} px-4 py-1.5 font-heading text-xs font-semibold text-white transition-colors`}>
-                      {'archiveHref' in game ? 'Play today' : 'Play now'}
-                    </span>
-                    <span className="font-heading text-[11px] text-muted-foreground/60">
-                      {game.playTime}
-                    </span>
-                  </div>
-                </div>
-                <svg
-                  className="mt-1 h-5 w-5 shrink-0 text-muted-foreground/40 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
+              {/* Background icon — large, faded, positioned right */}
+              <div className="pointer-events-none absolute -right-4 -bottom-4 text-[120px] leading-none opacity-[0.08] select-none">
+                {game.icon}
               </div>
-            </Link>
+
+              {/* Content */}
+              <div className="relative flex min-h-[200px] flex-col justify-between p-6">
+                {/* Top: icon + title */}
+                <div>
+                  <div
+                    className={`mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl ${game.iconBg} text-2xl`}
+                  >
+                    {game.icon}
+                  </div>
+                  <h2 className="font-heading text-xl font-bold text-foreground">
+                    {game.title}
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {game.subtitle}
+                  </p>
+                </div>
+
+                {/* Bottom: buttons + play time */}
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  <Link
+                    href={game.getHref()}
+                    className={`inline-flex items-center rounded-full ${game.btnColor} px-5 py-2 font-heading text-xs font-semibold text-white transition-all hover:scale-[1.03]`}
+                  >
+                    {game.archiveHref ? 'Play today' : 'Play now'}
+                  </Link>
+                  {game.archiveHref && (
+                    <Link
+                      href={game.archiveHref}
+                      className="inline-flex items-center rounded-full border border-border/60 bg-white/60 px-4 py-2 font-heading text-xs font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+                    >
+                      Archive
+                    </Link>
+                  )}
+                  <span className="ml-auto font-heading text-[11px] text-muted-foreground/50">
+                    {game.playTime}
+                  </span>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </main>
