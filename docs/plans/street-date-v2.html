@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Street Date — Idle Hours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream: #F0EBE0;
+  --cream-dark: #E4DBCC;
+  --cream-mid: #EAE3D6;
+  --ink: #1A1A14;
+  --ink-mid: #4A4A3A;
+  --ink-light: #8A8A70;
+  --amber: #C8873A;
+  --amber-light: #E09B4A;
+  --green: #27A85A;
+  --red: #C0392B;
+  --blue: #4A8FE8;
+  --white: #FDFAF5;
+  --mystery: #2A2420;
+  --divider: rgba(26,26,20,0.1);
+}
+
+body {
+  background: var(--cream);
+  font-family: 'Montserrat', sans-serif;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--divider);
+  background: var(--cream);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-logo {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  padding: 8px 16px;
+  border-radius: 100px;
+}
+
+.header-nav {
+  display: flex;
+  gap: 4px;
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  padding: 4px;
+  border-radius: 100px;
+}
+
+.nav-item {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  padding: 7px 16px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  text-decoration: none;
+}
+
+.nav-item:hover { background: var(--cream); color: var(--ink); }
+
+.header-dark-toggle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px;
+}
+
+/* ── PAGE ── */
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── GAME HEADER ── */
+.game-header {
+  text-align: center;
+  padding: 44px 0 28px;
+}
+
+.game-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 12px;
+}
+
+.eyebrow-logo {
+  font-weight: 900;
+  color: var(--amber);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+
+.game-title {
+  font-size: clamp(52px, 9vw, 80px);
+  font-weight: 900;
+  color: var(--amber);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.game-tagline {
+  font-size: 13px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--ink-mid);
+  margin-bottom: 8px;
+}
+
+.game-meta {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-light);
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* ── ROUND PROGRESS ── */
+.round-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 32px;
+}
+
+.round-pip {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--cream-dark);
+  border: 2px solid rgba(26,26,20,0.12);
+  transition: all 0.3s;
+}
+
+.round-pip.done { background: var(--amber); border-color: var(--amber); }
+.round-pip.current {
+  background: transparent;
+  border-color: var(--amber);
+  width: 10px; height: 10px;
+}
+
+.round-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-left: 8px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── COVERS ── */
+.covers-strip {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 32px;
+  padding: 20px 0 8px;
+}
+
+.cover-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.cover-slot:nth-child(1) .cover-card.revealed { transform: rotate(-1.5deg); }
+.cover-slot:nth-child(2) .cover-card.revealed { transform: rotate(1deg); }
+.cover-slot:nth-child(3) .cover-card.revealed { transform: rotate(-0.8deg); }
+.cover-slot:nth-child(4) .cover-card.revealed { transform: rotate(1.5deg); }
+.cover-slot:nth-child(5) .cover-card.revealed { transform: rotate(-1deg); }
+
+.cover-card {
+  width: 136px;
+  height: 178px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.3s;
+  flex-shrink: 0;
+}
+
+.cover-card.mystery {
+  background: var(--mystery);
+  border: 2px solid rgba(255,255,255,0.06);
+}
+
+.cover-card.revealed {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2), 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.cover-card.revealed:hover {
+  transform: rotate(0deg) translateY(-4px) !important;
+  box-shadow: 0 16px 36px rgba(0,0,0,0.25);
+}
+
+.mystery-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mystery-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent, transparent 2px,
+    rgba(255,255,255,0.015) 2px,
+    rgba(255,255,255,0.015) 4px
+  );
+}
+
+.mystery-mark {
+  font-size: 32px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.1);
+  font-family: 'DM Mono', monospace;
+  position: relative;
+  z-index: 1;
+}
+
+.cover-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+@keyframes cardReveal {
+  0% { transform: scale(0.8) translateY(12px) rotate(3deg); opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.cover-card.popping {
+  animation: cardReveal 0.45s cubic-bezier(0.34,1.4,0.64,1) forwards;
+}
+
+.cover-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-mid);
+  text-align: center;
+  max-width: 136px;
+  line-height: 1.3;
+  min-height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-label.mystery-label {
+  color: var(--ink-light);
+  opacity: 0.4;
+}
+
+/* ── WAGER SELECTOR ── */
+.wager-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.wager-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 12px;
+}
+
+.wager-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.wager-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 20px;
+  background: var(--white);
+  border: 2px solid var(--divider);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Montserrat', sans-serif;
+  position: relative;
+}
+
+.wager-btn:hover {
+  border-color: var(--amber);
+  transform: translateY(-2px);
+}
+
+.wager-btn.selected {
+  border-color: var(--amber);
+  background: rgba(200,135,58,0.08);
+}
+
+.wager-btn.selected::after {
+  content: '✓';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--amber);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 20px;
+  text-align: center;
+}
+
+.wager-emoji { font-size: 20px; line-height: 1; }
+
+.wager-name {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+}
+
+.wager-desc {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--ink-light);
+  line-height: 1.3;
+  text-align: center;
+  max-width: 90px;
+}
+
+.wager-pts {
+  font-size: 10px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  margin-top: 2px;
+}
+
+.wager-pts.low { color: #7A9A7A; }
+.wager-pts.mid { color: var(--amber); }
+.wager-pts.high { color: var(--red); }
+
+/* ── INPUT ── */
+.input-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.input-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.year-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.year-input {
+  width: 160px;
+  padding: 16px 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.05em;
+  background: var(--white);
+  border: 2px solid var(--divider);
+  border-radius: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -moz-appearance: textfield;
+}
+
+.year-input::-webkit-outer-spin-button,
+.year-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.year-input:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 4px rgba(200,135,58,0.12);
+}
+
+.year-input::placeholder { color: var(--cream-dark); font-size: 16px; }
+
+.btn-submit {
+  padding: 16px 28px;
+  background: var(--amber);
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 16px rgba(200,135,58,0.3);
+}
+
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,135,58,0.4); }
+.btn-submit:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+.btn-skip {
+  padding: 16px 20px;
+  background: transparent;
+  color: var(--ink-light);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 2px solid var(--divider);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-skip:hover { border-color: var(--ink-light); color: var(--ink-mid); }
+
+/* ── GUESS HISTORY ── */
+.guess-history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  min-height: 32px;
+}
+
+.guess-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideIn 0.25s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.guess-year-chip {
+  font-size: 15px;
+  font-weight: 800;
+  font-family: 'DM Mono', monospace;
+  color: var(--ink-mid);
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  padding: 6px 16px;
+  border-radius: 100px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.guess-direction {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.guess-direction.too-low {
+  background: rgba(74,143,232,0.1);
+  color: var(--blue);
+  border: 1.5px solid rgba(74,143,232,0.25);
+}
+
+.guess-direction.too-high {
+  background: rgba(192,57,43,0.1);
+  color: var(--red);
+  border: 1.5px solid rgba(192,57,43,0.25);
+}
+
+.guess-direction.correct {
+  background: rgba(39,168,90,0.1);
+  color: var(--green);
+  border: 1.5px solid rgba(39,168,90,0.25);
+}
+
+/* Attempts counter */
+.attempts-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+
+.attempt-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--cream-dark);
+  border: 1.5px solid rgba(26,26,20,0.15);
+  transition: all 0.2s;
+}
+
+.attempt-dot.used { background: var(--amber); border-color: var(--amber); }
+.attempt-dot.used.wrong { background: var(--red); border-color: var(--red); }
+
+/* ── RESULT (round complete) ── */
+.result-area {
+  text-align: center;
+  padding: 8px 0 24px;
+  display: none;
+}
+
+.result-area.visible { display: block; }
+
+.result-year-reveal {
+  font-size: clamp(56px, 10vw, 88px);
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+  animation: yearDrop 0.5s cubic-bezier(0.34,1.4,0.64,1);
+}
+
+@keyframes yearDrop {
+  0% { transform: translateY(-20px) scale(0.85); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.result-verdict {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-mid);
+  margin-bottom: 6px;
+  font-style: italic;
+}
+
+.result-wager-outcome {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.result-wager-outcome.win {
+  background: rgba(39,168,90,0.12);
+  color: var(--green);
+  border: 1.5px solid rgba(39,168,90,0.25);
+}
+
+.result-wager-outcome.lose {
+  background: rgba(192,57,43,0.12);
+  color: var(--red);
+  border: 1.5px solid rgba(192,57,43,0.25);
+}
+
+.stars-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.star {
+  font-size: 28px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.2s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  color: var(--amber);
+}
+
+.star.lit { opacity: 1; transform: scale(1); filter: drop-shadow(0 2px 8px rgba(200,135,58,0.4)); }
+.star.dim { opacity: 0.15; transform: scale(1); }
+
+.score-pts {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: var(--ink-light);
+  margin-bottom: 4px;
+  letter-spacing: 0.08em;
+}
+
+/* ── DIVIDER / MORE ── */
+.section-divider {
+  height: 1px;
+  background: var(--divider);
+  margin: 40px 0 32px;
+}
+
+.more-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.more-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--divider);
+}
+
+.more-sub-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 10px;
+  opacity: 0.6;
+}
+
+.games-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.game-tile {
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  border-radius: 14px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
+  text-decoration: none;
+  display: block;
+}
+
+.game-tile:hover {
+  border-color: var(--amber);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+}
+
+.tile-icon { font-size: 20px; margin-bottom: 8px; display: block; }
+.tile-name { font-size: 13px; font-weight: 800; color: var(--ink); margin-bottom: 3px; }
+.tile-desc { font-size: 10px; font-weight: 500; color: var(--ink-light); line-height: 1.4; }
+
+.archive-wrap { text-align: center; margin-top: 24px; }
+.archive-link {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-light);
+  text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  transition: color 0.2s;
+}
+.archive-link:hover { color: var(--amber); }
+
+/* ── WAGER EXPLANATION TOOLTIP ── */
+.wager-explainer {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink-light);
+  font-style: italic;
+  text-align: center;
+  margin-top: 8px;
+  min-height: 18px;
+  transition: opacity 0.2s;
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-logo">◆ Idle Hours</div>
+  <nav class="header-nav">
+    <a class="nav-item" href="#">✏ Posts</a>
+    <a class="nav-item" href="#">◎ Play</a>
+    <a class="nav-item" href="#">▣ Library</a>
+    <a class="nav-item" href="#">✦ About</a>
+  </nav>
+  <div class="header-dark-toggle">🌙</div>
+</header>
+
+<div class="page">
+
+  <div class="game-header">
+    <div class="game-eyebrow">
+      A game by <span class="eyebrow-logo">◆ Idle Hours</span>
+    </div>
+    <div class="game-title">Street<br>Date</div>
+    <div class="game-tagline">Five covers. One year. How close can you get?</div>
+    <div class="game-meta">#006 · Sat 7th Mar 2026</div>
+  </div>
+
+  <!-- ROUND PIPS -->
+  <div class="round-progress" id="round-progress">
+    <div class="round-pip current" id="rp-0"></div>
+    <div class="round-pip" id="rp-1"></div>
+    <div class="round-pip" id="rp-2"></div>
+    <div class="round-pip" id="rp-3"></div>
+    <div class="round-pip" id="rp-4"></div>
+    <span class="round-label" id="round-label">Round 1 of 5</span>
+  </div>
+
+  <!-- COVERS -->
+  <div class="covers-strip" id="covers-strip"></div>
+
+  <!-- RESULT (shown when round over) -->
+  <div class="result-area" id="result-area">
+    <div class="result-year-reveal" id="result-year"></div>
+    <div class="result-verdict" id="result-verdict"></div>
+    <div class="result-wager-outcome" id="wager-outcome"></div>
+    <div class="stars-row" id="stars-row"></div>
+    <div class="score-pts" id="score-pts"></div>
+  </div>
+
+  <!-- WAGER -->
+  <div class="wager-section" id="wager-section">
+    <div class="wager-label">How confident are you?</div>
+    <div class="wager-options">
+
+      <button class="wager-btn" id="wager-low" onclick="selectWager('low')">
+        <span class="wager-emoji">🤷</span>
+        <span class="wager-name">Cautious</span>
+        <span class="wager-desc">Playing it safe</span>
+        <span class="wager-pts low">×0.5 pts</span>
+      </button>
+
+      <button class="wager-btn selected" id="wager-mid" onclick="selectWager('mid')">
+        <span class="wager-emoji">🎯</span>
+        <span class="wager-name">Confident</span>
+        <span class="wager-desc">Standard play</span>
+        <span class="wager-pts mid">×1 pts</span>
+      </button>
+
+      <button class="wager-btn" id="wager-high" onclick="selectWager('high')">
+        <span class="wager-emoji">🔥</span>
+        <span class="wager-name">All In</span>
+        <span class="wager-desc">Double or nothing</span>
+        <span class="wager-pts high">×2 pts</span>
+      </button>
+
+    </div>
+    <div class="wager-explainer" id="wager-explainer">Standard points — score normally.</div>
+  </div>
+
+  <!-- ATTEMPT DOTS -->
+  <div class="attempts-row" id="attempts-row">
+    <div class="attempt-dot" id="ad-0"></div>
+    <div class="attempt-dot" id="ad-1"></div>
+    <div class="attempt-dot" id="ad-2"></div>
+    <div class="attempt-dot" id="ad-3"></div>
+    <div class="attempt-dot" id="ad-4"></div>
+  </div>
+
+  <!-- GUESS HISTORY -->
+  <div class="guess-history" id="guess-history"></div>
+
+  <!-- INPUT -->
+  <div class="input-area" id="input-area">
+    <div class="input-label">What year were these games released?</div>
+    <div class="year-input-wrap">
+      <input
+        class="year-input"
+        id="year-input"
+        type="number"
+        min="1970"
+        max="2026"
+        placeholder="Year"
+        onkeydown="if(event.key==='Enter') submitGuess()"
+      />
+      <button class="btn-submit" id="btn-submit" onclick="submitGuess()">Submit</button>
+      <button class="btn-skip" onclick="skipRound()">Skip</button>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <div>
+    <div class="more-label">More from Idle Hours</div>
+    <div class="more-sub-label">Try another game</div>
+    <div class="games-row">
+      <a class="game-tile" href="#" style="background:rgba(74,100,200,0.06);border-color:rgba(74,100,200,0.15)">
+        <span class="tile-icon">🎮</span>
+        <div class="tile-name">Game Sense</div>
+        <div class="tile-desc">Guess the game from clues</div>
+      </a>
+      <a class="game-tile" href="#" style="background:rgba(200,135,58,0.06);border-color:rgba(200,135,58,0.15)">
+        <span class="tile-icon">💰</span>
+        <div class="tile-name">Shelf Price</div>
+        <div class="tile-desc">Which game cost more at launch?</div>
+      </a>
+      <a class="game-tile" href="#" style="background:rgba(192,57,43,0.06);border-color:rgba(192,57,43,0.15)">
+        <span class="tile-icon">📦</span>
+        <div class="tile-name">Ship It</div>
+        <div class="tile-desc">Navigate publisher meetings</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="archive-wrap">
+    <a class="archive-link" href="#">Browse the archive →</a>
+  </div>
+
+</div>
+
+<script>
+// ── PUZZLE DATA ──
+const PUZZLE = {
+  number: '006',
+  date: 'Sat 7th Mar 2026',
+  answer: 1995,
+  games: [
+    { title: 'Earthworm Jim 2',  img: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1qgx.jpg' },
+    { title: 'Full Throttle',    img: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1rqz.jpg' },
+    { title: 'Chrono Trigger',   img: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1vcy.jpg' },
+    { title: 'Rayman',           img: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1tnw.jpg' },
+    { title: 'Mortal Kombat 3',  img: 'https://images.igdb.com/igdb/image/upload/t_cover_big/co1rde.jpg' },
+  ]
+};
+
+// ── CONFIG ──
+const MAX_GUESSES = 5;   // max attempts per round
+const MAX_ROUNDS  = 5;   // rounds per game
+
+// Base points for getting it right (before wager multiplier)
+// Fewer attempts used = more points
+const PTS_BY_ATTEMPT = [200, 160, 120, 80, 40]; // attempt 1–5
+
+// ── STATE ──
+let currentRound = 0;
+let totalScore   = 0;
+let currentAttempt = 0;
+let roundGuesses = [];   // guesses this round
+let selectedWager = 'mid';
+let wagerLocked  = false; // wager locks after first guess
+let roundOver    = false;
+
+// ── WAGER CONFIG ──
+const WAGER = {
+  low:  { mult: 0.5, text: 'Cautious — half points if correct, no penalty if wrong.' },
+  mid:  { mult: 1.0, text: 'Standard points — score normally.' },
+  high: { mult: 2.0, text: 'All In — double points if correct. Zero if wrong.' },
+};
+
+// ── INIT ──
+buildCovers();
+updateProgress();
+renderAttemptDots();
+
+// ── COVERS ──
+function buildCovers() {
+  const strip = document.getElementById('covers-strip');
+  strip.innerHTML = '';
+  const revealed = currentRound + 1; // 1 revealed in round 1, 2 in round 2, etc.
+
+  PUZZLE.games.forEach((game, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'cover-slot';
+
+    const card = document.createElement('div');
+    if (i < revealed) {
+      card.className = 'cover-card revealed' + (i === revealed - 1 && currentRound > 0 ? ' popping' : '');
+      const img = document.createElement('img');
+      img.className = 'cover-img';
+      img.src = game.img;
+      img.alt = game.title;
+      img.onerror = function() {
+        this.parentNode.style.background = `hsl(${i * 50 + 160}, 25%, 22%)`;
+        this.style.display = 'none';
+      };
+      card.appendChild(img);
+    } else {
+      card.className = 'cover-card mystery';
+      card.innerHTML = `<div class="mystery-inner"><div class="mystery-mark">?</div></div>`;
+    }
+
+    const label = document.createElement('div');
+    label.className = i < revealed ? 'cover-label' : 'cover-label mystery-label';
+    label.textContent = i < revealed ? game.title : '· · ·';
+
+    slot.appendChild(card);
+    slot.appendChild(label);
+    strip.appendChild(slot);
+  });
+}
+
+// ── PROGRESS ──
+function updateProgress() {
+  for (let i = 0; i < MAX_ROUNDS; i++) {
+    const pip = document.getElementById(`rp-${i}`);
+    pip.classList.remove('done', 'current');
+    if (i < currentRound) pip.classList.add('done');
+    else if (i === currentRound) pip.classList.add('current');
+  }
+  document.getElementById('round-label').textContent =
+    `Round ${currentRound + 1} of ${MAX_ROUNDS}`;
+}
+
+// ── ATTEMPT DOTS ──
+function renderAttemptDots() {
+  for (let i = 0; i < MAX_GUESSES; i++) {
+    const dot = document.getElementById(`ad-${i}`);
+    dot.classList.remove('used', 'wrong');
+    if (i < currentAttempt) {
+      dot.classList.add('used');
+      // Mark as wrong if this attempt was wrong (all used dots before last are wrong)
+      if (!roundOver || i < currentAttempt - 1) dot.classList.add('wrong');
+    }
+  }
+}
+
+// ── WAGER ──
+function selectWager(w) {
+  if (wagerLocked) return;
+  selectedWager = w;
+  document.querySelectorAll('.wager-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById(`wager-${w}`).classList.add('selected');
+  document.getElementById('wager-explainer').textContent = WAGER[w].text;
+}
+
+function lockWager() {
+  wagerLocked = true;
+  document.querySelectorAll('.wager-btn').forEach(b => {
+    b.style.opacity = b.classList.contains('selected') ? '1' : '0.4';
+    b.style.cursor = 'default';
+  });
+}
+
+// ── SUBMIT GUESS ──
+function submitGuess() {
+  if (roundOver) return;
+  const input = document.getElementById('year-input');
+  const val = parseInt(input.value);
+
+  if (!val || val < 1970 || val > 2026) {
+    input.style.borderColor = 'var(--red)';
+    input.style.boxShadow = '0 0 0 4px rgba(192,57,43,0.12)';
+    setTimeout(() => { input.style.borderColor = ''; input.style.boxShadow = ''; }, 600);
+    return;
+  }
+
+  // Lock wager on first guess
+  if (!wagerLocked) lockWager();
+
+  const answer = PUZZLE.answer;
+  const isCorrect = val === answer;
+
+  roundGuesses.push(val);
+  currentAttempt++;
+  renderAttemptDots();
+  input.value = '';
+
+  if (isCorrect) {
+    // Correct!
+    roundOver = true;
+    showGuessHistory(val, 'correct');
+    setTimeout(() => endRound(true, val), 400);
+  } else {
+    // Wrong — show direction hint
+    const dir = val < answer ? 'too-low' : 'too-high';
+    showGuessHistory(val, dir);
+
+    if (currentAttempt >= MAX_GUESSES) {
+      // Out of attempts
+      roundOver = true;
+      setTimeout(() => endRound(false, val), 400);
+    }
+  }
+}
+
+function skipRound() {
+  if (roundOver) return;
+  roundOver = true;
+  endRound(false, null);
+}
+
+// ── GUESS HISTORY ── (too high / too low feedback)
+function showGuessHistory(year, result) {
+  const history = document.getElementById('guess-history');
+  const row = document.createElement('div');
+  row.className = 'guess-row';
+
+  const chip = document.createElement('div');
+  chip.className = 'guess-year-chip';
+  chip.textContent = year;
+
+  const dir = document.createElement('div');
+
+  if (result === 'correct') {
+    dir.className = 'guess-direction correct';
+    dir.textContent = '✓ Correct';
+  } else if (result === 'too-low') {
+    dir.className = 'guess-direction too-low';
+    dir.textContent = '↑ Too low';
+  } else {
+    dir.className = 'guess-direction too-high';
+    dir.textContent = '↓ Too high';
+  }
+
+  row.appendChild(chip);
+  row.appendChild(dir);
+  history.prepend(row); // newest at top
+}
+
+// ── END ROUND ──
+function endRound(correct, guessedYear) {
+  const answer = PUZZLE.answer;
+
+  // Calculate points
+  let basePts = 0;
+  let stars = 0;
+  let verdict = '';
+  let wagerOutcomeText = '';
+  let wagerOutcomeClass = '';
+
+  if (correct) {
+    basePts = PTS_BY_ATTEMPT[currentAttempt - 1] || 20;
+    stars = Math.max(1, 6 - currentAttempt); // attempt 1=5★, 2=4★, etc.
+
+    if (currentAttempt === 1)      verdict = 'First guess. Impressive.';
+    else if (currentAttempt === 2) verdict = 'Got there in two.';
+    else if (currentAttempt === 3) verdict = 'Three guesses — not bad.';
+    else if (currentAttempt === 4) verdict = 'Scraped it on the fourth.';
+    else                            verdict = 'Just made it on the last guess.';
+
+    // Apply wager
+    const mult = WAGER[selectedWager].mult;
+    const finalPts = Math.round(basePts * mult);
+    totalScore += finalPts;
+
+    if (selectedWager === 'high') {
+      wagerOutcomeText = `All In paid off — ×2 → +${finalPts} pts`;
+      wagerOutcomeClass = 'win';
+    } else if (selectedWager === 'low') {
+      wagerOutcomeText = `Cautious wager — ×0.5 → +${finalPts} pts`;
+      wagerOutcomeClass = 'win';
+    } else {
+      wagerOutcomeText = `+${finalPts} pts added to your score`;
+      wagerOutcomeClass = 'win';
+    }
+
+    showRoundResult(answer, verdict, stars, finalPts, wagerOutcomeText, wagerOutcomeClass);
+
+  } else {
+    // Failed — reveal answer now
+    stars = 0;
+    verdict = currentAttempt >= MAX_GUESSES
+      ? `Out of guesses — it was ${answer}.`
+      : `Skipped — it was ${answer}.`;
+
+    if (selectedWager === 'high') {
+      wagerOutcomeText = `All In failed — no points scored.`;
+      wagerOutcomeClass = 'lose';
+    } else if (selectedWager === 'low') {
+      wagerOutcomeText = `Cautious wager — no points lost.`;
+      wagerOutcomeClass = 'lose';
+    } else {
+      wagerOutcomeText = `No points this round.`;
+      wagerOutcomeClass = 'lose';
+    }
+
+    showRoundResult(answer, verdict, 0, 0, wagerOutcomeText, wagerOutcomeClass);
+  }
+
+  // Hide input
+  document.getElementById('input-area').style.display = 'none';
+  document.getElementById('wager-section').style.display = 'none';
+  document.getElementById('attempts-row').style.display = 'none';
+
+  // Auto-advance (or show final on last round)
+  const isLast = currentRound >= MAX_ROUNDS - 1;
+  if (!isLast) {
+    setTimeout(() => nextRound(), 2800);
+  } else {
+    setTimeout(() => showFinal(), 2800);
+  }
+}
+
+function showRoundResult(year, verdict, stars, pts, wagerText, wagerClass) {
+  const area = document.getElementById('result-area');
+  area.classList.add('visible');
+
+  document.getElementById('result-year').textContent = year;
+  document.getElementById('result-verdict').textContent = verdict;
+
+  const wo = document.getElementById('wager-outcome');
+  wo.textContent = wagerText;
+  wo.className = `result-wager-outcome ${wagerClass}`;
+
+  document.getElementById('score-pts').textContent =
+    `Total so far: ${totalScore} pts`;
+
+  // Animate stars
+  const row = document.getElementById('stars-row');
+  row.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.textContent = '★';
+    row.appendChild(s);
+    setTimeout(() => s.classList.add(i < stars ? 'lit' : 'dim'), 200 + i * 100);
+  }
+}
+
+// ── NEXT ROUND ──
+function nextRound() {
+  currentRound++;
+  currentAttempt = 0;
+  roundGuesses = [];
+  roundOver = false;
+  wagerLocked = false;
+  selectedWager = 'mid';
+
+  // Reset UI
+  document.getElementById('result-area').classList.remove('visible');
+  document.getElementById('input-area').style.display = 'flex';
+  document.getElementById('wager-section').style.display = 'block';
+  document.getElementById('attempts-row').style.display = 'flex';
+  document.getElementById('guess-history').innerHTML = '';
+  document.getElementById('year-input').value = '';
+
+  // Reset wager buttons
+  document.querySelectorAll('.wager-btn').forEach(b => {
+    b.style.opacity = '1';
+    b.style.cursor = 'pointer';
+    b.classList.remove('selected');
+  });
+  document.getElementById('wager-mid').classList.add('selected');
+  document.getElementById('wager-explainer').textContent = WAGER.mid.text;
+
+  updateProgress();
+  buildCovers();
+  renderAttemptDots();
+}
+
+// ── FINAL SCREEN ──
+function showFinal() {
+  const ranks = [
+    { min: 800, title: 'Time Archivist',     desc: 'You know gaming history cold.' },
+    { min: 600, title: 'Retro Head',          desc: 'Solid knowledge, minor gaps.' },
+    { min: 350, title: 'Occasional Player',   desc: 'You were there for some of it.' },
+    { min: 0,   title: 'New to the Medium',   desc: "That's what Idle Hours is for." },
+  ];
+  const rank = ranks.find(r => totalScore >= r.min);
+
+  document.getElementById('result-year').style.fontSize = 'clamp(40px,7vw,64px)';
+  document.getElementById('result-year').textContent = `${totalScore} pts`;
+  document.getElementById('result-verdict').textContent = `${rank.title} — ${rank.desc}`;
+  document.getElementById('wager-outcome').style.display = 'none';
+  document.getElementById('score-pts').textContent = 'Final score · Share your result';
+
+  const row = document.getElementById('stars-row');
+  row.innerHTML = '';
+  // Show 5 stars for >= 800, scale down
+  const finalStars = totalScore >= 800 ? 5 : totalScore >= 600 ? 4 : totalScore >= 350 ? 3 : totalScore >= 150 ? 2 : 1;
+  for (let i = 0; i < 5; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.textContent = '★';
+    row.appendChild(s);
+    setTimeout(() => s.classList.add(i < finalStars ? 'lit' : 'dim'), 150 + i * 100);
+  }
+
+  document.getElementById('result-area').classList.add('visible');
+}
+</script>
+</body>
+</html>

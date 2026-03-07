@@ -8,17 +8,16 @@ import SiteFooter from '@/components/SiteFooter'
 import DiscoverMore from '@/components/DiscoverMore'
 import Link from 'next/link'
 import {
-  getGameForDate,
+  getPairsForDate,
   formatGameNumber,
   formatDisplayDate,
   isPlayableDate,
   isToday,
 } from '../lib/dateUtils'
-import { loadDayState, saveDayState, type DayState } from '../lib/storage'
-import GameCard from '../components/GameCard'
-import PriceInput from '../components/PriceInput'
-import StarScore from '../../street-date/components/StarScore'
-import WinModal from '../components/WinModal'
+import { loadDayState, saveDayState, WRONG_PENALTY, TARGET_ROUNDS, type DayState } from '../lib/storage'
+import GameCards from '../components/GameCards'
+import ProgressBar from '../components/ProgressBar'
+import ResultOverlay from '../components/ResultOverlay'
 
 export default function ShelfPriceDayPage({
   params,
@@ -28,120 +27,93 @@ export default function ShelfPriceDayPage({
   const { date } = use(params)
 
   const [state, setState] = useState<DayState | null>(null)
-  const [showModal, setShowModal] = useState(false)
+  const [showResult, setShowResult] = useState(false)
+  const [lastResult, setLastResult] = useState<{ choice: 'left' | 'right'; correct: boolean } | null>(null)
+  const [started, setStarted] = useState(false)
+  const [floatingCost, setFloatingCost] = useState(false)
+  const [scorePulse, setScorePulse] = useState(false)
 
-  const game = getGameForDate(date)
+  const pairs = getPairsForDate(date)
   const playable = isPlayableDate(date)
   const today = isToday(date)
 
-  // Load state from localStorage on mount
+  // Load state
   useEffect(() => {
     const loaded = loadDayState(date)
     setState(loaded)
+    if (loaded.choices.length > 0) {
+      setStarted(true)
+    }
     if (loaded.finished) {
-      setShowModal(true)
+      setShowResult(true)
     }
   }, [date])
 
-  const handleSubmit = useCallback(
-    (priceGuessed: number) => {
-      if (!state || state.won || state.finished) return
+  const handleChoice = useCallback(
+    (choice: 'left' | 'right') => {
+      if (!state || state.finished) return
 
-      const guessIndex = state.currentGuessIndex
-      const isCorrect = Math.abs(priceGuessed - game.launchPriceUsd) <= 2.0
+      const pairIndex = state.round
+      if (pairIndex >= pairs.length) return
 
-      if (isCorrect) {
-        // Won!
-        const baseStars = 5 - guessIndex
-        const stars = Math.max(0, baseStars - (state.hintUsed ? 1 : 0))
-        const newState: DayState = {
-          ...state,
-          guesses: [
-            ...state.guesses,
-            { guessIndex, priceGuessed },
-          ],
-          won: true,
-          finished: true,
-          stars,
-          score: stars * 100,
-          currentGuessIndex: guessIndex,
-        }
+      const [left, right] = pairs[pairIndex]
+      const moreExpensiveSide = left.launchPriceUsd >= right.launchPriceUsd ? 'left' : 'right'
+      const correct = choice === moreExpensiveSide
+
+      // Show result on cards
+      setLastResult({ choice, correct })
+
+      if (!correct) {
+        // Delay the score animation slightly so the card reveal lands first
+        setTimeout(() => {
+          setScorePulse(true)
+          setFloatingCost(true)
+          setTimeout(() => {
+            setScorePulse(false)
+            setFloatingCost(false)
+          }, 1200)
+        }, 800)
+      }
+
+      const newStreak = correct ? state.streak + 1 : state.streak
+      const newRound = state.round + 1
+      const newScore = correct ? state.score : Math.max(0, state.score - WRONG_PENALTY)
+      const finished = newRound >= TARGET_ROUNDS
+      const won = finished && newScore > 0
+
+      const newState: DayState = {
+        score: newScore,
+        streak: newStreak,
+        round: newRound,
+        won,
+        finished,
+        choices: [...state.choices, choice],
+      }
+
+      // 4s hold to let the player absorb the result and price
+      setTimeout(() => {
         setState(newState)
         saveDayState(date, newState)
-        setShowModal(true)
-      } else {
-        // Wrong guess
-        const nextIndex = guessIndex + 1
-        const finished = nextIndex >= 5
-
-        const newState: DayState = {
-          ...state,
-          guesses: [
-            ...state.guesses,
-            { guessIndex, priceGuessed },
-          ],
-          won: false,
-          finished,
-          stars: 0,
-          score: 0,
-          currentGuessIndex: finished ? guessIndex : nextIndex,
-        }
-        setState(newState)
-        saveDayState(date, newState)
+        setLastResult(null)
 
         if (finished) {
-          setShowModal(true)
+          setTimeout(() => setShowResult(true), 300)
         }
-      }
+      }, 4000)
     },
-    [state, game.launchPriceUsd, date],
+    [state, pairs, date],
   )
 
-  const handleSkip = useCallback(() => {
-    if (!state || state.won || state.finished) return
+  const handleStart = () => {
+    setStarted(true)
+  }
 
-    const guessIndex = state.currentGuessIndex
-    const nextIndex = guessIndex + 1
-    const finished = nextIndex >= 5
-
-    const newState: DayState = {
-      ...state,
-      guesses: [
-        ...state.guesses,
-        { guessIndex, priceGuessed: 0 },
-      ],
-      won: false,
-      finished,
-      stars: 0,
-      score: 0,
-      currentGuessIndex: finished ? guessIndex : nextIndex,
-    }
-
-    setState(newState)
-    saveDayState(date, newState)
-
-    if (finished) {
-      setShowModal(true)
-    }
-  }, [state, date])
-
-  const handleHint = useCallback(() => {
-    if (!state || state.hintUsed || state.finished) return
-
-    const newState: DayState = {
-      ...state,
-      hintUsed: true,
-    }
-    setState(newState)
-    saveDayState(date, newState)
-  }, [state, date])
-
-  // Loading state
+  // Loading
   if (!state) {
     return (
       <>
         <Header />
-        <main className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
+        <main className="mx-auto max-w-2xl px-4 py-12">
           <p className="text-center text-muted-foreground">Loading...</p>
         </main>
         <SiteFooter />
@@ -149,52 +121,15 @@ export default function ShelfPriceDayPage({
     )
   }
 
-  const showInput = playable && !state.finished
+  const currentPairIndex = state.round
+  const currentPair = pairs[currentPairIndex] ?? pairs[pairs.length - 1]
 
   return (
     <>
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
-        {/* Old game banner */}
-        {playable && !today && (
-          <div className="mb-6 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-700">
-            You&apos;re playing a previous day.{' '}
-            <Link
-              href="/play/shelf-price"
-              className="font-semibold underline underline-offset-2 transition-colors hover:text-amber-900"
-            >
-              Jump to today &rarr;
-            </Link>
-          </div>
-        )}
-
-        {/* Game header */}
-        <div className="mb-8 text-center">
-          <div className="flex items-center justify-center gap-2">
-            <span className="font-heading text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              a game by
-            </span>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/icons/icon_Idlehours logo horizontal-wide-mobile header.svg"
-              alt="Idle Hours"
-              className="h-4 w-auto opacity-40 dark:invert"
-              draggable={false}
-            />
-          </div>
-          <h1 className="mt-2 font-heading text-3xl font-bold text-foreground sm:text-4xl">
-            Shelf Price
-          </h1>
-          <p className="mt-2 font-body text-base text-muted-foreground sm:text-lg">
-            Guess the launch price
-          </p>
-          <p className="mt-3 font-heading text-sm text-muted-foreground">
-            {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-          </p>
-        </div>
-
-        {/* Not playable message */}
+      <main className="font-game mx-auto max-w-7xl px-4 py-8 lg:px-8">
+        {/* Not playable */}
         {!playable && (
           <div className="mb-8 rounded-lg border border-border/60 bg-muted/30 px-4 py-6 text-center">
             <p className="text-muted-foreground">
@@ -202,84 +137,188 @@ export default function ShelfPriceDayPage({
             </p>
             <Link
               href="/play/shelf-price"
-              className="mt-3 inline-block font-heading text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+              className="mt-3 inline-block text-sm font-semibold text-primary transition-colors hover:text-primary/80"
             >
               Go to today&apos;s game &rarr;
             </Link>
           </div>
         )}
 
-        {/* Game card */}
-        {playable && (
-          <div className="mb-8">
-            <GameCard game={game} hintUsed={state.hintUsed} />
-          </div>
-        )}
-
-        {/* Price input — only during active play */}
-        {showInput && (
-          <PriceInput
-            onSubmit={handleSubmit}
-            onSkip={handleSkip}
-            onHint={handleHint}
-            disabled={false}
-            guesses={state.guesses}
-            actualPrice={game.launchPriceUsd}
-            hintUsed={state.hintUsed}
-          />
-        )}
-
-        {/* Finished inline (when modal closed) */}
-        {state.finished && !showModal && (
-          <div className="mb-6 text-center">
-            <StarScore stars={state.stars} size="lg" />
-            <p className="mt-2 font-heading text-sm text-muted-foreground">
-              {state.won
-                ? `You got it \u2014 $${game.launchPriceUsd.toFixed(2)}!`
-                : `The price was $${game.launchPriceUsd.toFixed(2)}`}
+        {/* Start screen */}
+        {playable && !started && !state.finished && (
+          <div className="flex flex-col items-center gap-6 py-12 text-center">
+            <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
+              Shelf Price
+            </h1>
+            <p className="max-w-sm text-base text-muted-foreground">
+              Which cost more at launch? Get all 10 right to keep your perfect score.
             </p>
+            <p className="font-heading text-sm text-muted-foreground">
+              {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+            </p>
+
             <button
-              type="button"
-              onClick={() => setShowModal(true)}
-              className="mt-2 font-heading text-sm text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
+              onClick={handleStart}
+              className="rounded-full bg-[hsl(var(--game-blue))] px-8 py-3 text-base font-bold text-white transition-transform hover:scale-105"
             >
-              View results
+              Start Playing
             </button>
           </div>
         )}
 
-        {/* Discover more — after game ends */}
-        {state.finished && !showModal && (
-          <div className="mb-8">
-            <DiscoverMore currentGame="shelf-price" />
+        {/* Active gameplay */}
+        {playable && started && !state.finished && (
+          <div className="flex flex-col gap-6">
+            {/* Header bar — matches Game Sense */}
+            <div className="text-center">
+              <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
+                Shelf Price
+              </h1>
+              <p className="mt-1 font-heading text-sm text-muted-foreground">
+                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+              </p>
+
+              {/* Score pill — pulses red on wrong answer */}
+              <div
+                className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 bg-white px-5 py-2 transition-all duration-300"
+                style={{
+                  borderColor: scorePulse
+                    ? 'hsl(var(--game-red))'
+                    : 'hsl(var(--game-blue) / 0.2)',
+                  transform: scorePulse ? 'scale(1.1)' : 'scale(1)',
+                }}
+              >
+                <span
+                  className="font-heading text-2xl font-black transition-colors duration-300"
+                  style={{
+                    color: scorePulse
+                      ? 'hsl(var(--game-red))'
+                      : 'hsl(var(--game-blue))',
+                  }}
+                >
+                  {state.score}
+                </span>
+                <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
+                  pts
+                </span>
+                {floatingCost && (
+                  <span
+                    className="absolute -top-6 left-1/2 -translate-x-1/2 rounded-full bg-[hsl(var(--game-red))] px-4 py-1 font-heading text-lg font-black text-white shadow-lg"
+                    style={{
+                      animation: 'float-up 1.2s ease-out forwards',
+                    }}
+                  >
+                    -{WRONG_PENALTY}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Progress */}
+            <ProgressBar current={state.round} total={TARGET_ROUNDS} correctCount={state.streak} />
+
+            {/* Game cards */}
+            <GameCards
+              left={currentPair[0]}
+              right={currentPair[1]}
+              onChoice={handleChoice}
+              disabled={lastResult !== null}
+              result={lastResult}
+            />
           </div>
         )}
 
-        {/* Archive link */}
-        <div className="text-center">
-          <Link
-            href="/play/shelf-price/archive"
-            className="font-heading text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Browse the archive &rarr;
-          </Link>
-        </div>
+        {/* Finished inline (when overlay closed) */}
+        {state.finished && !showResult && (
+          <>
+            <div className="mb-4 text-center">
+              <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
+                Shelf Price
+              </h1>
+              <p className="mt-1 font-heading text-sm text-muted-foreground">
+                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+              </p>
+              <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-white px-5 py-2">
+                <span className="font-heading text-2xl font-black text-[hsl(var(--game-blue))]">
+                  {state.score}
+                </span>
+                <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
+                  pts
+                </span>
+              </div>
+            </div>
+
+            <div className="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-4 text-center">
+              <p className="text-sm font-semibold text-green-700">
+                {state.score === 1000 ? 'Perfect score!' : `${state.streak}/${TARGET_ROUNDS} correct`}
+              </p>
+              <button
+                onClick={() => setShowResult(true)}
+                className="mt-2 text-sm text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
+              >
+                View results
+              </button>
+            </div>
+
+            {/* Nav pills — above discover more */}
+            <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
+              {!today && (
+                <Link
+                  href="/play/shelf-price"
+                  className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+                >
+                  Play today&apos;s game
+                  <span className="text-base">&rsaquo;</span>
+                </Link>
+              )}
+              <Link
+                href="/play/shelf-price/archive"
+                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+              >
+                Browse the archive
+                <span className="text-base">&rsaquo;</span>
+              </Link>
+            </div>
+
+            <div className="mb-8">
+              <DiscoverMore currentGame="shelf-price" />
+            </div>
+          </>
+        )}
+
+        {/* Nav pills — during gameplay / start screen */}
+        {!(state.finished && !showResult) && (
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            {!today && (
+              <Link
+                href="/play/shelf-price"
+                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+              >
+                Play today&apos;s game
+                <span className="text-base">&rsaquo;</span>
+              </Link>
+            )}
+            <Link
+              href="/play/shelf-price/archive"
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+            >
+              Browse the archive
+              <span className="text-base">&rsaquo;</span>
+            </Link>
+          </div>
+        )}
       </main>
 
       <SiteFooter />
 
-      {/* Win/end modal */}
-      {showModal && state.finished && (
-        <WinModal
+      {/* Result overlay */}
+      {showResult && state.finished && (
+        <ResultOverlay
           dateStr={date}
-          actualPrice={game.launchPriceUsd}
-          game={game}
-          guesses={state.guesses}
-          stars={state.stars}
           score={state.score}
-          won={state.won}
-          hintUsed={state.hintUsed}
-          onClose={() => setShowModal(false)}
+          streak={state.streak}
+          won={state.score === 1000}
+          onClose={() => setShowResult(false)}
         />
       )}
     </>

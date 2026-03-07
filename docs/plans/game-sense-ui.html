@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Sense</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream: #F0EBE0;
+  --cream-dark: #E4DBCC;
+  --cream-mid: #EAE3D6;
+  --blue: #4A8FE8;
+  --blue-dark: #2D6BC4;
+  --blue-light: #EBF2FC;
+  --ink: #1A1A14;
+  --ink-mid: #4A4A3A;
+  --ink-light: #8A8A70;
+  --amber: #C8873A;
+  --green: #27A85A;
+  --red: #C0392B;
+  --white: #FDFAF5;
+}
+
+body {
+  background: var(--cream);
+  font-family: 'Montserrat', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 20px 80px;
+}
+
+/* ── HEADER ── */
+.game-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.game-eyebrow {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 10px;
+}
+
+.game-title {
+  font-size: clamp(52px, 8vw, 80px);
+  font-weight: 900;
+  color: var(--blue);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.game-sub {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.game-meta {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-light);
+  margin-top: 8px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ── SCORE ── */
+.score-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+
+.score-pill {
+  background: var(--white);
+  border: 2px solid rgba(26,26,20,0.1);
+  border-radius: 100px;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.score-number {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--blue);
+  line-height: 1;
+  transition: color 0.3s;
+}
+
+.score-number.deducting {
+  animation: scoreFlash 0.4s ease;
+}
+
+@keyframes scoreFlash {
+  0% { color: var(--blue); }
+  30% { color: var(--red); transform: scale(1.1); }
+  100% { color: var(--blue); transform: scale(1); }
+}
+
+.score-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+/* ── SENTENCE AREA ── */
+.sentence-wrap {
+  max-width: 720px;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.sentence {
+  font-size: clamp(18px, 3vw, 24px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.9;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+/* The blank/revealed tokens */
+.token {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  margin: 0 3px;
+  vertical-align: middle;
+}
+
+/* Unrevealed blank */
+.blank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  color: transparent;
+  border-radius: 6px;
+  padding: 2px 10px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  position: relative;
+  min-width: 80px;
+  height: 34px;
+  user-select: none;
+}
+
+.blank:hover {
+  background: var(--blue-dark);
+  transform: translateY(-2px);
+}
+
+.blank.hinting {
+  background: var(--blue);
+}
+
+/* Revealed value */
+.revealed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--blue);
+  color: white;
+  border-radius: 6px;
+  padding: 2px 14px;
+  height: 34px;
+  font-size: 0.85em;
+  font-weight: 700;
+  animation: revealPop 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  min-width: 80px;
+}
+
+@keyframes revealPop {
+  0% { transform: scale(0.7) translateY(4px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* Tooltip on hover */
+.blank-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--blue);
+  color: white;
+  border-radius: 8px;
+  padding: 6px 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s, transform 0.15s;
+  transform: translateX(-50%) translateY(4px);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.blank:hover .blank-tooltip,
+.blank.hinting .blank-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.blank-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--blue);
+}
+
+.tooltip-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.tooltip-cost {
+  font-size: 13px;
+  font-weight: 900;
+  color: white;
+}
+
+.tooltip-cost span {
+  color: rgba(255,255,255,0.65);
+  font-size: 10px;
+}
+
+/* Cost deduction animation floating up */
+.cost-float {
+  position: fixed;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--red);
+  pointer-events: none;
+  z-index: 100;
+  animation: floatUp 0.8s ease forwards;
+}
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-40px); }
+}
+
+/* ── VIBE HINT ── */
+.vibe-section {
+  max-width: 720px;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.vibe-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--white);
+  border: 2px dashed rgba(26,26,20,0.15);
+  border-radius: 14px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vibe-btn:hover:not(:disabled) {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--blue-light);
+}
+
+.vibe-btn:disabled {
+  cursor: default;
+}
+
+.vibe-cost {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--red);
+  opacity: 0.7;
+}
+
+.vibe-revealed {
+  width: 100%;
+  background: var(--white);
+  border: 2px solid var(--blue);
+  border-radius: 14px;
+  padding: 20px 24px;
+  animation: revealPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.vibe-quote {
+  font-size: 15px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  margin-bottom: 6px;
+}
+
+.vibe-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+/* ── GUESS INPUT ── */
+.guess-section {
+  max-width: 720px;
+  width: 100%;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.guess-input {
+  width: 100%;
+  padding: 18px 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  background: var(--white);
+  border: 2px solid rgba(26,26,20,0.12);
+  border-radius: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.guess-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(74,143,232,0.1);
+}
+
+.guess-input::placeholder { color: var(--ink-light); }
+
+/* Autocomplete dropdown */
+.autocomplete {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: var(--white);
+  border: 2px solid rgba(26,26,20,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 50;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  display: none;
+}
+
+.autocomplete.visible { display: block; }
+
+.autocomplete-item {
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.1s;
+  border-bottom: 1px solid rgba(26,26,20,0.05);
+}
+
+.autocomplete-item:last-child { border-bottom: none; }
+.autocomplete-item:hover { background: var(--blue-light); color: var(--blue-dark); }
+
+.autocomplete-similarity {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: var(--ink-light);
+}
+
+/* ── GUESSES LIST ── */
+.guesses-section {
+  max-width: 720px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.guesses-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 10px;
+}
+
+.guess-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--white);
+  border: 1.5px solid rgba(26,26,20,0.08);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  animation: slideIn 0.25s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.guess-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-mid);
+  font-family: 'DM Mono', monospace;
+}
+
+.guess-score {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  color: var(--ink-light);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.similarity-bar {
+  width: 60px;
+  height: 4px;
+  background: var(--cream-dark);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.similarity-fill {
+  height: 100%;
+  background: var(--amber);
+  border-radius: 100px;
+  transition: width 0.5s ease;
+}
+
+/* ── ARCHIVE LINK ── */
+.archive-link {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-light);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+  font-family: 'DM Mono', monospace;
+}
+
+.archive-link:hover { color: var(--blue); }
+
+/* ── WIN STATE ── */
+.win-banner {
+  max-width: 720px;
+  width: 100%;
+  background: var(--green);
+  border-radius: 16px;
+  padding: 24px 32px;
+  text-align: center;
+  margin-bottom: 24px;
+  animation: revealPop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  display: none;
+}
+
+.win-banner.visible { display: block; }
+
+.win-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.win-sub {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.1em;
+}
+
+.win-final-score {
+  font-size: 48px;
+  font-weight: 900;
+  color: white;
+  margin: 8px 0 4px;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="game-header">
+  <div class="game-eyebrow">A game by Idle Hours</div>
+  <div class="game-title">Game<br>Sense</div>
+  <div class="game-sub">Guess the game</div>
+  <div class="game-meta">Game_Sense #014 · Sat 7th Mar 2026</div>
+</div>
+
+<!-- SCORE -->
+<div class="score-wrap">
+  <div class="score-pill">
+    <div class="score-number" id="score-display">1000</div>
+    <div class="score-label">pts remaining</div>
+  </div>
+</div>
+
+<!-- SENTENCE -->
+<div class="sentence-wrap">
+  <div class="sentence" id="sentence">
+    A
+    <span class="token">
+      <span class="blank" id="blank-genre" data-key="genre" data-cost="300" data-value="cozy farming sim" onclick="revealBlank(this)" >
+        <span class="blank-tooltip">
+          <span class="tooltip-label">Genre</span>
+          <span class="tooltip-cost">−300 <span>pts</span></span>
+        </span>
+      </span>
+    </span>
+    about
+    <span class="token">
+      <span class="blank" id="blank-theme" data-key="theme" data-cost="200" data-value="building a new life" onclick="revealBlank(this)">
+        <span class="blank-tooltip">
+          <span class="tooltip-label">Theme</span>
+          <span class="tooltip-cost">−200 <span>pts</span></span>
+        </span>
+      </span>
+    </span>
+    released in
+    <span class="token">
+      <span class="blank" id="blank-year" data-key="year" data-cost="150" data-value="2016" onclick="revealBlank(this)">
+        <span class="blank-tooltip">
+          <span class="tooltip-label">Release Year</span>
+          <span class="tooltip-cost">−150 <span>pts</span></span>
+        </span>
+      </span>
+    </span>
+    with
+    <span class="token">
+      <span class="blank" id="blank-rating" data-key="rating" data-cost="75" data-value="E for Everyone" onclick="revealBlank(this)">
+        <span class="blank-tooltip">
+          <span class="tooltip-label">Age Rating</span>
+          <span class="tooltip-cost">−75 <span>pts</span></span>
+        </span>
+      </span>
+    </span>
+    on
+    <span class="token">
+      <span class="blank" id="blank-platform" data-key="platform" data-cost="100" data-value="PC, Switch, PS4, Xbox" onclick="revealBlank(this)">
+        <span class="blank-tooltip">
+          <span class="tooltip-label">Platforms</span>
+          <span class="tooltip-cost">−100 <span>pts</span></span>
+        </span>
+      </span>
+    </span>.
+  </div>
+</div>
+
+<!-- VIBE HINT -->
+<div class="vibe-section">
+  <button class="vibe-btn" id="vibe-btn" onclick="revealVibe()">
+    <span>✦ Vibe Hint — reveal a quote that describes the game</span>
+    <span class="vibe-cost">−200 pts</span>
+  </button>
+</div>
+
+<!-- WIN BANNER -->
+<div class="win-banner" id="win-banner">
+  <div class="win-title">You got it! 🎉</div>
+  <div class="win-sub">Today's game was <strong>Stardew Valley</strong></div>
+  <div class="win-final-score" id="win-score">850</div>
+  <div class="win-sub">final score</div>
+</div>
+
+<!-- GUESS INPUT -->
+<div class="guess-section" id="guess-section">
+  <input
+    class="guess-input"
+    id="guess-input"
+    type="text"
+    placeholder="Type a game title..."
+    autocomplete="off"
+    oninput="handleInput(this.value)"
+    onkeydown="handleKey(event)"
+  />
+  <div class="autocomplete" id="autocomplete"></div>
+</div>
+
+<!-- GUESSES -->
+<div class="guesses-section" id="guesses-section" style="display:none">
+  <div class="guesses-label">Your guesses</div>
+  <div id="guesses-list"></div>
+</div>
+
+<!-- ARCHIVE -->
+<a href="#" class="archive-link">Browse the archive →</a>
+
+<script>
+// ── GAME DATA (demo) ──
+const ANSWER = 'Stardew Valley';
+const VIBE_QUOTE = '"Walking through Pelican Town feels like being handed something you didn\'t know you needed. Every villager has a life. Every season has a rhythm. You\'ll think about it long after you stop playing."';
+
+// Demo game database for autocomplete
+const GAMES_DB = [
+  { title: 'Stardew Valley', year: 2016 },
+  { title: 'Spiritfarer', year: 2020 },
+  { title: 'Hollow Knight', year: 2017 },
+  { title: 'Celeste', year: 2018 },
+  { title: 'Hades', year: 2020 },
+  { title: 'Animal Crossing: New Horizons', year: 2020 },
+  { title: 'Unpacking', year: 2021 },
+  { title: 'A Short Hike', year: 2019 },
+  { title: 'Disco Elysium', year: 2019 },
+  { title: 'Night in the Woods', year: 2017 },
+  { title: 'Firewatch', year: 2016 },
+  { title: 'Undertale', year: 2015 },
+  { title: 'Minecraft', year: 2011 },
+  { title: 'Terraria', year: 2011 },
+  { title: 'Recettear', year: 2010 },
+];
+
+// ── STATE ──
+let score = 1000;
+let guesses = [];
+let gameWon = false;
+let selectedAutocomplete = -1;
+let filteredGames = [];
+
+// ── REVEAL BLANK ──
+function revealBlank(el) {
+  if (el.classList.contains('revealed') || gameWon) return;
+
+  const cost = parseInt(el.dataset.cost);
+  const value = el.dataset.value;
+  const key = el.dataset.key;
+
+  // Deduct score
+  deductScore(cost, el);
+
+  // Replace blank with revealed span
+  const revealed = document.createElement('span');
+  revealed.className = 'revealed';
+  revealed.textContent = value;
+  el.parentNode.replaceChild(revealed, el);
+}
+
+function deductScore(amount, el) {
+  score = Math.max(0, score - amount);
+  updateScoreDisplay(amount);
+
+  // Floating cost indicator
+  const rect = el.getBoundingClientRect();
+  const float = document.createElement('div');
+  float.className = 'cost-float';
+  float.textContent = `−${amount}`;
+  float.style.left = (rect.left + rect.width / 2) + 'px';
+  float.style.top = (rect.top + window.scrollY - 10) + 'px';
+  document.body.appendChild(float);
+  setTimeout(() => float.remove(), 800);
+}
+
+function updateScoreDisplay(deducted) {
+  const el = document.getElementById('score-display');
+  el.textContent = score;
+  el.classList.remove('deducting');
+  void el.offsetWidth; // reflow
+  el.classList.add('deducting');
+}
+
+// ── VIBE HINT ──
+function revealVibe() {
+  if (gameWon) return;
+  const btn = document.getElementById('vibe-btn');
+  deductScore(200, btn);
+
+  const section = document.querySelector('.vibe-section');
+  section.innerHTML = `
+    <div class="vibe-revealed">
+      <div class="vibe-label">Vibe Hint</div>
+      <div class="vibe-quote">${VIBE_QUOTE}</div>
+    </div>
+  `;
+}
+
+// ── AUTOCOMPLETE ──
+function handleInput(val) {
+  selectedAutocomplete = -1;
+  if (val.length < 2) {
+    hideAutocomplete();
+    return;
+  }
+
+  const q = val.toLowerCase();
+  filteredGames = GAMES_DB
+    .filter(g => g.title.toLowerCase().includes(q))
+    .slice(0, 6);
+
+  if (filteredGames.length === 0) {
+    hideAutocomplete();
+    return;
+  }
+
+  const ac = document.getElementById('autocomplete');
+  ac.innerHTML = filteredGames.map((g, i) => `
+    <div class="autocomplete-item" onclick="selectGame('${g.title.replace(/'/g,"\\'")}')">
+      <span>${g.title}</span>
+      <span class="autocomplete-similarity">${g.year}</span>
+    </div>
+  `).join('');
+  ac.classList.add('visible');
+}
+
+function hideAutocomplete() {
+  document.getElementById('autocomplete').classList.remove('visible');
+  filteredGames = [];
+}
+
+function handleKey(e) {
+  const items = document.querySelectorAll('.autocomplete-item');
+  if (e.key === 'ArrowDown') {
+    selectedAutocomplete = Math.min(selectedAutocomplete + 1, items.length - 1);
+    items.forEach((el, i) => el.style.background = i === selectedAutocomplete ? 'var(--blue-light)' : '');
+    e.preventDefault();
+  } else if (e.key === 'ArrowUp') {
+    selectedAutocomplete = Math.max(selectedAutocomplete - 1, 0);
+    items.forEach((el, i) => el.style.background = i === selectedAutocomplete ? 'var(--blue-light)' : '');
+    e.preventDefault();
+  } else if (e.key === 'Enter') {
+    if (selectedAutocomplete >= 0 && filteredGames[selectedAutocomplete]) {
+      selectGame(filteredGames[selectedAutocomplete].title);
+    } else {
+      submitGuess(document.getElementById('guess-input').value);
+    }
+  }
+}
+
+function selectGame(title) {
+  document.getElementById('guess-input').value = title;
+  hideAutocomplete();
+  submitGuess(title);
+}
+
+// ── SUBMIT GUESS ──
+function submitGuess(title) {
+  if (!title.trim() || gameWon) return;
+
+  const input = document.getElementById('guess-input');
+  const isCorrect = title.toLowerCase().trim() === ANSWER.toLowerCase();
+
+  // Similarity score (simple demo — in production use IGDB proximity)
+  const similarity = isCorrect ? 1000 : Math.floor(Math.random() * 400 + 100);
+
+  guesses.unshift({ title, similarity, correct: isCorrect });
+  renderGuesses();
+
+  input.value = '';
+  hideAutocomplete();
+
+  if (isCorrect) {
+    winGame();
+  }
+}
+
+function renderGuesses() {
+  const section = document.getElementById('guesses-section');
+  const list = document.getElementById('guesses-list');
+  section.style.display = 'block';
+
+  list.innerHTML = guesses.map(g => `
+    <div class="guess-item" style="${g.correct ? 'border-color: var(--green); background: rgba(39,168,90,0.06)' : ''}">
+      <span class="guess-name" style="${g.correct ? 'color: var(--green)' : ''}">${g.title}</span>
+      <span class="guess-score">
+        <div class="similarity-bar">
+          <div class="similarity-fill" style="width: ${g.correct ? 100 : (g.similarity/10)}%; background: ${g.correct ? 'var(--green)' : 'var(--amber)'}"></div>
+        </div>
+        ${g.correct ? '✓ correct' : g.similarity + ' sim'}
+      </span>
+    </div>
+  `).join('');
+}
+
+function winGame() {
+  gameWon = true;
+  const banner = document.getElementById('win-banner');
+  document.getElementById('win-score').textContent = score + ' pts';
+  banner.classList.add('visible');
+
+  // Disable input
+  document.getElementById('guess-input').disabled = true;
+  document.getElementById('guess-input').placeholder = 'You got it!';
+
+  // Scroll to banner
+  setTimeout(() => banner.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+}
+
+// Close autocomplete on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.guess-section')) hideAutocomplete();
+});
+</script>
+</body>
+</html>

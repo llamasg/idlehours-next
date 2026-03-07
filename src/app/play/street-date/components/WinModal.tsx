@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo } from 'react'
 import type { StreetDateGame } from '../data/games'
-import type { CoverAttempt } from '../lib/storage'
-import StarScore from './StarScore'
+import type { CoverAttempt, Wager } from '../lib/storage'
 import ResultsReveal from './ResultsReveal'
 import ShareCard from './ShareCard'
 
@@ -17,42 +16,26 @@ interface WinModalProps {
   stars: number
   score: number
   won: boolean
+  wager: Wager
   onClose: () => void
 }
 
 // ── Confetti ─────────────────────────────────────────────────────────────────
 
 const CONFETTI_COLOURS = [
-  '#c95d0d',
-  '#2e8b57',
-  '#e5a44d',
-  '#d94f4f',
-  '#5b8dd9',
-  '#9b59b6',
+  '#c95d0d', '#2e8b57', '#e5a44d', '#d94f4f', '#5b8dd9', '#9b59b6',
 ]
 
-interface ConfettiPiece {
-  id: number
-  left: number
-  delay: number
-  size: number
-  colour: string
-  shape: 'square' | 'circle'
-}
-
-function generatePieces(count: number): ConfettiPiece[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    delay: Math.random() * 1.5,
-    size: 6 + Math.random() * 6,
-    colour: CONFETTI_COLOURS[i % CONFETTI_COLOURS.length],
-    shape: i % 2 === 0 ? 'square' : 'circle',
-  }))
-}
-
 function Confetti() {
-  const pieces = useMemo(() => generatePieces(40), [])
+  const pieces = useMemo(() =>
+    Array.from({ length: 40 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 1.5,
+      size: 6 + Math.random() * 6,
+      colour: CONFETTI_COLOURS[i % CONFETTI_COLOURS.length],
+      shape: (i % 2 === 0 ? 'square' : 'circle') as 'square' | 'circle',
+    })), [])
 
   return (
     <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden">
@@ -76,6 +59,14 @@ function Confetti() {
   )
 }
 
+// ── Wager label ─────────────────────────────────────────────────────────────
+
+const WAGER_LABELS: Record<Wager, string> = {
+  low: '🛡️ Cautious (x0.5)',
+  mid: '🎯 Confident (x1)',
+  high: '🔥 All In (x2)',
+}
+
 // ── WinModal ─────────────────────────────────────────────────────────────────
 
 export default function WinModal({
@@ -86,9 +77,9 @@ export default function WinModal({
   stars,
   score,
   won,
+  wager,
   onClose,
 }: WinModalProps) {
-  // Close on Escape key
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()
@@ -101,38 +92,42 @@ export default function WinModal({
     <>
       {won && <Confetti />}
 
-      {/* Overlay */}
       <div
         className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 backdrop-blur-sm"
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose()
         }}
       >
-        {/* Card — wide modal */}
-        <div className="mx-4 w-full max-w-[860px] rounded-3xl bg-card p-6 shadow-2xl sm:p-8 lg:p-10">
-          {/* Two-column layout on desktop */}
+        <div className="mx-4 w-full max-w-[860px] rounded-3xl bg-card p-6 shadow-2xl font-game sm:p-8 lg:p-10">
           <div className="lg:grid lg:grid-cols-[1fr_1.5fr] lg:gap-8 lg:items-center">
-            {/* Left column: heading, stars, score, year */}
+            {/* Left column */}
             <div className="text-center lg:text-left">
-              <h2 className="mb-2 font-heading text-2xl font-bold text-foreground sm:text-3xl">
+              <h2 className="mb-2 text-2xl font-bold text-foreground sm:text-3xl">
                 {won ? 'You got it!' : 'Game Over'}
               </h2>
 
-              <div className="mb-3">
-                <StarScore stars={stars} size="lg" />
+              {/* Score pill */}
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-white px-5 py-2">
+                <span className="font-heading text-2xl font-black text-[hsl(var(--game-blue))]">
+                  {score}
+                </span>
+                <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
+                  pts
+                </span>
               </div>
 
-              <p className="mb-4 font-heading text-xl font-bold text-foreground">
-                {stars * 200} pts
+              {/* Wager badge */}
+              <p className="mb-4 text-sm text-muted-foreground">
+                {WAGER_LABELS[wager]}
               </p>
 
               {/* Answer year */}
-              <p className="mb-6 font-heading text-4xl font-bold text-primary sm:text-5xl lg:mb-0">
+              <p className="mb-6 text-4xl font-bold text-[hsl(var(--game-blue))] sm:text-5xl lg:mb-0">
                 {answerYear}
               </p>
             </div>
 
-            {/* Right column: 5-game cover strip */}
+            {/* Right column */}
             <div>
               <ResultsReveal
                 answerYear={answerYear}
@@ -144,17 +139,18 @@ export default function WinModal({
             </div>
           </div>
 
-          {/* Actions — inline buttons */}
+          {/* Actions */}
           <div className="mt-8 flex items-center justify-center gap-3">
             <ShareCard
               dateStr={dateStr}
               answerYear={answerYear}
-              stars={stars}
+              score={score}
+              wager={wager}
               attempts={attempts}
             />
             <button
               onClick={onClose}
-              className="rounded-full border-2 border-border/60 px-6 py-2.5 font-heading text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+              className="rounded-full border-2 border-border/60 px-6 py-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
             >
               Close
             </button>

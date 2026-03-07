@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shelf Price — Idle Hours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream: #F0EBE0;
+  --cream-dark: #E4DBCC;
+  --ink: #1A1A14;
+  --ink-mid: #4A4A3A;
+  --ink-light: #8A8A70;
+  --amber: #C8873A;
+  --amber-light: #F0A84A;
+  --green: #27A85A;
+  --red: #C0392B;
+  --white: #FDFAF5;
+  --divider: rgba(26,26,20,0.12);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Montserrat', sans-serif;
+  background: var(--cream);
+  overflow-x: hidden;
+}
+
+/* ── HEADER ── */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(240,235,224,0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--divider);
+}
+
+.header-logo {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.header-game-info {
+  text-align: center;
+}
+
+.header-game-name {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--amber);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-game-sub {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--ink-light);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.header-streak {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-mid);
+}
+
+.streak-num {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--amber);
+  line-height: 1;
+}
+
+/* ── MAIN GAME AREA ── */
+.game-wrap {
+  padding-top: 64px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── GAME CARDS SPLIT ── */
+.cards-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  flex: 1;
+  min-height: calc(100vh - 64px - 80px);
+}
+
+/* Individual game card */
+.game-card {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition: filter 0.15s;
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1;
+  transition: background 0.2s;
+}
+
+.game-card:hover::before {
+  background: rgba(0,0,0,0.3);
+}
+
+.game-card.correct::before {
+  background: rgba(39,168,90,0.5);
+}
+
+.game-card.wrong::before {
+  background: rgba(192,57,43,0.5);
+}
+
+.game-card.dimmed::before {
+  background: rgba(0,0,0,0.65);
+}
+
+/* Cover image */
+.card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  transform: scale(1.04);
+  transition: transform 6s ease;
+}
+
+.game-card:hover .card-bg {
+  transform: scale(1.0);
+}
+
+/* Card content */
+.card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px 48px;
+}
+
+.card-meta-top {
+  position: absolute;
+  top: 28px;
+  left: 48px;
+  right: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-era {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.3);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+.card-platform {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.5);
+}
+
+.card-publisher {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 8px;
+}
+
+.card-title {
+  font-size: clamp(22px, 2.8vw, 36px);
+  font-weight: 900;
+  color: white;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+.card-year {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+}
+
+/* Price display — hidden until revealed */
+.card-price {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.card-price.visible { display: flex; }
+
+.price-amount {
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.price-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.4;
+}
+
+/* Context line shown on reveal */
+.card-context {
+  display: none;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: italic;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+  max-width: 340px;
+  border-left: 2px solid rgba(255,255,255,0.3);
+  padding-left: 12px;
+}
+
+.card-context.visible { display: block; }
+
+/* Higher/lower button */
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  color: var(--ink);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  margin-top: 16px;
+  width: fit-content;
+}
+
+.card-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  background: var(--amber);
+  color: white;
+}
+
+.card-cta.hidden { display: none; }
+
+/* Result tick/cross overlay */
+.card-result-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 10;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.card-result-icon.visible {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.card-result-icon.correct-icon {
+  background: var(--green);
+  color: white;
+}
+
+.card-result-icon.wrong-icon {
+  background: var(--red);
+  color: white;
+}
+
+/* ── VS DIVIDER ── */
+.vs-divider {
+  width: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 5;
+  flex-shrink: 0;
+}
+
+.vs-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 3px solid var(--cream-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 2;
+}
+
+/* Line through middle */
+.vs-divider::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: rgba(255,255,255,0.15);
+  z-index: 1;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  height: 80px;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 40px;
+}
+
+.progress-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.pips-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.2);
+  transition: all 0.3s;
+  position: relative;
+}
+
+.pip.done {
+  background: var(--amber);
+  border-color: var(--amber);
+  transform: scale(1.1);
+}
+
+.pip.current {
+  background: transparent;
+  border-color: var(--amber);
+  animation: pipPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pipPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200,135,58,0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(200,135,58,0); }
+}
+
+/* Milestone pips */
+.pip-milestone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pip-milestone-label {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  white-space: nowrap;
+}
+
+/* ── OVERLAY SCREENS ── */
+.screen-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26,26,20,0.85);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.screen-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.screen-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 48px 56px;
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+  transform: scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.screen-overlay.visible .screen-card {
+  transform: scale(1);
+}
+
+.screen-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.screen-title {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.screen-rank {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.screen-rank.rank-gold { background: rgba(200,135,58,0.15); color: var(--amber); }
+.screen-rank.rank-silver { background: rgba(140,140,100,0.15); color: #7A7A60; }
+.screen-rank.rank-bronze { background: rgba(180,100,60,0.15); color: #9A5A30; }
+.screen-rank.rank-basic { background: rgba(26,26,20,0.08); color: var(--ink-light); }
+
+.screen-score {
+  font-size: 64px;
+  font-weight: 900;
+  color: var(--amber);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 8px 0 4px;
+}
+
+.screen-score-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 20px;
+}
+
+.screen-context {
+  font-size: 13px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  margin-bottom: 28px;
+  padding: 16px 20px;
+  background: var(--cream);
+  border-radius: 12px;
+  border-left: 3px solid var(--amber);
+  text-align: left;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--amber);
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 100px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 16px rgba(200,135,58,0.35);
+  margin-right: 10px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(200,135,58,0.45);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink-light);
+  background: none;
+  border: 2px solid var(--divider);
+  padding: 14px 24px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: var(--ink-mid);
+  color: var(--ink);
+}
+
+/* ── START SCREEN ── */
+.start-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+}
+
+.start-card {
+  text-align: center;
+  max-width: 500px;
+  padding: 20px;
+}
+
+.start-eyebrow {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 12px;
+}
+
+.start-title {
+  font-size: clamp(56px, 10vw, 88px);
+  font-weight: 900;
+  color: var(--amber);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.start-sub {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 32px;
+}
+
+.ranks-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 36px;
+  text-align: left;
+  background: var(--white);
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: 1.5px solid var(--divider);
+}
+
+.rank-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.rank-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-mid);
+}
+
+.rank-req {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-light);
+  font-family: 'Montserrat', monospace;
+}
+
+.rank-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+</style>
+</head>
+<body>
+
+<!-- START SCREEN -->
+<div class="start-screen" id="start-screen">
+  <div class="start-card">
+    <div class="start-eyebrow">A game by Idle Hours</div>
+    <div class="start-title">Shelf<br>Price</div>
+    <div class="start-sub">Which game cost more at launch?</div>
+
+    <div class="ranks-preview">
+      <div style="font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-light);margin-bottom:8px;">Your rank depends on your streak</div>
+      <div class="rank-row">
+        <span class="rank-badge" style="background:rgba(200,135,58,0.15);color:var(--amber)">Industry Insider</span>
+        <span class="rank-req">10 in a row</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-badge" style="background:rgba(100,130,100,0.15);color:#4A7A58">Senior Producer</span>
+        <span class="rank-req">7 in a row</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-badge" style="background:rgba(180,100,60,0.15);color:#9A5A30">Junior Dev</span>
+        <span class="rank-req">4 in a row</span>
+      </div>
+      <div class="rank-row">
+        <span class="rank-badge" style="background:rgba(26,26,20,0.08);color:var(--ink-light)">Just Another Consumer</span>
+        <span class="rank-req">0–3</span>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startGame()" style="font-size:13px;padding:16px 40px;">
+      Start Playing →
+    </button>
+  </div>
+</div>
+
+<!-- SITE HEADER -->
+<header class="site-header">
+  <div class="header-logo">◆ Idle Hours</div>
+  <div class="header-game-info">
+    <div class="header-game-name">Shelf Price</div>
+    <div class="header-game-sub">Which cost more at launch?</div>
+  </div>
+  <div class="header-streak">
+    <span style="font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-light);">Streak</span>
+    <span class="streak-num" id="streak-display">0</span>
+  </div>
+</header>
+
+<!-- MAIN GAME -->
+<div class="game-wrap">
+  <div class="cards-row" id="cards-row">
+
+    <!-- LEFT CARD -->
+    <div class="game-card" id="card-left" onclick="makeChoice('left')">
+      <div class="card-bg" id="bg-left"></div>
+      <div class="card-meta-top">
+        <span class="card-era" id="era-left"></span>
+        <span class="card-platform" id="platform-left"></span>
+      </div>
+      <div class="card-content">
+        <div class="card-publisher" id="publisher-left"></div>
+        <div class="card-title" id="title-left"></div>
+        <div class="card-year" id="year-left"></div>
+        <div class="card-price" id="price-left">
+          <div class="price-amount" id="price-amt-left"></div>
+          <div class="price-label">launch<br>price</div>
+        </div>
+        <div class="card-context" id="context-left"></div>
+        <button class="card-cta" id="cta-left">This one cost more ↑</button>
+      </div>
+      <div class="card-result-icon" id="result-left"></div>
+    </div>
+
+    <!-- VS -->
+    <div class="vs-divider">
+      <div class="vs-circle">VS</div>
+    </div>
+
+    <!-- RIGHT CARD -->
+    <div class="game-card" id="card-right" onclick="makeChoice('right')">
+      <div class="card-bg" id="bg-right"></div>
+      <div class="card-meta-top">
+        <span class="card-era" id="era-right"></span>
+        <span class="card-platform" id="platform-right"></span>
+      </div>
+      <div class="card-content">
+        <div class="card-publisher" id="publisher-right"></div>
+        <div class="card-title" id="title-right"></div>
+        <div class="card-year" id="year-right"></div>
+        <div class="card-price" id="price-right">
+          <div class="price-amount" id="price-amt-right"></div>
+          <div class="price-label">launch<br>price</div>
+        </div>
+        <div class="card-context" id="context-right"></div>
+        <button class="card-cta" id="cta-right">This one cost more ↑</button>
+      </div>
+      <div class="card-result-icon" id="result-right"></div>
+    </div>
+
+  </div>
+
+  <!-- PROGRESS PIPS -->
+  <div class="progress-wrap">
+    <div class="progress-label">Streak towards Industry Insider</div>
+    <div class="pips-row" id="pips-row"></div>
+  </div>
+</div>
+
+<!-- RESULT OVERLAY (wrong) -->
+<div class="screen-overlay" id="overlay-wrong">
+  <div class="screen-card">
+    <div class="screen-icon">📦</div>
+    <div class="screen-title">Wrong price.</div>
+    <div class="screen-rank rank-basic" id="final-rank-label">Just Another Consumer</div>
+    <div class="screen-score" id="final-score">0</div>
+    <div class="screen-score-label">correct in a row</div>
+    <div class="screen-context" id="wrong-context"></div>
+    <button class="btn-primary" onclick="restartGame()">Try Again →</button>
+    <button class="btn-secondary" onclick="location.href='#'">Browse Archive</button>
+  </div>
+</div>
+
+<!-- WIN OVERLAY -->
+<div class="screen-overlay" id="overlay-win">
+  <div class="screen-card">
+    <div class="screen-icon">🏆</div>
+    <div class="screen-title">Industry Insider.</div>
+    <div class="screen-rank rank-gold">10 in a row</div>
+    <div class="screen-score">10</div>
+    <div class="screen-score-label">correct in a row</div>
+    <div class="screen-context" style="text-align:center">
+      You know exactly what games cost and why. The publishers would like a word.
+    </div>
+    <button class="btn-primary" onclick="restartGame()">Play Again →</button>
+    <button class="btn-secondary" onclick="location.href='#'">Share Result</button>
+  </div>
+</div>
+
+<script>
+// ── GAME DATA ──
+const GAMES = [
+  {
+    title: "The Last of Us Part II",
+    year: 2020, era: "2020s", publisher: "Naughty Dog / Sony",
+    platform: "PS4",
+    price: 59.99,
+    colour: "#1A2A3A",
+    context: "Launched at AAA full price despite being PS4 exclusive. One of the most expensive games of that console generation."
+  },
+  {
+    title: "Stardew Valley",
+    year: 2016, era: "2010s", publisher: "ConcernedApe",
+    platform: "PC, Switch, PS4",
+    price: 10.99,
+    colour: "#2C4A2E",
+    context: "One person, four years of work. Still only £10.99. ConcernedApe has never raised the price."
+  },
+  {
+    title: "Grand Theft Auto V",
+    year: 2013, era: "2010s", publisher: "Rockstar Games",
+    platform: "PS3 / Xbox 360",
+    price: 49.99,
+    colour: "#1A1A2E",
+    context: "Launched at the tail end of a console generation. Still the second best-selling game of all time."
+  },
+  {
+    title: "Celeste",
+    year: 2018, era: "2010s", publisher: "Maddy Makes Games",
+    platform: "PC, Switch, PS4",
+    price: 19.99,
+    colour: "#3A1A2E",
+    context: "Launched at a modest indie price despite being one of the most critically acclaimed platformers of the decade."
+  },
+  {
+    title: "Elden Ring",
+    year: 2022, era: "2020s", publisher: "FromSoftware / Bandai Namco",
+    platform: "PS5, Xbox, PC",
+    price: 59.99,
+    colour: "#2A1A0A",
+    context: "Full AAA price at launch. Sold over 20 million copies. FromSoftware's biggest commercial success by far."
+  },
+  {
+    title: "Hollow Knight",
+    year: 2017, era: "2010s", publisher: "Team Cherry",
+    platform: "PC, Switch",
+    price: 14.99,
+    colour: "#0A0A1A",
+    context: "Three developers, one of the most generous price-to-content ratios in gaming. Never went above £14.99."
+  },
+  {
+    title: "FIFA 23",
+    year: 2022, era: "2020s", publisher: "EA Sports",
+    platform: "PS5, Xbox Series X",
+    price: 69.99,
+    colour: "#0A2A1A",
+    context: "The first game to hit the new £69.99 next-gen price point. Also the last game in the FIFA series before EA renamed it."
+  },
+  {
+    title: "Disco Elysium",
+    year: 2019, era: "2010s", publisher: "ZA/UM",
+    platform: "PC",
+    price: 34.99,
+    colour: "#1A0A0A",
+    context: "Mid-range price for one of the most ambitious RPGs ever made. The studio was later gutted by its own investors."
+  },
+  {
+    title: "Minecraft",
+    year: 2011, era: "2010s", publisher: "Mojang",
+    platform: "PC",
+    price: 17.95,
+    colour: "#1A2A1A",
+    context: "Launched out of beta at a modest price in 2011. Now the best-selling game of all time. Price has since risen significantly."
+  },
+  {
+    title: "Cyberpunk 2077",
+    year: 2020, era: "2020s", publisher: "CD Projekt Red",
+    platform: "PC, PS4, Xbox One",
+    price: 49.99,
+    colour: "#1A0A2A",
+    context: "Launched broken on last-gen consoles at full price. Sony pulled it from the PlayStation Store within two weeks."
+  },
+  {
+    title: "Among Us",
+    year: 2018, era: "2010s", publisher: "Innersloth",
+    platform: "PC",
+    price: 3.99,
+    colour: "#0A0A2A",
+    context: "Released at under £4 in 2018, went viral two years later with no price change. Innersloth turned down a $40m acquisition."
+  },
+  {
+    title: "Red Dead Redemption 2",
+    year: 2018, era: "2010s", publisher: "Rockstar Games",
+    platform: "PS4, Xbox One",
+    price: 54.99,
+    colour: "#2A1A0A",
+    context: "Standard AAA console pricing. Cost an estimated $540 million to make. One of the most expensive games ever produced."
+  },
+  {
+    title: "Undertale",
+    year: 2015, era: "2010s", publisher: "Toby Fox",
+    platform: "PC",
+    price: 9.99,
+    colour: "#0A0A0A",
+    context: "One developer. Under £10. Still has one of the most devoted fanbases in gaming a decade later."
+  },
+  {
+    title: "God of War (2018)",
+    year: 2018, era: "2010s", publisher: "Santa Monica Studio / Sony",
+    platform: "PS4",
+    price: 49.99,
+    colour: "#1A0A0A",
+    context: "Standard Sony first-party pricing. Won Game of the Year. Still one of PlayStation's most celebrated exclusives."
+  },
+  {
+    title: "Fall Guys",
+    year: 2020, era: "2020s", publisher: "Mediatonic / Devolver",
+    platform: "PC, PS4",
+    price: 15.99,
+    colour: "#3A0A2A",
+    context: "Launched as a paid game, went free-to-play two years later. The shift cost Devolver the publishing rights."
+  },
+  {
+    title: "Hades",
+    year: 2020, era: "2020s", publisher: "Supergiant Games",
+    platform: "PC, Switch",
+    price: 24.99,
+    colour: "#1A0A2A",
+    context: "Mid-range indie price for a game that redefined what a roguelike could be. Won virtually every GOTY award that year."
+  },
+  {
+    title: "Call of Duty: Modern Warfare II",
+    year: 2022, era: "2020s", publisher: "Infinity Ward / Activision",
+    platform: "PS5, Xbox, PC",
+    price: 69.99,
+    colour: "#0A0A1A",
+    context: "One of the first major titles to adopt the new £69.99 standard. Broke franchise sales records within 24 hours."
+  },
+  {
+    title: "A Short Hike",
+    year: 2019, era: "2010s", publisher: "adamgryu",
+    platform: "PC",
+    price: 6.99,
+    colour: "#2A3A2A",
+    context: "One developer, two hours long, under £7. Consistently appears in 'best games ever made' lists despite its size."
+  },
+];
+
+// ── STATE ──
+let streak = 0;
+let currentLeft = null;
+let currentRight = null;
+let usedIndices = [];
+let isAnimating = false;
+const TARGET = 10;
+
+const RANKS = [
+  { min: 10, label: 'Industry Insider', class: 'rank-gold', icon: '🏆' },
+  { min: 7,  label: 'Senior Producer',  class: 'rank-silver', icon: '📊' },
+  { min: 4,  label: 'Junior Dev',       class: 'rank-bronze', icon: '💻' },
+  { min: 0,  label: 'Just Another Consumer', class: 'rank-basic', icon: '📦' },
+];
+
+function getRank(s) {
+  return RANKS.find(r => s >= r.min);
+}
+
+// ── BUILD PIPS ──
+function buildPips() {
+  const row = document.getElementById('pips-row');
+  row.innerHTML = '';
+  const milestones = { 3: 'Junior Dev', 7: 'Senior Producer', 10: 'Insider' };
+  for (let i = 0; i < TARGET; i++) {
+    if (milestones[i + 1]) {
+      const wrap = document.createElement('div');
+      wrap.className = 'pip-milestone';
+      const pip = document.createElement('div');
+      pip.className = 'pip';
+      pip.id = `pip-${i}`;
+      const lbl = document.createElement('div');
+      lbl.className = 'pip-milestone-label';
+      lbl.textContent = milestones[i + 1];
+      wrap.appendChild(pip);
+      wrap.appendChild(lbl);
+      row.appendChild(wrap);
+    } else {
+      const pip = document.createElement('div');
+      pip.className = 'pip';
+      pip.id = `pip-${i}`;
+      row.appendChild(pip);
+    }
+  }
+  updatePips();
+}
+
+function updatePips() {
+  for (let i = 0; i < TARGET; i++) {
+    const pip = document.getElementById(`pip-${i}`);
+    if (!pip) continue;
+    pip.classList.remove('done', 'current');
+    if (i < streak) pip.classList.add('done');
+    else if (i === streak) pip.classList.add('current');
+  }
+}
+
+// ── PICK TWO GAMES ──
+function pickGames() {
+  if (usedIndices.length >= GAMES.length - 1) usedIndices = [];
+
+  let available = GAMES.map((_, i) => i).filter(i => !usedIndices.includes(i));
+
+  // Make sure prices are different
+  let attempts = 0;
+  let li, ri;
+  do {
+    li = available[Math.floor(Math.random() * available.length)];
+    do { ri = available[Math.floor(Math.random() * available.length)]; } while (ri === li);
+    attempts++;
+  } while (GAMES[li].price === GAMES[ri].price && attempts < 20);
+
+  usedIndices.push(li, ri);
+  currentLeft = GAMES[li];
+  currentRight = GAMES[ri];
+}
+
+// ── RENDER CARDS ──
+function renderCards() {
+  renderCard('left', currentLeft);
+  renderCard('right', currentRight);
+  isAnimating = false;
+}
+
+function renderCard(side, game) {
+  document.getElementById(`bg-${side}`).style.backgroundColor = game.colour;
+  document.getElementById(`bg-${side}`).style.backgroundImage = '';
+  document.getElementById(`era-${side}`).textContent = game.era;
+  document.getElementById(`platform-${side}`).textContent = game.platform;
+  document.getElementById(`publisher-${side}`).textContent = game.publisher;
+  document.getElementById(`title-${side}`).textContent = game.title;
+  document.getElementById(`year-${side}`).textContent = game.year;
+  document.getElementById(`price-${side}`).classList.remove('visible');
+  document.getElementById(`context-${side}`).classList.remove('visible');
+  document.getElementById(`cta-${side}`).classList.remove('hidden');
+  document.getElementById(`result-${side}`).classList.remove('visible', 'correct-icon', 'wrong-icon');
+  document.getElementById(`result-${side}`).textContent = '';
+
+  const card = document.getElementById(`card-${side}`);
+  card.classList.remove('correct', 'wrong', 'dimmed');
+  card.style.pointerEvents = 'auto';
+}
+
+// ── MAKE CHOICE ──
+function makeChoice(side) {
+  if (isAnimating) return;
+  isAnimating = true;
+
+  const chosen = side === 'left' ? currentLeft : currentRight;
+  const other = side === 'left' ? currentRight : currentLeft;
+  const otherSide = side === 'left' ? 'right' : 'left';
+
+  const isCorrect = chosen.price >= other.price;
+
+  // Reveal both prices
+  document.getElementById(`price-amt-left`).textContent = '£' + currentLeft.price.toFixed(2);
+  document.getElementById(`price-amt-right`).textContent = '£' + currentRight.price.toFixed(2);
+  document.getElementById(`price-left`).classList.add('visible');
+  document.getElementById(`price-right`).classList.add('visible');
+
+  // Hide CTAs
+  document.getElementById(`cta-left`).classList.add('hidden');
+  document.getElementById(`cta-right`).classList.add('hidden');
+
+  // Show result icons
+  const chosenResult = document.getElementById(`result-${side}`);
+  const otherResult = document.getElementById(`result-${otherSide}`);
+
+  if (isCorrect) {
+    chosenResult.textContent = '✓';
+    chosenResult.classList.add('correct-icon', 'visible');
+    document.getElementById(`card-${side}`).classList.add('correct');
+    document.getElementById(`card-${otherSide}`).classList.add('dimmed');
+    // Show context on chosen card
+    document.getElementById(`context-${side}`).textContent = chosen.context;
+    document.getElementById(`context-${side}`).classList.add('visible');
+  } else {
+    chosenResult.textContent = '✗';
+    chosenResult.classList.add('wrong-icon', 'visible');
+    document.getElementById(`card-${side}`).classList.add('wrong');
+    document.getElementById(`card-${otherSide}`).classList.add('correct');
+    // Show correct context
+    document.getElementById(`context-${otherSide}`).textContent = other.context;
+    document.getElementById(`context-${otherSide}`).classList.add('visible');
+  }
+
+  if (isCorrect) {
+    streak++;
+    updatePips();
+    document.getElementById('streak-display').textContent = streak;
+
+    if (streak >= TARGET) {
+      setTimeout(() => {
+        document.getElementById('overlay-win').classList.add('visible');
+      }, 1800);
+    } else {
+      setTimeout(() => {
+        pickGames();
+        renderCards();
+      }, 2000);
+    }
+  } else {
+    // Wrong
+    setTimeout(() => {
+      const rank = getRank(streak);
+      document.getElementById('final-rank-label').textContent = rank.label;
+      document.getElementById('final-rank-label').className = `screen-rank ${rank.class}`;
+      document.getElementById('final-score').textContent = streak;
+      document.getElementById('wrong-context').textContent =
+        `${chosen.title} launched at £${chosen.price.toFixed(2)}. ${other.title} launched at £${other.price.toFixed(2)}. ${other.context}`;
+      document.getElementById('overlay-wrong').classList.add('visible');
+    }, 2000);
+  }
+}
+
+// ── START / RESTART ──
+function startGame() {
+  document.getElementById('start-screen').style.display = 'none';
+  buildPips();
+  pickGames();
+  renderCards();
+}
+
+function restartGame() {
+  streak = 0;
+  usedIndices = [];
+  document.getElementById('streak-display').textContent = '0';
+  document.getElementById('overlay-wrong').classList.remove('visible');
+  document.getElementById('overlay-win').classList.remove('visible');
+  buildPips();
+  pickGames();
+  renderCards();
+}
+</script>
+</body>
+</html>

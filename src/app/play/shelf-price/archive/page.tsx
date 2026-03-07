@@ -6,12 +6,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
-import StarScore from '../../street-date/components/StarScore'
 import {
   getArchiveDates,
   formatGameNumber,
   formatDisplayDate,
-  getGameForDate,
 } from '../lib/dateUtils'
 import { loadDayState } from '../lib/storage'
 
@@ -19,12 +17,10 @@ interface ArchiveRow {
   date: string
   gameNumber: string
   displayDate: string
-  gameTitle: string
-  price: number
   played: boolean
   finished: boolean
   won: boolean
-  stars: number
+  streak: number
 }
 
 export default function ShelfPriceArchivePage() {
@@ -35,18 +31,15 @@ export default function ShelfPriceArchivePage() {
     const dates = getArchiveDates()
     const archiveRows: ArchiveRow[] = dates.map((date) => {
       const state = loadDayState(date)
-      const game = getGameForDate(date)
-      const played = state.guesses.length > 0
+      const played = state.choices.length > 0
       return {
         date,
         gameNumber: formatGameNumber(date),
         displayDate: formatDisplayDate(date),
-        gameTitle: game.title,
-        price: game.launchPriceUsd,
         played,
         finished: state.finished,
         won: state.won,
-        stars: state.stars,
+        streak: state.streak,
       }
     })
     setRows(archiveRows)
@@ -80,28 +73,22 @@ export default function ShelfPriceArchivePage() {
               key={row.date}
               className="flex items-center justify-between rounded-lg border border-border/60 bg-card px-4 py-3"
             >
-              <div className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-3">
-                <div className="flex items-center gap-3">
-                  <span className="font-heading text-sm font-bold text-foreground">
-                    {row.gameNumber}
-                  </span>
-                  <span className="font-body text-xs text-muted-foreground">
-                    {row.displayDate}
-                  </span>
-                </div>
-                <span className="line-clamp-1 font-heading text-xs font-medium text-muted-foreground">
-                  {row.gameTitle}
+              <div className="flex items-center gap-3">
+                <span className="font-heading text-sm font-bold text-foreground">
+                  {row.gameNumber}
+                </span>
+                <span className="font-body text-xs text-muted-foreground">
+                  {row.displayDate}
                 </span>
               </div>
 
               <div className="flex items-center gap-3">
                 {row.finished && (
-                  <>
-                    <span className="hidden font-heading text-xs font-semibold text-primary sm:inline">
-                      ${row.price.toFixed(2)}
-                    </span>
-                    <StarScore stars={row.stars} size="sm" />
-                  </>
+                  <span className={`font-heading text-xs font-bold ${
+                    row.won ? 'text-[hsl(var(--game-amber))]' : 'text-muted-foreground'
+                  }`}>
+                    {row.streak}/10
+                  </span>
                 )}
                 {row.played && !row.finished && (
                   <span className="font-heading text-xs text-amber-600">

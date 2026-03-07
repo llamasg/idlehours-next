@@ -9,22 +9,21 @@ interface ShareCardProps {
   gameTitle: string
   score: number
   guesses: GuessRecord[]
-  lifelinesUsedCount: number
+  blanksRevealedCount: number
 }
 
-function proximityEmoji(proximity: number): string {
-  if (proximity <= 100) return '🟩'
-  if (proximity <= 300) return '🟨'
-  if (proximity <= 600) return '🟧'
+function proximityEmoji(rank: number): string {
+  if (rank <= 50) return '🟩'
+  if (rank <= 200) return '🟨'
+  if (rank <= 500) return '🟧'
   return '🟥'
 }
 
 export default function ShareCard({
   dateStr,
-  gameTitle,
   score,
   guesses,
-  lifelinesUsedCount,
+  blanksRevealedCount,
 }: ShareCardProps) {
   const [copied, setCopied] = useState(false)
 
@@ -37,8 +36,8 @@ export default function ShareCard({
       emojiRow,
     ]
 
-    if (lifelinesUsedCount > 0) {
-      lines.push(`${guesses.length} guesses \u00b7 ${lifelinesUsedCount} lifelines`)
+    if (blanksRevealedCount > 0) {
+      lines.push(`${guesses.length} guesses \u00b7 ${blanksRevealedCount}/5 clues`)
     } else {
       lines.push(`${guesses.length} guesses`)
     }
@@ -61,7 +60,7 @@ export default function ShareCard({
   return (
     <button
       onClick={handleCopy}
-      className="rounded-full bg-primary px-6 py-2.5 font-heading text-sm font-semibold text-white transition-transform hover:scale-105"
+      className="rounded-full bg-[hsl(var(--game-blue))] px-6 py-2.5 font-heading text-sm font-semibold text-white transition-transform hover:scale-105"
     >
       {copied ? 'Copied!' : 'Share Result'}
     </button>
