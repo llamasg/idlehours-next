@@ -21,6 +21,8 @@ import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
 import SentenceClue, { type BlankDef, BLANK_COSTS } from '../components/SentenceClue'
 import WinModal from '../components/WinModal'
+import RulesModal from '../components/RulesModal'
+import ProximityCounter from '../components/ProximityCounter'
 
 const GUESS_COST = 20
 
@@ -33,8 +35,15 @@ export default function GameSenseDayPage({
 
   const [state, setState] = useState<DayState | null>(null)
   const [showWinModal, setShowWinModal] = useState(false)
+  const [showRules, setShowRules] = useState(false)
   const [floatingCost, setFloatingCost] = useState<{ key: string; cost: number } | null>(null)
   const [scorePulse, setScorePulse] = useState(false)
+
+  // Countdown animation state
+  const [pendingGuess, setPendingGuess] = useState<{
+    game: GameSenseGame
+    proximity: number
+  } | null>(null)
 
   const answer: GameSenseGame = GAMES[getGameIndexForDate(date)]
   const playable = isPlayableDate(date)
@@ -51,30 +60,48 @@ export default function GameSenseDayPage({
 
   const handleGuess = useCallback(
     (game: GameSenseGame) => {
-      if (!state || state.won) return
+      if (!state || state.won || pendingGuess) return
 
       const proximity = calculateRank(game, answer)
-      const won = proximity === 1
+
+      // Deduct guess cost immediately
       const newState: DayState = {
         ...state,
-        guesses: [...state.guesses, { gameId: game.id, proximity }],
         score: Math.max(0, state.score - GUESS_COST),
-        won,
       }
-
       setState(newState)
       saveDayState(date, newState)
 
-      if (won) {
-        setShowWinModal(true)
-      }
+      // Start the countdown animation
+      setPendingGuess({ game, proximity })
     },
-    [state, answer, date],
+    [state, answer, date, pendingGuess],
   )
+
+  const handleCountdownComplete = useCallback(() => {
+    if (!pendingGuess || !state) return
+
+    const { game, proximity } = pendingGuess
+    const won = proximity === 1
+    const newState: DayState = {
+      ...state,
+      guesses: [...state.guesses, { gameId: game.id, proximity }],
+      score: Math.max(0, state.score - GUESS_COST),
+      won,
+    }
+
+    setState(newState)
+    saveDayState(date, newState)
+    setPendingGuess(null)
+
+    if (won) {
+      setTimeout(() => setShowWinModal(true), 300)
+    }
+  }, [pendingGuess, state, date])
 
   const handleRevealBlank = useCallback(
     (blank: BlankDef) => {
-      if (!state || state.won) return
+      if (!state || state.won || pendingGuess) return
       if (state.blanksRevealed.includes(blank.key)) return
 
       const cost = BLANK_COSTS[blank.key] ?? 0
@@ -95,7 +122,7 @@ export default function GameSenseDayPage({
         setScorePulse(false)
       }, 1200)
     },
-    [state, date],
+    [state, date, pendingGuess],
   )
 
   // While loading from localStorage
@@ -112,6 +139,7 @@ export default function GameSenseDayPage({
   }
 
   const guessedIds = state.guesses.map((g) => g.gameId)
+  const isAnimating = pendingGuess !== null
 
   return (
     <>
@@ -119,13 +147,30 @@ export default function GameSenseDayPage({
 
       <main className="font-game mx-auto max-w-2xl px-4 py-8">
         {/* Game header */}
-        <div className="mb-8 text-center">
+        <div className="mb-6 text-center">
           <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
             Game Sense
           </h1>
-          <p className="mt-1 font-heading text-sm text-muted-foreground">
-            {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+
+          {/* Subtitle + help button */}
+          <div className="mt-1.5 flex items-center justify-center gap-2">
+            <p className="font-heading text-sm text-muted-foreground">
+              {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+            </p>
+            <button
+              onClick={() => setShowRules(true)}
+              className="flex h-5 w-5 items-center justify-center rounded-full border border-border/80 text-[11px] font-bold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
+              aria-label="How to play"
+            >
+              ?
+            </button>
+          </div>
+
+          <p className="mt-1 text-xs text-muted-foreground">
+            Guess the game — higher score is better!
           </p>
+
+          {/* Score pill */}
           <div
             className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 bg-white px-5 py-2 transition-all duration-300"
             style={{
@@ -184,13 +229,24 @@ export default function GameSenseDayPage({
               blanksRevealed={state.blanksRevealed}
               score={state.score}
               onRevealBlank={handleRevealBlank}
-              disabled={state.won}
+              disabled={state.won || isAnimating}
             />
           </div>
         )}
 
-        {/* Guess input — hidden when won or not playable */}
-        {playable && !state.won && (
+        {/* Proximity countdown animation */}
+        {pendingGuess && (
+          <div className="mb-6">
+            <ProximityCounter
+              gameTitle={pendingGuess.game.title}
+              targetRank={pendingGuess.proximity}
+              onComplete={handleCountdownComplete}
+            />
+          </div>
+        )}
+
+        {/* Guess input — hidden when won, not playable, or animating */}
+        {playable && !state.won && !isAnimating && (
           <div className="mb-6">
             <GuessInput
               onGuess={handleGuess}
@@ -201,7 +257,7 @@ export default function GameSenseDayPage({
         )}
 
         {/* Won inline message — when won and modal closed */}
-        {state.won && !showWinModal && (
+        {state.won && !showWinModal && !isAnimating && (
           <div className="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-4 text-center">
             <p className="text-sm font-semibold text-green-700">
               You guessed it! &mdash; {answer.title}
@@ -216,14 +272,14 @@ export default function GameSenseDayPage({
         )}
 
         {/* Guess list */}
-        {playable && state.guesses.length > 0 && (
+        {playable && state.guesses.length > 0 && !isAnimating && (
           <div className="mb-8">
             <GuessList guesses={state.guesses} />
           </div>
         )}
 
         {/* End-game: nav pills + discover more */}
-        {state.won && !showWinModal && (
+        {state.won && !showWinModal && !isAnimating && (
           <>
             <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
               {!today && (
@@ -250,7 +306,7 @@ export default function GameSenseDayPage({
         )}
 
         {/* Nav pills — during gameplay */}
-        {!(state.won && !showWinModal) && (
+        {!(state.won && !showWinModal && !isAnimating) && (
           <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
             {!today && (
               <Link
@@ -273,6 +329,9 @@ export default function GameSenseDayPage({
       </main>
 
       <SiteFooter />
+
+      {/* Rules modal */}
+      {showRules && <RulesModal onClose={() => setShowRules(false)} />}
 
       {/* Win modal */}
       {showWinModal && state.won && (
