@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { GAMES } from '../data/games'
 
 const TOTAL = GAMES.length
@@ -13,8 +13,9 @@ interface ProximityCounterProps {
 
 /**
  * Pointless-style animated countdown.
- * Starts at TOTAL and counts down to targetRank with easing —
- * fast at the top, slowing dramatically as it approaches the target.
+ * Two phases:
+ *  1. Fast sweep from TOTAL down to ~targetRank+10 using RAF
+ *  2. Stepped ticks for the final stretch with increasing delays
  */
 export default function ProximityCounter({
   gameTitle,
@@ -23,44 +24,92 @@ export default function ProximityCounter({
 }: ProximityCounterProps) {
   const [displayValue, setDisplayValue] = useState(TOTAL)
   const [phase, setPhase] = useState<'counting' | 'landed' | 'correct'>('counting')
-  const rafRef = useRef<number>(0)
-  const startTimeRef = useRef(0)
-
-  // Duration scales: correct answer (rank 1) gets a longer, more dramatic countdown
-  const isCorrect = targetRank === 1
-  const duration = isCorrect ? 4500 : Math.min(3000, 800 + (TOTAL - targetRank) * 2.5)
-
-  const animate = useCallback(() => {
-    const elapsed = Date.now() - startTimeRef.current
-    const progress = Math.min(1, elapsed / duration)
-
-    // Ease-out cubic for smooth deceleration
-    const eased = 1 - Math.pow(1 - progress, 3)
-
-    const current = Math.round(TOTAL - eased * (TOTAL - targetRank))
-    setDisplayValue(current)
-
-    if (progress < 1) {
-      rafRef.current = requestAnimationFrame(animate)
-    } else {
-      setDisplayValue(targetRank)
-      if (isCorrect) {
-        setPhase('correct')
-        setTimeout(onComplete, 1500)
-      } else {
-        setPhase('landed')
-        setTimeout(onComplete, 800)
-      }
-    }
-  }, [targetRank, duration, isCorrect, onComplete])
+  const cancelledRef = useRef(false)
 
   useEffect(() => {
-    startTimeRef.current = Date.now()
-    rafRef.current = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(rafRef.current)
-  }, [animate])
+    cancelledRef.current = false
+    let raf = 0
 
-  // Color transitions as the number drops
+    const isCorrect = targetRank === 1
+    // Where the slow phase kicks in
+    const slowThreshold = Math.min(targetRank + 12, TOTAL)
+    // Fast phase goes from TOTAL down to slowThreshold
+    const fastRange = TOTAL - slowThreshold
+    const fastDuration = Math.min(2000, 400 + fastRange * 1.5)
+
+    const startTime = Date.now()
+
+    function fastPhase() {
+      if (cancelledRef.current) return
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(1, elapsed / fastDuration)
+
+      // Aggressive ease-out: power of 5 for extreme deceleration
+      const eased = 1 - Math.pow(1 - progress, 5)
+      const current = Math.round(TOTAL - eased * fastRange)
+      setDisplayValue(current)
+
+      if (progress < 1) {
+        raf = requestAnimationFrame(fastPhase)
+      } else {
+        setDisplayValue(slowThreshold)
+        slowPhase(slowThreshold)
+      }
+    }
+
+    async function slowPhase(from: number) {
+      // Step through each number from `from` down to targetRank
+      for (let n = from - 1; n >= targetRank; n--) {
+        if (cancelledRef.current) return
+
+        // Delay increases as we get closer to target
+        const remaining = n - targetRank
+        let delay: number
+        if (remaining <= 2) {
+          delay = isCorrect ? 600 : 350
+        } else if (remaining <= 5) {
+          delay = isCorrect ? 400 : 200
+        } else if (remaining <= 10) {
+          delay = isCorrect ? 200 : 120
+        } else {
+          delay = 60
+        }
+
+        await new Promise((r) => setTimeout(r, delay))
+        if (cancelledRef.current) return
+        setDisplayValue(n)
+      }
+
+      if (cancelledRef.current) return
+
+      if (isCorrect) {
+        setPhase('correct')
+        setTimeout(() => {
+          if (!cancelledRef.current) onComplete()
+        }, 1500)
+      } else {
+        setPhase('landed')
+        setTimeout(() => {
+          if (!cancelledRef.current) onComplete()
+        }, 800)
+      }
+    }
+
+    // Kick off
+    if (fastRange <= 0) {
+      // Target is very close to TOTAL, skip fast phase
+      slowPhase(TOTAL)
+    } else {
+      raf = requestAnimationFrame(fastPhase)
+    }
+
+    return () => {
+      cancelledRef.current = true
+      cancelAnimationFrame(raf)
+    }
+  }, [targetRank, onComplete])
+
+  // Color based on current display value
   function getColor(val: number): string {
     if (val <= 1) return 'hsl(var(--game-green))'
     if (val <= 50) return 'hsl(147 61% 41%)'
@@ -69,16 +118,8 @@ export default function ProximityCounter({
     return 'hsl(var(--game-red))'
   }
 
-  function getBgColor(val: number): string {
-    if (val <= 1) return 'hsl(147 61% 41% / 0.1)'
-    if (val <= 50) return 'hsl(147 61% 41% / 0.08)'
-    if (val <= 200) return 'hsl(30 55% 50% / 0.08)'
-    if (val <= 500) return 'hsl(30 55% 50% / 0.06)'
-    return 'hsl(7 62% 47% / 0.06)'
-  }
-
-  // Bar fill percentage (inverted — lower rank = more fill)
-  const fillPct = Math.max(0, Math.min(100, 100 - ((displayValue / TOTAL) * 100)))
+  // Bar fill: 0% at TOTAL, 100% at 1
+  const fillPct = Math.max(0, Math.min(100, ((TOTAL - displayValue) / (TOTAL - 1)) * 100))
 
   return (
     <div className="mx-auto w-full max-w-md">
@@ -89,39 +130,43 @@ export default function ProximityCounter({
 
       {/* Counter bar */}
       <div
-        className="relative overflow-hidden rounded-xl border-2 transition-colors duration-300"
+        className="relative overflow-hidden rounded-xl border-2"
         style={{
           borderColor: getColor(displayValue),
-          background: getBgColor(displayValue),
           height: '64px',
         }}
       >
-        {/* Fill bar */}
+        {/* Fill bar — no CSS transition, driven directly by displayValue */}
         <div
-          className="absolute inset-y-0 left-0 transition-[width] duration-75"
+          className="absolute inset-y-0 left-0"
           style={{
             width: `${fillPct}%`,
             background: getColor(displayValue),
-            opacity: 0.15,
+            opacity: 0.18,
           }}
         />
 
         {/* Number */}
         <div className="relative flex h-full items-center justify-center">
           <span
-            className="font-heading text-4xl font-black tabular-nums transition-colors duration-150"
+            className="font-heading text-4xl font-black tabular-nums"
             style={{ color: getColor(displayValue) }}
           >
-            {phase === 'correct' ? '1' : displayValue}
+            {displayValue}
           </span>
         </div>
       </div>
 
       {/* Status text */}
-      <div className="mt-2 text-center">
-        {phase === 'counting' && (
+      <div className="mt-2 text-center" style={{ minHeight: '28px' }}>
+        {phase === 'counting' && displayValue > targetRank + 12 && (
+          <p className="text-xs font-semibold text-muted-foreground">
+            &nbsp;
+          </p>
+        )}
+        {phase === 'counting' && displayValue <= targetRank + 12 && (
           <p className="text-xs font-semibold text-muted-foreground animate-pulse">
-            Calculating proximity...
+            &nbsp;
           </p>
         )}
         {phase === 'landed' && (
