@@ -1,31 +1,35 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import type { CoverAttempt } from '../lib/storage'
+
+interface GuessHistoryEntry {
+  year: number
+  direction: 'too-low' | 'too-high' | 'correct'
+}
 
 interface YearInputProps {
   onSubmit: (year: number) => void
-  onSkip: () => void
   disabled: boolean
-  attempts: CoverAttempt[]
-  answerYear: number
+  guessHistory: GuessHistoryEntry[]
+  attemptsUsed: number
+  maxAttempts: number
 }
 
 export default function YearInput({
   onSubmit,
-  onSkip,
   disabled,
-  attempts,
-  answerYear,
+  guessHistory,
+  attemptsUsed,
+  maxAttempts,
 }: YearInputProps) {
   const [value, setValue] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [historyIndex, setHistoryIndex] = useState(-1)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Focus the input on mount and when attempts change (new cover revealed)
   useEffect(() => {
     inputRef.current?.focus()
-  }, [attempts.length])
+  }, [guessHistory.length])
 
   const handleSubmit = () => {
     setError(null)
@@ -48,6 +52,7 @@ export default function YearInput({
     }
 
     setValue('')
+    setHistoryIndex(-1)
     onSubmit(year)
   }
 
@@ -55,63 +60,77 @@ export default function YearInput({
     if (e.key === 'Enter') {
       e.preventDefault()
       handleSubmit()
+    } else if (e.key === 'ArrowUp' && guessHistory.length > 0) {
+      e.preventDefault()
+      const yearHistory = guessHistory.map((g) => g.year)
+      const nextIndex = historyIndex < yearHistory.length - 1 ? historyIndex + 1 : historyIndex
+      setHistoryIndex(nextIndex)
+      setValue(String(yearHistory[yearHistory.length - 1 - nextIndex]))
+    } else if (e.key === 'ArrowDown' && historyIndex > 0) {
+      e.preventDefault()
+      const yearHistory = guessHistory.map((g) => g.year)
+      const nextIndex = historyIndex - 1
+      setHistoryIndex(nextIndex)
+      setValue(String(yearHistory[yearHistory.length - 1 - nextIndex]))
     }
   }
 
-  const handleSkip = () => {
-    setValue('')
-    setError(null)
-    onSkip()
-  }
-
-  // Filter to only actual guesses (not skips) for the history
-  const guessHistory = attempts.filter((a) => !a.skipped && a.yearGuessed > 0)
-
   return (
     <div className="mb-8 flex flex-col items-center gap-4">
-      {/* Previous guesses — higher/lower list */}
+      {/* Attempt dots */}
+      <div className="flex items-center gap-2">
+        {Array.from({ length: maxAttempts }, (_, i) => (
+          <div
+            key={i}
+            className={`h-2.5 w-2.5 rounded-full transition-all ${
+              i < attemptsUsed
+                ? 'bg-[hsl(var(--game-amber))]'
+                : 'bg-[hsl(var(--game-ink))]/15'
+            }`}
+          />
+        ))}
+        <span className="ml-1 font-heading text-xs text-muted-foreground">
+          {attemptsUsed}/{maxAttempts}
+        </span>
+      </div>
+
+      {/* Guess history chips */}
       {guessHistory.length > 0 && (
-        <div className="mb-2 flex w-full max-w-sm flex-col gap-2.5">
-          {guessHistory.map((attempt, i) => {
-            const direction = attempt.yearGuessed < answerYear ? 'higher' : 'lower'
-            return (
-              <div
-                key={i}
-                className="flex items-center justify-between rounded-2xl border border-border/60 bg-muted/30 px-6 py-3"
-              >
-                <span className="font-heading text-base font-bold tabular-nums text-foreground">
-                  {attempt.yearGuessed}
-                </span>
-                <span className={`flex items-center gap-1.5 font-heading text-sm font-semibold ${
-                  direction === 'higher'
-                    ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-red-600 dark:text-red-400'
-                }`}>
-                  {direction === 'higher' ? (
-                    <>
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-                      </svg>
-                      Higher
-                    </>
-                  ) : (
-                    <>
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                      </svg>
-                      Lower
-                    </>
-                  )}
-                </span>
-              </div>
-            )
-          })}
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {[...guessHistory].reverse().map((entry, i) => (
+            <div
+              key={i}
+              className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-heading text-sm font-bold ${
+                entry.direction === 'correct'
+                  ? 'border-[hsl(var(--game-green))]/40 bg-[hsl(var(--game-green))]/10 text-[hsl(var(--game-green))]'
+                  : entry.direction === 'too-low'
+                  ? 'border-blue-500/30 bg-blue-500/10 text-blue-600'
+                  : 'border-red-500/30 bg-red-500/10 text-red-600'
+              }`}
+            >
+              {entry.year}
+              {entry.direction === 'too-low' && (
+                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                </svg>
+              )}
+              {entry.direction === 'too-high' && (
+                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              )}
+              {entry.direction === 'correct' && (
+                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+            </div>
+          ))}
         </div>
       )}
 
-      {/* Input row — stacked on mobile, inline on desktop */}
+      {/* Input row */}
       <div className="flex w-full max-w-sm flex-col items-center gap-3 lg:max-w-none lg:flex-row lg:justify-center">
-        {/* Year input */}
         <input
           ref={inputRef}
           type="text"
@@ -123,36 +142,26 @@ export default function YearInput({
           onChange={(e) => {
             setValue(e.target.value.replace(/[^0-9]/g, ''))
             setError(null)
+            setHistoryIndex(-1)
           }}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          className="w-full rounded-full border-2 border-border bg-background px-6 py-3 text-center font-heading text-xl font-bold tabular-nums focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50 lg:w-[200px]"
+          className="w-full rounded-xl border-2 border-border bg-white px-6 py-3 text-center font-heading text-xl font-bold tabular-nums focus:border-[hsl(var(--game-blue))]/40 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--game-blue))]/30 disabled:opacity-50 lg:w-[200px]"
         />
 
-        {/* Submit button */}
         <button
           type="button"
           onClick={handleSubmit}
           disabled={disabled}
-          className="w-full rounded-full bg-primary px-6 py-3 font-heading text-base font-bold text-white transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 lg:w-auto"
+          className="w-full rounded-xl bg-[hsl(var(--game-blue))] px-6 py-3 font-heading text-base font-bold text-white transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 lg:w-auto"
         >
           Submit
-        </button>
-
-        {/* Skip button */}
-        <button
-          type="button"
-          onClick={handleSkip}
-          disabled={disabled}
-          className="w-full rounded-full border-2 border-border/60 px-6 py-3 font-heading text-base font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground disabled:opacity-50 lg:w-auto"
-        >
-          Skip
         </button>
       </div>
 
       {/* Error message */}
       {error && (
-        <p className="font-heading text-sm font-medium text-red-600">{error}</p>
+        <p className="font-heading text-sm font-medium text-[hsl(var(--game-red))]">{error}</p>
       )}
     </div>
   )

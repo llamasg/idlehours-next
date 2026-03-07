@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ship It — An Indie Dev Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream: #F5EFE0;
+  --cream-dark: #EDE4D0;
+  --amber: #C8873A;
+  --amber-light: #E8A857;
+  --amber-pale: #F2D5A8;
+  --forest: #2C4A2E;
+  --forest-light: #3D6B40;
+  --dusty-rose: #C4847A;
+  --rose-pale: #F0D5D0;
+  --ink: #1A1A14;
+  --ink-mid: #3D3D30;
+  --ink-light: #7A7A60;
+  --paper: #FAF6ED;
+  --red: #C0392B;
+  --green: #27AE60;
+}
+
+body {
+  background: var(--cream);
+  font-family: 'DM Mono', monospace;
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ===================== SCREENS ===================== */
+.screen { display: none; width: 100%; max-width: 860px; }
+.screen.active { display: block; animation: fadeUp 0.5s ease both; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== START SCREEN ===================== */
+#start-screen {
+  text-align: center;
+}
+
+.start-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 32px;
+}
+
+.start-logo span {
+  color: var(--amber);
+}
+
+.start-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.start-headline em {
+  color: var(--forest);
+  font-style: italic;
+}
+
+.start-sub {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--ink-light);
+  margin-bottom: 48px;
+  line-height: 1.6;
+}
+
+.start-form {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  padding: 40px;
+  text-align: left;
+  position: relative;
+}
+
+.start-form::before {
+  content: 'INTAKE FORM';
+  position: absolute;
+  top: -10px;
+  left: 24px;
+  background: var(--amber);
+  border: 2px solid var(--ink);
+  padding: 2px 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  color: var(--ink);
+}
+
+.form-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-input {
+  width: 100%;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+  padding: 14px 16px;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-style: italic;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus { border-color: var(--forest); }
+.form-input::placeholder { color: var(--ink-light); opacity: 0.5; }
+
+.objective-box {
+  margin-top: 28px;
+  padding: 20px;
+  background: var(--forest);
+  border: 2px solid var(--ink);
+}
+
+.objective-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--amber-pale);
+  margin-bottom: 10px;
+}
+
+.objective-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px;
+  color: var(--cream);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.start-btn {
+  margin-top: 28px;
+  width: 100%;
+  background: var(--forest);
+  border: 3px solid var(--ink);
+  padding: 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cream);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+}
+
+.start-btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 4px 4px 0 var(--ink);
+  background: var(--forest-light);
+}
+
+.start-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ===================== GAME SCREEN ===================== */
+#game-screen {}
+
+/* Top bar */
+.top-bar {
+  background: var(--ink);
+  border: 3px solid var(--ink);
+  border-bottom: none;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-bar-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--amber-light);
+}
+
+.top-bar-stats {
+  display: flex;
+  gap: 32px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-item .stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  display: block;
+}
+
+.stat-item .stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.1;
+}
+
+.stat-item .stat-value.danger { color: #ff6b6b; }
+.stat-item .stat-value.warning { color: var(--amber-light); }
+
+/* Stage indicator */
+.stage-bar {
+  background: var(--amber-pale);
+  border: 3px solid var(--ink);
+  border-top: 2px solid var(--ink);
+  border-bottom: none;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stage-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.stage-dots {
+  display: flex;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.stage-dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--ink);
+  background: transparent;
+  transition: background 0.3s;
+}
+
+.stage-dot.done { background: var(--forest); }
+.stage-dot.current { background: var(--amber); }
+
+/* Main game area */
+.game-body {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 480px;
+}
+
+/* Box art panel */
+.boxart-panel {
+  border-right: 3px solid var(--ink);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.boxart-wrap {
+  position: relative;
+  width: 220px;
+}
+
+.boxart {
+  width: 220px;
+  height: 300px;
+  background: var(--forest);
+  border: 4px solid var(--ink);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.boxart-bg {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 50% 60%, #3D6B40 0%, #1A3A1C 70%);
+}
+
+.boxart-stars {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.4;
+}
+
+.boxart-title {
+  position: relative;
+  z-index: 2;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cream);
+  text-align: center;
+  padding: 0 12px;
+  line-height: 1.2;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.boxart-subtitle {
+  position: absolute;
+  bottom: 12px;
+  left: 0; right: 0;
+  z-index: 2;
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber-pale);
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* Sticker layer */
+.stickers-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.sticker {
+  position: absolute;
+  padding: 5px 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 2px solid var(--ink);
+  line-height: 1.3;
+  text-align: center;
+  max-width: 120px;
+  animation: stickerSlap 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes stickerSlap {
+  from { opacity: 0; transform: scale(2) rotate(var(--rot)); }
+  to { opacity: 1; transform: scale(1) rotate(var(--rot)); }
+}
+
+.sticker.bad { background: var(--red); color: white; }
+.sticker.good { background: var(--green); color: white; }
+.sticker.warning { background: var(--amber); color: var(--ink); }
+
+/* Vision bar */
+.vision-bar-wrap {
+  margin-top: 24px;
+  width: 220px;
+}
+
+.vision-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 4px;
+}
+
+.vision-track {
+  height: 8px;
+  background: var(--cream);
+  border: 2px solid var(--ink);
+}
+
+.vision-fill {
+  height: 100%;
+  background: var(--forest);
+  transition: width 0.5s ease;
+}
+
+.vision-fill.low { background: var(--amber); }
+.vision-fill.critical { background: var(--red); }
+
+/* Offer panel */
+.offer-panel {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.offer-day-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.offer-card {
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  padding: 24px;
+  position: relative;
+  transition: transform 0.15s;
+}
+
+.offer-card::before {
+  content: attr(data-type);
+  position: absolute;
+  top: -10px;
+  right: 16px;
+  background: var(--cream-dark);
+  border: 2px solid var(--ink);
+  padding: 2px 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.exec-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px dashed rgba(26,26,20,0.2);
+}
+
+.exec-avatar {
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--ink);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: var(--cream-dark);
+}
+
+.exec-info {}
+.exec-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.exec-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: var(--ink-light);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.offer-pitch {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.offer-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.offer-stat {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1.5px solid var(--ink);
+  text-align: center;
+}
+
+.offer-stat .os-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.offer-stat .os-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.os-val.positive { color: var(--green); }
+.os-val.negative { color: var(--red); }
+.os-val.neutral { color: var(--amber); }
+
+.offer-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.offer-btn {
+  padding: 12px;
+  border: 2px solid var(--ink);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.offer-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.btn-reject {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.btn-accept {
+  background: var(--forest);
+  color: var(--cream);
+}
+
+/* Transition card */
+.transition-card {
+  display: none;
+  text-align: center;
+  padding: 60px 40px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.transition-card.showing {
+  display: flex;
+  animation: fadeUp 0.4s ease both;
+}
+
+.transition-stage {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+.transition-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--forest);
+}
+
+.transition-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-mid);
+  max-width: 400px;
+  line-height: 1.7;
+}
+
+.continue-btn {
+  margin-top: 8px;
+  background: var(--amber);
+  border: 2px solid var(--ink);
+  padding: 12px 32px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.continue-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* ===================== END SCREEN ===================== */
+#end-screen {}
+
+.end-header {
+  background: var(--ink);
+  border: 3px solid var(--ink);
+  border-bottom: none;
+  padding: 24px 32px;
+  text-align: center;
+}
+
+.end-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--amber-pale);
+  margin-bottom: 8px;
+}
+
+.end-game-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--cream);
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.end-full-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--amber-light);
+  line-height: 1.3;
+}
+
+.end-body {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-top: 2px solid var(--ink);
+  padding: 40px;
+}
+
+/* Steam review widget */
+.steam-reviews {
+  border: 2px solid var(--ink);
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.steam-header {
+  background: #1b2838;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.steam-header-left {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: #c6d4df;
+  text-transform: uppercase;
+}
+
+.steam-score-badge {
+  padding: 6px 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+}
+
+.steam-body {
+  padding: 20px;
+  background: #c6d4df10;
+}
+
+.steam-bar-wrap {
+  display: flex;
+  gap: 4px;
+  height: 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--ink);
+  overflow: hidden;
+}
+
+.steam-bar-pos {
+  background: #4CAF50;
+  transition: width 1s ease;
+}
+
+.steam-bar-neg {
+  background: #f44336;
+  flex: 1;
+}
+
+.steam-percentages {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-light);
+}
+
+.steam-verdict {
+  margin-top: 12px;
+  padding: 10px 16px;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-mid);
+  border-left: 3px solid var(--forest);
+  background: rgba(44,74,46,0.06);
+}
+
+/* Review breakdown */
+.review-breakdown {
+  margin-bottom: 32px;
+}
+
+.breakdown-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--cream-dark);
+}
+
+.breakdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(26,26,20,0.1);
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-mid);
+}
+
+.breakdown-item .bi-tag { letter-spacing: 0.1em; }
+.breakdown-item .bi-impact { font-weight: 500; }
+.breakdown-item .bi-impact.neg { color: var(--red); }
+.breakdown-item .bi-impact.pos { color: var(--green); }
+.breakdown-item .bi-impact.neutral { color: var(--amber); }
+
+/* Message */
+.end-message {
+  padding: 28px;
+  background: var(--forest);
+  border: 2px solid var(--ink);
+  margin-bottom: 28px;
+}
+
+.end-message-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--amber-light);
+  margin-bottom: 12px;
+}
+
+.end-message-text {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 13px;
+  color: var(--cream);
+  line-height: 1.8;
+  font-style: italic;
+}
+
+/* Good publishers */
+.publishers-section {
+  margin-bottom: 28px;
+}
+
+.publishers-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-bottom: 14px;
+}
+
+.publishers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.publisher-chip {
+  border: 2px solid var(--ink);
+  padding: 12px 14px;
+  background: var(--cream);
+  text-decoration: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: block;
+}
+
+.publisher-chip:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.publisher-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.publisher-desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin-top: 3px;
+}
+
+/* Job boards */
+.jobboards-section { margin-bottom: 32px; }
+
+.jobboard-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--forest);
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--forest);
+  padding-bottom: 1px;
+  margin-right: 20px;
+}
+
+.play-again-btn {
+  width: 100%;
+  background: var(--amber);
+  border: 3px solid var(--ink);
+  padding: 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.play-again-btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+/* idle hours footer strip */
+.idle-strip {
+  margin-top: 0;
+  background: var(--amber-pale);
+  border: 3px solid var(--ink);
+  border-top: 2px solid var(--ink);
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.idle-strip a {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--forest);
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== START SCREEN ===== -->
+<div id="start-screen" class="screen active">
+  <div class="start-logo">A game by <span>idle hours</span></div>
+  <div class="start-headline">Ship <em>It.</em></div>
+  <p class="start-sub">You made something beautiful. Now comes the hard part.</p>
+
+  <div class="start-form">
+    <label class="form-label" for="game-name-input">What's your game called?</label>
+    <input 
+      class="form-input" 
+      id="game-name-input" 
+      type="text" 
+      placeholder="e.g. Meadow, Driftwood, The Quiet Hours…"
+      maxlength="32"
+    />
+
+    <div class="objective-box">
+      <div class="objective-title">◆ Your Objective</div>
+      <div class="objective-text">
+        You're an indie dev with a game, a dream, and $300 in the bank. Each day brings a new offer from a publisher. Some will help. Most will not. Keep the lights on. Survive three rounds of meetings. Launch with your integrity mostly intact.<br><br>
+        Goal: At least Mostly Positive reviews on launch day.
+      </div>
+    </div>
+
+    <button class="start-btn" id="start-btn" disabled onclick="startGame()">
+      ▸ Enter the meetings
+    </button>
+  </div>
+</div>
+
+<!-- ===== GAME SCREEN ===== -->
+<div id="game-screen" class="screen">
+
+  <div class="top-bar">
+    <div class="top-bar-logo">◆ Ship It.</div>
+    <div class="top-bar-stats">
+      <div class="stat-item">
+        <span class="stat-label">Balance</span>
+        <span class="stat-value" id="balance-display">$300</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Burn / day</span>
+        <span class="stat-value" style="color:var(--amber-light);">$100</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Offers today</span>
+        <span class="stat-value" id="offers-remaining">3</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage-bar">
+    <span class="stage-label">Round</span>
+    <div class="stage-dots">
+      <div class="stage-dot" id="dot-0"></div>
+      <div class="stage-dot" id="dot-1"></div>
+      <div class="stage-dot" id="dot-2"></div>
+    </div>
+    <span class="stage-label" id="round-name" style="margin-left:12px;"></span>
+  </div>
+
+  <div class="game-body" id="game-body">
+
+    <!-- Box art -->
+    <div class="boxart-panel">
+      <div class="boxart-wrap">
+        <div class="boxart" id="boxart">
+          <div class="boxart-bg"></div>
+          <div class="boxart-stars"></div>
+          <div class="boxart-title" id="boxart-title">—</div>
+          <div class="boxart-subtitle">An Indie Game</div>
+          <div class="stickers-layer" id="stickers-layer"></div>
+        </div>
+      </div>
+
+      <div class="vision-bar-wrap">
+        <div class="vision-bar-label">
+          <span>Vision</span>
+          <span id="vision-pct">100%</span>
+        </div>
+        <div class="vision-track">
+          <div class="vision-fill" id="vision-fill" style="width:100%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Offer / Transition -->
+    <div class="offer-panel" id="offer-panel">
+
+      <div id="offer-content">
+        <div class="offer-day-label" id="offer-day-label">Day 1 · Offer 1 of 3</div>
+
+        <div class="offer-card" id="offer-card" data-type="Publisher Meeting">
+          <div class="exec-header">
+            <div class="exec-avatar" id="exec-avatar">👔</div>
+            <div class="exec-info">
+              <div class="exec-name" id="exec-name">—</div>
+              <div class="exec-title" id="exec-title">—</div>
+            </div>
+          </div>
+          <div class="offer-pitch" id="offer-pitch">Loading offer…</div>
+          <div class="offer-stats">
+            <div class="offer-stat">
+              <span class="os-label">Funding</span>
+              <span class="os-val positive" id="offer-funding">—</span>
+            </div>
+            <div class="offer-stat">
+              <span class="os-label">Vision hit</span>
+              <span class="os-val negative" id="offer-vision">—</span>
+            </div>
+          </div>
+          <div class="offer-buttons">
+            <button class="offer-btn btn-reject" onclick="handleDecision('reject')">✕ Pass</button>
+            <button class="offer-btn btn-accept" onclick="handleDecision('accept')">✓ Accept</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="transition-card" id="transition-card">
+        <div class="transition-stage" id="t-stage">Round Complete</div>
+        <div class="transition-title" id="t-title">—</div>
+        <div class="transition-text" id="t-text">—</div>
+        <button class="continue-btn" onclick="nextRound()">Continue ▸</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="idle-strip">
+    <span>An <a href="https://idlehours.co.uk">idlehours.co.uk</a> game</span>
+    <span style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:0.15em;color:var(--ink-light);text-transform:uppercase;">Support indie devs</span>
+  </div>
+
+</div>
+
+<!-- ===== END SCREEN ===== -->
+<div id="end-screen" class="screen">
+
+  <div class="end-header">
+    <div class="end-label">Your Game Has Launched</div>
+    <div class="end-game-title" id="end-original-title">You started with something special.</div>
+    <div class="end-full-title" id="end-final-title">—</div>
+  </div>
+
+  <div class="end-body">
+
+    <div class="steam-reviews">
+      <div class="steam-header">
+        <span class="steam-header-left">Steam User Reviews</span>
+        <span class="steam-score-badge" id="steam-badge">—</span>
+      </div>
+      <div class="steam-body">
+        <div class="steam-bar-wrap">
+          <div class="steam-bar-pos" id="steam-bar-pos" style="width:0%"></div>
+          <div class="steam-bar-neg"></div>
+        </div>
+        <div class="steam-percentages">
+          <span id="pos-pct">—% positive</span>
+          <span id="neg-pct">—% negative</span>
+        </div>
+        <div class="steam-verdict" id="steam-verdict">—</div>
+      </div>
+    </div>
+
+    <div class="review-breakdown">
+      <div class="breakdown-title">What the players said</div>
+      <div id="breakdown-list"></div>
+    </div>
+
+    <div class="end-message">
+      <div class="end-message-title">A note from Idle Hours</div>
+      <div class="end-message-text">
+        The best games you've ever played were probably made by a small team who cared deeply and had the freedom to follow that care wherever it led. That freedom is rare. It requires publishers who trust developers, players who buy at full price, and critics who value artistry over aggregate scores.<br><br>
+        The executives in this game are satirical — but only just. Support indie developers. Wishlist their games. Buy them on launch day. Tell your friends. It makes a real difference.
+      </div>
+    </div>
+
+    <div class="publishers-section">
+      <div class="publishers-title">Publishers who actually get it</div>
+      <div class="publishers-grid">
+        <a href="https://www.devolverdigital.com" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Devolver Digital</div>
+          <div class="publisher-desc">Weird, bold, trusted</div>
+        </a>
+        <a href="https://www.annapurnainteractive.com" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Annapurna Interactive</div>
+          <div class="publisher-desc">Artful, emotional</div>
+        </a>
+        <a href="https://www.rawfury.com" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Raw Fury</div>
+          <div class="publisher-desc">Developer-first</div>
+        </a>
+        <a href="https://www.finji.co" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Finji</div>
+          <div class="publisher-desc">Night in the Woods folk</div>
+        </a>
+        <a href="https://www.hoodnation.co" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Fellow Traveller</div>
+          <div class="publisher-desc">Narrative-led games</div>
+        </a>
+        <a href="https://www.tinybuild.com" target="_blank" class="publisher-chip">
+          <div class="publisher-name">tinyBuild</div>
+          <div class="publisher-desc">Indie-friendly</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="jobboards-section">
+      <div class="publishers-title">Work in games</div>
+      <a href="https://www.gamesjobsdirect.com" target="_blank" class="jobboard-link">Games Jobs Direct ↗</a>
+      <a href="https://hitmarker.net" target="_blank" class="jobboard-link">Hitmarker ↗</a>
+      <a href="https://www.workwithindies.com" target="_blank" class="jobboard-link">Work With Indies ↗</a>
+    </div>
+
+    <button class="play-again-btn" onclick="resetGame()">▸ Play again with a new game</button>
+  </div>
+
+  <div class="idle-strip">
+    <span>An <a href="https://idlehours.co.uk">idlehours.co.uk</a> game</span>
+    <a href="https://idlehours.co.uk/game-library">Browse the game library →</a>
+  </div>
+
+</div>
+
+<!-- ===== LOSE SCREEN ===== -->
+<div id="lose-screen" class="screen">
+
+  <div class="end-header" style="background: #1A1A14;">
+    <div class="end-label" style="color: #ff6b6b;">Project Cancelled</div>
+    <div class="end-game-title" style="color: var(--cream); opacity:0.6;" id="lose-game-title">—</div>
+    <div class="end-full-title" style="color: #ff6b6b; font-size:22px;" id="lose-reason">The studio ran out of money.</div>
+  </div>
+
+  <div class="end-body">
+
+    <div style="border: 3px solid var(--ink); margin-bottom: 28px; overflow: hidden;">
+      <div style="background: #2a1a1a; padding: 20px 28px; display:flex; align-items:center; gap: 20px;">
+        <div style="font-size: 48px; line-height:1;">🕯️</div>
+        <div>
+          <div style="font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:#ff6b6b; margin-bottom:6px;">The lights went out.</div>
+          <div style="font-family:'Libre Baskerville',serif; font-size:13px; font-style:italic; color: var(--cream); opacity:0.7; line-height:1.7;" id="lose-flavour">—</div>
+        </div>
+      </div>
+      <div style="background: var(--paper); padding: 20px 28px; border-top: 2px solid var(--ink);">
+        <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink-light); margin-bottom:12px;">Final accounts</div>
+        <div style="display:flex; gap: 32px;">
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.15em; text-transform:uppercase; color:var(--ink-light);">Balance at close</div>
+            <div style="font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--red);" id="lose-balance">$0</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.15em; text-transform:uppercase; color:var(--ink-light);">Vision remaining</div>
+            <div style="font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--forest);" id="lose-vision">—</div>
+          </div>
+          <div>
+            <div style="font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.15em; text-transform:uppercase; color:var(--ink-light);">Reached</div>
+            <div style="font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--ink);" id="lose-round">Round 1</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="end-message" style="margin-bottom: 28px;">
+      <div class="end-message-title">A note from Idle Hours</div>
+      <div class="end-message-text">
+        This happens more than anyone talks about. Studios close quietly. Games get cancelled in development. The team disperses, the Steam page disappears, and the game that could have been is just — gone.<br><br>
+        The best thing you can do for the next developer in this position is buy their games at full price, leave a review, and tell someone else. Every sale is a vote for the next one getting made.
+      </div>
+    </div>
+
+    <div class="publishers-section">
+      <div class="publishers-title">Publishers who actually keep studios alive</div>
+      <div class="publishers-grid">
+        <a href="https://www.devolverdigital.com" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Devolver Digital</div>
+          <div class="publisher-desc">Weird, bold, trusted</div>
+        </a>
+        <a href="https://www.annapurnainteractive.com" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Annapurna Interactive</div>
+          <div class="publisher-desc">Artful, emotional</div>
+        </a>
+        <a href="https://www.rawfury.com" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Raw Fury</div>
+          <div class="publisher-desc">Developer-first</div>
+        </a>
+        <a href="https://www.finji.co" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Finji</div>
+          <div class="publisher-desc">Night in the Woods folk</div>
+        </a>
+        <a href="https://fellowtraveller.games" target="_blank" class="publisher-chip">
+          <div class="publisher-name">Fellow Traveller</div>
+          <div class="publisher-desc">Narrative-led games</div>
+        </a>
+        <a href="https://www.tinybuild.com" target="_blank" class="publisher-chip">
+          <div class="publisher-name">tinyBuild</div>
+          <div class="publisher-desc">Indie-friendly</div>
+        </a>
+      </div>
+    </div>
+
+    <button class="play-again-btn" onclick="resetGame()" style="background: var(--ink); color: var(--cream);">▸ Try again</button>
+
+  </div>
+
+  <div class="idle-strip">
+    <span>An <a href="https://idlehours.co.uk">idlehours.co.uk</a> game</span>
+    <a href="https://idlehours.co.uk/game-library">Browse the game library →</a>
+  </div>
+
+</div>
+
+<script>
+// ===================== DATA =====================
+
+const ROUNDS = [
+  { name: 'Pitch Round', transition: { title: 'Funding Secured', text: 'The money is in. Development begins. Three months pass. Your game is taking shape — but the meetings keep coming.' } },
+  { name: 'Dev Round', transition: { title: 'Alpha Approved', text: 'The alpha passed. Reviews are promising. One more gauntlet before launch day.' } },
+  { name: 'Pre-Launch', transition: null }
+];
+
+// 7 bad execs, 2 good
+const ALL_OFFERS = [
+  // BAD - vision hits
+  {
+    id: 'microtx',
+    exec: { name: 'Derek Huang', title: 'VP of Monetisation Strategy', avatar: '💼' },
+    pitch: '"Love the emotional core. We\'re thinking — what if grief had a season pass? Players pay £4.99 a month to unlock the sadder endings. Engagement metrics through the roof."',
+    funding: '+$250',
+    fundingVal: 250,
+    vision: '-25%',
+    visionVal: 25,
+    sticker: { text: 'NOW WITH\nMICROTRANSACTIONS', type: 'bad', top: '8%', left: '5%', rot: '-3deg' },
+    reviewNote: { text: 'Microtransactions in a cozy game', impact: 'neg', score: -20 },
+    type: 'Monetisation'
+  },
+  {
+    id: 'liveservice',
+    exec: { name: 'Sarah Chen', title: 'Head of Live Operations', avatar: '📊' },
+    pitch: '"One-time purchases are dead. We need daily quests, weekly challenges, seasonal events. Players should feel like missing a day has consequences. FOMO is a feature."',
+    funding: '+$300',
+    fundingVal: 300,
+    vision: '-30%',
+    visionVal: 30,
+    sticker: { text: 'LIVE SERVICE\nEDITION', type: 'bad', top: '38%', left: '-8%', rot: '4deg' },
+    reviewNote: { text: 'Mandatory daily login system', impact: 'neg', score: -25 },
+    type: 'Live Service'
+  },
+  {
+    id: 'ai',
+    exec: { name: 'Marcus Webb', title: 'Chief Innovation Officer', avatar: '🤖' },
+    pitch: '"Have you considered replacing your hand-crafted dialogue with AI generation? We could ship 10,000 unique NPCs at zero cost. Sure, they\'re a bit… uncanny. But think of the scale."',
+    funding: '+$180',
+    fundingVal: 180,
+    vision: '-35%',
+    visionVal: 35,
+    sticker: { text: 'AI-OPTIMISED\nCONTENT', type: 'bad', top: '55%', right: '0%', rot: '-2deg' },
+    reviewNote: { text: 'AI-generated dialogue replacing hand-written story', impact: 'neg', score: -30 },
+    type: 'AI Integration'
+  },
+  {
+    id: 'battlepass',
+    exec: { name: 'Tiffany Monroe', title: 'Director of Player Engagement', avatar: '🎯' },
+    pitch: '"A battle pass. Hear me out. Not a violent one — a cozy battle pass. Seasonal cosmetics, exclusive crops. Players love it. We\'ve seen it work in everything. Literally everything."',
+    funding: '+$220',
+    fundingVal: 220,
+    vision: '-20%',
+    visionVal: 20,
+    sticker: { text: 'BATTLE PASS\nINCLUDED', type: 'bad', top: '20%', right: '-5%', rot: '5deg' },
+    reviewNote: { text: 'Cosmetic battle pass cluttering the UI', impact: 'neg', score: -15 },
+    type: 'Battle Pass'
+  },
+  {
+    id: 'nft',
+    exec: { name: 'Brendan Frost', title: 'Web3 Synergy Lead', avatar: '🪙' },
+    pitch: '"What if the seeds in your farming game were NFTs? Players would truly own their crops. We\'re a little late to the trend but I feel like it\'s coming back. I really do."',
+    funding: '+$150',
+    fundingVal: 150,
+    vision: '-40%',
+    visionVal: 40,
+    sticker: { text: 'BLOCKCHAIN\nFEATURES', type: 'bad', top: '65%', left: '8%', rot: '-5deg' },
+    reviewNote: { text: 'Mandatory NFT wallet integration', impact: 'neg', score: -35 },
+    type: 'Web3'
+  },
+  {
+    id: 'mobile',
+    exec: { name: 'Lisa Park', title: 'Platform Expansion Director', avatar: '📱' },
+    pitch: '"We need a mobile version by launch. Same game, different screen. The development team said six months — I said six weeks. They\'ll figure it out. The market is huge."',
+    funding: '+$200',
+    fundingVal: 200,
+    vision: '-15%',
+    visionVal: 15,
+    sticker: { text: 'NOW ON\nMOBILE', type: 'warning', top: '78%', right: '5%', rot: '3deg' },
+    reviewNote: { text: 'Rushed mobile port with broken controls', impact: 'neg', score: -10 },
+    type: 'Platform Grab'
+  },
+  {
+    id: 'sequel',
+    exec: { name: 'Tom Bradley', title: 'Franchise Strategy VP', avatar: '🎬' },
+    pitch: '"Add \'Origins\' to the title. It implies there\'s more coming. Creates franchise expectation. We don\'t need to have the sequel planned — we just need the market to think we do."',
+    funding: '+$100',
+    fundingVal: 100,
+    vision: '-10%',
+    visionVal: 10,
+    sticker: { text: 'ORIGINS\nEDITION', type: 'warning', top: '12%', right: '8%', rot: '-4deg' },
+    reviewNote: { text: 'Sequel-baiting title change', impact: 'neutral', score: -5 },
+    type: 'Franchise Build'
+  },
+  // GOOD
+  {
+    id: 'goodpress',
+    exec: { name: 'Anya Kowalski', title: 'Head of Indie Relations', avatar: '🌿' },
+    pitch: '"We\'d like to feature your game in our Indie Spotlight newsletter. 200k subscribers, all genuine players. No strings, no branding requirements. We just think it\'s special."',
+    funding: '+$0',
+    fundingVal: 0,
+    vision: '+5%',
+    visionVal: -5,
+    sticker: { text: 'INDIE\nSPOTLIGHT', type: 'good', top: '30%', left: '-5%', rot: '2deg' },
+    reviewNote: { text: 'Organic press coverage from genuine fans', impact: 'pos', score: 15 },
+    type: 'Press Feature'
+  },
+  {
+    id: 'goodgrant',
+    exec: { name: 'James Osei', title: 'Arts Council Gaming Fund', avatar: '🏛️' },
+    pitch: '"We provide grants to games with genuine cultural merit. No equity stake, no creative control, no obligations beyond a 500-word report. Your game qualifies on every criterion."',
+    funding: '+$300',
+    fundingVal: 300,
+    vision: '+0%',
+    visionVal: 0,
+    sticker: { text: 'ARTS COUNCIL\nGRANTED', type: 'good', top: '85%', left: '20%', rot: '-2deg' },
+    reviewNote: { text: 'Arts council recognition', impact: 'pos', score: 10 },
+    type: 'Grant Funding'
+  }
+];
+
+// ===================== STATE =====================
+let state = {
+  gameName: '',
+  balance: 300,
+  vision: 100,
+  round: 0,
+  offerInRound: 0,
+  acceptedOffers: [],
+  roundQueue: [],
+  titleSuffix: '',
+  gameOver: false
+};
+
+// ===================== INIT =====================
+document.getElementById('game-name-input').addEventListener('input', function() {
+  document.getElementById('start-btn').disabled = this.value.trim().length < 2;
+});
+
+document.getElementById('game-name-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && this.value.trim().length >= 2) startGame();
+});
+
+function startGame() {
+  const name = document.getElementById('game-name-input').value.trim();
+  if (name.length < 2) return;
+  state.gameName = name;
+  state.balance = 300;
+  state.vision = 100;
+  state.round = 0;
+  state.offerInRound = 0;
+  state.acceptedOffers = [];
+  state.titleSuffix = '';
+
+  // Build shuffled queue: 3 rounds of 3 offers
+  // Ensure 2 good offers are spread across rounds
+  const bads = shuffleArray(ALL_OFFERS.filter(o => o.id !== 'goodpress' && o.id !== 'goodgrant'));
+  const goods = [ALL_OFFERS.find(o => o.id === 'goodpress'), ALL_OFFERS.find(o => o.id === 'goodgrant')];
+  
+  // Place one good in round 1 pos 2, one in round 2 pos 1
+  const r1 = [bads[0], goods[0], bads[1]];
+  const r2 = [goods[1], bads[2], bads[3]];
+  const r3 = [bads[4], bads[5], bads[6]];
+  state.roundQueue = [r1, r2, r3];
+
+  showScreen('game-screen');
+  document.getElementById('boxart-title').textContent = name;
+  renderRound();
+}
+
+function renderRound() {
+  const r = state.round;
+  const o = state.offerInRound;
+
+  // Stage dots
+  for (let i = 0; i < 3; i++) {
+    const dot = document.getElementById('dot-' + i);
+    dot.className = 'stage-dot';
+    if (i < r) dot.classList.add('done');
+    else if (i === r) dot.classList.add('current');
+  }
+  document.getElementById('round-name').textContent = ROUNDS[r].name;
+
+  // Offer count
+  document.getElementById('offers-remaining').textContent = 3 - o;
+
+  renderOffer();
+  updateBalance();
+}
+
+function renderOffer() {
+  const offer = state.roundQueue[state.round][state.offerInRound];
+  const r = state.round;
+  const o = state.offerInRound;
+
+  document.getElementById('offer-day-label').textContent = 
+    `Round ${r + 1} · Offer ${o + 1} of 3`;
+  document.getElementById('exec-avatar').textContent = offer.exec.avatar;
+  document.getElementById('exec-name').textContent = offer.exec.name;
+  document.getElementById('exec-title').textContent = offer.exec.title;
+  document.getElementById('offer-pitch').textContent = offer.pitch;
+
+  const fundEl = document.getElementById('offer-funding');
+  fundEl.textContent = offer.funding;
+  fundEl.className = 'os-val ' + (offer.fundingVal > 0 ? 'positive' : 'neutral');
+
+  const visEl = document.getElementById('offer-vision');
+  visEl.textContent = offer.vision;
+  visEl.className = 'os-val ' + (offer.visionVal > 0 ? 'negative' : (offer.visionVal < 0 ? 'positive' : 'neutral'));
+
+  document.getElementById('offer-card').setAttribute('data-type', offer.type);
+
+  // Show offer, hide transition
+  document.getElementById('offer-content').style.display = 'block';
+  document.getElementById('transition-card').className = 'transition-card';
+}
+
+function handleDecision(choice) {
+  const offer = state.roundQueue[state.round][state.offerInRound];
+
+  if (choice === 'accept') {
+    state.balance += offer.fundingVal;
+    state.vision = Math.max(0, Math.min(100, state.vision - offer.visionVal));
+    state.acceptedOffers.push(offer);
+
+    // Add sticker
+    addSticker(offer.sticker);
+  }
+
+  // Burn rate
+  state.balance -= 100;
+  updateBalance();
+
+  state.offerInRound++;
+
+  if (state.offerInRound >= 3) {
+    // End of round
+    const roundDef = ROUNDS[state.round];
+    if (state.round < 2) {
+      showTransition(roundDef.transition);
+    } else {
+      // Game over
+      setTimeout(() => showEndScreen(), 400);
+    }
+  } else {
+    renderOffer();
+  }
+
+  // Check bankruptcy
+  if (state.balance <= 0) {
+    state.balance = 0;
+    updateBalance();
+    setTimeout(() => showLoseScreen(), 400);
+  }
+}
+
+function addSticker(s) {
+  const layer = document.getElementById('stickers-layer');
+  const el = document.createElement('div');
+  el.className = 'sticker ' + s.type;
+  el.style.setProperty('--rot', s.rot);
+  el.style.top = s.top || 'auto';
+  el.style.left = s.left || 'auto';
+  el.style.right = s.right || 'auto';
+  el.style.bottom = s.bottom || 'auto';
+  el.textContent = s.text;
+  layer.appendChild(el);
+
+  // Vision bar
+  const pct = state.vision;
+  const fill = document.getElementById('vision-fill');
+  fill.style.width = pct + '%';
+  fill.className = 'vision-fill' + (pct < 40 ? ' critical' : pct < 65 ? ' low' : '');
+  document.getElementById('vision-pct').textContent = pct + '%';
+}
+
+function showTransition(t) {
+  document.getElementById('offer-content').style.display = 'none';
+  const tc = document.getElementById('transition-card');
+  tc.className = 'transition-card showing';
+  document.getElementById('t-stage').textContent = ROUNDS[state.round].name + ' Complete';
+  document.getElementById('t-title').textContent = t.title;
+  document.getElementById('t-text').textContent = t.text;
+}
+
+function nextRound() {
+  state.round++;
+  state.offerInRound = 0;
+  document.getElementById('transition-card').className = 'transition-card';
+  document.getElementById('offer-content').style.display = 'block';
+  renderRound();
+}
+
+function updateBalance() {
+  const el = document.getElementById('balance-display');
+  el.textContent = '$' + state.balance;
+  el.className = 'stat-value' + (state.balance < 100 ? ' danger' : state.balance < 200 ? ' warning' : '');
+}
+
+// ===================== END SCREEN =====================
+function showEndScreen() {
+  // Build final title
+  const badSuffixes = state.acceptedOffers
+    .filter(o => o.id !== 'goodpress' && o.id !== 'goodgrant')
+    .map(o => {
+      const map = {
+        microtx: 'Now with Microtransactions',
+        liveservice: 'Live Service Edition',
+        ai: 'AI-Enhanced',
+        battlepass: 'Battle Pass Included',
+        nft: 'Blockchain Edition',
+        mobile: 'Mobile & Desktop',
+        sequel: 'Origins'
+      };
+      return map[o.id];
+    }).filter(Boolean);
+
+  let finalTitle = state.gameName;
+  if (badSuffixes.length > 0) {
+    finalTitle += ': ' + badSuffixes.join(', ');
+  }
+
+  // Score calculation
+  let score = 75; // base
+  let breakdownItems = [];
+
+  // Base vision bonus
+  if (state.vision >= 80) { score += 15; breakdownItems.push({ text: 'Kept your original vision intact', impact: 'pos', score: 15 }); }
+  else if (state.vision >= 50) { score += 5; breakdownItems.push({ text: 'Maintained most of your vision', impact: 'pos', score: 5 }); }
+  else { score -= 10; breakdownItems.push({ text: 'Vision compromised heavily', impact: 'neg', score: -10 }); }
+
+  // Per offer
+  state.acceptedOffers.forEach(o => {
+    score += o.reviewNote.score;
+    breakdownItems.push(o.reviewNote);
+  });
+
+  // Balance bonus
+  if (state.balance >= 300) { score += 5; breakdownItems.push({ text: 'Financially independent at launch', impact: 'pos', score: 5 }); }
+  else if (state.balance <= 0) { score -= 10; breakdownItems.push({ text: 'Launched on fumes', impact: 'neg', score: -10 }); }
+
+  score = Math.max(0, Math.min(100, score));
+  const posPct = score;
+  const negPct = 100 - score;
+
+  let verdict, badge, badgeColor;
+  if (score >= 85) { verdict = 'The players love it. You made something real.'; badge = 'Overwhelmingly Positive'; badgeColor = '#4CAF50'; }
+  else if (score >= 70) { verdict = 'Mostly Positive. The community sees what you were trying to do — mostly.'; badge = 'Mostly Positive'; badgeColor = '#8BC34A'; }
+  else if (score >= 50) { verdict = 'Mixed. Half the reviews mention the microtransactions. You know which half.'; badge = 'Mixed'; badgeColor = '#FFC107'; }
+  else if (score >= 30) { verdict = 'Mostly Negative. \'The core game is great but the execs got to it.\' —Top review'; badge = 'Mostly Negative'; badgeColor = '#FF5722'; }
+  else { verdict = 'Overwhelmingly Negative. The game was great. Once.'; badge = 'Overwhelmingly Negative'; badgeColor = '#f44336'; }
+
+  document.getElementById('end-original-title').textContent = 'You started with: "' + state.gameName + '"';
+  document.getElementById('end-final-title').textContent = finalTitle;
+
+  document.getElementById('steam-badge').textContent = badge;
+  document.getElementById('steam-badge').style.background = badgeColor;
+  document.getElementById('steam-badge').style.color = score >= 50 ? '#1b2838' : 'white';
+
+  setTimeout(() => {
+    document.getElementById('steam-bar-pos').style.width = posPct + '%';
+  }, 400);
+
+  document.getElementById('pos-pct').textContent = posPct + '% positive';
+  document.getElementById('neg-pct').textContent = negPct + '% negative';
+  document.getElementById('steam-verdict').textContent = verdict;
+
+  // Breakdown
+  const list = document.getElementById('breakdown-list');
+  list.innerHTML = '';
+  breakdownItems.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'breakdown-item';
+    const sign = item.score > 0 ? '+' : '';
+    el.innerHTML = `<span class="bi-tag">${item.text}</span><span class="bi-impact ${item.impact}">${sign}${item.score}%</span>`;
+    list.appendChild(el);
+  });
+
+  showScreen('end-screen');
+}
+
+function showLoseScreen() {
+  const roundNames = ['Pitch Round', 'Development', 'Pre-Launch'];
+  const flavourLines = [
+    '"We had to let everyone go on a Friday afternoon. The Slack channel went quiet at 4pm."',
+    '"The game existed in a build folder on three laptops. Those laptops went back to their owners."',
+    '"The domain expired six months later. Nobody renewed it."'
+  ];
+
+  document.getElementById('lose-game-title').textContent = '"' + state.gameName + '" — cancelled';
+  document.getElementById('lose-balance').textContent = '$' + state.balance;
+  document.getElementById('lose-vision').textContent = state.vision + '%';
+  document.getElementById('lose-round').textContent = roundNames[state.round];
+  document.getElementById('lose-flavour').textContent = flavourLines[state.round];
+  
+  showScreen('lose-screen');
+}
+
+function resetGame() {
+  document.getElementById('stickers-layer').innerHTML = '';
+  document.getElementById('game-name-input').value = '';
+  document.getElementById('start-btn').disabled = true;
+  state = { gameName: '', balance: 300, vision: 100, round: 0, offerInRound: 0, acceptedOffers: [], roundQueue: [], titleSuffix: '' };
+  showScreen('start-screen');
+}
+
+// ===================== UTILS =====================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }z
+  return a;
+}
+</script>
+</body>
+</html>

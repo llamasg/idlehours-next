@@ -15,11 +15,11 @@ import {
   isPlayableDate,
   isToday,
 } from '../lib/dateUtils'
-import { calculateProximity } from '../lib/scoring'
+import { calculateRank } from '../lib/scoring'
 import { loadDayState, saveDayState, type DayState } from '../lib/storage'
 import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
-import LifelinePanel, { type Lifeline } from '../components/LifelinePanel'
+import SentenceClue, { type BlankDef, BLANK_COSTS } from '../components/SentenceClue'
 import WinModal from '../components/WinModal'
 
 const GUESS_COST = 20
@@ -33,6 +33,7 @@ export default function GameSenseDayPage({
 
   const [state, setState] = useState<DayState | null>(null)
   const [showWinModal, setShowWinModal] = useState(false)
+  const [floatingCost, setFloatingCost] = useState<{ key: string; cost: number } | null>(null)
 
   const answer: GameSenseGame = GAMES[getGameIndexForDate(date)]
   const playable = isPlayableDate(date)
@@ -51,7 +52,7 @@ export default function GameSenseDayPage({
     (game: GameSenseGame) => {
       if (!state || state.won) return
 
-      const proximity = calculateProximity(game, answer)
+      const proximity = calculateRank(game, answer)
       const won = proximity === 1
       const newState: DayState = {
         ...state,
@@ -70,22 +71,24 @@ export default function GameSenseDayPage({
     [state, answer, date],
   )
 
-  const handleUseLifeline = useCallback(
-    (lifeline: Lifeline, value: string | number | boolean | string[]) => {
+  const handleRevealBlank = useCallback(
+    (blank: BlankDef) => {
       if (!state || state.won) return
+      if (state.blanksRevealed.includes(blank.key)) return
 
+      const cost = BLANK_COSTS[blank.key] ?? 0
       const newState: DayState = {
         ...state,
-        score: Math.max(0, state.score - lifeline.cost),
-        lifelinesUsed: [...state.lifelinesUsed, lifeline.key],
-        lifelinesRevealed: {
-          ...state.lifelinesRevealed,
-          [lifeline.key]: value,
-        },
+        score: Math.max(0, state.score - cost),
+        blanksRevealed: [...state.blanksRevealed, blank.key],
       }
 
       setState(newState)
       saveDayState(date, newState)
+
+      // Trigger floating cost animation
+      setFloatingCost({ key: blank.key, cost })
+      setTimeout(() => setFloatingCost(null), 1000)
     },
     [state, date],
   )
@@ -104,38 +107,36 @@ export default function GameSenseDayPage({
   }
 
   const guessedIds = state.guesses.map((g) => g.gameId)
-  const answerYear = state.lifelinesUsed.includes('year')
-    ? answer.year
-    : null
 
   return (
     <>
       <Header />
 
-      <main className="mx-auto max-w-2xl px-4 py-8">
-        {/* Old game banner */}
-        {playable && !today && (
-          <div className="mb-6 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-center text-sm text-amber-700">
-            You&apos;re playing a previous day.{' '}
-            <Link
-              href="/play/game-sense"
-              className="font-semibold underline underline-offset-2 transition-colors hover:text-amber-900"
-            >
-              Jump to today &rarr;
-            </Link>
-          </div>
-        )}
-
+      <main className="font-game mx-auto max-w-2xl px-4 py-8">
         {/* Game header */}
         <div className="mb-8 text-center">
-          <h1 className="font-heading text-2xl font-bold text-foreground">
-            Game_Sense {formatGameNumber(date)}
+          <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
+            Game Sense
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {formatDisplayDate(date)}
+          <p className="mt-1 font-heading text-sm text-muted-foreground">
+            {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
           </p>
-          <div className="mt-3 inline-block rounded-full bg-primary/10 px-4 py-1.5 font-heading text-sm font-semibold text-primary">
-            {state.score} pts remaining
+          <div className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-white px-5 py-2">
+            <span className="font-heading text-2xl font-black text-[hsl(var(--game-blue))]">
+              {state.score}
+            </span>
+            <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
+              pts
+            </span>
+            {/* Floating cost animation */}
+            {floatingCost && (
+              <span
+                key={floatingCost.key}
+                className="absolute -top-2 right-0 animate-[float-up_1s_ease-out_forwards] font-heading text-sm font-bold text-[hsl(var(--game-red))]"
+              >
+                -{floatingCost.cost}
+              </span>
+            )}
           </div>
         </div>
 
@@ -147,22 +148,21 @@ export default function GameSenseDayPage({
             </p>
             <Link
               href="/play/game-sense"
-              className="mt-3 inline-block font-heading text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+              className="mt-3 inline-block text-sm font-semibold text-primary transition-colors hover:text-primary/80"
             >
               Go to today&apos;s game &rarr;
             </Link>
           </div>
         )}
 
-        {/* Lifeline panel */}
+        {/* Sentence clue */}
         {playable && (
-          <div className="mb-6">
-            <LifelinePanel
+          <div className="mb-8">
+            <SentenceClue
               answer={answer}
-              lifelinesUsed={state.lifelinesUsed}
-              lifelinesRevealed={state.lifelinesRevealed}
+              blanksRevealed={state.blanksRevealed}
               score={state.score}
-              onUseLifeline={handleUseLifeline}
+              onRevealBlank={handleRevealBlank}
               disabled={state.won}
             />
           </div>
@@ -182,12 +182,12 @@ export default function GameSenseDayPage({
         {/* Won inline message — when won and modal closed */}
         {state.won && !showWinModal && (
           <div className="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-4 text-center">
-            <p className="font-heading text-sm font-semibold text-green-700">
+            <p className="text-sm font-semibold text-green-700">
               You guessed it! &mdash; {answer.title}
             </p>
             <button
               onClick={() => setShowWinModal(true)}
-              className="mt-2 font-heading text-sm text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
+              className="mt-2 text-sm text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
             >
               View results
             </button>
@@ -197,26 +197,58 @@ export default function GameSenseDayPage({
         {/* Guess list */}
         {playable && state.guesses.length > 0 && (
           <div className="mb-8">
-            <GuessList guesses={state.guesses} answerYear={answerYear} />
+            <GuessList guesses={state.guesses} />
           </div>
         )}
 
-        {/* Discover more — after game ends */}
+        {/* End-game: nav pills + discover more */}
         {state.won && !showWinModal && (
-          <div className="mb-8">
-            <DiscoverMore currentGame="game-sense" />
-          </div>
+          <>
+            <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
+              {!today && (
+                <Link
+                  href="/play/game-sense"
+                  className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+                >
+                  Play today&apos;s game
+                  <span className="text-base">&rsaquo;</span>
+                </Link>
+              )}
+              <Link
+                href="/play/game-sense/archive"
+                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+              >
+                Browse the archive
+                <span className="text-base">&rsaquo;</span>
+              </Link>
+            </div>
+            <div className="mb-8">
+              <DiscoverMore currentGame="game-sense" />
+            </div>
+          </>
         )}
 
-        {/* Archive link */}
-        <div className="text-center">
-          <Link
-            href="/play/game-sense/archive"
-            className="font-heading text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Browse the archive &rarr;
-          </Link>
-        </div>
+        {/* Nav pills — during gameplay */}
+        {!(state.won && !showWinModal) && (
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            {!today && (
+              <Link
+                href="/play/game-sense"
+                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+              >
+                Play today&apos;s game
+                <span className="text-base">&rsaquo;</span>
+              </Link>
+            )}
+            <Link
+              href="/play/game-sense/archive"
+              className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+            >
+              Browse the archive
+              <span className="text-base">&rsaquo;</span>
+            </Link>
+          </div>
+        )}
       </main>
 
       <SiteFooter />
@@ -229,7 +261,7 @@ export default function GameSenseDayPage({
           gameSlug={answer.id}
           score={state.score}
           guesses={state.guesses}
-          lifelinesUsedCount={state.lifelinesUsed.length}
+          blanksRevealedCount={state.blanksRevealed.length}
           onClose={() => setShowWinModal(false)}
         />
       )}

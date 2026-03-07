@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Montserrat:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -32,6 +32,16 @@
     --accent-green: 153 39% 52%;
     --burnt-orange: 25 89% 42%;
     --teal: 148 72% 26%;
+    /* Game sub-brand tokens */
+    --game-blue: 217 78% 60%;
+    --game-blue-dark: 215 63% 47%;
+    --game-blue-light: 216 82% 95%;
+    --game-ink: 60 15% 9%;
+    --game-ink-mid: 60 12% 25%;
+    --game-ink-light: 60 10% 49%;
+    --game-amber: 30 55% 50%;
+    --game-green: 147 61% 41%;
+    --game-red: 7 62% 47%;
   }
 
   .dark {
@@ -60,6 +70,16 @@
     --accent-green: 153 39% 52%;
     --burnt-orange: 25 85% 52%;
     --teal: 148 72% 30%;
+    /* Game sub-brand tokens (dark) */
+    --game-blue: 217 78% 60%;
+    --game-blue-dark: 215 63% 55%;
+    --game-blue-light: 217 30% 18%;
+    --game-ink: 30 25% 88%;
+    --game-ink-mid: 30 15% 65%;
+    --game-ink-light: 30 10% 50%;
+    --game-amber: 30 55% 55%;
+    --game-green: 147 61% 45%;
+    --game-red: 7 62% 52%;
   }
 }
 
@@ -75,6 +95,13 @@
 @layer utilities {
   .font-heading { font-family: 'Montserrat', system-ui, sans-serif; }
   .font-body    { font-family: 'Lora', Georgia, serif; }
+  .font-mono    { font-family: 'DM Mono', monospace; }
+  /* Game pages: force all text (including headings) to Montserrat */
+  .font-game,
+  .font-game h1, .font-game h2, .font-game h3,
+  .font-game h4, .font-game h5, .font-game h6 {
+    font-family: 'Montserrat', system-ui, sans-serif;
+  }
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;

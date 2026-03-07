@@ -14,7 +14,7 @@ interface WinModalProps {
   gameSlug?: string
   score: number
   guesses: GuessRecord[]
-  lifelinesUsedCount: number
+  blanksRevealedCount: number
   onClose: () => void
 }
 
@@ -82,7 +82,7 @@ export default function WinModal({
   gameSlug,
   score,
   guesses,
-  lifelinesUsedCount,
+  blanksRevealedCount,
   onClose,
 }: WinModalProps) {
   const { game: sanityGame } = useSanityGame(gameSlug ?? null)
@@ -108,22 +108,22 @@ export default function WinModal({
         }}
       >
         {/* Card */}
-        <div className="mx-4 w-full max-w-sm rounded-2xl bg-card p-6 shadow-xl">
+        <div className="mx-4 w-full max-w-sm rounded-2xl bg-card p-6 shadow-xl font-game">
           {/* Heading */}
-          <h2 className="mb-1 text-center font-heading text-2xl font-bold text-foreground">
+          <h2 className="mb-1 text-center text-2xl font-bold text-foreground">
             You got it!
           </h2>
-          <p className="mb-5 text-center font-heading text-lg text-primary">
+          <p className="mb-5 text-center text-lg text-[hsl(var(--game-blue))]">
             {gameTitle}
           </p>
 
           {/* Score + Guesses grid */}
           <div className="mb-4 grid grid-cols-2 gap-3">
             <div className="rounded-xl bg-muted/50 px-4 py-3 text-center">
-              <p className="font-heading text-2xl font-bold text-foreground">
-                {score}/1000
+              <p className="font-heading text-2xl font-bold text-[hsl(var(--game-blue))]">
+                {score}
               </p>
-              <p className="font-heading text-xs uppercase tracking-wide text-muted-foreground">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
                 Score
               </p>
             </div>
@@ -131,16 +131,16 @@ export default function WinModal({
               <p className="font-heading text-2xl font-bold text-foreground">
                 {guesses.length}
               </p>
-              <p className="font-heading text-xs uppercase tracking-wide text-muted-foreground">
+              <p className="text-xs uppercase tracking-wide text-muted-foreground">
                 Guesses
               </p>
             </div>
           </div>
 
-          {/* Lifelines used */}
-          {lifelinesUsedCount > 0 && (
-            <p className="mb-4 text-center font-heading text-sm text-muted-foreground">
-              Lifelines used: {lifelinesUsedCount}
+          {/* Blanks revealed */}
+          {blanksRevealedCount > 0 && (
+            <p className="mb-4 text-center text-sm text-muted-foreground">
+              Clues revealed: {blanksRevealedCount}/5
             </p>
           )}
 
@@ -158,11 +158,11 @@ export default function WinModal({
               gameTitle={gameTitle}
               score={score}
               guesses={guesses}
-              lifelinesUsedCount={lifelinesUsedCount}
+              blanksRevealedCount={blanksRevealedCount}
             />
             <button
               onClick={onClose}
-              className="font-heading text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               Close
             </button>

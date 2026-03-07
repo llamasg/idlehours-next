@@ -2,29 +2,41 @@
 // Street Date – localStorage helpers
 // ---------------------------------------------------------------------------
 
+export type Wager = 'low' | 'mid' | 'high'
+
 export interface CoverAttempt {
-  /** Which cover was shown (0-4, matching popularityRank order) */
   coverIndex: number
-  /** The year the player guessed, or 0 if skipped */
   yearGuessed: number
-  /** True if the player skipped this cover */
   skipped: boolean
 }
 
 export interface DayState {
   attempts: CoverAttempt[]
   won: boolean
-  /** True when won OR all 5 covers exhausted */
   finished: boolean
-  /** 0-5 stars earned */
   stars: number
-  /** stars x 100 */
   score: number
-  /** Current cover being shown (0-4) */
   currentCoverIndex: number
+  wager: Wager
+  wagerLocked: boolean
+  guessHistory: number[]
 }
 
 export const STARTING_STARS = 0
+
+// ---------------------------------------------------------------------------
+// Scoring
+// ---------------------------------------------------------------------------
+
+export const WAGER_MULT: Record<Wager, number> = {
+  low: 0.5,
+  mid: 1.0,
+  high: 2.0,
+}
+
+export const STARTING_SCORE = 1000
+export const WRONG_PENALTY_SD = 200
+export const PTS_BY_ATTEMPT = [1000, 800, 600, 400, 200]
 
 // ---------------------------------------------------------------------------
 // Private helper
@@ -38,11 +50,6 @@ function storageKey(dateStr: string): string {
 // Public API
 // ---------------------------------------------------------------------------
 
-/**
- * Load the day's game state from localStorage.
- * Returns a fresh default state when running on the server (SSR),
- * when no entry exists, or when the stored value is corrupted.
- */
 export function loadDayState(dateStr: string): DayState {
   const defaultState: DayState = {
     attempts: [],
@@ -51,6 +58,9 @@ export function loadDayState(dateStr: string): DayState {
     stars: STARTING_STARS,
     score: 0,
     currentCoverIndex: 0,
+    wager: 'mid',
+    wagerLocked: false,
+    guessHistory: [],
   }
 
   if (typeof window === 'undefined') return defaultState
@@ -58,23 +68,27 @@ export function loadDayState(dateStr: string): DayState {
   try {
     const raw = localStorage.getItem(storageKey(dateStr))
     if (!raw) return defaultState
-    const parsed: DayState = JSON.parse(raw)
-    return parsed
+    const parsed = JSON.parse(raw)
+    // Migrate old state without wager fields
+    if (parsed.wager === undefined) {
+      parsed.wager = 'mid'
+      parsed.wagerLocked = parsed.attempts?.length > 0
+      parsed.guessHistory = parsed.attempts
+        ?.filter((a: CoverAttempt) => !a.skipped && a.yearGuessed > 0)
+        .map((a: CoverAttempt) => a.yearGuessed) ?? []
+    }
+    return parsed as DayState
   } catch {
     return defaultState
   }
 }
 
-/**
- * Persist the day's game state to localStorage.
- * No-ops silently during SSR.
- */
 export function saveDayState(dateStr: string, state: DayState): void {
   if (typeof window === 'undefined') return
 
   try {
     localStorage.setItem(storageKey(dateStr), JSON.stringify(state))
   } catch {
-    // Silently ignore storage errors (e.g. quota exceeded)
+    // Silently ignore storage errors
   }
 }

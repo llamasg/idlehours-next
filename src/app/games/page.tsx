@@ -436,7 +436,7 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
             <FilterSelect
               label="Platform"
               value={platform}
-              options={['All', 'PC', 'Switch', 'PS5', 'Xbox', 'Mobile']}
+              options={['All', 'PC', 'Nintendo', 'PlayStation', 'Xbox', 'Mobile']}
               onChange={setPlatform}
               icon="/images/icons/icon_handheld-console-platform-gameboy-retro.svg"
             />

@@ -1,0 +1,193 @@
+# Idle Hours — Games Redesign Handoff
+## Claude Code Brief · March 2026
+
+You are working in the established Idle Hours Next.js repo. The site is well-built — nav, fonts, components, routing all exist. Do not rebuild anything that already works. This brief covers changes to four existing games only.
+
+---
+
+## WHAT THIS IS
+
+We are updating the mechanics and UI of four existing daily games:
+- Game Sense
+- Shelf Price
+- Street Date
+- Blitz
+
+Four reference HTML prototypes are attached. Use them to understand the intended mechanics and layout. Do **not** copy them 1-for-1 — they are built as standalone HTML demos. Your job is to rebuild the logic cleanly in Next.js using the existing site's patterns, components, and design system.
+
+---
+
+## DESIGN DIRECTION
+
+Look at the existing Game Sense page as the baseline. The screenshots show the intended aesthetic:
+
+**Big, confident, readable.** Think Nintendo eShop meets Apple product page — clear hierarchy, generous whitespace, nothing competing for attention. Not minimal-corporate, not cluttered. Just very legible and friendly.
+
+**Typography** — the site already uses Montserrat. Keep it:
+- Headings/game titles: Montserrat 900, large, in `--blue` (`#4A8FE8`) on cream background
+- Subheadings and labels: Montserrat 600, ink colour
+- Data/scores/numbers: DM Mono (already in use)
+- Do not introduce new fonts
+
+**Colour** — the existing CSS variables are correct, use them:
+```
+--cream: #F0EBE0
+--cream-dark: #E4DBCC
+--blue: #4A8FE8          ← primary accent, used for game titles
+--blue-dark: #2D6BC4
+--blue-light: #EBF2FC
+--ink: #1A1A14
+--ink-mid: #4A4A3A
+--ink-light: #8A8A70 (also #4A4A3A in some places)
+--amber: #C8873A
+--green: #27A85A
+--red: #C0392B
+--white: #FDFAF5
+```
+
+**Components** — use what exists. Pill buttons, card containers, input styles are already in the codebase. Match them.
+
+**Hover interactions** — every interactive element should respond. Buttons: `translateY(-2px)` + shadow deepens. Cards: same. Clickable blanks in Game Sense: highlight on hover before clicking. Keep transitions at 0.15s.
+
+---
+
+## GAME 1: GAME SENSE
+
+**What changed:** The hint mechanic is now fill-in-the-blank instead of a card grid.
+
+**New mechanic:**
+A sentence describes the mystery game with 5 clickable blanks:
+
+> A [genre] about [theme] released in [year] with [rating] on [platform].
+
+Each blank is a dark filled rectangle. Clicking one opens a small tooltip showing the label and point cost. A second click (or "Reveal" in the tooltip) deducts the points and reveals the word. A floating "-Xpts" indicator animates upward from the blank briefly.
+
+There is also a separate **Vibe Hint** button below the sentence (dashed border, `-200 pts`) that reveals the game's editorial quote.
+
+**Point costs:**
+- Genre: -200pts
+- Theme: -150pts
+- Year: -150pts
+- Rating: -100pts
+- Platform: -100pts
+- Vibe hint: -200pts
+- Starting score: 1000pts
+
+**Guess input** stays the same — text input with autocomplete from the games database. Wrong guesses appear in a list below with proximity score. Correct guess triggers result state.
+
+**What stays the same:** routing, data source, result/end screen structure, "More from Idle Hours" block at bottom.
+
+**Reference file attached:** `game-sense-ui.html`
+
+---
+
+## GAME 2: SHELF PRICE
+
+**What changed:** Completely new mechanic. The old "guess the price" input is replaced with a higher-or-lower split-screen format.
+
+**New mechanic:**
+Two game covers shown side by side, taking up the full viewport below the nav. Click the one you think had the higher launch price. Get 10 correct in a row to reach "Industry Insider".
+
+**Each card:**
+- Full-bleed cover art with ~40% dark overlay
+- Publisher, title (large, white), year at the bottom
+- A "This one →" CTA button at the bottom
+- On hover: overlay lightens, cover scales subtly, button goes amber
+
+**After a choice:**
+Both prices reveal simultaneously with an animation. Correct = green tint + ✓. Wrong = red tint + ✗. Context line appears on the correct card (one sentence about why). Auto-advances after ~1.8s.
+
+**VS divider:** centred circle between the two cards with "VS" text. Vertical rule behind it.
+
+**Progress:** 10 pips below. Milestone labels at 3 (Junior Dev), 7 (Senior Producer), 10 (Industry Insider).
+
+**Ranks:**
+- 0–3: Just Another Consumer
+- 4–6: Junior Dev
+- 7–9: Senior Producer
+- 10: Industry Insider
+
+**End states:** wrong = modal with streak + rank + context. Win = celebration modal with rank + share.
+
+**Reference file attached:** `shelf-price.html`
+
+---
+
+## GAME 3: STREET DATE
+
+**What changed:** Two additions to the existing game — a confidence wager system, and corrected guess feedback (was immediately revealing the answer, now only reveals on fail/success).
+
+**Wager system (new):**
+Before the first guess each round, player picks:
+- 🤷 Cautious — ×0.5 pts if correct, no penalty if wrong
+- 🎯 Confident — ×1 (default)
+- 🔥 All In — ×2 if correct, 0 if wrong
+
+Wager locks after first guess is submitted. The three buttons grey out (selected one stays prominent).
+
+**Corrected guess feedback:**
+- Correct → round ends, reveal year, show result
+- Wrong → show "↑ Too low" or "↓ Too high" chip. Do NOT reveal the answer.
+- After 5 wrong guesses → reveal the answer, 0 pts for round.
+
+**Guess history:** previous guesses stack above input as year chip + direction badge. Newest at top. Max 5.
+
+**Attempt dots:** 5 dots track remaining guesses.
+
+**Up-arrow key:** cycles back through submitted years in the input (terminal-style history).
+
+**Everything else** — cover cards, round progression, result screen, "More from Idle Hours" — stays the same.
+
+**Reference file attached:** `street-date-v2.html`
+
+---
+
+## GAME 4: BLITZ
+
+**What changed:** New game, needs building. A 90-second speed round where the player names as many games as possible within a daily theme.
+
+**Core mechanic:**
+- Daily theme shown (e.g. "Mario Games", "90s Platformers")
+- 90-second countdown timer (ring SVG, turns red at 15s)
+- Player types game names. Each correct answer spawns a floating word node in the arena above the input
+- Bronze (5), Silver (12), Gold (20) milestones
+
+**Word cloud arena:**
+- Correct answers: white pill nodes drift slowly, bounce off walls, connected by faint lines when close (canvas overlay)
+- Wrong answers: red pill, shake animation, fade out
+- Duplicates: grey pill, fade out
+- +1 score pop floats up from spawn point
+
+**Pause:**
+Hover the timer ring → pause button appears. Pausing stops the timer but also locks scoring. Arena blurs behind an overlay: "Paused — no points scored while paused" + Resume button.
+
+**Did you mean:**
+Live fuzzy match as player types (Levenshtein, debounced 180ms). Shows below input: "Did you mean [Game Name]?" as a clickable amber link. Enter also accepts it. If already scored, shows "✓ Already got [name]" in green.
+
+**Up-arrow history:** same terminal-style cycling through submitted values.
+
+**Milestone toasts:** drop in from above arena on bronze/silver/gold. Auto-dismiss.
+
+**End screen:**
+- Score large (Nunito 900, blue)
+- Rank badge
+- "Your answers" — amber chips
+- "You missed" — grey chips, all possible answers not guessed
+- "X out of Y possible answers" subtitle
+- Play Again + Share
+
+**Share format:** `⚡ Blitz #014 — Mario Games\n🥇 18/55 in 90s\nidlehours.co.uk/play`
+
+**Answer matching:** normalise input (lowercase, strip punctuation, collapse spaces). Match against a canonical answers list + aliases map. See reference file for the data structure.
+
+**Reference file attached:** `blitz-v2.html`
+
+---
+
+## GENERAL NOTES
+
+- Each game uses `localStorage` keyed by `ih-[game]-YYYY-MM-DD` to store today's result. If played today, show end screen on load.
+- Puzzle data lives in a single `const` at the top of each file — easy to swap for Sanity later.
+- No em dashes anywhere. UK English except "cozy".
+- The "More from Idle Hours" block at the bottom of each game (links to the other 3 games + worth reading cards) already exists — reuse the existing component.
+- Do not change routing, page metadata, or anything outside the game component itself.

@@ -1,56 +1,56 @@
 // src/app/play/shelf-price/lib/dateUtils.ts
-// Shelf Price — date math, epoch, game selection, display helpers
+// Shelf Price — date math, epoch, pair generation, display helpers
 
-import { GAMES } from '../data/games'
+import { GAMES, type ShelfPriceGame } from '../data/games'
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-/** The date Shelf Price launched, as a YYYY-MM-DD string. */
 export const LAUNCH_DATE = '2026-03-03'
-
-/** Midnight UTC on launch day — the epoch from which day offsets are counted. */
 export const EPOCH = new Date('2026-03-03T00:00:00+00:00')
 
-/** IANA timezone used for the daily reset boundary. */
 const TZ = 'Europe/London'
+const MS_PER_DAY = 86_400_000
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-const MS_PER_DAY = 86_400_000
-
-/**
- * Parse a YYYY-MM-DD string into a Date at midnight UTC.
- * Avoids the pitfalls of `new Date(dateStr)` which can be
- * interpreted as local time in some engines.
- */
 function parseUTCDate(dateStr: string): Date {
   const [y, m, d] = dateStr.split('-').map(Number)
   return new Date(Date.UTC(y, m - 1, d))
 }
 
-/**
- * Return the ordinal suffix for a day-of-month number.
- */
 function ordinal(day: number): string {
   if (day >= 11 && day <= 13) return 'th'
   switch (day % 10) {
-    case 1:
-      return 'st'
-    case 2:
-      return 'nd'
-    case 3:
-      return 'rd'
-    default:
-      return 'th'
+    case 1: return 'st'
+    case 2: return 'nd'
+    case 3: return 'rd'
+    default: return 'th'
   }
+}
+
+// ── Seeded PRNG (mulberry32) ────────────────────────────────────────────────
+
+function mulberry32(seed: number): () => number {
+  let s = seed | 0
+  return () => {
+    s = (s + 0x6d2b79f5) | 0
+    let t = Math.imul(s ^ (s >>> 15), 1 | s)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function shuffle<T>(arr: T[], rng: () => number): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
 }
 
 // ── Public API ───────────────────────────────────────────────────────────────
 
-/**
- * Returns today's date as a YYYY-MM-DD string in the Europe/London timezone.
- * Games reset at midnight London time.
- */
 export function getTodayDateString(): string {
   const now = new Date()
   const parts = new Intl.DateTimeFormat('en-GB', {
@@ -67,43 +67,19 @@ export function getTodayDateString(): string {
   return `${year}-${month}-${day}`
 }
 
-/**
- * Number of whole days between the EPOCH and the given date string.
- * Returns 0 on launch day, 1 the day after, etc.
- */
 export function getDaysSinceEpoch(dateStr: string): number {
   const target = parseUTCDate(dateStr)
   return Math.floor((target.getTime() - EPOCH.getTime()) / MS_PER_DAY)
 }
 
-/**
- * The single ShelfPriceGame for a given date.
- * Uses safe modulo arithmetic to handle negative remainders.
- */
-export function getGameForDate(dateStr: string) {
-  const days = getDaysSinceEpoch(dateStr)
-  const dayIndex = ((days % GAMES.length) + GAMES.length) % GAMES.length
-  return GAMES[dayIndex]
-}
-
-/**
- * Sequential, 1-indexed game number.
- * Game #1 is played on launch day.
- */
 export function getGameNumber(dateStr: string): number {
   return getDaysSinceEpoch(dateStr) + 1
 }
 
-/**
- * Zero-padded game number string, e.g. "#001".
- */
 export function formatGameNumber(dateStr: string): string {
   return `#${String(getGameNumber(dateStr)).padStart(3, '0')}`
 }
 
-/**
- * Human-friendly display date, e.g. "Tue 10th Mar 2026".
- */
 export function formatDisplayDate(dateStr: string): string {
   const date = parseUTCDate(dateStr)
 
@@ -123,26 +99,15 @@ export function formatDisplayDate(dateStr: string): string {
   return `${weekday} ${day}${ordinal(day)} ${month} ${year}`
 }
 
-/**
- * True if the date falls within the playable window:
- * from launch day up to and including today (London time).
- */
 export function isPlayableDate(dateStr: string): boolean {
   const today = getTodayDateString()
   return dateStr >= LAUNCH_DATE && dateStr <= today
 }
 
-/**
- * True if the given date string matches today's date in London time.
- */
 export function isToday(dateStr: string): boolean {
   return dateStr === getTodayDateString()
 }
 
-/**
- * Returns every playable archive date (launch day through yesterday),
- * ordered newest-first.
- */
 export function getArchiveDates(): string[] {
   const today = getTodayDateString()
   const dates: string[] = []
@@ -154,12 +119,39 @@ export function getArchiveDates(): string[] {
     const d = String(current.getUTCDate()).padStart(2, '0')
     const ds = `${y}-${m}-${d}`
 
-    // Archive includes everything up to but NOT including today
     if (ds >= today) break
-
     dates.push(ds)
     current.setUTCDate(current.getUTCDate() + 1)
   }
 
   return dates.reverse()
+}
+
+// ── Pair generation ─────────────────────────────────────────────────────────
+
+export type GamePair = [ShelfPriceGame, ShelfPriceGame]
+
+/**
+ * Generate 11 deterministic pairs for a given date.
+ * 10 correct answers needed to win, plus 1 spare.
+ * Each pair has different prices.
+ */
+export function getPairsForDate(dateStr: string): GamePair[] {
+  const seed = getDaysSinceEpoch(dateStr) + 42
+  const rng = mulberry32(seed)
+  const shuffled = shuffle(GAMES, rng)
+
+  const pairs: GamePair[] = []
+  let i = 0
+  while (pairs.length < 11 && i + 1 < shuffled.length) {
+    const a = shuffled[i]
+    const b = shuffled[i + 1]
+    // Only pair games with different prices
+    if (a.launchPriceUsd !== b.launchPriceUsd) {
+      pairs.push([a, b])
+    }
+    i += 2
+  }
+
+  return pairs
 }

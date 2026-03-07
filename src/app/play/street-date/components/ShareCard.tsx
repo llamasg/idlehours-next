@@ -1,29 +1,35 @@
 'use client'
 
 import { useState } from 'react'
-import type { CoverAttempt } from '../lib/storage'
+import type { CoverAttempt, Wager } from '../lib/storage'
 import { formatGameNumber } from '../lib/dateUtils'
 
 interface ShareCardProps {
   dateStr: string
   answerYear: number
-  stars: number
+  score: number
+  wager: Wager
   attempts: CoverAttempt[]
+}
+
+const WAGER_EMOJI: Record<Wager, string> = {
+  low: '🛡️',
+  mid: '🎯',
+  high: '🔥',
 }
 
 export default function ShareCard({
   dateStr,
-  stars,
+  score,
+  wager,
 }: ShareCardProps) {
   const [copied, setCopied] = useState(false)
 
   function buildShareText(): string {
     const number = formatGameNumber(dateStr)
-    const starLine = '\u2605'.repeat(stars) + '\u2606'.repeat(5 - stars)
 
     const lines: string[] = [
-      `Street Date ${number} \u00b7 ${stars * 200}/1000`,
-      starLine,
+      `Street Date ${number} \u00b7 ${score}/1000 ${WAGER_EMOJI[wager]}`,
       'idlehours.co.uk/play/street-date',
     ]
 
@@ -36,14 +42,14 @@ export default function ShareCard({
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // Fallback: silently fail if clipboard API unavailable
+      // Silently fail
     }
   }
 
   return (
     <button
       onClick={handleCopy}
-      className="rounded-full bg-primary px-6 py-2.5 font-heading text-sm font-bold text-white transition-transform hover:scale-105 active:scale-95"
+      className="rounded-full bg-[hsl(var(--game-blue))] px-6 py-2.5 font-heading text-sm font-bold text-white transition-transform hover:scale-105 active:scale-95"
     >
       {copied ? 'Copied!' : 'Share Result'}
     </button>

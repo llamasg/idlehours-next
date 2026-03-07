@@ -11,8 +11,7 @@ export interface DayState {
   guesses: GuessRecord[];
   won: boolean;
   score: number;
-  lifelinesUsed: string[];
-  lifelinesRevealed: Record<string, string | number | boolean | string[]>;
+  blanksRevealed: string[];
 }
 
 export const STARTING_SCORE = 1000;
@@ -29,18 +28,12 @@ function storageKey(dateStr: string): string {
 // Public API
 // ---------------------------------------------------------------------------
 
-/**
- * Load the day's game state from localStorage.
- * Returns a fresh default state when running on the server (SSR),
- * when no entry exists, or when the stored value is corrupted.
- */
 export function loadDayState(dateStr: string): DayState {
   const defaultState: DayState = {
     guesses: [],
     won: false,
     score: STARTING_SCORE,
-    lifelinesUsed: [],
-    lifelinesRevealed: {},
+    blanksRevealed: [],
   };
 
   if (typeof window === "undefined") return defaultState;
@@ -48,17 +41,19 @@ export function loadDayState(dateStr: string): DayState {
   try {
     const raw = localStorage.getItem(storageKey(dateStr));
     if (!raw) return defaultState;
-    const parsed: DayState = JSON.parse(raw);
-    return parsed;
+    const parsed = JSON.parse(raw);
+    // Migrate old lifeline-based state to new blanks-based state
+    if (parsed.lifelinesUsed && !parsed.blanksRevealed) {
+      parsed.blanksRevealed = parsed.lifelinesUsed;
+      delete parsed.lifelinesUsed;
+      delete parsed.lifelinesRevealed;
+    }
+    return parsed as DayState;
   } catch {
     return defaultState;
   }
 }
 
-/**
- * Persist the day's game state to localStorage.
- * No-ops silently during SSR.
- */
 export function saveDayState(dateStr: string, state: DayState): void {
   if (typeof window === "undefined") return;
 

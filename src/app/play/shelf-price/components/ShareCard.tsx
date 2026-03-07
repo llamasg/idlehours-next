@@ -5,28 +5,20 @@ import { formatGameNumber } from '../lib/dateUtils'
 
 interface ShareCardProps {
   dateStr: string
-  stars: number
-  actualPrice: number
+  score: number
+  streak: number
+  won: boolean
 }
 
-export default function ShareCard({
-  dateStr,
-  stars,
-  actualPrice,
-}: ShareCardProps) {
+export default function ShareCard({ dateStr, score, streak, won }: ShareCardProps) {
   const [copied, setCopied] = useState(false)
-
-  // Suppress unused variable warning — actualPrice is part of the interface
-  // for potential future use in share text
-  void actualPrice
 
   function buildShareText(): string {
     const number = formatGameNumber(dateStr)
-    const starLine = '\u2605'.repeat(stars) + '\u2606'.repeat(5 - stars)
 
     const lines: string[] = [
-      `Shelf Price ${number} \u00b7 ${stars * 200}/1000`,
-      starLine,
+      `Shelf Price ${number} \u00b7 ${score}/1000`,
+      `${streak}/10 correct${won ? ' \u00b7 Perfect! \ud83c\udfc6' : ''}`,
       'idlehours.co.uk/play/shelf-price',
     ]
 
@@ -39,14 +31,14 @@ export default function ShareCard({
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // Fallback: silently fail if clipboard API unavailable
+      // Silently fail
     }
   }
 
   return (
     <button
       onClick={handleCopy}
-      className="rounded-full bg-primary px-6 py-2.5 font-heading text-sm font-bold text-white transition-transform hover:scale-105 active:scale-95"
+      className="rounded-full bg-[hsl(var(--game-blue))] px-6 py-2.5 font-heading text-sm font-bold text-white transition-transform hover:scale-105 active:scale-95"
     >
       {copied ? 'Copied!' : 'Share Result'}
     </button>
