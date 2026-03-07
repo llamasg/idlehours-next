@@ -111,8 +111,10 @@
 
 /* Game animations — defined globally so inline styles can reference them */
 @keyframes sentence-in {
-  0% { opacity: 0; transform: translateY(12px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0%   { opacity: 0; transform: translateY(28px) rotate(8deg) scale(0.85); }
+  55%  { opacity: 1; transform: translateY(-3px) rotate(-1.5deg) scale(1.04); }
+  75%  { opacity: 1; transform: translateY(1.5px) rotate(0.5deg) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
 }
 @keyframes blank-click {
   0% { opacity: 0; transform: translateY(50px) rotate(20deg) scale(0.8); }

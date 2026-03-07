@@ -89,7 +89,7 @@ export default function SentenceClue({
                 style={{
                   opacity: mounted ? undefined : 0,
                   animation: mounted
-                    ? `sentence-in 0.4s cubic-bezier(0.25,0.46,0.45,0.94) ${delay}s both`
+                    ? `sentence-in 0.5s cubic-bezier(0.22,1.2,0.36,1) ${delay}s both`
                     : 'none',
                 }}
               >
@@ -105,7 +105,7 @@ export default function SentenceClue({
               style={{
                 opacity: mounted ? undefined : 0,
                 animation: mounted
-                  ? `sentence-in 0.4s cubic-bezier(0.25,0.46,0.45,0.94) ${delay}s both`
+                  ? `sentence-in 0.5s cubic-bezier(0.22,1.2,0.36,1) ${delay}s both`
                   : 'none',
               }}
             >
