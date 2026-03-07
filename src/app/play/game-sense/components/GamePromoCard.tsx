@@ -29,7 +29,7 @@ export default function GamePromoCard({ game }: GamePromoCardProps) {
           {game.title}
         </h3>
 
-        <p className="mt-1 line-clamp-2 font-body text-xs text-muted-foreground">
+        <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
           {game.shortDescription}
         </p>
 

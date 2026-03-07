@@ -26,7 +26,7 @@ export default function TransitionCard({
       </h2>
 
       {/* Narrative text */}
-      <p className="mt-4 font-body text-sm leading-relaxed text-muted-foreground">
+      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
         {text}
       </p>
 

@@ -44,7 +44,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
       </h1>
 
       {/* Subtitle */}
-      <p className="mx-auto mt-3 max-w-sm font-body text-base text-muted-foreground">
+      <p className="mx-auto mt-3 max-w-sm text-base text-muted-foreground">
         You made something beautiful. Now comes the hard part.
       </p>
 
@@ -64,7 +64,7 @@ export default function StartScreen({ onStart }: StartScreenProps) {
           value={gameName}
           onChange={(e) => setGameName(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="w-full rounded-xl border-2 border-border bg-background px-4 py-3 font-body text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className="w-full rounded-xl border-2 border-border bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/30"
         />
       </div>
 
@@ -73,13 +73,13 @@ export default function StartScreen({ onStart }: StartScreenProps) {
         <h2 className="font-heading text-sm font-bold text-foreground">
           &#9670; Your Objective
         </h2>
-        <p className="mt-2 font-body text-sm leading-relaxed text-muted-foreground">
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           You&apos;re an indie dev with a game, a dream, and $300 in the bank.
           Each day brings a new offer from a publisher. Some will help. Most
           will not. Keep the lights on. Survive three rounds of meetings. Launch
           with your integrity mostly intact.
         </p>
-        <p className="mt-3 font-body text-sm font-semibold text-foreground">
+        <p className="mt-3 text-sm font-semibold text-foreground">
           Goal: At least Mostly Positive reviews on launch day.
         </p>
       </div>

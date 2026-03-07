@@ -72,7 +72,7 @@ function FilterSelect({ label, value, options, onChange, icon }: FilterSelectPro
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Type to filter..."
-              className="w-full rounded-lg bg-muted/40 px-2 py-1.5 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+              className="w-full rounded-lg bg-muted/40 px-2 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
             />
           </div>
           <div className="max-h-52 overflow-y-auto">
@@ -419,7 +419,7 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search games, tags..."
-              className="w-full rounded-full border border-border bg-card py-2.5 pl-9 pr-4 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full rounded-full border border-border bg-card py-2.5 pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
             {search && (
               <button

@@ -74,13 +74,42 @@ export function getDaysSinceEpoch(dateStr: string): number {
 }
 
 /**
+ * Simple seeded PRNG (mulberry32) for deterministic shuffling.
+ */
+function mulberry32(seed: number) {
+  return () => {
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Deterministic shuffle order for the GAMES array.
+ * Uses a fixed seed so the mapping is stable across all sessions,
+ * but avoids the chronological walk-through that made early dates
+ * always land on 1980s/1990s games.
+ */
+const _shuffledIndices: number[] = (() => {
+  const indices = Array.from({ length: GAMES.length }, (_, i) => i);
+  const rng = mulberry32(314159); // fixed seed
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  return indices;
+})();
+
+/**
  * Deterministic index into the GAMES array for a given date.
- * Uses modulo arithmetic and handles negative remainders safely
- * (e.g. if someone queries a date before the epoch).
+ * Uses a pre-shuffled index mapping so daily games are a mix of
+ * eras rather than walking chronologically through the database.
  */
 export function getGameIndexForDate(dateStr: string): number {
   const days = getDaysSinceEpoch(dateStr);
-  return ((days % GAMES.length) + GAMES.length) % GAMES.length;
+  const slot = ((days % GAMES.length) + GAMES.length) % GAMES.length;
+  return _shuffledIndices[slot];
 }
 
 /**

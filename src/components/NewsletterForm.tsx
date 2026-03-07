@@ -7,7 +7,7 @@ export default function NewsletterForm() {
 
   if (submitted) {
     return (
-      <p className="font-body text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         You&apos;re in! We&apos;ll be in touch.
       </p>
     )

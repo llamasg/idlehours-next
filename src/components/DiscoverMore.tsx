@@ -126,7 +126,7 @@ export default function DiscoverMore({ currentGame }: DiscoverMoreProps) {
       {/* ---- Section 3: Stay in the loop ---- */}
       <SectionLabel className="mt-8">Stay in the loop</SectionLabel>
       {submitted ? (
-        <p className="font-body text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           You&apos;re in! We&apos;ll be in touch.
         </p>
       ) : (
@@ -137,7 +137,7 @@ export default function DiscoverMore({ currentGame }: DiscoverMoreProps) {
           }}
           className="flex flex-col gap-3 sm:flex-row sm:items-center"
         >
-          <span className="font-body text-sm text-muted-foreground">
+          <span className="text-sm text-muted-foreground">
             Good games. Good reads. Once a week.
           </span>
           <input

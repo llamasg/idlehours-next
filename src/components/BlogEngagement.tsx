@@ -45,7 +45,7 @@ export default function BlogEngagement() {
         <p className="font-heading text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
           Stay in the loop
         </p>
-        <p className="mt-1 font-body text-sm text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           Good games. Good reads. Once a week.
         </p>
         <div className="mt-3">

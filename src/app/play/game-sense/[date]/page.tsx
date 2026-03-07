@@ -34,6 +34,7 @@ export default function GameSenseDayPage({
   const [state, setState] = useState<DayState | null>(null)
   const [showWinModal, setShowWinModal] = useState(false)
   const [floatingCost, setFloatingCost] = useState<{ key: string; cost: number } | null>(null)
+  const [scorePulse, setScorePulse] = useState(false)
 
   const answer: GameSenseGame = GAMES[getGameIndexForDate(date)]
   const playable = isPlayableDate(date)
@@ -86,9 +87,13 @@ export default function GameSenseDayPage({
       setState(newState)
       saveDayState(date, newState)
 
-      // Trigger floating cost animation
+      // Trigger floating cost + red flash animation
       setFloatingCost({ key: blank.key, cost })
-      setTimeout(() => setFloatingCost(null), 1000)
+      setScorePulse(true)
+      setTimeout(() => {
+        setFloatingCost(null)
+        setScorePulse(false)
+      }, 1200)
     },
     [state, date],
   )
@@ -121,8 +126,23 @@ export default function GameSenseDayPage({
           <p className="mt-1 font-heading text-sm text-muted-foreground">
             {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
           </p>
-          <div className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-white px-5 py-2">
-            <span className="font-heading text-2xl font-black text-[hsl(var(--game-blue))]">
+          <div
+            className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 bg-white px-5 py-2 transition-all duration-300"
+            style={{
+              borderColor: scorePulse
+                ? 'hsl(var(--game-red))'
+                : 'hsl(var(--game-blue) / 0.2)',
+              transform: scorePulse ? 'scale(1.1)' : 'scale(1)',
+            }}
+          >
+            <span
+              className="font-heading text-2xl font-black transition-colors duration-300"
+              style={{
+                color: scorePulse
+                  ? 'hsl(var(--game-red))'
+                  : 'hsl(var(--game-blue))',
+              }}
+            >
               {state.score}
             </span>
             <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
@@ -132,7 +152,8 @@ export default function GameSenseDayPage({
             {floatingCost && (
               <span
                 key={floatingCost.key}
-                className="absolute -top-2 right-0 animate-[float-up_1s_ease-out_forwards] font-heading text-sm font-bold text-[hsl(var(--game-red))]"
+                className="absolute -top-6 left-1/2 -translate-x-1/2 rounded-full bg-[hsl(var(--game-red))] px-4 py-1 font-heading text-lg font-black text-white shadow-lg"
+                style={{ animation: 'float-up 1.2s ease-out forwards' }}
               >
                 -{floatingCost.cost}
               </span>
@@ -257,8 +278,7 @@ export default function GameSenseDayPage({
       {showWinModal && state.won && (
         <WinModal
           dateStr={date}
-          gameTitle={answer.title}
-          gameSlug={answer.id}
+          answer={answer}
           score={state.score}
           guesses={state.guesses}
           blanksRevealedCount={state.blanksRevealed.length}

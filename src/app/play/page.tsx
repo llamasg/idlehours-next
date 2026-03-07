@@ -71,7 +71,7 @@ export default function PlayHubPage() {
           <h1 className="mt-1 font-heading text-3xl font-bold text-foreground">
             Play Our Games
           </h1>
-          <p className="mt-2 font-body text-sm text-muted-foreground">
+          <p className="mt-2 text-sm text-muted-foreground">
             Daily puzzles and more. Pick a game and play.
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function PlayHubPage() {
                       {game.title}
                     </h2>
                   </div>
-                  <p className="mt-2 font-body text-sm text-muted-foreground">
+                  <p className="mt-2 text-sm text-muted-foreground">
                     {game.description}
                   </p>
                   <div className="mt-3 flex items-center gap-3">

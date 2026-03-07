@@ -69,7 +69,7 @@ export default function LoseScreen({
             <h2 className="font-heading text-xl font-bold text-red-400">
               The lights went out.
             </h2>
-            <p className="mt-1 font-body text-sm italic text-white/70">
+            <p className="mt-1 text-sm italic text-white/70">
               {FLAVOUR_TEXTS[round] ?? FLAVOUR_TEXTS[2]}
             </p>
           </div>
@@ -114,12 +114,12 @@ export default function LoseScreen({
         <h3 className="font-heading text-lg font-bold text-primary-foreground">
           A note from Idle Hours
         </h3>
-        <p className="mt-3 font-body text-sm italic leading-relaxed text-primary-foreground/80">
+        <p className="mt-3 text-sm italic leading-relaxed text-primary-foreground/80">
           This happens more than anyone talks about. Studios close quietly.
           Games get cancelled in development. The team disperses, the Steam page
           disappears, and the game that could have been is just — gone.
         </p>
-        <p className="mt-3 font-body text-sm italic leading-relaxed text-primary-foreground/80">
+        <p className="mt-3 text-sm italic leading-relaxed text-primary-foreground/80">
           The best thing you can do for the next developer in this position is
           buy their games at full price, leave a review, and tell someone else.
           Every sale is a vote for the next one getting made.

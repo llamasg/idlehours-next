@@ -46,7 +46,7 @@ export default function GameSenseArchivePage() {
       <main className="mx-auto max-w-xl px-4 py-10">
         <Link
           href="/play/game-sense"
-          className="mb-6 inline-block font-body text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="mb-6 inline-block text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           &larr; Back to today
         </Link>
@@ -56,7 +56,7 @@ export default function GameSenseArchivePage() {
         </h1>
 
         {loaded && rows.length === 0 && (
-          <p className="font-body text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             No previous games yet. Come back tomorrow!
           </p>
         )}
@@ -71,7 +71,7 @@ export default function GameSenseArchivePage() {
                 <span className="font-heading text-sm font-bold text-foreground">
                   {row.gameNumber}
                 </span>
-                <span className="ml-3 font-body text-xs text-muted-foreground">
+                <span className="ml-3 text-xs text-muted-foreground">
                   {row.displayDate}
                 </span>
               </div>

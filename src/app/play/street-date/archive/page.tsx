@@ -56,7 +56,7 @@ export default function StreetDateArchivePage() {
       <main className="mx-auto max-w-xl px-4 py-10">
         <Link
           href="/play/street-date"
-          className="mb-6 inline-block font-body text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="mb-6 inline-block text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           &larr; Back to today
         </Link>
@@ -66,7 +66,7 @@ export default function StreetDateArchivePage() {
         </h1>
 
         {loaded && rows.length === 0 && (
-          <p className="font-body text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             No previous games yet. Come back tomorrow!
           </p>
         )}
@@ -81,7 +81,7 @@ export default function StreetDateArchivePage() {
                 <span className="font-heading text-sm font-bold text-foreground">
                   {row.gameNumber}
                 </span>
-                <span className="font-body text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground">
                   {row.displayDate}
                 </span>
               </div>

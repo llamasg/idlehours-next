@@ -110,7 +110,7 @@ export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInput
         placeholder="Type a game title..."
         disabled={disabled}
         autoComplete="off"
-        className="w-full rounded-lg border border-border bg-background px-4 py-3 font-body text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50"
+        className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50"
       />
 
       {showDropdown && (

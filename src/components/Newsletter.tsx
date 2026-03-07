@@ -53,7 +53,7 @@ export default function Newsletter({ data }: NewsletterProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={data.placeholderText}
-            className="flex-1 rounded-full border border-border bg-background px-4 py-2.5 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1 rounded-full border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
           <button
             type="submit"
