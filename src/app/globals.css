@@ -108,3 +108,15 @@
   }
   .scrollbar-hide::-webkit-scrollbar { display: none; }
 }
+
+/* Game animations — defined globally so inline styles can reference them */
+@keyframes sentence-in {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes blank-click {
+  0% { opacity: 0; transform: translateY(50px) rotate(20deg) scale(0.8); }
+  60% { opacity: 1; transform: translateY(-4px) rotate(-2deg) scale(1.05); }
+  80% { opacity: 1; transform: translateY(2px) rotate(0.5deg) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+}
