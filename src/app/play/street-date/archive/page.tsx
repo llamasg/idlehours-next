@@ -12,6 +12,7 @@ import {
   formatGameNumber,
   formatDisplayDate,
   getYearForDate,
+  getTodayDateString,
 } from '../lib/dateUtils'
 import { loadDayState } from '../lib/storage'
 
@@ -54,12 +55,20 @@ export default function StreetDateArchivePage() {
     <>
       <Header />
       <main className="mx-auto max-w-xl px-4 py-10">
-        <Link
-          href="/play/street-date"
-          className="mb-6 inline-block text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          &larr; Back to today
-        </Link>
+        <div className="mb-6 flex items-center justify-between">
+          <Link
+            href="/play"
+            className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-4 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+          >
+            &larr; Back to games
+          </Link>
+          <Link
+            href={`/play/street-date/${getTodayDateString()}`}
+            className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--game-blue))] px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[hsl(var(--game-blue-dark))]"
+          >
+            Play today&apos;s game &rsaquo;
+          </Link>
+        </div>
 
         <h1 className="mb-8 font-heading text-2xl font-bold text-foreground">
           Street Date Archive

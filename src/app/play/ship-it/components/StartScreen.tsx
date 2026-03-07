@@ -25,27 +25,18 @@ export default function StartScreen({ onStart }: StartScreenProps) {
   return (
     <div className="mx-auto max-w-lg px-4 py-12 text-center">
       {/* Branded header */}
-      <div className="mb-6 flex items-center justify-center gap-2">
-        <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
-          a game by
-        </span>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/icons/icon_Idlehours logo horizontal-wide-mobile header.svg"
-          alt="Idle Hours"
-          className="h-4 w-auto opacity-40 dark:invert"
-          draggable={false}
-        />
-      </div>
+      <p className="font-heading text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        a game by Idle Hours
+      </p>
 
-      {/* Title */}
-      <h1 className="font-heading text-3xl font-bold text-foreground sm:text-4xl">
+      {/* Title — matches Game Sense / Shelf Price / Street Date */}
+      <h1 className="mt-2 text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
         Ship It
       </h1>
 
       {/* Subtitle */}
-      <p className="mx-auto mt-3 max-w-sm text-base text-muted-foreground">
-        You made something beautiful. Now comes the hard part.
+      <p className="mt-2 text-xs text-muted-foreground">
+        Navigate publishers. Launch your indie game.
       </p>
 
       {/* Name input */}
@@ -64,13 +55,13 @@ export default function StartScreen({ onStart }: StartScreenProps) {
           value={gameName}
           onChange={(e) => setGameName(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="w-full rounded-xl border-2 border-border bg-background px-4 py-3 text-base text-foreground placeholder:text-muted-foreground/50 focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className="w-full rounded-xl border-2 border-border bg-white px-4 py-3 font-heading text-base text-foreground placeholder:text-muted-foreground/50 focus:border-[hsl(var(--game-blue))]/40 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--game-blue))]/30"
         />
       </div>
 
       {/* Objective box */}
       <div className="mx-auto mt-6 max-w-sm rounded-2xl border border-border/60 bg-card p-5 text-left">
-        <h2 className="font-heading text-sm font-bold text-foreground">
+        <h2 className="font-heading text-sm font-bold text-[hsl(var(--game-ink))]">
           &#9670; Your Objective
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -79,19 +70,19 @@ export default function StartScreen({ onStart }: StartScreenProps) {
           will not. Keep the lights on. Survive three rounds of meetings. Launch
           with your integrity mostly intact.
         </p>
-        <p className="mt-3 text-sm font-semibold text-foreground">
+        <p className="mt-3 text-sm font-semibold text-[hsl(var(--game-ink))]">
           Goal: At least Mostly Positive reviews on launch day.
         </p>
       </div>
 
-      {/* Start button */}
+      {/* Start button — matches game style */}
       <button
         type="button"
         onClick={handleSubmit}
         disabled={!isValid}
-        className="mx-auto mt-8 block rounded-full bg-primary px-6 py-3 font-heading text-sm font-semibold text-white transition-colors hover:bg-primary/80 disabled:cursor-not-allowed disabled:opacity-40"
+        className="mx-auto mt-8 block rounded-full bg-[hsl(var(--game-blue))] px-8 py-3 font-heading text-sm font-bold text-white transition-all hover:scale-105 hover:bg-[hsl(var(--game-blue-dark))] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
       >
-        &#9654; Enter the meetings
+        Start Playing
       </button>
     </div>
   )

@@ -17,6 +17,7 @@ import {
 } from '../lib/dateUtils'
 import { calculateRank } from '../lib/scoring'
 import { loadDayState, saveDayState, type DayState } from '../lib/storage'
+import AnimatedScore from '@/components/AnimatedScore'
 import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
 import SentenceClue, { type BlankDef, BLANK_COSTS } from '../components/SentenceClue'
@@ -179,16 +180,10 @@ export default function GameSenseDayPage({
               transform: scorePulse ? 'scale(1.1)' : 'scale(1)',
             }}
           >
-            <span
-              className="font-heading text-2xl font-black transition-colors duration-300"
-              style={{
-                color: scorePulse
-                  ? 'hsl(var(--game-red))'
-                  : 'hsl(var(--game-blue))',
-              }}
-            >
-              {state.score}
-            </span>
+            <AnimatedScore
+              value={state.score}
+              className="font-heading text-2xl font-black"
+            />
             <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
               pts
             </span>

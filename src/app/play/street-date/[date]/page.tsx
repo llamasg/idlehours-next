@@ -23,10 +23,12 @@ import {
   type DayState,
   type Wager,
 } from '../lib/storage'
+import AnimatedScore from '@/components/AnimatedScore'
 import CoverStrip from '../components/CoverStrip'
 import YearInput from '../components/YearInput'
 import WagerSelector from '../components/WagerSelector'
 import WinModal from '../components/WinModal'
+import RulesModal from '../components/RulesModal'
 
 const MAX_ATTEMPTS = 5
 
@@ -40,6 +42,7 @@ export default function StreetDateDayPage({
   const [state, setState] = useState<DayState | null>(null)
   const [showModal, setShowModal] = useState(false)
   const [viewingCoverIndex, setViewingCoverIndex] = useState(0)
+  const [showRules, setShowRules] = useState(false)
 
   const answerYear = getYearForDate(date)
   const roundGames = getGamesForDate(date)
@@ -168,15 +171,28 @@ export default function StreetDateDayPage({
           <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
             Street Date
           </h1>
-          <p className="mt-1 font-heading text-sm text-muted-foreground">
-            {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+          <div className="mt-1.5 flex items-center justify-center gap-2">
+            <p className="font-heading text-sm text-muted-foreground">
+              {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+            </p>
+            <button
+              onClick={() => setShowRules(true)}
+              className="flex h-5 w-5 items-center justify-center rounded-full border border-border/80 text-[11px] font-bold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
+              aria-label="How to play"
+            >
+              ?
+            </button>
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Guess the year
           </p>
 
           {/* Score pill */}
           <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-white px-5 py-2">
-            <span className="font-heading text-2xl font-black text-[hsl(var(--game-blue))]">
-              {displayScore}
-            </span>
+            <AnimatedScore
+              value={displayScore}
+              className="font-heading text-2xl font-black"
+            />
             <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
               pts
             </span>
@@ -308,6 +324,8 @@ export default function StreetDateDayPage({
           onClose={() => setShowModal(false)}
         />
       )}
+
+      {showRules && <RulesModal onClose={() => setShowRules(false)} />}
     </>
   )
 }

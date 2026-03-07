@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import DiscoverMore from '@/components/DiscoverMore'
+import AnimatedScore from '@/components/AnimatedScore'
 import Link from 'next/link'
 import {
   getPairsForDate,
@@ -18,6 +19,7 @@ import { loadDayState, saveDayState, WRONG_PENALTY, TARGET_ROUNDS, type DayState
 import GameCards from '../components/GameCards'
 import ProgressBar from '../components/ProgressBar'
 import ResultOverlay from '../components/ResultOverlay'
+import RulesModal from '../components/RulesModal'
 
 export default function ShelfPriceDayPage({
   params,
@@ -28,10 +30,12 @@ export default function ShelfPriceDayPage({
 
   const [state, setState] = useState<DayState | null>(null)
   const [showResult, setShowResult] = useState(false)
-  const [lastResult, setLastResult] = useState<{ choice: 'left' | 'right'; correct: boolean } | null>(null)
+  const [chosenSide, setChosenSide] = useState<'left' | 'right' | null>(null)
+  const [choiceCorrect, setChoiceCorrect] = useState<boolean | null>(null)
   const [started, setStarted] = useState(false)
   const [floatingCost, setFloatingCost] = useState(false)
   const [scorePulse, setScorePulse] = useState(false)
+  const [showRules, setShowRules] = useState(false)
 
   const pairs = getPairsForDate(date)
   const playable = isPlayableDate(date)
@@ -49,9 +53,19 @@ export default function ShelfPriceDayPage({
     }
   }, [date])
 
+  // Compute per-round results from choices + pairs
+  const roundResults: boolean[] = state
+    ? state.choices.map((choice, i) => {
+        if (i >= pairs.length) return false
+        const [left, right] = pairs[i]
+        const moreExpensiveSide = left.launchPriceUsd >= right.launchPriceUsd ? 'left' : 'right'
+        return choice === moreExpensiveSide
+      })
+    : []
+
   const handleChoice = useCallback(
     (choice: 'left' | 'right') => {
-      if (!state || state.finished) return
+      if (!state || state.finished || chosenSide !== null) return
 
       const pairIndex = state.round
       if (pairIndex >= pairs.length) return
@@ -60,49 +74,52 @@ export default function ShelfPriceDayPage({
       const moreExpensiveSide = left.launchPriceUsd >= right.launchPriceUsd ? 'left' : 'right'
       const correct = choice === moreExpensiveSide
 
-      // Show result on cards
-      setLastResult({ choice, correct })
-
-      if (!correct) {
-        // Delay the score animation slightly so the card reveal lands first
-        setTimeout(() => {
-          setScorePulse(true)
-          setFloatingCost(true)
-          setTimeout(() => {
-            setScorePulse(false)
-            setFloatingCost(false)
-          }, 1200)
-        }, 800)
-      }
-
-      const newStreak = correct ? state.streak + 1 : state.streak
-      const newRound = state.round + 1
-      const newScore = correct ? state.score : Math.max(0, state.score - WRONG_PENALTY)
-      const finished = newRound >= TARGET_ROUNDS
-      const won = finished && newScore > 0
-
-      const newState: DayState = {
-        score: newScore,
-        streak: newStreak,
-        round: newRound,
-        won,
-        finished,
-        choices: [...state.choices, choice],
-      }
-
-      // 4s hold to let the player absorb the result and price
-      setTimeout(() => {
-        setState(newState)
-        saveDayState(date, newState)
-        setLastResult(null)
-
-        if (finished) {
-          setTimeout(() => setShowResult(true), 300)
-        }
-      }, 4000)
+      // Start the phased reveal
+      setChosenSide(choice)
+      setChoiceCorrect(correct)
     },
-    [state, pairs, date],
+    [state, pairs, chosenSide],
   )
+
+  const handleRevealComplete = useCallback(() => {
+    if (!state || chosenSide === null || choiceCorrect === null) return
+
+    const correct = choiceCorrect
+
+    // Trigger score animation for wrong answers
+    if (!correct) {
+      setScorePulse(true)
+      setFloatingCost(true)
+      setTimeout(() => {
+        setScorePulse(false)
+        setFloatingCost(false)
+      }, 1200)
+    }
+
+    const newStreak = correct ? state.streak + 1 : state.streak
+    const newRound = state.round + 1
+    const newScore = correct ? state.score : Math.max(0, state.score - WRONG_PENALTY)
+    const finished = newRound >= TARGET_ROUNDS
+    const won = finished && newScore > 0
+
+    const newState: DayState = {
+      score: newScore,
+      streak: newStreak,
+      round: newRound,
+      won,
+      finished,
+      choices: [...state.choices, chosenSide],
+    }
+
+    setState(newState)
+    saveDayState(date, newState)
+    setChosenSide(null)
+    setChoiceCorrect(null)
+
+    if (finished) {
+      setTimeout(() => setShowResult(true), 300)
+    }
+  }, [state, chosenSide, choiceCorrect, date])
 
   const handleStart = () => {
     setStarted(true)
@@ -147,15 +164,26 @@ export default function ShelfPriceDayPage({
         {/* Start screen */}
         {playable && !started && !state.finished && (
           <div className="flex flex-col items-center gap-6 py-12 text-center">
-            <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
-              Shelf Price
-            </h1>
-            <p className="max-w-sm text-base text-muted-foreground">
-              Which cost more at launch? Get all 10 right to keep your perfect score.
-            </p>
-            <p className="font-heading text-sm text-muted-foreground">
-              {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-            </p>
+            <div>
+              <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
+                Shelf Price
+              </h1>
+              <div className="mt-1.5 flex items-center justify-center gap-2">
+                <p className="font-heading text-sm text-muted-foreground">
+                  {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+                </p>
+                <button
+                  onClick={() => setShowRules(true)}
+                  className="flex h-5 w-5 items-center justify-center rounded-full border border-border/80 text-[11px] font-bold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
+                  aria-label="How to play"
+                >
+                  ?
+                </button>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Which cost more at launch?
+              </p>
+            </div>
 
             <button
               onClick={handleStart}
@@ -169,16 +197,28 @@ export default function ShelfPriceDayPage({
         {/* Active gameplay */}
         {playable && started && !state.finished && (
           <div className="flex flex-col gap-6">
-            {/* Header bar — matches Game Sense */}
+            {/* Header bar */}
             <div className="text-center">
               <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
                 Shelf Price
               </h1>
-              <p className="mt-1 font-heading text-sm text-muted-foreground">
-                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+              <div className="mt-1.5 flex items-center justify-center gap-2">
+                <p className="font-heading text-sm text-muted-foreground">
+                  {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+                </p>
+                <button
+                  onClick={() => setShowRules(true)}
+                  className="flex h-5 w-5 items-center justify-center rounded-full border border-border/80 text-[11px] font-bold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
+                  aria-label="How to play"
+                >
+                  ?
+                </button>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Which cost more at launch?
               </p>
 
-              {/* Score pill — pulses red on wrong answer */}
+              {/* Score pill */}
               <div
                 className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 bg-white px-5 py-2 transition-all duration-300"
                 style={{
@@ -188,16 +228,10 @@ export default function ShelfPriceDayPage({
                   transform: scorePulse ? 'scale(1.1)' : 'scale(1)',
                 }}
               >
-                <span
-                  className="font-heading text-2xl font-black transition-colors duration-300"
-                  style={{
-                    color: scorePulse
-                      ? 'hsl(var(--game-red))'
-                      : 'hsl(var(--game-blue))',
-                  }}
-                >
-                  {state.score}
-                </span>
+                <AnimatedScore
+                  value={state.score}
+                  className="font-heading text-2xl font-black"
+                />
                 <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
                   pts
                 </span>
@@ -215,15 +249,17 @@ export default function ShelfPriceDayPage({
             </div>
 
             {/* Progress */}
-            <ProgressBar current={state.round} total={TARGET_ROUNDS} correctCount={state.streak} />
+            <ProgressBar current={state.round} total={TARGET_ROUNDS} results={roundResults} />
 
             {/* Game cards */}
             <GameCards
               left={currentPair[0]}
               right={currentPair[1]}
               onChoice={handleChoice}
-              disabled={lastResult !== null}
-              result={lastResult}
+              disabled={chosenSide !== null}
+              chosenSide={chosenSide}
+              correct={choiceCorrect}
+              onRevealComplete={handleRevealComplete}
             />
           </div>
         )}
@@ -260,7 +296,7 @@ export default function ShelfPriceDayPage({
               </button>
             </div>
 
-            {/* Nav pills — above discover more */}
+            {/* Nav pills */}
             <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
               {!today && (
                 <Link
@@ -321,6 +357,9 @@ export default function ShelfPriceDayPage({
           onClose={() => setShowResult(false)}
         />
       )}
+
+      {/* Rules modal */}
+      {showRules && <RulesModal onClose={() => setShowRules(false)} />}
     </>
   )
 }

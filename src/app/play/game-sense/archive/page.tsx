@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
-import { getArchiveDates, formatGameNumber, formatDisplayDate } from '../lib/dateUtils'
+import { getArchiveDates, formatGameNumber, formatDisplayDate, getTodayDateString } from '../lib/dateUtils'
 import { loadDayState } from '../lib/storage'
 
 interface ArchiveRow {
@@ -44,15 +44,23 @@ export default function GameSenseArchivePage() {
     <>
       <Header />
       <main className="mx-auto max-w-xl px-4 py-10">
-        <Link
-          href="/play/game-sense"
-          className="mb-6 inline-block text-sm text-muted-foreground transition-colors hover:text-foreground"
-        >
-          &larr; Back to today
-        </Link>
+        <div className="mb-6 flex items-center justify-between">
+          <Link
+            href="/play"
+            className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-4 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+          >
+            &larr; Back to games
+          </Link>
+          <Link
+            href={`/play/game-sense/${getTodayDateString()}`}
+            className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--game-blue))] px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[hsl(var(--game-blue-dark))]"
+          >
+            Play today&apos;s game &rsaquo;
+          </Link>
+        </div>
 
         <h1 className="mb-8 font-heading text-2xl font-bold text-foreground">
-          Game_Sense Archive
+          Game Sense Archive
         </h1>
 
         {loaded && rows.length === 0 && (
