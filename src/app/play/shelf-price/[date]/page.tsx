@@ -300,22 +300,7 @@ export default function ShelfPriceDayPage({
               </p>
             </div>
 
-            <div className="mb-6">
-              <ResultCard
-                game="shelf-price"
-                score={state.score}
-                streak={state.streak}
-                won={state.won}
-                puzzleLabel={`Shelf Price ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                onViewResults={() => setShowResult(true)}
-              />
-            </div>
-
-            <div className="mb-8">
-              <DailyBadgeShelf currentGame="shelf-price" />
-            </div>
-
-            {/* Nav pills */}
+            {/* Nav pills — above showcase */}
             <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
               {!today && (
                 <Link
@@ -331,6 +316,21 @@ export default function ShelfPriceDayPage({
               >
                 Browse the archive
               </Link>
+            </div>
+
+            <div className="mb-6">
+              <ResultCard
+                game="shelf-price"
+                score={state.score}
+                streak={state.streak}
+                won={state.won}
+                puzzleLabel={`Shelf Price ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                onViewResults={() => setShowResult(true)}
+              />
+            </div>
+
+            <div className="mb-8">
+              <DailyBadgeShelf currentGame="shelf-price" />
             </div>
 
             <div className="mb-8">

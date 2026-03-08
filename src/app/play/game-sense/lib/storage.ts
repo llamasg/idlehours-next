@@ -5,6 +5,7 @@
 export interface GuessRecord {
   gameId: string;
   proximity: number;
+  isHint?: boolean;
 }
 
 export interface DayState {

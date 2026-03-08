@@ -53,8 +53,8 @@ export default function ResultCard({
 
   return (
     <div className="mx-auto w-full max-w-[850px] overflow-hidden rounded-[24px] border-[1.5px] border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] shadow-sm">
-      {/* Top accent line */}
-      <div className="h-[4px] w-full bg-[hsl(var(--game-blue))]" />
+      {/* Top accent line — green for win, red for loss */}
+      <div className={`h-[4px] w-full ${won ? 'bg-[hsl(var(--game-green))]' : 'bg-[hsl(var(--game-red))]'}`} />
 
       {/* Top bar */}
       <div className="flex items-center gap-2 border-b border-[hsl(var(--game-ink))]/10 px-8 py-4">

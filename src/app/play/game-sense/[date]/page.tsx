@@ -49,8 +49,7 @@ export default function GameSenseDayPage({
   const [floatingCost, setFloatingCost] = useState<{ key: string; cost: number } | null>(null)
   const [scorePulse, setScorePulse] = useState(false)
 
-  // Hint state
-  const [hints, setHints] = useState<{ title: string; rank: number }[]>([])
+  const HINT_COST = 250
 
   // Countdown animation state
   const [pendingGuess, setPendingGuess] = useState<{
@@ -144,21 +143,48 @@ export default function GameSenseDayPage({
     const bestProximity = Math.min(...state.guesses.map((g) => g.proximity))
     if (bestProximity <= 1) return
 
-    // Each hint halves the distance: first hint = best/2, second = best/4, etc.
-    const divisor = Math.pow(2, hints.length + 1)
+    // "Give up" mode — best proximity is already 2, so the answer is rank 1
+    if (bestProximity <= 2) {
+      // Forfeit all remaining points and reveal the answer
+      const newState: DayState = {
+        ...state,
+        score: 0,
+        guesses: [...state.guesses, { gameId: answer.id, proximity: 1, isHint: true }],
+        won: true,
+      }
+      setState(newState)
+      saveDayState(date, newState)
+      setTimeout(() => setShowWinModal(true), 300)
+      return
+    }
+
+    // Each hint halves the distance from the best guess so far
+    const hintCount = state.guesses.filter((g) => g.isHint).length
+    const divisor = Math.pow(2, hintCount + 1)
     const targetRank = Math.max(2, Math.round(bestProximity / divisor))
 
-    // Exclude already-hinted games and guessed games
-    const excludeIds = [
-      ...state.guesses.map((g) => g.gameId),
-      ...hints.map((h) => h.title), // won't match IDs but that's fine
-    ]
-
+    const excludeIds = state.guesses.map((g) => g.gameId)
     const hintGame = getGameAtRank(answer, targetRank, excludeIds)
     if (!hintGame) return
 
-    setHints((prev) => [...prev, { title: hintGame.title, rank: targetRank }])
-  }, [state, pendingGuess, hints, answer])
+    const hintProximity = calculateRank(hintGame, answer)
+
+    const newState: DayState = {
+      ...state,
+      score: Math.max(0, state.score - HINT_COST),
+      guesses: [...state.guesses, { gameId: hintGame.id, proximity: hintProximity, isHint: true }],
+    }
+    setState(newState)
+    saveDayState(date, newState)
+
+    // Trigger score deduction animation
+    setFloatingCost({ key: `hint-${hintCount}`, cost: HINT_COST })
+    setScorePulse(true)
+    setTimeout(() => {
+      setFloatingCost(null)
+      setScorePulse(false)
+    }, 1200)
+  }, [state, pendingGuess, answer, date])
 
   // Modal copy — picked once when modal opens, stable across re-renders
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -287,28 +313,42 @@ export default function GameSenseDayPage({
             />
 
             {/* Hint button — appears after first guess */}
-            {state.guesses.length > 0 && (
-              <div className="mt-3 flex flex-col items-center gap-2">
-                <button
-                  type="button"
-                  onClick={handleHint}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-border/60 px-4 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
-                >
-                  <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                  Hint
-                </button>
-
-                {/* Revealed hints */}
-                {hints.map((hint, i) => (
-                  <p key={i} className="text-xs text-muted-foreground">
-                    <span className="font-semibold text-[hsl(var(--game-blue))]">{hint.title}</span>
-                    {' '}is closer (rank ~{hint.rank})
-                  </p>
-                ))}
-              </div>
-            )}
+            {state.guesses.length > 0 && (() => {
+              const bestProximity = Math.min(...state.guesses.map((g) => g.proximity))
+              const isGiveUp = bestProximity <= 2
+              return (
+                <div className="mt-3 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={handleHint}
+                    className={`group inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors ${
+                      isGiveUp
+                        ? 'border-[hsl(var(--game-red))]/40 text-muted-foreground hover:border-[hsl(var(--game-red))] hover:text-[hsl(var(--game-red))]'
+                        : 'border-border/60 text-muted-foreground hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]'
+                    }`}
+                  >
+                    <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    {isGiveUp ? (
+                      <>
+                        <span>Give up</span>
+                        <span className="ml-0.5 text-[10px] opacity-0 transition-opacity group-hover:opacity-100">
+                          &minus;&infin; pts
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Hint</span>
+                        <span className="ml-0.5 text-[10px] opacity-60">
+                          &minus;{HINT_COST} pts
+                        </span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              )
+            })()}
           </div>
         )}
 
@@ -316,7 +356,7 @@ export default function GameSenseDayPage({
         {state.won && !showWinModal && !isAnimating && (
           <>
             {/* Revealed sentence — all blanks shown */}
-            <div className="mb-8">
+            <div className="mb-6">
               <SentenceClue
                 answer={answer}
                 blanksRevealed={state.blanksRevealed}
@@ -325,6 +365,24 @@ export default function GameSenseDayPage({
                 disabled={true}
                 revealAll
               />
+            </div>
+
+            {/* Nav pills — above showcase */}
+            <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
+              {!today && (
+                <Link
+                  href="/play/game-sense"
+                  className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+                >
+                  Play today&apos;s game
+                </Link>
+              )}
+              <Link
+                href="/play/game-sense/archive"
+                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+              >
+                Browse the archive
+              </Link>
             </div>
 
             <div className="mb-6">
@@ -342,22 +400,6 @@ export default function GameSenseDayPage({
               <DailyBadgeShelf currentGame="game-sense" />
             </div>
 
-            <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
-              {!today && (
-                <Link
-                  href="/play/game-sense"
-                  className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
-                >
-                  Play today&apos;s game
-                </Link>
-              )}
-              <Link
-                href="/play/game-sense/archive"
-                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
-              >
-                Browse the archive
-              </Link>
-            </div>
             <div className="mb-8">
               <DiscoverMore currentGame="game-sense" />
             </div>

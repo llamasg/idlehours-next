@@ -263,22 +263,7 @@ export default function StreetDateDayPage({
         {/* Finished — post-game page (when modal closed) */}
         {state.finished && !showModal && (
           <>
-            <div className="mb-6">
-              <ResultCard
-                game="street-date"
-                score={state.score}
-                streak={0}
-                won={state.won}
-                puzzleLabel={`Street Date ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                onViewResults={() => setShowModal(true)}
-              />
-            </div>
-
-            <div className="mb-8">
-              <DailyBadgeShelf currentGame="street-date" />
-            </div>
-
-            {/* Nav pills */}
+            {/* Nav pills — above showcase */}
             <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
               {!today && (
                 <Link
@@ -294,6 +279,21 @@ export default function StreetDateDayPage({
               >
                 Browse the archive
               </Link>
+            </div>
+
+            <div className="mb-6">
+              <ResultCard
+                game="street-date"
+                score={state.score}
+                streak={0}
+                won={state.won}
+                puzzleLabel={`Street Date ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                onViewResults={() => setShowModal(true)}
+              />
+            </div>
+
+            <div className="mb-8">
+              <DailyBadgeShelf currentGame="street-date" />
             </div>
 
             <div className="mb-8">
