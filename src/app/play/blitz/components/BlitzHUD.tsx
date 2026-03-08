@@ -22,13 +22,13 @@ export default function BlitzHUD({ topicName, timeRemaining, timeLimit, score }:
   const seconds = timeRemaining % 60
 
   return (
-    <div className="flex items-center justify-between px-4 py-3">
+    <div className="flex items-center justify-between bg-[hsl(var(--game-cream))] px-5 py-4">
       {/* Left — label + topic */}
       <div className="min-w-0 flex-1">
-        <div className="font-heading text-sm font-black tracking-wide text-[hsl(var(--game-amber))]">
+        <div className="font-heading text-[15px] font-black tracking-wide text-[hsl(var(--game-amber))]">
           ⚡ BLITZ
         </div>
-        <div className="truncate font-heading text-xs font-bold text-[hsl(var(--game-ink))]">
+        <div className="truncate font-heading text-[13px] font-bold text-[hsl(var(--game-ink))]">
           {topicName}
         </div>
       </div>
@@ -44,7 +44,7 @@ export default function BlitzHUD({ topicName, timeRemaining, timeLimit, score }:
             fill="none"
             stroke="currentColor"
             strokeWidth={stroke}
-            className="text-border/30"
+            className="text-[hsl(var(--game-ink))]/10"
           />
           {/* Progress ring */}
           <circle
@@ -73,8 +73,8 @@ export default function BlitzHUD({ topicName, timeRemaining, timeLimit, score }:
 
       {/* Right — score */}
       <div className="flex flex-1 flex-col items-end">
-        <div className="font-heading text-3xl font-black text-[hsl(var(--game-ink))]">{score}</div>
-        <div className="font-heading text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="font-heading text-[48px] font-black leading-none text-[hsl(var(--game-ink))]">{score}</div>
+        <div className="font-heading text-[11px] font-extrabold uppercase tracking-wider text-[hsl(var(--game-ink-light))]">
           correct
         </div>
       </div>

@@ -6,7 +6,6 @@ import { type GameEntry } from '@/data/games-db'
 import { type Milestones, getMedalName } from '../lib/milestones'
 import { checkGuess } from '../lib/matching'
 import BlitzHUD from './BlitzHUD'
-import ProgressBar from './ProgressBar'
 import PhysicsArena, { type PhysicsArenaHandle } from './PhysicsArena'
 import BlitzInput from './BlitzInput'
 import MilestoneToast from './MilestoneToast'
@@ -126,33 +125,36 @@ export default function GameplayScreen({
 
   return (
     <div className="flex h-dvh flex-col bg-[hsl(var(--game-cream))]">
-      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col">
-        {/* HUD */}
+      {/* HUD — strong opaque bar at top */}
+      <div className="mx-auto w-full max-w-2xl flex-shrink-0">
         <BlitzHUD
           topicName={topic.name}
           timeRemaining={timeRemaining}
           timeLimit={timeLimit}
           score={score}
         />
+      </div>
 
-        {/* Progress bar */}
-        <ProgressBar score={score} poolSize={poolSize} milestones={milestones} />
+      {/* Arena — fills all remaining space, input floats in centre */}
+      <div className="relative min-h-0 flex-1">
+        <MilestoneToast medal={toastMedal} triggerId={toastTrigger} />
+        <PhysicsArena ref={arenaRef} />
 
-        {/* Physics arena — fills remaining space */}
-        <div className="relative min-h-0 flex-1">
-          <MilestoneToast medal={toastMedal} triggerId={toastTrigger} />
-          <PhysicsArena ref={arenaRef} />
+        {/* Centred input zone — absolutely positioned at ~57% down */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center" style={{ paddingTop: '14%' }}>
+          <div className="pointer-events-auto w-full max-w-2xl px-4">
+            <BlitzInput
+              onSubmit={handleGuess}
+              disabled={gameOver}
+              score={score}
+              totalGuesses={totalGuesses}
+              poolSize={poolSize}
+              milestones={milestones}
+              nextMilestoneLabel={nextMilestone.label}
+              nextMilestoneRemaining={nextMilestone.remaining}
+            />
+          </div>
         </div>
-
-        {/* Input zone — pinned to bottom */}
-        <BlitzInput
-          onSubmit={handleGuess}
-          disabled={gameOver}
-          score={score}
-          totalGuesses={totalGuesses}
-          nextMilestoneLabel={nextMilestone.label}
-          nextMilestoneRemaining={nextMilestone.remaining}
-        />
       </div>
     </div>
   )

@@ -71,27 +71,27 @@ export default function LeaderboardScreen({
       <Header />
       <main className="mx-auto max-w-2xl px-4 py-10">
         {/* Header */}
-        <div className="mb-6">
-          <p className="font-heading text-xs font-semibold uppercase tracking-wider text-[hsl(var(--game-amber))]">
+        <div className="mb-8">
+          <p className="font-heading text-[13px] font-extrabold uppercase tracking-[0.2em] text-[hsl(var(--game-amber))]">
             ⚡ Blitz · Leaderboard
           </p>
-          <h1 className="mt-1 font-heading text-2xl font-black text-[hsl(var(--game-ink))]">
+          <h1 className="mt-2 font-heading text-[48px] leading-tight font-black text-[hsl(var(--game-ink))]">
             {topic.name}
           </h1>
-          <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="mt-2 flex items-center gap-3 text-[13px] text-[hsl(var(--game-ink-mid))]">
             <span>{poolSize} games</span>
             <span>·</span>
             <span>All time</span>
           </div>
 
           {/* Milestone chips */}
-          <div className="mt-3 flex gap-2">
+          <div className="mt-4 flex gap-2">
             {(['bronze', 'silver', 'gold'] as const).map((medal) => {
               const emoji = medal === 'bronze' ? '🥉' : medal === 'silver' ? '🥈' : '🥇'
               return (
                 <span
                   key={medal}
-                  className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background px-2.5 py-0.5 text-[11px] font-semibold text-muted-foreground"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border/40 bg-background px-3 py-1 text-[13px] font-semibold text-[hsl(var(--game-ink-mid))]"
                 >
                   {emoji} {milestones[medal]}
                 </span>
@@ -102,7 +102,7 @@ export default function LeaderboardScreen({
           <button
             type="button"
             onClick={onChangeTopic}
-            className="mt-3 text-xs font-semibold text-[hsl(var(--game-amber))] hover:underline"
+            className="mt-4 text-[14px] font-heading font-bold text-[hsl(var(--game-amber))] hover:underline"
           >
             Change topic →
           </button>
@@ -110,19 +110,19 @@ export default function LeaderboardScreen({
 
         {/* Table */}
         {!supabase ? (
-          <div className="rounded-xl border border-border/40 bg-card p-8 text-center text-sm text-muted-foreground">
+          <div className="rounded-2xl bg-[hsl(var(--game-white))] p-8 text-center text-[14px] text-[hsl(var(--game-ink-mid))] shadow-[0_4px_24px_rgba(0,0,0,0.10)]">
             Leaderboard not available — Supabase not configured.
           </div>
         ) : loading ? (
-          <div className="py-12 text-center text-sm text-muted-foreground">Loading...</div>
+          <div className="py-12 text-center text-[14px] text-[hsl(var(--game-ink-mid))]">Loading...</div>
         ) : entries.length === 0 ? (
-          <div className="rounded-xl border border-border/40 bg-card p-8 text-center text-sm text-muted-foreground">
+          <div className="rounded-2xl bg-[hsl(var(--game-white))] p-8 text-center text-[14px] text-[hsl(var(--game-ink-mid))] shadow-[0_4px_24px_rgba(0,0,0,0.10)]">
             No scores yet. Be the first!
           </div>
         ) : (
-          <div className="overflow-hidden rounded-xl border border-border/40">
+          <div className="overflow-hidden rounded-2xl bg-[hsl(var(--game-white))] shadow-[0_4px_24px_rgba(0,0,0,0.10)]">
             {/* Column headers */}
-            <div className="grid grid-cols-[40px_1fr_80px_60px] gap-2 border-b border-border/30 bg-muted/30 px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            <div className="grid grid-cols-[48px_1fr_90px_70px] gap-2 border-b border-border/30 px-5 py-3 text-[11px] font-heading font-extrabold uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">
               <span>#</span>
               <span>Name</span>
               <span className="text-right">Score</span>
@@ -136,29 +136,45 @@ export default function LeaderboardScreen({
               return (
                 <div
                   key={entry.id}
-                  className={`grid grid-cols-[40px_1fr_80px_60px] gap-2 px-4 py-2.5 text-sm ${
+                  className={`grid grid-cols-[48px_1fr_90px_70px] items-center gap-2 px-5 py-3 text-[15px] ${
                     isPlayer
-                      ? 'border-l-2 border-l-[hsl(var(--game-amber))] bg-[hsl(var(--game-amber))]/5'
+                      ? 'border-l-[3px] border-l-[hsl(var(--game-amber))] bg-[hsl(var(--game-white))]'
                       : i % 2 === 0
-                        ? 'bg-card'
-                        : 'bg-muted/10'
+                        ? 'bg-[hsl(var(--game-white))]'
+                        : 'bg-[hsl(var(--game-cream))]'
                   }`}
                 >
-                  <span className="font-heading text-xs font-bold text-muted-foreground">
-                    {medal || i + 1}
+                  <span className="flex items-center justify-center">
+                    {medal ? (
+                      <span
+                        className={`flex h-8 w-8 items-center justify-center rounded-full text-base ${
+                          i === 0
+                            ? 'bg-[hsl(var(--game-amber))]/20'
+                            : i === 1
+                              ? 'bg-gray-200'
+                              : 'bg-orange-100'
+                        }`}
+                      >
+                        {medal}
+                      </span>
+                    ) : (
+                      <span className="font-heading text-[14px] font-bold text-[hsl(var(--game-ink-light))]">
+                        {i + 1}
+                      </span>
+                    )}
                   </span>
-                  <span className={`font-semibold ${isPlayer ? 'text-[hsl(var(--game-amber))]' : 'text-[hsl(var(--game-ink))]'}`}>
+                  <span className={`font-heading font-semibold ${isPlayer ? 'font-extrabold text-[hsl(var(--game-amber))]' : 'text-[hsl(var(--game-ink))]'}`}>
                     {entry.name}
                     {isPlayer && (
-                      <span className="ml-1.5 inline-flex items-center rounded-full bg-[hsl(var(--game-amber))]/15 px-1.5 py-0.5 text-[9px] font-bold text-[hsl(var(--game-amber))]">
+                      <span className="ml-2 inline-flex items-center rounded-full bg-[hsl(var(--game-amber))]/15 px-2 py-0.5 text-[11px] font-heading font-extrabold tracking-wide text-[hsl(var(--game-amber))]">
                         You
                       </span>
                     )}
                   </span>
-                  <span className="text-right font-heading text-xs font-bold text-[hsl(var(--game-ink))]">
+                  <span className="text-right font-heading text-[18px] font-extrabold text-[hsl(var(--game-ink))]">
                     {entry.score} / {entry.pool_size}
                   </span>
-                  <span className="text-right font-heading text-xs text-muted-foreground">
+                  <span className="text-right font-heading text-[14px] font-medium text-[hsl(var(--game-ink-mid))]">
                     {formatTime(entry.time_seconds)}
                   </span>
                 </div>

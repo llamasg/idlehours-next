@@ -1,12 +1,16 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import ProgressBar from './ProgressBar'
+import { type Milestones } from '../lib/milestones'
 
 interface BlitzInputProps {
   onSubmit: (text: string) => 'correct' | 'duplicate' | 'wrong'
   disabled: boolean
   score: number
   totalGuesses: number
+  poolSize: number
+  milestones: Milestones
   nextMilestoneLabel: string
   nextMilestoneRemaining: number
 }
@@ -16,6 +20,8 @@ export default function BlitzInput({
   disabled,
   score,
   totalGuesses,
+  poolSize,
+  milestones,
   nextMilestoneLabel,
   nextMilestoneRemaining,
 }: BlitzInputProps) {
@@ -79,20 +85,27 @@ export default function BlitzInput({
   )
 
   return (
-    <div className="relative px-4 pb-4 pt-2">
+    <div className="flex flex-col items-center gap-2">
       {/* Float feedback */}
-      {float && (
-        <div
-          key={float.key}
-          className={`absolute -top-6 left-1/2 -translate-x-1/2 font-heading text-sm font-bold ${float.color} animate-[float-up_0.9s_ease-out_forwards] pointer-events-none`}
-        >
-          {float.text}
-        </div>
-      )}
+      <div className="relative h-6">
+        {float && (
+          <div
+            key={float.key}
+            className={`absolute left-1/2 -translate-x-1/2 font-heading text-sm font-bold ${float.color} animate-[float-up_0.9s_ease-out_forwards] pointer-events-none whitespace-nowrap`}
+          >
+            {float.text}
+          </div>
+        )}
+      </div>
+
+      {/* Progress bar */}
+      <div className="w-full max-w-[420px] min-w-[280px] px-1">
+        <ProgressBar score={score} poolSize={poolSize} milestones={milestones} />
+      </div>
 
       {/* Input row */}
       <div
-        className={`flex gap-2 ${shake ? 'animate-[shake_0.4s_ease-in-out]' : ''}`}
+        className={`mt-1.5 flex w-full max-w-[420px] min-w-[280px] gap-2 ${shake ? 'animate-[shake_0.4s_ease-in-out]' : ''}`}
       >
         <input
           ref={inputRef}
@@ -103,7 +116,7 @@ export default function BlitzInput({
           disabled={disabled}
           placeholder="Type a game title..."
           autoComplete="off"
-          className="min-w-0 flex-1 rounded-lg border border-border bg-background px-4 py-3 font-heading text-sm text-[hsl(var(--game-ink))] placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--game-amber))]/40 disabled:opacity-50"
+          className="min-w-0 flex-1 rounded-lg border-[1.5px] border-[hsl(var(--game-amber))] bg-[hsl(var(--game-white))] px-4 py-3 font-heading text-sm text-[hsl(var(--game-ink))] shadow-[0_0_0_4px_rgba(200,135,58,0.15)] placeholder:text-[hsl(var(--game-ink-light))]/50 focus:outline-none focus:shadow-[0_0_0_6px_rgba(200,135,58,0.25)] disabled:opacity-50"
         />
         <button
           type="button"
@@ -116,7 +129,7 @@ export default function BlitzInput({
       </div>
 
       {/* Hint row */}
-      <div className="mt-2 flex items-center justify-center gap-2 text-[11px] text-muted-foreground">
+      <div className="mt-1 flex items-center justify-center gap-2 text-[11px] text-[hsl(var(--game-ink-light))]">
         <span>{score} correct</span>
         <span>·</span>
         <span>{totalGuesses} guesses</span>

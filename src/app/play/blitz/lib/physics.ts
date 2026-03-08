@@ -35,14 +35,19 @@ export function spawnBody(
   textWidth: number,
 ): Body {
   const w = Math.max(textWidth, 60)
-  const x = Math.random() * (canvasW - w - 20) + 10
-  const angle = (Math.random() - 0.5) * 0.8
-  const speed = 4 + Math.random() * 2
+  // Spawn from centre of arena (where input sits, ~57% down)
+  const x = (canvasW - w) / 2
+  const y = canvasH * 0.57 - PILL_H / 2
+  // Angle between -160deg and -20deg (biased upward and sideways)
+  const minAngle = (-160 * Math.PI) / 180
+  const maxAngle = (-20 * Math.PI) / 180
+  const angle = minAngle + Math.random() * (maxAngle - minAngle)
+  const speed = 5 + Math.random() * 3
   return {
     x,
-    y: canvasH - PILL_H - 10,
-    vx: Math.sin(angle) * speed,
-    vy: -Math.abs(Math.cos(angle)) * speed,
+    y,
+    vx: Math.cos(angle) * speed,
+    vy: Math.sin(angle) * speed,
     w,
     h: PILL_H,
     text,
@@ -66,8 +71,8 @@ export function stepPhysics(bodies: Body[], W: number, H: number, now: number): 
 
   // Physics step for each body
   for (const b of alive) {
-    // Gravity (upward float — moon gravity)
-    b.vy += GRAVITY
+    // Gravity (upward pull — moon gravity, arena fills from top)
+    b.vy -= GRAVITY
 
     // Friction
     b.vx *= FRICTION

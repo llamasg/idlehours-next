@@ -56,17 +56,16 @@ const PhysicsArena = forwardRef<PhysicsArenaHandle>(function PhysicsArena(_, ref
       ctx.roundRect(x, y, w, h, r)
 
       if (type === 'correct') {
-        ctx.fillStyle = styles.getPropertyValue('--background')?.trim()
-          ? `hsl(${styles.getPropertyValue('--background').trim()})`
-          : '#ffffff'
+        const white = styles.getPropertyValue('--game-white').trim()
+        ctx.fillStyle = white ? `hsl(${white})` : '#ffffff'
         ctx.fill()
-        ctx.strokeStyle = 'rgba(200,135,58,0.4)'
+        ctx.strokeStyle = 'rgba(200,135,58,0.5)'
         ctx.lineWidth = 1.5
         ctx.stroke()
 
         // Subtle amber shadow
-        ctx.shadowColor = 'rgba(200,135,58,0.15)'
-        ctx.shadowBlur = 6
+        ctx.shadowColor = 'rgba(200,135,58,0.18)'
+        ctx.shadowBlur = 8
         ctx.shadowOffsetY = 2
       } else {
         ctx.fillStyle = 'rgba(220,60,60,0.12)'

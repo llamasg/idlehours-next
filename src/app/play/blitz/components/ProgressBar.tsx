@@ -18,7 +18,7 @@ export default function ProgressBar({ score, poolSize, milestones }: ProgressBar
   ]
 
   return (
-    <div className="relative mx-4 h-[3px] rounded-full bg-border/30">
+    <div className="relative h-[5px] rounded-full bg-[hsl(var(--game-ink))]/10">
       {/* Fill */}
       <div
         className="absolute inset-y-0 left-0 rounded-full bg-[hsl(var(--game-amber))] transition-all duration-300"
@@ -28,10 +28,10 @@ export default function ProgressBar({ score, poolSize, milestones }: ProgressBar
       {dots.map((dot) => (
         <div
           key={dot.key}
-          className={`absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-colors duration-300 ${
+          className={`absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-colors duration-300 ${
             dot.reached
               ? 'border-[hsl(var(--game-amber))] bg-[hsl(var(--game-amber))]'
-              : 'border-border/60 bg-background'
+              : 'border-[hsl(var(--game-ink))]/20 bg-[hsl(var(--game-cream))]'
           }`}
           style={{ left: `${dot.pos}%` }}
         />
