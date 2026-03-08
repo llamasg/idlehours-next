@@ -69,10 +69,49 @@ export function checkGuess(
   const norm = normalize(input)
   if (!norm) return { result: 'wrong' }
 
-  const gameId = aliasMap.get(norm)
+  // Exact alias match first
+  let gameId = aliasMap.get(norm)
+
+  // Fuzzy: try prefix match on aliases if no exact match
+  if (!gameId) {
+    for (const [alias, id] of aliasMap) {
+      if (alias.startsWith(norm) && norm.length >= 3) {
+        gameId = id
+        break
+      }
+    }
+  }
+
   if (!gameId) return { result: 'wrong' }
   if (guessedIds.has(gameId)) return { result: 'duplicate', gameId }
 
   const game = pool.find((g) => g.id === gameId)
   return { result: 'correct', gameId, title: game?.title }
+}
+
+/**
+ * Get the best autocomplete suggestion for current input.
+ * Returns the full game title if a prefix match is found, or null.
+ */
+export function getSuggestion(
+  input: string,
+  pool: GameEntry[],
+  guessedIds: Set<string>,
+): string | null {
+  const norm = normalize(input)
+  if (norm.length < 2) return null
+
+  // Find best match: prefer shorter titles (more specific matches)
+  let best: GameEntry | null = null
+  for (const game of pool) {
+    if (guessedIds.has(game.id)) continue
+    const normTitle = normalize(game.title)
+    if (normTitle.startsWith(norm)) {
+      if (!best || game.title.length < best.title.length) {
+        best = game
+      }
+    }
+  }
+
+  return best?.title ?? null
 }

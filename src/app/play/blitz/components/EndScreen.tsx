@@ -36,6 +36,7 @@ export default function EndScreen({ result, onPlayAgain, onShowLeaderboard }: En
   const [showModal, setShowModal] = useState(true)
   const [name, setName] = useState('')
   const [posting, setPosting] = useState(false)
+  const [showAllMissed, setShowAllMissed] = useState(false)
 
   const { score, pool, topic, medal, timeUsed, guessedIds, guessedTitles } = result
   const poolSize = pool.length
@@ -144,7 +145,7 @@ export default function EndScreen({ result, onPlayAgain, onShowLeaderboard }: En
                 Missed ({missed.length})
               </h3>
               <div className="flex flex-wrap gap-1.5">
-                {missed.slice(0, showMissedCount).map((g) => (
+                {(showAllMissed ? missed : missed.slice(0, showMissedCount)).map((g) => (
                   <span
                     key={g.id}
                     className="rounded-full border border-border/40 bg-muted/30 px-3 py-1 text-xs text-muted-foreground"
@@ -152,10 +153,14 @@ export default function EndScreen({ result, onPlayAgain, onShowLeaderboard }: En
                     {g.title}
                   </span>
                 ))}
-                {missed.length > showMissedCount && (
-                  <span className="rounded-full px-3 py-1 text-xs text-muted-foreground">
+                {!showAllMissed && missed.length > showMissedCount && (
+                  <button
+                    type="button"
+                    onClick={() => setShowAllMissed(true)}
+                    className="rounded-full border border-border/40 px-3 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+                  >
                     +{missed.length - showMissedCount} more
-                  </span>
+                  </button>
                 )}
               </div>
             </div>

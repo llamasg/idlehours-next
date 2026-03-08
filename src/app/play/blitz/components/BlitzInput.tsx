@@ -1,6 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import { type GameEntry } from '@/data/games-db'
+import { getSuggestion } from '../lib/matching'
 
 interface BlitzInputProps {
   onSubmit: (text: string) => 'correct' | 'duplicate' | 'wrong'
@@ -9,6 +11,8 @@ interface BlitzInputProps {
   totalGuesses: number
   nextMilestoneLabel: string
   nextMilestoneRemaining: number
+  pool: GameEntry[]
+  guessedIds: Set<string>
 }
 
 export default function BlitzInput({
@@ -18,17 +22,26 @@ export default function BlitzInput({
   totalGuesses,
   nextMilestoneLabel,
   nextMilestoneRemaining,
+  pool,
+  guessedIds,
 }: BlitzInputProps) {
   const [value, setValue] = useState('')
   const [shake, setShake] = useState(false)
   const [float, setFloat] = useState<{ text: string; color: string; key: number } | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const floatKey = useRef(0)
+  const lastSentRef = useRef('')
 
   // Auto-focus on mount
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
+
+  // Autocomplete suggestion
+  const suggestion = useMemo(
+    () => getSuggestion(value, pool, guessedIds),
+    [value, pool, guessedIds],
+  )
 
   const showFloat = useCallback((text: string, color: string) => {
     floatKey.current++
@@ -45,6 +58,7 @@ export default function BlitzInput({
     const trimmed = value.trim()
     if (!trimmed) return
 
+    lastSentRef.current = trimmed
     const result = onSubmit(trimmed)
     setValue('')
 
@@ -66,10 +80,28 @@ export default function BlitzInput({
       if (e.key === 'Enter') {
         e.preventDefault()
         handleSubmit()
+      } else if (e.key === 'Tab' && suggestion) {
+        e.preventDefault()
+        setValue(suggestion)
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        if (lastSentRef.current) {
+          setValue(lastSentRef.current)
+        }
       }
     },
-    [handleSubmit],
+    [handleSubmit, suggestion],
   )
+
+  // Ghost text: show the portion of the suggestion after what the user typed
+  const ghostText = useMemo(() => {
+    if (!suggestion || !value.trim()) return null
+    // Find where in the suggestion the user's input starts matching (case-insensitive)
+    const lower = suggestion.toLowerCase()
+    const inputLower = value.trim().toLowerCase()
+    if (!lower.startsWith(inputLower)) return null
+    return suggestion.slice(value.trim().length)
+  }, [suggestion, value])
 
   return (
     <div className="relative px-4 pb-4 pt-2">
@@ -87,17 +119,26 @@ export default function BlitzInput({
       <div
         className={`flex gap-2 ${shake ? 'animate-[shake_0.4s_ease-in-out]' : ''}`}
       >
-        <input
-          ref={inputRef}
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          disabled={disabled}
-          placeholder="Type a game title..."
-          autoComplete="off"
-          className="min-w-0 flex-1 rounded-lg border border-border bg-background px-4 py-3 font-heading text-sm text-[hsl(var(--game-ink))] placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--game-amber))]/40 disabled:opacity-50"
-        />
+        <div className="relative min-w-0 flex-1">
+          {/* Ghost autocomplete text */}
+          {ghostText && (
+            <div className="pointer-events-none absolute inset-0 flex items-center px-4 py-3 font-heading text-sm">
+              <span className="invisible">{value}</span>
+              <span className="text-muted-foreground/30">{ghostText}</span>
+            </div>
+          )}
+          <input
+            ref={inputRef}
+            type="text"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={disabled}
+            placeholder="Type a game title..."
+            autoComplete="off"
+            className="w-full rounded-lg border border-border bg-background px-4 py-3 font-heading text-sm text-[hsl(var(--game-ink))] placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--game-amber))]/40 disabled:opacity-50"
+          />
+        </div>
         <button
           type="button"
           onClick={handleSubmit}

@@ -126,32 +126,36 @@ export default function GameplayScreen({
 
   return (
     <div className="flex h-dvh flex-col bg-[hsl(var(--game-cream))]">
-      {/* HUD */}
-      <BlitzHUD
-        topicName={topic.name}
-        timeRemaining={timeRemaining}
-        timeLimit={timeLimit}
-        score={score}
-      />
+      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col">
+        {/* HUD */}
+        <BlitzHUD
+          topicName={topic.name}
+          timeRemaining={timeRemaining}
+          timeLimit={timeLimit}
+          score={score}
+        />
 
-      {/* Progress bar */}
-      <ProgressBar score={score} poolSize={poolSize} milestones={milestones} />
+        {/* Progress bar */}
+        <ProgressBar score={score} poolSize={poolSize} milestones={milestones} />
 
-      {/* Physics arena — fills remaining space */}
-      <div className="relative min-h-0 flex-1">
-        <MilestoneToast medal={toastMedal} triggerId={toastTrigger} />
-        <PhysicsArena ref={arenaRef} />
+        {/* Physics arena — fills remaining space */}
+        <div className="relative min-h-0 flex-1">
+          <MilestoneToast medal={toastMedal} triggerId={toastTrigger} />
+          <PhysicsArena ref={arenaRef} />
+        </div>
+
+        {/* Input zone — pinned to bottom */}
+        <BlitzInput
+          onSubmit={handleGuess}
+          disabled={gameOver}
+          score={score}
+          totalGuesses={totalGuesses}
+          nextMilestoneLabel={nextMilestone.label}
+          nextMilestoneRemaining={nextMilestone.remaining}
+          pool={pool}
+          guessedIds={guessedIdsRef.current}
+        />
       </div>
-
-      {/* Input zone — pinned to bottom */}
-      <BlitzInput
-        onSubmit={handleGuess}
-        disabled={gameOver}
-        score={score}
-        totalGuesses={totalGuesses}
-        nextMilestoneLabel={nextMilestone.label}
-        nextMilestoneRemaining={nextMilestone.remaining}
-      />
     </div>
   )
 }
