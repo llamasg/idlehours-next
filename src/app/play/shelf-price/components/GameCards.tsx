@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import type { ShelfPriceGame } from '../data/games'
 import { igdbCoverUrl } from '../../street-date/lib/imageUtils'
+import { COPY, pickRandom } from '@/components/games/GameEndModal.copy'
 
 type RevealPhase = 'idle' | 'other-counting' | 'chosen-counting' | 'result'
 
@@ -61,6 +62,7 @@ export default function GameCards({
   const [phase, setPhase] = useState<RevealPhase>('idle')
   const [leftPrice, setLeftPrice] = useState<number | null>(null)
   const [rightPrice, setRightPrice] = useState<number | null>(null)
+  const [resultText, setResultText] = useState('')
   const cleanupRef = useRef<(() => void) | null>(null)
 
   const otherSide = chosenSide === 'left' ? 'right' : 'left'
@@ -94,6 +96,7 @@ export default function GameCards({
               // Phase 3: Show result
               const t2 = setTimeout(() => {
                 setPhase('result')
+                setResultText(pickRandom(correct ? COPY.shelfPriceCorrect : COPY.shelfPriceWrong))
                 // Hold for 1.5s then notify parent
                 const t3 = setTimeout(() => {
                   onRevealComplete()
@@ -123,7 +126,7 @@ export default function GameCards({
   }, [chosenSide])
 
   return (
-    <div className="relative grid grid-cols-[1fr_auto_1fr] items-stretch gap-3 sm:gap-5">
+    <div className="relative grid grid-cols-1 items-stretch gap-3 md:grid-cols-[1fr_auto_1fr] md:gap-5">
       <Card
         game={left}
         side="left"
@@ -139,10 +142,13 @@ export default function GameCards({
         }
       />
 
-      {/* VS divider */}
+      {/* VS divider — horizontal on mobile, vertical on desktop */}
       <div className="relative z-10 flex items-center justify-center">
-        <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/15" />
-        <div className="relative flex h-12 w-12 items-center justify-center rounded-full border-3 border-[hsl(var(--game-ink))]/10 bg-white font-heading text-sm font-black text-[hsl(var(--game-ink-mid))] shadow-lg">
+        {/* Vertical line (desktop) */}
+        <div className="absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-white/15 md:block" />
+        {/* Horizontal line (mobile) */}
+        <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-border/30 md:hidden" />
+        <div className="relative flex h-10 w-10 items-center justify-center rounded-full border-3 border-[hsl(var(--game-ink))]/10 bg-white font-heading text-xs font-black text-[hsl(var(--game-ink-mid))] shadow-lg md:h-12 md:w-12 md:text-sm">
           VS
         </div>
       </div>
@@ -173,7 +179,7 @@ export default function GameCards({
               correct ? 'bg-[hsl(var(--game-green))]' : 'bg-[hsl(var(--game-red))]'
             }`}
           >
-            {correct ? 'Correct!' : 'Not this time :('}
+            {resultText}
           </div>
         </div>
       )}
@@ -230,10 +236,9 @@ function Card({
     <button
       onClick={onChoice}
       disabled={disabled}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl transition-all ${
+      className={`group relative flex min-h-[min(35vh,280px)] flex-col overflow-hidden rounded-2xl transition-all md:min-h-[min(75vh,640px)] ${
         !disabled ? 'cursor-pointer hover:shadow-2xl' : ''
       }`}
-      style={{ minHeight: 'min(75vh, 640px)' }}
     >
       {/* Background cover image */}
       {imgFailed ? (

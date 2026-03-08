@@ -42,6 +42,10 @@
     --game-amber: 30 55% 50%;
     --game-green: 147 61% 41%;
     --game-red: 7 62% 47%;
+    --game-white: 0 0% 100%;
+    --game-cream: 40 30% 95%;
+    --game-cream-mid: 40 20% 92%;
+    --game-cream-dark: 40 15% 88%;
   }
 
   .dark {
@@ -80,6 +84,10 @@
     --game-amber: 30 55% 55%;
     --game-green: 147 61% 45%;
     --game-red: 7 62% 52%;
+    --game-white: 20 14% 14%;
+    --game-cream: 20 12% 18%;
+    --game-cream-mid: 20 10% 16%;
+    --game-cream-dark: 20 8% 14%;
   }
 }
 

@@ -58,6 +58,8 @@ interface SentenceClueProps {
   score: number
   onRevealBlank: (blank: BlankDef) => void
   disabled: boolean
+  /** When true, reveal ALL blanks — player-revealed in blue, others in grey with black text */
+  revealAll?: boolean
 }
 
 export default function SentenceClue({
@@ -66,6 +68,7 @@ export default function SentenceClue({
   score,
   onRevealBlank,
   disabled,
+  revealAll = false,
 }: SentenceClueProps) {
   const [mounted, setMounted] = useState(false)
 
@@ -116,6 +119,7 @@ export default function SentenceClue({
                 score={score}
                 disabled={disabled}
                 onReveal={onRevealBlank}
+                revealAll={revealAll}
               />
             </span>
           )
@@ -134,12 +138,14 @@ interface BlankProps {
   score: number
   disabled: boolean
   onReveal: (blank: BlankDef) => void
+  revealAll?: boolean
 }
 
-function Blank({ blank, answer, revealed, score, disabled, onReveal }: BlankProps) {
+function Blank({ blank, answer, revealed, score, disabled, onReveal, revealAll = false }: BlankProps) {
   const canAfford = score >= blank.cost
   const value = blank.reveal(answer)
 
+  // Player-revealed blank — blue background
   if (revealed) {
     return (
       <span
@@ -148,7 +154,25 @@ function Blank({ blank, answer, revealed, score, disabled, onReveal }: BlankProp
           background: 'hsl(var(--game-blue))',
           height: '34px',
           minWidth: '80px',
-          animation: 'blank-click 0.45s cubic-bezier(0.22,1.2,0.36,1) both',
+          animation: revealAll ? 'none' : 'blank-click 0.45s cubic-bezier(0.22,1.2,0.36,1) both',
+          verticalAlign: 'middle',
+        }}
+      >
+        {value}
+      </span>
+    )
+  }
+
+  // Auto-revealed blank (post-game) — grey background, black text
+  if (revealAll) {
+    return (
+      <span
+        className="inline-flex items-center justify-center rounded-[6px] px-[14px] text-[0.85em] font-bold"
+        style={{
+          background: 'hsl(var(--game-ink) / 0.12)',
+          color: 'hsl(var(--game-ink))',
+          height: '34px',
+          minWidth: '80px',
           verticalAlign: 'middle',
         }}
       >

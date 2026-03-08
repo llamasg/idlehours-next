@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect, useCallback, use } from 'react'
+import { useState, useEffect, useCallback, useMemo, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import DiscoverMore from '@/components/DiscoverMore'
@@ -27,8 +27,17 @@ import AnimatedScore from '@/components/AnimatedScore'
 import CoverStrip from '../components/CoverStrip'
 import YearInput from '../components/YearInput'
 import WagerSelector from '../components/WagerSelector'
-import WinModal from '../components/WinModal'
+import GameEndModal from '@/components/games/GameEndModal'
+import {
+  COPY,
+  pickRandom,
+  getStreetDateRank,
+  STREET_DATE_FLAVOUR,
+} from '@/components/games/GameEndModal.copy'
+import { igdbCoverUrl } from '../lib/imageUtils'
 import RulesModal from '../components/RulesModal'
+import ResultCard from '@/components/games/ResultCard'
+import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
 
 const MAX_ATTEMPTS = 5
 
@@ -129,6 +138,22 @@ export default function StreetDateDayPage({
     },
     [state, answerYear, date],
   )
+
+  // Modal copy — picked once when modal opens
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const modalCopy = useMemo(() => {
+    const won = state?.won ?? false
+    const score = state?.score ?? 0
+    const result = won ? 'win' : 'loss'
+    const rankName = getStreetDateRank(score)
+    return {
+      result: result as 'win' | 'loss',
+      heading: pickRandom(COPY[result].headings),
+      subheading: pickRandom(COPY[result].subheadings),
+      rankName,
+      rankFlavour: pickRandom(STREET_DATE_FLAVOUR[rankName]),
+    }
+  }, [showModal])
 
   if (!state) {
     return (
@@ -235,24 +260,25 @@ export default function StreetDateDayPage({
           />
         )}
 
+        {/* Finished — post-game page (when modal closed) */}
         {state.finished && !showModal && (
           <>
-            <div className="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-4 text-center">
-              <p className="text-sm font-semibold text-green-700">
-                {state.won
-                  ? `You got it \u2014 ${answerYear}!`
-                  : `The answer was ${answerYear}`}
-              </p>
-              <button
-                type="button"
-                onClick={() => setShowModal(true)}
-                className="mt-2 text-sm text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
-              >
-                View results
-              </button>
+            <div className="mb-6">
+              <ResultCard
+                game="street-date"
+                score={state.score}
+                streak={0}
+                won={state.won}
+                puzzleLabel={`Street Date ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                onViewResults={() => setShowModal(true)}
+              />
             </div>
 
-            {/* Nav pills — above discover more */}
+            <div className="mb-8">
+              <DailyBadgeShelf currentGame="street-date" />
+            </div>
+
+            {/* Nav pills */}
             <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
               {!today && (
                 <Link
@@ -300,15 +326,63 @@ export default function StreetDateDayPage({
       <SiteFooter />
 
       {showModal && state.finished && (
-        <WinModal
-          dateStr={date}
-          answerYear={answerYear}
-          games={roundGames}
-          attempts={state.attempts}
-          stars={state.stars}
+        <GameEndModal
+          result={modalCopy.result}
           score={state.score}
-          won={state.won}
-          wager={state.wager}
+          heading={modalCopy.heading}
+          subheading={modalCopy.subheading}
+          rankName={modalCopy.rankName}
+          rankFlavour={modalCopy.rankFlavour}
+          stats={[
+            { label: 'Score', value: String(state.score) },
+            { label: 'Guessed On', value: `Clue ${state.attempts.length}/${MAX_ATTEMPTS}` },
+            { label: 'Wager', value: state.wager === 'high' ? 'All In' : state.wager === 'mid' ? 'Confident' : 'Cautious' },
+          ]}
+          heroZone={
+            <div className="px-6 pt-6 pb-2">
+              <p className="text-center font-heading text-xs font-semibold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
+                The answer
+              </p>
+              <p className="text-center font-heading text-5xl font-black text-[hsl(var(--game-blue))]">
+                {answerYear}
+              </p>
+              <div className="mt-4 grid grid-cols-5 gap-2">
+                {roundGames.map((game, i) => {
+                  const wasGuessedOn = state.attempts.length - 1 === i && state.won
+                  const neverReached = i > state.currentCoverIndex
+                  return (
+                    <div key={game.id} className="relative flex flex-col items-center">
+                      <div
+                        className={`aspect-[3/4] w-full overflow-hidden rounded-lg bg-muted/30 shadow-sm ${
+                          wasGuessedOn ? 'ring-2 ring-[hsl(var(--game-blue))] scale-105' : ''
+                        } ${neverReached ? 'opacity-40' : ''}`}
+                      >
+                        <img
+                          src={igdbCoverUrl(game.igdbImageId)}
+                          alt={game.title}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      {wasGuessedOn && (
+                        <span className="absolute -top-2 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--game-blue))] text-[10px] font-bold text-white shadow">
+                          {i + 1}
+                        </span>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          }
+          onShare={async () => {
+            const number = formatGameNumber(date)
+            const wagerEmoji = state.wager === 'high' ? '\u{1F525}' : state.wager === 'mid' ? '\u{1F3AF}' : '\u{1F6E1}\u{FE0F}'
+            const lines = [
+              `Street Date ${number} \u00b7 ${state.score}/1000 ${wagerEmoji}`,
+              'idlehours.co.uk/play/street-date',
+            ]
+            try { await navigator.clipboard.writeText(lines.join('\n')) } catch {}
+          }}
           onClose={() => setShowModal(false)}
         />
       )}

@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Idle Hours — End Modal Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F0EBE0;
+    --cream-dark: #E4DBCC;
+    --cream-mid: #EAE3D6;
+    --white: #FDFAF5;
+    --ink: #1A1A14;
+    --ink-mid: #4A4A3A;
+    --ink-light: #8A8A70;
+    --blue: #4A8FE8;
+    --blue-dark: #2D6BC4;
+    --blue-light: #EBF2FC;
+    --amber: #C8873A;
+    --green: #27A85A;
+    --red: #C0392B;
+    --divider: rgba(26,26,20,0.1);
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #B8A898;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 20px;
+    gap: 60px;
+  }
+
+  /* Tab switcher */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 6px;
+    border-radius: 100px;
+    position: sticky;
+    top: 20px;
+    z-index: 100;
+  }
+  .tab {
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    transition: all 0.15s;
+    letter-spacing: 0.04em;
+  }
+  .tab.active {
+    background: var(--white);
+    color: var(--ink);
+  }
+
+  /* Modal wrapper */
+  .modal-scene {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+    max-width: 480px;
+  }
+  .modal-scene.visible { display: flex; }
+
+  .scene-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  /* Core modal */
+  .modal {
+    background: var(--white);
+    border-radius: 24px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.25), 0 4px 16px rgba(0,0,0,0.1);
+  }
+  .modal.loss {
+    background: var(--cream);
+  }
+
+  /* Hero zones */
+  .hero {
+    width: 100%;
+    position: relative;
+  }
+
+  /* Game Sense hero */
+  .hero-game-sense {
+    height: 200px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-game-sense .cover-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.55);
+  }
+  .hero-game-sense .cover-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  }
+  .hero-game-sense .game-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+  }
+  .hero-game-sense .game-year {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+  }
+
+  /* Street Date hero */
+  .hero-street-date {
+    padding: 24px 20px 20px;
+    background: var(--white);
+    text-align: center;
+  }
+  .hero-street-date .year-display {
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--blue);
+    line-height: 1;
+    margin-bottom: 4px;
+    letter-spacing: -3px;
+  }
+  .hero-street-date .year-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 18px;
+  }
+  .covers-strip {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  .cover-thumb {
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .cover-thumb img {
+    display: block;
+    width: 64px;
+    height: 86px;
+    object-fit: cover;
+  }
+  .cover-thumb.revealed img {
+    width: 80px;
+    height: 106px;
+  }
+  .cover-thumb .cover-placeholder {
+    background: var(--cream-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--ink-light);
+    letter-spacing: 0.05em;
+  }
+  /* Guess number badge on the cover that cracked it */
+  .cover-thumb .guess-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--blue);
+    color: white;
+    font-size: 10px;
+    font-weight: 900;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Shelf Price hero — scorecard grid */
+  .hero-shelf-price {
+    padding: 24px 20px 20px;
+    background: var(--white);
+  }
+  .shelf-scorecard-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    text-align: center;
+    margin-bottom: 14px;
+  }
+  .shelf-scorecard {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  .shelf-round {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid var(--divider);
+  }
+  .shelf-round .round-covers {
+    display: flex;
+    height: 48px;
+  }
+  .shelf-round .round-cover {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+  }
+  .shelf-round .round-result {
+    padding: 4px 2px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+  }
+  .shelf-round.correct .round-result { background: rgba(39,168,90,0.12); color: var(--green); }
+  .shelf-round.wrong .round-result { background: rgba(192,57,43,0.08); color: var(--red); }
+  .shelf-round.correct { border-color: rgba(39,168,90,0.3); }
+  .shelf-round.wrong { border-color: rgba(192,57,43,0.2); }
+
+  /* Modal body */
+  .modal-body {
+    padding: 20px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  /* Result heading */
+  .result-heading { font-size: 26px; font-weight: 900; color: var(--ink); line-height: 1.1; }
+  .result-subheading { font-size: 14px; font-weight: 600; color: var(--ink-mid); margin-top: -8px; }
+
+  /* Score pill */
+  .score-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    background: var(--white);
+    border: 2px solid var(--divider);
+    border-radius: 100px;
+    padding: 8px 20px;
+  }
+  .modal.loss .score-pill { background: var(--cream-mid); }
+  .score-number { font-size: 28px; font-weight: 900; color: var(--blue); }
+  .score-label { font-size: 12px; font-weight: 600; color: var(--ink-light); letter-spacing: 0.1em; }
+
+  /* Rank badge */
+  .rank-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .rank-badge {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .modal.loss .rank-badge { background: var(--ink-light); }
+  .rank-badge.pulse {
+    animation: badgePulse 1.2s ease-out forwards;
+  }
+  @keyframes badgePulse {
+    0%   { box-shadow: 0 0 0 0 rgba(74,143,232,0.5); }
+    70%  { box-shadow: 0 0 0 20px rgba(74,143,232,0); }
+    100% { box-shadow: 0 0 0 0 rgba(74,143,232,0); }
+  }
+  .rank-name { font-size: 18px; font-weight: 900; color: var(--blue); letter-spacing: 0.02em; }
+  .modal.loss .rank-name { color: var(--ink-mid); }
+  .rank-flavour { font-size: 13px; font-weight: 600; font-style: italic; color: var(--ink-mid); margin-top: -4px; }
+
+  /* Stat row */
+  .stat-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .stat-pill {
+    background: var(--cream);
+    border-radius: 100px;
+    padding: 6px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+  .modal.loss .stat-pill { background: var(--cream-dark); }
+  .stat-value { font-size: 15px; font-weight: 800; color: var(--ink); }
+  .stat-label { font-size: 9px; font-weight: 700; color: var(--ink-light); letter-spacing: 0.15em; text-transform: uppercase; }
+
+  /* Pip row */
+  .pip-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+  }
+  .pip {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cream-dark);
+  }
+  .pip.correct { background: var(--green); }
+  .pip.wrong { background: var(--red); opacity: 0.4; }
+
+  /* Buttons */
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    border-radius: 100px;
+    border: none;
+    background: var(--blue);
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(74,143,232,0.35);
+    transition: all 0.15s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74,143,232,0.45); }
+  .btn-ghost {
+    background: transparent;
+    border: 2px solid var(--divider);
+    color: var(--ink-mid);
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+  }
+  .btn-ghost:hover { border-color: var(--ink-mid); color: var(--ink); }
+
+  .btn-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  /* Divider */
+  .modal-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--divider);
+    margin: 0 -24px;
+    width: calc(100% + 48px);
+  }
+
+  /* Confetti canvas */
+  .confetti-wrap {
+    position: relative;
+    width: 100%;
+  }
+  canvas.confetti {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Win badge glow */
+  .win .rank-badge {
+    box-shadow: 0 0 32px rgba(74,143,232,0.3);
+  }
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <button class="tab active" onclick="showScene('game-sense-win')">Game Sense Win</button>
+  <button class="tab" onclick="showScene('street-date-win')">Street Date Win</button>
+  <button class="tab" onclick="showScene('shelf-price-win')">Shelf Price Win</button>
+  <button class="tab" onclick="showScene('loss')">Loss State</button>
+</div>
+
+<!-- GAME SENSE WIN -->
+<div class="modal-scene visible" id="scene-game-sense-win">
+  <div class="scene-label">Game Sense — Win</div>
+  <div class="confetti-wrap">
+    <canvas class="confetti" id="confetti-gs"></canvas>
+    <div class="modal win">
+      <div class="hero">
+        <div class="hero-game-sense">
+          <div class="cover-bg"></div>
+          <div class="cover-overlay">
+            <div class="game-title">Forza Motorsport 7</div>
+            <div class="game-year">2017 · Racing, Simulator</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="result-heading">You did it!</div>
+        <div class="result-subheading">That was tidy.</div>
+        <div class="score-pill">
+          <span class="score-number">620</span>
+          <span class="score-label">PTS</span>
+        </div>
+        <div class="rank-block">
+          <div class="rank-badge pulse">BADGE</div>
+          <div class="rank-name">Well Played</div>
+          <div class="rank-flavour">A few clues, a confident guess. Good game.</div>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="stat-row">
+          <div class="stat-pill"><span class="stat-value">620</span><span class="stat-label">Score</span></div>
+          <div class="stat-pill"><span class="stat-value">4</span><span class="stat-label">Guesses</span></div>
+          <div class="stat-pill"><span class="stat-value">2/5</span><span class="stat-label">Clues Used</span></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary">Share Result</button>
+          <button class="btn-ghost">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STREET DATE WIN -->
+<div class="modal-scene" id="scene-street-date-win">
+  <div class="scene-label">Street Date — Win</div>
+  <div class="confetti-wrap">
+    <canvas class="confetti" id="confetti-sd"></canvas>
+    <div class="modal win">
+      <div class="hero">
+        <div class="hero-street-date">
+          <div class="year-display">1996</div>
+          <div class="year-label">The answer</div>
+          <div class="covers-strip">
+            <div class="cover-thumb">
+              <div class="cover-placeholder" style="width:64px;height:86px;background:#1a1a2e;">GAME 1</div>
+            </div>
+            <div class="cover-thumb">
+              <div class="cover-placeholder" style="width:64px;height:86px;background:#1a3a1a;">GAME 2</div>
+            </div>
+            <div class="cover-thumb revealed">
+              <div class="cover-placeholder" style="width:80px;height:106px;background:#3a1a1a;">GAME 3</div>
+              <div class="guess-badge">3</div>
+            </div>
+            <div class="cover-thumb" style="opacity:0.4;">
+              <div class="cover-placeholder" style="width:64px;height:86px;background:#1a2a3a;">GAME 4</div>
+            </div>
+            <div class="cover-thumb" style="opacity:0.4;">
+              <div class="cover-placeholder" style="width:64px;height:86px;background:#2a2a1a;">GAME 5</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="result-heading">Winner winner!</div>
+        <div class="result-subheading">You knew this one.</div>
+        <div class="score-pill">
+          <span class="score-number">800</span>
+          <span class="score-label">PTS</span>
+        </div>
+        <div class="rank-block">
+          <div class="rank-badge pulse">BADGE</div>
+          <div class="rank-name">Time Archivist</div>
+          <div class="rank-flavour">Got it on the third clue. Impressive.</div>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="stat-row">
+          <div class="stat-pill"><span class="stat-value">800</span><span class="stat-label">Score</span></div>
+          <div class="stat-pill"><span class="stat-value">3rd clue</span><span class="stat-label">Guessed on</span></div>
+          <div class="stat-pill"><span class="stat-value">×2</span><span class="stat-label">Wager</span></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary">Share Result</button>
+          <button class="btn-ghost">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHELF PRICE WIN -->
+<div class="modal-scene" id="scene-shelf-price-win">
+  <div class="scene-label">Shelf Price — Win</div>
+  <div class="confetti-wrap">
+    <canvas class="confetti" id="confetti-sp"></canvas>
+    <div class="modal win">
+      <div class="hero">
+        <div class="hero-shelf-price">
+          <div class="shelf-scorecard-label">Today's 10 rounds</div>
+          <div class="shelf-scorecard">
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#1a2a3a;">ER</div>
+                <div class="round-cover" style="background:#2a1a1a;">SD</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#1a3a2a;">HK</div>
+                <div class="round-cover" style="background:#3a1a2a;">GTA</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#2a2a1a;">MC</div>
+                <div class="round-cover" style="background:#1a1a3a;">COD</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#3a2a1a;">ZD</div>
+                <div class="round-cover" style="background:#1a3a3a;">AM</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#2a1a3a;">FF</div>
+                <div class="round-cover" style="background:#3a3a1a;">CE</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#1a2a1a;">DS</div>
+                <div class="round-cover" style="background:#3a1a3a;">BL</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#2a3a1a;">SP</div>
+                <div class="round-cover" style="background:#1a1a2a;">HZ</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#3a2a2a;">RD</div>
+                <div class="round-cover" style="background:#2a3a3a;">AU</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#1a3a1a;">TW</div>
+                <div class="round-cover" style="background:#3a1a1a;">OF</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#2a1a2a;">VB</div>
+                <div class="round-cover" style="background:#1a2a2a;">SH</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="result-heading">Let's go champ</div>
+        <div class="result-subheading">Didn't miss a beat.</div>
+        <div class="score-pill">
+          <span class="score-number">1000</span>
+          <span class="score-label">PTS</span>
+        </div>
+        <div class="rank-block">
+          <div class="rank-badge pulse">BADGE</div>
+          <div class="rank-name">Industry Insider</div>
+          <div class="rank-flavour">You knew exactly what things cost. Suspicious, honestly.</div>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="stat-row">
+          <div class="stat-pill"><span class="stat-value">1000</span><span class="stat-label">Score</span></div>
+          <div class="stat-pill"><span class="stat-value">10</span><span class="stat-label">Streak</span></div>
+          <div class="stat-pill"><span class="stat-value">10/10</span><span class="stat-label">Correct</span></div>
+        </div>
+        <div class="pip-row">
+          <div class="pip correct"></div><div class="pip correct"></div><div class="pip correct"></div>
+          <div class="pip correct"></div><div class="pip correct"></div><div class="pip correct"></div>
+          <div class="pip correct"></div><div class="pip correct"></div><div class="pip correct"></div>
+          <div class="pip correct"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-primary">Share Result</button>
+          <button class="btn-ghost">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOSS STATE -->
+<div class="modal-scene" id="scene-loss">
+  <div class="scene-label">Loss State — Shelf Price example</div>
+  <div class="modal loss">
+    <div class="hero">
+        <div class="hero-shelf-price" style="background: var(--cream);">
+          <div class="shelf-scorecard-label">Today's 10 rounds</div>
+          <div class="shelf-scorecard">
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#1a2a3a;">ER</div>
+                <div class="round-cover" style="background:#2a1a1a;">SD</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#1a3a2a;">HK</div>
+                <div class="round-cover" style="background:#3a1a2a;">GTA</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#2a2a1a;">MC</div>
+                <div class="round-cover" style="background:#1a1a3a;">COD</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+            <div class="shelf-round correct">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#3a2a1a;">ZD</div>
+                <div class="round-cover" style="background:#1a3a3a;">AM</div>
+              </div>
+              <div class="round-result">✓</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#2a1a3a;">FF</div>
+                <div class="round-cover" style="background:#3a3a1a;">CE</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#1a2a1a;">DS</div>
+                <div class="round-cover" style="background:#3a1a3a;">BL</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#2a3a1a;">SP</div>
+                <div class="round-cover" style="background:#1a1a2a;">HZ</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#3a2a2a;">RD</div>
+                <div class="round-cover" style="background:#2a3a3a;">AU</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#1a3a1a;">TW</div>
+                <div class="round-cover" style="background:#3a1a1a;">OF</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+            <div class="shelf-round wrong">
+              <div class="round-covers">
+                <div class="round-cover" style="background:#2a1a2a;">VB</div>
+                <div class="round-cover" style="background:#1a2a2a;">SH</div>
+              </div>
+              <div class="round-result">✗</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="modal-body">
+      <div class="result-heading">So you didn't win...</div>
+      <div class="result-subheading">Come back tomorrow — it resets at midnight.</div>
+      <div class="score-pill">
+        <span class="score-number" style="color:var(--ink-mid);">340</span>
+        <span class="score-label">PTS</span>
+      </div>
+      <div class="rank-block">
+        <div class="rank-badge">BADGE</div>
+        <div class="rank-name" style="color:var(--ink-mid);">Just Another Consumer</div>
+        <div class="rank-flavour">The prices on some of these are genuinely criminal.</div>
+      </div>
+      <div class="modal-divider"></div>
+      <div class="stat-row">
+        <div class="stat-pill"><span class="stat-value">340</span><span class="stat-label">Score</span></div>
+        <div class="stat-pill"><span class="stat-value">4</span><span class="stat-label">Streak</span></div>
+        <div class="stat-pill"><span class="stat-value">4/10</span><span class="stat-label">Correct</span></div>
+      </div>
+      <div class="pip-row">
+        <div class="pip correct"></div><div class="pip correct"></div><div class="pip correct"></div>
+        <div class="pip correct"></div><div class="pip wrong"></div><div class="pip wrong"></div>
+        <div class="pip wrong"></div><div class="pip wrong"></div><div class="pip wrong"></div>
+        <div class="pip wrong"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" style="background:var(--ink-mid); box-shadow:none;">Share Result</button>
+        <button class="btn-ghost">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showScene(id) {
+    document.querySelectorAll('.modal-scene').forEach(s => s.classList.remove('visible'))
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+    document.getElementById('scene-' + id).classList.add('visible')
+    event.target.classList.add('active')
+    // re-run confetti if win scene
+    if (id !== 'loss') setTimeout(() => launchConfetti(id), 100)
+  }
+
+  // Simple confetti
+  function launchConfetti(sceneId) {
+    const canvasMap = {
+      'game-sense-win': 'confetti-gs',
+      'street-date-win': 'confetti-sd',
+      'shelf-price-win': 'confetti-sp',
+    }
+    const canvasId = canvasMap[sceneId]
+    if (!canvasId) return
+    const canvas = document.getElementById(canvasId)
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    canvas.width = canvas.offsetWidth
+    canvas.height = canvas.offsetHeight
+
+    const colours = ['#4A8FE8', '#C8873A', '#27A85A', '#F0EBE0', '#2D6BC4']
+    const pieces = Array.from({length: 60}, () => ({
+      x: Math.random() * canvas.width,
+      y: -10,
+      w: Math.random() * 8 + 4,
+      h: Math.random() * 4 + 2,
+      colour: colours[Math.floor(Math.random() * colours.length)],
+      vx: (Math.random() - 0.5) * 2,
+      vy: Math.random() * 3 + 1.5,
+      rot: Math.random() * 360,
+      vr: (Math.random() - 0.5) * 6,
+      opacity: 1,
+    }))
+
+    let frame
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      let alive = false
+      pieces.forEach(p => {
+        p.x += p.vx
+        p.y += p.vy
+        p.rot += p.vr
+        if (p.y > canvas.height * 0.6) p.opacity -= 0.025
+        if (p.opacity > 0) {
+          alive = true
+          ctx.save()
+          ctx.globalAlpha = Math.max(0, p.opacity)
+          ctx.translate(p.x, p.y)
+          ctx.rotate(p.rot * Math.PI / 180)
+          ctx.fillStyle = p.colour
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h)
+          ctx.restore()
+        }
+      })
+      if (alive) frame = requestAnimationFrame(draw)
+      else ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+    cancelAnimationFrame(frame)
+    draw()
+  }
+
+  // Auto-run confetti on load
+  setTimeout(() => launchConfetti('game-sense-win'), 300)
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect, useCallback, use } from 'react'
+import { useState, useEffect, useCallback, useMemo, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import DiscoverMore from '@/components/DiscoverMore'
@@ -21,9 +21,18 @@ import AnimatedScore from '@/components/AnimatedScore'
 import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
 import SentenceClue, { type BlankDef, BLANK_COSTS } from '../components/SentenceClue'
-import WinModal from '../components/WinModal'
+import GameEndModal from '@/components/games/GameEndModal'
+import {
+  COPY,
+  pickRandom,
+  getGameSenseRank,
+  GAME_SENSE_FLAVOUR,
+} from '@/components/games/GameEndModal.copy'
+import { igdbCoverUrl } from '../../street-date/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
 import ProximityCounter from '../components/ProximityCounter'
+import ResultCard from '@/components/games/ResultCard'
+import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
 
 const GUESS_COST = 20
 
@@ -151,6 +160,19 @@ export default function GameSenseDayPage({
     setHints((prev) => [...prev, { title: hintGame.title, rank: targetRank }])
   }, [state, pendingGuess, hints, answer])
 
+  // Modal copy — picked once when modal opens, stable across re-renders
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const modalCopy = useMemo(() => {
+    const score = state?.score ?? 0
+    const rankName = getGameSenseRank(score)
+    return {
+      heading: pickRandom(COPY.win.headings),
+      subheading: pickRandom(COPY.win.subheadings),
+      rankName,
+      rankFlavour: pickRandom(GAME_SENSE_FLAVOUR[rankName]),
+    }
+  }, [showWinModal])
+
   // While loading from localStorage
   if (!state) {
     return (
@@ -171,7 +193,7 @@ export default function GameSenseDayPage({
     <>
       <Header />
 
-      <main className="font-game mx-auto max-w-2xl px-4 py-8">
+      <main className={`font-game mx-auto px-4 py-8 ${state.won && !showWinModal && !isAnimating ? 'max-w-7xl lg:px-8' : 'max-w-2xl'}`}>
         {/* Game header */}
         <div className="mb-6 text-center">
           <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
@@ -230,8 +252,8 @@ export default function GameSenseDayPage({
           </div>
         )}
 
-        {/* Sentence clue */}
-        {playable && (
+        {/* Sentence clue — hidden once won (post-game section shows revealAll version) */}
+        {playable && !state.won && (
           <div className="mb-8">
             <SentenceClue
               answer={answer}
@@ -290,31 +312,36 @@ export default function GameSenseDayPage({
           </div>
         )}
 
-        {/* Won inline message — when won and modal closed */}
-        {state.won && !showWinModal && !isAnimating && (
-          <div className="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-4 text-center">
-            <p className="text-sm font-semibold text-green-700">
-              You guessed it! &mdash; {answer.title}
-            </p>
-            <button
-              onClick={() => setShowWinModal(true)}
-              className="mt-2 text-sm text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
-            >
-              View results
-            </button>
-          </div>
-        )}
-
-        {/* Guess list */}
-        {playable && state.guesses.length > 0 && !isAnimating && (
-          <div className="mb-8">
-            <GuessList guesses={state.guesses} />
-          </div>
-        )}
-
-        {/* End-game: nav pills + discover more */}
+        {/* Won — post-game page (when modal closed) */}
         {state.won && !showWinModal && !isAnimating && (
           <>
+            {/* Revealed sentence — all blanks shown */}
+            <div className="mb-8">
+              <SentenceClue
+                answer={answer}
+                blanksRevealed={state.blanksRevealed}
+                score={0}
+                onRevealBlank={() => {}}
+                disabled={true}
+                revealAll
+              />
+            </div>
+
+            <div className="mb-6">
+              <ResultCard
+                game="game-sense"
+                score={state.score}
+                streak={0}
+                won={true}
+                puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                onViewResults={() => setShowWinModal(true)}
+              />
+            </div>
+
+            <div className="mb-8">
+              <DailyBadgeShelf currentGame="game-sense" />
+            </div>
+
             <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
               {!today && (
                 <Link
@@ -335,6 +362,13 @@ export default function GameSenseDayPage({
               <DiscoverMore currentGame="game-sense" />
             </div>
           </>
+        )}
+
+        {/* Guess list — during gameplay */}
+        {playable && state.guesses.length > 0 && !isAnimating && !state.won && (
+          <div className="mb-8">
+            <GuessList guesses={state.guesses} />
+          </div>
         )}
 
         {/* Nav pills — during gameplay */}
@@ -365,12 +399,54 @@ export default function GameSenseDayPage({
 
       {/* Win modal */}
       {showWinModal && state.won && (
-        <WinModal
-          dateStr={date}
-          answer={answer}
+        <GameEndModal
+          result="win"
           score={state.score}
-          guesses={state.guesses}
-          blanksRevealedCount={state.blanksRevealed.length}
+          heading={modalCopy.heading}
+          subheading={modalCopy.subheading}
+          rankName={modalCopy.rankName}
+          rankFlavour={modalCopy.rankFlavour}
+          stats={[
+            { label: 'Score', value: String(state.score) },
+            { label: 'Guesses', value: String(state.guesses.length) },
+            { label: 'Clues Revealed', value: `${state.blanksRevealed.length}/5` },
+          ]}
+          heroZone={
+            answer.igdbImageId ? (
+              <div className="relative w-full overflow-hidden bg-secondary" style={{ maxHeight: '240px' }}>
+                <img src={igdbCoverUrl(answer.igdbImageId)} alt={answer.title} className="w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="absolute bottom-3 left-4 right-4">
+                  <h3 className="font-heading text-xl font-black text-white drop-shadow-md">
+                    {answer.title}
+                  </h3>
+                  <p className="text-xs font-semibold text-white/70">
+                    {answer.year} &middot; {answer.genres.slice(0, 2).join(', ')}
+                  </p>
+                </div>
+              </div>
+            ) : null
+          }
+          onShare={async () => {
+            const number = formatGameNumber(date)
+            const emojiRow = state.guesses
+              .map((g) => {
+                if (g.proximity <= 50) return '\u{1F7E9}'
+                if (g.proximity <= 200) return '\u{1F7E8}'
+                if (g.proximity <= 500) return '\u{1F7E7}'
+                return '\u{1F7E5}'
+              })
+              .join('')
+            const lines = [
+              `Game Sense ${number} \u00b7 ${state.score}/1000`,
+              emojiRow,
+              state.blanksRevealed.length > 0
+                ? `${state.guesses.length} guesses \u00b7 ${state.blanksRevealed.length}/5 clues`
+                : `${state.guesses.length} guesses`,
+              'idlehours.co.uk/play/game-sense',
+            ]
+            try { await navigator.clipboard.writeText(lines.join('\n')) } catch {}
+          }}
           onClose={() => setShowWinModal(false)}
         />
       )}

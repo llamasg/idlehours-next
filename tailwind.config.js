@@ -46,6 +46,25 @@ export default {
           '0%, 100%': { boxShadow: '0 0 0 0 rgba(200,135,58,0.4)' },
           '50%': { boxShadow: '0 0 0 4px rgba(200,135,58,0)' },
         },
+        'badge-pulse': {
+          '0%': { transform: 'scale(0.8)', opacity: '0' },
+          '50%': { transform: 'scale(1.1)' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        'stamp-bounce': {
+          '0%': { transform: 'scale(1.8) translateY(-20px)', opacity: '0' },
+          '60%': { transform: 'scale(0.95) translateY(2px)', opacity: '1' },
+          '80%': { transform: 'scale(1.05) translateY(-1px)' },
+          '100%': { transform: 'scale(1) translateY(0)' },
+        },
+        'ink-ring': {
+          '0%': { transform: 'scale(1)', opacity: '0.6' },
+          '100%': { transform: 'scale(1.8)', opacity: '0' },
+        },
+        'score-float': {
+          '0%': { transform: 'translateY(0)', opacity: '1' },
+          '100%': { transform: 'translateY(-24px)', opacity: '0' },
+        },
       },
       animation: {
         echo: 'echo 0.6s ease-out',
@@ -57,6 +76,10 @@ export default {
         'blank-click': 'blank-click 0.45s cubic-bezier(0.22,1.2,0.36,1) both',
         'score-flash': 'score-flash 0.4s ease',
         'pip-pulse': 'pip-pulse 1.2s ease-in-out infinite',
+        'badge-pulse': 'badge-pulse 1.2s ease-out forwards',
+        'stamp-bounce': 'stamp-bounce 0.5s cubic-bezier(0.34,1.56,0.64,1) both',
+        'ink-ring': 'ink-ring 0.8s ease-out both',
+        'score-float': 'score-float 1.2s ease-out both',
       },
   		borderRadius: {
   			lg: 'var(--radius)',

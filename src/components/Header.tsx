@@ -60,8 +60,8 @@ export default function Header({ transparent = false }: { transparent?: boolean 
             className="shrink-0 flex items-center rounded-full"
             style={pillStyle}
           >
-            {/* Desktop: wide text logo, white */}
-            <div className="hidden md:flex items-center px-6 py-3">
+            {/* Desktop: wide text logo — only at ≥960px */}
+            <div className="hidden min-[960px]:flex items-center px-6 py-3">
               <img
                 src="/images/icons/icon_Idlehours logo horizontal-wide-mobile header.svg"
                 alt="Idle Hours"
@@ -70,8 +70,8 @@ export default function Header({ transparent = false }: { transparent?: boolean 
                 draggable={false}
               />
             </div>
-            {/* Mobile/tablet: icon logo in perfect circle */}
-            <div className="flex md:hidden items-center justify-center w-11 h-11">
+            {/* Icon logo — below 960px */}
+            <div className="flex min-[960px]:hidden items-center justify-center w-11 h-11">
               <img
                 src="/images/IH_ICON_LOGO.svg"
                 alt="Idle Hours"
@@ -84,7 +84,7 @@ export default function Header({ transparent = false }: { transparent?: boolean 
 
           {/* Nav pill — desktop */}
           <nav
-            className="hidden md:flex items-center gap-6 rounded-full px-2 py-2 absolute left-1/2 -translate-x-1/2"
+            className="hidden min-[640px]:flex items-center gap-3 min-[960px]:gap-6 rounded-full px-5 min-[960px]:px-4 py-2 absolute left-1/2 -translate-x-1/2"
             style={pillStyle}
           >
             {NAV_LINKS.map((link) => (
@@ -110,7 +110,7 @@ export default function Header({ transparent = false }: { transparent?: boolean 
           {/* Theme toggle pill — desktop */}
           <button
             onClick={() => { hasClickedTheme.current = true; setTheme(isDark ? 'light' : 'dark') }}
-            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden text-white/70 transition-colors hover:text-white"
+            className="hidden min-[640px]:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden text-white/70 transition-colors hover:text-white"
             style={pillStyle}
             aria-label="Toggle theme"
           >
@@ -140,7 +140,7 @@ export default function Header({ transparent = false }: { transparent?: boolean 
 
           {/* Burger pill — mobile */}
           <button
-            className="relative z-[60] flex items-center justify-center rounded-full p-2.5 md:hidden"
+            className="relative z-[60] flex items-center justify-center rounded-full p-2.5 min-[640px]:hidden"
             style={pillStyle}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
@@ -166,7 +166,7 @@ export default function Header({ transparent = false }: { transparent?: boolean 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[55] flex flex-col items-center justify-between bg-background px-6 py-8 md:hidden"
+            className="fixed inset-0 z-[55] flex flex-col items-center justify-between bg-background px-6 py-8 min-[640px]:hidden"
           >
             {/* Close button — top right */}
             <button

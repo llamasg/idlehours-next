@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect, useCallback, use } from 'react'
+import { useState, useEffect, useCallback, useMemo, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import DiscoverMore from '@/components/DiscoverMore'
@@ -18,8 +18,17 @@ import {
 import { loadDayState, saveDayState, WRONG_PENALTY, TARGET_ROUNDS, type DayState } from '../lib/storage'
 import GameCards from '../components/GameCards'
 import ProgressBar from '../components/ProgressBar'
-import ResultOverlay from '../components/ResultOverlay'
+import GameEndModal from '@/components/games/GameEndModal'
+import {
+  COPY,
+  pickRandom,
+  getShelfPriceRank,
+  SHELF_PRICE_FLAVOUR,
+} from '@/components/games/GameEndModal.copy'
+import { igdbCoverUrl } from '../../street-date/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
+import ResultCard from '@/components/games/ResultCard'
+import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
 
 export default function ShelfPriceDayPage({
   params,
@@ -124,6 +133,23 @@ export default function ShelfPriceDayPage({
   const handleStart = () => {
     setStarted(true)
   }
+
+  // Modal copy — picked once when modal opens
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const modalCopy = useMemo(() => {
+    const score = state?.score ?? 0
+    const streak = state?.streak ?? 0
+    const shelfWon = score >= 500
+    const result = shelfWon ? 'win' : 'loss'
+    const rankName = getShelfPriceRank(streak)
+    return {
+      result: result as 'win' | 'loss',
+      heading: pickRandom(COPY[result].headings),
+      subheading: pickRandom(COPY[result].subheadings),
+      rankName,
+      rankFlavour: pickRandom(SHELF_PRICE_FLAVOUR[rankName]),
+    }
+  }, [showResult])
 
   // Loading
   if (!state) {
@@ -262,7 +288,7 @@ export default function ShelfPriceDayPage({
           </div>
         )}
 
-        {/* Finished inline (when overlay closed) */}
+        {/* Finished — post-game page (when modal closed) */}
         {state.finished && !showResult && (
           <>
             <div className="mb-4 text-center">
@@ -272,26 +298,21 @@ export default function ShelfPriceDayPage({
               <p className="mt-1 font-heading text-sm text-muted-foreground">
                 {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
               </p>
-              <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-card px-5 py-2">
-                <span className="font-heading text-2xl font-black text-[hsl(var(--game-blue))]">
-                  {state.score}
-                </span>
-                <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
-                  pts
-                </span>
-              </div>
             </div>
 
-            <div className="mb-6 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-4 text-center">
-              <p className="text-sm font-semibold text-green-700">
-                {state.score === 1000 ? 'Perfect score!' : `${state.streak}/${TARGET_ROUNDS} correct`}
-              </p>
-              <button
-                onClick={() => setShowResult(true)}
-                className="mt-2 text-sm text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
-              >
-                View results
-              </button>
+            <div className="mb-6">
+              <ResultCard
+                game="shelf-price"
+                score={state.score}
+                streak={state.streak}
+                won={state.won}
+                puzzleLabel={`Shelf Price ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                onViewResults={() => setShowResult(true)}
+              />
+            </div>
+
+            <div className="mb-8">
+              <DailyBadgeShelf currentGame="shelf-price" />
             </div>
 
             {/* Nav pills */}
@@ -343,11 +364,77 @@ export default function ShelfPriceDayPage({
 
       {/* Result overlay */}
       {showResult && state.finished && (
-        <ResultOverlay
-          dateStr={date}
+        <GameEndModal
+          result={modalCopy.result}
           score={state.score}
-          streak={state.streak}
-          won={state.score === 1000}
+          heading={modalCopy.heading}
+          subheading={modalCopy.subheading}
+          rankName={modalCopy.rankName}
+          rankFlavour={modalCopy.rankFlavour}
+          stats={[
+            { label: 'Score', value: String(state.score) },
+            { label: 'Streak', value: String(state.streak) },
+            { label: 'Correct', value: `${state.streak}/${TARGET_ROUNDS}` },
+          ]}
+          heroZone={
+            <div className="px-4 pt-5 pb-2">
+              <div className="grid grid-cols-5 gap-1.5">
+                {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
+                  const correct = roundResults[i]
+                  const played = i < state.choices.length
+                  return (
+                    <div
+                      key={i}
+                      className={`flex flex-col items-center gap-1 rounded-lg border-2 p-1.5 ${
+                        !played
+                          ? 'border-transparent opacity-30'
+                          : correct
+                            ? 'border-[hsl(var(--game-green))]/40'
+                            : 'border-[hsl(var(--game-red))]/30'
+                      }`}
+                    >
+                      <div className="flex w-full gap-0.5">
+                        <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-sm bg-muted/30">
+                          <img src={igdbCoverUrl(left.igdbImageId)} alt="" className="h-full w-full object-cover" />
+                        </div>
+                        <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-sm bg-muted/30">
+                          <img src={igdbCoverUrl(right.igdbImageId)} alt="" className="h-full w-full object-cover" />
+                        </div>
+                      </div>
+                      {played && (
+                        <span className={`text-[10px] font-bold ${correct ? 'text-[hsl(var(--game-green))]' : 'text-[hsl(var(--game-red))]'}`}>
+                          {correct ? '\u2713' : '\u2717'}
+                        </span>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          }
+          pipRow={
+            <div className="flex justify-center gap-1.5">
+              {roundResults.map((correct, i) => (
+                <div
+                  key={i}
+                  className={`h-2.5 w-2.5 rounded-full ${
+                    correct
+                      ? 'bg-[hsl(var(--game-green))]'
+                      : 'bg-[hsl(var(--game-ink-light))]/30'
+                  }`}
+                />
+              ))}
+            </div>
+          }
+          onShare={async () => {
+            const number = formatGameNumber(date)
+            const lines = [
+              `Shelf Price ${number} \u00b7 ${state.score}/1000`,
+              `${state.streak}/${TARGET_ROUNDS} correct${state.score === 1000 ? ' \u00b7 Perfect! \u{1F3C6}' : ''}`,
+              'idlehours.co.uk/play/shelf-price',
+            ]
+            try { await navigator.clipboard.writeText(lines.join('\n')) } catch {}
+          }}
           onClose={() => setShowResult(false)}
         />
       )}
