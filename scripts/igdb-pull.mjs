@@ -17,7 +17,8 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const ROOT = path.resolve(__dirname, '..')
 
-const REQUESTED = parseInt(process.argv[2] || '200', 10)
+const MANIFEST_MODE = process.argv.includes('--manifest')
+const REQUESTED = parseInt(process.argv.find(a => /^\d+$/.test(a)) || '200', 10)
 const BATCH_SIZE = 50
 const STAGING_PATH = path.join(__dirname, '.igdb-staging.json')
 
@@ -73,11 +74,16 @@ async function queryIGDB(token, endpoint, body) {
     },
     body,
   })
+  const text = await res.text()
   if (!res.ok) {
-    const text = await res.text()
     throw new Error(`IGDB ${endpoint} query failed (${res.status}): ${text}`)
   }
-  return res.json()
+  try {
+    return JSON.parse(text)
+  } catch {
+    console.error(`IGDB response not JSON:`, text.slice(0, 500))
+    return []
+  }
 }
 
 function sleep(ms) {
@@ -89,13 +95,13 @@ function sleep(ms) {
 function getExistingIds() {
   const dbPath = path.resolve(ROOT, 'src/data/games-db.ts')
   const dbSource = fs.readFileSync(dbPath, 'utf8')
-  const arrayMatch = dbSource.match(/export const GAMES_DB:\s*GameEntry\[\]\s*=\s*(\[[\s\S]*\])/)
-  if (!arrayMatch) {
-    console.error('Could not extract GAMES_DB array from games-db.ts')
-    process.exit(1)
+  // Extract IDs via regex — avoids eval issues with TS syntax
+  const idRegex = /id:\s*'([^']+)'/g
+  const ids = new Set()
+  let match
+  while ((match = idRegex.exec(dbSource)) !== null) {
+    ids.add(match[1])
   }
-  const games = new Function(`return ${arrayMatch[1]}`)()
-  const ids = new Set(games.map((g) => g.id))
   console.log(`Existing database: ${ids.size} games`)
   return ids
 }
@@ -310,51 +316,111 @@ function normaliseGame(igdb) {
   }
 }
 
+// ── IGDB field list (shared across all queries) ─────────────────────────────
+
+const IGDB_FIELDS = 'fields name, slug, first_release_date, genres.name, platforms.name, age_ratings.rating, age_ratings.category, total_rating, cover.image_id, game_modes.name, keywords.name, total_rating_count'
+
+// ── Collect games from a single IGDB query ──────────────────────────────────
+
+async function collectFromQuery(token, whereClause, existingIds, limit, label) {
+  const collected = []
+  let offset = 0
+  const MAX_OFFSET = 5000
+
+  while (collected.length < limit && offset < MAX_OFFSET) {
+    const query = `${IGDB_FIELDS}; where ${whereClause}; sort total_rating_count desc; limit ${BATCH_SIZE}; offset ${offset};`
+
+    const batch = await queryIGDB(token, 'games', query)
+    if (batch.length === 0) break
+
+    let skippedNull = 0, skippedDup = 0
+    for (const igdb of batch) {
+      const entry = normaliseGame(igdb)
+      if (!entry) { skippedNull++; continue }
+      if (existingIds.has(entry.id)) { skippedDup++; continue }
+
+      collected.push(entry)
+      existingIds.add(entry.id)
+      if (collected.length >= limit) break
+    }
+
+    offset += BATCH_SIZE
+    if (label) {
+      console.log(`  [${label}] offset ${offset - BATCH_SIZE}: ${batch.length} results, +${collected.length - Math.max(0, collected.length - batch.length + skippedNull + skippedDup)} new (${collected.length}/${limit})`)
+    }
+
+    await sleep(300)
+  }
+
+  return collected
+}
+
+// ── Blind pull mode (original behaviour) ────────────────────────────────────
+
+async function blindPull(token, existingIds) {
+  console.log(`Blind pull mode: pulling up to ${REQUESTED} new games...`)
+  const minRating = 50
+  const whereClause = `total_rating_count > ${minRating} & first_release_date != null`
+  return collectFromQuery(token, whereClause, existingIds, REQUESTED, 'blind')
+}
+
+// ── Manifest-driven pull mode ───────────────────────────────────────────────
+
+async function manifestPull(token, existingIds) {
+  // Dynamic import of manifest module
+  const { auditDatabase, buildPriorityQueries, IGDB_GENRE_IDS } = await import('./db-manifest.mjs')
+  const audit = auditDatabase()
+  const { tier, queries } = buildPriorityQueries(audit, REQUESTED)
+
+  console.log(`Manifest mode: ${tier.label}`)
+  console.log(`Database: ${audit.totalGames} games`)
+  console.log(`Priority queries: ${queries.length}`)
+
+  const allCollected = []
+
+  for (const q of queries) {
+    if (allCollected.length >= REQUESTED) break
+
+    const remaining = REQUESTED - allCollected.length
+    const toFetch = Math.min(q.needed, remaining)
+
+    let whereClause, label
+
+    if (q.type === 'genre-gap') {
+      whereClause = `genres = [${q.igdbGenreId}] & total_rating_count > ${q.minRatingCount} & first_release_date != null`
+      label = `genre:${q.genre}`
+      console.log(`\n  Filling ${q.genre} gap: have ${q.current}/${q.target}, fetching ${toFetch}`)
+    } else if (q.type === 'era-gap') {
+      const fromTs = Math.floor(new Date(`${q.fromYear}-01-01`).getTime() / 1000)
+      const toTs = Math.floor(new Date(`${q.toYear}-12-31`).getTime() / 1000)
+      whereClause = `first_release_date >= ${fromTs} & first_release_date <= ${toTs} & total_rating_count > ${q.minRatingCount} & first_release_date != null`
+      label = `era:${q.era}`
+      console.log(`\n  Filling ${q.era} gap: have ${q.current}/${q.target}, fetching ${toFetch}`)
+    } else {
+      // General fill
+      whereClause = `total_rating_count > ${q.minRatingCount} & first_release_date != null`
+      label = 'general'
+      console.log(`\n  General fill: fetching ${toFetch} (rating > ${q.minRatingCount})`)
+    }
+
+    const batch = await collectFromQuery(token, whereClause, existingIds, toFetch, label)
+    allCollected.push(...batch)
+    console.log(`  → Got ${batch.length} games`)
+  }
+
+  return allCollected
+}
+
 // ── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
   const existingIds = getExistingIds()
   const token = await getTwitchToken()
-  console.log(`Authenticated with Twitch. Pulling up to ${REQUESTED} new games...`)
+  console.log(`Authenticated with Twitch. Mode: ${MANIFEST_MODE ? 'manifest' : 'blind'}`)
 
-  const collected = []
-  let offset = 0
-  const MAX_OFFSET = 5000 // IGDB hard limit
-
-  while (collected.length < REQUESTED && offset < MAX_OFFSET) {
-    const query = [
-      'fields name, slug, first_release_date, genres.name, platforms.name,',
-      'age_ratings.rating, age_ratings.category, total_rating,',
-      'cover.image_id, game_modes.name, keywords.name;',
-      'where rating_count > 50 & category = 0 & first_release_date != null;',
-      'sort rating_count desc;',
-      `limit ${BATCH_SIZE};`,
-      `offset ${offset};`,
-    ].join('\n')
-
-    const batch = await queryIGDB(token, 'games', query)
-
-    if (batch.length === 0) {
-      console.log('No more results from IGDB.')
-      break
-    }
-
-    for (const igdb of batch) {
-      const entry = normaliseGame(igdb)
-      if (!entry) continue
-      if (existingIds.has(entry.id)) continue
-
-      collected.push(entry)
-      existingIds.add(entry.id) // prevent duplicates within this run
-      if (collected.length >= REQUESTED) break
-    }
-
-    offset += BATCH_SIZE
-    console.log(`  Fetched batch at offset ${offset - BATCH_SIZE}: ${batch.length} results, ${collected.length}/${REQUESTED} new games collected`)
-
-    // Rate limit: IGDB allows 4 requests/second
-    await sleep(300)
-  }
+  const collected = MANIFEST_MODE
+    ? await manifestPull(token, existingIds)
+    : await blindPull(token, existingIds)
 
   // Write staging file
   fs.writeFileSync(STAGING_PATH, JSON.stringify(collected, null, 2), 'utf8')

@@ -70,7 +70,8 @@
       "Bash(wc -l d:/websites/IdleHours/src/app/games/[slug]/page.tsx)",
       "WebFetch(domain:nextbricks.io)",
       "Bash(sed \"s/tags: \\\\[//\")",
-      "Bash(sed \"s/\\\\]//\")"
+      "Bash(sed \"s/\\\\]//\")",
+      "Bash(xxd)"
     ]
   }
 }
