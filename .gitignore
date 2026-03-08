@@ -41,5 +41,8 @@ pip/google-service-account.json
 google-service-account.json
 pip/idle-hours-pip-*.json
 
+# IGDB staging data (temporary, not committed)
+scripts/.igdb-staging.json
+
 # Next.js build
 .next/

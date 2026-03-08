@@ -68,7 +68,9 @@
       "Bash(npm ls lucide-react --prefix \"d:/websites/IdleHours\")",
       "Bash(python3 -c \":*)",
       "Bash(wc -l d:/websites/IdleHours/src/app/games/[slug]/page.tsx)",
-      "WebFetch(domain:nextbricks.io)"
+      "WebFetch(domain:nextbricks.io)",
+      "Bash(sed \"s/tags: \\\\[//\")",
+      "Bash(sed \"s/\\\\]//\")"
     ]
   }
 }

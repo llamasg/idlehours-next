@@ -5,6 +5,14 @@ import { VALID_YEARS } from '../data/years'
 import { getGamesForYear } from './roundUtils'
 import type { StreetDateGame } from '../data/games'
 
+// TODO: STABILITY — daily game selection is derived from GAMES.length and array
+// shuffling. Adding games changes past date assignments. This is acceptable pre-launch
+// but must be fixed before significant archive growth.
+//
+// Fix: build a pre-computed daily-schedule.ts that maps dates to game IDs explicitly.
+// Trigger: implement this before launch or before database exceeds 2,000 games,
+// whichever comes first. See docs/plans/daily-schedule-stability.md
+
 // ── Constants ────────────────────────────────────────────────────────────────
 
 /** The date Street Date launched, as a YYYY-MM-DD string. */
