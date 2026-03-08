@@ -152,8 +152,6 @@ export default function GameplayScreen({
           totalGuesses={totalGuesses}
           nextMilestoneLabel={nextMilestone.label}
           nextMilestoneRemaining={nextMilestone.remaining}
-          pool={pool}
-          guessedIds={guessedIdsRef.current}
         />
       </div>
     </div>

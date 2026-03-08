@@ -4,9 +4,33 @@ import { type GameEntry } from '@/data/games-db'
 export function normalize(s: string): string {
   return s
     .toLowerCase()
-    .replace(/[''.,:;!?\-"()&]/g, '')
+    .replace(/[''\u2019.,:;!?\-"()&]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
+}
+
+/**
+ * Generate fuzzy variants of a normalized string for lenient matching.
+ * Handles pluralization differences (souls/soul, demons/demon) etc.
+ */
+function fuzzyVariants(norm: string): string[] {
+  const variants = [norm]
+  const words = norm.split(' ')
+
+  // For each word, try adding/removing trailing 's'
+  for (let i = 0; i < words.length; i++) {
+    const w = words[i]
+    const toggled = [...words]
+    if (w.endsWith('s') && w.length > 2) {
+      toggled[i] = w.slice(0, -1) // demons → demon
+      variants.push(toggled.join(' '))
+    } else {
+      toggled[i] = w + 's' // demon → demons
+      variants.push(toggled.join(' '))
+    }
+  }
+
+  return variants
 }
 
 /**
@@ -69,16 +93,30 @@ export function checkGuess(
   const norm = normalize(input)
   if (!norm) return { result: 'wrong' }
 
-  // Exact alias match first
+  // 1. Exact alias match
   let gameId = aliasMap.get(norm)
 
-  // Fuzzy: try prefix match on aliases if no exact match
+  // 2. Try fuzzy variants (plural/singular toggling)
+  if (!gameId) {
+    for (const variant of fuzzyVariants(norm)) {
+      gameId = aliasMap.get(variant)
+      if (gameId) break
+    }
+  }
+
+  // 3. Check if input matches any alias with fuzzy variants on the alias side too
   if (!gameId) {
     for (const [alias, id] of aliasMap) {
-      if (alias.startsWith(norm) && norm.length >= 3) {
-        gameId = id
-        break
+      // Check if any fuzzy variant of the input matches any fuzzy variant of the alias
+      const aliasVariants = fuzzyVariants(alias)
+      const inputVariants = fuzzyVariants(norm)
+      for (const iv of inputVariants) {
+        if (aliasVariants.includes(iv)) {
+          gameId = id
+          break
+        }
       }
+      if (gameId) break
     }
   }
 
@@ -87,31 +125,4 @@ export function checkGuess(
 
   const game = pool.find((g) => g.id === gameId)
   return { result: 'correct', gameId, title: game?.title }
-}
-
-/**
- * Get the best autocomplete suggestion for current input.
- * Returns the full game title if a prefix match is found, or null.
- */
-export function getSuggestion(
-  input: string,
-  pool: GameEntry[],
-  guessedIds: Set<string>,
-): string | null {
-  const norm = normalize(input)
-  if (norm.length < 2) return null
-
-  // Find best match: prefer shorter titles (more specific matches)
-  let best: GameEntry | null = null
-  for (const game of pool) {
-    if (guessedIds.has(game.id)) continue
-    const normTitle = normalize(game.title)
-    if (normTitle.startsWith(norm)) {
-      if (!best || game.title.length < best.title.length) {
-        best = game
-      }
-    }
-  }
-
-  return best?.title ?? null
 }
