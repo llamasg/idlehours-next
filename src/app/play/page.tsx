@@ -66,6 +66,16 @@ const GAMES: GameCard[] = [
     iconBg: 'bg-rose-500/15',
     btnColor: 'bg-rose-600 hover:bg-rose-700',
   },
+  {
+    title: 'Blitz',
+    subtitle: 'Name as many games as you can before time runs out.',
+    icon: '⚡',
+    playTime: 'Play anytime',
+    getHref: () => '/play/blitz',
+    gradient: 'from-amber-400/20 via-amber-500/10 to-yellow-600/5',
+    iconBg: 'bg-amber-500/20',
+    btnColor: 'bg-amber-500 hover:bg-amber-600',
+  },
 ]
 
 export default function PlayHubPage() {

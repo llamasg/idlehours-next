@@ -65,6 +65,18 @@ export default {
           '0%': { transform: 'translateY(0)', opacity: '1' },
           '100%': { transform: 'translateY(-24px)', opacity: '0' },
         },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '15%': { transform: 'translateX(-6px)' },
+          '30%': { transform: 'translateX(5px)' },
+          '45%': { transform: 'translateX(-4px)' },
+          '60%': { transform: 'translateX(3px)' },
+          '75%': { transform: 'translateX(-2px)' },
+        },
+        'milestone-toast': {
+          '0%': { transform: 'translateY(-40px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
       },
       animation: {
         echo: 'echo 0.6s ease-out',
@@ -80,6 +92,8 @@ export default {
         'stamp-bounce': 'stamp-bounce 0.5s cubic-bezier(0.34,1.56,0.64,1) both',
         'ink-ring': 'ink-ring 0.8s ease-out both',
         'score-float': 'score-float 1.2s ease-out both',
+        shake: 'shake 0.4s ease-in-out',
+        'milestone-toast': 'milestone-toast 0.4s ease-out',
       },
   		borderRadius: {
   			lg: 'var(--radius)',
