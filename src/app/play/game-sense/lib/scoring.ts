@@ -71,3 +71,35 @@ export function calculateRank(
 
   return fallbackRank(guess, answer)
 }
+
+/**
+ * Find the game at a specific rank relative to the answer.
+ * Used by the hint system to reveal a game halfway to the answer.
+ */
+export function getGameAtRank(
+  answer: GameSenseGame,
+  targetRank: number,
+  excludeIds: string[] = [],
+): GameSenseGame | null {
+  if (targetRank <= 1) return answer
+
+  if (RANKINGS && RANKINGS[answer.id]) {
+    const ranked = RANKINGS[answer.id]
+    for (let i = 0; i < ranked.length; i++) {
+      if (i + 2 >= targetRank && !excludeIds.includes(ranked[i])) {
+        const game = GAMES.find((g) => g.id === ranked[i])
+        if (game) return game
+      }
+    }
+    return null
+  }
+
+  // Fallback: sort all games by distance and pick from target rank area
+  const distances = GAMES
+    .filter((g) => g.id !== answer.id && !excludeIds.includes(g.id))
+    .map((g) => ({ game: g, dist: rawDistance(g, answer) }))
+    .sort((a, b) => a.dist - b.dist)
+
+  const idx = Math.min(Math.max(0, targetRank - 2), distances.length - 1)
+  return distances[idx]?.game ?? null
+}

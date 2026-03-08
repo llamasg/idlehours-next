@@ -168,29 +168,29 @@ export default function ShelfPriceDayPage({
               <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
                 Shelf Price
               </h1>
-              <div className="mt-1.5 flex items-center justify-center gap-2">
-                <p className="font-heading text-sm text-muted-foreground">
-                  {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-                </p>
-                <button
-                  onClick={() => setShowRules(true)}
-                  className="flex h-5 w-5 items-center justify-center rounded-full border border-border/80 text-[11px] font-bold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
-                  aria-label="How to play"
-                >
-                  ?
-                </button>
-              </div>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1.5 text-sm text-muted-foreground">
                 Which cost more at launch?
+              </p>
+              <p className="mt-0.5 font-heading text-xs text-muted-foreground/70">
+                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
               </p>
             </div>
 
-            <button
-              onClick={handleStart}
+            <div className="flex items-center justify-center gap-3">
+              <button
+                onClick={() => setShowRules(true)}
+                className="flex h-11 w-11 items-center justify-center rounded-lg border border-border/80 text-lg font-bold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
+                aria-label="How to play"
+              >
+                ?
+              </button>
+              <button
+                onClick={handleStart}
               className="rounded-full bg-[hsl(var(--game-blue))] px-8 py-3 text-base font-bold text-white transition-transform hover:scale-105"
             >
               Start Playing
             </button>
+            </div>
           </div>
         )}
 
@@ -202,25 +202,23 @@ export default function ShelfPriceDayPage({
               <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
                 Shelf Price
               </h1>
-              <div className="mt-1.5 flex items-center justify-center gap-2">
-                <p className="font-heading text-sm text-muted-foreground">
-                  {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-                </p>
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                Which cost more at launch?
                 <button
                   onClick={() => setShowRules(true)}
-                  className="flex h-5 w-5 items-center justify-center rounded-full border border-border/80 text-[11px] font-bold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
+                  className="ml-1.5 inline-flex h-5 w-5 translate-y-[1px] items-center justify-center rounded-full border border-border/80 text-[11px] font-bold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
                   aria-label="How to play"
                 >
                   ?
                 </button>
-              </div>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Which cost more at launch?
+              </p>
+              <p className="mt-0.5 font-heading text-xs text-muted-foreground/70">
+                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
               </p>
 
               {/* Score pill */}
               <div
-                className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 bg-white px-5 py-2 transition-all duration-300"
+                className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 bg-card px-5 py-2 transition-all duration-300"
                 style={{
                   borderColor: scorePulse
                     ? 'hsl(var(--game-red))'
@@ -274,7 +272,7 @@ export default function ShelfPriceDayPage({
               <p className="mt-1 font-heading text-sm text-muted-foreground">
                 {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
               </p>
-              <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-white px-5 py-2">
+              <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-card px-5 py-2">
                 <span className="font-heading text-2xl font-black text-[hsl(var(--game-blue))]">
                   {state.score}
                 </span>
@@ -304,7 +302,6 @@ export default function ShelfPriceDayPage({
                   className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
                 >
                   Play today&apos;s game
-                  <span className="text-base">&rsaquo;</span>
                 </Link>
               )}
               <Link
@@ -312,7 +309,6 @@ export default function ShelfPriceDayPage({
                 className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
               >
                 Browse the archive
-                <span className="text-base">&rsaquo;</span>
               </Link>
             </div>
 
@@ -331,7 +327,6 @@ export default function ShelfPriceDayPage({
                 className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
               >
                 Play today&apos;s game
-                <span className="text-base">&rsaquo;</span>
               </Link>
             )}
             <Link
@@ -339,7 +334,6 @@ export default function ShelfPriceDayPage({
               className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
             >
               Browse the archive
-              <span className="text-base">&rsaquo;</span>
             </Link>
           </div>
         )}

@@ -7,9 +7,10 @@ interface GuessInputProps {
   onGuess: (game: GameSenseGame) => void
   guessedIds: string[]
   disabled: boolean
+  onHelpClick?: () => void
 }
 
-export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInputProps) {
+export default function GuessInput({ onGuess, guessedIds, disabled, onHelpClick }: GuessInputProps) {
   const [query, setQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [highlightIndex, setHighlightIndex] = useState(-1)
@@ -100,18 +101,30 @@ export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInput
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <input
-        ref={inputRef}
-        type="text"
-        value={query}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        onFocus={() => query.length >= 2 && setIsOpen(true)}
-        placeholder="Type a game title..."
-        disabled={disabled}
-        autoComplete="off"
-        className="w-full rounded-lg border border-border bg-background px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50"
-      />
+      <div className="flex items-stretch gap-0 rounded-lg border border-border bg-background focus-within:ring-2 focus-within:ring-primary/40">
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onFocus={() => query.length >= 2 && setIsOpen(true)}
+          placeholder="Type a game title..."
+          disabled={disabled}
+          autoComplete="off"
+          className="min-w-0 flex-1 rounded-l-lg bg-transparent px-4 py-3 text-foreground placeholder:text-muted-foreground/50 focus:outline-none disabled:opacity-50"
+        />
+        {onHelpClick && (
+          <button
+            type="button"
+            onClick={onHelpClick}
+            className="flex w-12 flex-shrink-0 items-center justify-center rounded-r-lg border-l border-border text-lg font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-[hsl(var(--game-blue))]"
+            aria-label="How to play"
+          >
+            ?
+          </button>
+        )}
+      </div>
 
       {showDropdown && (
         <ul

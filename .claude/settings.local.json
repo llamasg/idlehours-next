@@ -71,7 +71,8 @@
       "WebFetch(domain:nextbricks.io)",
       "Bash(sed \"s/tags: \\\\[//\")",
       "Bash(sed \"s/\\\\]//\")",
-      "Bash(xxd)"
+      "Bash(xxd)",
+      "Bash(node -e \":*)"
     ]
   }
 }

@@ -13,6 +13,7 @@ interface YearInputProps {
   guessHistory: GuessHistoryEntry[]
   attemptsUsed: number
   maxAttempts: number
+  onHelpClick?: () => void
 }
 
 export default function YearInput({
@@ -21,6 +22,7 @@ export default function YearInput({
   guessHistory,
   attemptsUsed,
   maxAttempts,
+  onHelpClick,
 }: YearInputProps) {
   const [value, setValue] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -131,23 +133,35 @@ export default function YearInput({
 
       {/* Input row */}
       <div className="flex w-full max-w-sm flex-col items-center gap-3 lg:max-w-none lg:flex-row lg:justify-center">
-        <input
-          ref={inputRef}
-          type="text"
-          inputMode="numeric"
-          pattern="[0-9]{4}"
-          maxLength={4}
-          placeholder="Year"
-          value={value}
-          onChange={(e) => {
-            setValue(e.target.value.replace(/[^0-9]/g, ''))
-            setError(null)
-            setHistoryIndex(-1)
-          }}
-          onKeyDown={handleKeyDown}
-          disabled={disabled}
-          className="w-full rounded-xl border-2 border-border bg-white px-6 py-3 text-center font-heading text-xl font-bold tabular-nums focus:border-[hsl(var(--game-blue))]/40 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--game-blue))]/30 disabled:opacity-50 lg:w-[200px]"
-        />
+        <div className="flex w-full items-stretch gap-0 rounded-xl border-2 border-border bg-card focus-within:border-[hsl(var(--game-blue))]/40 focus-within:ring-2 focus-within:ring-[hsl(var(--game-blue))]/30 lg:w-[200px]">
+          <input
+            ref={inputRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]{4}"
+            maxLength={4}
+            placeholder="Year"
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value.replace(/[^0-9]/g, ''))
+              setError(null)
+              setHistoryIndex(-1)
+            }}
+            onKeyDown={handleKeyDown}
+            disabled={disabled}
+            className="min-w-0 flex-1 rounded-l-xl bg-transparent px-6 py-3 text-center font-heading text-xl font-bold tabular-nums focus:outline-none disabled:opacity-50"
+          />
+          {onHelpClick && (
+            <button
+              type="button"
+              onClick={onHelpClick}
+              className="flex w-12 flex-shrink-0 items-center justify-center rounded-r-xl border-l border-border text-lg font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-[hsl(var(--game-blue))]"
+              aria-label="How to play"
+            >
+              ?
+            </button>
+          )}
+        </div>
 
         <button
           type="button"

@@ -171,24 +171,15 @@ export default function StreetDateDayPage({
           <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
             Street Date
           </h1>
-          <div className="mt-1.5 flex items-center justify-center gap-2">
-            <p className="font-heading text-sm text-muted-foreground">
-              {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-            </p>
-            <button
-              onClick={() => setShowRules(true)}
-              className="flex h-5 w-5 items-center justify-center rounded-full border border-border/80 text-[11px] font-bold text-muted-foreground transition-colors hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]"
-              aria-label="How to play"
-            >
-              ?
-            </button>
-          </div>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-1.5 text-sm text-muted-foreground">
             Guess the year
+          </p>
+          <p className="mt-0.5 font-heading text-xs text-muted-foreground/70">
+            {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
           </p>
 
           {/* Score pill */}
-          <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-white px-5 py-2">
+          <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-card px-5 py-2">
             <AnimatedScore
               value={displayScore}
               className="font-heading text-2xl font-black"
@@ -240,6 +231,7 @@ export default function StreetDateDayPage({
             guessHistory={guessHistoryEntries}
             attemptsUsed={attemptsUsed}
             maxAttempts={MAX_ATTEMPTS}
+            onHelpClick={() => setShowRules(true)}
           />
         )}
 
@@ -268,7 +260,6 @@ export default function StreetDateDayPage({
                   className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
                 >
                   Play today&apos;s game
-                  <span className="text-base">&rsaquo;</span>
                 </Link>
               )}
               <Link
@@ -276,7 +267,6 @@ export default function StreetDateDayPage({
                 className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
               >
                 Browse the archive
-                <span className="text-base">&rsaquo;</span>
               </Link>
             </div>
 
@@ -295,7 +285,6 @@ export default function StreetDateDayPage({
                 className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
               >
                 Play today&apos;s game
-                <span className="text-base">&rsaquo;</span>
               </Link>
             )}
             <Link
@@ -303,7 +292,6 @@ export default function StreetDateDayPage({
               className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
             >
               Browse the archive
-              <span className="text-base">&rsaquo;</span>
             </Link>
           </div>
         )}

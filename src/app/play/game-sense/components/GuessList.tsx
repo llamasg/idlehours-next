@@ -10,9 +10,9 @@ interface GuessListProps {
 const TOTAL = GAMES.length
 
 function badgeClasses(rank: number): string {
-  if (rank <= 50) return 'bg-green-500/15 text-green-700 border-green-500/30'
-  if (rank <= 200) return 'bg-amber-500/15 text-amber-700 border-amber-500/30'
-  if (rank <= 500) return 'bg-orange-500/15 text-orange-700 border-orange-500/30'
+  if (rank <= 50) return 'bg-green-500/15 text-green-700 dark:text-green-300 border-green-500/30'
+  if (rank <= 200) return 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30'
+  if (rank <= 500) return 'bg-orange-500/15 text-orange-700 dark:text-orange-300 border-orange-500/30'
   return 'bg-red-500/10 text-red-400 border-red-500/20'
 }
 
@@ -40,7 +40,7 @@ export default function GuessList({ guesses }: GuessListProps) {
         return (
           <div
             key={`${guess.gameId}-${i}`}
-            className="relative overflow-hidden rounded-lg border border-border/60 bg-white px-4 py-3"
+            className="relative overflow-hidden rounded-lg border border-border/60 bg-card px-4 py-3"
           >
             {/* Proximity fill bar */}
             <div

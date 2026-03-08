@@ -62,7 +62,7 @@ export default function ShelfPriceArchivePage() {
             href={`/play/shelf-price/${getTodayDateString()}`}
             className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--game-blue))] px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-[hsl(var(--game-blue-dark))]"
           >
-            Play today&apos;s game &rsaquo;
+            Play today&apos;s game
           </Link>
         </div>
 
