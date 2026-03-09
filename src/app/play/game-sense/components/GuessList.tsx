@@ -5,6 +5,8 @@ import { GAMES } from '../data/games'
 
 interface GuessListProps {
   guesses: GuessRecord[]
+  /** Stagger delay (ms) per row for entrance animation. 0 = no animation. */
+  entranceDelay?: number
 }
 
 const TOTAL = GAMES.length
@@ -28,7 +30,7 @@ function lookupTitle(gameId: string): string {
   return game?.title ?? gameId
 }
 
-export default function GuessList({ guesses }: GuessListProps) {
+export default function GuessList({ guesses, entranceDelay = 0 }: GuessListProps) {
   if (guesses.length === 0) return null
 
   const sorted = [...guesses].sort((a, b) => a.proximity - b.proximity)
@@ -40,7 +42,10 @@ export default function GuessList({ guesses }: GuessListProps) {
         return (
           <div
             key={`${guess.gameId}-${i}`}
-            className="relative overflow-hidden rounded-lg border border-border/60 bg-card px-4 py-3"
+            className="relative overflow-hidden rounded-lg border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] px-4 py-3"
+            style={entranceDelay > 0 ? {
+              animation: `gs-fade-in 0.4s ease ${i * entranceDelay}ms both`,
+            } : undefined}
           >
             {/* Proximity fill bar */}
             <div
@@ -50,7 +55,7 @@ export default function GuessList({ guesses }: GuessListProps) {
             <div className="relative flex items-center justify-between">
               <span className="flex items-center gap-1.5 text-sm font-semibold text-[hsl(var(--game-ink))]">
                 {guess.isHint && (
-                  <svg className="h-3.5 w-3.5 flex-shrink-0 text-[hsl(var(--game-blue))]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <svg className="h-3.5 w-3.5 flex-shrink-0 text-[hsl(var(--game-ink-light))]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                 )}

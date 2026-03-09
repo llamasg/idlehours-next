@@ -60,6 +60,8 @@ interface SentenceClueProps {
   disabled: boolean
   /** When true, reveal ALL blanks — player-revealed in blue, others in grey with black text */
   revealAll?: boolean
+  /** When true, suppress the staggered entrance animation (used during entrance sequence) */
+  skipEntrance?: boolean
 }
 
 export default function SentenceClue({
@@ -69,12 +71,13 @@ export default function SentenceClue({
   onRevealBlank,
   disabled,
   revealAll = false,
+  skipEntrance = false,
 }: SentenceClueProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    if (!skipEntrance) setMounted(true)
+  }, [skipEntrance])
 
   return (
     <div className="text-center">
@@ -145,15 +148,19 @@ function Blank({ blank, answer, revealed, score, disabled, onReveal, revealAll =
   const canAfford = score >= blank.cost
   const value = blank.reveal(answer)
 
+  // Scale font down for long values so pills stay single-line on mobile
+  const fontSize = value.length > 30 ? '0.65em' : value.length > 20 ? '0.75em' : '0.85em'
+
   // Player-revealed blank — blue background
   if (revealed) {
     return (
       <span
-        className="inline-flex items-center justify-center rounded-[6px] px-[14px] text-[0.85em] font-bold text-white"
+        className="inline-flex items-center justify-center whitespace-nowrap rounded-[6px] px-[14px] font-bold text-white"
         style={{
           background: 'hsl(var(--game-blue))',
           height: '34px',
           minWidth: '80px',
+          fontSize,
           animation: revealAll ? 'none' : 'blank-click 0.45s cubic-bezier(0.22,1.2,0.36,1) both',
           verticalAlign: 'middle',
         }}
@@ -167,12 +174,13 @@ function Blank({ blank, answer, revealed, score, disabled, onReveal, revealAll =
   if (revealAll) {
     return (
       <span
-        className="inline-flex items-center justify-center rounded-[6px] px-[14px] text-[0.85em] font-bold"
+        className="inline-flex items-center justify-center whitespace-nowrap rounded-[6px] px-[14px] font-bold"
         style={{
           background: 'hsl(var(--game-ink) / 0.12)',
           color: 'hsl(var(--game-ink))',
           height: '34px',
           minWidth: '80px',
+          fontSize,
           verticalAlign: 'middle',
         }}
       >
@@ -213,7 +221,7 @@ function Blank({ blank, answer, revealed, score, disabled, onReveal, revealAll =
             : 'hsl(var(--game-ink))',
           color: 'transparent',
           minWidth: '80px',
-          height: '34px',
+          minHeight: '34px',
           cursor: disabled || !canAfford ? 'not-allowed' : 'pointer',
           fontSize: '0.85em',
           transition: 'background 0.15s, transform 0.1s',

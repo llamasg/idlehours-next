@@ -31,6 +31,10 @@ export default function ProximityCounter({
   const [phase, setPhase] = useState<'counting' | 'stepped' | 'landed' | 'correct'>('counting')
   const cancelledRef = useRef(false)
 
+  // Stable ref for onComplete — prevents animation restart when parent re-renders
+  const onCompleteRef = useRef(onComplete)
+  onCompleteRef.current = onComplete
+
   useEffect(() => {
     cancelledRef.current = false
     let raf = 0
@@ -97,12 +101,12 @@ export default function ProximityCounter({
       if (isCorrect) {
         setPhase('correct')
         setTimeout(() => {
-          if (!cancelledRef.current) onComplete()
+          if (!cancelledRef.current) onCompleteRef.current()
         }, 1500)
       } else {
         setPhase('landed')
         setTimeout(() => {
-          if (!cancelledRef.current) onComplete()
+          if (!cancelledRef.current) onCompleteRef.current()
         }, 800)
       }
     }
@@ -119,7 +123,8 @@ export default function ProximityCounter({
       cancelledRef.current = true
       cancelAnimationFrame(raf)
     }
-  }, [targetRank, onComplete])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [targetRank])
 
   // Color based on current display value
   function getColor(val: number): string {

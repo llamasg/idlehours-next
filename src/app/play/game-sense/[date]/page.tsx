@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect, useCallback, useMemo, use } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import DiscoverMore from '@/components/DiscoverMore'
@@ -35,6 +35,7 @@ import ResultCard from '@/components/games/ResultCard'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
 
 const GUESS_COST = 20
+const spring = 'cubic-bezier(0.34,1.5,0.64,1)'
 
 export default function GameSenseDayPage({
   params,
@@ -45,9 +46,29 @@ export default function GameSenseDayPage({
 
   const [state, setState] = useState<DayState | null>(null)
   const [showWinModal, setShowWinModal] = useState(false)
+  const [showLossModal, setShowLossModal] = useState(false)
   const [showRules, setShowRules] = useState(false)
+  const [showCompleteToast, setShowCompleteToast] = useState(false)
   const [floatingCost, setFloatingCost] = useState<{ key: string; cost: number } | null>(null)
   const [scorePulse, setScorePulse] = useState(false)
+  // Hint tooltip — spring physics (inertia tooltip)
+  const hintBtnRef = useRef<HTMLDivElement>(null)
+  const hintTipPosRef = useRef({ x: 0, y: 0 })
+  const hintTipTargetRef = useRef({ x: 0, y: 0 })
+  const hintTipVelRef = useRef({ x: 0, y: 0 })
+  const hintTipRafRef = useRef<number>(0)
+  const [hintTipPos, setHintTipPos] = useState({ x: 0, y: 0 })
+  const [showHintTooltip, setShowHintTooltip] = useState(false)
+  const [hintTipExiting, setHintTipExiting] = useState(false)
+  const hintTipExitTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [hintJustUsed, setHintJustUsed] = useState(false)
+  const hintUsedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Entrance animation: 0=waiting, 1=title centered, 2=title moves up + box, 3=sentence, 4=input, 5=rest, 6=done
+  const [entranceStep, setEntranceStep] = useState(0)
+  const [wipeStarted, setWipeStarted] = useState(false)
+  // Pre-compute skip so clip-path renders correctly on first paint (before useEffect)
+  const shouldAnimate = state ? !(state.won || state.score <= 0) : true
 
   const HINT_COST = 250
 
@@ -61,18 +82,69 @@ export default function GameSenseDayPage({
   const playable = isPlayableDate(date)
   const today = isToday(date)
 
-  // Load state from localStorage on mount
+  // Derived: game is over — but NOT while proximity counter is still animating
+  const gameOver = state ? (state.won || (state.score <= 0 && !pendingGuess)) : false
+
+  // Load state from localStorage on mount — go straight to post-game screen, no modal
   useEffect(() => {
     const loaded = loadDayState(date)
     setState(loaded)
-    if (loaded.won) {
-      setShowWinModal(true)
-    }
   }, [date])
+
+  // Entrance animation sequence — starts immediately on mount
+  useEffect(() => {
+    if (!state) return
+    // Skip animation if game already finished or reduced motion
+    const alreadyDone = state.won || state.score <= 0
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (alreadyDone || reducedMotion) {
+      setWipeStarted(true)
+      setEntranceStep(6)
+      return
+    }
+    // Blue wipe starts immediately (clip-path transition, 700ms)
+    requestAnimationFrame(() => requestAnimationFrame(() => setWipeStarted(true)))
+    // Sequenced entrance: title centered → title moves up + box → sentence → input → rest
+    const t1 = setTimeout(() => setEntranceStep(1), 350)    // title word-pops (wipe ~halfway down)
+    const t2 = setTimeout(() => setEntranceStep(2), 1700)   // title moves up, box scales in
+    const t3 = setTimeout(() => setEntranceStep(3), 2400)   // sentence mounts
+    const t4 = setTimeout(() => setEntranceStep(4), 3100)   // guess input fades in
+    const t5 = setTimeout(() => setEntranceStep(5), 3400)   // rest fades in (score, nav)
+    const t6 = setTimeout(() => setEntranceStep(6), 3900)   // done — clear animation classes
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); clearTimeout(t6) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!state])
+
+  // Hint tooltip spring physics
+  useEffect(() => {
+    if (!showHintTooltip) return
+    const stiffness = 0.12
+    const damping = 0.7
+    const tick = () => {
+      const dx = hintTipTargetRef.current.x - hintTipPosRef.current.x
+      const dy = hintTipTargetRef.current.y - hintTipPosRef.current.y
+      hintTipVelRef.current.x = hintTipVelRef.current.x * damping + dx * stiffness
+      hintTipVelRef.current.y = hintTipVelRef.current.y * damping + dy * stiffness
+      hintTipPosRef.current.x += hintTipVelRef.current.x
+      hintTipPosRef.current.y += hintTipVelRef.current.y
+      setHintTipPos({ x: hintTipPosRef.current.x, y: hintTipPosRef.current.y })
+      hintTipRafRef.current = requestAnimationFrame(tick)
+    }
+    hintTipRafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(hintTipRafRef.current)
+  }, [showHintTooltip])
+
+  // Watch for score hitting 0 — trigger loss
+  useEffect(() => {
+    if (!state || state.won || pendingGuess) return
+    if (state.score <= 0) {
+      setTimeout(() => setShowLossModal(true), 300)
+    }
+  }, [state, pendingGuess])
 
   const handleGuess = useCallback(
     (game: GameSenseGame) => {
-      if (!state || state.won || pendingGuess) return
+      if (!state || gameOver || pendingGuess) return
 
       const proximity = calculateRank(game, answer)
 
@@ -87,7 +159,7 @@ export default function GameSenseDayPage({
       // Start the countdown animation
       setPendingGuess({ game, proximity })
     },
-    [state, answer, date, pendingGuess],
+    [state, answer, date, pendingGuess, gameOver],
   )
 
   const handleCountdownComplete = useCallback(() => {
@@ -108,11 +180,12 @@ export default function GameSenseDayPage({
     if (won) {
       setTimeout(() => setShowWinModal(true), 300)
     }
+    // Loss check handled by the useEffect watching state.score
   }, [pendingGuess, state, date])
 
   const handleRevealBlank = useCallback(
     (blank: BlankDef) => {
-      if (!state || state.won || pendingGuess) return
+      if (!state || gameOver || pendingGuess) return
       if (state.blanksRevealed.includes(blank.key)) return
 
       const cost = BLANK_COSTS[blank.key] ?? 0
@@ -133,11 +206,11 @@ export default function GameSenseDayPage({
         setScorePulse(false)
       }, 1200)
     },
-    [state, date, pendingGuess],
+    [state, date, pendingGuess, gameOver],
   )
 
   const handleHint = useCallback(() => {
-    if (!state || state.won || pendingGuess || state.guesses.length === 0) return
+    if (!state || gameOver || pendingGuess || state.guesses.length === 0) return
 
     // Find best (lowest) proximity from guesses
     const bestProximity = Math.min(...state.guesses.map((g) => g.proximity))
@@ -184,260 +257,420 @@ export default function GameSenseDayPage({
       setFloatingCost(null)
       setScorePulse(false)
     }, 1200)
-  }, [state, pendingGuess, answer, date])
+
+    // Flash hint button red with cost text
+    setHintJustUsed(true)
+    if (hintUsedTimer.current) clearTimeout(hintUsedTimer.current)
+    hintUsedTimer.current = setTimeout(() => setHintJustUsed(false), 2000)
+  }, [state, pendingGuess, answer, date, gameOver])
 
   // Modal copy — picked once when modal opens, stable across re-renders
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const modalCopy = useMemo(() => {
     const score = state?.score ?? 0
+    const isLoss = showLossModal && !state?.won
     const rankName = getGameSenseRank(score)
     return {
-      heading: pickRandom(COPY.win.headings),
-      subheading: pickRandom(COPY.win.subheadings),
+      heading: pickRandom(isLoss ? COPY.loss.headings : COPY.win.headings),
+      subheading: pickRandom(isLoss ? COPY.loss.subheadings : COPY.win.subheadings),
       rankName,
       rankFlavour: pickRandom(GAME_SENSE_FLAVOUR[rankName]),
     }
-  }, [showWinModal])
+  }, [showWinModal, showLossModal])
 
-  // While loading from localStorage
+  // While loading from localStorage — layout handles the visual loading screen
   if (!state) {
-    return (
-      <>
-        <Header />
-        <main className="mx-auto max-w-2xl px-4 py-12">
-          <p className="text-center text-muted-foreground">Loading...</p>
-        </main>
-        <SiteFooter />
-      </>
-    )
+    return null
   }
 
   const guessedIds = state.guesses.map((g) => g.gameId)
   const isAnimating = pendingGuess !== null
+  const isPostGame = (state.won || state.score <= 0) && !showWinModal && !showLossModal && !isAnimating
 
   return (
     <>
       <Header />
 
-      <main className={`font-game mx-auto px-4 py-8 ${state.won && !showWinModal && !isAnimating ? 'max-w-7xl lg:px-8' : 'max-w-2xl'}`}>
-        {/* Game header */}
-        <div className="mb-6 text-center">
-          <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
-            Game Sense
-          </h1>
-
-          <p className="mt-1.5 text-sm text-muted-foreground">
-            Guess the game — higher score is better!
-          </p>
-          <p className="mt-0.5 font-heading text-xs text-muted-foreground/70">
-            {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-          </p>
-
-          {/* Score pill */}
-          <div
-            className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 bg-card px-5 py-2 transition-all duration-300"
-            style={{
-              borderColor: scorePulse
-                ? 'hsl(var(--game-red))'
-                : 'hsl(var(--game-blue) / 0.2)',
-              transform: scorePulse ? 'scale(1.1)' : 'scale(1)',
-            }}
-          >
-            <AnimatedScore
-              value={state.score}
-              className="font-heading text-2xl font-black"
-            />
-            <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
-              pts
-            </span>
-            {/* Floating cost animation */}
-            {floatingCost && (
-              <span
-                key={floatingCost.key}
-                className="absolute -top-6 left-1/2 -translate-x-1/2 rounded-full bg-[hsl(var(--game-red))] px-4 py-1 font-heading text-lg font-black text-white shadow-lg"
-                style={{ animation: 'float-up 1.2s ease-out forwards' }}
-              >
-                -{floatingCost.cost}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Not playable message */}
-        {!playable && (
-          <div className="mb-8 rounded-lg border border-border/60 bg-muted/30 px-4 py-6 text-center">
-            <p className="text-muted-foreground">
-              This game isn&apos;t available yet. Check back on the right day!
-            </p>
-            <Link
-              href="/play/game-sense"
-              className="mt-3 inline-block text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+      {/* Blue game world — site max-width, min full viewport height */}
+      <div
+        className="mx-auto mt-[15px] flex min-h-[900px] max-w-7xl flex-col"
+        style={{
+          background: 'linear-gradient(155deg, #2D6BC4, #1a2a4a)',
+          borderRadius: 20,
+          boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12)',
+          clipPath: (!shouldAnimate || wipeStarted) ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)',
+          transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+        }}
+      >
+        <main className={`font-game mx-auto flex flex-1 flex-col justify-center px-4 py-8 ${isPostGame ? 'max-w-7xl lg:px-8' : 'max-w-2xl'}`}>
+          {/* Game header */}
+          <div className="mb-6 text-center">
+            {/* Title + subtitle — animate: fade in centered, then slide up to position */}
+            <div
+              className="transition-all duration-700 ease-out"
+              style={
+                entranceStep < 1
+                  ? { opacity: 0, transform: 'translateY(120px)' }
+                  : entranceStep < 2
+                    ? { opacity: 1, transform: 'translateY(120px)' }
+                    : { opacity: 1, transform: 'translateY(0)' }
+              }
             >
-              Go to today&apos;s game &rarr;
-            </Link>
-          </div>
-        )}
-
-        {/* Sentence clue — hidden once won (post-game section shows revealAll version) */}
-        {playable && !state.won && (
-          <div className="mb-8">
-            <SentenceClue
-              answer={answer}
-              blanksRevealed={state.blanksRevealed}
-              score={state.score}
-              onRevealBlank={handleRevealBlank}
-              disabled={state.won || isAnimating}
-            />
-          </div>
-        )}
-
-        {/* Proximity countdown animation */}
-        {pendingGuess && (
-          <div className="mb-6">
-            <ProximityCounter
-              gameTitle={pendingGuess.game.title}
-              targetRank={pendingGuess.proximity}
-              onComplete={handleCountdownComplete}
-            />
-          </div>
-        )}
-
-        {/* Guess input — hidden when won, not playable, or animating */}
-        {playable && !state.won && !isAnimating && (
-          <div className="mb-6">
-            <GuessInput
-              onGuess={handleGuess}
-              guessedIds={guessedIds}
-              disabled={false}
-              onHelpClick={() => setShowRules(true)}
-            />
-
-            {/* Hint button — appears after first guess */}
-            {state.guesses.length > 0 && (() => {
-              const bestProximity = Math.min(...state.guesses.map((g) => g.proximity))
-              const isGiveUp = bestProximity <= 2
-              return (
-                <div className="mt-3 flex justify-center">
-                  <button
-                    type="button"
-                    onClick={handleHint}
-                    className={`group inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold transition-colors ${
-                      isGiveUp
-                        ? 'border-[hsl(var(--game-red))]/40 text-muted-foreground hover:border-[hsl(var(--game-red))] hover:text-[hsl(var(--game-red))]'
-                        : 'border-border/60 text-muted-foreground hover:border-[hsl(var(--game-blue))] hover:text-[hsl(var(--game-blue))]'
-                    }`}
+              <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-white">
+                {['Game', 'Sense'].map((word, i) => (
+                  <span
+                    key={word}
+                    className="inline-block"
+                    style={
+                      entranceStep >= 1
+                        ? { animation: `gs-word-pop 0.25s cubic-bezier(0.34,1.56,0.64,1) ${0.1 + i * 0.3}s both` }
+                        : { opacity: 0 }
+                    }
                   >
-                    <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                    {isGiveUp ? (
-                      <>
-                        <span>Give up</span>
-                        <span className="ml-0.5 text-[10px] opacity-0 transition-opacity group-hover:opacity-100">
-                          &minus;&infin; pts
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Hint</span>
-                        <span className="ml-0.5 text-[10px] opacity-60">
-                          &minus;{HINT_COST} pts
-                        </span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              )
-            })()}
-          </div>
-        )}
-
-        {/* Won — post-game page (when modal closed) */}
-        {state.won && !showWinModal && !isAnimating && (
-          <>
-            {/* Revealed sentence — all blanks shown */}
-            <div className="mb-6">
-              <SentenceClue
-                answer={answer}
-                blanksRevealed={state.blanksRevealed}
-                score={0}
-                onRevealBlank={() => {}}
-                disabled={true}
-                revealAll
-              />
+                    {word}{i === 0 ? '\u00a0' : ''}
+                  </span>
+                ))}
+              </h1>
+              <p className="mt-1.5 text-xl font-bold text-white/70">
+                {['Guess', 'the', 'game!'].map((word, i) => (
+                  <span
+                    key={word}
+                    className="inline-block"
+                    style={
+                      entranceStep >= 1
+                        ? { animation: `gs-word-pop 0.2s cubic-bezier(0.34,1.56,0.64,1) ${0.7 + i * 0.3}s both` }
+                        : { opacity: 0 }
+                    }
+                  >
+                    {word}{i < 2 ? '\u00a0' : ''}
+                  </span>
+                ))}
+              </p>
             </div>
 
-            {/* Nav pills — above showcase */}
-            <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
+            {/* Date + score pill — fade in with rest */}
+            <div
+              style={entranceStep < 5 ? { opacity: 0 } : entranceStep < 6 ? { animation: 'gs-fade-in 0.5s cubic-bezier(0.34,1.5,0.64,1) both' } : undefined}
+            >
+              <p className="mt-0.5 font-heading text-xs text-white/50">
+                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+              </p>
+
+              {/* Hint (left) | Score pill (center) | ? (right) — grid keeps score dead center */}
+              <div className="mt-3 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-6">
+                {/* Left cell — hint button with inertia tooltip */}
+                <div className="flex justify-start">
+                  {!gameOver && state.guesses.length > 0 && (() => {
+                    const bestProximity = Math.min(...state.guesses.map((g) => g.proximity))
+                    const isGiveUp = bestProximity <= 2
+                    return (
+                      <div
+                        ref={hintBtnRef}
+                        className="relative"
+                        onMouseMove={(e) => {
+                          if (isGiveUp) return
+                          const rect = hintBtnRef.current?.getBoundingClientRect()
+                          if (!rect) return
+                          hintTipTargetRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+                          if (!showHintTooltip || hintTipExiting) {
+                            // Cancel any exit animation, snap to cursor position
+                            if (hintTipExitTimer.current) clearTimeout(hintTipExitTimer.current)
+                            setHintTipExiting(false)
+                            hintTipPosRef.current = { ...hintTipTargetRef.current }
+                            hintTipVelRef.current = { x: 0, y: 0 }
+                            setShowHintTooltip(true)
+                          }
+                        }}
+                        onMouseLeave={() => {
+                          if (showHintTooltip && !hintTipExiting) {
+                            setHintTipExiting(true)
+                            if (hintTipExitTimer.current) clearTimeout(hintTipExitTimer.current)
+                            hintTipExitTimer.current = setTimeout(() => {
+                              setShowHintTooltip(false)
+                              setHintTipExiting(false)
+                            }, 150)
+                          }
+                        }}
+                      >
+                        <button
+                          type="button"
+                          onClick={handleHint}
+                          className={`inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white transition-[transform,box-shadow,background-color,border-color] duration-200 ${
+                            isGiveUp || hintJustUsed
+                              ? 'border-[hsl(7_62%_35%)] bg-[hsl(var(--game-red))] shadow-[0_6px_0_hsl(7_62%_35%),0_8px_20px_rgba(200,50,50,0.28)] hover:-translate-y-[3px] hover:shadow-[0_9px_0_hsl(7_62%_35%),0_12px_24px_rgba(200,50,50,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_hsl(7_62%_35%)]'
+                              : 'border-[#2d6bc4] bg-[hsl(var(--game-blue))] shadow-[0_6px_0_#2d6bc4,0_8px_20px_rgba(45,107,196,0.28)] hover:-translate-y-[3px] hover:shadow-[0_9px_0_#2d6bc4,0_12px_24px_rgba(45,107,196,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#2d6bc4]'
+                          }`}
+                        >
+                          {hintJustUsed ? (
+                            <span>&minus;{HINT_COST} pts</span>
+                          ) : (
+                            <>
+                              <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                              </svg>
+                              {isGiveUp ? 'Give up' : 'Hint'}
+                            </>
+                          )}
+                        </button>
+                        {/* Inertia tooltip — follows cursor with spring physics, scales in/out */}
+                        {showHintTooltip && !isGiveUp && (
+                          <div
+                            className="pointer-events-none absolute z-20 whitespace-nowrap px-3 py-1.5 shadow-lg"
+                            style={{
+                              background: 'hsl(var(--game-ink))',
+                              left: hintTipPos.x,
+                              top: hintTipPos.y,
+                              transformOrigin: 'center bottom',
+                              animation: hintTipExiting
+                                ? 'gs-tip-out 150ms cubic-bezier(0.4, 0, 1, 1) forwards'
+                                : 'gs-tip-in 200ms cubic-bezier(0.34, 1.5, 0.64, 1) forwards',
+                              translate: '-50% calc(-100% - 14px)',
+                            }}
+                          >
+                            <span className="text-[13px] font-black text-white">
+                              &minus;{HINT_COST}{' '}
+                              <span className="text-[10px] text-white/65">pts</span>
+                            </span>
+                            <span
+                              className="absolute top-full left-1/2 -translate-x-1/2 border-[5px] border-transparent"
+                              style={{ borderTopColor: 'hsl(var(--game-ink))' }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()}
+                </div>
+                {/* Center cell — score pill */}
+                <div
+                  className="relative inline-flex items-center gap-2 rounded-full border-2 border-white/20 bg-white px-5 py-2 transition-all duration-300"
+                  style={{
+                    borderColor: scorePulse ? 'hsl(var(--game-red))' : 'rgba(255,255,255,0.3)',
+                    transform: scorePulse ? 'scale(1.1)' : 'scale(1)',
+                  }}
+                >
+                  <AnimatedScore
+                    value={state.score}
+                    className={`font-heading text-2xl font-black transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]' : 'text-[hsl(var(--game-blue))]'}`}
+                  />
+                  <span className={`font-heading text-xs uppercase tracking-wider transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]/60' : 'text-[hsl(var(--game-blue))]/60'}`}>
+                    pts
+                  </span>
+                  {/* Floating cost animation */}
+                  {floatingCost && (
+                    <span
+                      key={floatingCost.key}
+                      className="absolute -top-6 left-1/2 -translate-x-1/2 rounded-full bg-[hsl(var(--game-red))] px-4 py-1 font-heading text-lg font-black text-white shadow-lg"
+                      style={{ animation: 'float-up 1.2s ease-out forwards' }}
+                    >
+                      -{floatingCost.cost}
+                    </span>
+                  )}
+                </div>
+                {/* Right cell — ? tutorial button */}
+                <div className="flex justify-end">
+                  {!gameOver && (
+                    <button
+                      type="button"
+                      onClick={() => setShowRules(true)}
+                      className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-white/20 bg-white/10 text-sm font-bold text-white/70 transition-colors hover:bg-white/20 hover:text-white"
+                      aria-label="How to play"
+                    >
+                      ?
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Not playable message */}
+          {!playable && (
+            <div className="mb-8 rounded-lg border border-white/20 bg-white/10 px-4 py-6 text-center backdrop-blur-sm">
+              <p className="text-white/70">
+                This game isn&apos;t available yet. Check back on the right day!
+              </p>
+              <Link
+                href="/play/game-sense"
+                className="mt-3 inline-block text-sm font-semibold text-white transition-colors hover:text-white/80"
+              >
+                Go to today&apos;s game &rarr;
+              </Link>
+            </div>
+          )}
+
+          {/* Game area — white container for clarity on blue bg */}
+          {playable && !gameOver && (
+            <div
+              className="relative z-10 mb-8 rounded-2xl bg-white/95 p-5 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out sm:p-6"
+              style={entranceStep < 2 ? { opacity: 0, transform: 'scale(0)' } : entranceStep < 6 ? { animation: 'gs-box-in 0.7s cubic-bezier(0.34,1.5,0.64,1) both' } : undefined}
+            >
+              {/* Sentence clue — always mounted so box knows its final size */}
+              <div
+                className="mb-6 transition-opacity duration-300 ease-out"
+                style={{ opacity: entranceStep < 3 ? 0 : 1 }}
+              >
+                <SentenceClue
+                  answer={answer}
+                  blanksRevealed={state.blanksRevealed}
+                  score={state.score}
+                  onRevealBlank={handleRevealBlank}
+                  disabled={gameOver || isAnimating}
+                  skipEntrance={entranceStep < 3}
+                />
+              </div>
+
+              {/* Proximity countdown animation */}
+              {pendingGuess && (
+                <div className="mb-6">
+                  <ProximityCounter
+                    gameTitle={pendingGuess.game.title}
+                    targetRank={pendingGuess.proximity}
+                    onComplete={handleCountdownComplete}
+                  />
+                </div>
+              )}
+
+              {/* Guess input — hidden when animating */}
+              {!isAnimating && (
+                <div
+                  className="transition-opacity duration-300 ease-out"
+                  style={{ opacity: entranceStep < 4 ? 0 : 1 }}
+                >
+                  <GuessInput
+                    onGuess={handleGuess}
+                    guessedIds={guessedIds}
+                    disabled={false}
+                  />
+                </div>
+              )}
+
+              {/* Guess list — grid row transition for smooth height */}
+              {!isAnimating && (
+                <div
+                  className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+                  style={{ gridTemplateRows: state.guesses.length > 0 && entranceStep >= 4 ? '1fr' : '0fr' }}
+                >
+                  <div className="overflow-hidden">
+                    {state.guesses.length > 0 && entranceStep >= 4 && (
+                      <div className="mt-6">
+                        <GuessList guesses={state.guesses} entranceDelay={entranceStep < 6 ? 100 : 0} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Won/Lost — post-game page (when modal closed) */}
+          {isPostGame && (
+            <>
+              {/* Revealed sentence — all blanks shown */}
+              <div className="mb-6">
+                <SentenceClue
+                  answer={answer}
+                  blanksRevealed={state.blanksRevealed}
+                  score={0}
+                  onRevealBlank={() => {}}
+                  disabled={true}
+                  revealAll
+                />
+              </div>
+
+              {/* Nav pills — above showcase */}
+              <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
+                {!today && (
+                  <Link
+                    href="/play/game-sense"
+                    className="inline-flex items-center gap-2 rounded-full border-2 border-[#3D35A0] bg-[#5B4FCF] px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.28)] transition-[transform,box-shadow] duration-100 hover:-translate-y-[3px] hover:shadow-[0_9px_0_#3D35A0,0_12px_24px_rgba(91,79,207,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#3D35A0]"
+                  >
+                    <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                    Today&apos;s game
+                  </Link>
+                )}
+                <Link
+                  href="/play/game-sense/archive"
+                  className="inline-flex items-center gap-2 rounded-full border-2 border-[#3D35A0] bg-[#5B4FCF] px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.28)] transition-[transform,box-shadow] duration-100 hover:-translate-y-[3px] hover:shadow-[0_9px_0_#3D35A0,0_12px_24px_rgba(91,79,207,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#3D35A0]"
+                >
+                  <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                  View past games
+                </Link>
+              </div>
+
+              <div className="mb-6">
+                <ResultCard
+                  game="game-sense"
+                  score={state.score}
+                  streak={0}
+                  won={state.won}
+                  puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                  onViewResults={() => state.won ? setShowWinModal(true) : setShowLossModal(true)}
+                />
+              </div>
+
+              <div className="mb-8">
+                <DailyBadgeShelf currentGame="game-sense" />
+              </div>
+            </>
+          )}
+
+          {/* Nav pills — during gameplay */}
+          {!isPostGame && (
+            <div
+              className="mt-4 flex flex-wrap items-center justify-center gap-4"
+              style={entranceStep < 5 ? { opacity: 0 } : entranceStep < 6 ? { animation: 'gs-fade-in 0.5s cubic-bezier(0.34,1.5,0.64,1) both' } : undefined}
+            >
               {!today && (
                 <Link
                   href="/play/game-sense"
-                  className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+                  className="inline-flex items-center gap-2 rounded-full border-2 border-[#3D35A0] bg-[#5B4FCF] px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.28)] transition-[transform,box-shadow] duration-100 hover:-translate-y-[3px] hover:shadow-[0_9px_0_#3D35A0,0_12px_24px_rgba(91,79,207,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#3D35A0]"
                 >
-                  Play today&apos;s game
+                  <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                  Today&apos;s game
                 </Link>
               )}
               <Link
                 href="/play/game-sense/archive"
-                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-[#3D35A0] bg-[#5B4FCF] px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.28)] transition-[transform,box-shadow] duration-100 hover:-translate-y-[3px] hover:shadow-[0_9px_0_#3D35A0,0_12px_24px_rgba(91,79,207,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#3D35A0]"
               >
-                Browse the archive
+                <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                View past games
               </Link>
             </div>
+          )}
+        </main>
+      </div>
 
-            <div className="mb-6">
-              <ResultCard
-                game="game-sense"
-                score={state.score}
-                streak={0}
-                won={true}
-                puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                onViewResults={() => setShowWinModal(true)}
-              />
-            </div>
-
-            <div className="mb-8">
-              <DailyBadgeShelf currentGame="game-sense" />
-            </div>
-
-            <div className="mb-8">
-              <DiscoverMore currentGame="game-sense" />
-            </div>
-          </>
-        )}
-
-        {/* Guess list — during gameplay */}
-        {playable && state.guesses.length > 0 && !isAnimating && !state.won && (
-          <div className="mb-8">
-            <GuessList guesses={state.guesses} />
-          </div>
-        )}
-
-        {/* Nav pills — during gameplay */}
-        {!(state.won && !showWinModal && !isAnimating) && (
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-            {!today && (
-              <Link
-                href="/play/game-sense"
-                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
-              >
-                Play today&apos;s game
-              </Link>
-            )}
-            <Link
-              href="/play/game-sense/archive"
-              className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
-            >
-              Browse the archive
-            </Link>
-          </div>
-        )}
-      </main>
+      {/* DiscoverMore — outside the blue area */}
+      {isPostGame && (
+        <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
+          <DiscoverMore currentGame="game-sense" />
+        </div>
+      )}
 
       <SiteFooter />
 
       {/* Rules modal */}
       {showRules && <RulesModal onClose={() => setShowRules(false)} />}
+
+      {/* Complete toast */}
+      {showCompleteToast && (
+        <div
+          className="fixed left-1/2 top-6 z-[200] -translate-x-1/2"
+          style={{ animation: 'gs-toast-in 500ms cubic-bezier(0.34, 1.5, 0.64, 1) forwards' }}
+        >
+          <div className="flex items-center gap-2.5 rounded-full bg-emerald-500 px-5 py-2.5 shadow-lg shadow-emerald-500/30">
+            <span className="text-lg">🏆</span>
+            <span className="font-heading text-sm font-black text-white">
+              Game Sense <span className="opacity-80">✓</span>
+            </span>
+            <span className="font-heading text-xs font-semibold text-white/80">
+              +{state.score} pts earned
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Win modal */}
       {showWinModal && state.won && (
@@ -489,7 +722,65 @@ export default function GameSenseDayPage({
             ]
             try { await navigator.clipboard.writeText(lines.join('\n')) } catch {}
           }}
-          onClose={() => setShowWinModal(false)}
+          onClose={() => {
+            setShowWinModal(false)
+            setShowCompleteToast(true)
+            setTimeout(() => setShowCompleteToast(false), 3000)
+          }}
+        />
+      )}
+
+      {/* Loss modal */}
+      {showLossModal && !state.won && (
+        <GameEndModal
+          result="loss"
+          score={state.score}
+          heading={modalCopy.heading}
+          subheading={modalCopy.subheading}
+          rankName={modalCopy.rankName}
+          rankFlavour={modalCopy.rankFlavour}
+          stats={[
+            { label: 'Score', value: String(state.score) },
+            { label: 'Guesses', value: String(state.guesses.length) },
+            { label: 'Clues Revealed', value: `${state.blanksRevealed.length}/5` },
+          ]}
+          heroZone={
+            answer.igdbImageId ? (
+              <div className="relative w-full overflow-hidden bg-secondary" style={{ maxHeight: '240px' }}>
+                <img src={igdbCoverUrl(answer.igdbImageId)} alt={answer.title} className="w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="absolute bottom-3 left-4 right-4">
+                  <h3 className="font-heading text-xl font-black text-white drop-shadow-md">
+                    {answer.title}
+                  </h3>
+                  <p className="text-xs font-semibold text-white/70">
+                    {answer.year} &middot; {answer.genres.slice(0, 2).join(', ')}
+                  </p>
+                </div>
+              </div>
+            ) : null
+          }
+          onShare={async () => {
+            const number = formatGameNumber(date)
+            const emojiRow = state.guesses
+              .map((g) => {
+                if (g.proximity <= 50) return '\u{1F7E9}'
+                if (g.proximity <= 200) return '\u{1F7E8}'
+                if (g.proximity <= 500) return '\u{1F7E7}'
+                return '\u{1F7E5}'
+              })
+              .join('')
+            const lines = [
+              `Game Sense ${number} \u00b7 ${state.score}/1000`,
+              emojiRow,
+              state.blanksRevealed.length > 0
+                ? `${state.guesses.length} guesses \u00b7 ${state.blanksRevealed.length}/5 clues`
+                : `${state.guesses.length} guesses`,
+              'idlehours.co.uk/play/game-sense',
+            ]
+            try { await navigator.clipboard.writeText(lines.join('\n')) } catch {}
+          }}
+          onClose={() => setShowLossModal(false)}
         />
       )}
     </>
