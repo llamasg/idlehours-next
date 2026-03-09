@@ -1,0 +1,2194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Idle Hours — UI Kit v5</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700;1,900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:      #F0EBE0;
+  --cream-dark: #E4DBCC;
+  --cream-mid:  #EAE3D6;
+  --white:      #FDFAF5;
+  --ink:        #1A1A14;
+  --ink-mid:    #4A4A3A;
+  --ink-light:  #8A8A70;
+  --ink-dim:    #C0B89A;
+  --divider:    rgba(26,26,20,0.1);
+  --blue:       #4A8FE8;
+  --blue-dark:  #2D6BC4;
+  --blue-light: #EBF2FC;
+  --amber:      #C8873A;
+  --amber-lt:   #F5E6D3;
+  --green:      #27A85A;
+  --red:        #C0392B;
+  --badge-purple: #5B4FCF;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* Grain */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.45;
+}
+
+/* ── UTILS ─────────────────────────── */
+.label { font-size: 9px; font-weight: 900; letter-spacing: 0.28em; text-transform: uppercase; color: var(--amber); }
+.note  { font-size: 11px; font-weight: 600; color: var(--ink-light); line-height: 1.65; max-width: 290px; }
+.concept {
+  font-size: 10px; font-weight: 700; font-style: italic;
+  color: var(--badge-purple); line-height: 1.65; max-width: 290px;
+  padding: 9px 13px;
+  background: rgba(91,79,207,0.06);
+  border-left: 2.5px solid rgba(91,79,207,0.3);
+  border-radius: 0 6px 6px 0;
+  margin-top: 8px;
+}
+.row  { display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap; }
+.col  { display: flex; flex-direction: column; }
+
+/* ── MASTHEAD ──────────────────────── */
+.masthead {
+  background: var(--ink);
+  position: relative; overflow: hidden;
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 480px;
+}
+/* SVG mountain silhouettes */
+.mh-mountains {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 280px; pointer-events: none;
+}
+.mh-left {
+  position: relative; z-index: 3;
+  padding: 56px 60px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+.mh-right {
+  position: relative; z-index: 3;
+  padding: 56px 60px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.mh-eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 0.32em; text-transform: uppercase; color: var(--amber); margin-bottom: 10px; }
+.mh-logo {
+  font-size: clamp(72px, 9vw, 116px);
+  font-weight: 900; color: white;
+  line-height: 0.85; letter-spacing: -3px; text-transform: uppercase;
+}
+.mh-logo span { color: var(--amber); display: block; }
+.mh-tag { font-size: 13px; font-weight: 600; font-style: italic; color: rgba(255,255,255,0.35); line-height: 1.7; max-width: 300px; margin-top: 22px; }
+.mh-ver {
+  display: inline-flex; align-items: center;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px; padding: 6px 16px; width: fit-content; margin-top: 20px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+.mh-nav { display: flex; flex-direction: column; }
+.mh-nav a {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 17px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+  text-decoration: none; cursor: pointer; transition: all 0.2s;
+}
+.mh-nav a:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+.mh-nav a:hover .nav-name { color: var(--amber); }
+.mh-nav a:hover .nav-arr { transform: translateX(5px); color: var(--amber); opacity: 1; }
+.nav-num  { font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.18); width: 30px; }
+.nav-name { font-size: 14px; font-weight: 800; color: rgba(255,255,255,0.58); flex: 1; transition: color 0.2s; }
+.nav-arr  { font-size: 13px; color: rgba(255,255,255,0.2); transition: all 0.2s; }
+
+/* ── SECTION ───────────────────────── */
+.section { padding: 80px 60px 0; }
+.sh { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 40px; padding-bottom: 18px; border-bottom: 2px dashed var(--cream-dark); }
+/* Dashed section divider — notebook feel */
+.sh-n { font-size: 10px; font-weight: 800; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink-dim); }
+.sh-t { font-size: 30px; font-weight: 900; color: var(--ink); letter-spacing: -0.5px; margin-top: 4px; }
+.sh-sub { font-size: 12px; font-weight: 600; font-style: italic; color: var(--ink-light); text-align: right; max-width: 260px; }
+
+/* ── COLOURS ───────────────────────── */
+.colour-mosaic {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-rows: 130px 130px;
+  gap: 3px; border-radius: 22px; overflow: hidden;
+}
+.cm { padding: 18px 20px; display: flex; flex-direction: column; justify-content: flex-end; transition: filter 0.2s; cursor: default; }
+.cm:hover { filter: brightness(1.07); }
+.cm.tall { grid-row: span 2; }
+.cm-name { font-size: 14px; font-weight: 900; }
+.cm-hex  { font-family: monospace; font-size: 11px; font-weight: 700; opacity: 0.65; margin-top: 2px; }
+.cm-role { font-size: 10px; font-weight: 600; opacity: 0.48; margin-top: 6px; line-height: 1.4; }
+
+.ratio-strip {
+  display: grid; grid-template-columns: 6fr 3fr 1fr;
+  height: 58px; border-radius: 100px; overflow: hidden; margin-top: 10px; gap: 3px;
+}
+.rs { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.rs-n { font-size: 20px; font-weight: 900; }
+
+/* ── TYPE SCALE ────────────────────── */
+.type-table {
+  background: var(--white);
+  border-radius: 20px; overflow: hidden;
+  /* Key detail: dashed internal dividers, like a notebook */
+  border: 1.5px solid var(--divider);
+}
+.tr {
+  display: grid; grid-template-columns: 158px 1fr;
+  border-bottom: 1px dashed var(--cream-dark);
+  align-items: center; transition: background 0.15s;
+}
+.tr:last-child { border-bottom: none; }
+.tr:hover { background: rgba(200,135,58,0.04); }
+.tr-meta { padding: 18px 22px; border-right: 1px dashed var(--cream-dark); display: flex; flex-direction: column; justify-content: center; gap: 3px; align-self: stretch; }
+.tr-id   { font-size: 9px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber); }
+.tr-name { font-size: 11px; font-weight: 700; color: var(--ink); }
+.tr-spec { font-size: 10px; font-weight: 600; color: var(--ink-light); font-family: monospace; margin-top: 1px; }
+.tr-prev { padding: 18px 32px; overflow: hidden; }
+
+.T1 { font-size: 52px; font-weight: 900; color: var(--ink); line-height: 1; letter-spacing: -1.5px; text-transform: uppercase; }
+.T2 { font-size: 68px; font-weight: 900; color: var(--ink); line-height: 0.9; letter-spacing: -2px; }
+.T3 { font-size: 30px; font-weight: 900; color: var(--ink); letter-spacing: -0.4px; }
+.T4 { font-size: 20px; font-weight: 900; color: var(--ink); }
+.T5b { font-size: 18px; font-weight: 900; color: var(--blue); }
+.T5a { font-size: 18px; font-weight: 900; color: var(--amber); }
+.T6  { font-size: 15px; font-weight: 700; color: var(--ink); }
+.T7  { font-size: 14px; font-weight: 600; font-style: italic; color: var(--ink-mid); }
+.T8  { font-size: 10px; font-weight: 800; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-light); }
+.T9  { font-size: 12px; font-weight: 600; font-style: italic; color: var(--ink-light); }
+
+/* ── BUTTONS ───────────────────────── */
+/* Physical press — the one standout interaction */
+.btn-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 3px; border-radius: 22px; overflow: hidden;
+}
+.btn-cell {
+  background: var(--white); padding: 30px 26px;
+  display: flex; flex-direction: column; gap: 14px; align-items: flex-start;
+}
+
+/* ── CHEVRON SWEEP
+   A diagonal stripe of lighter colour sweeps across on hover —
+   like light catching a physical surface.
+   Uses ::before pseudo with a skewed gradient, clipped to border-radius.
+   overflow:hidden on the button is required.
+───────────────────────────────────── */
+@keyframes chevronSweep {
+  0%   { transform: translateX(-140%) skewX(-20deg); }
+  100% { transform: translateX(260%) skewX(-20deg); }
+}
+
+.b1 {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 15px 32px; border-radius: 100px; border: none;
+  background: var(--blue); color: white;
+  font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.02em;
+  cursor: pointer; position: relative; overflow: hidden;
+  box-shadow: 0 5px 0 var(--blue-dark), 0 8px 24px rgba(74,143,232,0.28);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.b1::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  transform: translateX(-140%) skewX(-20deg);
+  pointer-events: none;
+}
+.b1:hover::before { animation: chevronSweep 0.5s ease forwards; }
+.b1:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--blue-dark), 0 12px 32px rgba(74,143,232,0.35); }
+.b1:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--blue-dark), 0 4px 10px rgba(74,143,232,0.15); }
+
+.b2 {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 15px 32px; border-radius: 100px; border: none;
+  background: var(--amber); color: white;
+  font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.02em;
+  cursor: pointer; position: relative; overflow: hidden;
+  box-shadow: 0 5px 0 #9D6328, 0 8px 24px rgba(200,135,58,0.28);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.b2::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  transform: translateX(-140%) skewX(-20deg);
+  pointer-events: none;
+}
+.b2:hover::before { animation: chevronSweep 0.5s ease forwards; }
+.b2:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #9D6328, 0 12px 32px rgba(200,135,58,0.35); }
+.b2:active { transform: translateY(4px); box-shadow: 0 1px 0 #9D6328, 0 4px 10px rgba(200,135,58,0.15); }
+
+.b3 {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 15px 32px; border-radius: 100px; border: none;
+  background: var(--ink); color: white;
+  font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 800;
+  cursor: pointer; position: relative; overflow: hidden;
+  box-shadow: 0 5px 0 rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.18);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.b3::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-140%) skewX(-20deg);
+  pointer-events: none;
+}
+.b3:hover::before { animation: chevronSweep 0.5s ease forwards; }
+.b3:hover { transform: translateY(-2px); }
+.b3:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.5); }
+
+.b4 {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 13px 28px; border-radius: 100px;
+  border: 2px solid var(--cream-dark); background: transparent; color: var(--ink-mid);
+  font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+}
+.b4:hover { border-color: var(--ink); color: var(--ink); transform: translateY(-1px); }
+
+.b5 { background: none; border: none; cursor: pointer; padding: 0;
+  font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+  color: var(--blue); text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px; text-decoration-color: rgba(74,143,232,0.35);
+  transition: text-decoration-color 0.15s;
+}
+.b5:hover { text-decoration-color: var(--blue); }
+.b6 { background: none; border: none; cursor: pointer; padding: 0;
+  font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+  color: var(--amber); text-decoration: underline; text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px; text-decoration-color: rgba(200,135,58,0.35);
+  transition: text-decoration-color 0.15s;
+}
+.b6:hover { text-decoration-color: var(--amber); }
+
+/* ── CARDS ─────────────────────────── */
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+/* Game card — slight wobble on hover */
+.gc {
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  border-radius: 18px; overflow: hidden;
+  box-shadow: 0 3px 0 var(--cream-dark), 0 6px 20px rgba(0,0,0,0.06);
+  transition: transform 0.22s cubic-bezier(0.34,1.5,0.64,1), box-shadow 0.22s;
+  cursor: default;
+}
+.gc:hover {
+  transform: translateY(-5px) rotate(-0.5deg);
+  box-shadow: 0 8px 0 var(--cream-dark), 0 18px 40px rgba(0,0,0,0.11);
+}
+.gc-cover {
+  height: 110px; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.gc-cover-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; font-style: italic; color: rgba(255,255,255,0.38); letter-spacing: 0.1em; text-transform: uppercase; }
+.gc-body { padding: 15px 16px 16px; }
+.gc-meta { display: flex; align-items: center; gap: 5px; margin-bottom: 7px; }
+.gc-plat { width: 15px; height: 15px; background: var(--cream-dark); border-radius: 3px; display: inline-block; }
+.gc-plat-label { font-size: 10px; font-weight: 700; color: var(--ink-light); }
+.gc-title { font-size: 16px; font-weight: 900; color: var(--ink); line-height: 1.1; letter-spacing: -0.2px; }
+.gc-desc  { font-size: 12px; font-weight: 600; color: var(--ink-light); margin-top: 5px; line-height: 1.5; }
+.gc-foot  { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--cream-dark); }
+.gc-tags  { display: flex; gap: 4px; }
+.gc-tag   { font-size: 9px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; background: var(--cream); border-radius: 5px; padding: 3px 7px; color: var(--ink-light); }
+.gc-cta   { font-size: 11px; font-weight: 800; color: var(--blue); }
+
+/* Result card */
+.rc {
+  background: var(--white); border: 1.5px solid var(--divider);
+  border-radius: 20px; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.rc-stripe { height: 4px; }
+.rc-head { display: flex; justify-content: space-between; align-items: baseline; padding: 18px 24px 16px; border-bottom: 1px dashed var(--cream-dark); }
+.rc-heading { font-size: 20px; font-weight: 900; color: var(--ink); }
+.rc-sub { font-size: 13px; font-weight: 600; font-style: italic; color: var(--ink-light); }
+.rc-body { display: grid; grid-template-columns: 1fr 1fr; }
+.rc-left { padding: 26px 22px; border-right: 1px dashed var(--cream-dark); display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.rc-right { padding: 22px 22px; }
+.rc-foot { display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; border-top: 1px dashed var(--cream-dark); background: var(--cream); }
+.rc-foot-meta { font-size: 11px; font-weight: 600; color: var(--ink-light); font-style: italic; }
+
+/* Topic row — slides right like pulling from shelf */
+.tc {
+  background: var(--white); border: 1.5px solid var(--divider);
+  border-radius: 14px; padding: 13px 16px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: default; transition: all 0.2s cubic-bezier(0.34,1.5,0.64,1);
+}
+.tc:hover { border-color: var(--blue); transform: translateX(5px); box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+.tc-icon { width: 42px; height: 42px; border-radius: 11px; background: var(--cream); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+.tc:hover .tc-icon { background: var(--blue-light); }
+.tc-title { font-size: 15px; font-weight: 800; color: var(--ink); }
+.tc-sub { font-size: 12px; font-weight: 600; color: var(--ink-light); margin-top: 2px; }
+.tc-right { margin-left: auto; display: flex; align-items: center; gap: 7px; }
+.tc-count { font-size: 11px; font-weight: 800; color: var(--ink-light); background: var(--cream); border-radius: 100px; padding: 3px 10px; }
+.tc-arr { font-size: 14px; color: var(--ink-dim); transition: all 0.2s; }
+.tc:hover .tc-arr { transform: translateX(3px); color: var(--blue); }
+
+/* ── STAT PILLS ─────────────────────
+   Back to full pill — soft, chunky, cute.
+   v2 was right. No border needed.
+───────────────────────────────────── */
+.stat-pill {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 3px;
+  background: var(--cream-dark);
+  border-radius: 100px; /* FULL PILL — soft and chunky */
+  padding: 11px 20px;
+  min-width: 72px;
+  /* No border — the cream-dark fill is enough contrast against white */
+}
+.sp-v { font-size: 22px; font-weight: 900; color: var(--ink); line-height: 1; letter-spacing: -0.5px; }
+.sp-l { font-size: 9px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-light); }
+
+/* Stat pill row — slight arc offset, ACNH-inspired */
+.stat-row {
+  display: flex; gap: 6px; align-items: center;
+}
+.stat-row .stat-pill:nth-child(2) { transform: translateY(-3px); }
+.stat-row .stat-pill:nth-child(4) { transform: translateY(-3px); }
+/* Every other pill nudges up slightly — makes the row feel drawn, not gridded */
+
+/* ── STAT ARC CONTAINER ──────────────────
+   Wraps the arc stat-row. The container's border-radius is
+   asymmetric — larger on top than bottom — so the top edge
+   visibly curves, giving the pills a "seated in a tray" feeling.
+   Pills aren't floating randomly; they're resting in a shape.
+─────────────────────────────────────────── */
+.stat-arc-wrap {
+  display: inline-flex;
+  padding: 18px 20px 14px;
+  /* Shallow bowl: large top-radius curves above the pills,
+     tight bottom-radius keeps it compact */
+  border-radius: 60px 60px 28px 28px;
+  background: var(--cream-mid);
+  border: 1.5px solid var(--cream-dark);
+  gap: 14px; /* more breathing room so arc is visible between pills */
+  align-items: flex-end; /* anchor to bottom so translateY-up pills arc upward */
+  position: relative;
+}
+/* Arc row inside the wrap — override gap to match wrap */
+.stat-arc-wrap .stat-pill:nth-child(1) { transform: translateY(6px); }
+.stat-arc-wrap .stat-pill:nth-child(2) { transform: translateY(2px); }
+.stat-arc-wrap .stat-pill:nth-child(3) { transform: translateY(0px); }
+.stat-arc-wrap .stat-pill:nth-child(4) { transform: translateY(2px); }
+.stat-arc-wrap .stat-pill:nth-child(5) { transform: translateY(6px); }
+
+/* ── CHIPS ──────────────────────────
+   Context tags — label not pill (6px radius)
+   Stat pills — full pill (100px radius)
+   These are different things with different shapes for a reason.
+───────────────────────────────────── */
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.02em; }
+.chip-amber { background: var(--amber-lt); border: 1.5px solid rgba(200,135,58,0.28); color: var(--amber); }
+.chip-blue  { background: var(--blue-light); border: 1.5px solid rgba(74,143,232,0.22); color: var(--blue-dark); }
+.chip-ink   { background: var(--cream); border: 1.5px solid var(--divider); color: var(--ink-mid); }
+.chip-green { background: rgba(39,168,90,0.1); border: 1.5px solid rgba(39,168,90,0.22); color: var(--green); }
+.chip-red   { background: rgba(192,57,43,0.07); border: 1.5px solid rgba(192,57,43,0.18); color: var(--red); }
+
+/* ── CHIPS SHOWCASE ─────────────────── */
+.chips-board {
+  background: var(--white); border-radius: 20px;
+  border: 1.5px solid var(--divider); overflow: hidden;
+}
+.cb-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1px dashed var(--cream-dark); }
+.cb-row:last-child { border-bottom: none; }
+.cb-lbl { font-size: 9px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase; color: var(--amber); width: 68px; flex-shrink: 0; }
+
+/* ── BADGES ─────────────────────────── */
+.badge {
+  border-radius: 50%; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  cursor: default;
+  transition: transform 0.22s cubic-bezier(0.34,1.5,0.64,1);
+}
+.badge:hover { transform: scale(1.07) rotate(3deg); }
+/* Hover: tiny rotate — like flipping a coin or picking up a medallion */
+
+.b-96 { width: 96px; height: 96px; }
+.b-72 { width: 72px; height: 72px; }
+.b-48 { width: 48px; height: 48px; }
+
+.b-blue  { background: var(--blue); box-shadow: 0 0 0 4px var(--blue-light), 0 8px 24px rgba(74,143,232,0.32); }
+.b-amber { background: var(--amber); box-shadow: 0 0 0 4px var(--amber-lt), 0 8px 24px rgba(200,135,58,0.32); }
+.b-muted { background: var(--ink-light); box-shadow: 0 0 0 3px var(--cream-dark); }
+.b-empty { background: transparent; border: 2px dashed var(--ink-dim); }
+
+/* Inner ring — essential brand detail from badge illustrations */
+.badge::before {
+  content: '';
+  position: absolute; inset: 7px;
+  border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.22);
+  pointer-events: none;
+}
+.b-empty::before { display: none; }
+
+.b-illus { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.32); text-align: center; line-height: 1.35; padding: 0 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Stamp animation */
+@keyframes stampIn {
+  0%   { transform: scale(0.4) translateY(-30px); opacity: 0; }
+  50%  { transform: scale(1.18) translateY(0); opacity: 1; }
+  70%  { transform: scale(0.94) rotate(-2deg); }
+  85%  { transform: scale(1.05) rotate(1deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes inkRing {
+  0%   { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+@keyframes scorePop {
+  0%   { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-44px); opacity: 0; }
+}
+
+.stamp-live { animation: stampIn 0.65s cubic-bezier(0.34,1.5,0.64,1) forwards; }
+
+.badge-demo-wrap { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 120px; height: 120px; }
+.ink-ring {
+  position: absolute; inset: 12px; border-radius: 50%;
+  border: 2px solid var(--blue);
+  animation: inkRing 0.7s ease-out forwards;
+  opacity: 0;
+}
+.ink-ring-2 { animation-delay: 0.15s; }
+.score-float {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  font-size: 13px; font-weight: 900; color: var(--green);
+  white-space: nowrap;
+  animation: scorePop 0.8s ease forwards 0.2s; opacity: 0;
+}
+
+/* ── RANK LADDER ───────────────────── */
+.rank-ladder {
+  background: var(--white); border-radius: 16px; overflow: hidden;
+  border: 1.5px solid var(--divider); max-width: 290px;
+}
+.rl-head { padding: 12px 18px 10px; border-bottom: 1px dashed var(--cream-dark); font-size: 9px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-light); }
+.rl-body { padding: 8px 10px; display: flex; flex-direction: column; gap: 4px; }
+
+.rung {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 10px; border-radius: 9px;
+  border: 1.5px solid transparent;
+}
+.rung.achieved { opacity: 0.42; }
+.rung.current { background: var(--blue-light); border-color: rgba(74,143,232,0.2); }
+.rung.next { border-color: var(--divider); border-style: dashed; }
+.rung-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cream-dark); flex-shrink: 0; }
+.rung.achieved .rung-dot { background: var(--green); }
+.rung.current  .rung-dot { background: var(--blue); }
+.rung-name { font-size: 13px; font-weight: 800; color: var(--ink); flex: 1; }
+.rung.current .rung-name { color: var(--blue); }
+.rung-pts { font-size: 10px; font-weight: 600; color: var(--ink-light); }
+.rung-you { font-size: 9px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
+
+/* ── LEADERBOARD ───────────────────── */
+.lb {
+  background: var(--white); border-radius: 20px; overflow: hidden;
+  border: 1.5px solid var(--divider);
+  box-shadow: 0 5px 0 var(--cream-dark), 0 10px 32px rgba(0,0,0,0.07);
+  max-width: 460px;
+}
+.lb-head { padding: 20px 24px 14px; border-bottom: 2px dashed var(--cream-dark); }
+.lb-topic { font-size: 24px; font-weight: 900; color: var(--ink); letter-spacing: -0.4px; }
+.lb-meta  { font-size: 11px; font-weight: 600; color: var(--ink-light); font-style: italic; margin-top: 2px; }
+.lb-cols  { display: grid; grid-template-columns: 42px 1fr 88px 66px; padding: 7px 22px; background: var(--cream-mid); border-bottom: 2px dashed rgba(26,26,20,0.18); }
+.lb-ch    { font-size: 9px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light); }
+.lb-ch.r  { text-align: right; }
+/* Leaderboard rows: thicker dashes, higher opacity — needs to read clearly at 100% zoom */
+.lb-row   { display: grid; grid-template-columns: 42px 1fr 88px 66px; padding: 14px 22px; border-bottom: 2px dashed rgba(26,26,20,0.13); align-items: center; transition: background 0.15s; }
+.lb-row:last-child { border-bottom: none; }
+.lb-row:hover { background: var(--cream); }
+.lb-row.you   { background: rgba(200,135,58,0.06); border-left: 3px solid var(--amber); padding-left: 19px; }
+.lb-pos  { font-size: 15px; font-weight: 800; color: var(--ink-light); }
+.lb-nw   { display: flex; align-items: center; gap: 6px; }
+.lb-name { font-size: 16px; font-weight: 800; color: var(--ink); }
+.lb-row.you .lb-name { color: var(--amber); }
+.lb-you-tag { font-size: 9px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(200,135,58,0.15); color: var(--amber); border-radius: 4px; padding: 2px 7px; }
+.lb-score { font-size: 16px; font-weight: 800; color: var(--ink); text-align: right; }
+.lb-of { font-size: 11px; font-weight: 600; color: var(--ink-light); }
+.lb-time  { font-size: 13px; font-weight: 700; color: var(--ink-mid); text-align: right; }
+
+/* ── HUD ────────────────────────────── */
+.hud {
+  background: var(--ink); border-radius: 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 22px; gap: 16px;
+}
+.hud-l { display: flex; flex-direction: column; }
+.hud-ey { font-size: 9px; font-weight: 800; letter-spacing: 0.24em; text-transform: uppercase; color: var(--amber); }
+.hud-ti { font-size: 18px; font-weight: 900; color: white; letter-spacing: -0.3px; }
+.timer-w { position: relative; width: 50px; height: 50px; flex-shrink: 0; }
+.timer-w svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.t-track { fill: none; stroke: rgba(255,255,255,0.1); stroke-width: 3.5; }
+.t-fill  { fill: none; stroke: var(--amber); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 119.4; stroke-dashoffset: 38; }
+.timer-n { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: white; }
+.hud-r { text-align: right; }
+.hud-score { font-size: 40px; font-weight: 900; color: white; line-height: 1; letter-spacing: -1px; }
+.hud-sl { font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.32); }
+
+/* Score bounce */
+@keyframes scoreBounce { 0%,100% { transform: scale(1); } 50% { transform: scale(1.35); } }
+.score-bounce { animation: scoreBounce 0.25s cubic-bezier(0.34,1.5,0.64,1); }
+
+/* ── PROGRESS BAR ───────────────────── */
+.prog-wrap { position: relative; padding-bottom: 16px; }
+.prog-bar { height: 6px; background: var(--cream-dark); border-radius: 100px; overflow: visible; position: relative; }
+.prog-fill { height: 100%; width: 58%; background: linear-gradient(90deg, rgba(200,135,58,0.5) 0%, var(--amber) 100%); border-radius: 100px; }
+.ms-dot {
+  position: absolute; top: -5px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--cream-dark); border: 2px solid white;
+  transform: translateX(-50%);
+  transition: all 0.3s;
+}
+.ms-dot.lit {
+  background: var(--amber);
+  box-shadow: 0 0 0 3px rgba(200,135,58,0.2), 0 0 8px rgba(200,135,58,0.5);
+}
+.ms-label { position: absolute; top: 12px; font-size: 9px; font-weight: 800; color: var(--ink-light); transform: translateX(-50%); letter-spacing: 0.04em; white-space: nowrap; }
+.ms-label.lit { color: var(--amber); }
+
+/* ── INPUTS ─────────────────────────── */
+.i1 {
+  background: var(--white); border: 2px solid var(--divider);
+  border-radius: 12px; padding: 13px 16px;
+  font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink);
+  outline: none; width: 100%;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.i1:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(74,143,232,0.1); transform: scale(1.01); }
+.i1.amber-focus:focus { border-color: var(--amber); box-shadow: 0 0 0 4px rgba(200,135,58,0.1); }
+
+/* ── MICRO INTERACTIONS ──────────────── */
+.micro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; border-radius: 22px; overflow: hidden; }
+.micro-cell { background: var(--white); padding: 26px 24px; display: flex; flex-direction: column; gap: 10px; }
+.mi-title { font-size: 13px; font-weight: 900; color: var(--ink); }
+.mi-desc  { font-size: 11px; font-weight: 600; color: var(--ink-light); line-height: 1.6; }
+
+@keyframes scoreFloat2 { 0%,100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(-10px); opacity: 0.7; } }
+.score-float-demo { display: inline-flex; align-items: center; justify-content: center; padding: 9px 18px; border-radius: 100px; background: rgba(39,168,90,0.1); border: 1.5px solid rgba(39,168,90,0.25); font-size: 14px; font-weight: 900; color: var(--green); animation: scoreFloat2 1.6s ease infinite; }
+
+@keyframes shakeInput { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+.shake-demo { display: inline-flex; align-items: center; padding: 10px 18px; background: var(--white); border: 2px solid var(--red); border-radius: 10px; font-size: 14px; font-weight: 700; color: var(--red); animation: shakeInput 0.5s ease infinite; }
+
+/* Blank reveal rotation — the Game Sense moment */
+@keyframes blankReveal {
+  0%   { transform: rotateY(90deg) scale(0.9); opacity: 0; }
+  60%  { transform: rotateY(-4deg) scale(1.02); opacity: 1; }
+  80%  { transform: rotateY(2deg); }
+  100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+}
+.blank-demo {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%; min-height: 48px; border-radius: 10px;
+  background: var(--blue-light); border: 2px solid rgba(74,143,232,0.3);
+  font-size: 16px; font-weight: 900; color: var(--blue);
+  animation: blankReveal 0.45s cubic-bezier(0.34,1.5,0.64,1) infinite;
+  animation-direction: alternate;
+  transform-style: preserve-3d;
+}
+
+/* Press demo */
+.press-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 12px 24px; border-radius: 100px; border: none;
+  background: var(--blue); color: white;
+  font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 800;
+  cursor: pointer; user-select: none;
+  box-shadow: 0 5px 0 var(--blue-dark);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.press-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--blue-dark); }
+
+/* Milestone toast */
+@keyframes toastIn { 0% { transform: translateX(-50%) translateY(-80px); opacity: 0; } 60% { transform: translateX(-50%) translateY(4px); opacity: 1; } 100% { transform: translateX(-50%) translateY(0); opacity: 1; } }
+.toast-demo {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--white); border: 1.5px solid rgba(200,135,58,0.4);
+  border-radius: 100px; padding: 9px 20px;
+  font-size: 13px; font-weight: 800; color: var(--amber);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  animation: toastIn 0.5s cubic-bezier(0.34,1.5,0.64,1) forwards;
+}
+
+/* ── RULES BLOCK ─────────────────────── */
+.rules-block { background: var(--ink); border-radius: 22px; overflow: hidden; }
+.rules-top { padding: 46px 52px 32px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.rules-eye { font-size: 10px; font-weight: 800; letter-spacing: 0.32em; text-transform: uppercase; color: var(--amber); margin-bottom: 10px; }
+.rules-hl { font-size: 40px; font-weight: 900; color: white; letter-spacing: -1px; line-height: 1.05; }
+.rules-hl em { font-style: italic; color: var(--amber); }
+.rules-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.ri { padding: 26px 34px; border-bottom: 1px solid rgba(255,255,255,0.06); border-right: 1px solid rgba(255,255,255,0.06); display: flex; gap: 15px; }
+.ri:nth-child(even) { border-right: none; }
+.ri:nth-last-child(-n+2) { border-bottom: none; }
+.ri-n { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.07); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.28); margin-top: 1px; }
+.ri-t { font-size: 13px; font-weight: 800; color: white; margin-bottom: 5px; }
+.ri-c { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.43); line-height: 1.65; }
+.ri-c strong { color: rgba(255,255,255,0.78); font-weight: 800; }
+
+/* Footer */
+.kit-footer { margin-top: 80px; background: var(--ink); padding: 46px 60px; display: flex; justify-content: space-between; align-items: center; }
+.kf-l { font-size: 24px; font-weight: 900; color: white; letter-spacing: -0.3px; }
+.kf-l span { color: var(--amber); }
+.kf-r { font-size: 11px; font-weight: 700; font-style: italic; color: rgba(255,255,255,0.26); }
+
+/* Stamp section demo */
+.stamp-section { background: var(--white); border-radius: 16px; border: 1.5px solid var(--divider); padding: 28px 32px; }
+
+
+/* ═══════════════════════════════════════════
+   V5 ADDITIONS — TEXTURE, STRIPE, STICKER
+═══════════════════════════════════════════ */
+
+/* ── DIAGONAL STRIPE TEXTURE ─────────────
+   The core new texture. A repeating 45deg stripe
+   that can be applied to any coloured element.
+   Animated variant scrolls infinitely left.
+   Static variant for subtler use cases.
+─────────────────────────────────────────── */
+@keyframes stripeScroll {
+  /* Move exactly one tile-width — guarantees seamless loop.
+     Tile is 28px wide at 45deg, so we move 28px horizontally. */
+  0%   { background-position: 0 0; }
+  100% { background-position: 28px 28px; }
+}
+@keyframes stripeScrollSlow {
+  0%   { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+/* ── STRIPE TEXTURES ──────────────────────
+   Key fix: use linear-gradient (not repeating-) inside
+   a background-size tile. The tile is sized so the diagonal
+   stripe repeats seamlessly. For 45deg stripes:
+   tile = stripe_gap × √2. Here gap=14px → tile=~20px.
+   Animation moves exactly one tile — zero jumpiness.
+─────────────────────────────────────────── */
+.stripe-blue {
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.13) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255,255,255,0.13) 50%,
+    rgba(255,255,255,0.13) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 28px 28px;
+  animation: stripeScroll 3s linear infinite;
+}
+.stripe-amber {
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255,255,255,0.15) 50%,
+    rgba(255,255,255,0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 28px 28px;
+  animation: stripeScroll 3.5s linear infinite;
+}
+.stripe-ink {
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.04) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255,255,255,0.04) 50%,
+    rgba(255,255,255,0.04) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 40px 40px;
+  animation: stripeScrollSlow 6s linear infinite;
+}
+.stripe-static {
+  background-image: linear-gradient(
+    -45deg,
+    rgba(0,0,0,0.05) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(0,0,0,0.05) 50%,
+    rgba(0,0,0,0.05) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+}
+
+/* ── HOURGLASS PATTERN ───────────────────
+   Two variants:
+   .hourglass-pattern     — single icon, well-spaced, tilted ~15deg
+   .hourglass-pattern-alt — 2×2 tile with each icon at a different
+                            angle so the repeat looks organic, not stamped
+─────────────────────────────────────────── */
+.hourglass-pattern {
+  position: relative;
+  overflow: hidden;
+}
+.hourglass-pattern::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("https://idlehours.co.uk/images/icons/icon_hourglass-loading-filtering-timer.svg");
+  /* 5× bigger tile — far less dense, proper breathing room */
+  background-size: 180px 180px;
+  background-repeat: repeat;
+  opacity: 0.09;
+  filter: invert(1);
+  /* Rotate the entire layer so the icon leans */
+  transform: rotate(15deg) scale(1.2);
+  transform-origin: center;
+  pointer-events: none; z-index: 0;
+}
+.hourglass-pattern > * { position: relative; z-index: 1; }
+
+/* Alternating-tilt variant — SVG data URI encodes a 2×2 tile
+   with four hourglasses each rotated differently.
+   Top-left: −20deg · Top-right: +22deg
+   Bottom-left: +12deg · Bottom-right: −8deg
+   The asymmetry breaks the grid rhythm entirely. */
+.hourglass-pattern-alt {
+  position: relative;
+  overflow: hidden;
+}
+.hourglass-pattern-alt::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3C!-- top-left: -20deg --%3E%3Cg transform='translate(50,50) rotate(-20)'%3E%3Cpath d='M-12-18h24v8l-12 10-12-10v-8zM-12 18h24v-8l-12-10-12 10v8z' fill='white' opacity='0.9'/%3E%3Crect x='-12' y='-21' width='24' height='4' rx='2' fill='white' opacity='0.9'/%3E%3Crect x='-12' y='17' width='24' height='4' rx='2' fill='white' opacity='0.9'/%3E%3C/g%3E%3C!-- top-right: +22deg --%3E%3Cg transform='translate(150,50) rotate(22)'%3E%3Cpath d='M-12-18h24v8l-12 10-12-10v-8zM-12 18h24v-8l-12-10-12 10v8z' fill='white' opacity='0.9'/%3E%3Crect x='-12' y='-21' width='24' height='4' rx='2' fill='white' opacity='0.9'/%3E%3Crect x='-12' y='17' width='24' height='4' rx='2' fill='white' opacity='0.9'/%3E%3C/g%3E%3C!-- bottom-left: +12deg --%3E%3Cg transform='translate(50,150) rotate(12)'%3E%3Cpath d='M-12-18h24v8l-12 10-12-10v-8zM-12 18h24v-8l-12-10-12 10v8z' fill='white' opacity='0.9'/%3E%3Crect x='-12' y='-21' width='24' height='4' rx='2' fill='white' opacity='0.9'/%3E%3Crect x='-12' y='17' width='24' height='4' rx='2' fill='white' opacity='0.9'/%3E%3C/g%3E%3C!-- bottom-right: -8deg --%3E%3Cg transform='translate(150,150) rotate(-8)'%3E%3Cpath d='M-12-18h24v8l-12 10-12-10v-8zM-12 18h24v-8l-12-10-12 10v8z' fill='white' opacity='0.9'/%3E%3Crect x='-12' y='-21' width='24' height='4' rx='2' fill='white' opacity='0.9'/%3E%3Crect x='-12' y='17' width='24' height='4' rx='2' fill='white' opacity='0.9'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  opacity: 0.08;
+  pointer-events: none; z-index: 0;
+}
+.hourglass-pattern-alt > * { position: relative; z-index: 1; }
+
+/* ── STICKER / TAB LABEL ─────────────────
+   The "BUNDLE" technique from the Deliveroo screenshot.
+   A label that sits ON TOP of a card, overlapping its border.
+   Applied as a position:absolute element inside position:relative card.
+   Or as a hanging tab on section headers.
+─────────────────────────────────────────── */
+.sticker {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 9px; font-weight: 900; letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 5px 10px; border-radius: 6px;
+  position: relative; z-index: 10;
+  /* Sticker sits slightly rotated — like it was applied by hand */
+  transform: rotate(-1.5deg);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+.sticker-amber { background: var(--amber); color: white; }
+.sticker-blue  { background: var(--blue); color: white; }
+.sticker-ink   { background: var(--ink); color: white; }
+.sticker-green { background: var(--green); color: white; }
+.sticker-white { background: var(--white); color: var(--ink); border: 1.5px solid var(--divider); }
+
+/* Card with overlapping sticker — wrapper technique */
+.gc-sticker-wrap {
+  position: relative;
+  /* Sticker overlaps from above */
+}
+.gc-sticker-wrap .sticker {
+  position: absolute;
+  top: -10px; left: 14px; /* Overlaps the card top edge */
+  z-index: 10;
+}
+/* Alternative: sticker on the cover image */
+.gc-cover .sticker {
+  position: absolute;
+  bottom: -10px; left: 14px;
+}
+
+/* ── PROGRESS BAR V2 ─────────────────────
+   Bigger, bolder. Fill goes edge to edge.
+   Milestone numbers sit INSIDE the fill.
+   Striped fill on active/blitz context.
+─────────────────────────────────────────── */
+.prog2-wrap { display: flex; flex-direction: column; gap: 8px; }
+.prog2-bar {
+  height: 10px; background: var(--cream-dark);
+  border-radius: 100px; overflow: hidden;
+  position: relative;
+}
+.prog2-fill {
+  height: 100%; border-radius: 100px;
+  position: relative; overflow: hidden;
+  transition: width 0.4s cubic-bezier(0.34,1.5,0.64,1);
+}
+/* Stripe layer inside the fill — slowed right down */
+.prog2-fill::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255,255,255,0.2) 50%,
+    rgba(255,255,255,0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+  animation: stripeScroll 2.5s linear infinite;
+}
+.prog2-fill-blue  { background: var(--blue); }
+.prog2-fill-amber { background: var(--amber); }
+.prog2-fill-green { background: var(--green); }
+
+.prog2-milestones {
+  display: flex; gap: 6px;
+}
+.prog2-ms {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 800;
+  padding: 4px 10px; border-radius: 100px;
+  border: 1.5px solid transparent;
+}
+.prog2-ms.hit { background: var(--amber-lt); border-color: rgba(200,135,58,0.3); color: var(--amber); }
+.prog2-ms.next { background: var(--cream); border-color: var(--cream-dark); color: var(--ink-light); border-style: dashed; }
+
+/* ── SCORE CHIP ──────────────────────────
+   The "400pts" treatment from Deliveroo screenshot.
+   Bold background with stripe texture, score large inside.
+   Used on end screens and leaderboard headers.
+─────────────────────────────────────────── */
+.score-chip {
+  display: inline-flex; align-items: baseline; gap: 3px;
+  padding: 14px 24px; border-radius: 14px;
+  position: relative; overflow: hidden;
+}
+.score-chip-blue  { background: var(--blue); color: white; }
+.score-chip-amber { background: var(--amber); color: white; }
+.score-chip-ink   { background: var(--ink); color: white; }
+.sc-big  { font-size: 38px; font-weight: 900; line-height: 1; letter-spacing: -1px; position: relative; z-index: 1; }
+.sc-unit { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.7; position: relative; z-index: 1; }
+
+/* ── MILESTONE TOAST V2 ──────────────────
+   Two-zone structure: icon pill + text body.
+   Icon zone has its OWN solid background-color so the parent
+   stripe background-image never bleeds through — eliminates
+   the grey artefact. overflow:hidden on .toast-v2 clips
+   the stripe and rounds the whole pill.
+─────────────────────────────────────────── */
+.toast-v2 {
+  display: inline-flex; align-items: stretch; gap: 0;
+  border-radius: 100px; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 3px 0 rgba(0,0,0,0.12);
+  width: fit-content; /* never stretches to fill parent */
+  max-width: 340px;
+}
+.toast-v2-icon {
+  width: 72px; height: 72px;
+  min-width: 72px; /* never squishes */
+  background-color: rgba(0,0,0,0.22);
+  background-image: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; flex-shrink: 0;
+}
+.toast-v2-body {
+  padding: 14px 28px 14px 18px;
+  display: flex; flex-direction: column; justify-content: center; gap: 4px;
+}
+.toast-v2-label { font-size: 10px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; color: white; opacity: 0.8; white-space: nowrap; }
+.toast-v2-text  { font-size: 22px; font-weight: 900; color: white; line-height: 1.1; letter-spacing: -0.3px; white-space: nowrap; }
+
+/* ── BLITZ B2 BUTTON — STRIPE VARIANT ───
+   B2 gets the animated stripe as a permanent texture.
+   Makes it feel kinetic even at rest.
+   Only B2 — keeps it special to Blitz.
+─────────────────────────────────────────── */
+.b2-stripe {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 15px 34px; border-radius: 100px; border: none;
+  background: var(--amber); color: white;
+  font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 0.03em;
+  cursor: pointer; position: relative; overflow: hidden;
+  box-shadow: 0 5px 0 #9D6328, 0 8px 24px rgba(200,135,58,0.3);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+/* Stripe layer */
+.b2-stripe::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.12) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255,255,255,0.12) 50%,
+    rgba(255,255,255,0.12) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 28px 28px;
+  animation: stripeScroll 3s linear infinite;
+  pointer-events: none;
+}
+.b2-stripe span { position: relative; z-index: 1; }
+.b2-stripe:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #9D6328, 0 14px 32px rgba(200,135,58,0.38); }
+.b2-stripe:active { transform: translateY(4px); box-shadow: 0 1px 0 #9D6328; }
+
+/* ── HMD SCORE CHIP — striped highlight ─ */
+.hud-score-striped {
+  position: relative; overflow: hidden;
+  background: rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 6px 14px;
+  display: flex; flex-direction: column; align-items: flex-end;
+}
+.hud-score-striped::before {
+  content: '';
+  position: absolute; inset: 0; border-radius: 12px;
+  background-image: linear-gradient(
+    -45deg,
+    rgba(200,135,58,0.18) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(200,135,58,0.18) 50%,
+    rgba(200,135,58,0.18) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 28px 28px;
+  animation: stripeScroll 4s linear infinite;
+  pointer-events: none;
+}
+
+/* ── SECTION HEADER TAB ──────────────────
+   Section numbers displayed as a sticker tab
+   overlapping the section divider line.
+─────────────────────────────────────────── */
+.sh-tab {
+  display: inline-flex; align-items: center; gap: 10px;
+  position: relative;
+}
+.sh-tab-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--amber); color: white;
+  font-size: 11px; font-weight: 900;
+  transform: rotate(-2deg);
+  box-shadow: 0 2px 6px rgba(200,135,58,0.4);
+  flex-shrink: 0;
+}
+
+/* ── GAME CARD V2 — with sticker tag ────
+   Demonstrates the overlapping sticker on a cover.
+─────────────────────────────────────────── */
+.gc2 {
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  border-radius: 18px; overflow: visible; /* visible to allow sticker to poke out */
+  box-shadow: 0 3px 0 var(--cream-dark), 0 6px 20px rgba(0,0,0,0.06);
+  transition: transform 0.22s cubic-bezier(0.34,1.5,0.64,1), box-shadow 0.22s;
+  cursor: default; position: relative;
+}
+.gc2:hover {
+  transform: translateY(-5px) rotate(-0.5deg);
+  box-shadow: 0 8px 0 var(--cream-dark), 0 18px 40px rgba(0,0,0,0.11);
+}
+.gc2-inner { border-radius: 18px; overflow: hidden; }
+.gc2-cover {
+  height: 110px; position: relative; overflow: hidden;
+  display: flex; align-items: flex-end; justify-content: flex-start;
+  padding: 10px 14px;
+}
+.gc2-cover-bg { position: absolute; inset: 0; }
+.gc2-rank {
+  /* Score/rank bubble sitting on the cover */
+  position: relative; z-index: 2;
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+  border-radius: 100px; padding: 4px 10px;
+  font-size: 11px; font-weight: 900; color: white;
+}
+.gc2-body { padding: 18px 16px 16px; }
+.gc2-title { font-size: 16px; font-weight: 900; color: var(--ink); line-height: 1.1; letter-spacing: -0.2px; }
+.gc2-desc  { font-size: 12px; font-weight: 600; color: var(--ink-light); margin-top: 4px; line-height: 1.5; }
+.gc2-foot  { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--cream-dark); }
+
+/* ── TEXTURE DEMO SECTION ────────────────
+   Shows all texture patterns side by side.
+─────────────────────────────────────────── */
+.texture-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; border-radius: 20px; overflow: hidden; }
+.tx-cell {
+  height: 120px; position: relative; overflow: hidden;
+  display: flex; align-items: flex-end; padding: 16px;
+}
+.tx-label {
+  position: relative; z-index: 2;
+  font-size: 10px; font-weight: 800; color: white;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ── ICON STICKERS ───────────────────────
+   Brand SVG icons from /images/icons/.
+   Rendered as sticker elements — white border
+   ring mimics the die-cut sticker look from the
+   brand screenshot. Applied on stipple notes,
+   toast icons, and UI decoration.
+─────────────────────────────────────────── */
+.icon-sticker {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: white;
+  /* Thick white border = sticker die-cut effect */
+  box-shadow: 0 0 0 4px white, 0 3px 10px rgba(0,0,0,0.18);
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+.icon-sticker img {
+  width: 60%; height: 60%;
+  object-fit: contain;
+  display: block;
+}
+/* Size variants */
+.is-sm  { width: 36px; height: 36px; }
+.is-md  { width: 52px; height: 52px; }
+.is-lg  { width: 72px; height: 72px; }
+.is-xl  { width: 96px; height: 96px; }
+
+/* Colour tints — coloured circle behind the black icon */
+.is-blue   { background: var(--blue-light); }
+.is-amber  { background: var(--amber-lt); }
+.is-cream  { background: var(--cream-mid); }
+.is-ink    { background: var(--ink); }
+.is-ink img { filter: invert(1); } /* white icon on dark bg */
+
+/* Slight rotation variants for sticker-stuck feeling */
+.is-tilt-l { transform: rotate(-4deg); }
+.is-tilt-r { transform: rotate(4deg); }
+.is-tilt-ll { transform: rotate(-8deg); }
+.is-tilt-rr { transform: rotate(8deg); }
+
+/* Icon grid for showcase */
+.icon-grid {
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+}
+.icon-grid-item {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  text-align: center;
+}
+.icon-grid-item .ig-name {
+  font-size: 9px; font-weight: 800; color: var(--ink-light);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  max-width: 70px; line-height: 1.3;
+}
+
+/* Icon on sticky note — positioned absolutely to hang off a corner */
+.sticky-with-icon { position: relative; }
+.sticky-with-icon .icon-sticker {
+  position: absolute;
+  top: -16px; right: -10px;
+  z-index: 20;
+}
+</style>
+<style>
+/* ── STIPPLE STICKY NOTE ─────────────────
+   Post-it / annotation card.
+   Stipple dots give it notepad texture without being loud.
+   Dog-ear fold is a pure CSS triangle on ::after.
+─────────────────────────────────────────── */
+.sticky-note {
+  position: relative;
+  background-color: #F5F0E4; /* slightly warmer than --cream */
+  background-image: radial-gradient(circle, rgba(26,26,20,0.07) 1px, transparent 1px);
+  background-size: 10px 10px;
+  border-radius: 4px 16px 16px 16px;
+  padding: 18px 20px 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
+  /* Slight tilt — hand-placed */
+  transform: rotate(-1deg);
+  /* GPU compositing — prevents sub-pixel blur on rotated text */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+/* Dog-ear fold top-right corner */
+.sticky-note::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 18px 18px 0;
+  border-color: transparent var(--cream-dark) transparent transparent;
+  border-radius: 0 16px 0 0;
+}
+.sticky-note::after {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 18px; height: 18px;
+  background: var(--cream);
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
+  border-radius: 0 16px 0 0;
+}
+.sn-label  { font-size: 9px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 8px; }
+.sn-title  { font-size: 15px; font-weight: 900; color: var(--ink); line-height: 1.2; margin-bottom: 6px; }
+.sn-body   { font-size: 12px; font-weight: 600; color: var(--ink-mid); line-height: 1.6; }
+.sn-tags   { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.sn-tag    { font-size: 10px; font-weight: 800; color: var(--ink-mid); background: rgba(26,26,20,0.07); padding: 3px 9px; border-radius: 4px; }
+
+/* Straight variant (no tilt) for inline use next to images */
+.sticky-note-flat {
+  transform: none;
+  border-radius: 4px 12px 12px 12px;
+}
+
+/* ── STIPPLE INFO POPUP ──────────────────
+   Compact annotaion that floats near a game cover.
+   Behaves like a tooltip / quick-info note.
+   Pointer triangle anchors it to the image.
+─────────────────────────────────────────── */
+.stipple-popup {
+  position: relative;
+  background-color: #F5F0E4;
+  background-image: radial-gradient(circle, rgba(26,26,20,0.06) 1px, transparent 1px);
+  background-size: 10px 10px;
+  border-radius: 12px;
+  padding: 14px 16px 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  transform: rotate(0.8deg);
+}
+/* Left-pointing triangle anchors popup to whatever is on its left */
+.stipple-popup-left::before {
+  content: '';
+  position: absolute; left: -8px; top: 22px;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 7px 8px 7px 0;
+  border-color: transparent #F5F0E4 transparent transparent;
+}
+.sp-pop-head { font-size: 9px; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); margin-bottom: 5px; }
+.sp-pop-title { font-size: 14px; font-weight: 900; color: var(--ink); line-height: 1.2; margin-bottom: 4px; }
+.sp-pop-meta  { font-size: 11px; font-weight: 600; font-style: italic; color: var(--ink-light); line-height: 1.5; }
+.sp-pop-divider { border: none; border-top: 1px dashed var(--cream-dark); margin: 8px 0; }
+.sp-pop-stat  { display: flex; justify-content: space-between; align-items: center; }
+.sp-pop-stat-k { font-size: 10px; font-weight: 700; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.08em; }
+.sp-pop-stat-v { font-size: 13px; font-weight: 900; color: var(--ink); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════
+     MASTHEAD
+══════════════════ -->
+<div class="masthead">
+  <svg class="mh-mountains" viewBox="0 0 1440 280" preserveAspectRatio="none" fill="none">
+    <path d="M0 280 L0 180 Q180 90 380 155 Q580 215 780 110 Q980 20 1180 125 L1440 85 L1440 280Z" fill="rgba(255,255,255,0.022)"/>
+    <path d="M0 280 L0 215 Q280 155 480 195 Q680 232 880 170 Q1080 108 1300 178 L1440 148 L1440 280Z" fill="rgba(255,255,255,0.038)"/>
+    <path d="M0 280 L0 248 Q220 215 460 235 Q700 255 940 222 Q1150 192 1440 228 L1440 280Z" fill="rgba(255,255,255,0.058)"/>
+  </svg>
+  <div class="mh-left">
+    <div>
+      <div class="mh-eyebrow">Design System · v4</div>
+      <svg width="36" height="44" viewBox="0 0 36 44" fill="none" style="margin-bottom:8px;">
+        <path d="M5 2h26v9L18 22 5 11V2z" fill="var(--amber)"/>
+        <path d="M5 42h26v-9L18 22 5 33v9z" fill="rgba(255,255,255,0.18)"/>
+        <rect x="3" y="0" width="30" height="4" rx="2" fill="rgba(255,255,255,0.12)"/>
+        <rect x="3" y="40" width="30" height="4" rx="2" fill="rgba(255,255,255,0.12)"/>
+      </svg>
+      <div class="mh-logo">IDLE<span>HOURS</span></div>
+      <div class="mh-tag">Familiar to use. Surprising to look at. The component language that holds it all together.</div>
+    </div>
+    <div class="mh-ver">UI Kit · v5 · March 2026</div>
+  </div>
+  <div class="mh-right hourglass-pattern-alt stripe-ink" style="background-color:var(--ink);">
+    <nav class="mh-nav">
+      <a href="#colours"><span class="nav-num">01</span><span class="nav-name">Colours</span><span class="nav-arr">→</span></a>
+      <a href="#type"><span class="nav-num">02</span><span class="nav-name">Type Scale</span><span class="nav-arr">→</span></a>
+      <a href="#buttons"><span class="nav-num">03</span><span class="nav-name">Buttons</span><span class="nav-arr">→</span></a>
+      <a href="#cards"><span class="nav-num">04</span><span class="nav-name">Cards</span><span class="nav-arr">→</span></a>
+      <a href="#badges"><span class="nav-num">05</span><span class="nav-name">Badge Stamp System</span><span class="nav-arr">→</span></a>
+      <a href="#chips"><span class="nav-num">06</span><span class="nav-name">Chips, Pills & Stats</span><span class="nav-arr">→</span></a>
+      <a href="#patterns"><span class="nav-num">07</span><span class="nav-name">Game Patterns</span><span class="nav-arr">→</span></a>
+      <a href="#textures"><span class="nav-num">08</span><span class="nav-name">Textures & Stickers</span><span class="nav-arr">→</span></a>
+      <a href="#micro"><span class="nav-num">09</span><span class="nav-name">Micro-Interactions</span><span class="nav-arr">→</span></a>
+      <a href="#rules"><span class="nav-num">10</span><span class="nav-name">Rules of Thumb</span><span class="nav-arr">→</span></a>
+    </nav>
+  </div>
+</div>
+
+<!-- ══════════════════
+     01 COLOURS
+══════════════════ -->
+<div class="section" id="colours">
+  <div class="sh">
+    <div><div class="sh-n">01</div><div class="sh-t">Colours</div></div>
+    <div class="sh-sub">Warm cream. Bold ink. One accent at a time.</div>
+  </div>
+
+  <div class="colour-mosaic">
+    <div class="cm tall" style="background:var(--ink);color:white;">
+      <div class="cm-name">Ink</div><div class="cm-hex">#1A1A14</div>
+      <div class="cm-role">Big ink on cream is the look. Scores, game titles, headings. Primary statement colour.</div>
+    </div>
+    <div class="cm" style="background:var(--cream);color:var(--ink);">
+      <div class="cm-name">Cream</div><div class="cm-hex">#F0EBE0</div><div class="cm-role">Page background.</div>
+    </div>
+    <div class="cm" style="background:var(--white);color:var(--ink);border:1px solid var(--cream-dark);">
+      <div class="cm-name">White</div><div class="cm-hex">#FDFAF5</div><div class="cm-role">Card surfaces.</div>
+    </div>
+    <div class="cm" style="background:var(--ink-light);color:white;">
+      <div class="cm-name">Ink Light</div><div class="cm-hex">#8A8A70</div><div class="cm-role">Labels, captions.</div>
+    </div>
+    <div class="cm" style="background:var(--blue);color:white;">
+      <div class="cm-name">Blue</div><div class="cm-hex">#4A8FE8</div><div class="cm-role">Daily games accent.</div>
+    </div>
+    <div class="cm" style="background:var(--amber);color:white;">
+      <div class="cm-name">Amber</div><div class="cm-hex">#C8873A</div><div class="cm-role">Blitz + editorial warmth.</div>
+    </div>
+    <div class="cm" style="background:var(--green);color:white;">
+      <div class="cm-name">Green</div><div class="cm-hex">#27A85A</div><div class="cm-role">Correct. Win.</div>
+    </div>
+    <div class="cm" style="background:var(--red);color:white;">
+      <div class="cm-name">Red</div><div class="cm-hex">#C0392B</div><div class="cm-role">Wrong. Error.</div>
+    </div>
+  </div>
+
+  <div class="ratio-strip" style="margin-top:10px;">
+    <div class="rs" style="background:var(--cream-dark);color:var(--ink);">
+      <span class="rs-n" style="color:var(--ink-dim);">60</span>
+      <span style="font-size:11px;font-weight:700;">Cream + White + Ink</span>
+    </div>
+    <div class="rs" style="background:var(--ink-mid);color:white;">
+      <span class="rs-n" style="color:rgba(255,255,255,0.18);">30</span>
+      <span style="font-size:11px;font-weight:700;">Ink as statement</span>
+    </div>
+    <div class="rs" style="background:var(--blue);color:white;">
+      <span class="rs-n" style="color:rgba(255,255,255,0.22);">10</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════
+     02 TYPE SCALE
+══════════════════ -->
+<div class="section" id="type">
+  <div class="sh">
+    <div><div class="sh-n">02</div><div class="sh-t">Type Scale</div></div>
+    <div class="sh-sub">Montserrat 900 for anything that matters. Always.</div>
+  </div>
+  <div class="type-table">
+    <div class="tr"><div class="tr-meta"><div class="tr-id">T1</div><div class="tr-name">Game Title</div><div class="tr-spec">900 · 52px · uppercase · -1.5px</div></div><div class="tr-prev"><div class="T1">Shelf Price</div></div></div>
+    <div class="tr"><div class="tr-meta"><div class="tr-id">T2</div><div class="tr-name">Score Hero</div><div class="tr-spec">900 · 68px · -2px</div></div><div class="tr-prev"><div class="T2">960</div></div></div>
+    <div class="tr"><div class="tr-meta"><div class="tr-id">T3</div><div class="tr-name">Section Head</div><div class="tr-spec">900 · 30px · -0.4px</div></div><div class="tr-prev"><div class="T3">FromSoftware</div></div></div>
+    <div class="tr"><div class="tr-meta"><div class="tr-id">T4</div><div class="tr-name">Card Title</div><div class="tr-spec">900 · 20px</div></div><div class="tr-prev"><div class="T4">Winner winner!</div></div></div>
+    <div class="tr"><div class="tr-meta"><div class="tr-id">T5</div><div class="tr-name">Rank Name</div><div class="tr-spec">900 · 18px · --blue or --amber</div></div><div class="tr-prev" style="display:flex;gap:28px;"><div class="T5b">Time Archivist</div><div class="T5a">🥇 Gold</div></div></div>
+    <div class="tr"><div class="tr-meta"><div class="tr-id">T6</div><div class="tr-name">Body Strong</div><div class="tr-spec">700 · 15px · --ink</div></div><div class="tr-prev"><div class="T6">Name any game in the Mario series</div></div></div>
+    <div class="tr"><div class="tr-meta"><div class="tr-id">T7</div><div class="tr-name">Flavour line</div><div class="tr-spec">600 italic · 14px · --ink-mid</div></div><div class="tr-prev"><div class="T7">Barely needed the clues.</div></div></div>
+    <div class="tr"><div class="tr-meta"><div class="tr-id">T8</div><div class="tr-name">Section Label</div><div class="tr-spec">800 · 10px · 0.24em · uppercase</div></div><div class="tr-prev"><div class="T8">Today's Badges</div></div></div>
+    <div class="tr"><div class="tr-meta"><div class="tr-id">T9</div><div class="tr-name">Meta / Caption</div><div class="tr-spec">600 italic · 12px · --ink-light</div></div><div class="tr-prev"><div class="T9">Street Date #007 · Sun 8th Mar 2026</div></div></div>
+  </div>
+  <div class="note" style="margin-top:14px;max-width:600px;">Internal dividers in the type table are <strong>dashed</strong> — this is intentional throughout the kit. Dashed lines feel hand-ruled, notebook, drawn. Solid lines feel printed, clinical, SaaS. Use dashed for all internal card dividers.</div>
+</div>
+
+<!-- ══════════════════
+     03 BUTTONS
+══════════════════ -->
+<div class="section" id="buttons">
+  <div class="sh">
+    <div><div class="sh-n">03</div><div class="sh-t">Buttons</div></div>
+    <div class="sh-sub">Press down like a cartridge. Only for key actions.</div>
+  </div>
+  <div class="btn-grid">
+    <div class="btn-cell">
+      <div class="label">B1 — Primary (Daily)</div>
+      <button class="b1">Share Result</button>
+      <div class="note">Blue. Daily game CTAs. Try hovering — a light chevron sweeps across. Try clicking — the 5px shadow collapses on press.</div>
+      <div class="concept">💡 Two interactions layered: (1) chevron sweep ::before pseudo-element, skewX(-20deg) sliding left→right on hover via chevronSweep keyframe. (2) box-shadow bottom-only: 5px at rest → 1px on :active + translateY(4px). Both work together — the sweep on approach, the press on commit.</div>
+    </div>
+    <div class="btn-cell">
+      <div class="label">B2 — Primary (Blitz) · Stripe</div>
+      <button class="b2-stripe"><span>Start ⚡</span></button>
+      <div class="note">Amber, animated diagonal stripe texture at rest — kinetic even before you touch it. Blitz only. Makes it feel like something's already happening.</div>
+      <div class="concept">💡 Stripe uses linear-gradient (not repeating-) inside a background-size tile — the 25%/50%/75% colour stops create clean parallel stripes that tile seamlessly. Animation moves background-position by exactly one tile (28px 28px) → zero jumpiness. ::before pseudo covers the button, overflow:hidden clips to pill shape.</div>
+    </div>
+    <div class="btn-cell">
+      <div class="label">B3 — Dark / Confirm</div>
+      <button class="b3">Post Score →</button>
+      <div class="note">Ink. Post to leaderboard, confirm. Same press.</div>
+    </div>
+    <div class="btn-cell">
+      <div class="label">B4 — Ghost</div>
+      <button class="b4">Browse Archive</button>
+      <div class="note">No press effect — ghost buttons are secondary. Never the main action.</div>
+    </div>
+    <div class="btn-cell">
+      <div class="label">B5 — Text Link (Blue)</div>
+      <button class="b5">View full results →</button>
+      <div class="note">Underline with offset 3px. Reopening modals, navigating to detail.</div>
+    </div>
+    <div class="btn-cell">
+      <div class="label">B6 — Text Link (Amber)</div>
+      <button class="b6">Change topic →</button>
+      <div class="note">Blitz contexts, on dark backgrounds.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════
+     04 CARDS
+══════════════════ -->
+<div class="section" id="cards">
+  <div class="sh">
+    <div><div class="sh-n">04</div><div class="sh-t">Cards</div></div>
+    <div class="sh-sub">White surfaces. Dashed internal lines. Physical lift on hover.</div>
+  </div>
+  <div class="cards-grid">
+
+    <div class="col" style="gap:8px;">
+      <div class="label">C1 — Game card</div>
+      <div class="gc">
+        <div class="gc-cover" style="background:#5C7A3E;">
+          <div class="gc-cover-ph">Cover art</div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-meta">
+            <div class="gc-plat"></div>
+            <div class="gc-plat-label">PC · Switch</div>
+          </div>
+          <div class="gc-title">A Short Hike</div>
+          <div class="gc-desc">A relaxing open-world adventure about reaching the summit.</div>
+          <div class="gc-foot">
+            <div class="gc-tags"><div class="gc-tag">Cozy</div><div class="gc-tag">Exploration</div></div>
+            <div class="gc-cta">View →</div>
+          </div>
+        </div>
+      </div>
+      <div class="concept">💡 Hover: translateY(-5px) + rotate(-0.5deg) — tilts like picking up a box. Bottom shadow deepens. Internal footer divider is <strong>dashed</strong>.</div>
+    </div>
+
+    <div class="col" style="gap:8px;">
+      <div class="label">C2 — Result card</div>
+      <div class="rc">
+        <div class="rc-stripe" style="background:var(--blue);"></div>
+        <div class="rc-head">
+          <div class="rc-heading">Congrats!</div>
+          <div class="rc-sub">Good way to spend a Sunday.</div>
+        </div>
+        <div class="rc-body">
+          <div class="rc-left">
+            <div class="badge b-96 b-blue"><div class="b-illus">Animal<br>character<br>here</div></div>
+            <div>
+              <div class="T8" style="margin-bottom:4px;">You earned</div>
+              <div class="T5b" style="font-size:19px;">Time Archivist</div>
+              <div class="T7" style="margin-top:3px;">Flawless. Come back tomorrow.</div>
+            </div>
+            <div class="stat-row">
+              <div class="stat-pill"><span class="sp-v">960</span><span class="sp-l">Score</span></div>
+              <div class="stat-pill"><span class="sp-v">3rd</span><span class="sp-l">Guess</span></div>
+            </div>
+          </div>
+          <div class="rc-right">
+            <div class="T8" style="margin-bottom:10px;">Rank Thresholds</div>
+            <div class="rank-ladder" style="border:none;padding:0;background:transparent;max-width:100%;">
+              <div class="rl-body" style="padding:0;">
+                <div class="rung achieved"><div class="rung-dot"></div><div style="flex:1"><div class="rung-name">New to the Medium</div><div class="rung-pts">0–349 pts</div></div></div>
+                <div class="rung achieved"><div class="rung-dot"></div><div style="flex:1"><div class="rung-name">Occasional Player</div><div class="rung-pts">350–599 pts</div></div></div>
+                <div class="rung achieved"><div class="rung-dot"></div><div style="flex:1"><div class="rung-name">Retro Head</div><div class="rung-pts">600–799 pts</div></div></div>
+                <div class="rung current"><div class="rung-dot"></div><div style="flex:1"><div class="rung-name">Time Archivist</div><div class="rung-pts">800+ pts</div></div><div class="rung-you">YOU</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="rc-foot">
+          <div class="rc-foot-meta">Street Date #007 · Sun 8th Mar 2026</div>
+          <button class="b5">View full results →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col" style="gap:8px;">
+      <div class="label">C3 — Topic row (Blitz)</div>
+      <div class="col" style="gap:7px;">
+        <div class="tc">
+          <div class="tc-icon">
+            <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M11 2L13 9H20L14.5 13.5L16.5 20L11 16L5.5 20L7.5 13.5L2 9H9L11 2Z" fill="var(--ink-light)"/></svg>
+          </div>
+          <div><div class="tc-title">FromSoftware</div><div class="tc-sub">24 games · Franchise</div></div>
+          <div class="tc-right"><div class="tc-count">24</div><div class="tc-arr">→</div></div>
+        </div>
+        <div class="tc">
+          <div class="tc-icon">
+            <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><rect x="3" y="6" width="16" height="11" rx="3" stroke="var(--ink-light)" stroke-width="1.5" fill="none"/><circle cx="8" cy="11.5" r="1.5" fill="var(--ink-light)"/><circle cx="14" cy="11.5" r="1.5" fill="var(--ink-light)"/></svg>
+          </div>
+          <div><div class="tc-title">Mario Games</div><div class="tc-sub">47 games · Franchise</div></div>
+          <div class="tc-right"><div class="tc-count">47</div><div class="tc-arr">→</div></div>
+        </div>
+        <div class="tc">
+          <div class="tc-icon">
+            <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><rect x="2" y="4" width="18" height="14" rx="2" stroke="var(--ink-light)" stroke-width="1.5" fill="none"/><path d="M7 11H15M11 7V15" stroke="var(--ink-light)" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="tc-title">Nintendo 64</div><div class="tc-sub">38 games · Platform</div></div>
+          <div class="tc-right"><div class="tc-count">38</div><div class="tc-arr">→</div></div>
+        </div>
+      </div>
+      <div class="concept">💡 Hover: slides right (translateX) not up. Like pulling a game off a shelf. Icon fill changes to --blue. cubic-bezier(0.34,1.5,0.64,1) spring easing.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════
+     05 BADGES
+══════════════════ -->
+<div class="section" id="badges">
+  <div class="sh">
+    <div><div class="sh-n">05</div><div class="sh-t">Badge Stamp System</div></div>
+    <div class="sh-sub">Earned. Physical. Illustration-led.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;align-items:end;">
+    <div class="col" style="align-items:center;gap:10px;text-align:center;">
+      <div class="label">Daily Win — Blue</div>
+      <div class="badge b-96 b-blue"><div class="b-illus">Animal<br>character<br>illustration</div></div>
+      <div class="T5b" style="font-size:14px;">Well Played</div>
+      <div class="concept" style="max-width:130px;text-align:left;">💡 Inner ring is the key brand detail. 7px inset, rgba(255,255,255,0.22). Hover: scale(1.07) + rotate(3deg) — like flipping a medallion.</div>
+    </div>
+    <div class="col" style="align-items:center;gap:10px;text-align:center;">
+      <div class="label">Daily Loss — Muted</div>
+      <div class="badge b-96 b-muted"><div class="b-illus">Animal<br>character<br>illustration</div></div>
+      <div style="font-size:14px;font-weight:900;color:var(--ink-light);">Keep Guessing</div>
+      <div class="concept" style="max-width:130px;text-align:left;">💡 No glow ring on loss state. Still a badge — not a failure icon.</div>
+    </div>
+    <div class="col" style="align-items:center;gap:10px;text-align:center;">
+      <div class="label">Blitz — Amber</div>
+      <div class="badge b-96 b-amber"><div class="b-illus">Animal<br>character<br>illustration</div></div>
+      <div class="T5a" style="font-size:14px;">🥇 Gold</div>
+      <div class="concept" style="max-width:130px;text-align:left;">💡 Outer ring = --amber-lt. Animal illustration has props matching rank tier (business card, headset etc).</div>
+    </div>
+    <div class="col" style="align-items:center;gap:10px;text-align:center;">
+      <div class="label">Empty shelf slot</div>
+      <div class="badge b-96 b-empty" style="flex-direction:column;gap:5px;cursor:pointer;transition:all 0.2s;" onmouseenter="this.style.borderColor='var(--blue)';this.style.background='var(--blue-light)'" onmouseleave="this.style.borderColor='var(--ink-dim)';this.style.background='transparent'">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="var(--ink-dim)" stroke-width="2" stroke-linecap="round"/></svg>
+        <div style="font-size:10px;font-weight:700;color:var(--ink-dim);">Play</div>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--ink-dim);">Not played</div>
+      <div class="concept" style="max-width:130px;text-align:left;">💡 Hover: border → solid blue, fill → --blue-light. Invites without demanding.</div>
+    </div>
+  </div>
+
+  <!-- Stamp earn animation -->
+  <div class="stamp-section" style="margin-top:28px;">
+    <div class="label" style="margin-bottom:16px;">Stamp earn animation — the most important reward moment</div>
+    <div class="row" style="align-items:center;gap:36px;">
+      <div class="badge-demo-wrap">
+        <div class="ink-ring"></div>
+        <div class="ink-ring ink-ring-2"></div>
+        <div class="score-float">+600 pts</div>
+        <div class="badge b-96 b-blue stamp-live"><div class="b-illus">Badge</div></div>
+      </div>
+      <div style="flex:1;">
+        <div class="T4" style="margin-bottom:8px;">The stamp-down</div>
+        <div class="note" style="max-width:100%;">scale(0.4) from above → scale(1.18) overshoot → slight wobble → settles at scale(1.0). Two ink rings pulse outward. Score float rises and fades. This is the one animation moment that defines the whole reward system. It must feel physical — like an actual ink stamp hitting paper. Every frame matters.</div>
+        <div class="concept" style="max-width:100%;margin-top:10px;">💡 The wobble is crucial — scale(1.18) → scale(0.94) rotate(-2deg) → scale(1.05) rotate(1deg) → scale(1). Without it the stamp feels digital. With it, it feels physical. Game Sense blank reveal uses the same principle: rotateY(90deg) → rotateY(-4deg) → rotateY(0) — always overshoot then settle.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════
+     06 CHIPS, PILLS
+══════════════════ -->
+<div class="section" id="chips">
+  <div class="sh">
+    <div><div class="sh-n">06</div><div class="sh-t">Chips, Pills & Stats</div></div>
+    <div class="sh-sub">Two different shapes for two different jobs.</div>
+  </div>
+
+  <div class="chips-board">
+    <div class="cb-row">
+      <div class="cb-lbl">Context chips</div>
+      <div class="chip chip-amber">🥇 Gold</div>
+      <div class="chip chip-blue">Well Played</div>
+      <div class="chip chip-ink">47 games</div>
+      <div class="chip chip-green">Correct</div>
+      <div class="chip chip-red">Wrong</div>
+      <div class="note" style="margin-left:12px;max-width:200px;">border-radius: 6px — label energy. These categorise and classify.</div>
+    </div>
+    <div class="cb-row">
+      <div class="cb-lbl">Stat pills</div>
+      <!-- Full pill — soft, chunky, cute. v2 was right. -->
+      <div class="stat-row">
+        <div class="stat-pill"><span class="sp-v">960</span><span class="sp-l">Score</span></div>
+        <div class="stat-pill"><span class="sp-v">3rd</span><span class="sp-l">Guess</span></div>
+        <div class="stat-pill"><span class="sp-v">×2</span><span class="sp-l">Wager</span></div>
+        <div class="stat-pill"><span class="sp-v">8</span><span class="sp-l">Correct</span></div>
+        <div class="stat-pill"><span class="sp-v">1:12</span><span class="sp-l">Time</span></div>
+      </div>
+    </div>
+    <div class="cb-row">
+      <div class="cb-lbl">Stat arc — in container</div>
+      <div>
+        <div class="stat-arc-wrap">
+          <div class="stat-pill"><span class="sp-v">960</span><span class="sp-l">Score</span></div>
+          <div class="stat-pill"><span class="sp-v">3rd</span><span class="sp-l">Guess</span></div>
+          <div class="stat-pill"><span class="sp-v">×2</span><span class="sp-l">Wager</span></div>
+          <div class="stat-pill"><span class="sp-v">8</span><span class="sp-l">Correct</span></div>
+          <div class="stat-pill"><span class="sp-v">1:12</span><span class="sp-l">Time</span></div>
+        </div>
+        <div class="note" style="margin-top:10px;max-width:300px;">Container has border-radius: 60px 60px 28px 28px — the curved top edge makes the arc intentional, not accidental. Pills anchor to the bottom of the tray via align-items: flex-end, so outer pills dip and the centre pill rides highest. gap: 14px gives the arc room to breathe.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:14px;">Stat pills = <strong>border-radius: 100px, no border, --cream-dark fill</strong>. Soft and chunky. Context chips = <strong>border-radius: 6px, with border</strong>. Sticker-like. Do not mix these up.</div>
+</div>
+
+<!-- ══════════════════
+     07 GAME PATTERNS
+══════════════════ -->
+<div class="section" id="patterns">
+  <div class="sh">
+    <div><div class="sh-n">07</div><div class="sh-t">Game Patterns</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+    <div class="col" style="gap:10px;">
+      <div class="label">HUD</div>
+      <div class="hud">
+        <div class="hud-l"><div class="hud-ey">⚡ Blitz</div><div class="hud-ti">Mario Games</div></div>
+        <div class="timer-w">
+          <svg viewBox="0 0 50 50" width="50" height="50">
+            <circle class="t-track" cx="25" cy="25" r="19"/>
+            <circle class="t-fill" cx="25" cy="25" r="19"/>
+          </svg>
+          <div class="timer-n">87</div>
+        </div>
+        <!-- Striped score chip — score feels kinetic even when static -->
+        <div class="hud-score-striped">
+          <div class="hud-score" style="position:relative;z-index:1;">13</div>
+          <div class="hud-sl" style="position:relative;z-index:1;">Correct</div>
+        </div>
+      </div>
+      <div class="concept">💡 Score block now uses the stripe texture — amber diagonal lines at low opacity inside a dark rounded container. Makes the score feel live and energised even between answers. Score number still bounces scale(1.35) on correct answer.</div>
+    </div>
+
+    <div class="col" style="gap:10px;">
+      <div class="label">Progress bar v2 — striped fill</div>
+      <div style="background:var(--white);border-radius:14px;border:1.5px solid var(--divider);padding:22px 24px 20px;">
+        <div class="prog2-wrap">
+          <div class="prog2-bar">
+            <div class="prog2-fill prog2-fill-amber" style="width:58%;"></div>
+          </div>
+          <div class="prog2-milestones" style="margin-top:10px;">
+            <div class="prog2-ms next">🥉 Bronze: 7</div>
+            <div class="prog2-ms hit">🥈 Silver: 14 ✓</div>
+            <div class="prog2-ms hit">🥇 Gold: 23 ✓</div>
+          </div>
+        </div>
+      </div>
+      <div class="concept">💡 Fill is 10px tall with animated diagonal stripe inside — the bar itself feels alive. Milestone pills sit below as chips (not dots) — clearer at a glance. Hit milestones turn amber. Next milestone has dashed border. Width transition uses cubic-bezier(0.34,1.5,0.64,1) — spring, not ease.</div>
+    </div>
+
+    <div class="col" style="gap:10px;">
+      <div class="label">Rank ladder</div>
+      <div class="rank-ladder">
+        <div class="rl-head">Rank Thresholds</div>
+        <div class="rl-body">
+          <div class="rung achieved"><div class="rung-dot"></div><div style="flex:1"><div class="rung-name">Keep Guessing</div><div class="rung-pts">0–349 pts</div></div></div>
+          <div class="rung achieved"><div class="rung-dot"></div><div style="flex:1"><div class="rung-name">Getting Warmer</div><div class="rung-pts">350–599 pts</div></div></div>
+          <div class="rung current"><div class="rung-dot"></div><div style="flex:1"><div class="rung-name">Well Played</div><div class="rung-pts">600–799 pts</div></div><div class="rung-you">YOU</div></div>
+          <div class="rung next"><div class="rung-dot"></div><div style="flex:1"><div class="rung-name">Encyclopaedic</div><div class="rung-pts">800+ pts</div></div></div>
+        </div>
+      </div>
+      <div class="note" style="margin-top:4px;">Dashed border on next rank — a target, not a wall. Current highlighted in --blue-light with "YOU" tag.</div>
+    </div>
+
+    <div class="col" style="gap:10px;">
+      <div class="label">Leaderboard</div>
+      <div class="lb">
+        <div class="lb-head">
+          <div class="lb-topic">FromSoftware</div>
+          <div class="lb-meta">24 games · All time</div>
+        </div>
+        <div class="lb-cols">
+          <div class="lb-ch">#</div><div class="lb-ch">Name</div>
+          <div class="lb-ch r">Score</div><div class="lb-ch r">Time</div>
+        </div>
+        <div class="lb-row"><div class="lb-pos">🥇</div><div class="lb-nw"><span class="lb-name">Sam</span></div><div class="lb-score">21<span class="lb-of">/24</span></div><div class="lb-time">0:51</div></div>
+        <div class="lb-row"><div class="lb-pos">🥈</div><div class="lb-nw"><span class="lb-name">Jess</span></div><div class="lb-score">18<span class="lb-of">/24</span></div><div class="lb-time">1:14</div></div>
+        <div class="lb-row you"><div class="lb-pos">3</div><div class="lb-nw"><span class="lb-name">Alfie</span><span class="lb-you-tag">You</span></div><div class="lb-score">8<span class="lb-of">/24</span></div><div class="lb-time">1:03</div></div>
+        <div class="lb-row"><div class="lb-pos">4</div><div class="lb-nw"><span class="lb-name">Beth</span></div><div class="lb-score">5<span class="lb-of">/24</span></div><div class="lb-time">1:49</div></div>
+      </div>
+      <div class="note" style="margin-top:4px;">Row dividers are <strong>dashed</strong>. Column headers on --cream-mid background. Your row: amber left border + amber name. Bottom shadow gives physical lift.</div>
+    </div>
+
+    <div style="grid-column:1/-1;">
+      <div class="label" style="margin-bottom:10px;">Inputs</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;border-radius:16px;overflow:hidden;">
+        <div style="background:var(--white);padding:28px 26px;display:flex;flex-direction:column;gap:12px;">
+          <div class="note" style="font-size:10px;color:var(--ink-light);">I1 — Blue focus (daily games)</div>
+          <input class="i1" type="text" placeholder="Type a game name…" />
+          <div class="concept">💡 scale(1.01) on focus — input grows slightly, feels responsive. Correct answer: border flashes --green for 0.4s. Wrong: .shake keyframe (already in tailwind.config). Inset shadow gives physical depth.</div>
+        </div>
+        <div style="background:var(--white);padding:28px 26px;display:flex;flex-direction:column;gap:12px;">
+          <div class="note" style="font-size:10px;color:var(--ink-light);">I1 — Amber focus (Blitz)</div>
+          <input class="i1 amber-focus" type="text" placeholder="Type a game title…" />
+          <div class="concept">💡 Persistent ambient glow in --amber during active Blitz session — signals this is the live action zone even when not actively focused. Always on during gameplay, not just on focus.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════
+     08 TEXTURES & STICKERS
+══════════════════ -->
+<div class="section" id="textures">
+  <div class="sh">
+    <div><div class="sh-n">08</div><div class="sh-t">Textures & Stickers</div></div>
+    <div class="sh-sub">The surfaces that make components feel drawn, not rendered.</div>
+  </div>
+
+  <!-- Texture swatches -->
+  <div class="label" style="margin-bottom:12px;">Texture patterns</div>
+  <div class="texture-grid">
+    <div class="tx-cell stripe-blue" style="background-color:var(--blue);">
+      <div class="tx-label">Stripe Blue<br><span style="opacity:0.6;font-size:9px;">Animated · 1.2s loop</span></div>
+    </div>
+    <div class="tx-cell stripe-amber" style="background-color:var(--amber);">
+      <div class="tx-label">Stripe Amber<br><span style="opacity:0.6;font-size:9px;">Animated · 1.4s loop</span></div>
+    </div>
+    <div class="tx-cell stripe-ink" style="background-color:var(--ink);">
+      <div class="tx-label">Stripe Ink<br><span style="opacity:0.6;font-size:9px;">Slow · 3s loop</span></div>
+    </div>
+    <div class="tx-cell stripe-static" style="background-color:var(--cream-dark);">
+      <div class="tx-label" style="color:var(--ink-light);">Stripe Static<br><span style="font-size:9px;">No animation</span></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;border-radius:16px;overflow:hidden;margin-top:3px;">
+    <div class="tx-cell hourglass-pattern" style="background-color:var(--ink); height:120px; border-radius:0;">
+      <div class="tx-label">Hourglass — single, tilted 15°</div>
+    </div>
+    <div class="tx-cell hourglass-pattern-alt" style="background-color:var(--ink); height:120px; border-radius:0;">
+      <div class="tx-label">Hourglass — alternating tilts</div>
+    </div>
+    <div class="tx-cell" style="background-color:#F5F0E4;background-image:radial-gradient(circle,rgba(26,26,20,0.07) 1px,transparent 1px);background-size:10px 10px;height:120px;border-radius:0;">
+      <div class="tx-label" style="color:var(--ink-light);">Stipple dots — warm light surfaces</div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:14px;max-width:700px;">Use stripe textures on: B2 button, milestone toasts, score chips, HUD score. Use hourglass pattern on: masthead, rules block, large dark surfaces. Stipple dots on: sticky notes, info popups, annotation cards — surfaces that should feel physical and handmade. <strong>Never stack two textures on the same element.</strong></div>
+
+  <!-- Stipple in context — sticky note and popup demos -->
+  <div style="margin-top:36px;">
+    <div class="label" style="margin-bottom:20px;">Stipple dots — in context</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;align-items:start;">
+
+      <!-- Sticky note — editorial annotation -->
+      <div>
+        <div class="note" style="margin-bottom:20px;font-size:10px;">Sticky note — editorial annotation</div>
+        <div class="sticky-note">
+          <div class="sn-label">Editor's note</div>
+          <div class="sn-title">Worth revisiting in 2025</div>
+          <div class="sn-body">The roguelite loop clicks better once you've unlocked the second zone. Give it three runs before you decide.</div>
+          <div class="sn-tags">
+            <div class="sn-tag">Roguelite</div>
+            <div class="sn-tag">Slow burn</div>
+            <div class="sn-tag">✓ Cozy</div>
+          </div>
+        </div>
+        <div class="concept" style="margin-top:12px;max-width:100%;">💡 Dog-ear fold is two CSS triangles on ::before/::after. border-radius: 4px 16px 16px 16px cuts the top-left corner flat to imply the fold. transform:rotate(-1deg) — hand-placed. Use for editorial callouts, staff picks, and review snippets next to cover art.</div>
+      </div>
+
+      <!-- Game cover + floating popup -->
+      <div>
+        <div class="note" style="margin-bottom:20px;font-size:10px;">Info popup — floats beside cover art</div>
+        <div style="display:flex;gap:0;align-items:flex-start;">
+          <!-- Fake game cover -->
+          <div style="width:90px;height:130px;border-radius:10px;background:#5B4FCF;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.18);">
+            <div style="font-size:10px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.3);text-align:center;line-height:1.4;">Cover<br>art</div>
+          </div>
+          <!-- Popup anchored to right of cover -->
+          <div style="margin-left:10px;flex:1;">
+            <div class="stipple-popup stipple-popup-left">
+              <div class="sp-pop-head">Street Date</div>
+              <div class="sp-pop-title">Hollow Knight</div>
+              <div class="sp-pop-meta">Team Cherry · 2017 · Switch, PC</div>
+              <hr class="sp-pop-divider">
+              <div class="sp-pop-stat">
+                <span class="sp-pop-stat-k">Your score</span>
+                <span class="sp-pop-stat-v">740 pts</span>
+              </div>
+              <div class="sp-pop-stat" style="margin-top:4px;">
+                <span class="sp-pop-stat-k">Rank</span>
+                <span class="sp-pop-stat-v">Retro Head</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="concept" style="margin-top:12px;max-width:100%;">💡 Left-pointing triangle via border trick on ::before — anchors the popup visually to the image. transform:rotate(0.8deg) keeps the slight hand-placed quality. Dashed divider inside uses --cream-dark. The stipple background stops it feeling like a standard tooltip.</div>
+      </div>
+
+      <!-- Compact tag list — inline with a game row -->
+      <div>
+        <div class="note" style="margin-bottom:20px;font-size:10px;">Inline tag note — next to a list row</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <!-- A minimal game list row -->
+          <div style="background:var(--white);border:1.5px solid var(--divider);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;">
+            <div style="width:40px;height:40px;border-radius:8px;background:var(--blue);flex-shrink:0;"></div>
+            <div>
+              <div style="font-size:14px;font-weight:900;color:var(--ink);">Celeste</div>
+              <div style="font-size:11px;font-weight:600;color:var(--ink-light);">2018 · Platformer</div>
+            </div>
+          </div>
+          <!-- Stipple tag note hanging below, slightly offset -->
+          <div class="sticky-note sticky-note-flat" style="transform:rotate(0.6deg);margin-left:12px;margin-top:-4px;">
+            <div class="sn-label">Why we love it</div>
+            <div class="sn-body" style="font-size:11px;">Tight controls, honest difficulty, quietly devastating story. One of the best of the decade.</div>
+          </div>
+        </div>
+        <div class="concept" style="margin-top:12px;max-width:100%;">💡 The note hangs below its list row with a negative margin-top to overlap slightly. Alternate rotation direction from the row above (+0.6deg vs -1deg) so a feed of these looks naturally varied. White card + stipple note = digital/physical contrast that reads as curation, not algorithm.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Icon sticker system -->
+  <div style="margin-top:48px;">
+    <div class="label" style="margin-bottom:6px;">Icon sticker system</div>
+    <div class="note" style="margin-bottom:24px;max-width:680px;">Icons from <code style="font-size:10px;background:var(--cream-dark);padding:2px 6px;border-radius:4px;">/images/icons/</code> — each rendered as a die-cut sticker with a white ring border. The thick white halo is the signature: <code style="font-size:10px;background:var(--cream-dark);padding:2px 6px;border-radius:4px;">box-shadow: 0 0 0 4px white</code>. Stick them onto stipple notes, HUD panels, toasts, and cover art overlays. Slight rotations make them feel hand-applied.</div>
+
+    <!-- Icon grid — all icons from repo -->
+    <div style="background:var(--cream-mid);border-radius:20px;padding:28px 24px;margin-bottom:32px;">
+      <div class="note" style="margin-bottom:18px;font-size:10px;">Full icon set — sticker treatment on cream</div>
+      <div class="icon-grid">
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-cream is-tilt-l">
+            <img src="https://idlehours.co.uk/images/icons/icon_trophy-winner-award-score-achieve.svg" alt="Trophy">
+          </div>
+          <div class="ig-name">Trophy / Score</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-amber is-tilt-r">
+            <img src="https://idlehours.co.uk/images/icons/icon_fire-hot-streak.svg" alt="Streak">
+          </div>
+          <div class="ig-name">Fire / Streak</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-blue">
+            <img src="https://idlehours.co.uk/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="Timer">
+          </div>
+          <div class="ig-name">Hourglass / Timer</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-cream is-tilt-l">
+            <img src="https://idlehours.co.uk/images/icons/icon_controller-gaming-ps5-xbox-joystick.svg" alt="Controller">
+          </div>
+          <div class="ig-name">Controller</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-amber is-tilt-rr">
+            <img src="https://idlehours.co.uk/images/icons/icon_star-Banner-tag-rating-uicard-band-great-music-tag-.svg" alt="Star / Tag">
+          </div>
+          <div class="ig-name">Star / Rating</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-blue is-tilt-l">
+            <img src="https://idlehours.co.uk/images/icons/icon_ribbon-banner-button shape.svg" alt="Ribbon">
+          </div>
+          <div class="ig-name">Ribbon / Rank</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-cream is-tilt-r">
+            <img src="https://idlehours.co.uk/images/icons/icon_Snack-food-pizza-tasty-meal.svg" alt="Snack">
+          </div>
+          <div class="ig-name">Snack / Cozy</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-cream is-tilt-ll">
+            <img src="https://idlehours.co.uk/images/icons/icon_music-soundtrack-headphones-sound-audio.svg" alt="Music">
+          </div>
+          <div class="ig-name">Music / Audio</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-blue is-tilt-r">
+            <img src="https://idlehours.co.uk/images/icons/icon_Target-aim-practice-games-play.svg" alt="Target">
+          </div>
+          <div class="ig-name">Target / Score</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-amber is-tilt-l">
+            <img src="https://idlehours.co.uk/images/icons/icon_Success-Positive-happy-Confirm.svg" alt="Success">
+          </div>
+          <div class="ig-name">Success / Confirm</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-cream is-tilt-rr">
+            <img src="https://idlehours.co.uk/images/icons/icon_search-lookup-find.svg" alt="Search">
+          </div>
+          <div class="ig-name">Search</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-cream is-tilt-l">
+            <img src="https://idlehours.co.uk/images/icons/icon_bell-notification-ring-ping-popup.svg" alt="Notification">
+          </div>
+          <div class="ig-name">Bell / Notify</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-ink">
+            <img src="https://idlehours.co.uk/images/icons/icon_handheld-console-platform-gameboy-retro.svg" alt="Handheld">
+          </div>
+          <div class="ig-name">Handheld / Retro</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-cream is-tilt-r">
+            <img src="https://idlehours.co.uk/images/icons/icon_peace-chill-relax-about-info-headsup-quote.svg" alt="Chill">
+          </div>
+          <div class="ig-name">Peace / Chill</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-amber is-tilt-ll">
+            <img src="https://idlehours.co.uk/images/icons/icon_Pencil-write-blog-pen-edit-ammend.svg" alt="Write">
+          </div>
+          <div class="ig-name">Pencil / Blog</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-cream is-tilt-r">
+            <img src="https://idlehours.co.uk/images/icons/icon_tag-genre-filter.svg" alt="Tag">
+          </div>
+          <div class="ig-name">Tag / Genre</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-blue is-tilt-ll">
+            <img src="https://idlehours.co.uk/images/icons/icon_friend-coop-co-op-together-companion-friendship.svg" alt="Friends">
+          </div>
+          <div class="ig-name">Co-op / Friends</div>
+        </div>
+
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-md is-cream is-tilt-rr">
+            <img src="https://idlehours.co.uk/images/icons/icon_skull-dead-boring-rip.svg" alt="Skull">
+          </div>
+          <div class="ig-name">Skull / Hard</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Icons in use — on dark panel -->
+    <div style="background:var(--ink);border-radius:20px;padding:28px 24px;margin-bottom:32px;position:relative;overflow:hidden;" class="hourglass-pattern-alt">
+      <div class="note" style="margin-bottom:18px;font-size:10px;color:rgba(255,255,255,0.5);">Icon stickers on dark — white ring pops against ink</div>
+      <div class="icon-grid">
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-lg is-ink is-tilt-l">
+            <img src="https://idlehours.co.uk/images/icons/icon_trophy-winner-award-score-achieve.svg" alt="Trophy" style="filter:invert(1);">
+          </div>
+          <div class="ig-name" style="color:rgba(255,255,255,0.4);">Trophy</div>
+        </div>
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-lg is-ink is-tilt-r">
+            <img src="https://idlehours.co.uk/images/icons/icon_fire-hot-streak.svg" alt="Streak" style="filter:invert(1);">
+          </div>
+          <div class="ig-name" style="color:rgba(255,255,255,0.4);">Streak</div>
+        </div>
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-lg is-amber is-tilt-ll">
+            <img src="https://idlehours.co.uk/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="Timer">
+          </div>
+          <div class="ig-name" style="color:rgba(255,255,255,0.4);">Timer</div>
+        </div>
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-lg is-blue is-tilt-rr">
+            <img src="https://idlehours.co.uk/images/icons/icon_controller-gaming-ps5-xbox-joystick.svg" alt="Controller">
+          </div>
+          <div class="ig-name" style="color:rgba(255,255,255,0.4);">Controller</div>
+        </div>
+        <div class="icon-grid-item">
+          <div class="icon-sticker is-lg is-ink is-tilt-r">
+            <img src="https://idlehours.co.uk/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg" alt="Star" style="filter:invert(1);">
+          </div>
+          <div class="ig-name" style="color:rgba(255,255,255,0.4);">Rating</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Icons stuck onto stipple notes — the full combo -->
+    <div>
+      <div class="note" style="margin-bottom:20px;font-size:10px;">Icons stuck onto stipple notes — the full combo</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;align-items:start;">
+
+        <!-- Achievement note -->
+        <div class="sticky-with-icon" style="padding-top:20px;">
+          <div class="icon-sticker is-lg is-amber is-tilt-r" style="position:absolute;top:0;right:4px;z-index:20;">
+            <img src="https://idlehours.co.uk/images/icons/icon_trophy-winner-award-score-achieve.svg" alt="Trophy">
+          </div>
+          <div class="sticky-note" style="transform:rotate(-1.2deg);padding-right:28px;">
+            <div class="sn-label">Achievement</div>
+            <div class="sn-title">Industry Insider</div>
+            <div class="sn-body">10 correct in a row on Shelf Price. Impressive — most people tap out at 7.</div>
+          </div>
+        </div>
+
+        <!-- Streak note -->
+        <div class="sticky-with-icon" style="padding-top:20px;">
+          <div class="icon-sticker is-lg is-cream is-tilt-ll" style="position:absolute;top:0;right:4px;z-index:20;">
+            <img src="https://idlehours.co.uk/images/icons/icon_fire-hot-streak.svg" alt="Streak">
+          </div>
+          <div class="sticky-note sticky-note-flat" style="transform:rotate(0.8deg);">
+            <div class="sn-label">On a roll</div>
+            <div class="sn-title">5-game streak</div>
+            <div class="sn-body">You've played every day this week. That's the kind of dedication we like around here.</div>
+          </div>
+        </div>
+
+        <!-- Editorial pick -->
+        <div class="sticky-with-icon" style="padding-top:20px;">
+          <div class="icon-sticker is-lg is-blue is-tilt-rr" style="position:absolute;top:0;right:4px;z-index:20;">
+            <img src="https://idlehours.co.uk/images/icons/icon_peace-chill-relax-about-info-headsup-quote.svg" alt="Chill">
+          </div>
+          <div class="sticky-note" style="transform:rotate(-0.5deg);">
+            <div class="sn-label">Editor's pick</div>
+            <div class="sn-title">Cozy season starts now</div>
+            <div class="sn-body">Our favourite games to play when the nights draw in. No pressure, no timers — just vibes.</div>
+            <div class="sn-tags">
+              <div class="sn-tag">Cozy</div>
+              <div class="sn-tag">Autumn</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="concept" style="margin-top:14px;max-width:700px;">💡 Icon sticker sits in a position:relative wrapper with padding-top equal to ~half the icon height. The icon is position:absolute top:0 right:4px — it pokes up above the note edge. Different tilt classes per icon so no two stick the same way. White ring (box-shadow: 0 0 0 4px white) makes each icon legible against any background colour.</div>
+    </div>
+
+  </div>
+
+  <!-- Sticker / overlapping label technique -->
+  <div style="margin-top:48px;">
+    <div class="label" style="margin-bottom:20px;">Sticker tabs — the overlapping label technique</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:start;">
+
+      <!-- Card with genre sticker overlapping top edge -->
+      <div>
+        <div class="note" style="margin-bottom:16px;font-size:10px;">Sticker overlaps top card edge</div>
+        <div class="gc2-sticker-demo" style="position:relative;padding-top:14px;">
+          <!-- Sticker pokes above the card -->
+          <div class="sticker sticker-amber" style="position:absolute;top:2px;left:18px;z-index:10;">Hidden Gem</div>
+          <div class="gc2" style="border-radius:18px;overflow:hidden;">
+            <div class="gc2-inner">
+              <div class="gc2-cover" style="height:100px;align-items:center;justify-content:center;">
+                <div class="gc2-cover-bg" style="background:#3A8C8A;"></div>
+                <div style="position:relative;z-index:2;font-size:10px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.38);text-transform:uppercase;letter-spacing:0.1em;">Cover art</div>
+              </div>
+              <div class="gc2-body">
+                <div class="gc2-title">Spiritfarer</div>
+                <div class="gc2-desc">A cosy management game about death.</div>
+                <div class="gc2-foot">
+                  <div class="gc-tags"><div class="gc-tag">Cozy</div><div class="gc-tag">Management</div></div>
+                  <div class="gc-cta">View →</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="concept" style="margin-top:8px;max-width:100%;">💡 sticker position:absolute, top:-10px, left:14px on a position:relative wrapper that has padding-top:14px. The card itself uses overflow:hidden on its inner container, not the outer wrapper — this is what allows the sticker to poke out above. transform:rotate(-1.5deg) gives the hand-applied feel.</div>
+      </div>
+
+      <!-- Score chip with stripe -->
+      <div>
+        <div class="note" style="margin-bottom:16px;font-size:10px;">Score chip — bold, textured</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div class="score-chip score-chip-amber stripe-amber" style="width:fit-content;">
+            <div class="sc-big">760</div><div class="sc-unit">pts</div>
+          </div>
+          <div class="score-chip score-chip-blue stripe-blue" style="width:fit-content;">
+            <div class="sc-big">21</div><div class="sc-unit">/24</div>
+          </div>
+          <div class="score-chip score-chip-ink stripe-ink" style="width:fit-content;">
+            <div class="sc-big">3rd</div><div class="sc-unit">place</div>
+          </div>
+        </div>
+        <div class="concept" style="margin-top:8px;max-width:100%;">💡 Score chips combine a solid background with a stripe texture layer. Used on end screens as the score hero — bigger and bolder than a stat pill, more expressive than plain text. T2 scale inside.</div>
+      </div>
+
+      <!-- Sticker variants -->
+      <div>
+        <div class="note" style="margin-bottom:16px;font-size:10px;">Sticker variants — use sparingly</div>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start;">
+          <div class="sticker sticker-amber">Hidden Gem</div>
+          <div class="sticker sticker-blue" style="transform:rotate(1deg);">Daily Pick</div>
+          <div class="sticker sticker-green" style="transform:rotate(-2deg);">New This Week</div>
+          <div class="sticker sticker-ink" style="transform:rotate(1.5deg);">Staff Fave</div>
+          <div class="sticker sticker-white" style="transform:rotate(-1deg);">In Your Library</div>
+        </div>
+        <div class="concept" style="margin-top:8px;max-width:100%;">💡 Each sticker has a slight unique rotation — alternate between -1.5deg and +1.5deg so a group looks hand-applied, not stamped by a machine. box-shadow gives physical lift. Use max 1 sticker per card.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Milestone toast v2 with stripe -->
+  <div style="margin-top:36px;">
+    <div class="label" style="margin-bottom:14px;">Milestone toast v2 — striped, icon-led</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+      <div class="toast-v2 stripe-amber" style="background-color:var(--amber);">
+        <div class="toast-v2-icon">🥈</div>
+        <div class="toast-v2-body">
+          <div class="toast-v2-label">Milestone</div>
+          <div class="toast-v2-text">Silver unlocked!</div>
+        </div>
+      </div>
+      <div class="toast-v2 stripe-blue" style="background-color:var(--blue);">
+        <div class="toast-v2-icon">🎯</div>
+        <div class="toast-v2-body">
+          <div class="toast-v2-label">Streak</div>
+          <div class="toast-v2-text">5 in a row!</div>
+        </div>
+      </div>
+    </div>
+    <div class="concept" style="margin-top:10px;max-width:600px;">💡 Toast now has two zones: dark icon circle on left (contrast against the stripe), text body on right. Full pill shape with overflow:hidden clips the stripe. Enters from top with spring animation. Icon could be custom SVG from Idle Hours iconset — these placeholders use emoji.</div>
+  </div>
+
+</div>
+
+<!-- ══════════════════
+     09 MICRO-INTERACTIONS
+══════════════════ -->
+<div class="section" id="micro">
+  <div class="sh">
+    <div><div class="sh-n">09</div><div class="sh-t">Micro-Interactions</div></div>
+    <div class="sh-sub">Small design spells. Each one a surprise.</div>
+  </div>
+  <div class="micro-grid">
+
+    <div class="micro-cell">
+      <div class="label">Button press</div>
+      <button class="press-btn" style="margin-bottom:4px;">Try pressing me</button>
+      <div class="mi-desc">5px shadow collapses on :active. translateY(4px). Feels like pressing a key, not tapping a screen.</div>
+      <div class="concept">CSS only. Works on B1, B2, B3. Not B4/B5/B6 — they're secondary and shouldn't have the same weight.</div>
+    </div>
+
+    <div class="micro-cell">
+      <div class="label">Correct answer float</div>
+      <div class="score-float-demo">+1 correct ✓</div>
+      <div class="mi-desc">Float rises from input, fades over 0.8s. HUD score bounces scale(1.35). Correct pill shoots into arena.</div>
+      <div class="concept">scorePop keyframe: translateY(0) → translateY(-44px) + opacity 1→0. HUD scoreBounce: scale(1)→scale(1.35)→scale(1) in 0.25s spring.</div>
+    </div>
+
+    <div class="micro-cell">
+      <div class="label">Wrong answer shake</div>
+      <div class="shake-demo">Not this one</div>
+      <div class="mi-desc">Input shakes horizontally. Red border flash 0.4s. Wrong pill appears in arena, fades after 0.8s.</div>
+      <div class="concept">shake keyframe already in tailwind.config. Border: transition to --red over 0.15s, return after 0.4s via JS class toggle.</div>
+    </div>
+
+    <div class="micro-cell">
+      <div class="label">Blank reveal (Game Sense)</div>
+      <div class="blank-demo">A game about ___</div>
+      <div class="mi-desc">The rotateY flip with overshoot. Card flips in from 90deg, overshoots to -4deg, wobbles to 0. Feels like turning over a flashcard.</div>
+      <div class="concept">rotateY(90deg) → rotateY(-4deg) scale(1.02) → rotateY(2deg) → rotateY(0). transform-style: preserve-3d on parent. 0.45s cubic-bezier(0.34,1.5,0.64,1). This is the Idle Hours signature animation — all reveals should use this principle.</div>
+    </div>
+
+    <div class="micro-cell">
+      <div class="label">Milestone unlock toast</div>
+      <div class="toast-demo">🥈 Silver unlocked!</div>
+      <div class="mi-desc">Slides down from above with spring bounce. Stays 2.2s, slides back. Milestone dot pulses amber glow simultaneously.</div>
+      <div class="concept">translateY(-80px) → translateY(4px) → translateY(0) with cubic-bezier(0.34,1.5,0.64,1). Not a simple slide — the overshoot is what gives it life.</div>
+    </div>
+
+    <div class="micro-cell">
+      <div class="label">Card hover physics</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="tc" style="max-width:200px;">
+          <div class="tc-icon"><svg width="16" height="16" viewBox="0 0 22 22" fill="none"><path d="M11 2L13 9H20L14.5 13.5L16.5 20L11 16L5.5 20L7.5 13.5L2 9H9L11 2Z" fill="var(--ink-light)"/></svg></div>
+          <div><div class="tc-title" style="font-size:13px;">FromSoftware</div><div class="tc-sub">24 games</div></div>
+          <div class="tc-arr">→</div>
+        </div>
+      </div>
+      <div class="mi-desc">Topic cards: translateX(5px) not translateY — slides like pulling from shelf. Game cards: translateY(-5px) + rotate(-0.5deg) — picks up like a box.</div>
+      <div class="concept">Direction matters. Horizontal = shelf metaphor. Vertical + tilt = picking up object. Spring easing (0.34,1.5,0.64,1) on both — slight overshoot makes it feel alive not smooth.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════
+     09 RULES
+══════════════════ -->
+<div class="section" id="rules">
+  <div class="sh">
+    <div><div class="sh-n">10</div><div class="sh-t">Rules of Thumb</div></div>
+    <div class="sh-sub">Paste these into Claude Code when things go wrong.</div>
+  </div>
+  <div class="rules-block hourglass-pattern">
+    <div class="rules-top">
+      <div class="rules-eye">For Claude Code prompts</div>
+      <div class="rules-hl">Familiar to use.<br><em>Surprising</em> to look at.</div>
+    </div>
+    <div class="rules-grid">
+      <div class="ri"><div class="ri-n">1</div><div><div class="ri-t">Cards are white. Pages are cream.</div><div class="ri-c">Card = <strong>#FDFAF5 + real box-shadow</strong>. Cream card on cream page = invisible. Internal dividers are <strong>dashed</strong>, not solid.</div></div></div>
+      <div class="ri"><div class="ri-n">2</div><div><div class="ri-t">Scores are T2 — 68px, 900 weight.</div><div class="ri-c">The result number is the headline. <strong>Minimum 48px. --ink. Never blue. Never in a pill.</strong></div></div></div>
+      <div class="ri"><div class="ri-n">3</div><div><div class="ri-t">Stat pills are full pill. Chips are labels.</div><div class="ri-c">Stat pills: <strong>border-radius 100px, no border, --cream-dark fill</strong>. Context chips: <strong>border-radius 6px, with border</strong>. These are different shapes for different jobs.</div></div></div>
+      <div class="ri"><div class="ri-n">4</div><div><div class="ri-t">Badges have inner rings.</div><div class="ri-c">Every filled badge circle: <strong>7px inset inner ring at rgba(255,255,255,0.22)</strong>. Matches brand PDF illustrations. Non-negotiable.</div></div></div>
+      <div class="ri"><div class="ri-n">5</div><div><div class="ri-t">Primary buttons press down.</div><div class="ri-c"><strong>box-shadow: 0 5px 0 [darker]</strong> at rest. Collapses to 1px on :active + translateY(4px). B1, B2, B3 only. Not ghost or text links.</div></div></div>
+      <div class="ri"><div class="ri-n">6</div><div><div class="ri-t">Animations overshoot and settle.</div><div class="ri-c">Every reveal, stamp, toast, and card hover uses <strong>cubic-bezier(0.34,1.5,0.64,1)</strong>. The overshoot is what makes it feel physical. Never ease-in-out.</div></div></div>
+      <div class="ri"><div class="ri-n">7</div><div><div class="ri-t">Card hover direction is intentional.</div><div class="ri-c">Topic rows: <strong>translateX</strong> (shelf). Game cards: <strong>translateY + rotate(-0.5deg)</strong> (picking up). Your row in leaderboard: amber left border + amber name. Never just translateY(-2px) everywhere.</div></div></div>
+      <div class="ri"><div class="ri-n">8</div><div><div class="ri-t">Icons are Idle Hours set, not emoji.</div><div class="ri-c">Custom SVG outlines, rounded ends, consistent stroke weight. Use <strong>placeholder boxes</strong> until drawn — don't substitute emoji. Emoji in UI = breaking the language.</div></div></div>
+      <div class="ri"><div class="ri-n">9</div><div><div class="ri-t">Stripe texture belongs on active/reward elements.</div><div class="ri-c">B2 button always. Milestone toasts always. Score chips on end screens. HUD score container during Blitz. <strong>Never on body text, never on cards.</strong> It signals energy — dilute it and it means nothing.</div></div></div>
+      <div class="ri"><div class="ri-n">10</div><div><div class="ri-t">Stickers rotate. Never perfectly straight.</div><div class="ri-c">Alternate <strong>-1.5deg and +1.5deg</strong> across a group of stickers. One per card maximum. The slight tilt is what makes them feel placed by a human, not rendered by a machine.</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div style="height:80px;"></div>
+<div class="kit-footer">
+  <div class="kf-l">Idle <span>Hours</span> — UI Kit v5</div>
+  <div class="kf-r">Familiar to use. Surprising to look at.</div>
+</div>
+
+<script>
+// Replay stamp animation on click
+document.querySelector('.stamp-live')?.addEventListener('click', function() {
+  this.classList.remove('stamp-live');
+  void this.offsetWidth;
+  this.classList.add('stamp-live');
+});
+</script>
+</body>
+</html>
