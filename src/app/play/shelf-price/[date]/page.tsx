@@ -171,7 +171,7 @@ export default function ShelfPriceDayPage({
     <>
       <Header />
 
-      <main className="font-game mx-auto max-w-7xl px-4 py-8 lg:px-8">
+      <main className="game-container font-game mx-auto max-w-7xl px-4 py-8 lg:px-8">
         {/* Not playable */}
         {!playable && (
           <div className="mb-8 rounded-lg border border-border/60 bg-muted/30 px-4 py-6 text-center">

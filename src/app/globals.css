@@ -89,6 +89,47 @@
     --game-cream-mid: 20 10% 16%;
     --game-cream-dark: 20 8% 14%;
   }
+
+  /* Game containers: force light-mode tokens so dark mode doesn't override designed colours */
+  .dark .game-container {
+    --card: 0 0% 100%;
+    --card-foreground: 33 69% 19%;
+    --foreground: 33 69% 19%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 36 20% 10%;
+    --primary: 25 89% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 20% 98%;
+    --secondary-foreground: 33 69% 19%;
+    --muted: 30 20% 90%;
+    --muted-foreground: 30 30% 42%;
+    --accent: 153 39% 52%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 35 39% 74%;
+    --input: 35 39% 74%;
+    --ring: 25 89% 42%;
+    --brand-dark: 33 69% 19%;
+    --brand-green: 155 41% 30%;
+    --accent-green: 153 39% 52%;
+    --burnt-orange: 25 89% 42%;
+    --teal: 148 72% 26%;
+    --game-blue: 217 78% 60%;
+    --game-blue-dark: 215 63% 47%;
+    --game-blue-light: 216 82% 95%;
+    --game-ink: 60 15% 9%;
+    --game-ink-mid: 60 12% 25%;
+    --game-ink-light: 60 10% 49%;
+    --game-amber: 30 55% 50%;
+    --game-green: 147 61% 41%;
+    --game-red: 7 62% 47%;
+    --game-white: 0 0% 100%;
+    --game-cream: 40 30% 95%;
+    --game-cream-mid: 40 20% 92%;
+    --game-cream-dark: 40 15% 88%;
+    color-scheme: light;
+  }
 }
 
 @layer base {
@@ -169,4 +210,158 @@
 @keyframes gs-tip-out {
   0% { opacity: 1; scale: 1; border-radius: 8px; }
   100% { opacity: 0; scale: 0; border-radius: 50%; }
+}
+
+/* ── Idle Hours entrance presets ── */
+@keyframes ih-pop {
+  0%   { opacity: 0; transform: scale(0); }
+  70%  { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes ih-fade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes ih-move {
+  0%   { opacity: 0; transform: translateX(-50px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes ih-wipe {
+  0%   { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+@keyframes ih-word-pop {
+  0%   { opacity: 0; transform: scale(0) rotate(var(--ih-tilt, 0deg)); }
+  70%  { opacity: 1; transform: scale(1.2) rotate(var(--ih-tilt, 0deg)); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes ih-slide-up {
+  0%   { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes ih-rise {
+  0%   { opacity: 0; transform: translateY(80px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes ih-wipe-right {
+  0%   { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0% 0 0); }
+}
+@keyframes ih-wipe-down {
+  0%   { clip-path: inset(0 0 100% 0); }
+  100% { clip-path: inset(0 0 0% 0); }
+}
+/* Roller animations — flip calendar style text transitions */
+@keyframes ih-roll-in-up {
+  from { transform: translateY(110%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes ih-roll-in-down {
+  from { transform: translateY(-110%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+@keyframes ih-roll-out-up {
+  from { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(-110%); opacity: 0; }
+}
+@keyframes ih-roll-out-down {
+  from { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(110%); opacity: 0; }
+}
+@keyframes ih-crossfade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes ih-nudge {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+@keyframes ih-shimmer {
+  0%   { transform: translateX(-150%); }
+  100% { transform: translateX(150%); }
+}
+
+/* Badge shimmer — diagonal wipe on hover like a shiny sticker */
+.badge-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.badge-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%; bottom: -50%;
+  width: 80%;
+  left: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255,255,255,0.25) 45%,
+    rgba(255,255,255,0.35) 50%,
+    rgba(255,255,255,0.25) 55%,
+    transparent 70%
+  );
+  transform: translateX(-150%);
+  pointer-events: none;
+}
+.badge-shimmer:hover::after {
+  animation: ih-shimmer 0.8s ease-in-out forwards;
+}
+
+/* Bevel button — physical press system. :active must beat :hover. */
+.bvl-purple {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: 2px solid #3D35A0;
+  background: #5B4FCF;
+  color: white;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 6px 0 #3D35A0, 0 8px 20px rgba(91,79,207,0.28);
+  transition: transform 0.1s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.1s;
+}
+.bvl-purple:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 0 #3D35A0, 0 12px 24px rgba(91,79,207,0.35);
+}
+.bvl-purple:active {
+  transform: translateY(4px) !important;
+  box-shadow: 0 1px 0 #3D35A0 !important;
+}
+
+/* Bevel button — blue variant */
+.bvl-blue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: 2px solid #2D6BC4;
+  background: #4A8FE8;
+  color: white;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 6px 0 #2D6BC4, 0 8px 20px rgba(74,143,232,0.28);
+  transition: transform 0.1s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.1s;
+}
+.bvl-blue:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 0 #2D6BC4, 0 12px 24px rgba(74,143,232,0.35);
+}
+.bvl-blue:active {
+  transform: translateY(4px) !important;
+  box-shadow: 0 1px 0 #2D6BC4 !important;
 }

@@ -190,7 +190,7 @@ export default function StreetDateDayPage({
     <>
       <Header />
 
-      <main className="font-game mx-auto max-w-7xl px-4 py-8 lg:px-8">
+      <main className="game-container font-game mx-auto max-w-7xl px-4 py-8 lg:px-8">
         {/* Header — matches Game Sense */}
         <div className="mb-8 text-center">
           <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">

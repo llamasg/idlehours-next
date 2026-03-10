@@ -33,6 +33,7 @@ import RulesModal from '../components/RulesModal'
 import ProximityCounter from '../components/ProximityCounter'
 import ResultCard from '@/components/games/ResultCard'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
+import { entrance, useEntranceSteps } from '@/lib/animations'
 
 const GUESS_COST = 20
 const spring = 'cubic-bezier(0.34,1.5,0.64,1)'
@@ -63,10 +64,16 @@ export default function GameSenseDayPage({
   const hintTipExitTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [hintJustUsed, setHintJustUsed] = useState(false)
   const hintUsedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const hasInteractedRef = useRef(false)
 
   // Entrance animation: 0=waiting, 1=title centered, 2=title moves up + box, 3=sentence, 4=input, 5=rest, 6=done
   const [entranceStep, setEntranceStep] = useState(0)
   const [wipeStarted, setWipeStarted] = useState(false)
+  // Post-game page-level sequencer — each parent section fires one after the other
+  // Steps: 1=ResultCard, 2=Sentence, 3=Nav buttons, 4=Title/date, 5=Badges, 6=DiscoverMore, 7=Toast
+  const isPostGameComplete = state ? (state.won || state.score <= 0) : false
+  const pgGaps = useMemo(() => [0, 3500, 400, 300, 300, 400, 500], [])
+  const pgStep = useEntranceSteps(7, pgGaps, isPostGameComplete)
   // Pre-compute skip so clip-path renders correctly on first paint (before useEffect)
   const shouldAnimate = state ? !(state.won || state.score <= 0) : true
 
@@ -115,6 +122,8 @@ export default function GameSenseDayPage({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [!!state])
 
+  // Post-game sequencing is now handled by useEntranceSteps (pgStep) above
+
   // Hint tooltip spring physics
   useEffect(() => {
     if (!showHintTooltip) return
@@ -134,9 +143,10 @@ export default function GameSenseDayPage({
     return () => cancelAnimationFrame(hintTipRafRef.current)
   }, [showHintTooltip])
 
-  // Watch for score hitting 0 — trigger loss
+  // Watch for score hitting 0 — trigger loss (skip on initial load from saved state)
   useEffect(() => {
     if (!state || state.won || pendingGuess) return
+    if (!hasInteractedRef.current) return
     if (state.score <= 0) {
       setTimeout(() => setShowLossModal(true), 300)
     }
@@ -145,6 +155,7 @@ export default function GameSenseDayPage({
   const handleGuess = useCallback(
     (game: GameSenseGame) => {
       if (!state || gameOver || pendingGuess) return
+      hasInteractedRef.current = true
 
       const proximity = calculateRank(game, answer)
 
@@ -187,6 +198,7 @@ export default function GameSenseDayPage({
     (blank: BlankDef) => {
       if (!state || gameOver || pendingGuess) return
       if (state.blanksRevealed.includes(blank.key)) return
+      hasInteractedRef.current = true
 
       const cost = BLANK_COSTS[blank.key] ?? 0
       const newState: DayState = {
@@ -211,6 +223,7 @@ export default function GameSenseDayPage({
 
   const handleHint = useCallback(() => {
     if (!state || gameOver || pendingGuess || state.guesses.length === 0) return
+    hasInteractedRef.current = true
 
     // Find best (lowest) proximity from guesses
     const bestProximity = Math.min(...state.guesses.map((g) => g.proximity))
@@ -218,16 +231,16 @@ export default function GameSenseDayPage({
 
     // "Give up" mode — best proximity is already 2, so the answer is rank 1
     if (bestProximity <= 2) {
-      // Forfeit all remaining points and reveal the answer
+      // Forfeit all remaining points and reveal the answer — this is a loss
       const newState: DayState = {
         ...state,
         score: 0,
         guesses: [...state.guesses, { gameId: answer.id, proximity: 1, isHint: true }],
-        won: true,
+        won: false,
       }
       setState(newState)
       saveDayState(date, newState)
-      setTimeout(() => setShowWinModal(true), 300)
+      setTimeout(() => setShowLossModal(true), 300)
       return
     }
 
@@ -278,6 +291,29 @@ export default function GameSenseDayPage({
     }
   }, [showWinModal, showLossModal])
 
+  // Compute share text for modals
+  const shareText = useMemo(() => {
+    if (!state) return ''
+    const number = formatGameNumber(date)
+    const emojiRow = state.guesses
+      .map((g) => {
+        if (g.proximity <= 50) return '\u{1F7E9}'
+        if (g.proximity <= 200) return '\u{1F7E8}'
+        if (g.proximity <= 500) return '\u{1F7E7}'
+        return '\u{1F7E5}'
+      })
+      .join('')
+    const lines = [
+      `Game Sense ${number} \u00b7 ${state.score}/1000`,
+      emojiRow,
+      state.blanksRevealed.length > 0
+        ? `${state.guesses.length} guesses \u00b7 ${state.blanksRevealed.length}/5 clues`
+        : `${state.guesses.length} guesses`,
+      'idlehours.co.uk/play/game-sense',
+    ]
+    return lines.join('\n')
+  }, [state, date])
+
   // While loading from localStorage — layout handles the visual loading screen
   if (!state) {
     return null
@@ -285,7 +321,7 @@ export default function GameSenseDayPage({
 
   const guessedIds = state.guesses.map((g) => g.gameId)
   const isAnimating = pendingGuess !== null
-  const isPostGame = (state.won || state.score <= 0) && !showWinModal && !showLossModal && !isAnimating
+  const isPostGame = (state.won || state.score <= 0) && !isAnimating
 
   return (
     <>
@@ -293,7 +329,7 @@ export default function GameSenseDayPage({
 
       {/* Blue game world — site max-width, min full viewport height */}
       <div
-        className="mx-auto mt-[15px] flex min-h-[900px] max-w-7xl flex-col"
+        className="game-container mx-auto mt-[15px] flex min-h-[900px] max-w-7xl flex-col"
         style={{
           background: 'linear-gradient(155deg, #2D6BC4, #1a2a4a)',
           borderRadius: 20,
@@ -309,11 +345,13 @@ export default function GameSenseDayPage({
             <div
               className="transition-all duration-700 ease-out"
               style={
-                entranceStep < 1
-                  ? { opacity: 0, transform: 'translateY(120px)' }
-                  : entranceStep < 2
-                    ? { opacity: 1, transform: 'translateY(120px)' }
-                    : { opacity: 1, transform: 'translateY(0)' }
+                isPostGame
+                  ? entrance('slide-up', pgStep >= 4)
+                  : (entranceStep < 1
+                      ? { opacity: 0, transform: 'translateY(120px)' }
+                      : entranceStep < 2
+                        ? { opacity: 1, transform: 'translateY(120px)' }
+                        : { opacity: 1, transform: 'translateY(0)' })
               }
             >
               <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-white">
@@ -350,14 +388,22 @@ export default function GameSenseDayPage({
 
             {/* Date + score pill — fade in with rest */}
             <div
-              style={entranceStep < 5 ? { opacity: 0 } : entranceStep < 6 ? { animation: 'gs-fade-in 0.5s cubic-bezier(0.34,1.5,0.64,1) both' } : undefined}
+              style={
+                isPostGame
+                  ? entrance('fade', pgStep >= 4)
+                  : (entranceStep < 5
+                      ? { opacity: 0 }
+                      : entranceStep < 6
+                        ? { animation: `gs-fade-in 0.5s ${spring} both` }
+                        : undefined)
+              }
             >
               <p className="mt-0.5 font-heading text-xs text-white/50">
                 {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
               </p>
 
               {/* Hint (left) | Score pill (center) | ? (right) — grid keeps score dead center */}
-              <div className="mt-3 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-6">
+              {!isPostGame && <div className="mt-3 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-6">
                 {/* Left cell — hint button with inertia tooltip */}
                 <div className="flex justify-start">
                   {!gameOver && state.guesses.length > 0 && (() => {
@@ -480,7 +526,7 @@ export default function GameSenseDayPage({
                     </button>
                   )}
                 </div>
-              </div>
+              </div>}
             </div>
           </div>
 
@@ -566,38 +612,19 @@ export default function GameSenseDayPage({
           {/* Won/Lost — post-game page (when modal closed) */}
           {isPostGame && (
             <>
-              {/* Revealed sentence — all blanks shown */}
-              <div className="mb-6">
-                <SentenceClue
-                  answer={answer}
-                  blanksRevealed={state.blanksRevealed}
-                  score={0}
-                  onRevealBlank={() => {}}
-                  disabled={true}
-                  revealAll
-                />
+              {/* 5th visually but above ResultCard — slides open when pgStep >= 5 */}
+              <div
+                className="grid transition-[grid-template-rows] duration-700 ease-out"
+                style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
+              >
+                <div className="overflow-hidden">
+                  <div className="mb-6">
+                    <DailyBadgeShelf currentGame="game-sense" animateStamp={pgStep >= 5} />
+                  </div>
+                </div>
               </div>
 
-              {/* Nav pills — above showcase */}
-              <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
-                {!today && (
-                  <Link
-                    href="/play/game-sense"
-                    className="inline-flex items-center gap-2 rounded-full border-2 border-[#3D35A0] bg-[#5B4FCF] px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.28)] transition-[transform,box-shadow] duration-100 hover:-translate-y-[3px] hover:shadow-[0_9px_0_#3D35A0,0_12px_24px_rgba(91,79,207,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#3D35A0]"
-                  >
-                    <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                    Today&apos;s game
-                  </Link>
-                )}
-                <Link
-                  href="/play/game-sense/archive"
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-[#3D35A0] bg-[#5B4FCF] px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.28)] transition-[transform,box-shadow] duration-100 hover:-translate-y-[3px] hover:shadow-[0_9px_0_#3D35A0,0_12px_24px_rgba(91,79,207,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#3D35A0]"
-                >
-                  <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                  View past games
-                </Link>
-              </div>
-
+              {/* 1st: ResultCard — internal 15-step cascade */}
               <div className="mb-6">
                 <ResultCard
                   game="game-sense"
@@ -606,11 +633,60 @@ export default function GameSenseDayPage({
                   won={state.won}
                   puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
                   onViewResults={() => state.won ? setShowWinModal(true) : setShowLossModal(true)}
+                  animateEntrance={pgStep >= 1}
                 />
               </div>
 
-              <div className="mb-8">
-                <DailyBadgeShelf currentGame="game-sense" />
+              {/* 2nd: Revealed sentence — white card with answer below */}
+              <div className="mb-6" style={entrance('slide-up', pgStep >= 2)}>
+                <div className="mx-auto w-full max-w-[850px] overflow-hidden rounded-2xl bg-white/95 shadow-sm">
+                  <div className="p-5 sm:p-6">
+                    <SentenceClue
+                      answer={answer}
+                      blanksRevealed={state.blanksRevealed}
+                      score={0}
+                      onRevealBlank={() => {}}
+                      disabled={true}
+                      revealAll
+                    />
+                  </div>
+                  <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
+                  <div className="flex items-center gap-3 px-5 py-4 sm:px-6">
+                    {answer.igdbImageId && (
+                      <img
+                        src={igdbCoverUrl(answer.igdbImageId)}
+                        alt={answer.title}
+                        className="h-12 w-9 rounded object-cover shadow-sm"
+                      />
+                    )}
+                    <div>
+                      <p className="font-heading text-[15px] font-black text-[hsl(var(--game-ink))]">
+                        {answer.title}
+                      </p>
+                      <p className="font-heading text-[12px] font-semibold text-[hsl(var(--game-ink-light))]">
+                        {answer.year}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3rd: Nav pills — entrance on wrapper, hover on link */}
+              <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
+                {!today && (
+                  <div style={entrance('pop', pgStep >= 3)}>
+                    <Link href="/play/game-sense" className="bvl-purple">
+                      <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                      Today&apos;s game
+                    </Link>
+                  </div>
+                )}
+                <div style={entrance('pop', pgStep >= 3, 150)}>
+                  <Link href="/play/game-sense/archive" className="bvl-purple">
+                    <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                    View past games
+                  </Link>
+                </div>
               </div>
             </>
           )}
@@ -624,7 +700,7 @@ export default function GameSenseDayPage({
               {!today && (
                 <Link
                   href="/play/game-sense"
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-[#3D35A0] bg-[#5B4FCF] px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.28)] transition-[transform,box-shadow] duration-100 hover:-translate-y-[3px] hover:shadow-[0_9px_0_#3D35A0,0_12px_24px_rgba(91,79,207,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#3D35A0]"
+                  className="bvl-purple"
                 >
                   <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
                   Today&apos;s game
@@ -632,7 +708,7 @@ export default function GameSenseDayPage({
               )}
               <Link
                 href="/play/game-sense/archive"
-                className="inline-flex items-center gap-2 rounded-full border-2 border-[#3D35A0] bg-[#5B4FCF] px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.28)] transition-[transform,box-shadow] duration-100 hover:-translate-y-[3px] hover:shadow-[0_9px_0_#3D35A0,0_12px_24px_rgba(91,79,207,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#3D35A0]"
+                className="bvl-purple"
               >
                 <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
                 View past games
@@ -644,7 +720,10 @@ export default function GameSenseDayPage({
 
       {/* DiscoverMore — outside the blue area */}
       {isPostGame && (
-        <div className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
+        <div
+          className="mx-auto max-w-7xl px-4 py-8 lg:px-8"
+          style={entrance('fade', pgStep >= 6)}
+        >
           <DiscoverMore currentGame="game-sense" />
         </div>
       )}
@@ -655,7 +734,7 @@ export default function GameSenseDayPage({
       {showRules && <RulesModal onClose={() => setShowRules(false)} />}
 
       {/* Complete toast */}
-      {showCompleteToast && (
+      {showCompleteToast && pgStep >= 7 && (
         <div
           className="fixed left-1/2 top-6 z-[200] -translate-x-1/2"
           style={{ animation: 'gs-toast-in 500ms cubic-bezier(0.34, 1.5, 0.64, 1) forwards' }}
@@ -702,26 +781,8 @@ export default function GameSenseDayPage({
               </div>
             ) : null
           }
-          onShare={async () => {
-            const number = formatGameNumber(date)
-            const emojiRow = state.guesses
-              .map((g) => {
-                if (g.proximity <= 50) return '\u{1F7E9}'
-                if (g.proximity <= 200) return '\u{1F7E8}'
-                if (g.proximity <= 500) return '\u{1F7E7}'
-                return '\u{1F7E5}'
-              })
-              .join('')
-            const lines = [
-              `Game Sense ${number} \u00b7 ${state.score}/1000`,
-              emojiRow,
-              state.blanksRevealed.length > 0
-                ? `${state.guesses.length} guesses \u00b7 ${state.blanksRevealed.length}/5 clues`
-                : `${state.guesses.length} guesses`,
-              'idlehours.co.uk/play/game-sense',
-            ]
-            try { await navigator.clipboard.writeText(lines.join('\n')) } catch {}
-          }}
+          shareText={shareText}
+          shareUrl="https://idlehours.co.uk/play/game-sense"
           onClose={() => {
             setShowWinModal(false)
             setShowCompleteToast(true)
@@ -760,26 +821,8 @@ export default function GameSenseDayPage({
               </div>
             ) : null
           }
-          onShare={async () => {
-            const number = formatGameNumber(date)
-            const emojiRow = state.guesses
-              .map((g) => {
-                if (g.proximity <= 50) return '\u{1F7E9}'
-                if (g.proximity <= 200) return '\u{1F7E8}'
-                if (g.proximity <= 500) return '\u{1F7E7}'
-                return '\u{1F7E5}'
-              })
-              .join('')
-            const lines = [
-              `Game Sense ${number} \u00b7 ${state.score}/1000`,
-              emojiRow,
-              state.blanksRevealed.length > 0
-                ? `${state.guesses.length} guesses \u00b7 ${state.blanksRevealed.length}/5 clues`
-                : `${state.guesses.length} guesses`,
-              'idlehours.co.uk/play/game-sense',
-            ]
-            try { await navigator.clipboard.writeText(lines.join('\n')) } catch {}
-          }}
+          shareText={shareText}
+          shareUrl="https://idlehours.co.uk/play/game-sense"
           onClose={() => setShowLossModal(false)}
         />
       )}

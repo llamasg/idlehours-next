@@ -236,7 +236,7 @@ export default function ShipItPage() {
   return (
     <>
       <Header />
-      <main className="mx-auto px-4 py-8">
+      <main className="game-container mx-auto px-4 py-8">
         {state.phase === 'start' && (
           <div className="mx-auto max-w-lg">
             <StartScreen onStart={handleStart} />
