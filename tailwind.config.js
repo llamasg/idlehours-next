@@ -77,6 +77,30 @@ export default {
           '0%': { transform: 'translateY(-40px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+        'stamp-down': {
+          '0%': { transform: 'scale(0.4)', opacity: '0' },
+          '40%': { transform: 'scale(1.18)', opacity: '1' },
+          '60%': { transform: 'scale(0.94) rotate(-2deg)' },
+          '80%': { transform: 'scale(1.05) rotate(1deg)' },
+          '100%': { transform: 'scale(1) rotate(0deg)' },
+        },
+        'postgame-fade-in': {
+          '0%': { opacity: '0', transform: 'translateY(12px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        'postgame-scale-in': {
+          '0%': { opacity: '0', transform: 'scale(0)' },
+          '60%': { opacity: '1', transform: 'scale(1.08)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        'rank-cascade': {
+          '0%': { opacity: '0', transform: 'translateX(-8px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        'ring-pulse': {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(74,143,232,0.25)' },
+          '50%': { boxShadow: '0 0 0 4px rgba(74,143,232,0)' },
+        },
       },
       animation: {
         echo: 'echo 0.6s ease-out',
@@ -94,6 +118,11 @@ export default {
         'score-float': 'score-float 1.2s ease-out both',
         shake: 'shake 0.4s ease-in-out',
         'milestone-toast': 'milestone-toast 0.4s ease-out',
+        'stamp-down': 'stamp-down 0.5s cubic-bezier(0.34,1.56,0.64,1) both',
+        'postgame-fade-in': 'postgame-fade-in 0.4s cubic-bezier(0.34,1.5,0.64,1) both',
+        'postgame-scale-in': 'postgame-scale-in 0.45s cubic-bezier(0.34,1.5,0.64,1) both',
+        'rank-cascade': 'rank-cascade 0.3s cubic-bezier(0.34,1.5,0.64,1) both',
+        'ring-pulse': 'ring-pulse 2.5s ease-in-out infinite',
       },
   		borderRadius: {
   			lg: 'var(--radius)',

@@ -46,14 +46,7 @@ const KEYFRAMES = `
   80%  { transform: scaleX(0.98) scaleY(1.02); }
   100% { transform: scaleX(1) scaleY(1); }
 }
-@keyframes anticipateLaunch {
-  0%   { transform: scale(1) translateY(0); opacity:1; }
-  12%  { transform: scale(0.92) translateY(4px); opacity:1; }
-  30%  { transform: scale(1.05) translateY(0); opacity:1; }
-  70%  { transform: scale(0.5) translateY(-200px); opacity:0; }
-  71%  { transform: scale(0.5) translateY(200px); opacity:0; }
-  100% { transform: scale(1) translateY(0); opacity:1; }
-}
+
 @keyframes bobA { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-3px) } }
 @keyframes bobB { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(3px) } }
 @keyframes bobC { 0%,100%{ transform:translateY(-2px) } 50%{ transform:translateY(2px) } }
@@ -66,30 +59,12 @@ const KEYFRAMES = `
   0%   { transform: translate(0,0) rotate(0deg); opacity:1; }
   100% { transform: translate(var(--cx), var(--cy)) rotate(var(--cr)); opacity:0; }
 }
-@keyframes stickerArc {
-  0%   { transform: translate(-60px, 80px) scale(0) rotate(-20deg); opacity:0; }
-  50%  { transform: translate(0px, -30px) scale(1.15) rotate(5deg); opacity:1; }
-  100% { transform: translate(40px, -10px) scale(1) rotate(0deg); opacity:1; }
-}
-@keyframes wobbleLeft {
-  0%,100% { transform: rotate(0deg); }
-  30%     { transform: rotate(-2deg); }
-  70%     { transform: rotate(1deg); }
-}
-@keyframes wobbleRight {
-  0%,100% { transform: rotate(0deg); }
-  30%     { transform: rotate(2deg); }
-  70%     { transform: rotate(-1deg); }
-}
-@keyframes wobbleLeftSmall {
-  0%,100% { transform: rotate(0deg); }
-  30%     { transform: rotate(-1deg); }
-  70%     { transform: rotate(0.5deg); }
-}
-@keyframes wobbleRightSmall {
-  0%,100% { transform: rotate(0deg); }
-  30%     { transform: rotate(1deg); }
-  70%     { transform: rotate(-0.5deg); }
+@keyframes appealIn {
+  0%   { transform: scale(0) rotate(-180deg); opacity: 0; }
+  50%  { transform: scale(1.2) rotate(10deg); opacity: 1; }
+  70%  { transform: scale(0.9) rotate(-5deg); }
+  85%  { transform: scale(1.05) rotate(2deg); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 `
 
@@ -109,28 +84,6 @@ function SquashStretch() {
           onAnimationEnd={() => setActive(false)}
         >
           Click
-        </button>
-      </div>
-    </Demo>
-  )
-}
-
-/* ─────────────────────────────────────────────
-   02 — ANTICIPATION
-   ───────────────────────────────────────────── */
-
-function Anticipation() {
-  const [launched, setLaunched] = useState(false)
-  return (
-    <Demo number="02" title="Anticipation" annotation="The button dips down before launching upward. The wind-up creates expectation.">
-      <div className="flex items-center justify-center py-12">
-        <button
-          onClick={() => { setLaunched(false); requestAnimationFrame(() => setLaunched(true)) }}
-          className="rounded-lg bg-[hsl(var(--game-ink))] px-6 py-3 font-heading text-sm font-bold text-[hsl(var(--game-cream))]"
-          style={launched ? { animation: 'anticipateLaunch 800ms cubic-bezier(0.34,1.5,0.64,1) forwards' } : undefined}
-          onAnimationEnd={() => setLaunched(false)}
-        >
-          Launch
         </button>
       </div>
     </Demo>
@@ -271,43 +224,6 @@ function SlowInSlowOut() {
           className="rounded-lg bg-[hsl(var(--game-amber))] px-5 py-2 font-heading text-xs font-bold text-[hsl(var(--game-white))] transition-opacity disabled:opacity-40"
         >
           {running ? 'Counting...' : 'Start'}
-        </button>
-      </div>
-    </Demo>
-  )
-}
-
-/* ─────────────────────────────────────────────
-   06 — ARCS
-   ───────────────────────────────────────────── */
-
-function Arcs() {
-  const [placed, setPlaced] = useState(false)
-
-  return (
-    <Demo number="06" title="Arcs" annotation="The sticker follows a curved arc into position — natural, never linear.">
-      <div className="relative flex items-center justify-center py-10">
-        <div className="relative h-32 w-48 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))]">
-          <p className="p-3 font-heading text-xs font-bold text-[hsl(var(--game-ink-mid))]">Game card</p>
-          {/* Sticker */}
-          <div
-            className="absolute right-[-8px] top-[-8px] flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(var(--game-green))] font-heading text-xs font-black text-[hsl(var(--game-white))] shadow-md"
-            style={{
-              animation: placed ? 'stickerArc 600ms cubic-bezier(0.34,1.5,0.64,1) forwards' : 'none',
-              opacity: placed ? undefined : 0,
-            }}
-            onAnimationEnd={() => {}}
-          >
-            ★
-          </div>
-        </div>
-      </div>
-      <div className="flex justify-center">
-        <button
-          onClick={() => { setPlaced(false); requestAnimationFrame(() => setPlaced(true)) }}
-          className="rounded-lg bg-[hsl(var(--game-green))] px-5 py-2 font-heading text-xs font-bold text-[hsl(var(--game-white))]"
-        >
-          Place sticker
         </button>
       </div>
     </Demo>
@@ -586,260 +502,6 @@ function InertiaTooltip() {
 }
 
 /* ─────────────────────────────────────────────
-   12 — STAR BURST
-   ───────────────────────────────────────────── */
-
-function StarBurst() {
-  const [earned, setEarned] = useState<boolean[]>([false, false, false, false, false])
-  const [bursting, setBursting] = useState(false)
-
-  const clickStar = (idx: number) => {
-    if (bursting) return
-    const next = [...earned]
-    next[idx] = true
-    setEarned(next)
-
-    if (next.every(Boolean)) {
-      setBursting(true)
-      setTimeout(() => { setBursting(false) }, 1200)
-    }
-  }
-
-  const reset = () => { setEarned([false, false, false, false, false]); setBursting(false) }
-
-  return (
-    <Demo number="12" title="Star Burst" annotation="Fill all 5 stars. On the 5th, they burst outward then snap back.">
-      <div className="flex flex-col items-center gap-4 py-6">
-        <div className="relative flex items-center gap-3">
-          {earned.map((on, i) => {
-            const angle = (i - 2) * 25
-            const burstX = Math.cos(((i * 72) * Math.PI) / 180) * 60
-            const burstY = Math.sin(((i * 72) * Math.PI) / 180) * 60
-            return (
-              <button
-                key={i}
-                onClick={() => clickStar(i)}
-                className="relative text-3xl transition-all"
-                style={{
-                  color: on ? 'hsl(var(--game-amber))' : 'hsl(var(--game-ink-light))',
-                  transform: bursting
-                    ? `translate(${burstX}px, ${burstY}px) scale(1.3) rotate(${angle}deg)`
-                    : 'translate(0,0) scale(1) rotate(0deg)',
-                  transition: bursting
-                    ? 'transform 400ms cubic-bezier(0.34,1.5,0.64,1)'
-                    : 'transform 600ms cubic-bezier(0.34,1.5,0.64,1), color 200ms',
-                }}
-              >
-                {on ? '★' : '☆'}
-              </button>
-            )
-          })}
-        </div>
-        <button onClick={reset} className="font-heading text-[11px] font-bold text-[hsl(var(--game-amber))] underline">
-          Reset
-        </button>
-      </div>
-    </Demo>
-  )
-}
-
-/* ─────────────────────────────────────────────
-   13 — CARD FLIP
-   ───────────────────────────────────────────── */
-
-function CardFlip() {
-  const [flipped, setFlipped] = useState(false)
-  return (
-    <Demo number="13" title="Card Flip" annotation="Click to flip. 3D perspective rotateY with preserve-3d — front and back are real surfaces.">
-      <div className="flex items-center justify-center py-8" style={{ perspective: '800px' }}>
-        <div
-          onClick={() => setFlipped(f => !f)}
-          className="relative h-40 w-56 cursor-pointer"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-            transition: 'transform 500ms cubic-bezier(0.34,1.5,0.64,1)',
-          }}
-        >
-          {/* Front */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] shadow-md"
-            style={{ backfaceVisibility: 'hidden' }}
-          >
-            <p className="font-heading text-lg font-black text-[hsl(var(--game-ink))]">Outer Wilds</p>
-            <p className="mt-1 font-heading text-[11px] text-[hsl(var(--game-ink-light))]">Click to reveal</p>
-          </div>
-          {/* Back */}
-          <div
-            className="absolute inset-0 flex flex-col items-center justify-center rounded-xl border border-[hsl(var(--game-amber))]/30 bg-[hsl(var(--game-amber))]/10 shadow-md"
-            style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-          >
-            <p className="font-heading text-sm font-bold text-[hsl(var(--game-ink))]">A time-loop space mystery</p>
-            <p className="mt-1 font-heading text-[11px] text-[hsl(var(--game-ink-light))]">Click to flip back</p>
-          </div>
-        </div>
-      </div>
-    </Demo>
-  )
-}
-
-/* ─────────────────────────────────────────────
-   14 — RUBBER BAND PULL
-   ───────────────────────────────────────────── */
-
-function RubberBandPull() {
-  const [dragY, setDragY] = useState(0)
-  const [dragging, setDragging] = useState(false)
-  const startY = useRef(0)
-  const cardRef = useRef<HTMLDivElement>(null)
-
-  const handlePointerDown = (e: React.PointerEvent) => {
-    setDragging(true)
-    startY.current = e.clientY
-    ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
-  }
-
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (!dragging) return
-    const raw = e.clientY - startY.current
-    // Rubber band: logarithmic resistance
-    const clamped = Math.max(raw, 0)
-    const resisted = Math.sign(clamped) * Math.log(1 + Math.abs(clamped) * 0.5) * 20
-    setDragY(resisted)
-  }
-
-  const handlePointerUp = () => {
-    setDragging(false)
-    setDragY(0)
-  }
-
-  return (
-    <Demo number="14" title="Rubber Band Pull" annotation="Drag the card downward. Spring tension resists your pull. Release and it overshoots back.">
-      <div className="flex items-center justify-center py-10">
-        <div
-          ref={cardRef}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          className="cursor-grab select-none rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] px-8 py-5 shadow-md active:cursor-grabbing"
-          style={{
-            transform: `translateY(${dragY}px)`,
-            transition: dragging ? 'none' : 'transform 600ms cubic-bezier(0.34,1.5,0.64,1)',
-          }}
-        >
-          <p className="font-heading text-sm font-bold text-[hsl(var(--game-ink))]">Drag me down</p>
-          <p className="mt-1 text-[11px] text-[hsl(var(--game-ink-light))]">↓ Pull</p>
-        </div>
-      </div>
-    </Demo>
-  )
-}
-
-/* ─────────────────────────────────────────────
-   15 — SCROLL PROGRESS
-   ───────────────────────────────────────────── */
-
-function ScrollProgress() {
-  const [progress, setProgress] = useState(0)
-  const scrollRef = useRef<HTMLDivElement>(null)
-
-  const handleScroll = () => {
-    const el = scrollRef.current
-    if (!el) return
-    const pct = el.scrollTop / (el.scrollHeight - el.clientHeight)
-    setProgress(Math.min(Math.max(pct, 0), 1))
-  }
-
-  return (
-    <Demo number="15" title="Scroll Progress" annotation="Scroll the container. The amber bar tracks your progress with spring-delayed smoothness.">
-      <div className="relative overflow-hidden rounded-xl border border-[hsl(var(--game-ink))]/10">
-        {/* Progress bar */}
-        <div className="sticky top-0 z-10 h-1 bg-[hsl(var(--game-cream-dark))]">
-          <div
-            className="h-full bg-[hsl(var(--game-amber))]"
-            style={{
-              width: `${progress * 100}%`,
-              transition: 'width 300ms cubic-bezier(0.34,1.5,0.64,1)',
-            }}
-          />
-        </div>
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="h-[200px] overflow-y-auto bg-[hsl(var(--game-white))] p-5"
-        >
-          {Array.from({ length: 20 }, (_, i) => (
-            <p key={i} className="mb-3 font-heading text-xs text-[hsl(var(--game-ink-mid))]">
-              {i + 1}. Every game tells a story worth savouring — and every quiet hour spent exploring one is time well invested in wonder.
-            </p>
-          ))}
-        </div>
-      </div>
-    </Demo>
-  )
-}
-
-/* ─────────────────────────────────────────────
-   16 — HOVER MAGNET FIELD
-   ───────────────────────────────────────────── */
-
-function HoverMagnetField() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [offsets, setOffsets] = useState([
-    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
-  ])
-  const elemRefs = useRef<(HTMLDivElement | null)[]>([])
-
-  const handleMove = (e: React.MouseEvent) => {
-    const newOffsets = elemRefs.current.map((el) => {
-      if (!el) return { x: 0, y: 0 }
-      const rect = el.getBoundingClientRect()
-      const cx = rect.left + rect.width / 2
-      const cy = rect.top + rect.height / 2
-      const dx = e.clientX - cx
-      const dy = e.clientY - cy
-      const dist = Math.sqrt(dx * dx + dy * dy)
-      const maxDist = 150
-      if (dist > maxDist || dist < 1) return { x: 0, y: 0 }
-      const strength = (1 - dist / maxDist) * 6
-      return { x: (dx / dist) * strength, y: (dy / dist) * strength }
-    })
-    setOffsets(newOffsets)
-  }
-
-  const handleLeave = () => {
-    setOffsets([{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }])
-  }
-
-  const colours = ['--game-amber', '--game-blue', '--game-green', '--game-red']
-
-  return (
-    <Demo number="16" title="Hover Magnet Field" annotation="Move your cursor near the elements. They are magnetically attracted toward you.">
-      <div
-        ref={containerRef}
-        onMouseMove={handleMove}
-        onMouseLeave={handleLeave}
-        className="grid grid-cols-2 gap-6 py-6 px-8"
-      >
-        {colours.map((c, i) => (
-          <div
-            key={i}
-            ref={(el) => { elemRefs.current[i] = el }}
-            className="flex h-16 items-center justify-center rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))]"
-            style={{
-              transform: `translate(${offsets[i].x}px, ${offsets[i].y}px)`,
-              transition: 'transform 200ms cubic-bezier(0.34,1.5,0.64,1)',
-            }}
-          >
-            <div className="h-4 w-4 rounded-full" style={{ background: `hsl(var(${c}))` }} />
-          </div>
-        ))}
-      </div>
-    </Demo>
-  )
-}
-
-/* ─────────────────────────────────────────────
    17 — CONFETTI BURST
    ───────────────────────────────────────────── */
 
@@ -932,7 +594,9 @@ function TypewriterReveal() {
       <div className="flex flex-col items-center gap-4 py-8">
         <p className="min-h-[3em] max-w-sm text-center font-heading text-lg font-bold text-[hsl(var(--game-ink))]">
           {text.slice(0, charIndex)}
-          <span style={{ animation: 'cursorBlink 530ms step-end infinite' }} className="ml-0.5 text-[hsl(var(--game-amber))]">|</span>
+          {charIndex < text.length && (
+            <span style={{ animation: 'cursorBlink 530ms step-end infinite' }} className="ml-0.5 text-[hsl(var(--game-amber))]">|</span>
+          )}
         </p>
         <button
           onClick={start}
@@ -946,128 +610,38 @@ function TypewriterReveal() {
   )
 }
 
+
 /* ─────────────────────────────────────────────
-   19 — ELASTIC BOUNDARY
+   10b — APPEAL v2 (Trophy Reveal)
    ───────────────────────────────────────────── */
 
-function ElasticBoundary() {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [overscroll, setOverscroll] = useState(0)
-  const [isSettling, setIsSettling] = useState(false)
+function AppealV2() {
+  const [revealed, setRevealed] = useState(false)
 
-  const handleScroll = () => {
-    const el = scrollRef.current
-    if (!el) return
-
-    const atTop = el.scrollTop <= 0
-    const atBottom = el.scrollTop >= el.scrollHeight - el.clientHeight - 1
-
-    if (!atTop && !atBottom) {
-      if (overscroll !== 0) {
-        setIsSettling(true)
-        setOverscroll(0)
-      }
-    }
-  }
-
-  const handleWheel = (e: React.WheelEvent) => {
-    const el = scrollRef.current
-    if (!el) return
-
-    const atTop = el.scrollTop <= 0 && e.deltaY < 0
-    const atBottom = el.scrollTop >= el.scrollHeight - el.clientHeight - 1 && e.deltaY > 0
-
-    if (atTop || atBottom) {
-      const dir = atTop ? 1 : -1
-      const raw = Math.abs(e.deltaY) * 0.15
-      const resisted = dir * Math.min(raw, 30)
-      setOverscroll(resisted)
-      setIsSettling(false)
-
-      setTimeout(() => {
-        setIsSettling(true)
-        setOverscroll(0)
-      }, 100)
-    }
+  const handleReveal = () => {
+    setRevealed(false)
+    requestAnimationFrame(() => setRevealed(true))
   }
 
   return (
-    <Demo number="19" title="Elastic Boundary" annotation="Scroll past the edges. The content stretches elastically then springs back.">
-      <div className="overflow-hidden rounded-xl border border-[hsl(var(--game-ink))]/10">
+    <Demo number="10b" title="Appeal v2" annotation="Achievement unlocks, badge reveals. Spins in through 360°, overshoots to 120%, wobbles to rest. The spiral entry makes it feel earned.">
+      <div className="flex flex-col items-center gap-5 py-8">
         <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          onWheel={handleWheel}
-          className="h-[180px] overflow-y-auto bg-[hsl(var(--game-white))]"
-          style={{ overscrollBehavior: 'none' }}
+          style={{
+            fontSize: 48,
+            opacity: revealed ? 1 : 0,
+            animation: revealed ? 'appealIn 700ms cubic-bezier(0.34,1.5,0.64,1) forwards' : 'none',
+          }}
+          onAnimationEnd={() => {}}
         >
-          <div
-            style={{
-              transform: `translateY(${overscroll}px)`,
-              transition: isSettling ? 'transform 500ms cubic-bezier(0.34,1.5,0.64,1)' : 'none',
-            }}
-            className="p-4"
-          >
-            {Array.from({ length: 12 }, (_, i) => (
-              <p key={i} className="mb-2 font-heading text-xs text-[hsl(var(--game-ink-mid))]">
-                Line {i + 1} — scroll to the edges and feel the elastic bounce at the boundary.
-              </p>
-            ))}
-          </div>
+          🏆
         </div>
-      </div>
-    </Demo>
-  )
-}
-
-/* ─────────────────────────────────────────────
-   20 — WOBBLE SHELF
-   ───────────────────────────────────────────── */
-
-function WobbleShelf() {
-  const [clickedIdx, setClickedIdx] = useState<number | null>(null)
-  const [wobbleKey, setWobbleKey] = useState(0)
-
-  const handleClick = (idx: number) => {
-    setClickedIdx(idx)
-    setWobbleKey(k => k + 1)
-    setTimeout(() => setClickedIdx(null), 600)
-  }
-
-  const items = ['A', 'B', 'C', 'D', 'E']
-
-  const getAnim = (idx: number) => {
-    if (clickedIdx === null) return undefined
-    if (idx === clickedIdx) return undefined // handled by scale transform
-    const dist = Math.abs(idx - clickedIdx)
-    if (dist === 1) {
-      const dir = idx < clickedIdx ? 'Left' : 'Right'
-      return `wobble${dir} 400ms cubic-bezier(0.34,1.5,0.64,1) 50ms`
-    }
-    if (dist === 2) {
-      const dir = idx < clickedIdx ? 'LeftSmall' : 'RightSmall'
-      return `wobble${dir} 400ms cubic-bezier(0.34,1.5,0.64,1) 100ms`
-    }
-    return undefined
-  }
-
-  return (
-    <Demo number="20" title="Wobble Shelf" annotation="Click an item. It bounces; its neighbours wobble outward like a ripple on a shelf.">
-      <div className="flex items-center justify-center gap-3 py-8">
-        {items.map((label, i) => (
-          <button
-            key={`${i}-${wobbleKey}`}
-            onClick={() => handleClick(i)}
-            className="flex h-16 w-16 items-center justify-center rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] font-heading text-sm font-black text-[hsl(var(--game-ink))]"
-            style={{
-              transform: clickedIdx === i ? 'scale(1.15)' : 'scale(1)',
-              transition: clickedIdx === i ? 'transform 300ms cubic-bezier(0.34,1.5,0.64,1)' : 'transform 300ms ease-out',
-              animation: getAnim(i),
-            }}
-          >
-            {label}
-          </button>
-        ))}
+        <button
+          onClick={handleReveal}
+          className="rounded-lg bg-[hsl(var(--game-amber))] px-5 py-2 font-heading text-xs font-bold text-[hsl(var(--game-white))] transition-opacity hover:opacity-90"
+        >
+          Reveal trophy
+        </button>
       </div>
     </Demo>
   )
@@ -1091,7 +665,7 @@ export default function MicroPage() {
             Microinteraction Playground
           </h1>
           <p className="mt-3 max-w-2xl font-heading text-sm leading-relaxed text-[hsl(var(--game-ink-mid))]">
-            Twenty interactive motion demos exploring the Disney 12 Principles of Animation
+            Eleven interactive motion demos exploring the Disney 12 Principles of Animation
             and interactive UI physics. Every element is live — click, hover, drag.
           </p>
         </header>
@@ -1104,34 +678,26 @@ export default function MicroPage() {
         </div>
         <div className="grid gap-8">
           <SquashStretch />
-          <Anticipation />
           <Staging />
           <FollowThrough />
           <SlowInSlowOut />
-          <Arcs />
           <SecondaryAction />
           <TimingComparison />
           <Exaggeration />
           <Appeal />
+          <AppealV2 />
         </div>
 
         {/* Section: Interactive Playground */}
         <div className="mb-10 mt-16">
           <h2 className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-ink-light))]">
-            Interactive Playground (11 &ndash; 20)
+            Interactive Playground (11 &ndash; 18)
           </h2>
         </div>
         <div className="grid gap-8">
           <InertiaTooltip />
-          <StarBurst />
-          <CardFlip />
-          <RubberBandPull />
-          <ScrollProgress />
-          <HoverMagnetField />
           <ConfettiBurst />
           <TypewriterReveal />
-          <ElasticBoundary />
-          <WobbleShelf />
         </div>
 
         {/* Footer */}

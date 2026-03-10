@@ -59,7 +59,8 @@ export function getGameSenseRank(score: number) {
   if (score >= 800) return 'Encyclopaedic'
   if (score >= 600) return 'Well Played'
   if (score >= 350) return 'Getting Warmer'
-  return 'Keep Guessing'
+  if (score >= 1) return 'Keep Guessing'
+  return 'Bust'
 }
 
 export const GAME_SENSE_FLAVOUR: Record<string, string[]> = {
@@ -67,6 +68,7 @@ export const GAME_SENSE_FLAVOUR: Record<string, string[]> = {
   'Well Played': ['A few clues, a confident guess. Good game.', 'Solid. You got there.', "That's the one."],
   'Getting Warmer': ['You found it in the end.', 'Took a few goes but you got there.', 'Not your easiest one.'],
   'Keep Guessing': ['A tough one today.', "Tomorrow's might suit you better.", 'It happens. Come back tomorrow.'],
+  'Bust': ['Ran out of points.', 'That one got away.', "It happens. Tomorrow's a new game."],
 }
 
 export function getStreetDateRank(score: number) {

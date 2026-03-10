@@ -365,3 +365,31 @@
   transform: translateY(4px) !important;
   box-shadow: 0 1px 0 #2D6BC4 !important;
 }
+
+/* Bevel button — green variant */
+.bvl-green {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: 2px solid #1A7A40;
+  background: #27A85A;
+  color: white;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 6px 0 #1A7A40, 0 8px 20px rgba(39,168,90,0.28);
+  transition: transform 0.1s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.1s;
+}
+.bvl-green:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 9px 0 #1A7A40, 0 12px 24px rgba(39,168,90,0.35);
+}
+.bvl-green:active {
+  transform: translateY(4px) !important;
+  box-shadow: 0 1px 0 #1A7A40 !important;
+}

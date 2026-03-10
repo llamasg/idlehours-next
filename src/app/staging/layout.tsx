@@ -5,13 +5,15 @@ import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
   { href: '/staging', label: 'Overview', short: '◆' },
-  { href: '/staging/layout-concepts', label: 'Layout', short: '01' },
-  { href: '/staging/type-components', label: 'Type + Components', short: '02' },
-  { href: '/staging/imagery', label: 'Imagery', short: '03' },
-  { href: '/staging/components', label: 'Component Library', short: '04' },
-  { href: '/staging/micro', label: 'Micro', short: '05' },
-  { href: '/staging/macro', label: 'Macro', short: '06' },
-  { href: '/staging/notebook', label: 'Notebook', short: '07' },
+  { href: '/staging/tokens', label: 'Tokens', short: '01' },
+  { href: '/staging/layout-concepts', label: 'Layout', short: '02' },
+  { href: '/staging/type-components', label: 'Type + Components', short: '03' },
+  { href: '/staging/imagery', label: 'Imagery', short: '04' },
+  { href: '/staging/components', label: 'Component Library', short: '05' },
+  { href: '/staging/micro', label: 'Micro', short: '06' },
+  { href: '/staging/macro', label: 'Macro', short: '07' },
+  { href: '/staging/notebook', label: 'Notebook', short: '08' },
+  { href: '/staging/game-identities', label: 'Game IDs', short: '09' },
 ]
 
 export default function StagingLayout({ children }: { children: React.ReactNode }) {

@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect, useCallback, useMemo, use } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import DiscoverMore from '@/components/DiscoverMore'
@@ -38,8 +38,10 @@ import { igdbCoverUrl } from '../lib/imageUtils'
 import RulesModal from '../components/RulesModal'
 import ResultCard from '@/components/games/ResultCard'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
+import { entrance, useEntranceSteps } from '@/lib/animations'
 
 const MAX_ATTEMPTS = 5
+const spring = 'cubic-bezier(0.34,1.5,0.64,1)'
 
 export default function StreetDateDayPage({
   params,
@@ -52,6 +54,17 @@ export default function StreetDateDayPage({
   const [showModal, setShowModal] = useState(false)
   const [viewingCoverIndex, setViewingCoverIndex] = useState(0)
   const [showRules, setShowRules] = useState(false)
+  const [wipeStarted, setWipeStarted] = useState(false)
+  const wipeTriggered = useRef(false)
+
+  // Entrance animation: 0=waiting, 1=title, 2=title moves up + box, 3=content, 4=input, 5=rest, 6=done
+  const [entranceStep, setEntranceStep] = useState(0)
+
+  // Post-game sequencer — matches Game Sense structure
+  const isPostGameComplete = state ? state.finished : false
+  const pgGaps = useMemo(() => [0, 3500, 400, 300, 300, 400, 500], [])
+  const pgStep = useEntranceSteps(7, pgGaps, isPostGameComplete && !showModal)
+  const shouldAnimate = state ? !state.finished : true
 
   const answerYear = getYearForDate(date)
   const roundGames = getGamesForDate(date)
@@ -62,10 +75,28 @@ export default function StreetDateDayPage({
     const loaded = loadDayState(date)
     setState(loaded)
     setViewingCoverIndex(loaded.currentCoverIndex)
-    if (loaded.finished) {
-      setShowModal(true)
-    }
   }, [date])
+
+  // Entrance animation sequence
+  useEffect(() => {
+    if (!state) return
+    const alreadyDone = state.finished
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (alreadyDone || reducedMotion) {
+      setWipeStarted(true)
+      setEntranceStep(6)
+      return
+    }
+    requestAnimationFrame(() => requestAnimationFrame(() => setWipeStarted(true)))
+    const t1 = setTimeout(() => setEntranceStep(1), 350)
+    const t2 = setTimeout(() => setEntranceStep(2), 1700)
+    const t3 = setTimeout(() => setEntranceStep(3), 2400)
+    const t4 = setTimeout(() => setEntranceStep(4), 3100)
+    const t5 = setTimeout(() => setEntranceStep(5), 3400)
+    const t6 = setTimeout(() => setEntranceStep(6), 3900)
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); clearTimeout(t6) }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!state])
 
   const handleWagerChange = useCallback(
     (wager: Wager) => {
@@ -159,9 +190,16 @@ export default function StreetDateDayPage({
     return (
       <>
         <Header />
-        <main className="mx-auto max-w-7xl px-4 py-12 lg:px-8">
-          <p className="text-center text-muted-foreground">Loading...</p>
-        </main>
+        <div
+          className="game-container mx-auto mt-[15px] flex min-h-[900px] max-w-7xl items-center justify-center"
+          style={{
+            background: 'linear-gradient(155deg, #1A7A40, #0d1f12)',
+            borderRadius: 20,
+            boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12)',
+          }}
+        >
+          <p className="text-center text-white/40">Loading...</p>
+        </div>
         <SiteFooter />
       </>
     )
@@ -186,147 +224,285 @@ export default function StreetDateDayPage({
     ? state.score
     : Math.round(currentPotential * WAGER_MULT[state.wager])
 
+  const isPostGame = state.finished && !showModal
+
   return (
     <>
       <Header />
 
-      <main className="game-container font-game mx-auto max-w-7xl px-4 py-8 lg:px-8">
-        {/* Header — matches Game Sense */}
-        <div className="mb-8 text-center">
-          <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-[hsl(var(--game-blue))]">
-            Street Date
-          </h1>
-          <p className="mt-1.5 text-sm text-muted-foreground">
-            Guess the year
-          </p>
-          <p className="mt-0.5 font-heading text-xs text-muted-foreground/70">
-            {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-          </p>
-
-          {/* Score pill */}
-          <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-[hsl(var(--game-blue))]/20 bg-card px-5 py-2">
-            <AnimatedScore
-              value={displayScore}
-              className="font-heading text-2xl font-black"
-            />
-            <span className="font-heading text-xs uppercase tracking-wider text-muted-foreground">
-              pts
-            </span>
-          </div>
-        </div>
-
-        {!playable && (
-          <div className="mb-8 rounded-lg border border-border/60 bg-muted/30 px-4 py-6 text-center">
-            <p className="text-muted-foreground">
-              This game isn&apos;t available yet. Check back on the right day!
-            </p>
-            <Link
-              href="/play/street-date"
-              className="mt-3 inline-block text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+      {/* Green game world */}
+      <div
+        className="game-container mx-auto mt-[15px] flex min-h-[900px] max-w-7xl flex-col"
+        style={{
+          background: 'linear-gradient(155deg, #1A7A40, #0d1f12)',
+          borderRadius: 20,
+          boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12)',
+          clipPath: (!shouldAnimate || wipeStarted) ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)',
+          transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+        }}
+      >
+        <main className={`font-game mx-auto flex flex-1 flex-col px-4 py-8 ${isPostGame ? 'w-full lg:px-8' : 'max-w-4xl justify-center'}`}>
+          {/* Game header */}
+          <div className="mb-6 text-center">
+            {/* Title + subtitle — animate like Game Sense */}
+            <div
+              className="transition-all duration-700 ease-out"
+              style={
+                isPostGame
+                  ? entrance('slide-up', pgStep >= 4)
+                  : (entranceStep < 1
+                      ? { opacity: 0, transform: 'translateY(120px)' }
+                      : entranceStep < 2
+                        ? { opacity: 1, transform: 'translateY(120px)' }
+                        : { opacity: 1, transform: 'translateY(0)' })
+              }
             >
-              Go to today&apos;s game &rarr;
-            </Link>
-          </div>
-        )}
+              <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-white">
+                {['Street', 'Date'].map((word, i) => (
+                  <span
+                    key={word}
+                    className="inline-block"
+                    style={
+                      entranceStep >= 1
+                        ? { animation: `gs-word-pop 0.25s cubic-bezier(0.34,1.56,0.64,1) ${0.1 + i * 0.3}s both` }
+                        : { opacity: 0 }
+                    }
+                  >
+                    {word}{i === 0 ? '\u00a0' : ''}
+                  </span>
+                ))}
+              </h1>
+              <p className="mt-1.5 text-sm text-white/60">
+                Guess the year
+              </p>
+            </div>
 
-        {playable && (
-          <CoverStrip
-            games={roundGames}
-            revealedCount={revealedCount}
-            activeIndex={viewingCoverIndex}
-            attempts={state.attempts}
-            onCoverClick={setViewingCoverIndex}
-          />
-        )}
+            {/* Date + score pill — fade in with rest */}
+            <div
+              style={
+                isPostGame
+                  ? entrance('fade', pgStep >= 4)
+                  : (entranceStep < 5
+                      ? { opacity: 0 }
+                      : entranceStep < 6
+                        ? { animation: `gs-fade-in 0.5s ${spring} both` }
+                        : undefined)
+              }
+            >
+              <p className="mt-0.5 font-heading text-xs text-white/40">
+                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+              </p>
 
-        {showInput && (
-          <div className="mb-6">
-            <WagerSelector
-              selected={state.wager}
-              locked={state.wagerLocked}
-              onSelect={handleWagerChange}
-            />
-          </div>
-        )}
-
-        {showInput && (
-          <YearInput
-            onSubmit={handleSubmit}
-            disabled={false}
-            guessHistory={guessHistoryEntries}
-            attemptsUsed={attemptsUsed}
-            maxAttempts={MAX_ATTEMPTS}
-            onHelpClick={() => setShowRules(true)}
-          />
-        )}
-
-        {/* Finished — post-game page (when modal closed) */}
-        {state.finished && !showModal && (
-          <>
-            {/* Nav pills — above showcase */}
-            <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
-              {!today && (
-                <Link
-                  href="/play/street-date"
-                  className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
-                >
-                  Play today&apos;s game
-                </Link>
+              {/* Score pill — only during gameplay */}
+              {!isPostGame && (
+                <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-white/20 bg-white px-5 py-2">
+                  <AnimatedScore
+                    value={displayScore}
+                    className="font-heading text-2xl font-black"
+                  />
+                  <span className="font-heading text-xs uppercase tracking-wider text-[hsl(var(--game-ink-light))]">
+                    pts
+                  </span>
+                </div>
               )}
-              <Link
-                href="/play/street-date/archive"
-                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
-              >
-                Browse the archive
-              </Link>
             </div>
+          </div>
 
-            <div className="mb-6">
-              <ResultCard
-                game="street-date"
-                score={state.score}
-                streak={0}
-                won={state.won}
-                puzzleLabel={`Street Date ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                onViewResults={() => setShowModal(true)}
-              />
-            </div>
-
-            <div className="mb-8">
-              <DailyBadgeShelf currentGame="street-date" />
-            </div>
-
-            <div className="mb-8">
-              <DiscoverMore currentGame="street-date" />
-            </div>
-          </>
-        )}
-
-        {/* Nav pills — during gameplay */}
-        {!(state.finished && !showModal) && (
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-            {!today && (
+          {/* Not playable message */}
+          {!playable && (
+            <div className="mb-8 rounded-lg border border-white/10 bg-white/5 px-4 py-6 text-center">
+              <p className="text-white/60">
+                This game isn&apos;t available yet. Check back on the right day!
+              </p>
               <Link
                 href="/play/street-date"
-                className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+                className="mt-3 inline-block text-sm font-semibold text-white transition-colors hover:text-white/80"
               >
-                Play today&apos;s game
+                Go to today&apos;s game &rarr;
               </Link>
-            )}
-            <Link
-              href="/play/street-date/archive"
-              className="inline-flex items-center gap-1.5 rounded-full border-2 border-border/60 px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+            </div>
+          )}
+
+          {/* Game area — white container for clarity on green bg */}
+          {playable && !state.finished && (
+            <div
+              className="relative z-10 mb-8 rounded-2xl bg-white/95 p-5 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out sm:p-6"
+              style={entranceStep < 2 ? { opacity: 0, transform: 'scale(0)' } : entranceStep < 6 ? { animation: `gs-box-in 0.7s ${spring} both` } : undefined}
             >
-              Browse the archive
-            </Link>
-          </div>
-        )}
-      </main>
+              {/* Cover strip */}
+              <div
+                className="transition-opacity duration-300 ease-out"
+                style={{ opacity: entranceStep < 3 ? 0 : 1 }}
+              >
+                <CoverStrip
+                  games={roundGames}
+                  revealedCount={revealedCount}
+                  activeIndex={viewingCoverIndex}
+                  attempts={state.attempts}
+                  onCoverClick={setViewingCoverIndex}
+                />
+              </div>
+
+              {/* Wager selector */}
+              {showInput && (
+                <div
+                  className="mb-6 transition-opacity duration-300 ease-out"
+                  style={{ opacity: entranceStep < 3 ? 0 : 1 }}
+                >
+                  <WagerSelector
+                    selected={state.wager}
+                    locked={state.wagerLocked}
+                    onSelect={handleWagerChange}
+                  />
+                </div>
+              )}
+
+              {/* Year input */}
+              {showInput && (
+                <div
+                  className="transition-opacity duration-300 ease-out"
+                  style={{ opacity: entranceStep < 4 ? 0 : 1 }}
+                >
+                  <YearInput
+                    onSubmit={handleSubmit}
+                    disabled={false}
+                    guessHistory={guessHistoryEntries}
+                    attemptsUsed={attemptsUsed}
+                    maxAttempts={MAX_ATTEMPTS}
+                    onHelpClick={() => setShowRules(true)}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Post-game — matches Game Sense structure */}
+          {isPostGame && (
+            <>
+              {/* Nav pills — early so user can navigate away quickly */}
+              <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
+                {!today && (
+                  <div style={entrance('pop', pgStep >= 1, 300)}>
+                    <Link href="/play/street-date" className="bvl-purple">
+                      <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                      Today&apos;s game
+                    </Link>
+                  </div>
+                )}
+                <div style={entrance('pop', pgStep >= 1, 450)}>
+                  <Link href="/play/archive?game=street-date" className="bvl-purple">
+                    <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                    View past games
+                  </Link>
+                </div>
+              </div>
+
+              {/* Badges — slides open */}
+              <div
+                className="grid transition-[grid-template-rows] duration-700 ease-out"
+                style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
+              >
+                <div className="overflow-hidden">
+                  <div className="mb-6">
+                    <DailyBadgeShelf currentGame="street-date" animateStamp={pgStep >= 5} />
+                  </div>
+                </div>
+              </div>
+
+              {/* ResultCard — internal 15-step cascade */}
+              <div className="mb-6">
+                <ResultCard
+                  game="street-date"
+                  score={state.score}
+                  streak={0}
+                  won={state.won}
+                  puzzleLabel={`Street Date ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                  onViewResults={() => setShowModal(true)}
+                  animateEntrance={pgStep >= 1}
+                />
+              </div>
+
+              {/* Game info — 5 covers + answer year in white card */}
+              <div className="mb-6" style={entrance('slide-up', pgStep >= 2)}>
+                <div className="mx-auto w-full max-w-[850px] overflow-hidden rounded-2xl bg-white/95 shadow-sm">
+                  <div className="p-5 sm:p-6">
+                    <p className="text-center font-heading text-xs font-semibold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
+                      The answer
+                    </p>
+                    <p className="text-center font-heading text-5xl font-black text-[hsl(var(--game-green))]">
+                      {answerYear}
+                    </p>
+                    <div className="mx-auto mt-4 grid max-w-md grid-cols-5 gap-2">
+                      {roundGames.map((game, i) => {
+                        const wasGuessedOn = state.attempts.length - 1 === i && state.won
+                        const neverReached = i > state.currentCoverIndex
+                        return (
+                          <div key={game.id} className="relative flex flex-col items-center">
+                            <div
+                              className={`aspect-[3/4] w-full overflow-hidden rounded-lg bg-muted/30 shadow-sm ${
+                                wasGuessedOn ? 'ring-2 ring-[hsl(var(--game-green))] scale-105' : ''
+                              } ${neverReached ? 'opacity-40' : ''}`}
+                            >
+                              <img
+                                src={igdbCoverUrl(game.igdbImageId)}
+                                alt={game.title}
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                            {wasGuessedOn && (
+                              <span className="absolute -top-2 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--game-green))] text-[10px] font-bold text-white shadow">
+                                {i + 1}
+                              </span>
+                            )}
+                            <p className="mt-1.5 line-clamp-2 w-full text-center font-heading text-[10px] font-medium leading-snug text-[hsl(var(--game-ink-mid))]">
+                              {game.title}
+                            </p>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Nav pills — during gameplay */}
+          {!isPostGame && (
+            <div
+              className="mt-4 flex flex-wrap items-center justify-center gap-4"
+              style={entranceStep < 5 ? { opacity: 0 } : entranceStep < 6 ? { animation: `gs-fade-in 0.5s ${spring} both` } : undefined}
+            >
+              {!today && (
+                <Link href="/play/street-date" className="bvl-purple">
+                  <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                  Today&apos;s game
+                </Link>
+              )}
+              <Link href="/play/archive?game=street-date" className="bvl-purple">
+                <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                View past games
+              </Link>
+            </div>
+          )}
+        </main>
+      </div>
+
+      {/* DiscoverMore — outside the green area */}
+      {isPostGame && (
+        <div
+          className="mx-auto max-w-7xl px-4 py-8 lg:px-8"
+          style={entrance('fade', pgStep >= 6)}
+        >
+          <DiscoverMore currentGame="street-date" />
+        </div>
+      )}
 
       <SiteFooter />
 
       {showModal && state.finished && (
         <GameEndModal
+          game="street-date"
           result={modalCopy.result}
           score={state.score}
           heading={modalCopy.heading}
@@ -343,7 +519,7 @@ export default function StreetDateDayPage({
               <p className="text-center font-heading text-xs font-semibold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
                 The answer
               </p>
-              <p className="text-center font-heading text-5xl font-black text-[hsl(var(--game-blue))]">
+              <p className="text-center font-heading text-5xl font-black text-[hsl(var(--game-green))]">
                 {answerYear}
               </p>
               <div className="mt-4 grid grid-cols-5 gap-2">
@@ -354,7 +530,7 @@ export default function StreetDateDayPage({
                     <div key={game.id} className="relative flex flex-col items-center">
                       <div
                         className={`aspect-[3/4] w-full overflow-hidden rounded-lg bg-muted/30 shadow-sm ${
-                          wasGuessedOn ? 'ring-2 ring-[hsl(var(--game-blue))] scale-105' : ''
+                          wasGuessedOn ? 'ring-2 ring-[hsl(var(--game-green))] scale-105' : ''
                         } ${neverReached ? 'opacity-40' : ''}`}
                       >
                         <img
@@ -364,7 +540,7 @@ export default function StreetDateDayPage({
                         />
                       </div>
                       {wasGuessedOn && (
-                        <span className="absolute -top-2 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--game-blue))] text-[10px] font-bold text-white shadow">
+                        <span className="absolute -top-2 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--game-green))] text-[10px] font-bold text-white shadow">
                           {i + 1}
                         </span>
                       )}

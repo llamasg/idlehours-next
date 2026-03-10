@@ -147,7 +147,7 @@ export default function GameCards({
         {/* Vertical line (desktop) */}
         <div className="absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-white/15 md:block" />
         {/* Horizontal line (mobile) */}
-        <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-border/30 md:hidden" />
+        <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-white/15 md:hidden" />
         <div className="relative flex h-10 w-10 items-center justify-center rounded-full border-3 border-[hsl(var(--game-ink))]/10 bg-white font-heading text-xs font-black text-[hsl(var(--game-ink-mid))] shadow-lg md:h-12 md:w-12 md:text-sm">
           VS
         </div>
@@ -236,7 +236,7 @@ function Card({
     <button
       onClick={onChoice}
       disabled={disabled}
-      className={`group relative flex min-h-[min(35vh,280px)] flex-col overflow-hidden rounded-2xl transition-all md:min-h-[min(75vh,640px)] ${
+      className={`group relative flex aspect-[3/4] w-full flex-col overflow-hidden rounded-2xl transition-all ${
         !disabled ? 'cursor-pointer hover:shadow-2xl' : ''
       }`}
     >
@@ -295,7 +295,7 @@ function Card({
 
         {/* Title */}
         <h3
-          className="mt-1 font-heading font-black leading-[1.05] text-white"
+          className="mt-1 text-left font-heading font-black leading-[1.05] text-white"
           style={{
             fontSize: 'clamp(18px, 2.5vw, 32px)',
             textShadow: '0 2px 12px rgba(0,0,0,0.5)',
@@ -320,23 +320,23 @@ function Card({
             </span>
           </div>
         )}
-
-        {/* CTA button — only in idle phase */}
-        {!priceRevealed && (
-          <div className="mt-4">
-            <span
-              className={`inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 font-heading text-[11px] font-extrabold uppercase tracking-[0.15em] text-[hsl(var(--game-ink))] shadow-lg transition-all ${
-                !disabled
-                  ? 'group-hover:-translate-y-0.5 group-hover:bg-[hsl(var(--game-blue))] group-hover:text-white group-hover:shadow-xl'
-                  : 'opacity-50'
-              }`}
-            >
-              This one cost more
-              <span className="text-sm">&rsaquo;</span>
-            </span>
-          </div>
-        )}
       </div>
+
+      {/* CTA button — center-bottom, overlapping onto purple bg */}
+      {!priceRevealed && (
+        <div className="absolute bottom-0 left-1/2 z-[3] -translate-x-1/2 translate-y-1/2">
+          <span
+            className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 py-2.5 font-heading text-[11px] font-extrabold uppercase tracking-[0.15em] text-[hsl(var(--game-ink))] shadow-lg transition-all ${
+              !disabled
+                ? 'group-hover:-translate-y-0.5 group-hover:bg-[#5B4FCF] group-hover:text-white group-hover:shadow-xl'
+                : 'opacity-50'
+            }`}
+          >
+            This one cost more
+            <span className="text-sm">&rsaquo;</span>
+          </span>
+        </div>
+      )}
     </button>
   )
 }

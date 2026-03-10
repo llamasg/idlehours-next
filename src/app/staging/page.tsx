@@ -1,12 +1,15 @@
 import Link from 'next/link'
 
 const SECTIONS = [
-  { href: '/staging/layout-concepts', num: '01', title: 'Layout', desc: 'Grid lockups, spatial compositions, page architectures. Blanks only, no colour.', status: 'building' },
-  { href: '/staging/type-components', num: '02', title: 'Type + Components', desc: 'Card concepts, data display, tag innovations, editorial type scale.', status: 'building' },
-  { href: '/staging/imagery', num: '03', title: 'Imagery', desc: 'Polaroids, full-bleed breaks, folders, editorial image-type pairings.', status: 'building' },
-  { href: '/staging/components', num: '04', title: 'Component Library', desc: '15+ button variations, search bars, sliders, calendars, charts and more.', status: 'building' },
-  { href: '/staging/micro', num: '05', title: 'Microinteractions', desc: 'Animation playground. Disney 12 principles. Tooltips, bursts, wobbles.', status: 'building' },
-  { href: '/staging/macro', num: '06', title: 'Macro Animations', desc: 'Page transitions, circle masks, card morphs, gravity drops, iris wipes.', status: 'building' },
+  { href: '/staging/tokens', num: '01', title: 'Tokens', desc: 'Colour palette, motion curves, game world gradients. The DNA of every component.', status: 'building' },
+  { href: '/staging/layout-concepts', num: '02', title: 'Layout', desc: 'Grid lockups, editorial page mocks, ranked lists, pull quotes, article cards.', status: 'building' },
+  { href: '/staging/type-components', num: '03', title: 'Type + Components', desc: 'Card concepts, data display, tag innovations, editorial type scale.', status: 'building' },
+  { href: '/staging/imagery', num: '04', title: 'Imagery', desc: 'Editorial image-type pairings, screenshot comparisons, lightbox.', status: 'building' },
+  { href: '/staging/components', num: '05', title: 'Component Library', desc: 'Bevel buttons, tooltips, toasts, search bars, accordions, charts and more.', status: 'building' },
+  { href: '/staging/micro', num: '06', title: 'Microinteractions', desc: 'Animation playground. Disney 12 principles. Tooltips, bursts, wobbles.', status: 'building' },
+  { href: '/staging/macro', num: '07', title: 'Macro Animations', desc: 'Page transitions, circle masks, wipes, gravity drops, scroll effects.', status: 'building' },
+  { href: '/staging/notebook', num: '08', title: 'Notebook', desc: 'Stipple textures, sticky notes, pinboards, spiral notebooks, icon stamps.', status: 'building' },
+  { href: '/staging/game-identities', num: '09', title: 'Game IDs', desc: 'Five game colour worlds. Gradients, accents, and sub-brand identities.', status: 'building' },
 ]
 
 export default function StagingOverview() {

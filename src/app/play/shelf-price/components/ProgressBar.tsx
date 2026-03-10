@@ -21,9 +21,9 @@ export default function ProgressBar({ current, total, results }: ProgressBarProp
               ? 'bg-[hsl(var(--game-green))]'
               : 'bg-[hsl(var(--game-red))]'
           } else if (isCurrent) {
-            color = 'animate-[pip-pulse_1.5s_ease-in-out_infinite] bg-[hsl(var(--game-blue))]/40'
+            color = 'animate-[pip-pulse_1.5s_ease-in-out_infinite] bg-white/40'
           } else {
-            color = 'bg-[hsl(var(--game-ink))]/10'
+            color = 'bg-white/10'
           }
 
           return (
@@ -34,7 +34,7 @@ export default function ProgressBar({ current, total, results }: ProgressBarProp
           )
         })}
       </div>
-      <p className="mt-2 text-center font-heading text-xs text-muted-foreground">
+      <p className="mt-2 text-center font-heading text-xs text-white/40">
         {current}/{total}
       </p>
     </div>

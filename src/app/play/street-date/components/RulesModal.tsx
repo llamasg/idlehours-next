@@ -23,7 +23,7 @@ export default function RulesModal({ onClose }: RulesModalProps) {
       }}
     >
       <div className="mx-4 w-full max-w-md rounded-2xl bg-card p-6 shadow-xl font-game">
-        <h2 className="mb-4 text-center text-xl font-black uppercase text-[hsl(var(--game-blue))]">
+        <h2 className="mb-4 text-center text-xl font-black uppercase text-[hsl(var(--game-green))]">
           How to Play
         </h2>
 
@@ -91,7 +91,7 @@ export default function RulesModal({ onClose }: RulesModalProps) {
 
         <button
           onClick={onClose}
-          className="mt-5 w-full rounded-full bg-[hsl(var(--game-blue))] py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
+          className="mt-5 w-full rounded-full bg-[hsl(var(--game-green))] py-2.5 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
         >
           Got it
         </button>

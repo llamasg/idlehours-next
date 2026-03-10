@@ -94,19 +94,52 @@ function mulberry32(seed: number) {
 }
 
 /**
- * Deterministic shuffle order for the GAMES array.
- * Uses a fixed seed so the mapping is stable across all sessions,
- * but avoids the chronological walk-through that made early dates
- * always land on 1980s/1990s games.
+ * Compute a popularity weight for a game. Higher = more likely to appear
+ * earlier in the daily rotation. Factors in:
+ * - Year (newer games weighted higher)
+ * - OpenCritic score (higher rated = higher weight)
+ * - Having complete data is a baseline signal of relevance
+ */
+function gameWeight(game: typeof GAMES[number]): number {
+  // Year factor: 1.0 for pre-2000, scaling up to 3.0 for 2020+
+  const yearFactor = game.year >= 2020 ? 3.0
+    : game.year >= 2015 ? 2.5
+    : game.year >= 2010 ? 2.0
+    : game.year >= 2005 ? 1.5
+    : game.year >= 2000 ? 1.2
+    : 1.0;
+
+  // OpenCritic factor: 1.0 for no score, up to 2.0 for highly rated
+  const ocFactor = game.openCritic !== null
+    ? 1.0 + (Math.min(game.openCritic, 95) / 95)
+    : 1.0;
+
+  return yearFactor * ocFactor;
+}
+
+/**
+ * Deterministic weighted shuffle for the GAMES array.
+ * Games with higher popularity weights appear earlier in the rotation,
+ * so daily games skew toward well-known, modern titles while still
+ * including the full catalog over time.
+ *
+ * Uses a fixed seed so the mapping is stable across all sessions.
  */
 const _shuffledIndices: number[] = (() => {
-  const indices = Array.from({ length: GAMES.length }, (_, i) => i);
   const rng = mulberry32(314159); // fixed seed
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [indices[i], indices[j]] = [indices[j], indices[i]];
-  }
-  return indices;
+
+  // Build weighted index pairs
+  const weighted = GAMES.map((game, i) => ({
+    index: i,
+    // Sort key: weight * random — higher weight games get higher keys on average
+    // This is a weighted sampling without replacement (Efraimidis-Spirakis algorithm)
+    key: Math.pow(rng(), 1 / gameWeight(game)),
+  }));
+
+  // Sort descending by key — high-weight games cluster toward the front
+  weighted.sort((a, b) => b.key - a.key);
+
+  return weighted.map(w => w.index);
 })();
 
 /**

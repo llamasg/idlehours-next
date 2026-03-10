@@ -14,207 +14,11 @@ export default function LayoutConceptsPage() {
         </p>
 
         {/* ──────────────────────────────────────────── */}
-        {/* 01. Daily Game Catalogue */}
+        {/* 01. Editorial Numbered List */}
         {/* ──────────────────────────────────────────── */}
         <section className="mt-20">
           <div className="flex items-baseline gap-3">
             <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">01</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Daily Game Catalogue</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            3-column grid with one feature card spanning 2 rows. Cards are white rounded-2xl on cream.
-          </p>
-          <div className="mt-6 rounded-2xl border border-dashed border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-6">
-            <div className="grid grid-cols-3 grid-rows-[180px_180px] gap-4">
-              {/* Feature card spanning 2 rows */}
-              <div className="row-span-2 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                <div className="h-3/5 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                <div className="mt-3 h-3 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                <div className="mt-2 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                <div className="mt-4 h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                <div className="mt-1.5 h-2 w-4/5 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-              {/* Regular cards */}
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                  <div className="h-3/5 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                  <div className="mt-2 h-2.5 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  <div className="mt-1.5 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 02. Sticker Collection Shelf */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">02</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Sticker Collection Shelf</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            14 badge slots in a credenza. Earned badges filled, empty ones dashed. Grouped by week with date labels.
-          </p>
-          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-            {/* Week 1 */}
-            <p className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-ink-light))]">Week of 3 Mar</p>
-            <div className="mt-3 flex flex-wrap gap-4">
-              {[true, true, true, true, true, true, true].map((earned, i) => (
-                <div key={`w1-${i}`} className={`flex h-14 w-14 items-center justify-center rounded-full ${earned ? 'border-2 border-[hsl(var(--game-ink))]/20 bg-[hsl(var(--game-white))] shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)]' : 'border-2 border-dashed border-[hsl(var(--game-ink))]/15'}`}>
-                  {earned && <div className="h-6 w-6 rounded-full bg-[hsl(var(--game-cream-dark))]" />}
-                </div>
-              ))}
-            </div>
-            {/* Dashed divider */}
-            <div className="my-5 border-t border-dashed border-[hsl(var(--game-ink))]/10" />
-            {/* Week 2 */}
-            <p className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-ink-light))]">Week of 10 Mar</p>
-            <div className="mt-3 flex flex-wrap gap-4">
-              {[true, true, true, false, false, false, false].map((earned, i) => (
-                <div key={`w2-${i}`} className={`flex h-14 w-14 items-center justify-center rounded-full ${earned ? 'border-2 border-[hsl(var(--game-ink))]/20 bg-[hsl(var(--game-white))] shadow-[inset_0_2px_4px_rgba(0,0,0,0.06)]' : 'border-2 border-dashed border-[hsl(var(--game-ink))]/15'}`}>
-                  {earned && <div className="h-6 w-6 rounded-full bg-[hsl(var(--game-cream-dark))]" />}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 03. Achievement Wall */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">03</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Achievement Wall</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            Dense grid of 30+ badge circles with 4 category tabs. Staggered sizing avoids the spreadsheet feel.
-          </p>
-          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-            {/* Category tabs */}
-            <div className="flex gap-2">
-              {['All', 'Daily', 'Weekly', 'Special'].map((tab, i) => (
-                <div key={tab} className={`rounded-md px-3 py-1 font-heading text-[10px] font-bold ${i === 0 ? 'bg-[hsl(var(--game-ink))] text-[hsl(var(--game-cream))]' : 'bg-[hsl(var(--game-cream))] text-[hsl(var(--game-ink-mid))]'}`}>
-                  {tab}
-                </div>
-              ))}
-            </div>
-            {/* Badge grid with staggered sizes */}
-            <div className="mt-5 flex flex-wrap items-center gap-2.5">
-              {Array.from({ length: 36 }).map((_, i) => {
-                const sizes = ['h-10 w-10', 'h-8 w-8', 'h-12 w-12', 'h-9 w-9', 'h-7 w-7', 'h-11 w-11']
-                const size = sizes[i % sizes.length]
-                const earned = i < 22
-                return (
-                  <div key={i} className={`flex-shrink-0 rounded-full ${size} ${earned ? 'border border-[hsl(var(--game-ink))]/15 bg-[hsl(var(--game-cream-dark))]' : 'border border-dashed border-[hsl(var(--game-ink))]/10'}`} />
-                )
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 04. Featured Game in Listicle */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">04</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Featured Game in Listicle</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            Mueller-Brockmann split: tall image zone left, editorial copy right. Large ranking number as typographic element.
-          </p>
-          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-            <div className="grid grid-cols-[2fr_3fr] gap-8">
-              {/* Image zone */}
-              <div className="h-80 rounded-xl bg-[hsl(var(--game-ink))]" />
-              {/* Editorial copy */}
-              <div className="flex flex-col justify-center">
-                <span className="font-heading text-[72px] font-black leading-none text-[hsl(var(--game-ink))]/8">01</span>
-                <div className="mt-2 h-4 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/15" />
-                <div className="mt-2 h-3 w-1/3 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                <div className="mt-6 space-y-2">
-                  <div className="h-2.5 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                  <div className="h-2.5 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                  <div className="h-2.5 w-5/6 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                  <div className="h-2.5 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-                <div className="mt-6 flex gap-2">
-                  <div className="rounded-full bg-[hsl(var(--game-cream))] px-4 py-1.5">
-                    <div className="h-2 w-12 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  </div>
-                  <div className="rounded-full bg-[hsl(var(--game-cream))] px-4 py-1.5">
-                    <div className="h-2 w-8 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 05. Homepage Hero Balance */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">05</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Homepage Hero Balance</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            Full homepage layout. Tension between "play today" game cards and "read this" article cards.
-          </p>
-          <div className="mt-6 rounded-2xl border border-dashed border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-6">
-            {/* Hero */}
-            <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-8">
-              <div className="h-3 w-20 rounded-full bg-[hsl(var(--game-ink))]/8" />
-              <div className="mt-3 h-8 w-2/3 rounded-full bg-[hsl(var(--game-ink))]/12" />
-              <div className="mt-2 h-3 w-1/3 rounded-full bg-[hsl(var(--game-ink))]/6" />
-            </div>
-
-            {/* Play today + Read this */}
-            <div className="mt-4 grid grid-cols-[3fr_2fr] gap-4">
-              {/* Games column */}
-              <div>
-                <div className="mb-3 h-2 w-16 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                <div className="grid grid-cols-3 gap-3">
-                  {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <div key={i} className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3">
-                      <div className="aspect-[4/3] rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                      <div className="mt-2 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {/* Articles column */}
-              <div>
-                <div className="mb-3 h-2 w-14 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                <div className="space-y-3">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4">
-                      <div className="flex gap-3">
-                        <div className="h-16 w-16 flex-shrink-0 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                        <div className="flex-1">
-                          <div className="h-2.5 w-full rounded-full bg-[hsl(var(--game-ink))]/10" />
-                          <div className="mt-1.5 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                          <div className="mt-1.5 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 06. Editorial Numbered List */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">06</span>
             <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Editorial Numbered List</h2>
           </div>
           <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
@@ -242,528 +46,430 @@ export default function LayoutConceptsPage() {
         </section>
 
         {/* ──────────────────────────────────────────── */}
-        {/* 07. Blog Image Layouts */}
+        {/* 02. Captioned Figure with Margin Note */}
+        {/* ──────────────────────────────────────────── */}
+        <section className="mt-20">
+          <div className="flex items-baseline gap-3">
+            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">02</span>
+            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Captioned Figure with Margin Note</h2>
+          </div>
+          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
+            Blog image with caption below and a margin annotation to the right. Useful for editorial asides.
+          </p>
+          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6">
+            <div className="grid grid-cols-[1fr_160px] gap-6">
+              <div>
+                <div className="aspect-[16/9] rounded-xl bg-[hsl(var(--game-cream-dark))]" />
+                <div className="mt-2 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/6" />
+              </div>
+              <div className="flex items-start pt-4">
+                <div className="border-l-2 border-[hsl(var(--game-ink))]/10 pl-3">
+                  <div className="h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/8" />
+                  <div className="mt-1.5 h-2 w-5/6 rounded-full bg-[hsl(var(--game-ink))]/5" />
+                  <div className="mt-1.5 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/5" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ──────────────────────────────────────────── */}
+        {/* 03. Image with Pull-Quote Overlay */}
+        {/* ──────────────────────────────────────────── */}
+        <section className="mt-20 pb-16">
+          <div className="flex items-baseline gap-3">
+            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">03</span>
+            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Image with Pull-Quote Overlay</h2>
+          </div>
+          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
+            Hero image with a floating pull-quote card overlaid in the bottom-right corner. Adds editorial weight.
+          </p>
+          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6">
+            <div className="relative">
+              <div className="h-56 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
+              <div className="absolute bottom-4 right-4 w-2/5 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
+                <div className="h-2.5 w-full rounded-full bg-[hsl(var(--game-ink))]/10" />
+                <div className="mt-1.5 h-2.5 w-4/5 rounded-full bg-[hsl(var(--game-ink))]/10" />
+                <div className="mt-3 h-2 w-1/3 rounded-full bg-[hsl(var(--game-ink))]/6" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ──────────────────────────────────────────── */}
+        {/* 04. Featured Game in Listicle */}
+        {/* ──────────────────────────────────────────── */}
+        <section className="mt-20">
+          <div className="flex items-baseline gap-3">
+            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">04</span>
+            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Featured Game in Listicle</h2>
+          </div>
+          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
+            Two-column layout with oversized rank number overlapping the headline. Game cover on the right.
+          </p>
+          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+            <div className="grid grid-cols-[1fr_200px] gap-8">
+              {/* Left column */}
+              <div className="relative">
+                <span
+                  className="font-heading text-[120px] font-black leading-none text-[hsl(var(--game-ink))]"
+                  style={{ opacity: 0.06, position: 'absolute', top: '-20px', left: '-8px', zIndex: 0 }}
+                >
+                  03
+                </span>
+                <div className="relative z-10">
+                  <p className="font-heading text-[9px] font-black uppercase tracking-[0.35em] text-[hsl(var(--game-amber))]">
+                    Best cosy games 2024
+                  </p>
+                  <h3 className="mt-2 font-heading text-[28px] font-black leading-[1.05] tracking-tight text-[hsl(var(--game-ink))]">
+                    Venba is the game that made me ring my mum.
+                  </h3>
+                  <p className="mt-3 font-heading text-[14px] font-semibold italic leading-relaxed text-[hsl(var(--game-ink-mid))]">
+                    A short, gorgeous cooking game about a Tamil family in Canada. Every recipe carries the weight of memory,
+                    and every meal is an act of love you can feel in your chest.
+                  </p>
+
+                  {/* OpenCritic score box */}
+                  <div className="mt-5 inline-flex items-center gap-3 rounded-lg border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] px-4 py-2.5">
+                    <span className="font-heading text-[28px] font-black leading-none text-[hsl(var(--game-ink))]">87</span>
+                    <div>
+                      <p className="font-heading text-[10px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-mid))]">OpenCritic</p>
+                      <p className="font-heading text-[12px] font-bold text-[hsl(var(--game-amber))]">Mighty</p>
+                    </div>
+                  </div>
+
+                  {/* Tags */}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <span className="rounded-full bg-[hsl(var(--game-amber-lt))] px-3 py-1 font-heading text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink))]">Narrative</span>
+                    <span className="rounded-full bg-[hsl(var(--game-cream))] px-3 py-1 font-heading text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink-mid))]">2-3 hrs</span>
+                    <span className="rounded-full bg-[hsl(var(--game-green-lt))] px-3 py-1 font-heading text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink))]">Steam</span>
+                    <span className="rounded-full bg-[hsl(var(--game-blue-light))] px-3 py-1 font-heading text-[10px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink))]">Switch</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right column — game cover placeholder */}
+              <div className="flex items-start">
+                <div className="h-[280px] w-full rounded-xl bg-[hsl(270,40%,30%)]" />
+              </div>
+            </div>
+          </div>
+          {/* Spec note */}
+          <div className="mt-3 rounded-lg border border-[hsl(var(--game-amber))]/30 bg-[hsl(var(--game-ink))]/90 px-4 py-3">
+            <p className="font-heading text-[11px] font-semibold italic text-[hsl(var(--game-amber))]/80">
+              Two-column grid (1fr 200px). Oversized dim rank number &ldquo;03&rdquo; positioned absolute behind headline.
+              Score box uses OpenCritic-style &ldquo;Mighty&rdquo; label. Tags use coloured pill backgrounds.
+            </p>
+          </div>
+        </section>
+
+        {/* ──────────────────────────────────────────── */}
+        {/* 05. Ranked List Treatment */}
+        {/* ──────────────────────────────────────────── */}
+        <section className="mt-20">
+          <div className="flex items-baseline gap-3">
+            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">05</span>
+            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Ranked List Treatment</h2>
+          </div>
+          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
+            Numbered ranking with large rank numbers, game titles with descriptions, and score badges. Hover reveals background and amber number.
+          </p>
+          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+            {[
+              { rank: '01', title: 'Stardew Valley', desc: 'The farming sim that became a way of life. Endlessly generous, endlessly gentle.', score: 94 },
+              { rank: '02', title: 'Hades', desc: 'Roguelike perfection wrapped in myth. Every death teaches you something new.', score: 93 },
+              { rank: '03', title: 'Venba', desc: 'A short cooking game about a Tamil family. Every recipe carries the weight of memory.', score: 87 },
+              { rank: '04', title: 'A Short Hike', desc: 'A tiny island, a mountain to climb. No rush. The journey is the entire point.', score: 85 },
+            ].map((item, i) => (
+              <div key={item.rank}>
+                {i > 0 && <div className="my-1 border-t border-dashed border-[hsl(var(--game-ink))]/8" />}
+                <div className="group grid grid-cols-[68px_1fr_110px] items-center gap-4 rounded-xl px-3 py-3 transition-colors hover:bg-[hsl(var(--game-cream))]/60">
+                  <span className="font-heading text-[36px] font-black leading-none text-[hsl(var(--game-ink))]/10 transition-colors group-hover:text-[hsl(var(--game-amber))]">
+                    {item.rank}
+                  </span>
+                  <div>
+                    <h4 className="font-heading text-[16px] font-black text-[hsl(var(--game-ink))]">{item.title}</h4>
+                    <p className="mt-0.5 font-heading text-[12px] font-semibold text-[hsl(var(--game-ink-mid))]">{item.desc}</p>
+                  </div>
+                  <div className="flex justify-end">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-[hsl(var(--game-cream))] font-heading text-[16px] font-black text-[hsl(var(--game-ink))]">
+                      {item.score}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Spec note */}
+          <div className="mt-3 rounded-lg border border-[hsl(var(--game-amber))]/30 bg-[hsl(var(--game-ink))]/90 px-4 py-3">
+            <p className="font-heading text-[11px] font-semibold italic text-[hsl(var(--game-amber))]/80">
+              Grid of 3 cols (68px rank, 1fr title+desc, 110px score). On hover: cream background appears, rank number transitions to amber.
+              Dashed separators between rows.
+            </p>
+          </div>
+        </section>
+
+        {/* ──────────────────────────────────────────── */}
+        {/* 06. Editorial Page Mock */}
+        {/* ──────────────────────────────────────────── */}
+        <section className="mt-20">
+          <div className="flex items-baseline gap-3">
+            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">06</span>
+            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Editorial Page Mock</h2>
+          </div>
+          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
+            Full article layout with main content column and sticky sidebar. Includes byline, pull-quote, score block, and related games.
+          </p>
+          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+            <div className="grid grid-cols-[1fr_280px] gap-10">
+              {/* Main content */}
+              <div>
+                {/* Kicker */}
+                <p className="font-heading text-[9px] font-black uppercase tracking-[0.35em] text-[hsl(var(--game-amber))]">
+                  Long Read · Cosy Games
+                </p>
+
+                {/* Headline */}
+                <h3 className="mt-3 font-heading text-[32px] font-black leading-[1.05] tracking-tight text-[hsl(var(--game-ink))]">
+                  Venba is the game that made me ring my mum.
+                </h3>
+
+                {/* Standfirst */}
+                <p className="mt-3 font-heading text-[15px] font-semibold italic leading-relaxed text-[hsl(var(--game-ink-mid))]">
+                  A short Tamil cooking game about memory, migration, and the recipes that hold families together
+                  even when everything else falls apart.
+                </p>
+
+                {/* Byline */}
+                <div className="mt-5 flex items-center gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--game-amber))]">
+                    <span className="font-heading text-[11px] font-black text-[hsl(var(--game-white))]">B</span>
+                  </div>
+                  <div>
+                    <p className="font-heading text-[12px] font-bold text-[hsl(var(--game-ink))]">Beth</p>
+                    <p className="font-heading text-[10px] font-semibold text-[hsl(var(--game-ink-light))]">8 min read · 14 Mar 2024</p>
+                  </div>
+                </div>
+
+                {/* Body text placeholder */}
+                <div className="mt-6 space-y-3">
+                  <div className="h-2.5 w-full rounded-full bg-[hsl(var(--game-ink))]/6" />
+                  <div className="h-2.5 w-[95%] rounded-full bg-[hsl(var(--game-ink))]/6" />
+                  <div className="h-2.5 w-[88%] rounded-full bg-[hsl(var(--game-ink))]/6" />
+                  <div className="h-2.5 w-full rounded-full bg-[hsl(var(--game-ink))]/6" />
+                  <div className="h-2.5 w-[70%] rounded-full bg-[hsl(var(--game-ink))]/6" />
+                </div>
+
+                {/* Pull-quote */}
+                <blockquote className="my-8 border-l-4 border-[hsl(var(--game-amber))] pl-5">
+                  <p className="font-heading text-[18px] font-black italic leading-snug text-[hsl(var(--game-ink))]">
+                    &ldquo;The recipes don&rsquo;t just feed you — they carry every conversation your family never had.&rdquo;
+                  </p>
+                </blockquote>
+
+                {/* More body text */}
+                <div className="space-y-3">
+                  <div className="h-2.5 w-full rounded-full bg-[hsl(var(--game-ink))]/6" />
+                  <div className="h-2.5 w-[92%] rounded-full bg-[hsl(var(--game-ink))]/6" />
+                  <div className="h-2.5 w-[85%] rounded-full bg-[hsl(var(--game-ink))]/6" />
+                </div>
+
+                {/* Subheading */}
+                <h4 className="mt-8 font-heading text-[18px] font-black text-[hsl(var(--game-ink))]">
+                  What the critics say
+                </h4>
+
+                {/* OpenCritic score block */}
+                <div className="mt-4 inline-flex items-center gap-4 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] px-5 py-3">
+                  <span className="font-heading text-[36px] font-black leading-none text-[hsl(var(--game-ink))]">87</span>
+                  <div>
+                    <p className="font-heading text-[10px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-mid))]">OpenCritic</p>
+                    <p className="font-heading text-[13px] font-bold text-[hsl(var(--game-amber))]">Mighty</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sidebar — sticky */}
+              <div className="sticky top-8 self-start space-y-6">
+                {/* Game card */}
+                <div className="rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-4">
+                  <div className="aspect-[3/4] w-full rounded-lg bg-[hsl(270,40%,30%)]" />
+                  <h4 className="mt-3 font-heading text-[15px] font-black text-[hsl(var(--game-ink))]">Venba</h4>
+                  <p className="mt-1 font-heading text-[20px] font-black text-[hsl(var(--game-ink))]">£9.99</p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    <span className="rounded-full bg-[hsl(var(--game-amber-lt))] px-2.5 py-0.5 font-heading text-[9px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink))]">Narrative</span>
+                    <span className="rounded-full bg-[hsl(var(--game-cream-dark))] px-2.5 py-0.5 font-heading text-[9px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink-mid))]">2-3 hrs</span>
+                    <span className="rounded-full bg-[hsl(var(--game-green-lt))] px-2.5 py-0.5 font-heading text-[9px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink))]">Steam</span>
+                    <span className="rounded-full bg-[hsl(var(--game-blue-light))] px-2.5 py-0.5 font-heading text-[9px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink))]">Switch</span>
+                  </div>
+                </div>
+
+                {/* If you liked this */}
+                <div>
+                  <h5 className="font-heading text-[10px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-ink-mid))]">If you liked this</h5>
+                  <div className="mt-3 space-y-3">
+                    {['Unpacking', 'A Short Hike', 'Spiritfarer'].map((game) => (
+                      <div key={game} className="flex items-center gap-3">
+                        <div className="h-10 w-10 flex-shrink-0 rounded-lg bg-[hsl(var(--game-cream-dark))]" />
+                        <span className="font-heading text-[13px] font-bold text-[hsl(var(--game-ink))]">{game}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Spec note */}
+          <div className="mt-3 rounded-lg border border-[hsl(var(--game-amber))]/30 bg-[hsl(var(--game-ink))]/90 px-4 py-3">
+            <p className="font-heading text-[11px] font-semibold italic text-[hsl(var(--game-amber))]/80">
+              Two-column editorial layout (1fr + 280px sidebar). Sidebar is sticky. Includes kicker, headline, standfirst,
+              byline with avatar circle, body text placeholders, pull-quote with amber left border, OpenCritic score block,
+              game card with cover + price + tags, and &ldquo;If you liked this&rdquo; section with 3 related games.
+            </p>
+          </div>
+        </section>
+
+        {/* ──────────────────────────────────────────── */}
+        {/* 07. Pull Quote (Stipple Background) */}
         {/* ──────────────────────────────────────────── */}
         <section className="mt-20">
           <div className="flex items-baseline gap-3">
             <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">07</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Blog Image Layouts</h2>
+            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Pull Quote (Stipple Background)</h2>
           </div>
           <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            4 sub-layouts: full-bleed break, side-by-side comparison, captioned figure with margin note, image with pull-quote overlay.
+            Pull-quote with stipple dot pattern background, amber left border, and slight negative rotation.
           </p>
-          <div className="mt-6 space-y-6">
-            {/* A: Full-bleed image break */}
-            <div>
-              <p className="mb-2 font-heading text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">A. Full-bleed break</p>
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6">
-                <div className="space-y-1.5">
-                  <div className="h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                  <div className="h-2 w-5/6 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-                <div className="-mx-6 my-5 h-48 bg-[hsl(var(--game-cream-dark))]" />
-                <div className="space-y-1.5">
-                  <div className="h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                  <div className="h-2 w-4/5 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-              </div>
-            </div>
-
-            {/* B: Side-by-side comparison */}
-            <div>
-              <p className="mb-2 font-heading text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">B. Side-by-side comparison</p>
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="aspect-[4/3] rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                    <div className="mt-2 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                  </div>
-                  <div>
-                    <div className="aspect-[4/3] rounded-xl bg-[hsl(var(--game-ink))]/80" />
-                    <div className="mt-2 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* C: Captioned figure with margin annotation */}
-            <div>
-              <p className="mb-2 font-heading text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">C. Captioned figure with margin note</p>
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6">
-                <div className="grid grid-cols-[1fr_160px] gap-6">
-                  <div>
-                    <div className="aspect-[16/9] rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                    <div className="mt-2 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/6" />
-                  </div>
-                  <div className="flex items-start pt-4">
-                    <div className="border-l-2 border-[hsl(var(--game-ink))]/10 pl-3">
-                      <div className="h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/8" />
-                      <div className="mt-1.5 h-2 w-5/6 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                      <div className="mt-1.5 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* D: Image with pull-quote overlay zone */}
-            <div>
-              <p className="mb-2 font-heading text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">D. Image with pull-quote overlay</p>
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6">
-                <div className="relative">
-                  <div className="h-56 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                  <div className="absolute bottom-4 right-4 w-2/5 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
-                    <div className="h-2.5 w-full rounded-full bg-[hsl(var(--game-ink))]/10" />
-                    <div className="mt-1.5 h-2.5 w-4/5 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                    <div className="mt-3 h-2 w-1/3 rounded-full bg-[hsl(var(--game-ink))]/6" />
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+            <blockquote
+              className="rounded-xl border-l-4 border-[hsl(var(--game-amber))] px-8 py-7"
+              style={{
+                backgroundImage: 'radial-gradient(circle, rgba(26,26,20,0.07) 1px, transparent 1px)',
+                backgroundSize: '10px 10px',
+                transform: 'rotate(-0.5deg)',
+              }}
+            >
+              <p className="font-heading text-[22px] font-black italic leading-snug text-[hsl(var(--game-ink))]">
+                &ldquo;The farming loop is patient in a way most games refuse to be.&rdquo;
+              </p>
+              <p className="mt-4 font-heading text-[12px] font-bold tracking-wide text-[hsl(var(--game-ink-mid))]">
+                Beth &middot; Idle Hours
+              </p>
+            </blockquote>
+          </div>
+          {/* Spec note */}
+          <div className="mt-3 rounded-lg border border-[hsl(var(--game-amber))]/30 bg-[hsl(var(--game-ink))]/90 px-4 py-3">
+            <p className="font-heading text-[11px] font-semibold italic text-[hsl(var(--game-amber))]/80">
+              Stipple dot background via radial-gradient (1px dots at 10px intervals). 4px amber left border.
+              Slight negative rotation (-0.5deg) for editorial personality. Attribution below quote.
+            </p>
           </div>
         </section>
 
         {/* ──────────────────────────────────────────── */}
-        {/* 08. Toast Notification Stack */}
+        {/* 08. Full-bleed Type Overlay */}
         {/* ──────────────────────────────────────────── */}
         <section className="mt-20">
           <div className="flex items-baseline gap-3">
             <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">08</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Toast Notification Stack</h2>
+            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Full-bleed Type Overlay</h2>
           </div>
           <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            3 toasts stacked in top-right with positioning and overlap. Different widths for success, error and info.
-          </p>
-          <div className="mt-6 rounded-2xl border border-dashed border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-6">
-            <div className="relative h-72 rounded-xl border border-[hsl(var(--game-ink))]/5 bg-[hsl(var(--game-white))]">
-              {/* Page content placeholder */}
-              <div className="p-6">
-                <div className="h-3 w-1/3 rounded-full bg-[hsl(var(--game-ink))]/6" />
-                <div className="mt-3 h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/3" />
-                <div className="mt-1.5 h-2 w-5/6 rounded-full bg-[hsl(var(--game-ink))]/3" />
-              </div>
-              {/* Toast stack */}
-              <div className="absolute right-4 top-4 flex flex-col gap-2">
-                {/* Success toast (narrow) */}
-                <div className="w-48 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_4px_16px_rgba(0,0,0,0.1)]">
-                  <div className="flex items-center gap-2">
-                    <div className="h-4 w-4 rounded-full bg-[hsl(var(--game-cream-dark))]" />
-                    <div className="h-2 w-16 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  </div>
-                </div>
-                {/* Error toast (wide) */}
-                <div className="w-72 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_4px_16px_rgba(0,0,0,0.1)]">
-                  <div className="flex items-center gap-2">
-                    <div className="h-4 w-4 rounded-full bg-[hsl(var(--game-ink))]" />
-                    <div className="h-2 w-32 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  </div>
-                  <div className="mt-2 h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-                {/* Info toast (medium) */}
-                <div className="w-56 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_4px_16px_rgba(0,0,0,0.1)]">
-                  <div className="flex items-center gap-2">
-                    <div className="h-4 w-4 rounded-full bg-[hsl(var(--game-cream-dark))]" />
-                    <div className="h-2 w-20 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 09. Two-Pane Dashboard */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">09</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Two-Pane Dashboard</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            Narrow ink sidebar with icon placeholders and labels. Right content area with cards in a grid.
+            Dark gradient background with text anchored bottom-left. Gradient fade from bottom edge.
           </p>
           <div className="mt-6 overflow-hidden rounded-2xl border border-[hsl(var(--game-ink))]/10 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-            <div className="grid grid-cols-[200px_1fr]">
-              {/* Sidebar */}
-              <div className="bg-[hsl(var(--game-ink))] p-5">
-                <div className="h-3 w-16 rounded-full bg-[hsl(var(--game-cream))]/20" />
-                <div className="mt-8 space-y-4">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className={`h-5 w-5 rounded-md ${i === 1 ? 'bg-[hsl(var(--game-cream))]/30' : 'bg-[hsl(var(--game-cream))]/10'}`} />
-                      <div className={`h-2 w-16 rounded-full ${i === 1 ? 'bg-[hsl(var(--game-cream))]/40' : 'bg-[hsl(var(--game-cream))]/15'}`} />
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-auto pt-20">
-                  <div className="border-t border-[hsl(var(--game-cream))]/10 pt-4">
-                    <div className="flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-full bg-[hsl(var(--game-cream))]/15" />
-                      <div className="h-2 w-12 rounded-full bg-[hsl(var(--game-cream))]/10" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Content */}
-              <div className="bg-[hsl(var(--game-cream))] p-6">
-                <div className="h-3 w-24 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                <div className="mt-4 grid grid-cols-2 gap-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4">
-                      <div className="aspect-[3/2] rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                      <div className="mt-3 h-2.5 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                      <div className="mt-1.5 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                    </div>
-                  ))}
-                </div>
+            <div
+              className="relative flex min-h-[340px] items-end"
+              style={{
+                background: 'linear-gradient(135deg, hsl(270, 30%, 18%) 0%, hsl(260, 25%, 12%) 100%)',
+              }}
+            >
+              {/* Bottom gradient overlay */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)',
+                }}
+              />
+              <div className="relative z-10 p-8 pb-10">
+                <p className="font-heading text-[9px] font-black uppercase tracking-[0.35em] text-[hsl(var(--game-amber))]">
+                  Curated Collection
+                </p>
+                <h3 className="mt-2 max-w-lg font-heading text-[clamp(28px,4vw,40px)] font-black leading-[1.05] tracking-tight text-white">
+                  The ones worth setting proper time aside for.
+                </h3>
+                <p className="mt-3 max-w-md font-heading text-[14px] font-semibold text-white/60">
+                  Long games that reward patience. The kind you clear your weekend for.
+                </p>
               </div>
             </div>
+          </div>
+          {/* Spec note */}
+          <div className="mt-3 rounded-lg border border-[hsl(var(--game-amber))]/30 bg-[hsl(var(--game-ink))]/90 px-4 py-3">
+            <p className="font-heading text-[11px] font-semibold italic text-[hsl(var(--game-amber))]/80">
+              Dark purple-ish gradient background (135deg, hsl 270). Bottom-to-top gradient overlay for text readability.
+              Text anchored bottom-left via flex items-end. Eyebrow + headline + subtitle in white tones.
+            </p>
           </div>
         </section>
 
         {/* ──────────────────────────────────────────── */}
-        {/* 10. Card Stack / Deck */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">10</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Card Stack / Deck</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            3 cards in a deck formation with slight offsets and rotations. Peek state and fanned-out state side by side.
-          </p>
-          <div className="mt-6 grid grid-cols-2 gap-8">
-            {/* Peek state */}
-            <div className="rounded-2xl border border-dashed border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-8">
-              <p className="mb-4 font-heading text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">Peek state</p>
-              <div className="relative mx-auto h-56 w-44">
-                <div className="absolute inset-0 translate-x-2 translate-y-2 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream-dark))]" style={{ transform: 'translate(8px, 8px) rotate(4deg)' }} />
-                <div className="absolute inset-0 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream-dark))]" style={{ transform: 'translate(4px, 4px) rotate(2deg)' }} />
-                <div className="absolute inset-0 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
-                  <div className="h-2/3 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                  <div className="mt-3 h-2.5 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  <div className="mt-1.5 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-              </div>
-            </div>
-
-            {/* Fanned-out state */}
-            <div className="rounded-2xl border border-dashed border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-8">
-              <p className="mb-4 font-heading text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">Fanned-out state</p>
-              <div className="relative mx-auto flex h-56 w-full items-center justify-center">
-                <div className="absolute h-48 w-36 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_4px_16px_rgba(0,0,0,0.06)]" style={{ transform: 'translateX(-60px) rotate(-12deg)' }}>
-                  <div className="h-2/3 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                  <div className="mt-2 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                </div>
-                <div className="absolute h-48 w-36 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_4px_16px_rgba(0,0,0,0.08)]" style={{ transform: 'rotate(0deg) translateY(-4px)' }}>
-                  <div className="h-2/3 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                  <div className="mt-2 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                </div>
-                <div className="absolute h-48 w-36 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_4px_16px_rgba(0,0,0,0.06)]" style={{ transform: 'translateX(60px) rotate(12deg)' }}>
-                  <div className="h-2/3 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                  <div className="mt-2 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 11. Timeline / Activity Feed */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">11</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Timeline / Activity Feed</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            Vertical timeline with a line down the left, date nodes, and content blocks branching right. 5 entries across 3 days.
-          </p>
-          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-            <div className="relative pl-10">
-              {/* Vertical line */}
-              <div className="absolute bottom-0 left-4 top-0 w-px bg-[hsl(var(--game-ink))]/10" />
-
-              {/* Day 1 */}
-              <div className="relative pb-6">
-                <div className="absolute -left-[25px] top-0.5 h-3 w-3 rounded-full border-2 border-[hsl(var(--game-ink))]/30 bg-[hsl(var(--game-white))]" />
-                <p className="font-heading text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">7 Mar</p>
-                <div className="mt-2 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-4">
-                  <div className="h-2.5 w-2/3 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  <div className="mt-2 h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-                <div className="relative mt-3">
-                  <div className="absolute -left-[25px] top-3 h-2 w-2 rounded-full bg-[hsl(var(--game-ink))]/15" />
-                  <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-4">
-                    <div className="h-2.5 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                    <div className="mt-2 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Day 2 */}
-              <div className="relative pb-6">
-                <div className="absolute -left-[25px] top-0.5 h-3 w-3 rounded-full border-2 border-[hsl(var(--game-ink))]/30 bg-[hsl(var(--game-white))]" />
-                <p className="font-heading text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">8 Mar</p>
-                <div className="mt-2 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-4">
-                  <div className="h-2.5 w-3/5 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  <div className="mt-2 h-2 w-5/6 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-              </div>
-
-              {/* Day 3 */}
-              <div className="relative">
-                <div className="absolute -left-[25px] top-0.5 h-3 w-3 rounded-full border-2 border-[hsl(var(--game-ink))]/30 bg-[hsl(var(--game-white))]" />
-                <p className="font-heading text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">9 Mar</p>
-                <div className="mt-2 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-4">
-                  <div className="h-2.5 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  <div className="mt-2 h-2 w-2/3 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-                <div className="relative mt-3">
-                  <div className="absolute -left-[25px] top-3 h-2 w-2 rounded-full bg-[hsl(var(--game-ink))]/15" />
-                  <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-4">
-                    <div className="h-2.5 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                    <div className="mt-2 h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 12. Comparison Layout */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">12</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Comparison Layout</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            Two game cards side by side with aligned stat rows between them. "VS" centred in the header.
-          </p>
-          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-            {/* Header with VS */}
-            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-              <div className="h-3 w-2/3 justify-self-end rounded-full bg-[hsl(var(--game-ink))]/10" />
-              <span className="font-heading text-2xl font-black text-[hsl(var(--game-ink))]/15">VS</span>
-              <div className="h-3 w-2/3 rounded-full bg-[hsl(var(--game-ink))]/10" />
-            </div>
-
-            <div className="mt-5 grid grid-cols-[1fr_auto_1fr] gap-4">
-              {/* Left card */}
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-4">
-                <div className="aspect-square rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                <div className="mt-3 h-2.5 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                <div className="mt-1.5 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-
-              {/* Stat rows */}
-              <div className="flex flex-col justify-center gap-3 py-4">
-                {['Score', 'Time', 'Streak', 'Rank'].map((stat) => (
-                  <div key={stat} className="flex flex-col items-center gap-1">
-                    <div className="h-px w-12 bg-[hsl(var(--game-ink))]/10" />
-                    <span className="font-heading text-[8px] font-bold uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">{stat}</span>
-                    <div className="h-px w-12 bg-[hsl(var(--game-ink))]/10" />
-                  </div>
-                ))}
-              </div>
-
-              {/* Right card */}
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-4">
-                <div className="aspect-square rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                <div className="mt-3 h-2.5 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                <div className="mt-1.5 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 13. Floating Annotations */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">13</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Floating Annotations</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            A central content card with sticky-note callouts at slight angles, connected by implied spatial relationship.
-          </p>
-          <div className="mt-6 rounded-2xl border border-dashed border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-12">
-            <div className="relative mx-auto max-w-md">
-              {/* Central card */}
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-6 shadow-[0_4px_16px_rgba(0,0,0,0.06)]">
-                <div className="h-40 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                <div className="mt-4 h-3 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                <div className="mt-2 h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                <div className="mt-1.5 h-2 w-5/6 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-
-              {/* Annotation: top-left */}
-              <div className="absolute -left-28 -top-6 w-32 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_2px_8px_rgba(0,0,0,0.06)]" style={{ transform: 'rotate(-3deg)' }}>
-                <div className="h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/10" />
-                <div className="mt-1 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-
-              {/* Annotation: top-right */}
-              <div className="absolute -right-24 top-8 w-28 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_2px_8px_rgba(0,0,0,0.06)]" style={{ transform: 'rotate(2deg)' }}>
-                <div className="h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/10" />
-                <div className="mt-1 h-2 w-2/3 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-
-              {/* Annotation: bottom-left */}
-              <div className="absolute -bottom-4 -left-20 w-36 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_2px_8px_rgba(0,0,0,0.06)]" style={{ transform: 'rotate(-1.5deg)' }}>
-                <div className="h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/10" />
-                <div className="mt-1 h-2 w-5/6 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                <div className="mt-1 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-
-              {/* Annotation: bottom-right */}
-              <div className="absolute -bottom-8 -right-16 w-30 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-3 shadow-[0_2px_8px_rgba(0,0,0,0.06)]" style={{ transform: 'rotate(3deg)' }}>
-                <div className="h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/10" />
-                <div className="mt-1 h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 14. Magazine Spread */}
-        {/* ──────────────────────────────────────────── */}
-        <section className="mt-20">
-          <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">14</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Magazine Spread</h2>
-          </div>
-          <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            Full editorial page. Drop-cap letter, 2-column body, pull-quote in the gutter, inline card, footnote bar.
-          </p>
-          <div className="mt-6 rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-            {/* Title area */}
-            <div className="h-4 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/12" />
-            <div className="mt-2 h-2.5 w-1/4 rounded-full bg-[hsl(var(--game-ink))]/6" />
-
-            {/* 2-column body with drop cap */}
-            <div className="mt-6 grid grid-cols-2 gap-8">
-              {/* Left column */}
-              <div>
-                {/* Drop cap */}
-                <div className="float-left mr-3 flex h-16 w-14 items-center justify-center rounded-lg bg-[hsl(var(--game-ink))]/8">
-                  <span className="font-heading text-3xl font-black text-[hsl(var(--game-ink))]/20">T</span>
-                </div>
-                <div className="space-y-1.5">
-                  {Array.from({ length: 8 }).map((_, i) => (
-                    <div key={i} className={`h-2 rounded-full bg-[hsl(var(--game-ink))]/5 ${i === 7 ? 'w-3/4' : 'w-full'}`} />
-                  ))}
-                </div>
-                {/* Inline card breaking flow */}
-                <div className="my-4 rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-3">
-                  <div className="flex gap-3">
-                    <div className="h-12 w-12 flex-shrink-0 rounded-lg bg-[hsl(var(--game-cream-dark))]" />
-                    <div className="flex-1">
-                      <div className="h-2 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/8" />
-                      <div className="mt-1 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={`b${i}`} className={`h-2 rounded-full bg-[hsl(var(--game-ink))]/5 ${i === 3 ? 'w-2/3' : 'w-full'}`} />
-                  ))}
-                </div>
-              </div>
-
-              {/* Right column with pull-quote */}
-              <div>
-                <div className="space-y-1.5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className={`h-2 rounded-full bg-[hsl(var(--game-ink))]/5 ${i === 4 ? 'w-4/5' : 'w-full'}`} />
-                  ))}
-                </div>
-                {/* Pull-quote */}
-                <div className="my-5 border-l-[3px] border-[hsl(var(--game-ink))]/15 pl-4 py-2">
-                  <div className="h-3 w-full rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  <div className="mt-1.5 h-3 w-4/5 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  <div className="mt-2 h-2 w-1/3 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                </div>
-                <div className="space-y-1.5">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={`c${i}`} className={`h-2 rounded-full bg-[hsl(var(--game-ink))]/5 ${i === 5 ? 'w-3/5' : 'w-full'}`} />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Footnote bar */}
-            <div className="mt-6 border-t border-dashed border-[hsl(var(--game-ink))]/10 pt-4">
-              <div className="flex gap-6">
-                <div className="h-1.5 w-20 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                <div className="h-1.5 w-32 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                <div className="h-1.5 w-24 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ──────────────────────────────────────────── */}
-        {/* 15. Mosaic Collage Grid */}
+        {/* 09. Stacked Article Card */}
         {/* ──────────────────────────────────────────── */}
         <section className="mt-20 pb-16">
           <div className="flex items-baseline gap-3">
-            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">15</span>
-            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Mosaic Collage Grid</h2>
+            <span className="font-heading text-[9px] font-black uppercase tracking-[0.28em] text-[hsl(var(--game-amber))]">09</span>
+            <h2 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Stacked Article Card</h2>
           </div>
           <p className="mt-1 font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-            Irregular grid with 8 cards of mixed sizes. CSS grid with named areas. Visual rhythm through size contrast.
+            Card with hero image area on top and article details below. Includes live indicator, read time, and feature tag.
           </p>
-          <div className="mt-6 rounded-2xl border border-dashed border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-6">
-            <div
-              className="grid gap-4"
-              style={{
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gridTemplateRows: '180px 140px 180px',
-                gridTemplateAreas: `
-                  "a a b c"
-                  "d e b f"
-                  "d g g f"
-                `,
-              }}
-            >
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]" style={{ gridArea: 'a' }}>
-                <div className="h-full rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-              </div>
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]" style={{ gridArea: 'b' }}>
-                <div className="h-3/4 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                <div className="mt-3 h-2.5 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                <div className="mt-1.5 h-2 w-1/2 rounded-full bg-[hsl(var(--game-ink))]/5" />
-              </div>
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]" style={{ gridArea: 'c' }}>
-                <div className="h-full rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-              </div>
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]" style={{ gridArea: 'd' }}>
-                <div className="h-full rounded-xl bg-[hsl(var(--game-ink))]/90" />
-              </div>
-              <div className="flex items-center justify-center rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]" style={{ gridArea: 'e' }}>
-                <div className="text-center">
-                  <div className="mx-auto h-3 w-16 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                  <div className="mx-auto mt-2 h-2 w-12 rounded-full bg-[hsl(var(--game-ink))]/5" />
+          <div className="mt-6 max-w-md">
+            <div className="overflow-hidden rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+              {/* Hero image — 16:9 placeholder */}
+              <div className="aspect-[16/9] w-full bg-[hsl(var(--game-cream-dark))]" />
+
+              {/* Body */}
+              <div className="p-6">
+                {/* Eyebrow with live dot */}
+                <div className="flex items-center gap-2">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[hsl(var(--game-amber))] opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[hsl(var(--game-amber))]" />
+                  </span>
+                  <span className="font-heading text-[9px] font-black uppercase tracking-[0.35em] text-[hsl(var(--game-amber))]">
+                    Long read
+                  </span>
                 </div>
-              </div>
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]" style={{ gridArea: 'f' }}>
-                <div className="h-full rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-              </div>
-              <div className="rounded-2xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]" style={{ gridArea: 'g' }}>
-                <div className="flex h-full gap-4">
-                  <div className="flex-1 rounded-xl bg-[hsl(var(--game-cream-dark))]" />
-                  <div className="flex flex-1 flex-col justify-center">
-                    <div className="h-3 w-3/4 rounded-full bg-[hsl(var(--game-ink))]/10" />
-                    <div className="mt-2 h-2 w-full rounded-full bg-[hsl(var(--game-ink))]/5" />
-                    <div className="mt-1.5 h-2 w-5/6 rounded-full bg-[hsl(var(--game-ink))]/5" />
-                  </div>
+
+                {/* Title */}
+                <h3 className="mt-3 font-heading text-[20px] font-black leading-[1.1] tracking-tight text-[hsl(var(--game-ink))]">
+                  The strange peace of games where nothing goes wrong
+                </h3>
+
+                {/* Description */}
+                <p className="mt-2 font-heading text-[13px] font-semibold italic leading-relaxed text-[hsl(var(--game-ink-mid))]">
+                  Why we keep returning to worlds with no enemies, no fail states, and no reason to hurry.
+                </p>
+
+                {/* Footer */}
+                <div className="mt-5 flex items-center justify-between">
+                  <p className="font-heading text-[11px] font-semibold text-[hsl(var(--game-ink-light))]">
+                    8 min read &middot; Beth
+                  </p>
+                  <span className="rounded-full bg-[hsl(var(--game-cream))] px-3 py-1 font-heading text-[9px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink-mid))]">
+                    Feature
+                  </span>
                 </div>
               </div>
             </div>
+          </div>
+          {/* Spec note */}
+          <div className="mt-3 max-w-md rounded-lg border border-[hsl(var(--game-amber))]/30 bg-[hsl(var(--game-ink))]/90 px-4 py-3">
+            <p className="font-heading text-[11px] font-semibold italic text-[hsl(var(--game-amber))]/80">
+              Stacked card: 16:9 hero placeholder on top, body below. Live pulsing dot next to &ldquo;Long read&rdquo; eyebrow.
+              Title + italic description. Footer with read time, author, and &ldquo;Feature&rdquo; tag pill.
+            </p>
           </div>
         </section>
       </div>

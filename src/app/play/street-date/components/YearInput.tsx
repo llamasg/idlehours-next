@@ -133,7 +133,7 @@ export default function YearInput({
 
       {/* Input row */}
       <div className="flex w-full max-w-sm flex-col items-center gap-3 lg:max-w-none lg:flex-row lg:justify-center">
-        <div className="flex w-full items-stretch gap-0 rounded-xl border-2 border-border bg-card focus-within:border-[hsl(var(--game-blue))]/40 focus-within:ring-2 focus-within:ring-[hsl(var(--game-blue))]/30 lg:w-[200px]">
+        <div className="flex w-full items-stretch gap-0 rounded-xl border-2 border-border bg-white focus-within:border-[hsl(var(--game-green))]/60 focus-within:ring-2 focus-within:ring-[hsl(var(--game-green))]/30 lg:w-[200px]">
           <input
             ref={inputRef}
             type="text"
@@ -155,7 +155,7 @@ export default function YearInput({
             <button
               type="button"
               onClick={onHelpClick}
-              className="flex w-12 flex-shrink-0 items-center justify-center rounded-r-xl border-l border-border text-lg font-bold text-muted-foreground transition-colors hover:bg-muted hover:text-[hsl(var(--game-blue))]"
+              className="flex w-12 flex-shrink-0 items-center justify-center rounded-r-xl border-l border-[hsl(var(--game-ink))]/10 text-lg font-bold text-[hsl(var(--game-ink-light))] transition-colors hover:bg-[hsl(var(--game-green))]/10 hover:text-[hsl(var(--game-green))]"
               aria-label="How to play"
             >
               ?
@@ -167,7 +167,7 @@ export default function YearInput({
           type="button"
           onClick={handleSubmit}
           disabled={disabled}
-          className="w-full rounded-xl bg-[hsl(var(--game-blue))] px-6 py-3 font-heading text-base font-bold text-white transition-transform hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100 lg:w-auto"
+          className="bvl-green w-full !rounded-xl !px-6 !py-3 !text-base lg:w-auto"
         >
           Submit
         </button>

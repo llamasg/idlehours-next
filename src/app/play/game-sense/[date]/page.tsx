@@ -338,7 +338,7 @@ export default function GameSenseDayPage({
           transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
         }}
       >
-        <main className={`font-game mx-auto flex flex-1 flex-col justify-center px-4 py-8 ${isPostGame ? 'max-w-7xl lg:px-8' : 'max-w-2xl'}`}>
+        <main className={`font-game mx-auto flex flex-1 flex-col px-4 py-8 ${isPostGame ? 'w-full lg:px-8' : 'max-w-2xl justify-center'}`}>
           {/* Game header */}
           <div className="mb-6 text-center">
             {/* Title + subtitle — animate: fade in centered, then slide up to position */}
@@ -612,7 +612,25 @@ export default function GameSenseDayPage({
           {/* Won/Lost — post-game page (when modal closed) */}
           {isPostGame && (
             <>
-              {/* 5th visually but above ResultCard — slides open when pgStep >= 5 */}
+              {/* Nav pills — early so user can navigate away quickly */}
+              <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
+                {!today && (
+                  <div style={entrance('pop', pgStep >= 1, 300)}>
+                    <Link href="/play/game-sense" className="bvl-purple">
+                      <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                      Today&apos;s game
+                    </Link>
+                  </div>
+                )}
+                <div style={entrance('pop', pgStep >= 1, 450)}>
+                  <Link href="/play/game-sense/archive" className="bvl-purple">
+                    <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
+                    View past games
+                  </Link>
+                </div>
+              </div>
+
+              {/* Badges — slides open when pgStep >= 5 */}
               <div
                 className="grid transition-[grid-template-rows] duration-700 ease-out"
                 style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
@@ -624,7 +642,7 @@ export default function GameSenseDayPage({
                 </div>
               </div>
 
-              {/* 1st: ResultCard — internal 15-step cascade */}
+              {/* ResultCard — internal 15-step cascade */}
               <div className="mb-6">
                 <ResultCard
                   game="game-sense"
@@ -637,7 +655,7 @@ export default function GameSenseDayPage({
                 />
               </div>
 
-              {/* 2nd: Revealed sentence — white card with answer below */}
+              {/* Revealed sentence — white card with answer below */}
               <div className="mb-6" style={entrance('slide-up', pgStep >= 2)}>
                 <div className="mx-auto w-full max-w-[850px] overflow-hidden rounded-2xl bg-white/95 shadow-sm">
                   <div className="p-5 sm:p-6">
@@ -668,24 +686,6 @@ export default function GameSenseDayPage({
                       </p>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* 3rd: Nav pills — entrance on wrapper, hover on link */}
-              <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
-                {!today && (
-                  <div style={entrance('pop', pgStep >= 3)}>
-                    <Link href="/play/game-sense" className="bvl-purple">
-                      <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                      Today&apos;s game
-                    </Link>
-                  </div>
-                )}
-                <div style={entrance('pop', pgStep >= 3, 150)}>
-                  <Link href="/play/game-sense/archive" className="bvl-purple">
-                    <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                    View past games
-                  </Link>
                 </div>
               </div>
             </>

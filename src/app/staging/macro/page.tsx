@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
 
 /* ─── reduced motion ─── */
 function usePrefersReducedMotion() {
@@ -316,124 +316,6 @@ function ContentStripTransition() {
   )
 }
 
-/* ─── 03 Card Morph ─── */
-function CardMorph() {
-  const reduced = usePrefersReducedMotion()
-  const [state, setState] = useState<'idle' | 'playing' | 'done'>('idle')
-  const stageRef = useRef<HTMLDivElement>(null)
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [morphed, setMorphed] = useState(false)
-  const [contentFade, setContentFade] = useState(false)
-
-  const play = useCallback(() => {
-    if (state === 'playing' || !stageRef.current || !cardRef.current) return
-    setState('playing')
-
-    if (reduced) {
-      setMorphed(true)
-      setContentFade(true)
-      setState('done')
-      return
-    }
-
-    const stage = stageRef.current
-    const card = cardRef.current
-    const stageRect = stage.getBoundingClientRect()
-    const cardRect = card.getBoundingClientRect()
-
-    const offsetX = cardRect.left - stageRect.left
-    const offsetY = cardRect.top - stageRect.top
-
-    // set card to fixed position first via transform
-    card.style.transition = 'none'
-    card.style.position = 'absolute'
-    card.style.left = `${offsetX}px`
-    card.style.top = `${offsetY}px`
-    card.style.width = `${cardRect.width}px`
-    card.style.height = `${cardRect.height}px`
-    card.style.zIndex = '20'
-
-    requestAnimationFrame(() => {
-      card.style.transition = 'all 500ms cubic-bezier(0.34,1.5,0.64,1)'
-      card.style.left = '0px'
-      card.style.top = '0px'
-      card.style.width = `${stageRect.width}px`
-      card.style.height = `${stageRect.height}px`
-      setMorphed(true)
-
-      setTimeout(() => {
-        setContentFade(true)
-        setState('done')
-      }, 350)
-    })
-  }, [state, reduced])
-
-  const reset = useCallback(() => {
-    setMorphed(false)
-    setContentFade(false)
-    if (cardRef.current) {
-      cardRef.current.style.transition = 'none'
-      cardRef.current.style.position = ''
-      cardRef.current.style.left = ''
-      cardRef.current.style.top = ''
-      cardRef.current.style.width = ''
-      cardRef.current.style.height = ''
-      cardRef.current.style.zIndex = ''
-    }
-    setState('idle')
-  }, [])
-
-  return (
-    <>
-      <Label num="03" title="Card Morph" annotation="Small card uses getBoundingClientRect to measure, then morphs to fill the container. Content cross-fades during the expansion. 500ms spring easing." />
-      <Stage stageRef={stageRef}>
-        {/* background grid of faded cards */}
-        {!morphed && (
-          <div className="absolute inset-0 grid grid-cols-3 gap-4 p-8">
-            <div
-              ref={cardRef}
-              className="flex cursor-pointer items-center justify-center rounded-xl bg-[hsl(var(--game-green))]/15 font-heading text-[11px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-green))]"
-              style={{ minHeight: 120 }}
-            >
-              Click to Morph
-            </div>
-            <PlaceholderCard label="Game B" colour="var(--game-ink)" />
-            <PlaceholderCard label="Game C" colour="var(--game-ink)" />
-            <PlaceholderCard label="Game D" colour="var(--game-ink)" />
-            <PlaceholderCard label="Game E" colour="var(--game-ink)" />
-            <PlaceholderCard label="Game F" colour="var(--game-ink)" />
-          </div>
-        )}
-        {/* morphed card (grows to fill) */}
-        {morphed && (
-          <div
-            ref={cardRef}
-            className="absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-[hsl(var(--game-green))]/15 p-8"
-            style={{
-              zIndex: 20,
-            }}
-          >
-            <div
-              style={{
-                opacity: contentFade ? 1 : 0,
-                transition: 'opacity 300ms ease',
-              }}
-              className="flex flex-col items-center gap-4"
-            >
-              <div className="h-40 w-full max-w-sm rounded-xl bg-[hsl(var(--game-green))]/20" />
-              <h3 className="font-heading text-lg font-black text-[hsl(var(--game-green))]">Game Detail View</h3>
-              <p className="max-w-xs text-center font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-                The card has morphed into a full detail page. Content fades in during the expansion.
-              </p>
-            </div>
-          </div>
-        )}
-      </Stage>
-      <Controls onPlay={play} onReset={reset} state={state} />
-    </>
-  )
-}
-
 /* ─── 04 Slide Stack ─── */
 function SlideStack() {
   const reduced = usePrefersReducedMotion()
@@ -533,95 +415,6 @@ function SlideStack() {
         </div>
       </Stage>
       <Controls onPlay={() => goTo('next')} onReset={reset} state={state} />
-    </>
-  )
-}
-
-/* ─── 05 Zoom Through ─── */
-function ZoomThrough() {
-  const reduced = usePrefersReducedMotion()
-  const [state, setState] = useState<'idle' | 'playing' | 'done'>('idle')
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [phase, setPhase] = useState<'card' | 'zooming' | 'landed'>('card')
-
-  const play = useCallback(async () => {
-    if (state === 'playing') return
-    setState('playing')
-    setPhase('card')
-
-    if (reduced) {
-      setPhase('landed')
-      setState('done')
-      return
-    }
-
-    await wait(100)
-    setPhase('zooming')
-    await wait(400)
-    setPhase('landed')
-    await wait(350)
-    setState('done')
-  }, [state, reduced])
-
-  const reset = useCallback(() => {
-    setPhase('card')
-    setState('idle')
-  }, [])
-
-  return (
-    <>
-      <Label num="05" title="Zoom Through" annotation="Camera dives into a card. The card scales from 1 to 8, content dissolves, then new content appears at normal scale. 700ms total." />
-      <Stage>
-        <div className="absolute inset-0 flex items-center justify-center">
-          {/* the card that zooms */}
-          <div
-            ref={cardRef}
-            className="flex flex-col items-center justify-center rounded-xl bg-[hsl(var(--game-amber))]/12 p-6"
-            style={{
-              width: phase === 'card' ? 200 : '100%',
-              height: phase === 'card' ? 140 : '100%',
-              transform: phase === 'zooming' ? 'scale(8)' : phase === 'landed' ? 'scale(1)' : 'scale(1)',
-              opacity: 1,
-              transition: reduced ? 'none' : phase === 'zooming'
-                ? 'transform 400ms ease-in, width 400ms ease-in, height 400ms ease-in'
-                : phase === 'landed'
-                  ? 'transform 300ms ease-out, width 300ms ease-out, height 300ms ease-out'
-                  : 'none',
-              position: phase === 'card' ? 'relative' : 'absolute',
-              inset: phase !== 'card' ? 0 : undefined,
-              borderRadius: phase === 'card' ? 12 : 0,
-            }}
-          >
-            {phase === 'card' && (
-              <div style={{ transition: 'opacity 200ms ease' }}>
-                <div className="mb-2 h-12 w-24 rounded-lg bg-[hsl(var(--game-amber))]/20" />
-                <span className="font-heading text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-amber))]">
-                  Dive In
-                </span>
-              </div>
-            )}
-            {phase === 'zooming' && (
-              <div style={{ opacity: 0, transition: 'opacity 200ms ease' }} />
-            )}
-            {phase === 'landed' && (
-              <div
-                className="flex flex-col items-center gap-4"
-                style={{
-                  opacity: 1,
-                  transition: 'opacity 300ms ease 100ms',
-                }}
-              >
-                <div className="h-32 w-full max-w-xs rounded-xl bg-[hsl(var(--game-amber))]/15" />
-                <h3 className="font-heading text-lg font-black text-[hsl(var(--game-amber))]">Inside the Card</h3>
-                <p className="max-w-xs text-center font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-                  You have zoomed through into the detail view. The card has become the page.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </Stage>
-      <Controls onPlay={play} onReset={reset} state={state} />
     </>
   )
 }
@@ -739,564 +532,114 @@ function GravityDrop() {
   )
 }
 
-/* ─── 07 Iris Wipe ─── */
-function IrisWipe() {
-  const reduced = usePrefersReducedMotion()
-  const [state, setState] = useState<'idle' | 'playing' | 'done'>('idle')
-  const irisRef = useRef<HTMLDivElement>(null)
-  const [phase, setPhase] = useState<'old' | 'closed' | 'new'>('old')
 
-  const play = useCallback(async () => {
-    if (state === 'playing') return
-    setState('playing')
-    setPhase('old')
+/* ─── 07 Directional Wipes ─── */
+function DirectionalWipes() {
+  const [hOpen, setHOpen] = useState(false)
+  const [vOpen, setVOpen] = useState(false)
 
-    if (reduced) {
-      setPhase('new')
-      setState('done')
-      return
-    }
-
-    const iris = irisRef.current
-    if (!iris) return
-
-    // close iris over old content
-    iris.style.transition = 'none'
-    iris.style.clipPath = 'circle(100% at 50% 50%)'
-    iris.style.opacity = '1'
-    iris.style.background = 'hsl(var(--game-ink))'
-
-    // actually we layer: old content visible, then black circle shrinks on top
-    // Use an overlay that goes from transparent to covering
-    await wait(50)
-    iris.style.transition = 'clip-path 400ms ease-in'
-    iris.style.clipPath = 'circle(0% at 50% 50%)'
-
-    await wait(420)
-    // hold at closed
-    setPhase('closed')
-    await wait(200)
-
-    // switch to new content behind the iris
-    setPhase('new')
-    await wait(50)
-
-    // open iris to reveal new
-    iris.style.transition = 'clip-path 400ms ease-out'
-    iris.style.clipPath = 'circle(100% at 50% 50%)'
-
-    await wait(450)
-    iris.style.opacity = '0'
-    setState('done')
-  }, [state, reduced])
-
-  const reset = useCallback(() => {
-    setPhase('old')
-    if (irisRef.current) {
-      irisRef.current.style.transition = 'none'
-      irisRef.current.style.clipPath = 'circle(100% at 50% 50%)'
-      irisRef.current.style.opacity = '0'
-    }
-    setState('idle')
-  }, [])
+  const wipeEasing = 'cubic-bezier(0.77, 0, 0.175, 1)'
 
   return (
     <>
-      <Label num="07" title="Iris Wipe" annotation="Vintage film-style circle wipe. The iris closes on the old content, holds briefly for dramatic pause, then opens on the new. 400ms close, 200ms hold, 400ms open." />
-      <Stage>
-        {/* old content */}
-        {phase === 'old' && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8">
-            <div className="h-24 w-full max-w-sm rounded-xl bg-[hsl(var(--game-ink))]/8" />
-            <h3 className="font-heading text-lg font-black text-[hsl(var(--game-ink-light))]">Scene One</h3>
-            <div className="flex gap-3">
-              <div className="h-16 w-24 rounded-lg bg-[hsl(var(--game-ink))]/6" />
-              <div className="h-16 w-24 rounded-lg bg-[hsl(var(--game-ink))]/6" />
-              <div className="h-16 w-24 rounded-lg bg-[hsl(var(--game-ink))]/6" />
-            </div>
-          </div>
-        )}
-        {/* new content */}
-        {(phase === 'new' || phase === 'closed') && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 bg-[hsl(var(--game-white))]">
-            {phase === 'new' && (
-              <>
-                <div className="h-24 w-full max-w-sm rounded-xl bg-[hsl(var(--game-blue))]/12" />
-                <h3 className="font-heading text-lg font-black text-[hsl(var(--game-blue))]">Scene Two</h3>
-                <div className="flex gap-3">
-                  <div className="h-16 w-24 rounded-lg bg-[hsl(var(--game-blue))]/8" />
-                  <div className="h-16 w-24 rounded-lg bg-[hsl(var(--game-blue))]/8" />
-                  <div className="h-16 w-24 rounded-lg bg-[hsl(var(--game-blue))]/8" />
-                </div>
-              </>
-            )}
-          </div>
-        )}
-        {/* iris overlay — black circle that shrinks/grows */}
-        <div
-          ref={irisRef}
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: 'hsl(var(--game-ink))',
-            clipPath: 'circle(100% at 50% 50%)',
-            opacity: 0,
-            zIndex: 30,
-          }}
-        />
-      </Stage>
-      <Controls onPlay={play} onReset={reset} state={state} />
-    </>
-  )
-}
-
-/* ─── 08 Scatter & Gather ─── */
-function ScatterGather() {
-  const reduced = usePrefersReducedMotion()
-  const [state, setState] = useState<'idle' | 'playing' | 'done'>('idle')
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
-  const [layout, setLayout] = useState<'3x2' | '2x3'>('3x2')
-
-  const cards = ['A', 'B', 'C', 'D', 'E', 'F']
-
-  const play = useCallback(async () => {
-    if (state === 'playing') return
-    setState('playing')
-    setLayout('3x2')
-
-    if (reduced) {
-      setLayout('2x3')
-      setState('done')
-      return
-    }
-
-    // reset positions
-    cardRefs.current.forEach((el) => {
-      if (el) { el.style.transition = 'none'; el.style.transform = 'translate(0, 0) rotate(0deg)' }
-    })
-
-    await wait(100)
-
-    // scatter to random positions
-    cardRefs.current.forEach((el) => {
-      if (!el) return
-      const rx = (Math.random() - 0.5) * 400
-      const ry = (Math.random() - 0.5) * 300
-      const rr = (Math.random() - 0.5) * 60
-      el.style.transition = 'transform 500ms cubic-bezier(0.34,1.5,0.64,1)'
-      el.style.transform = `translate(${rx}px, ${ry}px) rotate(${rr}deg)`
-    })
-
-    await wait(800)
-
-    // gather back to origin
-    cardRefs.current.forEach((el) => {
-      if (!el) return
-      el.style.transition = 'transform 500ms cubic-bezier(0.34,1.5,0.64,1)'
-      el.style.transform = 'translate(0, 0) rotate(0deg)'
-    })
-
-    await wait(300)
-    setLayout('2x3')
-
-    await wait(300)
-    setState('done')
-  }, [state, reduced])
-
-  const reset = useCallback(() => {
-    setLayout('3x2')
-    cardRefs.current.forEach((el) => {
-      if (el) { el.style.transition = 'none'; el.style.transform = 'translate(0, 0) rotate(0deg)' }
-    })
-    setState('idle')
-  }, [])
-
-  return (
-    <>
-      <Label num="08" title="Scatter & Gather" annotation="Six cards scatter to random positions and rotations, hold briefly, then gather into a rearranged grid layout. Two-phase spring animation." />
-      <Stage>
-        <div className="absolute inset-0 flex items-center justify-center p-8">
+      <Label num="07" title="Directional Wipes" annotation="Click-to-toggle clip-path wipes. Horizontal slides from left; vertical slides from top. Both use --wipe easing (cubic-bezier(0.77, 0, 0.175, 1)), 0.6s. clip-path: inset() values control reveal direction." />
+      <div className="flex flex-col gap-6">
+        {/* Horizontal wipe */}
+        <div>
+          <p className="mb-2 font-heading text-[10px] font-extrabold uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">Horizontal (left → right)</p>
           <div
-            className={`grid gap-4 ${layout === '3x2' ? 'grid-cols-3' : 'grid-cols-2'}`}
-            style={{
-              transition: reduced ? 'none' : 'all 400ms cubic-bezier(0.34,1.5,0.64,1)',
-              width: layout === '3x2' ? '100%' : '66%',
-            }}
+            className="relative h-48 w-full cursor-pointer overflow-hidden rounded-2xl border-[1.5px] border-[hsl(var(--game-cream-dark))] bg-[hsl(var(--game-cream-mid,var(--game-cream-dark)))]"
+            onClick={() => setHOpen(o => !o)}
           >
-            {cards.map((label, i) => (
+            <div className="absolute inset-0 flex items-center justify-center font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
+              Click to {hOpen ? 'reverse' : 'reveal'}
+            </div>
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-[hsl(var(--game-blue))]"
+              style={{
+                clipPath: hOpen ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+                transition: `clip-path 0.6s ${wipeEasing}`,
+              }}
+            >
+              <span className="font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-white">Revealed</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Vertical wipe */}
+        <div>
+          <p className="mb-2 font-heading text-[10px] font-extrabold uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">Vertical (top → bottom)</p>
+          <div
+            className="relative h-48 w-full cursor-pointer overflow-hidden rounded-2xl border-[1.5px] border-[hsl(var(--game-cream-dark))] bg-[hsl(var(--game-cream-mid,var(--game-cream-dark)))]"
+            onClick={() => setVOpen(o => !o)}
+          >
+            <div className="absolute inset-0 flex items-center justify-center font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
+              Click to {vOpen ? 'reverse' : 'reveal'}
+            </div>
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-[hsl(var(--game-amber))]"
+              style={{
+                clipPath: vOpen ? 'inset(0 0 0% 0)' : 'inset(0 0 100% 0)',
+                transition: `clip-path 0.6s ${wipeEasing}`,
+              }}
+            >
+              <span className="font-heading text-[12px] font-bold uppercase tracking-[0.15em] text-white">Revealed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+/* ─── 08 Scroll-driven Header Shrink ─── */
+function ScrollHeaderShrink() {
+  const [shrunk, setShrunk] = useState(false)
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    setShrunk(e.currentTarget.scrollTop > 20)
+  }
+
+  const games = ['Game Sense', 'Street Date', 'Shelf Price', 'Blitz', 'Ship It']
+
+  return (
+    <>
+      <Label num="08" title="Scroll-driven Header Shrink" annotation="Only change font-size and padding. Use 0.3s ease (not spring) — feels more natural on scroll." />
+      <div className="overflow-hidden rounded-2xl border-[1.5px] border-[hsl(var(--game-cream-dark))] bg-[hsl(var(--game-white))]">
+        {/* Header */}
+        <div
+          className="bg-[hsl(var(--game-ink))] text-[hsl(var(--game-cream))]"
+          style={{
+            fontSize: shrunk ? 14 : 22,
+            padding: shrunk ? '8px 16px' : '16px 20px',
+            transition: 'font-size 0.3s ease, padding 0.3s ease',
+          }}
+        >
+          <span className="font-heading font-black">Today&apos;s games</span>
+        </div>
+        {/* Scrollable content */}
+        <div
+          onScroll={handleScroll}
+          className="overflow-y-auto"
+          style={{ height: 280 }}
+        >
+          <div className="flex flex-col gap-3 p-5">
+            {games.map((game) => (
               <div
-                key={label}
-                ref={(el) => { cardRefs.current[i] = el }}
-                className="flex h-[100px] items-center justify-center rounded-xl bg-[hsl(var(--game-amber))]/12 font-heading text-[14px] font-black text-[hsl(var(--game-amber))]"
+                key={game}
+                className="rounded-xl border-[1.5px] border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] px-5 py-4"
               >
-                {label}
+                <span className="font-heading text-[13px] font-bold text-[hsl(var(--game-ink))]">{game}</span>
+                <p className="mt-1 font-heading text-[11px] font-semibold italic text-[hsl(var(--game-ink-light))]">
+                  Daily puzzle — tap to play
+                </p>
               </div>
             ))}
+            {/* Extra spacer content to enable scrolling */}
+            <div className="h-40 rounded-xl bg-[hsl(var(--game-cream-dark))]/30" />
           </div>
         </div>
-      </Stage>
-      <Controls onPlay={play} onReset={reset} state={state} />
-    </>
-  )
-}
-
-/* ─── 09 Fold Away ─── */
-function FoldAway() {
-  const reduced = usePrefersReducedMotion()
-  const [state, setState] = useState<'idle' | 'playing' | 'done'>('idle')
-  const oldRef = useRef<HTMLDivElement>(null)
-  const newRef = useRef<HTMLDivElement>(null)
-  const [phase, setPhase] = useState<'old' | 'folding' | 'unfolding' | 'new'>('old')
-
-  const play = useCallback(async () => {
-    if (state === 'playing') return
-    setState('playing')
-    setPhase('old')
-
-    if (reduced) {
-      setPhase('new')
-      setState('done')
-      return
-    }
-
-    const old = oldRef.current
-    const nw = newRef.current
-
-    if (old) {
-      old.style.transition = 'none'
-      old.style.transform = 'perspective(800px) rotateX(0deg)'
-      old.style.opacity = '1'
-    }
-    if (nw) {
-      nw.style.transition = 'none'
-      nw.style.transform = 'perspective(800px) rotateX(90deg)'
-      nw.style.opacity = '0'
-    }
-
-    await wait(100)
-    setPhase('folding')
-
-    // fold old upward
-    if (old) {
-      old.style.transition = 'transform 500ms ease-in, opacity 500ms ease-in'
-      old.style.transform = 'perspective(800px) rotateX(-90deg)'
-      old.style.opacity = '0'
-    }
-
-    await wait(550)
-    setPhase('unfolding')
-
-    // unfold new downward
-    if (nw) {
-      nw.style.transition = 'transform 500ms cubic-bezier(0.34,1.5,0.64,1), opacity 400ms ease'
-      nw.style.transform = 'perspective(800px) rotateX(0deg)'
-      nw.style.opacity = '1'
-    }
-
-    await wait(550)
-    setPhase('new')
-    setState('done')
-  }, [state, reduced])
-
-  const reset = useCallback(() => {
-    setPhase('old')
-    if (oldRef.current) {
-      oldRef.current.style.transition = 'none'
-      oldRef.current.style.transform = 'perspective(800px) rotateX(0deg)'
-      oldRef.current.style.opacity = '1'
-    }
-    if (newRef.current) {
-      newRef.current.style.transition = 'none'
-      newRef.current.style.transform = 'perspective(800px) rotateX(90deg)'
-      newRef.current.style.opacity = '0'
-    }
-    setState('idle')
-  }, [])
-
-  return (
-    <>
-      <Label num="09" title="Fold Away" annotation="Content folds like paper using CSS perspective and rotateX. Old content folds upward from bottom edge, new content unfolds downward from top. 500ms each." />
-      <Stage>
-        {/* old content */}
-        <div
-          ref={oldRef}
-          className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8"
-          style={{
-            transformOrigin: 'top center',
-            transform: 'perspective(800px) rotateX(0deg)',
-            backfaceVisibility: 'hidden',
-          }}
-        >
-          <div className="h-24 w-full max-w-md rounded-xl bg-[hsl(var(--game-ink))]/8" />
-          <h3 className="font-heading text-lg font-black text-[hsl(var(--game-ink))]">Original Content</h3>
-          <div className="flex gap-3">
-            {['Part A', 'Part B', 'Part C'].map((l) => (
-              <div key={l} className="flex h-16 w-24 items-center justify-center rounded-lg bg-[hsl(var(--game-ink))]/6 font-heading text-[10px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--game-ink-light))]">
-                {l}
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* new content */}
-        <div
-          ref={newRef}
-          className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 bg-[hsl(var(--game-white))]"
-          style={{
-            transformOrigin: 'top center',
-            transform: 'perspective(800px) rotateX(90deg)',
-            opacity: 0,
-            backfaceVisibility: 'hidden',
-          }}
-        >
-          <div className="h-24 w-full max-w-md rounded-xl bg-[hsl(var(--game-green))]/12" />
-          <h3 className="font-heading text-lg font-black text-[hsl(var(--game-green))]">Unfolded Content</h3>
-          <div className="flex gap-3">
-            {['New A', 'New B', 'New C'].map((l) => (
-              <div key={l} className="flex h-16 w-24 items-center justify-center rounded-lg bg-[hsl(var(--game-green))]/8 font-heading text-[10px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--game-green))]">
-                {l}
-              </div>
-            ))}
-          </div>
-        </div>
-      </Stage>
-      <Controls onPlay={play} onReset={reset} state={state} />
-    </>
-  )
-}
-
-/* ─── 10 Hero Sequence ─── */
-function HeroSequence() {
-  const reduced = usePrefersReducedMotion()
-  const [state, setState] = useState<'idle' | 'playing' | 'done'>('idle')
-  const seedRefs = useRef<(HTMLDivElement | null)[]>([])
-  const navRef = useRef<HTMLDivElement>(null)
-  const headingRef = useRef<HTMLDivElement>(null)
-  const cardsRef = useRef<HTMLDivElement>(null)
-  const footerRef = useRef<HTMLDivElement>(null)
-  const buttonRefs = useRef<(HTMLDivElement | null)[]>([])
-  const [showContent, setShowContent] = useState(false)
-
-  const seedColours = ['var(--game-amber)', 'var(--game-blue)', 'var(--game-green)']
-
-  const play = useCallback(async () => {
-    if (state === 'playing') return
-    setState('playing')
-    setShowContent(false)
-
-    if (reduced) {
-      setShowContent(true)
-      setState('done')
-      return
-    }
-
-    // reset everything
-    seedRefs.current.forEach((el) => {
-      if (el) { el.style.transition = 'none'; el.style.opacity = '0'; el.style.transform = 'scale(0.2) translate(0,0)' }
-    })
-    ;[navRef, headingRef, cardsRef, footerRef].forEach((ref) => {
-      if (ref.current) { ref.current.style.transition = 'none'; ref.current.style.opacity = '0'; ref.current.style.transform = 'scale(0.95)' }
-    })
-    buttonRefs.current.forEach((el) => {
-      if (el) { el.style.backgroundPosition = '-200% 0' }
-    })
-
-    await wait(200)
-
-    // (a) container starts empty — already empty
-
-    // (b) 3 seed dots fade in at centre, staggered 70ms
-    for (let i = 0; i < 3; i++) {
-      const el = seedRefs.current[i]
-      if (el) {
-        el.style.transition = `opacity 200ms ease ${i * 70}ms, transform 200ms ease ${i * 70}ms`
-        el.style.opacity = '1'
-        el.style.transform = 'scale(1) translate(0, 0)'
-      }
-    }
-    await wait(400)
-
-    // (c) seeds pulse twice
-    for (let pulse = 0; pulse < 2; pulse++) {
-      seedRefs.current.forEach((el) => {
-        if (el) {
-          el.style.transition = 'transform 100ms ease-out'
-          el.style.transform = 'scale(1.15) translate(0, 0)'
-        }
-      })
-      await wait(100)
-      seedRefs.current.forEach((el) => {
-        if (el) {
-          el.style.transition = 'transform 100ms ease-in'
-          el.style.transform = 'scale(0.9) translate(0, 0)'
-        }
-      })
-      await wait(100)
-    }
-    // settle
-    seedRefs.current.forEach((el) => {
-      if (el) {
-        el.style.transition = 'transform 100ms ease'
-        el.style.transform = 'scale(1) translate(0, 0)'
-      }
-    })
-    await wait(150)
-
-    // (d) seeds explode outward then settle
-    const positions = [
-      { x: -120, y: -80 },
-      { x: 0, y: -100 },
-      { x: 120, y: -80 },
-    ]
-    // fast explode
-    seedRefs.current.forEach((el, i) => {
-      if (el) {
-        el.style.transition = 'transform 200ms ease-out'
-        el.style.transform = `scale(1.4) translate(${positions[i].x}px, ${positions[i].y}px)`
-      }
-    })
-    await wait(220)
-    // settle
-    seedRefs.current.forEach((el, i) => {
-      if (el) {
-        el.style.transition = 'transform 300ms cubic-bezier(0.34,1.5,0.64,1)'
-        el.style.transform = `scale(1) translate(${positions[i].x}px, ${positions[i].y}px)`
-      }
-    })
-    await wait(350)
-
-    // (e) shockwave: reveal content in waves
-    setShowContent(true)
-    await wait(50)
-
-    const waveElements = [navRef, headingRef, cardsRef, footerRef]
-    for (let i = 0; i < waveElements.length; i++) {
-      const el = waveElements[i].current
-      if (el) {
-        el.style.transition = `opacity 300ms ease ${i * 100}ms, transform 300ms cubic-bezier(0.34,1.5,0.64,1) ${i * 100}ms`
-        el.style.opacity = '1'
-        el.style.transform = 'scale(1)'
-      }
-    }
-    await wait(700)
-
-    // (f) shimmer pass across buttons
-    buttonRefs.current.forEach((el, i) => {
-      if (el) {
-        el.style.transition = `background-position 600ms ease ${i * 150}ms`
-        el.style.backgroundPosition = '200% 0'
-      }
-    })
-
-    await wait(900)
-    setState('done')
-  }, [state, reduced])
-
-  const reset = useCallback(() => {
-    setShowContent(false)
-    seedRefs.current.forEach((el) => {
-      if (el) { el.style.transition = 'none'; el.style.opacity = '0'; el.style.transform = 'scale(0.2) translate(0,0)' }
-    })
-    ;[navRef, headingRef, cardsRef, footerRef].forEach((ref) => {
-      if (ref.current) { ref.current.style.transition = 'none'; ref.current.style.opacity = '0'; ref.current.style.transform = 'scale(0.95)' }
-    })
-    setState('idle')
-  }, [])
-
-  return (
-    <>
-      <Label num="10" title="Hero Sequence" annotation="Full entrance choreography. Seed dots appear, pulse, explode outward, triggering a shockwave that reveals content in radiating waves. Finishes with a shimmer flourish. ~3s total." />
-      <Stage>
-        {/* seed dots */}
-        <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 20 }}>
-          <div className="relative">
-            {seedColours.map((colour, i) => (
-              <div
-                key={i}
-                ref={(el) => { seedRefs.current[i] = el }}
-                className="absolute rounded-full"
-                style={{
-                  width: 16,
-                  height: 16,
-                  background: `hsl(${colour})`,
-                  boxShadow: `0 0 12px hsl(${colour} / 0.4)`,
-                  left: (i - 1) * 24 - 8,
-                  top: -8,
-                  opacity: 0,
-                  transform: 'scale(0.2) translate(0, 0)',
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* content layers */}
-        {showContent && (
-          <div className="absolute inset-0 flex flex-col gap-3 p-6" style={{ zIndex: 10 }}>
-            {/* nav */}
-            <div
-              ref={navRef}
-              className="flex items-center justify-between rounded-lg bg-[hsl(var(--game-ink))]/6 px-4 py-2"
-              style={{ opacity: 0, transform: 'scale(0.95)' }}
-            >
-              <div className="h-3 w-16 rounded bg-[hsl(var(--game-ink))]/15" />
-              <div className="flex gap-2">
-                {['Link', 'Link', 'Link'].map((l, i) => (
-                  <div key={i} className="h-3 w-10 rounded bg-[hsl(var(--game-ink))]/10" />
-                ))}
-              </div>
-            </div>
-
-            {/* heading */}
-            <div
-              ref={headingRef}
-              className="flex flex-col items-center gap-2 py-4"
-              style={{ opacity: 0, transform: 'scale(0.95)' }}
-            >
-              <h3 className="font-heading text-xl font-black text-[hsl(var(--game-ink))]">Welcome to Idle Hours</h3>
-              <p className="font-heading text-[12px] font-semibold italic text-[hsl(var(--game-ink-light))]">
-                Your cosy corner of gaming
-              </p>
-            </div>
-
-            {/* cards */}
-            <div
-              ref={cardsRef}
-              className="flex flex-1 gap-3"
-              style={{ opacity: 0, transform: 'scale(0.95)' }}
-            >
-              {seedColours.map((colour, i) => (
-                <div key={i} className="flex flex-1 flex-col items-center justify-center gap-2 rounded-xl" style={{ background: `hsl(${colour} / 0.1)` }}>
-                  <div className="h-12 w-12 rounded-lg" style={{ background: `hsl(${colour} / 0.2)` }} />
-                  <span className="font-heading text-[10px] font-bold uppercase tracking-[0.15em]" style={{ color: `hsl(${colour})` }}>
-                    {['Reviews', 'Guides', 'Lists'][i]}
-                  </span>
-                  {/* shimmer button */}
-                  <div
-                    ref={(el) => { buttonRefs.current[i] = el }}
-                    className="mt-1 rounded-full px-4 py-1 font-heading text-[9px] font-bold uppercase tracking-[0.1em] text-white"
-                    style={{
-                      background: `linear-gradient(110deg, hsl(${colour}) 0%, hsl(${colour}) 40%, hsl(${colour} / 0.6) 50%, hsl(${colour}) 60%, hsl(${colour}) 100%)`,
-                      backgroundSize: '200% 100%',
-                      backgroundPosition: '-200% 0',
-                    }}
-                  >
-                    Explore
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* footer */}
-            <div
-              ref={footerRef}
-              className="flex items-center justify-center rounded-lg bg-[hsl(var(--game-ink))]/4 py-2"
-              style={{ opacity: 0, transform: 'scale(0.95)' }}
-            >
-              <div className="h-3 w-32 rounded bg-[hsl(var(--game-ink))]/8" />
-            </div>
-          </div>
-        )}
-      </Stage>
-      <Controls onPlay={play} onReset={reset} state={state} />
+      </div>
     </>
   )
 }
@@ -1323,19 +666,15 @@ export default function MacroAnimationsPage() {
         <div className="mt-16 flex flex-col gap-20">
           <section><CircleMaskReveal /></section>
           <section><ContentStripTransition /></section>
-          <section><CardMorph /></section>
           <section><SlideStack /></section>
-          <section><ZoomThrough /></section>
           <section><GravityDrop /></section>
-          <section><IrisWipe /></section>
-          <section><ScatterGather /></section>
-          <section><FoldAway /></section>
-          <section><HeroSequence /></section>
+          <section><DirectionalWipes /></section>
+          <section><ScrollHeaderShrink /></section>
         </div>
 
         <div className="mt-20 border-t border-[hsl(var(--game-ink))]/10 pt-8 text-center">
           <p className="font-heading text-[11px] font-semibold text-[hsl(var(--game-ink-light))]">
-            End of component library. All 10 macro animation demos above.
+            End of component library. All 4 macro animation demos above.
           </p>
         </div>
       </div>

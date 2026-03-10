@@ -20,7 +20,8 @@ export interface RankThreshold {
 }
 
 export const GAME_SENSE_LADDER: RankThreshold[] = [
-  { name: 'Keep Guessing', label: '0\u2013349 pts' },
+  { name: 'Bust', label: '0 pts' },
+  { name: 'Keep Guessing', label: '1\u2013349 pts' },
   { name: 'Getting Warmer', label: '350\u2013599 pts' },
   { name: 'Well Played', label: '600\u2013799 pts' },
   { name: 'Encyclopaedic', label: '800+ pts' },
@@ -41,6 +42,29 @@ export const SHELF_PRICE_LADDER: RankThreshold[] = [
 ]
 
 export type GameSlug = 'game-sense' | 'street-date' | 'shelf-price'
+
+/** Per-game accent colours for badges, scores, and highlights */
+export const GAME_COLORS: Record<GameSlug, {
+  accent: string       // CSS colour for text/bg accents
+  shadow: string       // rgba shadow for badge glow
+  confetti: string[]   // confetti palette
+}> = {
+  'game-sense': {
+    accent: 'hsl(var(--game-blue))',
+    shadow: 'rgba(74,143,232,0.35)',
+    confetti: ['#4A8FE8', '#C8873A', '#27A85A', '#F0EBE0', '#2D6BC4'],
+  },
+  'street-date': {
+    accent: 'hsl(var(--game-green))',
+    shadow: 'rgba(39,168,90,0.35)',
+    confetti: ['#27A85A', '#1A7A40', '#C8873A', '#F0EBE0', '#4A8FE8'],
+  },
+  'shelf-price': {
+    accent: '#5B4FCF',
+    shadow: 'rgba(91,79,207,0.35)',
+    confetti: ['#5B4FCF', '#7B6FE8', '#C8873A', '#F0EBE0', '#4A8FE8'],
+  },
+}
 
 export function getLadderForGame(game: GameSlug): RankThreshold[] {
   switch (game) {

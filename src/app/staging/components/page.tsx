@@ -253,51 +253,12 @@ function ExpandReveal() {
   )
 }
 
-/* ─── 07 Magnetic Hover ─── */
-function MagneticHover() {
-  const btnRef = useRef<HTMLButtonElement>(null)
-  const [offset, setOffset] = useState({ x: 0, y: 0 })
-  const [isHovered, setIsHovered] = useState(false)
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!btnRef.current) return
-    const rect = btnRef.current.getBoundingClientRect()
-    const cx = rect.left + rect.width / 2
-    const cy = rect.top + rect.height / 2
-    const dx = (e.clientX - cx) / (rect.width / 2) * 4
-    const dy = (e.clientY - cy) / (rect.height / 2) * 4
-    setOffset({ x: dx, y: dy })
-  }
-
-  return (
-    <>
-      <Label num="07" title="Magnetic Hover" annotation="Subtly follows your cursor within the button bounds. Snaps back with spring easing." />
-      <Section>
-        <button
-          ref={btnRef}
-          className="rounded-full bg-[hsl(var(--game-blue))] px-7 py-3 font-heading text-[14px] font-[800] text-white"
-          style={{
-            transform: isHovered ? `translate(${offset.x}px, ${offset.y}px)` : 'translate(0, 0)',
-            transition: isHovered ? 'transform 0.1s ease-out' : `transform 0.4s ${spring}`,
-            boxShadow: '0 5px 0 hsl(var(--game-blue-dark))',
-          }}
-          onMouseMove={handleMouseMove}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => { setIsHovered(false); setOffset({ x: 0, y: 0 }) }}
-        >
-          Magnetic
-        </button>
-      </Section>
-    </>
-  )
-}
-
-/* ─── 08 Split Action ─── */
+/* ─── 07 Split Action ─── */
 function SplitAction() {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   return (
     <>
-      <Label num="08" title="Split Action" annotation="Primary action + dropdown chevron separated by a divider. Independent hover states." />
+      <Label num="07" title="Split Action" annotation="Primary action + dropdown chevron separated by a divider. Independent hover states." />
       <Section>
         <div className="relative inline-flex">
           <button
@@ -340,7 +301,7 @@ function SplitAction() {
   )
 }
 
-/* ─── 09 Loading State ─── */
+/* ─── 08 Loading State ─── */
 function LoadingState() {
   const [state, setState] = useState<'idle' | 'loading' | 'done'>('idle')
 
@@ -353,7 +314,7 @@ function LoadingState() {
 
   return (
     <>
-      <Label num="09" title="Loading State" annotation="Click to trigger loading spinner, then resolves to a done state. Full lifecycle button." />
+      <Label num="08" title="Loading State" annotation="Click to trigger loading spinner, then resolves to a done state. Full lifecycle button." />
       <Section>
         <style>{`@keyframes spin-loader { to { transform: rotate(360deg); } }`}</style>
         <button
@@ -385,7 +346,7 @@ function LoadingState() {
   )
 }
 
-/* ─── 10 Confirm Gate ─── */
+/* ─── 09 Confirm Gate ─── */
 function ConfirmGate() {
   const [phase, setPhase] = useState<'idle' | 'confirm' | 'done'>('idle')
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -406,7 +367,7 @@ function ConfirmGate() {
 
   return (
     <>
-      <Label num="10" title="Confirm Gate" annotation="Two-step destructive action. First click warns, second confirms. Auto-resets after 3 seconds." />
+      <Label num="09" title="Confirm Gate" annotation="Two-step destructive action. First click warns, second confirms. Auto-resets after 3 seconds." />
       <Section>
         <button
           onClick={handleClick}
@@ -424,12 +385,12 @@ function ConfirmGate() {
   )
 }
 
-/* ─── 11 Pill Toggle ─── */
+/* ─── 10 Pill Toggle ─── */
 function PillToggle() {
   const [active, setActive] = useState<'daily' | 'blitz'>('daily')
   return (
     <>
-      <Label num="11" title="Pill Toggle" annotation="Binary toggle with sliding indicator. Spring-animated slider moves between the two options." />
+      <Label num="10" title="Pill Toggle" annotation="Binary toggle with sliding indicator. Spring-animated slider moves between the two options." />
       <Section>
         <div className="relative inline-flex rounded-full bg-[hsl(var(--game-cream))] p-1" style={{ border: '1.5px solid hsl(var(--game-ink) / 0.1)' }}>
           <div
@@ -459,42 +420,12 @@ function PillToggle() {
   )
 }
 
-/* ─── 12 Ghost Button ─── */
-function GhostButton() {
-  return (
-    <>
-      <Label num="12" title="Ghost Button" annotation="Nearly invisible at rest. Border and text materialise on hover. A hidden control waiting to be found." />
-      <Section>
-        <button
-          className="rounded-full px-7 py-3 font-heading text-[14px] font-[800]"
-          style={{
-            border: '1.5px solid transparent',
-            color: 'transparent',
-            transition: 'all 0.4s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = 'hsl(var(--game-ink))'
-            e.currentTarget.style.color = 'hsl(var(--game-ink))'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = 'transparent'
-            e.currentTarget.style.color = 'transparent'
-          }}
-        >
-          Ghost Action
-        </button>
-        <p className="mt-3 font-heading text-[11px] font-semibold text-[hsl(var(--game-ink-dim))]">Hover here to reveal</p>
-      </Section>
-    </>
-  )
-}
-
-/* ─── 13 Stamp Press ─── */
+/* ─── 11 Stamp Press ─── */
 function StampPress() {
   const [stamped, setStamped] = useState(false)
   return (
     <>
-      <Label num="13" title="Stamp Press" annotation="Click for a satisfying stamp animation. Scales down then overshoots back. Passport-stamp energy." />
+      <Label num="11" title="Stamp Press" annotation="Click for a satisfying stamp animation. Scales down then overshoots back. Passport-stamp energy." />
       <Section>
         <style>{`
           @keyframes stamp-press {
@@ -523,59 +454,11 @@ function StampPress() {
   )
 }
 
-/* ─── 14 Text Scramble ─── */
-function TextScramble() {
-  const text = 'Scramble'
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%&*'
-  const [display, setDisplay] = useState(text)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-
-  const scramble = () => {
-    let resolvedCount = 0
-    const totalDuration = 400
-    const stepTime = totalDuration / text.length
-
-    intervalRef.current = setInterval(() => {
-      resolvedCount++
-      setDisplay(
-        text
-          .split('')
-          .map((ch, i) => (i < resolvedCount ? ch : chars[Math.floor(Math.random() * chars.length)]))
-          .join('')
-      )
-      if (resolvedCount >= text.length) {
-        if (intervalRef.current) clearInterval(intervalRef.current)
-      }
-    }, stepTime)
-  }
-
-  const reset = () => {
-    if (intervalRef.current) clearInterval(intervalRef.current)
-    setDisplay(text)
-  }
-
-  return (
-    <>
-      <Label num="14" title="Text Scramble" annotation="Characters scramble into random glyphs on hover, then resolve left-to-right. Cyberpunk-cosy." />
-      <Section>
-        <button
-          className="rounded-full bg-[hsl(var(--game-ink))] px-7 py-3 font-heading text-[14px] font-[800] tracking-wider text-[hsl(var(--game-cream))]"
-          style={{ boxShadow: '0 5px 0 rgba(0,0,0,0.5)', fontVariantNumeric: 'tabular-nums' }}
-          onMouseEnter={scramble}
-          onMouseLeave={reset}
-        >
-          <span className="inline-block min-w-[80px] text-center font-mono">{display}</span>
-        </button>
-      </Section>
-    </>
-  )
-}
-
-/* ─── 15 Stripe Glow ─── */
+/* ─── 12 Stripe Glow ─── */
 function StripeGlow() {
   return (
     <>
-      <Label num="15" title="Stripe Glow" annotation="B2 stripe energy combined with an ambient outer glow. Hover intensifies the amber radiance." />
+      <Label num="12" title="Stripe Glow" annotation="B2 stripe energy combined with an ambient outer glow. Hover intensifies the amber radiance." />
       <Section>
         <style>{`
           @keyframes stripe-scroll-2 { 0% { background-position: 0 0; } 100% { background-position: 28px 28px; } }
@@ -608,11 +491,159 @@ function StripeGlow() {
   )
 }
 
+/* ─── 13 Glow Blue ─── */
+function GlowBlue() {
+  return (
+    <>
+      <Label num="13" title="Glow Blue" annotation="Ambient blue glow radiates outward on hover. No bevel shadow, pure light energy. Lift + expanding ring of colour." />
+      <Section>
+        <button
+          className="inline-flex items-center justify-center gap-2 rounded-full border-none px-[30px] py-[14px] font-heading text-[14px] font-extrabold text-white transition-all duration-200"
+          style={{
+            background: '#4A8FE8',
+            boxShadow: '0 0 0 0 rgba(74,143,232,0.5)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 0 8px rgba(74,143,232,0.18), 0 0 30px rgba(74,143,232,0.4)'
+            e.currentTarget.style.transform = 'translateY(-2px)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 0 0 rgba(74,143,232,0.5)'
+            e.currentTarget.style.transform = 'translateY(0)'
+          }}
+        >
+          Play today →
+        </button>
+      </Section>
+    </>
+  )
+}
+
+/* ─── 14 Glow Amber ─── */
+function GlowAmber() {
+  return (
+    <>
+      <Label num="14" title="Glow Amber" annotation="Same ambient glow system in amber. Warmer, editorial feel. Pairs with article CTAs and Blitz-adjacent actions." />
+      <Section>
+        <button
+          className="inline-flex items-center justify-center gap-2 rounded-full border-none px-[30px] py-[14px] font-heading text-[14px] font-extrabold text-white transition-all duration-200"
+          style={{
+            background: '#C8873A',
+            boxShadow: '0 0 0 0 rgba(200,135,58,0.5)',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 0 8px rgba(200,135,58,0.18), 0 0 30px rgba(200,135,58,0.4)'
+            e.currentTarget.style.transform = 'translateY(-2px)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 0 0 rgba(200,135,58,0.5)'
+            e.currentTarget.style.transform = 'translateY(0)'
+          }}
+        >
+          Read more
+        </button>
+      </Section>
+    </>
+  )
+}
+
+/* ─── 15 Glass Button ─── */
+function GlassButton() {
+  return (
+    <>
+      <Label num="15" title="Glass Button" annotation="Translucent frosted glass with backdrop blur. Designed for use over dark/gradient backgrounds. Border and inner highlight create depth." />
+      <Section>
+        <div className="flex items-center justify-center rounded-2xl p-8" style={{ background: 'linear-gradient(135deg, #1a2a4a, #2D6BC4)' }}>
+          <button
+            className="inline-flex items-center justify-center gap-2 rounded-full px-[30px] py-[14px] font-heading text-[14px] font-extrabold text-white transition-all duration-200"
+            style={{
+              background: 'rgba(255,255,255,0.12)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.22)'
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)'
+              e.currentTarget.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.12)'
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'
+              e.currentTarget.style.transform = 'translateY(0)'
+            }}
+          >
+            Play →
+          </button>
+        </div>
+      </Section>
+    </>
+  )
+}
+
+/* ─── 16 Text Slide ─── */
+function TextSlide() {
+  return (
+    <>
+      <Label num="16" title="Text Slide" annotation="Ink button with vertically stacked duplicate text. On hover the text slides up to reveal the amber copy beneath. Spring easing on the slide." />
+      <Section>
+        <style>{`
+          .b8-text-wrap { display: flex; flex-direction: column; height: 1.2em; overflow: hidden; align-items: center; }
+          .b8-text-wrap span { display: block; transition: transform 0.25s cubic-bezier(0.34,1.5,0.64,1); }
+          .b8-host:hover .b8-text-wrap span:first-child { transform: translateY(-100%); }
+          .b8-host:hover .b8-text-wrap span:last-child { transform: translateY(-100%); }
+        `}</style>
+        <button
+          className="b8-host relative inline-flex items-center justify-center overflow-hidden rounded-full border-none px-[30px] py-[14px] font-heading text-[14px] font-extrabold text-white transition-transform duration-75"
+          style={{
+            background: 'hsl(var(--game-ink))',
+            boxShadow: '0 5px 0 rgba(0,0,0,0.4)',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)' }}
+          onMouseDown={(e) => { e.currentTarget.style.transform = 'translateY(4px)'; e.currentTarget.style.boxShadow = '0 1px 0 rgba(0,0,0,0.4)' }}
+          onMouseUp={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 5px 0 rgba(0,0,0,0.4)' }}
+        >
+          <div className="b8-text-wrap">
+            <span>Read the review</span>
+            <span style={{ color: 'hsl(var(--game-amber))' }}>Read the review</span>
+          </div>
+        </button>
+      </Section>
+    </>
+  )
+}
+
+/* ─── 17 Shimmer ─── */
+function ShimmerButton() {
+  return (
+    <>
+      <Label num="17" title="Shimmer" annotation="Gradient cycles through blue → purple → blue on an infinite loop. Catches the eye for primary CTAs. Background-size 200% with shimmer keyframe." />
+      <Section>
+        <style>{`
+          @keyframes shimmerBtn { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        `}</style>
+        <button
+          className="inline-flex items-center justify-center gap-2 rounded-full border-none px-[30px] py-[14px] font-heading text-[14px] font-extrabold text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110"
+          style={{
+            background: 'linear-gradient(90deg, #4A8FE8, #5B4FCF, #4A8FE8)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmerBtn 2.5s linear infinite',
+            boxShadow: '0 5px 0 rgba(0,0,0,0.2)',
+          }}
+        >
+          Start playing
+        </button>
+      </Section>
+    </>
+  )
+}
+
 /* ═══════════════════════════════════════════
-   OTHER COMPONENTS (16-27)
+   OTHER COMPONENTS (18-24)
    ═══════════════════════════════════════════ */
 
-/* ─── 16 Search Bar ─── */
+/* ─── 13 Search Bar ─── */
 function SearchBar() {
   const [focused, setFocused] = useState(false)
   const [query, setQuery] = useState('')
@@ -620,7 +651,7 @@ function SearchBar() {
 
   return (
     <>
-      <Label num="16" title="Search Bar" annotation="Expandable rounded input with search icon. Recent search chips below. Focus widens the field." />
+      <Label num="18" title="Search Bar" annotation="Expandable rounded input with search icon. Recent search chips below. Focus widens the field." />
       <Section>
         <div className="max-w-md">
           <div
@@ -662,99 +693,7 @@ function SearchBar() {
   )
 }
 
-/* ─── 17 Range Slider ─── */
-function RangeSlider() {
-  const [value, setValue] = useState(65)
-  return (
-    <>
-      <Label num="17" title="Range Slider" annotation="Custom styled range input. Amber fill track with floating value tooltip above the thumb." />
-      <Section>
-        <div className="max-w-sm">
-          <div className="relative pb-2 pt-8">
-            {/* Tooltip */}
-            <div
-              className="absolute top-0 -translate-x-1/2 rounded-lg bg-[hsl(var(--game-ink))] px-2.5 py-1 font-heading text-[12px] font-[800] text-white"
-              style={{ left: `${value}%`, transition: `left 0.1s ease` }}
-            >
-              {value}
-              <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-[hsl(var(--game-ink))]" />
-            </div>
-            {/* Track bg */}
-            <div className="relative h-2 w-full rounded-full bg-[hsl(var(--game-cream-dark))]">
-              <div className="absolute left-0 top-0 h-full rounded-full bg-[hsl(var(--game-amber))]" style={{ width: `${value}%` }} />
-            </div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={value}
-              onChange={(e) => setValue(Number(e.target.value))}
-              className="absolute inset-0 top-6 h-2 w-full cursor-pointer opacity-0"
-            />
-            {/* Thumb visual */}
-            <div
-              className="absolute top-6 h-5 w-5 -translate-x-1/2 -translate-y-[6px] rounded-full border-2 border-[hsl(var(--game-ink))] bg-white shadow-[0_2px_6px_rgba(0,0,0,0.15)]"
-              style={{ left: `${value}%`, pointerEvents: 'none', transition: 'left 0.1s ease' }}
-            />
-          </div>
-          <div className="mt-2 flex justify-between font-heading text-[11px] font-semibold text-[hsl(var(--game-ink-dim))]">
-            <span>0</span><span>50</span><span>100</span>
-          </div>
-        </div>
-      </Section>
-    </>
-  )
-}
-
-/* ─── 18 Streak Calendar ─── */
-function StreakCalendar() {
-  const days = Array.from({ length: 31 }, (_, i) => {
-    const r = Math.random()
-    if (i === 8) return 'today' // March 9 = index 8
-    if (r > 0.45) return 'played'
-    return 'missed'
-  })
-  const streakCount = days.filter((d) => d === 'played' || d === 'today').length
-  // March 2026 starts on Sunday
-  const startDay = 0
-
-  return (
-    <>
-      <Label num="18" title="Streak Calendar" annotation="Month grid showing play streaks. Amber for played, blue ring for today, empty for missed." />
-      <Section>
-        <div className="w-fit rounded-xl border-[1.5px] border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))] p-5">
-          <div className="mb-3 flex items-center justify-between">
-            <span className="font-heading text-[15px] font-[800] text-[hsl(var(--game-ink))]">March 2026</span>
-            <span className="rounded-full bg-[hsl(var(--game-amber))]/15 px-3 py-0.5 font-heading text-[11px] font-bold text-[hsl(var(--game-amber))]">{streakCount} day streak</span>
-          </div>
-          <div className="mb-1 grid grid-cols-7 gap-1.5">
-            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
-              <span key={i} className="flex h-6 w-6 items-center justify-center font-heading text-[9px] font-bold text-[hsl(var(--game-ink-dim))]">{d}</span>
-            ))}
-          </div>
-          <div className="grid grid-cols-7 gap-1.5">
-            {Array.from({ length: startDay }).map((_, i) => <div key={`e-${i}`} className="h-6 w-6" />)}
-            {days.map((d, i) => (
-              <div
-                key={i}
-                className="flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold"
-                style={{
-                  background: d === 'played' ? 'hsl(var(--game-amber))' : 'transparent',
-                  color: d === 'played' ? 'white' : 'hsl(var(--game-ink-dim))',
-                  border: d === 'today' ? '2px solid hsl(var(--game-blue))' : d === 'missed' ? '1.5px solid hsl(var(--game-ink) / 0.08)' : 'none',
-                }}
-              >
-                {i + 1}
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-    </>
-  )
-}
-
-/* ─── 19 Heart Button ─── */
+/* ─── 14 Heart Button ─── */
 function HeartButton() {
   const [liked, setLiked] = useState(false)
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; angle: number }[]>([])
@@ -813,111 +752,7 @@ function HeartButton() {
   )
 }
 
-/* ─── 20 Progress Ring ─── */
-function ProgressRing() {
-  const [progress, setProgress] = useState(0)
-  const targetProgress = 73
-  const radius = 52
-  const circumference = 2 * Math.PI * radius
-
-  useEffect(() => {
-    const timer = setTimeout(() => setProgress(targetProgress), 300)
-    return () => clearTimeout(timer)
-  }, [])
-
-  return (
-    <>
-      <Label num="20" title="Progress Ring" annotation="SVG stroke-dasharray animated ring. Percentage in the centre. Amber stroke on cream track." />
-      <Section>
-        <div className="relative inline-flex h-[120px] w-[120px] items-center justify-center">
-          <svg width="120" height="120" viewBox="0 0 120 120" className="-rotate-90">
-            <circle cx="60" cy="60" r={radius} fill="none" stroke="hsl(var(--game-cream-dark))" strokeWidth="10" />
-            <circle
-              cx="60" cy="60" r={radius} fill="none"
-              stroke="hsl(var(--game-amber))"
-              strokeWidth="10"
-              strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference - (progress / 100) * circumference}
-              style={{ transition: 'stroke-dashoffset 1s ease-out' }}
-            />
-          </svg>
-          <span className="absolute font-heading text-[28px] font-[900] text-[hsl(var(--game-ink))]">{progress}%</span>
-        </div>
-      </Section>
-    </>
-  )
-}
-
-/* ─── 21 Star Rating ─── */
-function StarRating() {
-  const [rating, setRating] = useState(0)
-  const [hover, setHover] = useState(0)
-
-  return (
-    <>
-      <Label num="21" title="Star Rating" annotation="Five interactive stars. Hover previews the rating, click locks it in. Amber filled, outline empty." />
-      <Section>
-        <div className="flex gap-1">
-          {[1, 2, 3, 4, 5].map((star) => {
-            const filled = star <= (hover || rating)
-            return (
-              <button
-                key={star}
-                onClick={() => setRating(star)}
-                onMouseEnter={() => setHover(star)}
-                onMouseLeave={() => setHover(0)}
-                className="p-0.5"
-                style={{ transition: `transform 0.2s ${spring}`, transform: filled ? 'scale(1.15)' : 'scale(1)' }}
-              >
-                <svg width="28" height="28" viewBox="0 0 24 24" fill={filled ? 'hsl(var(--game-amber))' : 'none'} stroke={filled ? 'hsl(var(--game-amber))' : 'hsl(var(--game-ink-dim))'} strokeWidth="1.5">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-              </button>
-            )
-          })}
-        </div>
-        {rating > 0 && (
-          <p className="mt-2 font-heading text-[12px] font-semibold text-[hsl(var(--game-ink-light))]">
-            You rated this {rating} star{rating > 1 ? 's' : ''}
-          </p>
-        )}
-      </Section>
-    </>
-  )
-}
-
-/* ─── 22 Notification Badge ─── */
-function NotificationBadge() {
-  const counts = [3, 12, '99+']
-  return (
-    <>
-      <Label num="22" title="Notification Badge" annotation="Icon placeholder with a spring-animated red count pill. Demonstrates small, medium, and overflow." />
-      <Section>
-        <style>{`@keyframes badge-pop { 0% { transform: scale(0) translate(50%,-50%); } 60% { transform: scale(1.2) translate(50%,-50%); } 100% { transform: scale(1) translate(50%,-50%); } }`}</style>
-        <div className="flex gap-6">
-          {counts.map((count, i) => (
-            <div key={i} className="relative">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(var(--game-cream-dark))]">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="hsl(var(--game-ink-mid))" strokeWidth="2" strokeLinecap="round">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                </svg>
-              </div>
-              <span
-                className="absolute right-0 top-0 flex h-5 min-w-5 origin-center items-center justify-center rounded-full bg-[hsl(var(--game-red))] px-1.5 font-heading text-[10px] font-[800] text-white"
-                style={{ transform: 'translate(50%,-50%)', animation: `badge-pop 0.4s ${spring}`, animationDelay: `${i * 150}ms`, animationFillMode: 'both' }}
-              >
-                {count}
-              </span>
-            </div>
-          ))}
-        </div>
-      </Section>
-    </>
-  )
-}
-
-/* ─── 23 Accordion ─── */
+/* ─── 15 Accordion ─── */
 function Accordion() {
   const [open, setOpen] = useState<number | null>(0)
   const items = [
@@ -928,7 +763,7 @@ function Accordion() {
 
   return (
     <>
-      <Label num="23" title="Accordion" annotation="Expandable sections with rotating chevron. Only one open at a time. Spring-eased height reveal." />
+      <Label num="20" title="Accordion" annotation="Expandable sections with rotating chevron. Only one open at a time. Spring-eased height reveal." />
       <Section>
         <div className="max-w-md">
           {items.map((item, i) => (
@@ -965,7 +800,7 @@ function Accordion() {
   )
 }
 
-/* ─── 24 Tab Bar ─── */
+/* ─── 16 Tab Bar ─── */
 function TabBar() {
   const tabs = ['Overview', 'Reviews', 'Media', 'Related']
   const [active, setActive] = useState(0)
@@ -992,7 +827,7 @@ function TabBar() {
 
   return (
     <>
-      <Label num="24" title="Tab Bar" annotation="Horizontal tabs with a sliding amber underline. Each tab reveals different content below." />
+      <Label num="21" title="Tab Bar" annotation="Horizontal tabs with a sliding amber underline. Each tab reveals different content below." />
       <Section>
         <div className="max-w-md">
           <div className="relative flex border-b border-[hsl(var(--game-ink))]/10">
@@ -1030,7 +865,7 @@ function TabBar() {
   )
 }
 
-/* ─── 25 Tooltip ─── */
+/* ─── 17 Tooltip ─── */
 function TooltipDemo() {
   const [visible, setVisible] = useState<string | null>(null)
 
@@ -1072,7 +907,7 @@ function TooltipDemo() {
 
   return (
     <>
-      <Label num="25" title="Tooltip" annotation="Hover targets with spring-scaled tooltip in three directions. Arrow pointer and ink background." />
+      <Label num="22" title="Tooltip" annotation="Hover targets with spring-scaled tooltip in three directions. Arrow pointer and ink background." />
       <Section>
         <div className="flex flex-wrap items-center gap-8 py-6">
           <Tip direction="top" label="Top" tip="Tooltip above" />
@@ -1084,7 +919,7 @@ function TooltipDemo() {
   )
 }
 
-/* ─── 26 Custom Select ─── */
+/* ─── 18 Custom Select ─── */
 function CustomSelect() {
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState('All Genres')
@@ -1101,7 +936,7 @@ function CustomSelect() {
 
   return (
     <>
-      <Label num="26" title="Custom Select" annotation="Dropdown with spring animation. Options highlight on hover. Selected option shown in trigger." />
+      <Label num="23" title="Custom Select" annotation="Dropdown with spring animation. Options highlight on hover. Selected option shown in trigger." />
       <Section>
         <div className="relative w-56" ref={ref}>
           <button
@@ -1142,7 +977,7 @@ function CustomSelect() {
   )
 }
 
-/* ─── 27 Mini Bar Chart ─── */
+/* ─── 19 Mini Bar Chart ─── */
 function MiniBarChart() {
   const data = [
     { day: 'Mon', value: 45 },
@@ -1158,7 +993,7 @@ function MiniBarChart() {
 
   return (
     <>
-      <Label num="27" title="Mini Bar Chart" annotation="Seven-day play time chart. Amber bars with hover values. Proportional heights in a compact container." />
+      <Label num="24" title="Mini Bar Chart" annotation="Seven-day play time chart. Amber bars with hover values. Proportional heights in a compact container." />
       <Section>
         <div className="inline-flex flex-col rounded-xl bg-[hsl(var(--game-cream-dark))] p-5">
           <div className="mb-1 font-heading text-[11px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-dim))]">Play Time This Week</div>
@@ -1200,6 +1035,364 @@ function MiniBarChart() {
 }
 
 /* ═══════════════════════════════════════════
+   20-26: BEVEL BUTTON SYSTEM
+   ═══════════════════════════════════════════ */
+
+const bevelButtons = [
+  { label: 'Play today →', bg: '#4A8FE8', shadow: '#2D6BC4', text: 'white', border: '#2D6BC4', variant: 'blue' },
+  { label: 'Read more', bg: '#C8873A', shadow: '#9D6328', text: 'white', border: '#9D6328', variant: 'amber' },
+  { label: 'Done ✓', bg: '#27A85A', shadow: '#1A7A40', text: 'white', border: '#1A7A40', variant: 'green' },
+  { label: 'Shelf Price', bg: '#5B4FCF', shadow: '#3D35A0', text: 'white', border: '#3D35A0', variant: 'purple' },
+  { label: '⚡ Start Blitz', bg: '#E05A1A', shadow: '#B04010', text: 'white', border: '#B04010', variant: 'blitz' },
+  { label: '← Back', bg: '#1A1A14', shadow: '#000000', text: '#F5F0E8', border: '#000000', variant: 'ink' },
+  { label: 'Maybe later', bg: 'transparent', shadow: 'none', text: 'hsl(var(--game-ink))', border: 'hsl(var(--game-cream-dark))', variant: 'ghost' },
+] as const
+
+function BevelButtonSystem() {
+  return (
+    <>
+      <Label num="25" title="Bevel Button System" annotation="Physical press buttons with 3D shadow. Hover lifts (-3px), active presses (4px). Shadow colour matches the button's darker shade, never black." />
+      <Section>
+        <style>{`
+          @keyframes stripeScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 28px 28px; }
+          }
+        `}</style>
+        <div className="flex flex-wrap items-center gap-4">
+          {bevelButtons.map((btn) => {
+            const isGhost = btn.variant === 'ghost'
+            const isBlitz = btn.variant === 'blitz'
+            return (
+              <button
+                key={btn.variant}
+                className="relative overflow-hidden rounded-full font-heading text-[14px] font-black"
+                style={{
+                  background: btn.bg,
+                  color: btn.text,
+                  padding: '14px 28px',
+                  border: `2px solid ${btn.border}`,
+                  boxShadow: isGhost ? 'none' : `0 5px 0 ${btn.shadow}`,
+                  transition: `transform 0.1s ${spring}, box-shadow 0.1s ${spring}`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-3px)'
+                  if (!isGhost) e.currentTarget.style.boxShadow = `0 8px 0 ${btn.shadow}`
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  if (!isGhost) e.currentTarget.style.boxShadow = `0 5px 0 ${btn.shadow}`
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = 'translateY(4px)'
+                  if (!isGhost) e.currentTarget.style.boxShadow = `0 1px 0 ${btn.shadow}`
+                }}
+                onMouseUp={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-3px)'
+                  if (!isGhost) e.currentTarget.style.boxShadow = `0 8px 0 ${btn.shadow}`
+                }}
+              >
+                {isBlitz && (
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 rounded-full"
+                    style={{
+                      backgroundImage: 'linear-gradient(-45deg, rgba(255,255,255,0.07) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.07) 75%, transparent 75%)',
+                      backgroundSize: '28px 28px',
+                      animation: 'stripeScroll 3s linear infinite',
+                    }}
+                  />
+                )}
+                <span className="relative z-10">{btn.label}</span>
+              </button>
+            )
+          })}
+        </div>
+      </Section>
+    </>
+  )
+}
+
+/* ═══════════════════════════════════════════
+   21: TOOLTIPS (STANDARD + WOBBLE)
+   ═══════════════════════════════════════════ */
+
+function TooltipSystem() {
+  const [stdTip, setStdTip] = useState<string | null>(null)
+  const [wobbleTip, setWobbleTip] = useState<string | null>(null)
+
+  const standardIcons = [
+    { id: 'question', icon: '?', bg: 'hsl(var(--game-cream-dark))', tip: 'Need help? Click for FAQ' },
+    { id: 'info', icon: 'i', bg: 'hsl(var(--game-blue-light, 210 80% 92%))', tip: 'Games updated daily' },
+    { id: 'warning', icon: '!', bg: 'hsl(40 90% 88%)', tip: 'Streak expires at midnight' },
+  ]
+
+  const wobbleEmojis = [
+    { id: 'gamepad', emoji: '🎮', bg: '#E8F0FE', tip: '42 games played' },
+    { id: 'bolt', emoji: '⚡', bg: '#FFF3E0', tip: 'Blitz mode active' },
+    { id: 'trophy', emoji: '🏆', bg: '#E8F5E9', tip: '#1 this week' },
+  ]
+
+  return (
+    <>
+      <Label num="26" title="Tooltips (Standard + Wobble)" annotation="Standard tooltips spring-scale on hover. Wobble tooltips rock left-right before settling. Transform-origin: bottom center for wobble." />
+      <Section>
+        <style>{`
+          @keyframes tooltipWobble {
+            0%   { transform: translateX(-50%) translateY(-8px) rotate(0deg) scale(1); }
+            12%  { transform: translateX(-50%) translateY(-8px) rotate(-8deg) scale(1); }
+            25%  { transform: translateX(-50%) translateY(-8px) rotate(6deg) scale(1); }
+            37%  { transform: translateX(-50%) translateY(-8px) rotate(-4deg) scale(1); }
+            50%  { transform: translateX(-50%) translateY(-8px) rotate(2.5deg) scale(1); }
+            62%  { transform: translateX(-50%) translateY(-8px) rotate(-1.5deg) scale(1); }
+            75%  { transform: translateX(-50%) translateY(-8px) rotate(0.8deg) scale(1); }
+            100% { transform: translateX(-50%) translateY(-8px) rotate(0deg) scale(1); }
+          }
+        `}</style>
+        <div className="flex flex-col gap-8 sm:flex-row sm:gap-16">
+          {/* Standard */}
+          <div>
+            <div className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-dim))]">Standard</div>
+            <div className="flex items-center gap-5 py-6">
+              {standardIcons.map((item) => (
+                <div key={item.id} className="relative inline-block">
+                  <button
+                    className="flex h-10 w-10 items-center justify-center rounded-full font-heading text-[15px] font-black text-[hsl(var(--game-ink-mid))]"
+                    style={{ background: item.bg, transition: `transform 0.2s ${spring}` }}
+                    onMouseEnter={(e) => { setStdTip(item.id); e.currentTarget.style.transform = 'scale(1.08)' }}
+                    onMouseLeave={(e) => { setStdTip(null); e.currentTarget.style.transform = 'scale(1)' }}
+                  >
+                    {item.icon}
+                  </button>
+                  <div
+                    className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 whitespace-nowrap rounded-lg bg-[hsl(var(--game-ink))] px-3 py-1.5 font-heading text-[12px] font-semibold text-[hsl(var(--game-cream))]"
+                    style={{
+                      transform: `translateX(-50%) translateY(-8px) scale(${stdTip === item.id ? 1 : 0.8})`,
+                      transformOrigin: 'bottom center',
+                      opacity: stdTip === item.id ? 1 : 0,
+                      transition: `all 0.25s ${spring}`,
+                    }}
+                  >
+                    {item.tip}
+                    <div className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-[hsl(var(--game-ink))]" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Wobble */}
+          <div>
+            <div className="mb-3 font-heading text-[11px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-dim))]">Wobble</div>
+            <div className="flex items-center gap-5 py-6">
+              {wobbleEmojis.map((item) => (
+                <div key={item.id} className="relative inline-block">
+                  <button
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-[20px]"
+                    style={{
+                      background: item.bg,
+                      transition: `transform 0.25s ${spring}`,
+                      transform: wobbleTip === item.id ? 'scale(1.15) rotate(6deg)' : 'scale(1) rotate(0deg)',
+                    }}
+                    onMouseEnter={() => setWobbleTip(item.id)}
+                    onMouseLeave={() => setWobbleTip(null)}
+                  >
+                    {item.emoji}
+                  </button>
+                  <div
+                    className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 whitespace-nowrap rounded-lg bg-[hsl(var(--game-ink))] px-3 py-1.5 font-heading text-[12px] font-semibold text-[hsl(var(--game-cream))]"
+                    style={{
+                      transformOrigin: 'bottom center',
+                      opacity: wobbleTip === item.id ? 1 : 0,
+                      animation: wobbleTip === item.id ? 'tooltipWobble 0.6s ease forwards' : 'none',
+                      transform: wobbleTip !== item.id ? 'translateX(-50%) translateY(-8px) scale(0.8)' : undefined,
+                    }}
+                  >
+                    {item.tip}
+                    <div className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-[hsl(var(--game-ink))]" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Section>
+    </>
+  )
+}
+
+/* ═══════════════════════════════════════════
+   22: TOAST NOTIFICATION SYSTEM
+   ═══════════════════════════════════════════ */
+
+const toastData = [
+  { icon: '🎮', label: 'Badge earned', title: 'Game Sense', bg: '#4A8FE8', iconBg: '#2D6BC4' },
+  { icon: '🔥', label: 'Streak milestone', title: '7-day streak!', bg: '#C8873A', iconBg: '#9D6328' },
+  { icon: '🏅', label: 'Achievement', title: 'First Perfect Week', bg: '#27A85A', iconBg: '#1A7A40' },
+  { icon: '📖', label: 'New article', title: 'Just published', bg: '#1A1A14', iconBg: '#000000' },
+  { icon: '⚡', label: 'Blitz best', title: 'New personal best!', bg: '#E05A1A', iconBg: '#B04010' },
+]
+
+function ToastSystem() {
+  const [toasts, setToasts] = useState<number[]>([])
+  const [animatingOut, setAnimatingOut] = useState<number[]>([])
+
+  const runDemo = () => {
+    if (toasts.length > 0) return
+    const ids: number[] = []
+    toastData.forEach((_, i) => {
+      setTimeout(() => {
+        ids.push(i)
+        setToasts([...ids])
+      }, i * 300)
+    })
+    // Start dismissing after 2s from last toast appearing
+    setTimeout(() => {
+      toastData.forEach((_, i) => {
+        setTimeout(() => {
+          setAnimatingOut((prev) => [...prev, i])
+        }, i * 200)
+      })
+      // Clean up after all have animated out
+      setTimeout(() => {
+        setToasts([])
+        setAnimatingOut([])
+      }, toastData.length * 200 + 400)
+    }, toastData.length * 300 + 2000)
+  }
+
+  return (
+    <>
+      <Label num="27" title="Toast Notification System" annotation="Pill-shaped toast notifications. Icon in darker left section. Slides in from right with 300ms stagger. Auto-dismisses after appearing. Position: fixed bottom-right, stacks upward." />
+      <Section>
+        <style>{`
+          @keyframes toastSlideIn {
+            0% { transform: translateX(120%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+          }
+          @keyframes toastSlideOut {
+            0% { transform: translateX(0); opacity: 1; }
+            100% { transform: translateX(120%); opacity: 0; }
+          }
+        `}</style>
+        <div className="flex items-start gap-8">
+          <button
+            onClick={runDemo}
+            className="rounded-full bg-[hsl(var(--game-ink))] px-6 py-3 font-heading text-[14px] font-black text-[hsl(var(--game-cream))]"
+            style={{
+              boxShadow: '0 5px 0 rgba(0,0,0,0.5)',
+              transition: `transform 0.1s ${spring}, box-shadow 0.1s ${spring}`,
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 0 rgba(0,0,0,0.5)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 5px 0 rgba(0,0,0,0.5)' }}
+            onMouseDown={(e) => { e.currentTarget.style.transform = 'translateY(4px)'; e.currentTarget.style.boxShadow = '0 1px 0 rgba(0,0,0,0.5)' }}
+            onMouseUp={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 0 rgba(0,0,0,0.5)' }}
+          >
+            Demo
+          </button>
+
+          {/* Inline preview stack */}
+          <div className="flex flex-col-reverse gap-3">
+            {toasts.map((idx) => {
+              const t = toastData[idx]
+              const isOut = animatingOut.includes(idx)
+              return (
+                <div
+                  key={idx}
+                  className="flex items-center overflow-hidden rounded-full"
+                  style={{
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.18), 0 1px 4px rgba(0,0,0,0.10)',
+                    animation: isOut ? `toastSlideOut 0.35s ${spring} forwards` : `toastSlideIn 0.4s ${spring} forwards`,
+                  }}
+                >
+                  <div
+                    className="flex h-full items-center justify-center px-3 py-3 text-[18px]"
+                    style={{ background: t.iconBg }}
+                  >
+                    {t.icon}
+                  </div>
+                  <div
+                    className="flex flex-col justify-center px-4 py-2.5"
+                    style={{ background: t.bg }}
+                  >
+                    <span className="font-heading text-[11px] font-bold uppercase tracking-[0.12em] text-white/70">{t.label}</span>
+                    <span className="font-heading text-[17px] font-bold text-white">{t.title}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </Section>
+    </>
+  )
+}
+
+/* ═══════════════════════════════════════════
+   23: STREAK FIRE (LIVING ANIMATION)
+   ═══════════════════════════════════════════ */
+
+function StreakFire() {
+  return (
+    <>
+      <Label num="28" title="Streak Fire" annotation="Living animated streak counters. Fire emoji uses flameDance (scaleX/scaleY/rotate, 0.8s). Number uses streakPulse (scale 1→1.06, 2s). Amber up to 29 days, orange at 30+. Never static." />
+      <Section>
+        <style>{`
+          @keyframes flameDance {
+            0%   { transform: scaleX(1) scaleY(1) rotate(0deg); }
+            15%  { transform: scaleX(1.1) scaleY(0.9) rotate(-3deg); }
+            30%  { transform: scaleX(0.9) scaleY(1.12) rotate(2deg); }
+            45%  { transform: scaleX(1.08) scaleY(0.92) rotate(-2deg); }
+            60%  { transform: scaleX(0.95) scaleY(1.08) rotate(1.5deg); }
+            75%  { transform: scaleX(1.05) scaleY(0.95) rotate(-1deg); }
+            100% { transform: scaleX(1) scaleY(1) rotate(0deg); }
+          }
+          @keyframes streakPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+          }
+        `}</style>
+        <div className="flex flex-wrap items-center gap-6">
+          {/* 7-day streak */}
+          <div className="inline-flex items-center gap-3 rounded-full bg-[hsl(var(--game-ink))] px-5 py-3">
+            <span
+              className="text-[24px]"
+              style={{ animation: 'flameDance 0.8s ease-in-out infinite', display: 'inline-block' }}
+            >
+              🔥
+            </span>
+            <span
+              className="font-heading text-[28px] font-black"
+              style={{ color: '#C8873A', animation: 'streakPulse 2s ease-in-out infinite', display: 'inline-block' }}
+            >
+              7
+            </span>
+            <span className="font-heading text-[12px] font-bold uppercase tracking-[0.12em] text-white/50">day streak</span>
+          </div>
+
+          {/* 30-day streak */}
+          <div className="inline-flex items-center gap-3 rounded-full bg-[hsl(var(--game-ink))] px-5 py-3">
+            <span
+              className="text-[24px]"
+              style={{ animation: 'flameDance 0.8s ease-in-out infinite', display: 'inline-block' }}
+            >
+              🔥
+            </span>
+            <span
+              className="font-heading text-[28px] font-black"
+              style={{ color: '#E05A1A', animation: 'streakPulse 2s ease-in-out infinite', display: 'inline-block' }}
+            >
+              30
+            </span>
+            <span className="font-heading text-[12px] font-bold uppercase tracking-[0.12em] text-white/50">day streak</span>
+          </div>
+        </div>
+      </Section>
+    </>
+  )
+}
+
+/* ═══════════════════════════════════════════
    PAGE
    ═══════════════════════════════════════════ */
 
@@ -1227,15 +1420,17 @@ export default function ComponentsPage() {
           <GlassFrost />
           <GlowPulse />
           <ExpandReveal />
-          <MagneticHover />
           <SplitAction />
           <LoadingState />
           <ConfirmGate />
           <PillToggle />
-          <GhostButton />
           <StampPress />
-          <TextScramble />
           <StripeGlow />
+          <GlowBlue />
+          <GlowAmber />
+          <GlassButton />
+          <TextSlide />
+          <ShimmerButton />
         </div>
 
         {/* ═══ OTHER COMPONENTS ═══ */}
@@ -1243,17 +1438,40 @@ export default function ComponentsPage() {
         <SectionLabel text="Other Components" />
         <div className="space-y-10">
           <SearchBar />
-          <RangeSlider />
-          <StreakCalendar />
           <HeartButton />
-          <ProgressRing />
-          <StarRating />
-          <NotificationBadge />
           <Accordion />
           <TabBar />
           <TooltipDemo />
           <CustomSelect />
           <MiniBarChart />
+        </div>
+
+        {/* ═══ BEVEL BUTTONS ═══ */}
+        <div className="mt-20" />
+        <SectionLabel text="Bevel Button System" />
+        <div className="space-y-10">
+          <BevelButtonSystem />
+        </div>
+
+        {/* ═══ TOOLTIPS ═══ */}
+        <div className="mt-20" />
+        <SectionLabel text="Tooltips" />
+        <div className="space-y-10">
+          <TooltipSystem />
+        </div>
+
+        {/* ═══ TOAST NOTIFICATIONS ═══ */}
+        <div className="mt-20" />
+        <SectionLabel text="Toast Notifications" />
+        <div className="space-y-10">
+          <ToastSystem />
+        </div>
+
+        {/* ═══ STREAK FIRE ═══ */}
+        <div className="mt-20" />
+        <SectionLabel text="Streak Fire" />
+        <div className="space-y-10">
+          <StreakFire />
         </div>
 
         {/* Footer */}

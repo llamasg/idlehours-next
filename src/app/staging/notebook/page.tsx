@@ -1,7 +1,5 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-
 /* ─── section label ─── */
 const Label = ({ num, title, annotation }: { num: string; title: string; annotation: string }) => (
   <div className="mb-6">
@@ -198,8 +196,6 @@ const NoteTag = ({ children }: { children: React.ReactNode }) => (
    PAGE
    ═══════════════════════════════════════════ */
 export default function NotebookPage() {
-  const [stackFanned, setStackFanned] = useState(false)
-  const [envelopeOpen, setEnvelopeOpen] = useState(false)
 
   return (
     <main className="min-h-screen bg-[hsl(var(--game-cream))]">
@@ -385,149 +381,9 @@ export default function NotebookPage() {
             </div>
           </div>
         </section>
-
-        {/* ─── 04. Notebook Page ─── */}
+        {/* ─── 04. Recipe Card Style ─── */}
         <section className="py-16">
-          <Label num="04" title="Notebook Page" annotation="Full-width stipple surface with ruled lines, a red margin line, torn top-edge, and content sitting naturally on the lines." />
-          <div
-            className="relative overflow-hidden rounded-2xl"
-            style={{
-              ...stippleStyle,
-              clipPath: 'polygon(0 12px, 2% 8px, 4% 13px, 6% 6px, 8% 11px, 10% 5px, 12% 10px, 14% 4px, 16% 9px, 18% 3px, 20% 8px, 22% 2px, 24% 7px, 26% 1px, 28% 6px, 30% 0, 32% 5px, 34% 1px, 36% 6px, 38% 2px, 40% 7px, 42% 3px, 44% 8px, 46% 4px, 48% 9px, 50% 5px, 52% 10px, 54% 4px, 56% 9px, 58% 3px, 60% 8px, 62% 2px, 64% 7px, 66% 1px, 68% 6px, 70% 0, 72% 5px, 74% 1px, 76% 6px, 78% 2px, 80% 7px, 82% 3px, 84% 8px, 86% 4px, 88% 9px, 90% 5px, 92% 10px, 94% 6px, 96% 11px, 98% 7px, 100% 12px, 100% 100%, 0 100%)',
-              boxShadow: '0 4px 14px rgba(0,0,0,0.1)',
-            }}
-          >
-            {/* ruled lines */}
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: 'repeating-linear-gradient(to bottom, transparent, transparent 27px, rgba(26,26,20,0.08) 27px, rgba(26,26,20,0.08) 28px)',
-              }}
-            />
-            {/* red margin line */}
-            <div
-              className="absolute bottom-0 top-0"
-              style={{ left: 48, width: 2, backgroundColor: 'rgba(220,80,80,0.25)' }}
-            />
-            {/* content */}
-            <div className="relative px-16 py-10" style={{ paddingLeft: 64 }}>
-              <div style={{ lineHeight: '28px' }}>
-                <div className="font-heading text-[15px] font-black text-[hsl(var(--game-ink))]">
-                  Games to finish this month
-                </div>
-                <div className="mt-0 font-heading text-[12px] font-semibold text-[hsl(var(--game-ink-mid))]">
-                  Updated 9 March 2026
-                </div>
-                <div className="h-[28px]" />
-                {[
-                  '1. Hollow Knight — just the final boss left',
-                  '2. Celeste — chapter 7 onwards',
-                  '3. Return of the Obra Dinn — 12 fates remaining',
-                  '4. Outer Wilds DLC — barely started',
-                  '5. Disco Elysium — replay for alt endings',
-                ].map((line, i) => (
-                  <div key={i} className="font-heading text-[12px] font-semibold text-[hsl(var(--game-ink-mid))]" style={{ lineHeight: '28px' }}>
-                    {line}
-                  </div>
-                ))}
-                <div className="h-[28px]" />
-                <div className="font-heading text-[11px] font-semibold italic text-[hsl(var(--game-ink-light))]" style={{ lineHeight: '28px' }}>
-                  &quot;Don&apos;t start anything new until you clear this list.&quot;
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── 05. Sticky Note Wall ─── */}
-        <section className="py-16">
-          <Label num="05" title="Sticky Note Wall" annotation="Six sticky notes scattered on a cork-board surface. Varying sizes, rotations, content types, and some with icon stickers." />
-          <div
-            className="relative overflow-visible rounded-2xl p-12"
-            style={{
-              ...stippleDarkStyle,
-              minHeight: 520,
-              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.06)',
-            }}
-          >
-            {/* note 1: quote */}
-            <StickyNote width={220} rotation={-2} style={{ position: 'absolute', top: 30, left: 40 }}>
-              <div className="p-4 pt-6">
-                <NoteLabel>Quote</NoteLabel>
-                <NoteBody className="mt-2 italic">&quot;Despite everything, it&apos;s still you.&quot;</NoteBody>
-                <div className="mt-2 font-heading text-[10px] font-bold text-[hsl(var(--game-ink-light))]">— Undertale</div>
-              </div>
-            </StickyNote>
-
-            {/* note 2: to-do */}
-            <StickyNote width={200} rotation={1.5} style={{ position: 'absolute', top: 20, left: 320 }}>
-              <div className="p-4 pt-6">
-                <NoteLabel>To Do</NoteLabel>
-                <div className="mt-2 space-y-1">
-                  {['Finish Celeste B-sides', 'Try Inscryption', 'Update backlog'].map((item, i) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <div className="h-3 w-3 rounded-sm border-[1.5px] border-[hsl(var(--game-ink-mid))]" />
-                      <NoteBody>{item}</NoteBody>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </StickyNote>
-
-            {/* note 3: recommendation with sticker */}
-            <StickyNote width={240} rotation={-3} style={{ position: 'absolute', top: 60, right: 60 }}>
-              <IconSticker
-                icon="⭐"
-                size={44}
-                tint="rgba(235,242,252,0.9)"
-                rotation={6}
-                style={{ position: 'absolute', top: -14, right: -8, zIndex: 30 }}
-              />
-              <div className="p-4 pt-6">
-                <NoteLabel>Recommendation</NoteLabel>
-                <NoteTitle className="mt-1">Tunic</NoteTitle>
-                <NoteBody className="mt-2">A tiny fox explores a vast, mysterious world. Utterly charming.</NoteBody>
-              </div>
-            </StickyNote>
-
-            {/* note 4: stat */}
-            <StickyNote width={180} rotation={2} style={{ position: 'absolute', bottom: 80, left: 60 }}>
-              <div className="p-4 pt-6">
-                <NoteLabel>Stat</NoteLabel>
-                <div className="mt-2 font-heading text-[28px] font-black text-[hsl(var(--game-ink))]">247</div>
-                <NoteBody>games in backlog</NoteBody>
-              </div>
-            </StickyNote>
-
-            {/* note 5: reminder */}
-            <StickyNote width={200} rotation={-1} style={{ position: 'absolute', bottom: 60, left: 300 }}>
-              <IconSticker
-                icon="🔥"
-                size={40}
-                tint="rgba(245,230,211,0.8)"
-                rotation={-5}
-                style={{ position: 'absolute', top: -12, right: -6, zIndex: 30 }}
-              />
-              <div className="p-4 pt-6">
-                <NoteLabel>Reminder</NoteLabel>
-                <NoteBody className="mt-2">Silksong release date: check daily. Do not miss launch.</NoteBody>
-              </div>
-            </StickyNote>
-
-            {/* note 6: editorial */}
-            <StickyNote width={260} rotation={3} style={{ position: 'absolute', bottom: 40, right: 40 }}>
-              <div className="p-4 pt-6">
-                <NoteLabel>Editorial</NoteLabel>
-                <NoteTitle className="mt-1">On pacing</NoteTitle>
-                <NoteBody className="mt-2">The best games know exactly when to let you breathe. Hollow Knight does this perfectly — every boss gauntlet followed by a quiet, gorgeous cavern.</NoteBody>
-              </div>
-            </StickyNote>
-          </div>
-        </section>
-
-        {/* ─── 06. Recipe Card Style ─── */}
-        <section className="py-16">
-          <Label num="06" title="Recipe Card Style" annotation="A game 'recipe' card structured like a cooking recipe. Header, ingredients list, numbered method, dashed dividers, dog-ear fold." />
+          <Label num="04" title="Recipe Card Style" annotation="A game 'recipe' card structured like a cooking recipe. Header, ingredients list, numbered method, dashed dividers, dog-ear fold." />
           <div className="px-8 py-10">
             <StickyNote width={360} rotation={-0.5} dogEarSize={22}>
               <div className="p-6 pt-8">
@@ -571,9 +427,9 @@ export default function NotebookPage() {
           </div>
         </section>
 
-        {/* ─── 07. Sticker Tab Collection ─── */}
+        {/* ─── 05. Sticker Tab Collection ─── */}
         <section className="py-16">
-          <Label num="07" title="Sticker Tab Collection" annotation="All sticker tab variants in a curated arrangement. Tabs overlapping a card edge, and cascading tabs along the side like file folder tabs." />
+          <Label num="05" title="Sticker Tab Collection" annotation="All sticker tab variants in a curated arrangement. Tabs overlapping a card edge, and cascading tabs along the side like file folder tabs." />
           <div className="space-y-10 px-8 py-10">
             {/* tabs overlapping top of card */}
             <div className="relative">
@@ -623,9 +479,9 @@ export default function NotebookPage() {
           </div>
         </section>
 
-        {/* ─── 08. Icon Grid on Stipple ─── */}
+        {/* ─── 06. Icon Grid on Stipple ─── */}
         <section className="py-16">
-          <Label num="08" title="Icon Grid on Stipple" annotation="A sticker sheet: 4x3 grid of icon stickers on a stipple surface. Various sizes, tilts, and colour tints. Feels like something you'd peel from." />
+          <Label num="06" title="Icon Grid on Stipple" annotation="A sticker sheet: 4x3 grid of icon stickers on a stipple surface. Various sizes, tilts, and colour tints. Feels like something you'd peel from." />
           <div className="px-8 py-10">
             <div
               className="mx-auto w-full max-w-lg rounded-2xl p-10"
@@ -662,374 +518,212 @@ export default function NotebookPage() {
           </div>
         </section>
 
-        {/* ─── 09. Pinboard Thread ─── */}
+        {/* ─── 07. Pinboard with Sticky Notes ─── */}
         <section className="py-16">
-          <Label num="09" title="Pinboard Thread" annotation="Three sticky notes pinned to a board with coloured pins. Dashed lines connect the pins like red-string conspiracy boards." />
-          <div
-            className="relative overflow-visible rounded-2xl p-16"
-            style={{ ...stippleDarkStyle, minHeight: 360, boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.06)' }}
-          >
-            {/* SVG thread lines */}
-            <svg className="absolute inset-0 z-0" width="100%" height="100%" style={{ overflow: 'visible' }}>
-              <line x1="140" y1="38" x2="380" y2="38" stroke="hsl(var(--game-red))" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.4" />
-              <line x1="380" y1="38" x2="640" y2="38" stroke="hsl(var(--game-red))" strokeWidth="1.5" strokeDasharray="6 4" opacity="0.4" />
-            </svg>
-
-            <div className="relative flex items-start justify-between gap-8">
-              {/* note 1: review snippet */}
-              <div className="relative">
-                <div className="absolute -top-3 left-1/2 z-30 h-5 w-5 -translate-x-1/2 rounded-full bg-[hsl(var(--game-red))]" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }} />
-                <StickyNote width={220} rotation={-1.5}>
-                  <div className="p-4 pt-6">
-                    <NoteLabel>Review</NoteLabel>
-                    <NoteTitle className="mt-1">Hades</NoteTitle>
-                    <NoteBody className="mt-2">&quot;Every run teaches you something. The roguelike structure keeps it fresh even after 50 attempts.&quot;</NoteBody>
-                    <div className="mt-2 font-heading text-[10px] font-bold text-[hsl(var(--game-amber))]">9.2 / 10</div>
-                  </div>
-                </StickyNote>
-              </div>
-
-              {/* note 2: stat card */}
-              <div className="relative">
-                <div className="absolute -top-3 left-1/2 z-30 h-5 w-5 -translate-x-1/2 rounded-full bg-[hsl(var(--game-blue))]" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }} />
-                <StickyNote width={200} rotation={2}>
-                  <div className="p-4 pt-6">
-                    <NoteLabel>Stats</NoteLabel>
-                    <div className="mt-2 space-y-1.5">
-                      {[['Runs', '142'], ['Clears', '38'], ['Best time', '14:22']].map(([k, v]) => (
-                        <div key={k} className="flex justify-between font-heading text-[11px]">
-                          <span className="font-semibold text-[hsl(var(--game-ink-mid))]">{k}</span>
-                          <span className="font-bold text-[hsl(var(--game-ink))]">{v}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </StickyNote>
-              </div>
-
-              {/* note 3: todo checkbox */}
-              <div className="relative">
-                <div className="absolute -top-3 left-1/2 z-30 h-5 w-5 -translate-x-1/2 rounded-full bg-[hsl(var(--game-green))]" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }} />
-                <StickyNote width={220} rotation={-0.5}>
-                  <div className="p-4 pt-6">
-                    <NoteLabel>Checklist</NoteLabel>
-                    <div className="mt-2 space-y-1.5">
-                      {[
-                        { text: 'Beat final boss', done: true },
-                        { text: 'Max all weapons', done: false },
-                        { text: 'Romance everyone', done: true },
-                        { text: 'Find all fish', done: false },
-                      ].map(({ text, done }) => (
-                        <div key={text} className="flex items-center gap-2">
-                          <div
-                            className="flex h-3.5 w-3.5 items-center justify-center rounded-sm border-[1.5px]"
-                            style={{
-                              borderColor: done ? 'hsl(var(--game-green))' : 'hsl(var(--game-ink-mid))',
-                              backgroundColor: done ? 'hsl(var(--game-green))' : 'transparent',
-                            }}
-                          >
-                            {done && <span className="text-[8px] text-white">✓</span>}
-                          </div>
-                          <NoteBody className={done ? 'line-through opacity-50' : ''}>{text}</NoteBody>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </StickyNote>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── 10. Sticky Note Stack ─── */}
-        <section className="py-16">
-          <Label num="10" title="Sticky Note Stack" annotation="Five notes stacked with slight offset. Click to fan out and reveal all notes. Shows both states." />
-          <div className="flex items-start gap-16 px-8 py-10">
-            {/* stacked state */}
-            <div>
-              <div className="mb-3 font-heading text-[10px] font-extrabold uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">Stacked</div>
-              <div className="relative" style={{ width: 260, height: 200 }}>
-                {[
-                  { rotation: 2.5, shade: '#EDE7DA', offset: 16 },
-                  { rotation: -1.5, shade: '#EBE5D8', offset: 12 },
-                  { rotation: 1, shade: '#E8E2D5', offset: 8 },
-                  { rotation: -0.5, shade: '#E5DFD2', offset: 4 },
-                  { rotation: -1, shade: '#F5F0E4', offset: 0 },
-                ].map(({ rotation, shade, offset }, i) => (
-                  <div
-                    key={i}
-                    className="absolute left-0 top-0"
-                    style={{
-                      width: 240,
-                      borderRadius: '4px 16px 16px 16px',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
-                      transform: `rotate(${rotation}deg) translate(${offset}px, ${offset}px)`,
-                      backgroundColor: shade,
-                      backgroundImage: 'radial-gradient(circle, rgba(26,26,20,0.07) 1px, transparent 1px)',
-                      backgroundSize: '10px 10px',
-                      zIndex: i,
-                    }}
-                  >
-                    {i === 4 && (
-                      <div className="p-4 pt-5">
-                        <NoteLabel>Top Note</NoteLabel>
-                        <NoteTitle className="mt-1">Visible content</NoteTitle>
-                        <NoteBody className="mt-2">Only the top note&apos;s content is fully readable. Peek at the others below.</NoteBody>
-                      </div>
-                    )}
-                    {i < 4 && <div className="p-4" style={{ height: 160 }} />}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* fanned state (interactive) */}
-            <div>
-              <div className="mb-3 flex items-center gap-3">
-                <span className="font-heading text-[10px] font-extrabold uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]">
-                  {stackFanned ? 'Fanned' : 'Click to fan'}
-                </span>
-                <button
-                  onClick={() => setStackFanned(!stackFanned)}
-                  className="rounded-full bg-[hsl(var(--game-ink))] px-4 py-1.5 font-heading text-[10px] font-bold text-[hsl(var(--game-cream))] transition-opacity hover:opacity-80"
-                >
-                  {stackFanned ? 'Stack' : 'Fan out'}
-                </button>
-              </div>
-              <div className="relative" style={{ width: stackFanned ? 600 : 260, height: 200, transition: 'width 0.5s cubic-bezier(0.34,1.5,0.64,1)' }}>
-                {[
-                  { label: 'Quote', title: '"Still you."', rotation: -3 },
-                  { label: 'Stat', title: '142 hours', rotation: -1 },
-                  { label: 'Pick', title: 'Tunic', rotation: 1 },
-                  { label: 'Reminder', title: 'Check sales', rotation: 2 },
-                  { label: 'Review', title: '9.4 / 10', rotation: -1 },
-                ].map(({ label, title, rotation }, i) => (
-                  <div
-                    key={i}
-                    className="absolute top-0"
-                    style={{
-                      width: 200,
-                      borderRadius: '4px 16px 16px 16px',
-                      boxShadow: stackFanned ? '0 4px 14px rgba(0,0,0,0.1)' : '0 2px 8px rgba(0,0,0,0.07)',
-                      transform: stackFanned
-                        ? `rotate(${rotation}deg) translateX(${i * 80}px)`
-                        : `rotate(${rotation * 0.3}deg) translate(${i * 4}px, ${i * 4}px)`,
-                      transition: 'all 0.5s cubic-bezier(0.34,1.5,0.64,1)',
-                      ...stippleStyle,
-                      zIndex: stackFanned ? 5 - Math.abs(i - 2) : i,
-                    }}
-                  >
-                    <div className="p-4 pt-5" style={{ opacity: stackFanned ? 1 : (i === 4 ? 1 : 0), transition: 'opacity 0.3s ease' }}>
-                      <NoteLabel>{label}</NoteLabel>
-                      <NoteTitle className="mt-1">{title}</NoteTitle>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── 11. Envelope Reveal ─── */}
-        <section className="py-16">
-          <Label num="11" title="Envelope Reveal" annotation="A sealed envelope with stipple texture. Click to open: the flap rotates up and a recommendation card slides out. Features a wax seal." />
-          <div className="flex justify-center px-8 py-10" style={{ perspective: 800 }}>
+          <Label num="07" title="Pinboard with Sticky Notes" annotation="Cork texture background with scattered sticky notes at different rotations. Each note has a coloured pin, label, title, and signature. Folded corner via border trick." />
+          <div className="px-8 py-10">
             <div
-              className="relative cursor-pointer"
-              style={{ width: 340, height: 220 }}
-              onClick={() => setEnvelopeOpen(!envelopeOpen)}
+              className="relative mx-auto w-full max-w-3xl rounded-2xl p-12"
+              style={{
+                backgroundColor: '#D4B896',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='20' height='20' fill='none'/%3E%3Cline x1='0' y1='20' x2='20' y2='20' stroke='rgba(0,0,0,0.06)' stroke-width='0.5'/%3E%3Cline x1='20' y1='0' x2='20' y2='20' stroke='rgba(0,0,0,0.06)' stroke-width='0.5'/%3E%3C/svg%3E")`,
+                boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.15), 0 4px 14px rgba(0,0,0,0.1)',
+              }}
             >
-              {/* envelope body */}
-              <div
-                className="absolute inset-0 rounded-xl"
-                style={{
-                  ...stippleStyle,
-                  boxShadow: '0 6px 20px rgba(0,0,0,0.12)',
-                  border: '1.5px solid rgba(26,26,20,0.08)',
-                }}
-              />
-
-              {/* content card (slides up when opened) */}
-              <div
-                className="absolute left-4 right-4 rounded-lg bg-white p-5"
-                style={{
-                  bottom: envelopeOpen ? 180 : 20,
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.1)',
-                  transition: 'bottom 0.6s cubic-bezier(0.34,1.5,0.64,1)',
-                  zIndex: envelopeOpen ? 20 : 1,
-                  opacity: envelopeOpen ? 1 : 0,
-                  transitionProperty: 'bottom, opacity',
-                }}
-              >
-                <NoteLabel>Recommendation</NoteLabel>
-                <NoteTitle className="mt-1">Outer Wilds</NoteTitle>
-                <NoteBody className="mt-2">You only get to play it once for the first time. Make it count.</NoteBody>
-                <div className="mt-3 flex gap-1.5">
-                  <NoteTag>Exploration</NoteTag>
-                  <NoteTag>Mystery</NoteTag>
-                </div>
-              </div>
-
-              {/* flap (rotates up) */}
-              <div
-                className="absolute left-0 right-0 top-0 z-10"
-                style={{
-                  height: 100,
-                  transformOrigin: 'top center',
-                  transform: envelopeOpen ? 'rotateX(180deg)' : 'rotateX(0deg)',
-                  transition: 'transform 0.5s cubic-bezier(0.34,1.5,0.64,1)',
-                  zIndex: envelopeOpen ? 0 : 15,
-                }}
-              >
-                <div
-                  className="h-full w-full"
-                  style={{
-                    ...stippleStyle,
-                    clipPath: 'polygon(0 0, 50% 100%, 100% 0)',
-                    borderRadius: '12px 12px 0 0',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-                  }}
-                />
-              </div>
-
-              {/* wax seal */}
-              <div
-                className="absolute z-20 flex items-center justify-center rounded-full"
-                style={{
-                  width: 48,
-                  height: 48,
-                  backgroundColor: 'hsl(var(--game-amber))',
-                  left: '50%',
-                  top: envelopeOpen ? -10 : 70,
-                  transform: 'translateX(-50%)',
-                  boxShadow: '0 3px 10px rgba(200,135,58,0.4), inset 0 -2px 4px rgba(0,0,0,0.15)',
-                  transition: 'top 0.5s cubic-bezier(0.34,1.5,0.64,1)',
-                }}
-              >
-                {/* seal texture */}
-                <div
-                  className="flex h-9 w-9 items-center justify-center rounded-full font-heading text-[14px] font-black text-white"
-                  style={{
-                    border: '2px solid rgba(255,255,255,0.25)',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.2)',
-                  }}
-                >
-                  IH
-                </div>
-              </div>
-
-              {/* click hint */}
-              {!envelopeOpen && (
-                <div className="absolute bottom-4 left-0 right-0 text-center font-heading text-[10px] font-bold text-[hsl(var(--game-ink-light))]">
-                  Click to open
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* ─── 12. Mixed Media Board ─── */}
-        <section className="py-16">
-          <Label num="12" title="Mixed Media Board" annotation="A full-width composition combining sticky notes, icon stickers, sticker tabs, a clean game card, a stipple popup, and dashed connecting lines. Digital/physical contrast." />
-          <div
-            className="relative overflow-visible rounded-2xl p-10"
-            style={{ ...stippleDarkStyle, minHeight: 420, boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.06)' }}
-          >
-            {/* sticker tab row along top */}
-            <div className="mb-8 flex gap-3">
-              <StickerTab label="Collection" colour="amber" rotation={-1} />
-              <StickerTab label="This Week" colour="blue" rotation={1} />
-              <StickerTab label="Pinned" colour="ink" rotation={-2} />
-            </div>
-
-            {/* dashed connecting lines */}
-            <svg className="pointer-events-none absolute inset-0 z-0" width="100%" height="100%" style={{ overflow: 'visible' }}>
-              <line x1="250" y1="170" x2="380" y2="150" stroke="hsl(var(--game-ink-mid))" strokeWidth="1" strokeDasharray="5 4" opacity="0.2" />
-              <line x1="590" y1="150" x2="650" y2="170" stroke="hsl(var(--game-ink-mid))" strokeWidth="1" strokeDasharray="5 4" opacity="0.2" />
-            </svg>
-
-            <div className="relative flex flex-wrap items-start gap-8">
-              {/* sticky note 1 with icon sticker */}
-              <StickyNote width={220} rotation={-2} style={{ flexShrink: 0 }}>
-                <IconSticker
-                  icon="🏆"
-                  size={44}
-                  tint="rgba(245,230,211,0.8)"
-                  rotation={6}
-                  style={{ position: 'absolute', top: -14, right: -8, zIndex: 30 }}
-                />
-                <div className="p-4 pt-6">
-                  <NoteLabel>Game of the Year</NoteLabel>
-                  <NoteTitle className="mt-1">Elden Ring</NoteTitle>
-                  <NoteBody className="mt-2">FromSoftware&apos;s magnum opus. 200 hours and counting.</NoteBody>
-                </div>
-              </StickyNote>
-
-              {/* clean game card */}
-              <div
-                className="relative flex-shrink-0 rounded-2xl bg-white p-6"
-                style={{
-                  width: 240,
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-                  border: '1.5px solid hsl(var(--game-cream-dark))',
-                }}
-              >
-                <div
-                  className="mb-4 h-[120px] w-full rounded-lg bg-[hsl(var(--game-ink))]"
-                  style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
-                />
-                <div className="font-heading text-[13px] font-black text-[hsl(var(--game-ink))]">Hollow Knight</div>
-                <div className="mt-1 font-heading text-[11px] font-semibold text-[hsl(var(--game-ink-mid))]">
-                  Metroidvania &middot; 2017 &middot; 45h
-                </div>
-                <div className="mt-3 flex gap-1.5">
-                  <NoteTag>Playing</NoteTag>
-                  <NoteTag>Favourite</NoteTag>
-                </div>
-              </div>
-
-              {/* stipple popup pointing at the card */}
-              <div className="relative flex-shrink-0" style={{ transform: 'rotate(0.5deg)' }}>
-                <div
-                  className="absolute -left-2 top-8"
-                  style={{
-                    width: 0,
-                    height: 0,
-                    borderTop: '7px solid transparent',
-                    borderBottom: '7px solid transparent',
-                    borderRight: '7px solid #F5F0E4',
-                  }}
-                />
-                <div
-                  className="w-[200px] rounded-xl p-4"
-                  style={{
-                    ...stippleStyle,
-                    boxShadow: '0 4px 14px rgba(0,0,0,0.1)',
-                  }}
-                >
-                  <NoteLabel>Quick Note</NoteLabel>
-                  <NoteBody className="mt-1.5">Remember to finish the White Palace before moving on. The platforming is brutal but the lore payoff is worth it.</NoteBody>
-                </div>
-              </div>
-            </div>
-
-            {/* second sticky note, lower */}
-            <div className="mt-6 ml-8">
-              <StickyNote width={240} rotation={1.5}>
-                <div className="p-4 pt-6">
-                  <NoteLabel>Up Next</NoteLabel>
-                  <NoteTitle className="mt-1">Tunic</NoteTitle>
-                  <NoteBody className="mt-2">Heard it has a secret language to decode. Perfect for a rainy weekend.</NoteBody>
-                  <div className="mt-3 flex gap-1.5">
-                    <NoteTag>Wishlist</NoteTag>
-                    <NoteTag>Puzzle</NoteTag>
+              <div className="flex flex-wrap items-start justify-center gap-10">
+                {/* Note 1 — default stipple bg */}
+                <div className="relative" style={{ transform: 'rotate(-2deg)', width: 220 }}>
+                  {/* Pin */}
+                  <div className="absolute -top-3 left-1/2 z-30 h-6 w-6 -translate-x-1/2 rounded-full bg-[hsl(var(--game-red))] shadow-[0_2px_4px_rgba(0,0,0,0.3)]" />
+                  <div
+                    className="relative overflow-hidden rounded-sm p-5 pt-6"
+                    style={{
+                      ...stippleStyle,
+                      boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
+                      borderRadius: '4px 16px 16px 16px',
+                    }}
+                  >
+                    {/* Folded corner */}
+                    <div className="absolute right-0 bottom-0" style={{ width: 0, height: 0, borderRight: '18px solid #D4B896', borderTop: '18px solid transparent' }} />
+                    <div className="absolute right-0 bottom-0" style={{ width: 18, height: 18, background: 'rgba(0,0,0,0.06)', clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }} />
+                    <NoteLabel>Staff Pick</NoteLabel>
+                    <NoteTitle className="mt-1">Hollow Knight</NoteTitle>
+                    <NoteBody className="mt-2">A haunting descent into the depths of Hallownest.</NoteBody>
+                    <p className="mt-3 font-heading text-[10px] font-bold italic text-[hsl(var(--game-ink-dim))]">— Team IH</p>
                   </div>
                 </div>
-              </StickyNote>
+
+                {/* Note 2 — yellow tint */}
+                <div className="relative" style={{ transform: 'rotate(1.5deg)', width: 220 }}>
+                  <div className="absolute -top-3 left-1/2 z-30 h-6 w-6 -translate-x-1/2 rounded-full bg-[hsl(var(--game-blue))] shadow-[0_2px_4px_rgba(0,0,0,0.3)]" />
+                  <div
+                    className="relative overflow-hidden rounded-sm p-5 pt-6"
+                    style={{
+                      backgroundColor: '#FFF9E6',
+                      backgroundImage: 'radial-gradient(circle, rgba(26,26,20,0.05) 1px, transparent 1px)',
+                      backgroundSize: '10px 10px',
+                      boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
+                      borderRadius: '4px 16px 16px 16px',
+                    }}
+                  >
+                    <div className="absolute right-0 bottom-0" style={{ width: 0, height: 0, borderRight: '18px solid #D4B896', borderTop: '18px solid transparent' }} />
+                    <div className="absolute right-0 bottom-0" style={{ width: 18, height: 18, background: 'rgba(0,0,0,0.06)', clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }} />
+                    <NoteLabel>Now Playing</NoteLabel>
+                    <NoteTitle className="mt-1">Celeste</NoteTitle>
+                    <NoteBody className="mt-2">Precision platforming with a story that stays with you.</NoteBody>
+                    <p className="mt-3 font-heading text-[10px] font-bold italic text-[hsl(var(--game-ink-dim))]">— Alfie</p>
+                  </div>
+                </div>
+
+                {/* Note 3 — green tint */}
+                <div className="relative" style={{ transform: 'rotate(-1deg)', width: 220 }}>
+                  <div className="absolute -top-3 left-1/2 z-30 h-6 w-6 -translate-x-1/2 rounded-full bg-[hsl(var(--game-amber))] shadow-[0_2px_4px_rgba(0,0,0,0.3)]" />
+                  <div
+                    className="relative overflow-hidden rounded-sm p-5 pt-6"
+                    style={{
+                      backgroundColor: '#E8F5EC',
+                      backgroundImage: 'radial-gradient(circle, rgba(26,26,20,0.05) 1px, transparent 1px)',
+                      backgroundSize: '10px 10px',
+                      boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
+                      borderRadius: '4px 16px 16px 16px',
+                    }}
+                  >
+                    <div className="absolute right-0 bottom-0" style={{ width: 0, height: 0, borderRight: '18px solid #D4B896', borderTop: '18px solid transparent' }} />
+                    <div className="absolute right-0 bottom-0" style={{ width: 18, height: 18, background: 'rgba(0,0,0,0.06)', clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }} />
+                    <NoteLabel>Completed</NoteLabel>
+                    <NoteTitle className="mt-1">Outer Wilds</NoteTitle>
+                    <NoteBody className="mt-2">Every discovery feels earned. A masterpiece of curiosity.</NoteBody>
+                    <p className="mt-3 font-heading text-[10px] font-bold italic text-[hsl(var(--game-ink-dim))]">— Guest</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
+        {/* ─── 08. Spiral Notebook ─── */}
+        <section className="py-16">
+          <Label num="08" title="Spiral Notebook" annotation="Left binding with coil circles, right side ruled paper with blue lines. Title with red underline. Bullet point design notes." />
+          <div className="px-8 py-10">
+            <div
+              className="mx-auto flex w-full max-w-lg overflow-hidden rounded-2xl"
+              style={{ boxShadow: '0 4px 14px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08)' }}
+            >
+              {/* Left binding */}
+              <div className="relative flex w-10 flex-shrink-0 flex-col items-center justify-center gap-3 bg-[hsl(var(--game-ink))]" style={{ padding: '24px 0' }}>
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="h-5 w-5 rounded-full border-2 border-[hsl(var(--game-cream-dark))] bg-[hsl(var(--game-ink))]" />
+                ))}
+              </div>
+              {/* Right ruled page */}
+              <div
+                className="flex-1 p-8"
+                style={{
+                  backgroundColor: '#fff',
+                  backgroundImage: 'repeating-linear-gradient(to bottom, transparent, transparent 27px, rgba(59,130,246,0.12) 27px, rgba(59,130,246,0.12) 28px)',
+                }}
+              >
+                <h3
+                  className="font-heading text-[18px] font-black text-[hsl(var(--game-ink))]"
+                  style={{ borderBottom: '2px solid hsl(var(--game-red))', paddingBottom: 4, display: 'inline-block' }}
+                >
+                  Design Notes
+                </h3>
+                <div className="mt-5 space-y-3">
+                  {[
+                    'Everything tilts. Nothing is perfectly straight.',
+                    'The cream is never pure white — always warm.',
+                    'Stipple texture adds tactile depth to flat surfaces.',
+                    'Dog-ear folds signal that content is tangible.',
+                    'Sticker tabs feel like real-world organisation.',
+                  ].map((note, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <span className="mt-0.5 font-heading text-[11px] text-[hsl(var(--game-amber))]">&bull;</span>
+                      <p className="font-heading text-[12px] font-semibold leading-relaxed text-[hsl(var(--game-ink-mid))]">{note}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── 09. Stipple Stat Card ─── */}
+        <section className="py-16">
+          <Label num="09" title="Stipple Stat Card" annotation="Three-column stat card with stipple background. Amber eyebrow label, bold stat numbers, and subtle colour accents for streak and points." />
+          <div className="px-8 py-10">
+            <div
+              className="mx-auto w-full max-w-md rounded-2xl p-6"
+              style={{
+                ...stippleStyle,
+                boxShadow: '0 4px 14px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08)',
+              }}
+            >
+              <p className="font-heading text-[9px] font-black uppercase tracking-[0.22em] text-[hsl(var(--game-amber))]">
+                Your stats today
+              </p>
+              <div className="mt-4 grid grid-cols-3 gap-4">
+                {/* Games */}
+                <div className="text-center">
+                  <span className="block font-heading text-[32px] font-black leading-none text-[hsl(var(--game-ink))]">3</span>
+                  <span className="mt-1 block font-heading text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-mid))]">Games</span>
+                </div>
+                {/* Streak */}
+                <div className="text-center">
+                  <span className="block font-heading text-[32px] font-black leading-none text-[hsl(var(--game-amber))]">7</span>
+                  <span className="mt-1 block font-heading text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-mid))]">Streak</span>
+                </div>
+                {/* Points */}
+                <div className="text-center">
+                  <span className="block font-heading text-[32px] font-black leading-none text-[hsl(var(--game-blue))]">1,240</span>
+                  <span className="mt-1 block font-heading text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-mid))]">Points</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── 10. The Rules Block ─── */}
+        <section className="py-16">
+          <Label num="10" title="The Rules Block" annotation="Large stipple card with design rules in a two-column grid. Title with red underline. The visual manifesto for Idle Hours aesthetic." />
+          <div className="px-8 py-10">
+            <div
+              className="mx-auto w-full max-w-2xl rounded-2xl p-8"
+              style={{
+                ...stippleDarkStyle,
+                boxShadow: '0 4px 14px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08)',
+              }}
+            >
+              <h3
+                className="font-heading text-[20px] font-black text-[hsl(var(--game-ink))]"
+                style={{ borderBottom: '2px solid hsl(var(--game-red))', paddingBottom: 6, display: 'inline-block' }}
+              >
+                Making It Feel Made
+              </h3>
+              <div className="mt-6 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+                {[
+                  'Everything tilts. Nothing is straight.',
+                  'The cream is never pure white.',
+                  'Stripe texture is energy. Use it once per screen, for Blitz.',
+                  'Stipple means surface. Cork, paper, cardboard.',
+                  'Dog-ears mean the content is a thing you can hold.',
+                  'Amber is warmth. Blue is trust. Red is danger or emphasis.',
+                  'Body copy is always italic, 600 weight, ink-light.',
+                  'Labels are 9px, black weight, uppercase, tracked wide.',
+                  'Spring easing for interactions. Ease for scroll.',
+                  'UK English always. Contractions mandatory.',
+                ].map((rule, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <span className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-[hsl(var(--game-amber))]/10 font-heading text-[9px] font-black text-[hsl(var(--game-amber))]">
+                      {i + 1}
+                    </span>
+                    <p className="font-heading text-[12px] font-semibold leading-relaxed text-[hsl(var(--game-ink-mid))]">{rule}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
   )

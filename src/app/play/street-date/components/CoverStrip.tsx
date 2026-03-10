@@ -31,14 +31,14 @@ export default function CoverStrip({
 
   return (
     <div className="mb-10">
-      {/* Cover strip — constrained so each card ≈ 160-180px wide */}
-      <div className="relative mx-auto max-w-4xl grid grid-cols-5 gap-3 sm:gap-5">
-        {/* Background progress line — sits behind covers at vertical center of cover cards */}
+      {/* Cover strip */}
+      <div className="relative mx-auto grid grid-cols-5 gap-3 sm:gap-5">
+        {/* Background progress line */}
         <div className="pointer-events-none absolute inset-x-[10%] top-[37.5%] z-0 h-[3px] rounded-full bg-border/40" />
 
         {/* Filled progress line */}
         <div
-          className="pointer-events-none absolute left-[10%] top-[37.5%] z-0 h-[3px] rounded-full bg-primary transition-all duration-500 ease-out"
+          className="pointer-events-none absolute left-[10%] top-[37.5%] z-0 h-[3px] rounded-full bg-[hsl(var(--game-green))] transition-all duration-500 ease-out"
           style={{ width: `${fillPercent * 0.8}%` }}
         />
 
@@ -60,9 +60,9 @@ export default function CoverStrip({
                   transition-all duration-300 sm:rounded-2xl
                   ${isRevealed
                     ? 'cursor-pointer border-border/60 bg-card shadow-lg hover:shadow-xl'
-                    : 'cursor-default border-border/30 bg-muted/40'
+                    : 'cursor-default border-border/30 bg-muted'
                   }
-                  ${isActive && isRevealed ? 'ring-3 ring-primary/50 ring-offset-2 ring-offset-background' : ''}
+                  ${isActive && isRevealed ? 'ring-3 ring-[hsl(var(--game-green))]/50 ring-offset-2 ring-offset-background' : ''}
                 `}
               >
                 {isRevealed ? (
@@ -106,7 +106,7 @@ export default function CoverStrip({
               </button>
 
               {/* Game title below — constrained to card width */}
-              <p className="mt-2.5 line-clamp-2 w-full text-center font-heading text-[11px] font-medium leading-snug text-muted-foreground sm:text-sm">
+              <p className="mt-2.5 w-full text-center font-heading text-[11px] font-medium leading-snug text-muted-foreground sm:text-sm">
                 {isRevealed ? game.title : '\u00A0'}
               </p>
             </div>

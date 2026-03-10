@@ -126,17 +126,27 @@ export default function ProximityCounter({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetRank])
 
-  // Color based on current display value
+  // Color + shadow color based on current display value
   function getColor(val: number): string {
-    if (val <= 1) return 'hsl(var(--game-green))'
+    if (val <= 1) return 'hsl(147 61% 41%)'
     if (val <= 50) return 'hsl(147 61% 41%)'
     if (val <= 200) return 'hsl(var(--game-amber))'
     if (val <= 500) return 'hsl(30 55% 50%)'
     return 'hsl(var(--game-red))'
   }
 
+  function getShadowColor(val: number): string {
+    if (val <= 1) return 'hsl(147 61% 30%)'
+    if (val <= 50) return 'hsl(147 61% 30%)'
+    if (val <= 200) return 'hsl(40 55% 35%)'
+    if (val <= 500) return 'hsl(20 55% 35%)'
+    return 'hsl(7 62% 35%)'
+  }
+
   // Bar fill: 0% at TOTAL, 100% at 1
   const fillPct = Math.max(0, Math.min(100, ((TOTAL - displayValue) / (TOTAL - 1)) * 100))
+  const color = getColor(displayValue)
+  const shadow = getShadowColor(displayValue)
 
   return (
     <div className="mx-auto w-full max-w-md">
@@ -145,21 +155,23 @@ export default function ProximityCounter({
         {gameTitle}
       </p>
 
-      {/* Counter bar */}
+      {/* Counter bar — bevel meter style */}
       <div
-        className="relative overflow-hidden rounded-xl border-2"
+        className="relative overflow-hidden rounded-full border-[3px]"
         style={{
-          borderColor: getColor(displayValue),
+          borderColor: shadow,
           height: '64px',
+          boxShadow: `0 6px 0 ${shadow}, 0 8px 20px rgba(0,0,0,0.15)`,
+          background: 'hsl(var(--game-cream))',
         }}
       >
         {/* Fill bar — driven directly by displayValue, no CSS transition */}
         <div
-          className="absolute inset-y-0 left-0"
+          className="absolute inset-y-0 left-0 rounded-full"
           style={{
             width: `${fillPct}%`,
-            background: getColor(displayValue),
-            opacity: 0.18,
+            background: color,
+            opacity: 0.2,
           }}
         />
 
@@ -167,7 +179,7 @@ export default function ProximityCounter({
         <div className="relative flex h-full items-center justify-center">
           <span
             className="font-heading text-4xl font-black tabular-nums"
-            style={{ color: getColor(displayValue) }}
+            style={{ color }}
           >
             {displayValue}
           </span>
@@ -175,14 +187,14 @@ export default function ProximityCounter({
       </div>
 
       {/* Status text */}
-      <div className="mt-2 text-center" style={{ minHeight: '28px' }}>
+      <div className="mt-4 text-center" style={{ minHeight: '28px' }}>
         {(phase === 'counting' || phase === 'stepped') && (
           <p className="text-xs font-semibold text-muted-foreground">
             &nbsp;
           </p>
         )}
         {phase === 'landed' && (
-          <p className="text-xs font-bold" style={{ color: getColor(targetRank) }}>
+          <p className="text-xs font-bold" style={{ color }}>
             {targetRank <= 50 ? 'Very close!' : targetRank <= 200 ? 'Getting warm' : targetRank <= 500 ? 'In the right area' : 'Keep trying'}
           </p>
         )}

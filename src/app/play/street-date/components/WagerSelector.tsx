@@ -37,7 +37,6 @@ export default function WagerSelector({ selected, locked, onSelect }: WagerSelec
                 ${locked ? 'cursor-default' : 'cursor-pointer'}
               `}
             >
-              {/* Check badge when locked and selected */}
               {locked && isSelected && (
                 <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--game-amber))] text-white text-[10px]">
                   ✓
