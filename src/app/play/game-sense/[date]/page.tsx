@@ -35,7 +35,7 @@ import ResultCard from '@/components/games/ResultCard'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 
-const GUESS_COST = 20
+const GUESS_COST = 1
 const spring = 'cubic-bezier(0.34,1.5,0.64,1)'
 
 export default function GameSenseDayPage({

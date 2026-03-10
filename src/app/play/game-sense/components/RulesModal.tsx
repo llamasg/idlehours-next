@@ -39,7 +39,7 @@ export default function RulesModal({ onClose }: RulesModalProps) {
           <div>
             <p className="mb-2 font-bold text-[hsl(var(--game-ink))]">Guessing</p>
             <p>
-              Each guess costs <strong>20 pts</strong>. Type a game title and
+              Each guess costs <strong>1 pt</strong>. Type a game title and
               select it. You&apos;ll see how close your guess is — the lower
               the number, the warmer you are.
             </p>
