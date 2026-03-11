@@ -63,6 +63,7 @@ export default function GameSenseDayPage({
   const [hintTipExiting, setHintTipExiting] = useState(false)
   const hintTipExitTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [hintJustUsed, setHintJustUsed] = useState(false)
+  const [hintPressed, setHintPressed] = useState(false)
   const hintUsedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hasInteractedRef = useRef(false)
 
@@ -78,6 +79,25 @@ export default function GameSenseDayPage({
   const shouldAnimate = state ? !(state.won || state.score <= 0) : true
 
   const HINT_COST = 250
+
+  // Force blue status bar — solid bg-color for iOS safe-area + theme-color meta
+  useEffect(() => {
+    const prevBg = document.body.style.backgroundColor
+    document.body.style.backgroundColor = '#2D6BC4'
+    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.remove())
+    const meta = document.createElement('meta')
+    meta.name = 'theme-color'
+    meta.content = '#2D6BC4'
+    document.head.appendChild(meta)
+    return () => {
+      document.body.style.backgroundColor = prevBg
+      meta.remove()
+      const restore = document.createElement('meta')
+      restore.name = 'theme-color'
+      restore.content = '#f5f0e8'
+      document.head.appendChild(restore)
+    }
+  }, [])
 
   // Countdown animation state
   const [pendingGuess, setPendingGuess] = useState<{
@@ -327,34 +347,35 @@ export default function GameSenseDayPage({
     <>
       <Header />
 
+      {/* Flex wrapper — game container grows to fill, no body-bg gap before footer */}
+      <div className="flex min-h-screen flex-col">
+
       {/* Blue game world — site max-width, min full viewport height */}
       <div
-        className="game-container mx-auto mt-[15px] flex min-h-[900px] max-w-7xl flex-col"
+        className="game-container mx-auto -mt-16 flex flex-1 max-w-7xl flex-col rounded-none sm:mt-[15px] sm:rounded-[20px]"
         style={{
-          background: 'linear-gradient(155deg, #2D6BC4, #1a2a4a)',
-          borderRadius: 20,
+          background: 'linear-gradient(to bottom, #2D6BC4, #1a2a4a)',
           boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12)',
           clipPath: (!shouldAnimate || wipeStarted) ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)',
           transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
         }}
       >
-        <main className={`font-game mx-auto flex flex-1 flex-col px-4 py-8 ${isPostGame ? 'w-full lg:px-8' : 'max-w-2xl justify-center'}`}>
-          {/* Game header */}
-          <div className="mb-6 text-center">
-            {/* Title + subtitle — animate: fade in centered, then slide up to position */}
-            <div
-              className="transition-all duration-700 ease-out"
-              style={
-                isPostGame
-                  ? entrance('slide-up', pgStep >= 4)
-                  : (entranceStep < 1
-                      ? { opacity: 0, transform: 'translateY(120px)' }
-                      : entranceStep < 2
-                        ? { opacity: 1, transform: 'translateY(120px)' }
-                        : { opacity: 1, transform: 'translateY(0)' })
-              }
-            >
-              <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-white">
+        <main className={`font-game mx-auto flex flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 ${isPostGame ? 'w-full lg:px-8' : 'max-w-2xl sm:justify-center'}`}>
+          {/* Title bar — normal flow, scrolls with page */}
+          <div
+            className="text-center"
+            style={
+              isPostGame
+                ? entrance('slide-up', pgStep >= 4)
+                : (entranceStep < 1
+                    ? { opacity: 0, transform: 'translateY(120px)' }
+                    : entranceStep < 2
+                      ? { opacity: 1, transform: 'translateY(120px)' }
+                      : { opacity: 1, transform: 'translateY(0)' })
+            }
+          >
+            <div className="transition-all duration-700 ease-out">
+              <h1 className="text-[22px] font-black uppercase leading-none text-white sm:text-[clamp(40px,8vw,64px)]">
                 {['Game', 'Sense'].map((word, i) => (
                   <span
                     key={word}
@@ -369,7 +390,7 @@ export default function GameSenseDayPage({
                   </span>
                 ))}
               </h1>
-              <p className="mt-1.5 text-xl font-bold text-white/70">
+              <p className="mt-0.5 text-sm font-bold text-white/70 sm:mt-1.5 sm:text-xl">
                 {['Guess', 'the', 'game!'].map((word, i) => (
                   <span
                     key={word}
@@ -384,9 +405,25 @@ export default function GameSenseDayPage({
                   </span>
                 ))}
               </p>
+              <p
+                className="mt-0 font-heading text-[10px] text-white/50 sm:mt-0.5 sm:text-xs"
+                style={
+                  isPostGame
+                    ? entrance('fade', pgStep >= 4)
+                    : (entranceStep < 5
+                        ? { opacity: 0 }
+                        : entranceStep < 6
+                          ? { animation: `gs-fade-in 0.5s ${spring} both` }
+                          : undefined)
+                }
+              >
+                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+              </p>
             </div>
+          </div>
 
-            {/* Date + score pill — fade in with rest */}
+          {/* Score row — scrolls with page, not pinned */}
+          <div className="mb-3 text-center sm:mb-6">
             <div
               style={
                 isPostGame
@@ -398,28 +435,23 @@ export default function GameSenseDayPage({
                         : undefined)
               }
             >
-              <p className="mt-0.5 font-heading text-xs text-white/50">
-                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-              </p>
-
               {/* Hint (left) | Score pill (center) | ? (right) — grid keeps score dead center */}
-              {!isPostGame && <div className="mt-3 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-6">
+              {!isPostGame && <div className="mt-2 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-3 sm:mt-3 sm:gap-6">
                 {/* Left cell — hint button with inertia tooltip */}
-                <div className="flex justify-start">
+                <div className={`flex ${hintPressed ? 'pr-2' : 'justify-start'}`}>
                   {!gameOver && state.guesses.length > 0 && (() => {
                     const bestProximity = Math.min(...state.guesses.map((g) => g.proximity))
                     const isGiveUp = bestProximity <= 2
                     return (
                       <div
                         ref={hintBtnRef}
-                        className="relative"
+                        className={`relative ${hintPressed && !isGiveUp ? 'w-full sm:w-auto' : ''}`}
                         onMouseMove={(e) => {
                           if (isGiveUp) return
                           const rect = hintBtnRef.current?.getBoundingClientRect()
                           if (!rect) return
                           hintTipTargetRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
                           if (!showHintTooltip || hintTipExiting) {
-                            // Cancel any exit animation, snap to cursor position
                             if (hintTipExitTimer.current) clearTimeout(hintTipExitTimer.current)
                             setHintTipExiting(false)
                             hintTipPosRef.current = { ...hintTipTargetRef.current }
@@ -441,7 +473,15 @@ export default function GameSenseDayPage({
                         <button
                           type="button"
                           onClick={handleHint}
-                          className={`inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 font-heading text-[13px] font-[900] tracking-wide text-white transition-[transform,box-shadow,background-color,border-color] duration-200 ${
+                          onTouchStart={() => setHintPressed(true)}
+                          onTouchEnd={() => setHintPressed(false)}
+                          onTouchCancel={() => setHintPressed(false)}
+                          className={`inline-flex items-center rounded-full border-2 font-heading text-[13px] font-[900] tracking-wide text-white transition-[transform,box-shadow,background-color,border-color,width,padding] duration-200 ${
+                            /* Circle on mobile (expand full-width when pressed), pill on sm+ */
+                            hintPressed && !isGiveUp
+                              ? 'h-11 w-full justify-between px-4 sm:w-auto sm:justify-center sm:gap-2 sm:px-6 sm:py-3'
+                              : 'h-11 w-11 justify-center sm:h-auto sm:w-auto sm:gap-2 sm:px-6 sm:py-3'
+                          } ${
                             isGiveUp || hintJustUsed
                               ? 'border-[hsl(7_62%_35%)] bg-[hsl(var(--game-red))] shadow-[0_6px_0_hsl(7_62%_35%),0_8px_20px_rgba(200,50,50,0.28)] hover:-translate-y-[3px] hover:shadow-[0_9px_0_hsl(7_62%_35%),0_12px_24px_rgba(200,50,50,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_hsl(7_62%_35%)]'
                               : 'border-[#2d6bc4] bg-[hsl(var(--game-blue))] shadow-[0_6px_0_#2d6bc4,0_8px_20px_rgba(45,107,196,0.28)] hover:-translate-y-[3px] hover:shadow-[0_9px_0_#2d6bc4,0_12px_24px_rgba(45,107,196,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#2d6bc4]'
@@ -451,17 +491,22 @@ export default function GameSenseDayPage({
                             <span>&minus;{HINT_COST} pts</span>
                           ) : (
                             <>
-                              <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                              <svg className="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                               </svg>
-                              {isGiveUp ? 'Give up' : 'Hint'}
+                              {/* Press-hold on mobile: show cost next to icon */}
+                              {hintPressed && !isGiveUp && (
+                                <span className="text-[11px] sm:hidden">&minus;{HINT_COST}</span>
+                              )}
+                              {/* Text label hidden on mobile, visible on sm+ */}
+                              <span className="hidden sm:inline">{isGiveUp ? 'Give up' : 'Hint'}</span>
                             </>
                           )}
                         </button>
-                        {/* Inertia tooltip — follows cursor with spring physics, scales in/out */}
+                        {/* Inertia tooltip — desktop only */}
                         {showHintTooltip && !isGiveUp && (
                           <div
-                            className="pointer-events-none absolute z-20 whitespace-nowrap px-3 py-1.5 shadow-lg"
+                            className="pointer-events-none absolute z-20 hidden whitespace-nowrap px-3 py-1.5 shadow-lg sm:block"
                             style={{
                               background: 'hsl(var(--game-ink))',
                               left: hintTipPos.x,
@@ -530,6 +575,7 @@ export default function GameSenseDayPage({
             </div>
           </div>
 
+
           {/* Not playable message */}
           {!playable && (
             <div className="mb-8 rounded-lg border border-white/20 bg-white/10 px-4 py-6 text-center backdrop-blur-sm">
@@ -548,12 +594,12 @@ export default function GameSenseDayPage({
           {/* Game area — white container for clarity on blue bg */}
           {playable && !gameOver && (
             <div
-              className="relative z-10 mb-8 rounded-2xl bg-white/95 p-5 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out sm:p-6"
+              className="relative z-10 mb-4 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out sm:mb-8 sm:p-6"
               style={entranceStep < 2 ? { opacity: 0, transform: 'scale(0)' } : entranceStep < 6 ? { animation: 'gs-box-in 0.7s cubic-bezier(0.34,1.5,0.64,1) both' } : undefined}
             >
               {/* Sentence clue — always mounted so box knows its final size */}
               <div
-                className="mb-6 transition-opacity duration-300 ease-out"
+                className="mb-4 transition-opacity duration-300 ease-out sm:mb-6"
                 style={{ opacity: entranceStep < 3 ? 0 : 1 }}
               >
                 <SentenceClue
@@ -591,7 +637,7 @@ export default function GameSenseDayPage({
                 </div>
               )}
 
-              {/* Guess list — grid row transition for smooth height */}
+              {/* Guess list — scrollable container on mobile, grid row transition for smooth height */}
               {!isAnimating && (
                 <div
                   className="grid transition-[grid-template-rows] duration-300 ease-in-out"
@@ -599,7 +645,7 @@ export default function GameSenseDayPage({
                 >
                   <div className="overflow-hidden">
                     {state.guesses.length > 0 && entranceStep >= 4 && (
-                      <div className="mt-6">
+                      <div className="mt-4 max-h-[30vh] overflow-y-auto overscroll-contain sm:mt-6 sm:max-h-none sm:overflow-y-visible">
                         <GuessList guesses={state.guesses} entranceDelay={entranceStep < 6 ? 100 : 0} />
                       </div>
                     )}
@@ -729,6 +775,7 @@ export default function GameSenseDayPage({
       )}
 
       <SiteFooter />
+      </div>{/* end flex wrapper */}
 
       {/* Rules modal */}
       {showRules && <RulesModal onClose={() => setShowRules(false)} />}

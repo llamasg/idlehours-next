@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, type TouchEvent as ReactTouchEvent } from 'react'
 import { GAMES, type GameSenseGame } from '../data/games'
 
 interface GuessInputProps {
@@ -58,6 +58,8 @@ export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInput
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
+  const touchStartX = useRef<number | null>(null)
+  const touchStartY = useRef<number | null>(null)
 
   // Filter matches based on what the user actually typed
   const matches =
@@ -181,11 +183,32 @@ export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInput
     setHighlightIndex(0)
   }
 
+  // Swipe right on input to accept ghost suggestion
+  function handleTouchStart(e: ReactTouchEvent) {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+  }
+  function handleTouchEnd(e: ReactTouchEvent) {
+    if (touchStartX.current === null || touchStartY.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current)
+    touchStartX.current = null
+    touchStartY.current = null
+    // Require horizontal swipe: >60px right, not too vertical
+    if (dx > 60 && dy < 40 && ghostSuffix) {
+      acceptGhost()
+    }
+  }
+
   return (
     <div ref={containerRef} className="relative w-full">
-      <div className="relative flex items-stretch gap-0 rounded-lg border border-[hsl(var(--game-ink))]/15 bg-[hsl(var(--game-cream))] focus-within:ring-2 focus-within:ring-[hsl(var(--game-blue))]/30">
+      <form
+        onSubmit={(e) => { e.preventDefault(); submitGuess() }}
+        autoComplete="off"
+        className="relative flex items-stretch gap-0 rounded-lg border border-[hsl(var(--game-ink))]/15 bg-[hsl(var(--game-cream))] focus-within:ring-2 focus-within:ring-[hsl(var(--game-blue))]/30"
+      >
         {/* Ghost suggestion layer — sits behind the real input */}
-        <div className="pointer-events-none absolute inset-0 flex items-center px-4 py-3">
+        <div className="pointer-events-none absolute inset-0 flex items-center px-4 py-3 text-[16px]">
           <span className="text-transparent">{query}</span>
           {ghostSuffix && (
             <span className="text-[hsl(var(--game-ink))]/30">{ghostSuffix}</span>
@@ -194,18 +217,31 @@ export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInput
         <input
           ref={inputRef}
           type="text"
+          name="game-guess"
           value={query}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onFocus={() => query.length >= 2 && setIsOpen(true)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
           placeholder="Type a game title..."
           disabled={disabled}
-          autoComplete="off"
-          className="relative min-w-0 flex-1 rounded-l-lg bg-transparent px-4 py-3 text-[hsl(var(--game-ink))] placeholder:text-[hsl(var(--game-ink-light))] focus:outline-none disabled:opacity-50"
+          autoComplete="one-time-code"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          inputMode="search"
+          enterKeyHint="send"
+          data-1p-ignore=""
+          data-lpignore="true"
+          data-form-type="other"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={showDropdown}
+          className="relative min-w-0 flex-1 rounded-l-lg bg-transparent px-4 py-3 text-[16px] text-[hsl(var(--game-ink))] placeholder:text-[hsl(var(--game-ink-light))] focus:outline-none disabled:opacity-50"
         />
         <button
-          type="button"
-          onClick={submitGuess}
+          type="submit"
           disabled={disabled || !query.trim()}
           className="flex w-12 flex-shrink-0 items-center justify-center rounded-r-lg border-l border-[hsl(var(--game-ink))]/15 text-[hsl(var(--game-ink-light))] transition-colors hover:bg-[hsl(var(--game-ink))]/5 hover:text-[hsl(var(--game-ink))] disabled:opacity-30"
           aria-label="Submit guess"
@@ -214,7 +250,7 @@ export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInput
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
           </svg>
         </button>
-      </div>
+      </form>
 
       {showDropdown && (
         <ul
@@ -228,7 +264,7 @@ export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInput
                 key={game.id}
                 role="option"
                 aria-selected={i === highlightIndex}
-                className={`cursor-pointer px-4 py-2 text-sm transition-colors ${
+                className={`cursor-pointer px-4 py-2 text-[16px] transition-colors ${
                   i === highlightIndex
                     ? 'bg-[hsl(var(--game-blue))]/10 text-[hsl(var(--game-ink))]'
                     : 'text-[hsl(var(--game-ink-mid))] hover:bg-[hsl(var(--game-blue))]/5 hover:text-[hsl(var(--game-ink))]'
@@ -247,7 +283,7 @@ export default function GuessInput({ onGuess, guessedIds, disabled }: GuessInput
               </li>
             ))
           ) : (
-            <li className="px-4 py-2 text-sm text-[hsl(var(--game-ink-light))]">
+            <li className="px-4 py-2 text-[16px] text-[hsl(var(--game-ink-light))]">
               No matching games found
             </li>
           )}

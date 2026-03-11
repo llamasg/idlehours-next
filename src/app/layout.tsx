@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import ClientProviders from '@/components/ClientProviders'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -16,6 +16,14 @@ export const metadata: Metadata = {
     locale: 'en_GB',
     type: 'website',
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  interactiveWidget: 'resizes-content',
+  viewportFit: 'cover',
+  themeColor: '#f5f0e8',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

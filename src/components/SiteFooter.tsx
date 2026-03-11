@@ -29,11 +29,11 @@ const footerColumns = [
 
 export default function SiteFooter() {
   return (
-    <footer className="mt-16 border-t border-border/60">
+    <footer className="mt-16 border-t border-border/60 bg-background">
       <div className="mx-auto max-w-7xl px-4 py-10 lg:px-8">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
           {/* Brand */}
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <Link href="/" className="font-heading text-lg font-bold tracking-tight text-foreground">
               idle hours
             </Link>
