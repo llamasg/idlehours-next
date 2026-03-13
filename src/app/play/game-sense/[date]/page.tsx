@@ -124,8 +124,13 @@ export default function GameSenseDayPage({
   const gameOver = state ? (state.won || (state.score <= 0 && !pendingGuess)) : false
 
   // Load state from localStorage on mount — go straight to post-game screen, no modal
+  // Also stamp startedAt if this is a fresh game
   useEffect(() => {
     const loaded = loadDayState(date)
+    if (!loaded.startedAt && !loaded.won && loaded.score > 0) {
+      loaded.startedAt = Date.now()
+      saveDayState(date, loaded)
+    }
     setState(loaded)
   }, [date])
 
@@ -182,6 +187,16 @@ export default function GameSenseDayPage({
       setTimeout(() => setShowLossModal(true), 300)
     }
   }, [state, pendingGuess])
+
+  // Stamp endedAt when the game finishes (win or loss)
+  useEffect(() => {
+    if (!state) return
+    if ((state.won || state.score <= 0) && !state.endedAt) {
+      const updated = { ...state, endedAt: Date.now() }
+      setState(updated)
+      saveDayState(date, updated)
+    }
+  }, [state, date])
 
   const handleGuess = useCallback(
     (game: GameSenseGame) => {
@@ -415,20 +430,20 @@ export default function GameSenseDayPage({
                   </span>
                 ))}
               </p>
-              <p
-                className="mt-0 font-heading text-[10px] text-white/50 sm:mt-0.5 sm:text-xs"
-                style={
-                  isPostGame
-                    ? entrance('fade', pgStep >= 4)
-                    : (entranceStep < 5
-                        ? { opacity: 0 }
-                        : entranceStep < 6
-                          ? { animation: `gs-fade-in 0.5s ${spring} both` }
-                          : undefined)
-                }
-              >
-                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-              </p>
+              {!isPostGame && (
+                <p
+                  className="mt-0 font-heading text-[10px] text-white/50 sm:mt-0.5 sm:text-xs"
+                  style={
+                    entranceStep < 5
+                      ? { opacity: 0 }
+                      : entranceStep < 6
+                        ? { animation: `gs-fade-in 0.5s ${spring} both` }
+                        : undefined
+                  }
+                >
+                  {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+                </p>
+              )}
             </div>
           </div>
 
@@ -686,53 +701,96 @@ export default function GameSenseDayPage({
                 </div>
               </div>
 
-              {/* Badges — slides open when pgStep >= 5 */}
-              <div
-                className="grid transition-[grid-template-rows] duration-700 ease-out"
-                style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
-              >
-                <div className="overflow-hidden">
-                  <div className="mb-6">
-                    <DailyBadgeShelf currentGame="game-sense" animateStamp={pgStep >= 5} />
-                  </div>
-                </div>
-              </div>
+              {/* Two-column post-game: left (55%) badges + results, right (45%) analysis */}
+              <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-[55fr_45fr]">
 
-              {/* Two-column: answers (mobile-first) + ResultCard */}
-              <div className="mb-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
-                {/* Scoring & rank — second on mobile, left on desktop */}
-                <div className="order-2 lg:order-1">
+                {/* ── Left column: badge shelf → gap → ResultCard ── */}
+                <div className="order-2 flex flex-col gap-6 lg:order-1">
+                  <div
+                    className="grid transition-[grid-template-rows] duration-700 ease-out"
+                    style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
+                  >
+                    <div className="overflow-hidden">
+                      <DailyBadgeShelf currentGame="game-sense" animateStamp={pgStep >= 5} />
+                    </div>
+                  </div>
+
                   <ResultCard
                     game="game-sense"
                     score={state.score}
                     streak={0}
                     won={state.won}
                     puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                    onViewResults={() => state.won ? setShowWinModal(true) : setShowLossModal(true)}
+                    onViewResults={() => {}}
+                    hideViewResults
                     animateEntrance={pgStep >= 1}
                   />
                 </div>
 
-                {/* Revealed sentence, answer & guess history — first on mobile, right on desktop */}
+                {/* ── Right column: single merged analysis card ── */}
                 <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
-                  <div className="overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                    <div className="flex items-center gap-3 px-5 py-4 sm:px-6">
+                  <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
+
+                    {/* Puzzle label */}
+                    <div className="px-5 pt-4 sm:px-6">
+                      <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
+                        Game Sense {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+                      </p>
+                    </div>
+
+                    {/* Game answer — prominent poster */}
+                    <div className="flex items-center gap-4 px-5 py-4 sm:px-6">
                       {answer.igdbImageId && (
                         <img
                           src={igdbCoverUrl(answer.igdbImageId)}
                           alt={answer.title}
-                          className="h-12 w-9 rounded object-cover shadow-sm"
+                          className="h-20 w-[60px] rounded-lg object-cover shadow-md"
                         />
                       )}
                       <div>
-                        <p className="font-heading text-[15px] font-black text-[hsl(var(--game-ink))]">
+                        <p className="font-heading text-[20px] font-black text-[hsl(var(--game-ink))]">
                           {answer.title}
                         </p>
-                        <p className="font-heading text-[12px] font-semibold text-[hsl(var(--game-ink-light))]">
+                        <p className="font-heading text-[13px] font-semibold text-[hsl(var(--game-ink-light))]">
                           {answer.year}
                         </p>
                       </div>
                     </div>
+
+                    {/* Stats row — all 4 inline */}
+                    <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
+                    <div className="flex gap-1.5 px-5 py-3 sm:gap-2 sm:px-6 sm:py-4">
+                      {[
+                        { label: 'Time', value: (() => {
+                          if (!state.startedAt || !state.endedAt) return '—'
+                          let secs = Math.round((state.endedAt - state.startedAt) / 1000)
+                          if (secs < 60) return `${secs}s`
+                          const hrs = Math.floor(secs / 3600)
+                          secs %= 3600
+                          const mins = Math.floor(secs / 60)
+                          const rem = secs % 60
+                          if (hrs > 0) return `${hrs}h ${mins}m ${rem}s`
+                          return `${mins}m ${rem}s`
+                        })() },
+                        { label: 'Guesses', value: String(state.guesses.filter(g => !g.isHint).length) },
+                        { label: 'Clues', value: `${state.blanksRevealed.length}/5` },
+                        { label: 'Hints', value: String(state.guesses.filter(g => g.isHint).length) },
+                      ].map(({ label, value }) => (
+                        <div
+                          key={label}
+                          className="flex flex-1 flex-col items-center gap-0.5 rounded-lg bg-[hsl(var(--game-cream-dark))] px-1.5 py-1.5 sm:rounded-xl sm:px-2 sm:py-2"
+                        >
+                          <span className="font-heading text-[14px] font-black text-[hsl(var(--game-ink))] sm:text-[18px]">
+                            {value}
+                          </span>
+                          <span className="font-heading text-[7px] font-extrabold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))] sm:text-[9px] sm:tracking-[0.18em]">
+                            {label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Revealed sentence */}
                     <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
                     <div className="p-5 sm:p-6">
                       <SentenceClue
@@ -745,12 +803,12 @@ export default function GameSenseDayPage({
                       />
                     </div>
 
-                    {/* Guess history */}
+                    {/* Guess history — scrollable if it overflows */}
                     {state.guesses.length > 0 && (
                       <>
                         <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
-                        <div className="p-5 sm:p-6">
-                          <p className="mb-3 font-heading text-[13px] font-bold uppercase tracking-wide text-[hsl(var(--game-ink-light))]">
+                        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-5 sm:p-6">
+                          <p className="mb-3 font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
                             Your guesses
                           </p>
                           <GuessList guesses={state.guesses} />
@@ -790,10 +848,10 @@ export default function GameSenseDayPage({
         </main>
       </div>
 
-      {/* DiscoverMore — outside the blue area */}
+      {/* DiscoverMore — outside the blue area, needs own bg on mobile */}
       {isPostGame && (
         <div
-          className="mx-auto max-w-7xl px-4 py-8 lg:px-8"
+          className="bg-background mx-auto max-w-7xl px-4 py-8 sm:bg-transparent lg:px-8"
           style={entrance('fade', pgStep >= 6)}
         >
           <DiscoverMore currentGame="game-sense" />

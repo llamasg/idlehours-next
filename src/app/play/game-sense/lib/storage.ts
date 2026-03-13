@@ -13,6 +13,10 @@ export interface DayState {
   won: boolean;
   score: number;
   blanksRevealed: string[];
+  /** Epoch ms when the player first loaded the puzzle */
+  startedAt?: number;
+  /** Epoch ms when the game ended (won or lost) */
+  endedAt?: number;
 }
 
 export const STARTING_SCORE = 1000;

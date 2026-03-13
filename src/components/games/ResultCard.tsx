@@ -21,6 +21,8 @@ interface ResultCardProps {
   won: boolean
   puzzleLabel: string    // e.g. "Shelf Price #001 · Tue 3rd Mar"
   onViewResults: () => void
+  /** Hide the "View full results" button in the footer */
+  hideViewResults?: boolean
   /** When true, play cascading entrance animation for each internal element */
   animateEntrance?: boolean
 }
@@ -54,6 +56,7 @@ export default function ResultCard({
   won,
   puzzleLabel,
   onViewResults,
+  hideViewResults = false,
   animateEntrance = false,
 }: ResultCardProps) {
   const [ladderOpen, setLadderOpen] = useState(false)
@@ -148,10 +151,13 @@ export default function ResultCard({
           </button>
 
           <div
-            className="grid transition-[grid-template-rows] duration-300 ease-out"
-            style={{ gridTemplateRows: ladderOpen ? '1fr' : '0fr' }}
+            style={{
+              maxHeight: ladderOpen ? '600px' : '0px',
+              overflow: 'hidden',
+              transition: 'max-height 0.3s ease-out',
+            }}
           >
-            <div className="overflow-hidden">
+            <div>
               <div className="flex flex-col gap-2 pt-3">
                 {ladder.map((tier, i) => {
                   const isCurrentRank = i === currentRankIndex
@@ -207,19 +213,21 @@ export default function ResultCard({
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t border-[hsl(var(--game-ink))]/10 px-6 py-3">
-          <p className="text-[13px] font-semibold text-[hsl(var(--game-ink-light))]">
-            {puzzleLabel}
-          </p>
-          <button
-            onClick={onViewResults}
-            className="text-[14px] font-bold underline underline-offset-2 transition-colors"
-            style={{ color: colors.accent, textDecorationColor: `color-mix(in srgb, ${colors.accent} 30%, transparent)` }}
-          >
-            View full results &rarr;
-          </button>
-        </div>
+        {/* Footer — hidden entirely when hideViewResults (puzzle label moved elsewhere) */}
+        {!hideViewResults && (
+          <div className="flex items-center justify-between border-t border-[hsl(var(--game-ink))]/10 px-6 py-3">
+            <p className="text-[13px] font-semibold text-[hsl(var(--game-ink-light))]">
+              {puzzleLabel}
+            </p>
+            <button
+              onClick={onViewResults}
+              className="text-[14px] font-bold underline underline-offset-2 transition-colors"
+              style={{ color: colors.accent, textDecorationColor: `color-mix(in srgb, ${colors.accent} 30%, transparent)` }}
+            >
+              View full results &rarr;
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ═══ Desktop full layout ═══ */}
@@ -384,22 +392,24 @@ export default function ResultCard({
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t border-[hsl(var(--game-ink))]/10 px-8 py-4">
-          <p
-            className="text-[13px] font-semibold text-[hsl(var(--game-ink-light))]"
-            style={entrance('move', step >= 15)}
-          >
-            {puzzleLabel}
-          </p>
-          <button
-            onClick={onViewResults}
-            className="text-[14px] font-bold underline underline-offset-2 transition-colors"
-            style={{ color: colors.accent, textDecorationColor: `color-mix(in srgb, ${colors.accent} 30%, transparent)`, ...entrance('move', step >= 15, 150) }}
-          >
-            View full results &rarr;
-          </button>
-        </div>
+        {/* Footer — hidden entirely when hideViewResults */}
+        {!hideViewResults && (
+          <div className="flex items-center justify-between border-t border-[hsl(var(--game-ink))]/10 px-8 py-4">
+            <p
+              className="text-[13px] font-semibold text-[hsl(var(--game-ink-light))]"
+              style={entrance('move', step >= 15)}
+            >
+              {puzzleLabel}
+            </p>
+            <button
+              onClick={onViewResults}
+              className="text-[14px] font-bold underline underline-offset-2 transition-colors"
+              style={{ color: colors.accent, textDecorationColor: `color-mix(in srgb, ${colors.accent} 30%, transparent)`, ...entrance('move', step >= 15, 150) }}
+            >
+              View full results &rarr;
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
