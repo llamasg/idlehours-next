@@ -9,6 +9,7 @@ import game from './game'
 import siteSettings from './siteSettings'
 import {homePageSchemas} from './homePage'
 import pipDashboard from './pipDashboard'
+import gameLibrary, {curatedRow, curatedRowGame, featureBanner} from './gameLibrary'
 
 export const schemaTypes = [
   // Documents
@@ -22,6 +23,11 @@ export const schemaTypes = [
   promoBanner,
   // Pip — nightly job results (singleton, written by backend)
   pipDashboard,
+  // Game Library (singleton)
+  gameLibrary,
+  curatedRow,
+  curatedRowGame,
+  featureBanner,
   // Content types
   blockContent,
   // Homepage (document + section objects)
