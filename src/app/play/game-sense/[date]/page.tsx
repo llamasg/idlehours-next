@@ -361,12 +361,11 @@ export default function GameSenseDayPage({
       {/* Flex wrapper — game container grows to fill, no body-bg gap before footer */}
       <div className="flex min-h-screen flex-col">
 
-      {/* Blue game world — site max-width, min full viewport height */}
+      {/* Blue game world — full-width gradient, content constrained inside */}
       <div
-        className="game-container mx-auto -mt-16 flex flex-1 max-w-7xl flex-col rounded-none sm:mt-[15px] sm:rounded-[20px]"
+        className="game-container -mt-16 flex flex-1 flex-col sm:mt-0"
         style={{
           background: 'linear-gradient(to bottom, #2D6BC4, #1a2a4a)',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12)',
           clipPath: (!shouldAnimate || wipeStarted) ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)',
           transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
         }}
