@@ -80,17 +80,28 @@ export default function GameSenseDayPage({
 
   const HINT_COST = 250
 
-  // Force blue status bar — solid bg-color for iOS safe-area + theme-color meta
+  // Force blue status bar on mobile only — solid bg-color for iOS safe-area + theme-color meta
   useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
     const prevBg = document.body.style.backgroundColor
-    document.body.style.backgroundColor = '#2D6BC4'
+
+    function applyMobileBg(mobile: boolean) {
+      document.body.style.backgroundColor = mobile ? '#2D6BC4' : prevBg
+    }
+
+    applyMobileBg(mq.matches)
+    mq.addEventListener('change', (e) => applyMobileBg(e.matches))
+
+    // Theme-color meta for iOS status bar (always set — only iOS uses it)
     document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.remove())
     const meta = document.createElement('meta')
     meta.name = 'theme-color'
     meta.content = '#2D6BC4'
     document.head.appendChild(meta)
+
     return () => {
       document.body.style.backgroundColor = prevBg
+      mq.removeEventListener('change', (e: MediaQueryListEvent) => applyMobileBg(e.matches))
       meta.remove()
       const restore = document.createElement('meta')
       restore.name = 'theme-color'
