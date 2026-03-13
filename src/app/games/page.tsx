@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import GameTileCard from '@/components/GameTileCard'
+import BrowseView from '@/components/games/BrowseView'
 import { getAllGames } from '@/lib/queries'
 import { useGameLightbox } from '@/context/GameLightboxContext'
 import type { Game } from '@/types'
@@ -266,6 +267,7 @@ function GameListCard({ game }: { game: Game }) {
 }
 
 export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug?: string }) {
+  const [tab, setTab] = useState<'browse' | 'library'>('browse')
   const [search, setSearch] = useState('')
   const [platform, setPlatform] = useState('All')
   const [genre, setGenre] = useState('All')
@@ -409,6 +411,33 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
           </p>
         </motion.div>
 
+        {/* Tab toggle */}
+        <div className="mb-8 inline-flex rounded-full border border-border bg-card p-1 gap-0.5">
+          <button
+            onClick={() => setTab('browse')}
+            className={`flex items-center gap-2 rounded-full px-5 py-2.5 font-heading text-xs font-extrabold transition-all ${
+              tab === 'browse'
+                ? 'bg-foreground text-background'
+                : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+            }`}
+          >
+            📖 Browse
+          </button>
+          <button
+            onClick={() => setTab('library')}
+            className={`flex items-center gap-2 rounded-full px-5 py-2.5 font-heading text-xs font-extrabold transition-all ${
+              tab === 'library'
+                ? 'bg-foreground text-background'
+                : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+            }`}
+          >
+            ⊞ Library
+          </button>
+        </div>
+
+        {tab === 'browse' && <BrowseView />}
+
+        {tab === 'library' && (<>
         {/* Search + Filters */}
         <div className="mb-6 space-y-3">
           {/* Search bar */}
@@ -538,6 +567,7 @@ export default function GamesPage({ initialLightboxSlug }: { initialLightboxSlug
             <p className="mt-1 text-sm text-muted-foreground">Try adjusting your filters or search.</p>
           </div>
         )}
+        </>)}
       </main>
 
       <SiteFooter />
