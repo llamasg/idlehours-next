@@ -453,3 +453,56 @@ export async function getSiteSettings() {
   The frontend will compose these based on the dynamicQuery object
   from the CMS homePage document.
 */
+
+// Get game library browse page (singleton)
+export async function getGameLibrary() {
+  const library = await client.fetch(`
+    *[_type == "gameLibrary"][0] {
+      _id,
+      featuredPick {
+        game-> {
+          _id, title, slug, "coverImage": coverImage.asset->url,
+          shortDescription, "platforms": coalesce(platforms, []),
+          "genre": coalesce(genre, []), coop, openCriticScore,
+          difficulty, greatSoundtrack, currentPrice, isFree,
+          "affiliateLinks": coalesce(affiliateLinks, [])
+        },
+        eyebrow,
+        quote
+      },
+      sections[] {
+        _key,
+        _type,
+
+        // curatedRow
+        _type == "curatedRow" => {
+          title,
+          "games": games[] {
+            isStaffPick,
+            game-> {
+              _id, title, slug, "coverImage": coverImage.asset->url,
+              shortDescription, "platforms": coalesce(platforms, []),
+              "genre": coalesce(genre, []), coop, openCriticScore,
+              difficulty, greatSoundtrack, currentPrice, isFree,
+              "affiliateLinks": coalesce(affiliateLinks, []),
+              featured, publishedAt
+            }
+          },
+          noteEnabled,
+          noteStyle,
+          noteContent,
+          noteAuthor
+        },
+
+        // featureBanner
+        _type == "featureBanner" => {
+          headline,
+          subtitle,
+          linkedPost-> { _id, title, slug },
+          buttonLabel
+        }
+      }
+    }
+  `)
+  return library
+}
