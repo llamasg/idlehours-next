@@ -698,63 +698,66 @@ export default function GameSenseDayPage({
                 </div>
               </div>
 
-              {/* ResultCard — internal 15-step cascade */}
-              <div className="mb-6">
-                <ResultCard
-                  game="game-sense"
-                  score={state.score}
-                  streak={0}
-                  won={state.won}
-                  puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                  onViewResults={() => state.won ? setShowWinModal(true) : setShowLossModal(true)}
-                  animateEntrance={pgStep >= 1}
-                />
-              </div>
+              {/* Two-column: answers (mobile-first) + ResultCard */}
+              <div className="mb-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+                {/* Scoring & rank — second on mobile, left on desktop */}
+                <div className="order-2 lg:order-1">
+                  <ResultCard
+                    game="game-sense"
+                    score={state.score}
+                    streak={0}
+                    won={state.won}
+                    puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                    onViewResults={() => state.won ? setShowWinModal(true) : setShowLossModal(true)}
+                    animateEntrance={pgStep >= 1}
+                  />
+                </div>
 
-              {/* Revealed sentence — white card with answer below */}
-              <div className="mb-6" style={entrance('slide-up', pgStep >= 2)}>
-                <div className="mx-auto w-full max-w-[850px] overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                  <div className="p-5 sm:p-6">
-                    <SentenceClue
-                      answer={answer}
-                      blanksRevealed={state.blanksRevealed}
-                      score={0}
-                      onRevealBlank={() => {}}
-                      disabled={true}
-                      revealAll
-                    />
-                  </div>
-                  <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
-                  <div className="flex items-center gap-3 px-5 py-4 sm:px-6">
-                    {answer.igdbImageId && (
-                      <img
-                        src={igdbCoverUrl(answer.igdbImageId)}
-                        alt={answer.title}
-                        className="h-12 w-9 rounded object-cover shadow-sm"
-                      />
-                    )}
-                    <div>
-                      <p className="font-heading text-[15px] font-black text-[hsl(var(--game-ink))]">
-                        {answer.title}
-                      </p>
-                      <p className="font-heading text-[12px] font-semibold text-[hsl(var(--game-ink-light))]">
-                        {answer.year}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Guess history */}
-                  {state.guesses.length > 0 && (
-                    <>
-                      <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
-                      <div className="p-5 sm:p-6">
-                        <p className="mb-3 font-heading text-[13px] font-bold uppercase tracking-wide text-[hsl(var(--game-ink-light))]">
-                          Your guesses
+                {/* Revealed sentence, answer & guess history — first on mobile, right on desktop */}
+                <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
+                  <div className="overflow-hidden rounded-2xl bg-white/95 shadow-sm">
+                    <div className="flex items-center gap-3 px-5 py-4 sm:px-6">
+                      {answer.igdbImageId && (
+                        <img
+                          src={igdbCoverUrl(answer.igdbImageId)}
+                          alt={answer.title}
+                          className="h-12 w-9 rounded object-cover shadow-sm"
+                        />
+                      )}
+                      <div>
+                        <p className="font-heading text-[15px] font-black text-[hsl(var(--game-ink))]">
+                          {answer.title}
                         </p>
-                        <GuessList guesses={state.guesses} />
+                        <p className="font-heading text-[12px] font-semibold text-[hsl(var(--game-ink-light))]">
+                          {answer.year}
+                        </p>
                       </div>
-                    </>
-                  )}
+                    </div>
+                    <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
+                    <div className="p-5 sm:p-6">
+                      <SentenceClue
+                        answer={answer}
+                        blanksRevealed={state.blanksRevealed}
+                        score={0}
+                        onRevealBlank={() => {}}
+                        disabled={true}
+                        revealAll
+                      />
+                    </div>
+
+                    {/* Guess history */}
+                    {state.guesses.length > 0 && (
+                      <>
+                        <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
+                        <div className="p-5 sm:p-6">
+                          <p className="mb-3 font-heading text-[13px] font-bold uppercase tracking-wide text-[hsl(var(--game-ink-light))]">
+                            Your guesses
+                          </p>
+                          <GuessList guesses={state.guesses} />
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </>
