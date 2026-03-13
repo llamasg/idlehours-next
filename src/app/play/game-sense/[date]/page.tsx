@@ -742,6 +742,19 @@ export default function GameSenseDayPage({
                       </p>
                     </div>
                   </div>
+
+                  {/* Guess history */}
+                  {state.guesses.length > 0 && (
+                    <>
+                      <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
+                      <div className="p-5 sm:p-6">
+                        <p className="mb-3 font-heading text-[13px] font-bold uppercase tracking-wide text-[hsl(var(--game-ink-light))]">
+                          Your guesses
+                        </p>
+                        <GuessList guesses={state.guesses} />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </>
