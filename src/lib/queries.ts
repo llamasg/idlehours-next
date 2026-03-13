@@ -477,6 +477,7 @@ export async function getGameLibrary() {
         // curatedRow
         _type == "curatedRow" => {
           title,
+          rowStyle,
           "games": games[] {
             isStaffPick,
             game-> {

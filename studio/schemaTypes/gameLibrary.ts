@@ -50,6 +50,19 @@ export const curatedRow = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'rowStyle',
+      title: 'Row Style',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Card Carousel', value: 'cards'},
+          {title: 'Ranked List', value: 'list'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'cards',
+    }),
+    defineField({
       name: 'games',
       title: 'Games',
       type: 'array',
