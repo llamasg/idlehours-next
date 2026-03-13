@@ -87,7 +87,7 @@ export default function ResultCard({
 
   return (
     <div
-      className="mx-auto w-full max-w-[850px] overflow-hidden rounded-[24px] border-[1.5px] border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] shadow-sm"
+      className="mx-auto w-full overflow-hidden rounded-[24px] border-[1.5px] border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] shadow-sm"
       style={entrance('wipe', step >= 1)}
     >
       {/* Top accent line — green for win, red for loss */}
@@ -250,12 +250,12 @@ export default function ResultCard({
         </div>
 
         {/* Two-column body */}
-        <div className="grid min-h-[250px] grid-cols-2">
+        <div className="grid min-h-[200px] grid-cols-2">
           {/* Left column — badge + rank */}
-          <div className="flex flex-col items-center justify-center gap-4 border-r border-[hsl(var(--game-ink))]/10 px-6 py-9 text-center">
+          <div className="flex flex-col items-center justify-center gap-3 border-r border-[hsl(var(--game-ink))]/10 px-4 py-6 text-center">
             <div className="transition-transform duration-200 hover:scale-[1.07] hover:rotate-[3deg]">
               <div
-                className="badge-shimmer flex h-[200px] w-[200px] items-center justify-center rounded-full text-[11px] font-bold uppercase tracking-[0.04em] text-white/30"
+                className="badge-shimmer flex h-[140px] w-[140px] items-center justify-center rounded-full text-[11px] font-bold uppercase tracking-[0.04em] text-white/30"
                 style={{
                   backgroundColor: colors.accent,
                   boxShadow: `0 10px 32px ${colors.shadow}`,
@@ -297,7 +297,7 @@ export default function ResultCard({
           </div>
 
           {/* Right column — score + ladder */}
-          <div className="flex flex-col gap-5 px-6 py-8">
+          <div className="flex flex-col gap-4 px-5 py-6">
             <div className="flex flex-col gap-0.5">
               <p
                 className="font-heading text-[11px] font-extrabold uppercase tracking-[0.2em] text-[hsl(var(--game-ink-light))]"
@@ -307,13 +307,13 @@ export default function ResultCard({
               </p>
               <div className="flex items-baseline">
                 <span
-                  className="font-heading text-[50px] font-black leading-none tracking-tight"
+                  className="font-heading text-[40px] font-black leading-none tracking-tight"
                   style={{ color: colors.accent, ...entrance('pop', step >= 11) }}
                 >
                   {displayScore}
                 </span>
                 <span
-                  className="ml-2 font-heading text-[16px] font-bold tracking-[0.1em] text-[hsl(var(--game-ink-light))]"
+                  className="ml-2 font-heading text-[14px] font-bold tracking-[0.1em] text-[hsl(var(--game-ink-light))]"
                   style={entrance('fade', step >= 12)}
                 >
                   {scoreLabel}

@@ -370,7 +370,7 @@ export default function GameSenseDayPage({
           transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
         }}
       >
-        <main className={`font-game mx-auto flex flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 ${isPostGame ? 'w-full lg:px-8' : 'max-w-2xl sm:justify-center'}`}>
+        <main className={`font-game mx-auto flex flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 ${isPostGame ? 'w-full max-w-7xl lg:px-8' : 'max-w-2xl sm:justify-center'}`}>
           {/* Title bar — normal flow, scrolls with page */}
           <div
             className="text-center"
