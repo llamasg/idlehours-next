@@ -126,7 +126,7 @@ export default function GameCards({
   }, [chosenSide])
 
   return (
-    <div className="relative grid grid-cols-1 items-stretch gap-3 md:grid-cols-[1fr_auto_1fr] md:gap-5">
+    <div className="relative grid grid-cols-1 items-stretch gap-3 overflow-visible md:grid-cols-[1fr_auto_1fr] md:gap-5">
       <Card
         game={left}
         side="left"
@@ -236,10 +236,13 @@ function Card({
     <button
       onClick={onChoice}
       disabled={disabled}
-      className={`group relative flex aspect-[3/4] w-full flex-col overflow-hidden rounded-2xl transition-all ${
+      className={`group relative flex w-full flex-col rounded-2xl transition-all ${
         !disabled ? 'cursor-pointer hover:shadow-2xl' : ''
       }`}
+      style={{ height: 'clamp(340px, 45vw, 520px)' }}
     >
+      {/* Image + overlay wrapper — clips the image but not the CTA button */}
+      <div className="absolute inset-0 overflow-hidden rounded-2xl">
       {/* Background cover image */}
       {imgFailed ? (
         <div className="absolute inset-0 bg-[hsl(var(--game-ink))]" />
@@ -261,6 +264,7 @@ function Card({
           !disabled ? 'group-hover:bg-black/30' : ''
         }`}
       />
+      </div>
 
       {/* Top row — decade pill */}
       <div className="relative z-[2] p-5 sm:p-8">
@@ -324,7 +328,7 @@ function Card({
 
       {/* CTA button — center-bottom, overlapping onto purple bg */}
       {!priceRevealed && (
-        <div className="absolute bottom-0 left-1/2 z-[3] -translate-x-1/2 translate-y-1/2">
+        <div className="absolute bottom-0 left-1/2 z-[5] -translate-x-1/2 translate-y-1/2">
           <span
             className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 py-2.5 font-heading text-[11px] font-extrabold uppercase tracking-[0.15em] text-[hsl(var(--game-ink))] shadow-lg transition-all ${
               !disabled
