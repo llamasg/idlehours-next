@@ -104,11 +104,14 @@ export function getYearForDate(dateStr: string): number {
 }
 
 /**
- * The 5 StreetDateGame entries for this date's puzzle,
- * sorted by popularityRank (1 = most obscure first, 5 = most iconic last).
+ * The 5 StreetDateGame entries for this date's puzzle.
+ * Uses the cycle number to pick different games each time
+ * a year repeats in the 36-day rotation.
  */
 export function getGamesForDate(dateStr: string): StreetDateGame[] {
-  return getGamesForYear(getYearForDate(dateStr))
+  const days = getDaysSinceEpoch(dateStr)
+  const cycle = Math.floor(days / VALID_YEARS.length)
+  return getGamesForYear(getYearForDate(dateStr), cycle)
 }
 
 /**
