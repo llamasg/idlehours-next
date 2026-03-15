@@ -8,6 +8,7 @@ import TodayCard from '@/components/play/TodayCard'
 import PlayGameCard from '@/components/play/PlayGameCard'
 import BlitzSection from '@/components/play/BlitzSection'
 import ShipItSection from '@/components/play/ShipItSection'
+import JigsawSection from '@/components/play/JigsawSection'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
 import { getTodayDateString as getGameSenseToday } from './game-sense/lib/dateUtils'
 import { getTodayDateString as getStreetDateToday } from './street-date/lib/dateUtils'
@@ -125,10 +126,20 @@ export default function PlayHubPage() {
           <ShipItSection />
         </section>
 
-        {/* Section 04: More Coming */}
+        {/* Section 04: Slow Games */}
         <section className="pt-14">
           <SectionHeader
-            number="04"
+            number="04 — Slow Games"
+            title={<>No timer. No score. <em className="font-semibold italic text-muted-foreground">Just the pieces.</em></>}
+            note="Games that don't rush you. Bring tea."
+          />
+          <JigsawSection />
+        </section>
+
+        {/* Section 05: More Coming */}
+        <section className="pt-14">
+          <SectionHeader
+            number="05"
             title={<>There&apos;s <em className="font-semibold italic text-muted-foreground">more coming.</em></>}
           />
           <div className="flex flex-col items-start justify-between gap-6 rounded-[18px] border-2 border-dashed border-border bg-secondary/30 p-8 sm:flex-row sm:items-center">

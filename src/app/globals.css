@@ -276,6 +276,75 @@
   to   { opacity: 1; }
 }
 
+/* Jigsaw piece shadow states */
+.piece-unlocked {
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+  transition: filter 0.2s ease;
+}
+
+.piece-locked {
+  filter: none;
+  transition: filter 0.2s ease;
+}
+
+/* Jigsaw canvas stipple — light & dark */
+.jigsaw-canvas {
+  background-color: hsl(var(--game-cream));
+  background-image: radial-gradient(circle, hsl(var(--game-ink) / 0.07) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+.dark .jigsaw-canvas {
+  background-color: hsl(var(--game-ink));
+  background-image: radial-gradient(circle, hsl(var(--game-cream) / 0.1) 1px, transparent 1px);
+}
+
+/* Jigsaw remote cursors */
+.ih-cursor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.ih-cursor-idle {
+  animation: ih-cursor-hover 2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes ih-cursor-hover {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -7px; }
+}
+
+.cursor-arrow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+
+.cursor-tag {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  border-radius: 3px 10px 10px 10px;
+  padding: 3px 14px 3px 10px;
+  will-change: transform;
+}
+
+.cursor-name {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.2px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 @keyframes stripeScroll {
   0%   { background-position: 0 0; }
   100% { background-position: 28px 28px; }

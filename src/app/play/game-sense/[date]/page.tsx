@@ -378,7 +378,7 @@ export default function GameSenseDayPage({
 
       {/* Blue game world — full-width gradient, content constrained inside */}
       <div
-        className="game-container -mt-16 flex flex-1 flex-col sm:mt-0"
+        className="game-container mx-4 -mt-16 flex flex-1 flex-col rounded-2xl sm:mt-4 sm:rounded-[20px]"
         style={{
           background: 'linear-gradient(to bottom, #2D6BC4, #1a2a4a)',
           clipPath: (!shouldAnimate || wipeStarted) ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)',
