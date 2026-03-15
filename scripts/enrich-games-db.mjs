@@ -112,38 +112,34 @@ function parseGamesDb() {
 
   const arrayStart = content.indexOf('[', exportMatch.index)
 
-  // Find the matching closing bracket — it's the ] followed by Blitz utilities
-  // We look for ]\n\n\n// which marks the end of the array and start of utilities
-  const arrayEndMatch = content.match(/\]\s*\n\s*\n\s*\/\/\s*──\s*Blitz/)
+  // Find the end of the array.
+  // Search for the Blitz utilities marker from the END of the file to avoid
+  // matching anything inside the array. The ] just before it closes the array.
+  const blitzMarker = content.lastIndexOf('\n// ── Blitz utilities')
   let endIdx
-  if (arrayEndMatch) {
-    endIdx = content.indexOf(']', arrayEndMatch.index)
+  if (blitzMarker !== -1) {
+    endIdx = content.lastIndexOf(']', blitzMarker)
   } else {
-    // Fallback: find the ] on its own line before any export function
-    const funcMatch = content.indexOf('\nexport function ')
-    if (funcMatch !== -1) {
-      endIdx = content.lastIndexOf(']', funcMatch)
-    } else {
-      endIdx = content.lastIndexOf(']')
-    }
+    // Fallback: find ] before any export function after the array
+    const funcMatch = content.lastIndexOf('\nexport function ')
+    endIdx = funcMatch !== -1
+      ? content.lastIndexOf(']', funcMatch)
+      : content.lastIndexOf(']')
   }
 
   if (arrayStart === -1 || endIdx === -1) throw new Error('Cannot find array bounds in games-db.ts')
 
   let arrayStr = content.slice(arrayStart, endIdx + 1)
 
-  // Strip single-line comments (// ...)
-  arrayStr = arrayStr.replace(/\/\/[^\n]*/g, '')
+  // Strip comments
+  arrayStr = arrayStr.replace(/\/\/[^\n]*/g, '')        // single-line
+  arrayStr = arrayStr.replace(/\/\*[\s\S]*?\*\//g, '')   // block comments
 
   // Eval the array
   const fn = new Function(`return ${arrayStr}`)
   const games = fn()
 
-  // Also extract the Blitz utilities section
-  const blitzStart = content.indexOf('\n// ── Blitz utilities')
-  const blitzSection = blitzStart !== -1 ? content.slice(blitzStart) : ''
-
-  return { games, blitzSection }
+  return { games }
 }
 
 // ── Phase 1: Deduplication ─────────────────────────────────────────────────
@@ -418,7 +414,19 @@ function formatGame(game) {
   return lines.join('\n')
 }
 
-function writeGamesDb(games, blitzSection) {
+const BLITZ_SECTION = `
+// ── Blitz utilities ─────────────────────────────────────────────────────────
+
+export function getBlitzPool(tag: string): GameEntry[] {
+  return GAMES_DB.filter(g => g.tags.includes(tag))
+}
+
+export function getBlitzPoolSize(tag: string): number {
+  return getBlitzPool(tag).length
+}
+`
+
+function writeGamesDb(games) {
   // Sort by year then popularityRank
   games.sort((a, b) => {
     if (a.year !== b.year) return a.year - b.year
@@ -453,7 +461,7 @@ export const GAMES_DB: GameEntry[] = [
 
   const entries = games.map((g) => formatGame(g)).join('\n')
 
-  const output = header + entries + '\n]\n' + blitzSection
+  const output = header + entries + '\n]\n' + BLITZ_SECTION
 
   fs.writeFileSync(GAMES_DB_PATH, output, 'utf8')
   console.log(`\nPhase 4: Written ${games.length} games to ${path.relative(ROOT, GAMES_DB_PATH)}`)
@@ -466,7 +474,7 @@ async function main() {
 
   // Parse
   console.log('Parsing games-db.ts...')
-  const { games: rawGames, blitzSection } = parseGamesDb()
+  const { games: rawGames } = parseGamesDb()
   console.log(`Parsed ${rawGames.length} entries\n`)
 
   // Phase 1: Dedup
@@ -474,7 +482,7 @@ async function main() {
 
   if (DEDUP_ONLY) {
     console.log('\n--dedup-only: writing output without IGDB enrichment')
-    writeGamesDb(games, blitzSection)
+    writeGamesDb(games)
     return
   }
 
@@ -494,7 +502,7 @@ async function main() {
   games = assignPopularityRanks(games, checkpoint)
 
   // Phase 4: Write output
-  writeGamesDb(games, blitzSection)
+  writeGamesDb(games)
 
   // Summary
   const withCover = games.filter((g) => g.igdbImageId != null).length
