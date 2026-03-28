@@ -27,7 +27,7 @@ export default function JobColumn({ label, description, jobs, onOpen, onArchive,
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-3">
+      <div className="flex flex-1 flex-col gap-3 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 220px)' }}>
         {jobs.map((job) => (
           <JobCard key={job.id} job={job} onOpen={onOpen} onArchive={onArchive} />
         ))}
