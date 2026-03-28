@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /pip/
+Disallow: /jobs
+Disallow: /testing
