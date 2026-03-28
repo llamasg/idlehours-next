@@ -13,6 +13,7 @@ import {
   Calendar,
   BarChart3,
   Trophy,
+  PenLine,
   Menu,
   X,
 } from 'lucide-react';
@@ -61,6 +62,7 @@ export default function PipLayout({ children }: PipLayoutProps) {
 
   const navItems: NavItemDef[] = [
     { to: '/pip/home', label: 'Home', icon: Home },
+    { to: '/pip/writing', label: 'Writing', icon: PenLine },
     { to: '/pip/ideas', label: 'Ideas', icon: Lightbulb, badge: ideas.length },
     { to: '/pip/clusters', label: 'Clusters', icon: Network },
     { to: '/pip/seo', label: 'SEO Helper', icon: Search },
