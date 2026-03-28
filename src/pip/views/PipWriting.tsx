@@ -45,7 +45,7 @@ export default function PipWriting() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-xl font-bold text-white mb-4">Writing Review</h1>
+      <h1 className="text-xl font-bold text-stone-900 mb-4">Writing Review</h1>
 
       {!review ? (
         <>
@@ -56,7 +56,7 @@ export default function PipWriting() {
 
           {/* Headline (optional) */}
           <div className="mb-3">
-            <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5">
               Headline (optional — helps with SEO scoring)
             </label>
             <input
@@ -64,13 +64,13 @@ export default function PipWriting() {
               onChange={(e) => setHeadline(e.target.value)}
               placeholder="Your article headline…"
               disabled={loading}
-              className="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none focus:border-white/25 transition-colors disabled:opacity-50"
+              className="w-full rounded-xl bg-white border border-stone-200 px-4 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 outline-none focus:border-stone-400 shadow-sm transition-colors disabled:opacity-50"
             />
           </div>
 
           {/* Draft textarea */}
           <div className="mb-3">
-            <label className="block text-xs font-semibold text-white/40 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-stone-500 uppercase tracking-wider mb-1.5">
               Draft
             </label>
             <textarea
@@ -79,16 +79,16 @@ export default function PipWriting() {
               placeholder="Paste your draft here…"
               rows={14}
               disabled={loading}
-              className="w-full resize-y rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-sm leading-relaxed text-white placeholder:text-white/30 outline-none focus:border-white/25 transition-colors disabled:opacity-50"
+              className="w-full resize-y rounded-xl bg-white border border-stone-200 px-4 py-3 text-sm leading-relaxed text-stone-900 placeholder:text-stone-400 outline-none focus:border-stone-400 shadow-sm transition-colors disabled:opacity-50"
             />
-            <div className="mt-1 text-right text-xs text-white/30">
+            <div className="mt-1 text-right text-xs text-stone-400">
               {wordCount > 0 && `${wordCount} words`}
             </div>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="mb-3 rounded-xl bg-red-500/10 border border-red-500/25 px-4 py-3 text-sm text-red-400">
+            <div className="mb-3 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           )}
@@ -98,7 +98,7 @@ export default function PipWriting() {
             onClick={handleReview}
             disabled={!draft.trim() || loading}
             className="rounded-full bg-[#7C9B7A] px-6 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-[1px] active:translate-y-[1px] disabled:opacity-40 disabled:hover:translate-y-0 flex items-center gap-2"
-            style={{ boxShadow: '0 3px 0 rgba(0,0,0,0.2)' }}
+            style={{ boxShadow: '0 3px 0 #5a7a58' }}
           >
             {loading && <Loader2 size={16} className="animate-spin" />}
             {loading ? 'Reviewing…' : 'Review'}
@@ -113,7 +113,7 @@ export default function PipWriting() {
           >
             <button
               onClick={handleReset}
-              className="mb-6 rounded-full bg-white/5 border border-white/10 px-4 py-1.5 text-xs font-semibold text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+              className="mb-6 rounded-full bg-white border border-stone-200 px-4 py-1.5 text-xs font-semibold text-stone-600 hover:text-stone-900 hover:border-stone-300 shadow-sm transition-colors"
             >
               ← Review another
             </button>
