@@ -724,7 +724,6 @@ export default function GameSenseDayPage({
                     won={state.won}
                     puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
                     onViewResults={() => {}}
-                    hideViewResults
                     animateEntrance={pgStep >= 1}
                   />
                 </div>
