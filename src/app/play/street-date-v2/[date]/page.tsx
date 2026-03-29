@@ -288,25 +288,22 @@ export default function StreetDateV2DayPage({
       score: newScore,
     }
 
-    // When submitting, lock in revealed slots based on results
-    const newRevealed = { ...state.revealedSlots }
-    results.forEach((r, i) => {
-      newRevealed[i] = r
-    })
-
     const updatedState: V2DayState = {
       ...state,
       guesses: [...state.guesses, guess],
       score: newScore,
       won,
       finished,
-      revealedSlots: finished ? newRevealed : state.revealedSlots,
+      revealedSlots: state.revealedSlots,
     }
 
-    // If lost, show correct order in slots
+    // If lost, show correct order in slots with all revealed
     if (finished && !won) {
       updatedState.slots = [...correctOrder]
       updatedState.pool = []
+      const allRevealed: Record<number, 'exact' | 'close' | 'wrong'> = {}
+      correctOrder.forEach((_, i) => { allRevealed[i] = 'exact' })
+      updatedState.revealedSlots = allRevealed
     }
 
     persist(updatedState)
@@ -509,7 +506,7 @@ export default function StreetDateV2DayPage({
             transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
           }}
         >
-          <main className="font-game mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 pb-8 pt-4 sm:py-8">
+          <main className={`font-game mx-auto flex w-full flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 ${isPostGame ? 'max-w-7xl lg:px-8' : 'max-w-3xl'}`}>
             {/* ── Title ── */}
             <div
               className="text-center"
@@ -622,7 +619,7 @@ export default function StreetDateV2DayPage({
             {/* ── Gameplay area ── */}
             {!state.finished && (
               <div
-                className="mt-6 flex flex-col gap-5"
+                className="mt-6"
                 style={
                   entranceStep < 2
                     ? { opacity: 0, transform: 'scale(0)' }
@@ -631,6 +628,8 @@ export default function StreetDateV2DayPage({
                       : undefined
                 }
               >
+              <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl bg-white/95 shadow-sm p-5 sm:p-8">
+              <div className="flex flex-col gap-5">
                 {/* Hint buttons */}
                 <div className="flex items-center justify-center gap-3">
                   <button
@@ -686,7 +685,7 @@ export default function StreetDateV2DayPage({
                           onClick={() => handleSlotTap(i)}
                           onDrop={(e) => handleSlotDrop(e, i)}
                           onDragOver={handleDragOver}
-                          className={`relative flex h-[110px] w-[76px] cursor-pointer flex-col items-center justify-center rounded-xl border-2 transition-all duration-200 sm:h-[130px] sm:w-[90px] ${slotBorderColor} ${
+                          className={`relative flex h-[140px] w-[90px] cursor-pointer flex-col items-center justify-end rounded-xl border-2 transition-all duration-200 sm:h-[170px] sm:w-[110px] ${slotBorderColor} ${
                             hintOnePending && chipId ? 'animate-pulse ring-2 ring-amber-400/50' : ''
                           } ${isSelected ? 'ring-2 ring-blue-400/50 shadow-lg shadow-blue-400/20' : ''}`}
                           style={{
@@ -702,22 +701,26 @@ export default function StreetDateV2DayPage({
                             <div
                               draggable
                               onDragStart={(e) => handleDragStart(e, chipId!)}
-                              className="flex flex-col items-center gap-1 cursor-grab active:cursor-grabbing"
+                              className="flex h-full w-full flex-col cursor-grab active:cursor-grabbing"
                             >
-                              <img
-                                src={igdbCoverUrl(game.igdbImageId)}
-                                alt={game.title}
-                                className="h-[56px] w-[42px] rounded-md object-cover shadow-md sm:h-[64px] sm:w-[48px]"
-                                loading="lazy"
-                              />
-                              <span className="max-w-[68px] truncate text-center text-[9px] font-bold leading-tight text-white sm:max-w-[80px] sm:text-[10px]">
-                                {game.title}
-                              </span>
-                              {state.revealedYearIds.includes(chipId!) && (
-                                <span className="text-[10px] font-bold text-green-400">
-                                  {game.year}
+                              <div className="relative flex-1 overflow-hidden rounded-t-[10px]" style={{ aspectRatio: '3/4' }}>
+                                <img
+                                  src={igdbCoverUrl(game.igdbImageId)}
+                                  alt={game.title}
+                                  className="absolute inset-0 h-full w-full object-cover"
+                                  loading="lazy"
+                                />
+                              </div>
+                              <div className="flex flex-col items-center justify-center px-1 py-1">
+                                <span className="max-w-[80px] truncate text-center text-[9px] font-bold leading-tight text-white sm:max-w-[100px] sm:text-[10px]">
+                                  {game.title}
                                 </span>
-                              )}
+                                {state.revealedYearIds.includes(chipId!) && (
+                                  <span className="text-[10px] font-bold text-green-400">
+                                    {game.year}
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           ) : (
                             <span className="text-lg text-white/20">+</span>
@@ -753,9 +756,6 @@ export default function StreetDateV2DayPage({
                       >
                         <span className="text-white/60">
                           Guess {i + 1} — <span className="font-bold text-white">{guess.correctCount}/7</span> correct
-                        </span>
-                        <span className="font-heading text-xs font-bold text-white/40">
-                          {guess.results.map(emojiForResult).join('')}
                         </span>
                       </div>
                     ))}
@@ -820,7 +820,7 @@ export default function StreetDateV2DayPage({
                             e.stopPropagation()
                             handlePoolChipTap(chipId)
                           }}
-                          className={`flex cursor-grab items-center gap-2 rounded-xl border-2 bg-white/10 px-2 py-1.5 transition-all duration-200 active:cursor-grabbing ${
+                          className={`flex h-[140px] w-[90px] cursor-grab flex-col overflow-hidden rounded-xl border-2 bg-white/10 transition-all duration-200 active:cursor-grabbing sm:h-[170px] sm:w-[110px] ${
                             isSelected
                               ? 'border-blue-400 shadow-lg shadow-blue-400/20 -translate-y-1'
                               : 'border-white/20 hover:border-white/40'
@@ -831,14 +831,16 @@ export default function StreetDateV2DayPage({
                               : undefined
                           }
                         >
-                          <img
-                            src={igdbCoverUrl(game.igdbImageId)}
-                            alt={game.title}
-                            className="h-[48px] w-[36px] rounded-md object-cover shadow-sm sm:h-[56px] sm:w-[42px]"
-                            loading="lazy"
-                          />
-                          <div className="flex flex-col">
-                            <span className="max-w-[100px] truncate text-[11px] font-bold leading-tight text-white sm:max-w-[120px] sm:text-xs">
+                          <div className="relative flex-1 overflow-hidden rounded-t-[10px]" style={{ aspectRatio: '3/4' }}>
+                            <img
+                              src={igdbCoverUrl(game.igdbImageId)}
+                              alt={game.title}
+                              className="absolute inset-0 h-full w-full object-cover"
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="flex flex-col items-center justify-center px-1 py-1">
+                            <span className="max-w-[80px] truncate text-center text-[9px] font-bold leading-tight text-white sm:max-w-[100px] sm:text-[10px]">
                               {game.title}
                             </span>
                             {state.revealedYearIds.includes(chipId) && (
@@ -852,6 +854,8 @@ export default function StreetDateV2DayPage({
                     })}
                   </div>
                 </div>
+              </div>
+              </div>
               </div>
             )}
 
