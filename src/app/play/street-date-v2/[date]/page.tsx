@@ -506,7 +506,7 @@ export default function StreetDateV2DayPage({
             transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
           }}
         >
-          <main className={`font-game mx-auto flex w-full flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 ${isPostGame ? 'max-w-7xl lg:px-8' : 'max-w-3xl'}`}>
+          <main className="font-game mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 lg:px-8">
             {/* ── Title ── */}
             <div
               className="text-center"
