@@ -661,8 +661,8 @@ export default function StreetDateV2DayPage({
                 </div>
 
                 {/* ── Slot grid ── */}
-                <div className="flex justify-center">
-                  <div className="grid grid-cols-4 gap-2 sm:grid-cols-7 sm:gap-3">
+                <div className="overflow-x-auto">
+                  <div className="flex justify-center gap-3 sm:gap-4" style={{ minWidth: 'max-content' }}>
                     {state.slots.map((chipId, i) => {
                       const game = chipId ? gameById(chipId) : null
                       const revealed = state.revealedSlots[i]
@@ -685,7 +685,7 @@ export default function StreetDateV2DayPage({
                           onClick={() => handleSlotTap(i)}
                           onDrop={(e) => handleSlotDrop(e, i)}
                           onDragOver={handleDragOver}
-                          className={`relative flex h-[140px] w-[90px] cursor-pointer flex-col items-center justify-end rounded-xl border-2 transition-all duration-200 sm:h-[170px] sm:w-[110px] ${slotBorderColor} ${
+                          className={`relative flex h-[140px] w-[90px] shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border-2 transition-all duration-200 sm:h-[170px] sm:w-[110px] ${slotBorderColor} ${
                             hintOnePending && chipId ? 'animate-pulse ring-2 ring-amber-400/50' : ''
                           } ${isSelected ? 'ring-2 ring-blue-400/50 shadow-lg shadow-blue-400/20' : ''}`}
                           style={{
@@ -723,7 +723,15 @@ export default function StreetDateV2DayPage({
                               </div>
                             </div>
                           ) : (
-                            <span className="text-lg text-[hsl(var(--game-ink-dim))]">+</span>
+                            <div className="flex flex-col items-center gap-1">
+                              <span className="text-xl text-[hsl(var(--game-ink-dim))]">+</span>
+                              {i === 0 && (
+                                <span className="text-[8px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink-dim))]">Oldest</span>
+                              )}
+                              {i === 6 && (
+                                <span className="text-[8px] font-bold uppercase tracking-wider text-[hsl(var(--game-ink-dim))]">Newest</span>
+                              )}
+                            </div>
                           )}
 
                           {/* Result indicator after reveal */}
@@ -837,11 +845,11 @@ export default function StreetDateV2DayPage({
                   }}
                   onDrop={handlePoolDrop}
                   onDragOver={handleDragOver}
-                  className="rounded-2xl border-2 border-dashed border-[hsl(var(--game-ink))]/15 bg-[hsl(var(--game-cream))]/50 p-3 sm:p-4"
+                  className="rounded-2xl border-2 border-dashed border-[hsl(var(--game-ink))]/15 bg-[hsl(var(--game-cream-dark))]/40 p-3 sm:p-4"
                   data-pool-bg="true"
                 >
                   <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-widest text-[hsl(var(--game-ink-dim))]" data-pool-bg="true">
-                    {state.pool.length > 0 ? 'Available games' : 'All games placed'}
+                    {state.pool.length > 0 ? 'Drag games into the slots above' : 'All games placed'}
                   </p>
                   <div className="flex flex-wrap items-center justify-center gap-2" data-pool-bg="true">
                     {state.pool.map((chipId, i) => {
