@@ -379,7 +379,7 @@ export default function StreetDateDayPage({
           {/* Post-game — matches Game Sense structure */}
           {isPostGame && (
             <>
-              {/* Nav pills — early so user can navigate away quickly */}
+              {/* Nav pills */}
               <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
                 {!today && (
                   <div style={entrance('pop', pgStep >= 1, 300)}>
@@ -397,69 +397,70 @@ export default function StreetDateDayPage({
                 </div>
               </div>
 
-              {/* Badges — slides open */}
-              <div
-                className="grid transition-[grid-template-rows] duration-700 ease-out"
-                style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
-              >
-                <div className="overflow-hidden">
-                  <div className="mb-6">
-                    <DailyBadgeShelf currentGame="street-date" animateStamp={pgStep >= 5} />
+              {/* Two-column post-game: left (55%) badges + results, right (45%) info */}
+              <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-[55fr_45fr]">
+
+                {/* Left column: badge shelf → ResultCard */}
+                <div className="order-2 flex flex-col gap-6 lg:order-1">
+                  <div
+                    className="grid transition-[grid-template-rows] duration-700 ease-out"
+                    style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
+                  >
+                    <div className="overflow-hidden">
+                      <DailyBadgeShelf currentGame="street-date" animateStamp={pgStep >= 5} />
+                    </div>
                   </div>
+
+                  <ResultCard
+                    game="street-date"
+                    score={state.score}
+                    streak={0}
+                    won={state.won}
+                    puzzleLabel={`Street Date ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                    onViewResults={() => setShowModal(true)}
+                    animateEntrance={pgStep >= 1}
+                  />
                 </div>
-              </div>
 
-              {/* ResultCard — internal 15-step cascade */}
-              <div className="mb-6">
-                <ResultCard
-                  game="street-date"
-                  score={state.score}
-                  streak={0}
-                  won={state.won}
-                  puzzleLabel={`Street Date ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                  onViewResults={() => setShowModal(true)}
-                  animateEntrance={pgStep >= 1}
-                />
-              </div>
-
-              {/* Game info — 5 covers + answer year in white card */}
-              <div className="mb-6" style={entrance('slide-up', pgStep >= 2)}>
-                <div className="mx-auto w-full max-w-[850px] overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                  <div className="p-5 sm:p-6">
-                    <p className="text-center font-heading text-xs font-semibold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
-                      The answer
-                    </p>
-                    <p className="text-center font-heading text-5xl font-black text-[hsl(var(--game-green))]">
-                      {answerYear}
-                    </p>
-                    <div className="mx-auto mt-4 grid max-w-md grid-cols-5 gap-2">
-                      {roundGames.map((game, i) => {
-                        const wasGuessedOn = state.attempts.length - 1 === i && state.won
-                        const neverReached = i > state.currentCoverIndex
-                        return (
-                          <div key={game.id} className="relative flex flex-col items-center">
-                            <div
-                              className={`aspect-[3/4] w-full overflow-hidden rounded-lg bg-muted/30 shadow-sm ${
-                                wasGuessedOn ? 'ring-2 ring-[hsl(var(--game-green))] scale-105' : ''
-                              } ${neverReached ? 'opacity-40' : ''}`}
-                            >
-                              <img
-                                src={igdbCoverUrl(game.igdbImageId)}
-                                alt={game.title}
-                                className="h-full w-full object-cover"
-                              />
+                {/* Right column: game info card */}
+                <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
+                  <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
+                    <div className="p-5 sm:p-6">
+                      <p className="text-center font-heading text-xs font-semibold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
+                        The answer
+                      </p>
+                      <p className="text-center font-heading text-5xl font-black text-[hsl(var(--game-green))]">
+                        {answerYear}
+                      </p>
+                      <div className="mx-auto mt-4 grid max-w-md grid-cols-5 gap-2">
+                        {roundGames.map((game, i) => {
+                          const wasGuessedOn = state.attempts.length - 1 === i && state.won
+                          const neverReached = i > state.currentCoverIndex
+                          return (
+                            <div key={game.id} className="relative flex flex-col items-center">
+                              <div
+                                className={`aspect-[3/4] w-full overflow-hidden rounded-lg bg-muted/30 shadow-sm ${
+                                  wasGuessedOn ? 'ring-2 ring-[hsl(var(--game-green))] scale-105' : ''
+                                } ${neverReached ? 'opacity-40' : ''}`}
+                              >
+                                <img
+                                  src={igdbCoverUrl(game.igdbImageId)}
+                                  alt={game.title}
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                              {wasGuessedOn && (
+                                <span className="absolute -top-2 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--game-green))] text-[10px] font-bold text-white shadow">
+                                  {i + 1}
+                                </span>
+                              )}
+                              <p className="mt-1.5 line-clamp-2 w-full text-center font-heading text-[10px] font-medium leading-snug text-[hsl(var(--game-ink-mid))]">
+                                {game.title}
+                              </p>
                             </div>
-                            {wasGuessedOn && (
-                              <span className="absolute -top-2 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--game-green))] text-[10px] font-bold text-white shadow">
-                                {i + 1}
-                              </span>
-                            )}
-                            <p className="mt-1.5 line-clamp-2 w-full text-center font-heading text-[10px] font-medium leading-snug text-[hsl(var(--game-ink-mid))]">
-                              {game.title}
-                            </p>
-                          </div>
-                        )
-                      })}
+                          )
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
