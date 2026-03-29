@@ -552,7 +552,7 @@ export default function StreetDateV2DayPage({
               </div>
             </div>
 
-            {/* ── Score pill + guess pips ── */}
+            {/* ── Score display — arcade style ── */}
             <div
               className="mt-4 text-center"
               style={
@@ -564,20 +564,22 @@ export default function StreetDateV2DayPage({
               }
             >
               {!state.finished && (
-                <div
-                  className="relative inline-flex items-center gap-2 rounded-full border-2 bg-white px-5 py-2 transition-all duration-300"
-                  style={{
-                    borderColor: scorePulse ? 'hsl(var(--game-red))' : 'rgba(255,255,255,0.2)',
-                    transform: scorePulse ? 'scale(1.1)' : 'scale(1)',
-                  }}
-                >
-                  <AnimatedScore
-                    value={state.score}
-                    className={`font-heading text-2xl font-black transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]' : 'text-[hsl(var(--game-ink))]'}`}
-                  />
-                  <span className={`font-heading text-xs uppercase tracking-wider transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]/60' : 'text-[hsl(var(--game-ink))]/60'}`}>
-                    pts
-                  </span>
+                <div className="relative inline-block">
+                  <div
+                    className="relative inline-flex items-baseline gap-1 rounded-2xl border-2 bg-white px-8 py-3 transition-all duration-300"
+                    style={{
+                      borderColor: scorePulse ? 'hsl(var(--game-red))' : 'rgba(255,255,255,0.3)',
+                      transform: scorePulse ? 'scale(1.08)' : 'scale(1)',
+                    }}
+                  >
+                    <AnimatedScore
+                      value={state.score}
+                      className={`font-heading text-4xl font-black tracking-tight transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]' : 'text-[hsl(var(--game-ink))]'}`}
+                    />
+                    <span className={`font-heading text-sm font-[800] uppercase tracking-wider transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]/60' : 'text-[hsl(var(--game-ink))]/40'}`}>
+                      pts
+                    </span>
+                  </div>
                   {floatingCost && (
                     <span
                       key={floatingCost.key}
@@ -592,24 +594,24 @@ export default function StreetDateV2DayPage({
 
               {/* Guess pips */}
               {!state.finished && (
-                <div className="mt-2 flex items-center justify-center gap-1.5">
+                <div className="mt-3 flex items-center justify-center gap-2">
                   {Array.from({ length: MAX_GUESSES }).map((_, i) => {
                     const used = i < state.guesses.length
                     const current = i === state.guesses.length
                     return (
                       <div
                         key={i}
-                        className={`h-2.5 w-2.5 rounded-full border-2 transition-all duration-300 ${
+                        className={`h-3 w-3 rounded-full border-2 transition-all duration-300 ${
                           used
-                            ? 'border-white/40 bg-white/40'
+                            ? 'border-white bg-white'
                             : current
                               ? 'border-amber-400 bg-amber-400'
-                              : 'border-white/20 bg-transparent'
+                              : 'border-white/25 bg-transparent'
                         }`}
                       />
                     )
                   })}
-                  <span className="ml-1.5 text-xs font-bold text-white/40">
+                  <span className="ml-2 font-heading text-xs font-[800] text-white/50">
                     {state.guesses.length}/{MAX_GUESSES}
                   </span>
                 </div>
@@ -662,7 +664,71 @@ export default function StreetDateV2DayPage({
               <div className="mx-auto w-full max-w-7xl rounded-2xl bg-white/95 shadow-sm p-5 sm:p-8">
               <div className="flex flex-col gap-5">
 
-                {/* ── Slot grid — single row on lg+, wraps on small ── */}
+                {/* ── Guess history — faded, reads as completed attempts ── */}
+                {state.guesses.length > 0 && (
+                  <div className="space-y-2">
+                    {state.guesses.map((guess, gi) => (
+                      <div
+                        key={gi}
+                        className="rounded-xl border border-[hsl(var(--game-ink))]/8 bg-[hsl(var(--game-ink))]/[0.02] p-2.5 opacity-40"
+                        style={justSubmitted && gi === state.guesses.length - 1
+                          ? { animation: `gs-fade-in 0.4s ${spring} both` }
+                          : undefined
+                        }
+                      >
+                        <div className="mb-1.5 flex items-center justify-between">
+                          <span className="font-heading text-[9px] font-[700] uppercase tracking-wider text-[hsl(var(--game-ink-dim))]">
+                            Guess {gi + 1}
+                          </span>
+                          <span className="font-heading text-[11px] font-[800] text-[hsl(var(--game-ink))]">
+                            {guess.correctCount}/7
+                          </span>
+                        </div>
+                        <div className="flex gap-0.5">
+                          {guess.order.map((chipId, ci) => {
+                            const game = gameById(chipId)
+                            if (!game) return null
+                            const result = guess.results[ci]
+                            const borderColor = result === 'exact'
+                              ? 'border-green-500'
+                              : result === 'close'
+                                ? 'border-amber-400'
+                                : 'border-red-400'
+                            return (
+                              <div key={ci} className={`flex flex-1 flex-col items-center gap-0.5 rounded-md border-2 p-0.5 ${borderColor}`}>
+                                <div className="aspect-[3/4] w-full overflow-hidden rounded-sm grayscale">
+                                  <img
+                                    src={igdbCoverUrl(game.igdbImageId)}
+                                    alt={game.title}
+                                    className="h-full w-full object-cover"
+                                    loading="lazy"
+                                  />
+                                </div>
+                                <span className="line-clamp-1 w-full text-center text-[6px] font-[600] leading-tight text-[hsl(var(--game-ink-light))] sm:text-[7px]">
+                                  {game.title}
+                                </span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* ── Active ordering area — focal point ── */}
+                <div>
+                  <div className="mb-3 flex items-center gap-3">
+                    <span className="font-heading text-[11px] font-[900] uppercase tracking-[0.18em] text-[hsl(var(--game-ink))]">
+                      {state.guesses.length === 0 ? 'Your order' : 'Rearrange and resubmit'}
+                    </span>
+                    <div className="h-px flex-1 bg-[hsl(var(--game-ink))]/10" />
+                    {lastGuess && !state.finished && (
+                      <span className="font-heading text-[11px] font-[800] text-[hsl(var(--game-green))]">
+                        {lastGuess.correctCount}/7 correct
+                      </span>
+                    )}
+                  </div>
                 <div>
                   <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:flex-nowrap">
                     {state.slots.map((chipId, i) => {
@@ -751,68 +817,7 @@ export default function StreetDateV2DayPage({
                     })}
                   </div>
                 </div>
-
-                {/* ── Guess history — visual grid like Wordle ── */}
-                {state.guesses.length > 0 && (
-                  <div className="space-y-3">
-                    {state.guesses.map((guess, gi) => (
-                      <div
-                        key={gi}
-                        className="rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-ink))]/[0.02] p-3"
-                        style={justSubmitted && gi === state.guesses.length - 1
-                          ? { animation: `gs-fade-in 0.4s ${spring} both` }
-                          : undefined
-                        }
-                      >
-                        <div className="mb-2 flex items-center justify-between">
-                          <span className="font-heading text-[10px] font-[700] uppercase tracking-wider text-[hsl(var(--game-ink-dim))]">
-                            Guess {gi + 1}
-                          </span>
-                          <span className="font-heading text-[12px] font-[800] text-[hsl(var(--game-ink))]">
-                            {guess.correctCount}/7
-                          </span>
-                        </div>
-                        <div className="flex gap-1">
-                          {guess.order.map((chipId, ci) => {
-                            const game = gameById(chipId)
-                            if (!game) return null
-                            const result = guess.results[ci]
-                            const borderColor = result === 'exact'
-                              ? 'border-green-500'
-                              : result === 'close'
-                                ? 'border-amber-400'
-                                : 'border-red-400'
-                            const bgColor = result === 'exact'
-                              ? 'bg-green-500/10'
-                              : result === 'close'
-                                ? 'bg-amber-400/10'
-                                : 'bg-red-400/10'
-                            return (
-                              <div key={ci} className={`flex flex-1 flex-col items-center gap-0.5 rounded-lg border-2 p-0.5 ${borderColor} ${bgColor}`}>
-                                <div className="aspect-[3/4] w-full overflow-hidden rounded-md">
-                                  <img
-                                    src={igdbCoverUrl(game.igdbImageId)}
-                                    alt={game.title}
-                                    className="h-full w-full object-cover"
-                                    loading="lazy"
-                                  />
-                                </div>
-                                <span className="line-clamp-1 w-full text-center text-[7px] font-[600] leading-tight text-[hsl(var(--game-ink))] sm:text-[8px]">
-                                  {game.title}
-                                </span>
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                    {lastGuess && !state.finished && (
-                      <p className="text-center text-sm font-bold text-[hsl(var(--game-ink-light))]">
-                        {lastGuess.correctCount}/7 in the correct position
-                      </p>
-                    )}
-                  </div>
-                )}
+                </div>
 
                 {/* ── Action buttons ── */}
                 <div className="flex items-center justify-center gap-3">
