@@ -239,7 +239,7 @@ function Card({
       className={`group relative flex w-full flex-col rounded-2xl transition-all ${
         !disabled ? 'cursor-pointer hover:shadow-2xl' : ''
       }`}
-      style={{ height: 'clamp(340px, 45vw, 520px)' }}
+      style={{ aspectRatio: '3 / 4' }}
     >
       {/* Image + overlay wrapper — clips the image but not the CTA button */}
       <div className="absolute inset-0 overflow-hidden rounded-2xl">
