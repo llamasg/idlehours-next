@@ -628,41 +628,43 @@ export default function StreetDateV2DayPage({
                       : undefined
                 }
               >
-              <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl bg-white/95 shadow-sm p-5 sm:p-8">
-              <div className="flex flex-col gap-5">
-                {/* Hint buttons */}
-                <div className="flex items-center justify-center gap-3">
-                  <button
-                    type="button"
-                    onClick={hintOnePending ? () => setHintOnePending(false) : handleHintOne}
-                    disabled={state.hintOneUsed && !hintOnePending}
-                    className={`rounded-full border-2 px-4 py-1.5 text-xs font-bold transition-all duration-200 ${
-                      hintOnePending
-                        ? 'border-amber-400 bg-amber-400 text-black'
-                        : state.hintOneUsed
-                          ? 'cursor-not-allowed border-[hsl(var(--game-ink))]/10 text-[hsl(var(--game-ink-dim))]'
-                          : 'border-[hsl(var(--game-ink))]/20 text-[hsl(var(--game-ink))] hover:border-[hsl(var(--game-ink))]/40 hover:bg-[hsl(var(--game-ink))]/5'
-                    }`}
-                  >
-                    {hintOnePending ? 'pick a slot →' : `Reveal one slot −${HINT_ONE_COST}pts`}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleHintAll}
-                    disabled={state.hintAllUsed}
-                    className={`rounded-full border-2 px-4 py-1.5 text-xs font-bold transition-all duration-200 ${
-                      state.hintAllUsed
-                        ? 'cursor-not-allowed border-[hsl(var(--game-ink))]/10 text-[hsl(var(--game-ink-dim))]'
-                        : 'border-[hsl(var(--game-ink))]/20 text-[hsl(var(--game-ink))] hover:border-[hsl(var(--game-ink))]/40 hover:bg-[hsl(var(--game-ink))]/5'
-                    }`}
-                  >
-                    Reveal all slots −{HINT_ALL_COST}pts
-                  </button>
-                </div>
+              {/* Hint buttons — outside the white container */}
+              <div className="mb-4 flex items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={hintOnePending ? () => setHintOnePending(false) : handleHintOne}
+                  disabled={state.hintOneUsed && !hintOnePending}
+                  className={`rounded-full border-2 px-4 py-1.5 text-xs font-bold transition-all duration-200 ${
+                    hintOnePending
+                      ? 'border-amber-400 bg-amber-400 text-black'
+                      : state.hintOneUsed
+                        ? 'cursor-not-allowed border-white/10 text-white/30'
+                        : 'border-white/30 text-white hover:border-white/60 hover:bg-white/10'
+                  }`}
+                >
+                  {hintOnePending ? 'pick a slot →' : `Reveal one slot −${HINT_ONE_COST}pts`}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleHintAll}
+                  disabled={state.hintAllUsed}
+                  className={`rounded-full border-2 px-4 py-1.5 text-xs font-bold transition-all duration-200 ${
+                    state.hintAllUsed
+                      ? 'cursor-not-allowed border-white/10 text-white/30'
+                      : 'border-white/30 text-white hover:border-white/60 hover:bg-white/10'
+                  }`}
+                >
+                  Reveal all slots −{HINT_ALL_COST}pts
+                </button>
+              </div>
 
-                {/* ── Slot grid ── */}
-                <div className="overflow-x-auto">
-                  <div className="flex justify-center gap-3 sm:gap-4" style={{ minWidth: 'max-content' }}>
+              {/* White container — sizes to fit slots */}
+              <div className="mx-auto w-fit rounded-2xl bg-white/95 shadow-sm p-5 sm:p-8">
+              <div className="flex flex-col gap-5">
+
+                {/* ── Slot grid — wraps onto 2 lines on small screens ── */}
+                <div>
+                  <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
                     {state.slots.map((chipId, i) => {
                       const game = chipId ? gameById(chipId) : null
                       const revealed = state.revealedSlots[i]
