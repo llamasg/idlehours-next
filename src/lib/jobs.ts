@@ -8,15 +8,16 @@ export interface Job {
   priority: 'low' | 'medium' | 'high'
   progress: string | null
   body: string
+  tag: string | null
   created_at: string
   updated_at: string
 }
 
 export type JobCreate = Pick<Job, 'title' | 'column'> &
-  Partial<Pick<Job, 'priority' | 'progress' | 'body'>>
+  Partial<Pick<Job, 'priority' | 'progress' | 'body' | 'tag'>>
 
 export type JobUpdate = Partial<
-  Pick<Job, 'title' | 'column' | 'status' | 'priority' | 'progress' | 'body'>
+  Pick<Job, 'title' | 'column' | 'status' | 'priority' | 'progress' | 'body' | 'tag'>
 >
 
 export async function getJobs(): Promise<Job[]> {

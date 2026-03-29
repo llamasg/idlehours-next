@@ -37,6 +37,7 @@ export default function JobBoard() {
       priority: data.priority ?? 'medium',
       progress: data.progress ?? null,
       body: data.body ?? '',
+      tag: data.tag ?? null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     }

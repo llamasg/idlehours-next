@@ -46,6 +46,9 @@ export default function JobModal(props: ModalProps) {
   const [priority, setPriority] = useState<Job['priority']>(
     mode === 'edit' ? props.job.priority : 'medium'
   )
+  const [tag, setTag] = useState(
+    mode === 'edit' ? props.job.tag ?? '' : ''
+  )
   const [progress, setProgress] = useState(
     mode === 'edit' ? props.job.progress ?? '' : ''
   )
@@ -69,9 +72,9 @@ export default function JobModal(props: ModalProps) {
   const handleSave = () => {
     if (!title.trim()) return
     if (mode === 'create') {
-      onSave({ title: title.trim(), column, priority, progress: progress || undefined, body })
+      onSave({ title: title.trim(), column, priority, tag: tag.trim() || undefined, progress: progress || undefined, body })
     } else {
-      onSave({ title: title.trim(), column, priority, progress: progress || null, body } as JobUpdate)
+      onSave({ title: title.trim(), column, priority, tag: tag.trim() || null, progress: progress || null, body } as JobUpdate)
     }
   }
 
@@ -139,6 +142,13 @@ export default function JobModal(props: ModalProps) {
             ))}
           </select>
         </div>
+
+        <input
+          value={tag}
+          onChange={(e) => setTag(e.target.value)}
+          placeholder="e.g. games/game sense/post game"
+          className="mt-4 w-full rounded-xl border-[1.5px] border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-cream))]/50 px-4 py-2.5 font-body text-[12px] text-[hsl(var(--game-ink))] placeholder:text-[hsl(var(--game-ink-dim))] outline-none"
+        />
 
         <input
           value={progress}

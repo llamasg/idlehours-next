@@ -25,6 +25,17 @@ export default function JobCard({ job, onOpen, onArchive }: JobCardProps) {
     >
       <span className={`absolute right-3 top-3 h-2.5 w-2.5 rounded-full ${PRIORITY_COLORS[job.priority]}`} />
 
+      {job.tag && (
+        <div className="mb-1.5 flex items-center gap-1 font-heading text-[9px] font-[700] uppercase tracking-wider text-[hsl(var(--game-ink-light))]">
+          {job.tag.split('/').map((seg, i, arr) => (
+            <span key={i} className="flex items-center gap-1">
+              {i > 0 && <span className="text-[hsl(var(--game-ink-dim))]">/</span>}
+              <span>{seg}</span>
+            </span>
+          ))}
+        </div>
+      )}
+
       <h3
         className="cursor-pointer pr-6 font-heading text-[14px] font-[700] leading-snug text-[hsl(var(--game-ink))]"
         onClick={() => onOpen(job)}
