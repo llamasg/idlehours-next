@@ -241,7 +241,7 @@ export default function StreetDateDayPage({
           transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
         }}
       >
-        <main className={`font-game mx-auto flex flex-1 flex-col px-4 py-8 ${isPostGame ? 'w-full lg:px-8' : 'max-w-4xl justify-center'}`}>
+        <main className={`font-game mx-auto flex flex-1 flex-col px-4 py-8 ${isPostGame ? 'w-full max-w-7xl lg:px-8' : 'max-w-4xl justify-center'}`}>
           {/* Game header */}
           <div className="mb-6 text-center">
             {/* Title + subtitle — animate like Game Sense */}
