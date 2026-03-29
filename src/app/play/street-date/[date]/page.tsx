@@ -232,7 +232,7 @@ export default function StreetDateDayPage({
 
       {/* Green game world */}
       <div
-        className="game-container mx-4 -mt-16 flex flex-1 flex-col rounded-2xl sm:mt-4 sm:rounded-[20px]"
+        className="game-container mx-0 -mt-16 flex flex-1 flex-col rounded-none sm:mx-4 sm:mt-4 sm:rounded-[20px]"
         style={{
           background: 'linear-gradient(155deg, #1A7A40, #0d1f12)',
           borderRadius: 20,
@@ -257,7 +257,7 @@ export default function StreetDateDayPage({
                         : { opacity: 1, transform: 'translateY(0)' })
               }
             >
-              <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-white">
+              <h1 className="text-[22px] font-black uppercase leading-none text-white sm:text-[clamp(40px,8vw,64px)]">
                 {['Street', 'Date'].map((word, i) => (
                   <span
                     key={word}
@@ -307,9 +307,9 @@ export default function StreetDateDayPage({
                 <div className="mt-3 inline-flex items-center gap-2 rounded-full border-2 border-white/20 bg-white px-5 py-2">
                   <AnimatedScore
                     value={displayScore}
-                    className="font-heading text-2xl font-black"
+                    className="font-heading text-2xl font-black text-[hsl(var(--game-ink))]"
                   />
-                  <span className="font-heading text-xs uppercase tracking-wider text-[hsl(var(--game-ink-light))]">
+                  <span className="font-heading text-xs uppercase tracking-wider text-[hsl(var(--game-ink))]/60">
                     pts
                   </span>
                 </div>
@@ -426,7 +426,8 @@ export default function StreetDateDayPage({
                     streak={0}
                     won={state.won}
                     puzzleLabel={`Street Date ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                    onViewResults={() => setShowModal(true)}
+                    onViewResults={() => {}}
+                    hideViewResults
                     animateEntrance={pgStep >= 1}
                   />
                 </div>
@@ -437,6 +438,9 @@ export default function StreetDateDayPage({
                     {/* Header */}
                     <div className="px-5 pt-5 pb-3 sm:px-6 sm:pt-6">
                       <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
+                        Street Date {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+                      </p>
+                      <p className="mt-1 font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
                         The answer
                       </p>
                       <p className="font-heading text-4xl font-black text-[hsl(var(--game-green))]">

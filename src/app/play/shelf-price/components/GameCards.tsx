@@ -126,7 +126,7 @@ export default function GameCards({
   }, [chosenSide])
 
   return (
-    <div className="relative grid grid-cols-1 items-stretch gap-3 overflow-visible md:grid-cols-[1fr_auto_1fr] md:gap-5">
+    <div className="relative grid grid-cols-2 items-stretch gap-1 overflow-visible sm:gap-5">
       <Card
         game={left}
         side="left"
@@ -141,17 +141,6 @@ export default function GameCards({
           (phase === 'chosen-counting' && chosenSide === 'left')
         }
       />
-
-      {/* VS divider — horizontal on mobile, vertical on desktop */}
-      <div className="relative z-10 flex items-center justify-center">
-        {/* Vertical line (desktop) */}
-        <div className="absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-white/15 md:block" />
-        {/* Horizontal line (mobile) */}
-        <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-white/15 md:hidden" />
-        <div className="relative flex h-10 w-10 items-center justify-center rounded-full border-3 border-[hsl(var(--game-ink))]/10 bg-white font-heading text-xs font-black text-[hsl(var(--game-ink-mid))] shadow-lg md:h-12 md:w-12 md:text-sm">
-          VS
-        </div>
-      </div>
 
       <Card
         game={right}
@@ -168,10 +157,17 @@ export default function GameCards({
         }
       />
 
-      {/* Center result text */}
+      {/* VS circle — overlaid between cards */}
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full border-3 border-[hsl(var(--game-ink))]/10 bg-white font-heading text-[10px] font-black text-[hsl(var(--game-ink-mid))] shadow-lg sm:h-12 sm:w-12 sm:text-sm">
+          VS
+        </div>
+      </div>
+
+      {/* Result text — near top so it doesn't overlap tick/cross */}
       {phase === 'result' && (
         <div
-          className="absolute inset-0 z-20 flex items-center justify-center"
+          className="absolute inset-x-0 top-[15%] z-20 flex justify-center"
           style={{ animation: 'result-flash 0.4s cubic-bezier(0.22,1.2,0.36,1) both' }}
         >
           <div
@@ -233,114 +229,96 @@ function Card({
   const displayPrice = animatedPrice !== null ? `$${animatedPrice.toFixed(2)}` : null
 
   return (
-    <button
-      onClick={onChoice}
-      disabled={disabled}
-      className={`group relative flex w-full flex-col rounded-2xl transition-all ${
-        !disabled ? 'cursor-pointer hover:shadow-2xl' : ''
-      }`}
-      style={{ aspectRatio: '3 / 4' }}
-    >
-      {/* Image + overlay wrapper — clips the image but not the CTA button */}
-      <div className="absolute inset-0 overflow-hidden rounded-2xl">
-      {/* Background cover image */}
-      {imgFailed ? (
-        <div className="absolute inset-0 bg-[hsl(var(--game-ink))]" />
-      ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={igdbCoverUrl(game.igdbImageId)}
-          alt={game.title}
-          className={`absolute inset-0 h-full w-full object-cover transition-transform duration-[6s] ${
-            !disabled ? 'scale-[1.04] group-hover:scale-100' : 'scale-[1.04]'
-          }`}
-          onError={() => setImgFailed(true)}
-        />
-      )}
-
-      {/* Colour overlay */}
-      <div
-        className={`absolute inset-0 transition-all duration-500 ${overlayClass} ${
-          !disabled ? 'group-hover:bg-black/30' : ''
+    <div className="relative mx-auto w-full max-w-[450px]">
+      <button
+        onClick={onChoice}
+        disabled={disabled}
+        className={`group relative w-full overflow-hidden rounded-2xl transition-all ${
+          !disabled ? 'cursor-pointer hover:shadow-2xl' : ''
         }`}
-      />
-      </div>
-
-      {/* Top row — decade pill */}
-      <div className="relative z-[2] p-5 sm:p-8">
-        <span className="rounded-full bg-black/30 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.25em] text-white/60">
-          {decade}
-        </span>
-      </div>
-
-      {/* Result icon */}
-      {showResultIcon && isChosen && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center">
+        style={{ height: 'clamp(320px, 50vw, 480px)' }}
+      >
+        {/* Background cover image */}
+        <div className="absolute inset-0">
+          {imgFailed ? (
+            <div className="absolute inset-0 bg-[hsl(var(--game-ink))]" />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={igdbCoverUrl(game.igdbImageId)}
+              alt={game.title}
+              className={`absolute inset-0 h-full w-full object-cover transition-transform duration-[6s] ${
+                !disabled ? 'scale-[1.04] group-hover:scale-100' : 'scale-[1.04]'
+              }`}
+              onError={() => setImgFailed(true)}
+            />
+          )}
           <div
-            className={`flex h-[72px] w-[72px] items-center justify-center rounded-full text-[32px] text-white ${
-              isCorrect ? 'bg-[hsl(var(--game-green))]' : 'bg-[hsl(var(--game-red))]'
+            className={`absolute inset-0 transition-all duration-500 ${overlayClass} ${
+              !disabled ? 'group-hover:bg-black/30' : ''
             }`}
-            style={{ animation: 'reveal-pop 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}
-          >
-            {isCorrect ? '\u2713' : '\u2717'}
+          />
+        </div>
+
+        {/* Card content — decade at top, everything else pinned to bottom */}
+        <div className="relative z-[2] flex h-full flex-col items-start">
+          {/* Decade pill — top */}
+          <div className="p-3 pb-0 sm:p-8 sm:pb-0">
+            <span className="rounded-full bg-black/30 px-2 py-0.5 text-[7px] font-bold uppercase tracking-[0.2em] text-white/60 sm:px-2.5 sm:py-1 sm:text-[9px] sm:tracking-[0.25em]">
+              {decade}
+            </span>
+          </div>
+
+          {/* Spacer */}
+          <div className="flex-1" />
+
+          {/* Bottom content — genre, title, price — all left-aligned */}
+          <div className="w-full bg-gradient-to-t from-black/60 via-black/30 to-transparent px-3 pb-4 pt-10 sm:px-8 sm:pb-8 sm:pt-12">
+            <span
+              className="block text-left font-heading text-[8px] font-bold uppercase tracking-[0.15em] text-white/50 sm:text-[10px] sm:tracking-[0.2em]"
+              style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
+            >
+              {genreLabel}
+            </span>
+
+            <h3
+              className="mt-0.5 text-left font-heading text-[clamp(14px,3.5vw,32px)] font-black leading-[1.05] text-white sm:mt-1"
+              style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}
+            >
+              {game.title}
+            </h3>
+
+            {priceRevealed && (
+              <div className="mt-2 flex items-center gap-2 sm:mt-3 sm:gap-3">
+                <span
+                  className="font-heading text-[clamp(22px,5vw,52px)] font-[800] tabular-nums leading-none text-white"
+                  style={{ letterSpacing: '-0.03em' }}
+                >
+                  {displayPrice}
+                </span>
+                <span className="text-[7px] font-bold uppercase tracking-[0.15em] text-white/60 leading-tight sm:text-[9px] sm:tracking-[0.2em]">
+                  launch<br />price
+                </span>
+              </div>
+            )}
           </div>
         </div>
-      )}
 
-      {/* Content area — bottom-left aligned */}
-      <div className="relative z-[2] mt-auto flex flex-col items-start p-5 sm:p-8">
-        {/* Genre label */}
-        <span
-          className="font-heading text-[10px] font-bold uppercase tracking-[0.2em] text-white/50"
-          style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
-        >
-          {genreLabel}
-        </span>
-
-        {/* Title */}
-        <h3
-          className="mt-1 text-left font-heading font-black leading-[1.05] text-white"
-          style={{
-            fontSize: 'clamp(18px, 2.5vw, 32px)',
-            textShadow: '0 2px 12px rgba(0,0,0,0.5)',
-          }}
-        >
-          {game.title}
-        </h3>
-
-        {/* Price — shows during counting and after */}
-        {priceRevealed && (
-          <div
-            className="mt-3 flex items-center gap-3"
-          >
-            <span
-              className="font-heading tabular-nums text-white"
-              style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 800, letterSpacing: '-0.03em' }}
+        {/* Result icon */}
+        {showResultIcon && isChosen && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <div
+              className={`flex h-[72px] w-[72px] items-center justify-center rounded-full text-[32px] text-white ${
+                isCorrect ? 'bg-[hsl(var(--game-green))]' : 'bg-[hsl(var(--game-red))]'
+              }`}
+              style={{ animation: 'reveal-pop 0.3s cubic-bezier(0.34,1.56,0.64,1)' }}
             >
-              {displayPrice}
-            </span>
-            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/60 leading-tight">
-              launch<br />price
-            </span>
+              {isCorrect ? '\u2713' : '\u2717'}
+            </div>
           </div>
         )}
-      </div>
+      </button>
 
-      {/* CTA button — center-bottom, overlapping onto purple bg */}
-      {!priceRevealed && (
-        <div className="absolute bottom-0 left-1/2 z-[5] -translate-x-1/2 translate-y-1/2">
-          <span
-            className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 py-2.5 font-heading text-[11px] font-extrabold uppercase tracking-[0.15em] text-[hsl(var(--game-ink))] shadow-lg transition-all ${
-              !disabled
-                ? 'group-hover:-translate-y-0.5 group-hover:bg-[#5B4FCF] group-hover:text-white group-hover:shadow-xl'
-                : 'opacity-50'
-            }`}
-          >
-            This one cost more
-            <span className="text-sm">&rsaquo;</span>
-          </span>
-        </div>
-      )}
-    </button>
+    </div>
   )
 }

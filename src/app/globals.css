@@ -159,6 +159,16 @@
     scrollbar-width: none;
   }
   .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+  .scrollbar-slim {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.15) transparent;
+  }
+  .scrollbar-slim::-webkit-scrollbar { width: 5px; }
+  .scrollbar-slim::-webkit-scrollbar-track { background: transparent; }
+  .scrollbar-slim::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 9999px; }
+  .scrollbar-slim::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+  .scrollbar-slim::-webkit-scrollbar-button { display: none; }
 }
 
 /* Game animations — defined globally so inline styles can reference them */

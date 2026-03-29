@@ -36,11 +36,11 @@ export const STREET_DATE_LADDER: RankThreshold[] = [
 ]
 
 export const SHELF_PRICE_LADDER: RankThreshold[] = [
-  { name: 'Bust', label: '0 / 10' },
-  { name: 'Just Another Consumer', label: '1\u20133 / 10' },
-  { name: 'Junior Dev', label: '4\u20136 / 10' },
-  { name: 'Senior Producer', label: '7\u20139 / 10' },
-  { name: 'Industry Insider', label: '10 / 10' },
+  { name: 'Bust', label: '0 pts' },
+  { name: 'Just Another Consumer', label: '100\u2013300 pts' },
+  { name: 'Junior Dev', label: '400\u2013600 pts' },
+  { name: 'Senior Producer', label: '700\u2013900 pts' },
+  { name: 'Industry Insider', label: '1000 pts' },
 ]
 
 export type GameSlug = 'game-sense' | 'street-date' | 'shelf-price'

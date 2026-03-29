@@ -176,7 +176,7 @@ export default function ShelfPriceDayPage({
     const streak = state?.streak ?? 0
     const shelfWon = score >= 500
     const result = shelfWon ? 'win' : 'loss'
-    const rankName = getShelfPriceRank(streak)
+    const rankName = getShelfPriceRank(score)
     return {
       result: result as 'win' | 'loss',
       heading: pickRandom(COPY[result].headings),
@@ -216,7 +216,7 @@ export default function ShelfPriceDayPage({
 
       {/* Purple game world */}
       <div
-        className="game-container mx-4 -mt-16 flex flex-1 flex-col rounded-2xl sm:mt-4 sm:rounded-[20px]"
+        className="game-container mx-0 -mt-16 flex flex-1 flex-col rounded-none sm:mx-4 sm:mt-4 sm:rounded-[20px]"
         style={{
           background: 'linear-gradient(155deg, #5B4FCF, #1a1040)',
           borderRadius: 20,
@@ -242,7 +242,7 @@ export default function ShelfPriceDayPage({
                       : { opacity: 1, transform: 'translateY(0)' })
             }
           >
-          <h1 className="text-[clamp(40px,8vw,64px)] font-black uppercase leading-none text-white">
+          <h1 className="text-[22px] font-black uppercase leading-none text-white sm:text-[clamp(40px,8vw,64px)]">
             {['Shelf', 'Price'].map((word, i) => (
               <span
                 key={word}
@@ -299,9 +299,9 @@ export default function ShelfPriceDayPage({
               >
                 <AnimatedScore
                   value={state.score}
-                  className="font-heading text-2xl font-black"
+                  className={`font-heading text-2xl font-black transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]' : 'text-[hsl(var(--game-ink))]'}`}
                 />
-                <span className="font-heading text-xs uppercase tracking-wider text-[hsl(var(--game-ink-light))]">
+                <span className={`font-heading text-xs uppercase tracking-wider transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]/60' : 'text-[hsl(var(--game-ink))]/60'}`}>
                   pts
                 </span>
                 {floatingCost && (
@@ -399,11 +399,11 @@ export default function ShelfPriceDayPage({
               </div>
             </div>
 
-            {/* Two-column post-game: left (55%) badges + results, right (45%) matchups */}
-            <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-[55fr_45fr]">
+            {/* Two-column post-game: left determines height, right scrolls within it */}
+            <div className="relative mb-6 flex flex-col gap-6 lg:flex-row">
 
-              {/* ── Left column: badge shelf → gap → ResultCard ── */}
-              <div className="order-2 flex flex-col gap-6 lg:order-1">
+              {/* ── Left column: badge shelf → ResultCard (determines container height) ── */}
+              <div className="flex flex-col gap-6 lg:w-[55%] lg:shrink-0">
                 <div
                   className="grid transition-[grid-template-rows] duration-700 ease-out"
                   style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
@@ -419,20 +419,27 @@ export default function ShelfPriceDayPage({
                   streak={state.streak}
                   won={state.won}
                   puzzleLabel={`Shelf Price ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                  onViewResults={() => setShowResult(true)}
+                  onViewResults={() => {}}
+                  hideViewResults
                   animateEntrance={pgStep >= 1}
                 />
               </div>
 
-              {/* ── Right column: matchups — scrollable, capped to left col height ── */}
-              <div className="order-1 lg:order-2 lg:overflow-hidden" style={entrance('slide-up', pgStep >= 2)}>
+              {/* ── Right column: matchups — absolutely positioned on lg, scrolls within left col height ── */}
+              <div
+                className="lg:absolute lg:top-0 lg:bottom-0 lg:right-0 lg:w-[calc(45%-1.5rem)]"
+                style={entrance('slide-up', pgStep >= 2)}
+              >
                 <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
                   <div className="shrink-0 px-5 pt-5 sm:px-6 sm:pt-6">
                     <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
+                      Shelf Price {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+                    </p>
+                    <p className="mt-1 font-heading text-[13px] font-[700] text-[hsl(var(--game-ink))]">
                       Your matchups
                     </p>
                   </div>
-                  <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-5 pt-3 sm:px-6 sm:pb-6">
+                  <div className="flex-1 overflow-y-auto overscroll-contain scrollbar-slim px-5 pb-5 pt-3 sm:px-6 sm:pb-6">
                     <div className="flex flex-col gap-3">
                       {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
                         const correct = roundResults[i]
@@ -448,7 +455,6 @@ export default function ShelfPriceDayPage({
                                   : 'border-[hsl(var(--game-red))]/30 bg-[hsl(var(--game-red))]/5'
                             }`}
                           >
-                            {/* Round header */}
                             <div className="mb-2 flex items-center justify-between">
                               <span className="font-heading text-[10px] font-[800] text-[hsl(var(--game-ink-light))]">
                                 Round {i + 1}
@@ -459,19 +465,18 @@ export default function ShelfPriceDayPage({
                                 </span>
                               )}
                             </div>
-                            {/* Two games side by side */}
-                            <div className="flex gap-3">
+                            <div className="flex gap-4">
                               {[left, right].map((game, gi) => (
-                                <div key={gi} className="flex flex-1 items-center gap-2.5">
-                                  <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-muted/30 shadow-sm">
+                                <div key={gi} className="flex flex-1 items-center gap-3">
+                                  <div className="h-24 w-[68px] shrink-0 overflow-hidden rounded-lg bg-muted/30 shadow-sm">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img src={igdbCoverUrl(game.igdbImageId)} alt={game.title} className="h-full w-full object-cover" />
                                   </div>
                                   <div className="flex-1 min-w-0">
-                                    <p className="line-clamp-1 font-heading text-[11px] font-[700] leading-snug text-[hsl(var(--game-ink))]">
+                                    <p className="line-clamp-3 font-heading text-[12px] font-[700] leading-snug text-[hsl(var(--game-ink))]">
                                       {game.title}
                                     </p>
-                                    <p className="font-heading text-[14px] font-[800] text-[hsl(var(--game-ink))]">
+                                    <p className="mt-0.5 font-heading text-[16px] font-[800] text-[hsl(var(--game-ink))]">
                                       ${game.launchPriceUsd}
                                     </p>
                                   </div>

@@ -88,10 +88,10 @@ export const STREET_DATE_FLAVOUR: Record<string, string[]> = {
 }
 
 export function getShelfPriceRank(score: number) {
-  if (score === 10) return 'Industry Insider'
-  if (score >= 7) return 'Senior Producer'
-  if (score >= 4) return 'Junior Dev'
-  if (score >= 1) return 'Just Another Consumer'
+  if (score >= 1000) return 'Industry Insider'
+  if (score >= 700) return 'Senior Producer'
+  if (score >= 400) return 'Junior Dev'
+  if (score >= 100) return 'Just Another Consumer'
   return 'Bust'
 }
 

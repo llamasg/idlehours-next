@@ -80,8 +80,8 @@ export default function ResultCard({
   const currentTier = ladder[currentRankIndex]
   const colors = GAME_COLORS[game]
 
-  const displayScore = game === 'shelf-price' ? `${streak}/10` : String(score)
-  const scoreLabel = game === 'shelf-price' ? 'correct' : 'pts'
+  const displayScore = String(score)
+  const scoreLabel = 'pts'
 
   const step = useEntranceSteps(15, STEP_GAPS, animateEntrance)
 
