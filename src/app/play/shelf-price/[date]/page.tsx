@@ -257,7 +257,7 @@ export default function ShelfPriceDayPage({
               </span>
             ))}
           </h1>
-          <p className="mt-1.5 text-sm text-white/70">
+          <p className="mt-0.5 text-sm font-bold text-white/70 sm:mt-1.5 sm:text-xl">
             {['Which', 'cost', 'more', 'at', 'launch?'].map((word, i) => (
               <span
                 key={word}
@@ -286,10 +286,6 @@ export default function ShelfPriceDayPage({
                       : undefined)
             }
           >
-            <p className="mt-0.5 font-heading text-xs text-white/50">
-              {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-            </p>
-
             {/* Score pill — only during gameplay */}
             {!isPostGame && !state.finished && (
               <div
@@ -429,7 +425,7 @@ export default function ShelfPriceDayPage({
               </div>
 
               {/* ── Right column: matchups — scrollable, capped to left col height ── */}
-              <div className="order-1 lg:order-2 lg:max-h-full lg:overflow-hidden" style={entrance('slide-up', pgStep >= 2)}>
+              <div className="order-1 lg:order-2 lg:overflow-hidden" style={entrance('slide-up', pgStep >= 2)}>
                 <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
                   <div className="shrink-0 px-5 pt-5 sm:px-6 sm:pt-6">
                     <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">

@@ -272,12 +272,24 @@ export default function StreetDateDayPage({
                   </span>
                 ))}
               </h1>
-              <p className="mt-1.5 text-sm text-white/60">
-                Guess the year
+              <p className="mt-0.5 text-sm font-bold text-white/70 sm:mt-1.5 sm:text-xl">
+                {['Guess', 'the', 'year!'].map((word, i) => (
+                  <span
+                    key={word}
+                    className="inline-block"
+                    style={
+                      entranceStep >= 1
+                        ? { animation: `gs-word-pop 0.2s cubic-bezier(0.34,1.56,0.64,1) ${0.7 + i * 0.3}s both` }
+                        : { opacity: 0 }
+                    }
+                  >
+                    {word}{i < 2 ? '\u00a0' : ''}
+                  </span>
+                ))}
               </p>
             </div>
 
-            {/* Date + score pill — fade in with rest */}
+            {/* Score pill — fade in with rest */}
             <div
               style={
                 isPostGame
@@ -289,9 +301,6 @@ export default function StreetDateDayPage({
                         : undefined)
               }
             >
-              <p className="mt-0.5 font-heading text-xs text-white/40">
-                {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-              </p>
 
               {/* Score pill — only during gameplay */}
               {!isPostGame && (
