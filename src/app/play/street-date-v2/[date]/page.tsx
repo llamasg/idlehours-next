@@ -628,7 +628,7 @@ export default function StreetDateV2DayPage({
                       : undefined
                 }
               >
-              <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl bg-white/95 shadow-sm p-5 sm:p-8">
+              <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl bg-white/95 shadow-sm p-5 sm:p-8">
               <div className="flex flex-col gap-5">
                 {/* Hint buttons */}
                 <div className="flex items-center justify-center gap-3">
@@ -742,21 +742,58 @@ export default function StreetDateV2DayPage({
                   </div>
                 </div>
 
-                {/* ── Guess history ── */}
+                {/* ── Guess history — visual grid like Wordle ── */}
                 {state.guesses.length > 0 && (
-                  <div className="space-y-1.5">
-                    {state.guesses.map((guess, i) => (
+                  <div className="space-y-3">
+                    {state.guesses.map((guess, gi) => (
                       <div
-                        key={i}
-                        className="flex items-center justify-between rounded-lg bg-[hsl(var(--game-ink))]/5 px-3 py-2 text-sm"
-                        style={justSubmitted && i === state.guesses.length - 1
+                        key={gi}
+                        className="rounded-xl border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-ink))]/[0.02] p-3"
+                        style={justSubmitted && gi === state.guesses.length - 1
                           ? { animation: `gs-fade-in 0.4s ${spring} both` }
                           : undefined
                         }
                       >
-                        <span className="text-[hsl(var(--game-ink-light))]">
-                          Guess {i + 1} — <span className="font-bold text-[hsl(var(--game-ink))]">{guess.correctCount}/7</span> correct
-                        </span>
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className="font-heading text-[10px] font-[700] uppercase tracking-wider text-[hsl(var(--game-ink-dim))]">
+                            Guess {gi + 1}
+                          </span>
+                          <span className="font-heading text-[12px] font-[800] text-[hsl(var(--game-ink))]">
+                            {guess.correctCount}/7
+                          </span>
+                        </div>
+                        <div className="flex gap-1">
+                          {guess.order.map((chipId, ci) => {
+                            const game = gameById(chipId)
+                            if (!game) return null
+                            const result = guess.results[ci]
+                            const borderColor = result === 'exact'
+                              ? 'border-green-500'
+                              : result === 'close'
+                                ? 'border-amber-400'
+                                : 'border-red-400'
+                            const bgColor = result === 'exact'
+                              ? 'bg-green-500/10'
+                              : result === 'close'
+                                ? 'bg-amber-400/10'
+                                : 'bg-red-400/10'
+                            return (
+                              <div key={ci} className={`flex flex-1 flex-col items-center gap-0.5 rounded-lg border-2 p-0.5 ${borderColor} ${bgColor}`}>
+                                <div className="aspect-[3/4] w-full overflow-hidden rounded-md">
+                                  <img
+                                    src={igdbCoverUrl(game.igdbImageId)}
+                                    alt={game.title}
+                                    className="h-full w-full object-cover"
+                                    loading="lazy"
+                                  />
+                                </div>
+                                <span className="line-clamp-1 w-full text-center text-[7px] font-[600] leading-tight text-[hsl(var(--game-ink))] sm:text-[8px]">
+                                  {game.title}
+                                </span>
+                              </div>
+                            )
+                          })}
+                        </div>
                       </div>
                     ))}
                     {lastGuess && !state.finished && (
@@ -800,7 +837,7 @@ export default function StreetDateV2DayPage({
                   }}
                   onDrop={handlePoolDrop}
                   onDragOver={handleDragOver}
-                  className="rounded-2xl bg-[hsl(var(--game-cream))] p-3 sm:p-4"
+                  className="rounded-2xl border-2 border-dashed border-[hsl(var(--game-ink))]/15 bg-[hsl(var(--game-cream))]/50 p-3 sm:p-4"
                   data-pool-bg="true"
                 >
                   <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-widest text-[hsl(var(--game-ink-dim))]" data-pool-bg="true">

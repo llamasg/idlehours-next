@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Idle Hours — UI Specification v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root {
+  --cream:#F0EBE0; --cream-dark:#E4DBCC; --cream-mid:#EAE3D6;
+  --sticky:#F5F0E4; --white:#FDFAF5;
+  --ink:#1A1A14; --ink-mid:#4A4A3A; --ink-light:#6A6A56; --ink-dim:#C0B89A;
+  --divider:rgba(26,26,20,0.1);
+  --blue:#4A8FE8; --blue-dark:#2D6BC4; --blue-light:#EBF2FC;
+  --amber:#C8873A; --amber-dark:#9D6328; --amber-lt:#F5E6D3;
+  --green:#27A85A; --green-dark:#1A7A40; --green-lt:rgba(39,168,90,0.12);
+  --purple:#5B4FCF; --purple-dark:#3D35A0; --purple-lt:rgba(91,79,207,0.1);
+  --orange:#E05A1A; --orange-dark:#B04010;
+  --brown:#6B4C3A; --brown-dark:#4A3025;
+  --grad-game-sense:linear-gradient(155deg,#1a2a4a 0%,#2D6BC4 100%);
+  --grad-street-date:linear-gradient(155deg,#0d1f12 0%,#1A7A40 100%);
+  --grad-shelf-price:linear-gradient(155deg,#1a1040 0%,#5B4FCF 100%);
+  --grad-blitz:linear-gradient(155deg,#2a1000 0%,#E05A1A 100%);
+  --grad-ship-it:linear-gradient(155deg,#1a100a 0%,#6B4C3A 100%);
+  --spring:cubic-bezier(0.34,1.5,0.64,1);
+  --ease-out:cubic-bezier(0.22,1,0.36,1);
+  --wipe:cubic-bezier(0.77,0,0.175,1);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+
+/* NAV */
+.spec-nav{position:sticky;top:0;z-index:800;background:var(--ink);display:flex;align-items:center;height:52px;padding:0 32px;overflow-x:auto;white-space:nowrap;gap:0;}
+.spec-nav-logo{font-size:13px;font-weight:900;color:white;text-transform:uppercase;letter-spacing:-0.2px;margin-right:32px;flex-shrink:0;text-decoration:none;}
+.spec-nav-logo span{color:var(--amber);}
+.spec-nav a{font-size:9px;font-weight:800;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);text-decoration:none;padding:0 12px;height:52px;display:inline-flex;align-items:center;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;flex-shrink:0;}
+.spec-nav a:hover{color:rgba(255,255,255,0.75);}
+.spec-nav a.act{color:white;border-bottom-color:var(--amber);}
+
+/* LAYOUT */
+.pw{max-width:1400px;margin:0 auto;padding:0 48px;}
+.sec{padding:80px 0 0;}
+.sec-last{padding:80px 0 120px;}
+.sh{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:16px;margin-bottom:40px;border-bottom:2px dashed var(--cream-dark);}
+.sh-n{font-size:9px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:5px;}
+.sh-t{font-size:26px;font-weight:900;letter-spacing:-0.4px;}
+.sh-t em{font-style:italic;font-weight:600;color:var(--ink-light);}
+.sh-sub{font-size:12px;font-weight:600;font-style:italic;color:var(--ink-light);max-width:300px;text-align:right;line-height:1.6;}
+
+.spec-note{background:var(--ink);color:white;border-radius:12px;padding:14px 18px;font-size:11px;font-weight:700;font-style:italic;line-height:1.65;margin-top:16px;border-left:3px solid var(--amber);}
+.spec-note strong{color:var(--amber);font-style:normal;}
+.spec-note code{background:rgba(255,255,255,0.1);border-radius:4px;padding:1px 5px;font-family:monospace;font-size:10px;font-style:normal;}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+.dc{background:var(--white);border:1.5px solid var(--divider);border-radius:16px;padding:24px;box-shadow:0 2px 0 var(--cream-dark);}
+.dl{font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.dl::before{content:'';display:block;width:16px;height:1.5px;background:var(--amber);}
+.mb20{margin-bottom:20px;}
+.mb12{margin-bottom:12px;}
+
+/* KEYFRAMES */
+@keyframes stripeScroll{0%{background-position:0 0;}100%{background-position:28px 28px;}}
+@keyframes followThrough{0%{transform:rotate(0);}20%{transform:rotate(-45deg);}40%{transform:rotate(12deg) scaleX(0.85);}60%{transform:rotate(-6deg);}80%{transform:rotate(2deg);}100%{transform:rotate(0);}}
+@keyframes appealIn{0%{transform:scale(0) rotate(-180deg);opacity:0;}50%{transform:scale(1.2) rotate(10deg);opacity:1;}70%{transform:scale(0.9) rotate(-5deg);}85%{transform:scale(1.05) rotate(2deg);}100%{transform:scale(1) rotate(0);opacity:1;}}
+@keyframes slowInOut{0%{transform:translateX(0);}50%{transform:translateX(180px);}100%{transform:translateX(0);}}
+@keyframes streakPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+@keyframes flameDance{from{transform:scaleX(1) scaleY(1) rotate(-3deg);}to{transform:scaleX(0.9) scaleY(1.1) rotate(3deg);}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+@keyframes stampIn{0%{transform:scale(0.35) translateY(-20px);opacity:0;}55%{transform:scale(1.18);opacity:1;}75%{transform:scale(0.93);}90%{transform:scale(1.05);}100%{transform:scale(1);opacity:1;}}
+@keyframes inkRing{0%{transform:scale(1);opacity:0.65;}100%{transform:scale(2.8);opacity:0;}}
+@keyframes badgePop{0%{transform:scale(1);}40%{transform:scale(1.35) rotate(8deg);}70%{transform:scale(0.9) rotate(-3deg);}100%{transform:scale(1) rotate(0deg);}}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes toastIn{from{transform:translateX(120%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+@keyframes toastOut{from{transform:translateX(0);opacity:1;}to{transform:translateX(120%);opacity:0;}}
+@keyframes wobble{0%,100%{transform:rotate(0);}15%{transform:rotate(-8deg);}30%{transform:rotate(6deg);}45%{transform:rotate(-4deg);}60%{transform:rotate(2.5deg);}75%{transform:rotate(-1.5deg);}88%{transform:rotate(0.8deg);}}
+@keyframes tipWobble{0%{transform:translateX(-50%) translateY(0) rotate(0);}25%{transform:translateX(-50%) translateY(-3px) rotate(-3deg);}75%{transform:translateX(-50%) translateY(-3px) rotate(3deg);}100%{transform:translateX(-50%) translateY(0) rotate(0);}}
+
+/* SECTION 01 — TOKENS */
+.game-bar{border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;box-shadow:0 4px 0 rgba(0,0,0,0.25),0 8px 24px rgba(0,0,0,0.15);}
+.game-bar-name{font-size:13px;font-weight:900;color:white;letter-spacing:-0.2px;}
+.game-bar-meta{font-size:10px;font-weight:700;color:rgba(255,255,255,0.55);}
+.game-bar-var{font-family:monospace;font-size:10px;color:rgba(255,255,255,0.35);}
+.swatch-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px;}
+.swatch-cell{display:flex;flex-direction:column;gap:4px;}
+.swatch-box{height:40px;border-radius:8px;}
+.swatch-name{font-family:monospace;font-size:8px;color:var(--ink-dim);}
+.motion-token{background:var(--cream);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.mt-name{font-size:9px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:3px;}
+.mt-val{font-family:monospace;font-size:11px;color:var(--ink-mid);}
+.mt-desc{font-size:10px;font-weight:600;color:var(--ink-light);margin-top:3px;font-style:italic;}
+
+/* SECTION 02 — TYPE */
+.type-row{display:flex;align-items:baseline;gap:16px;padding:12px 0;border-bottom:1px dashed var(--cream-dark);}
+.type-token{font-family:monospace;font-size:9px;color:var(--ink-dim);flex-shrink:0;width:110px;}
+
+/* SECTION 03 — LAYOUTS */
+.lf-grid{display:grid;grid-template-columns:1fr 200px;gap:32px;align-items:start;}
+.lf-num{font-size:100px;font-weight:900;color:var(--cream-dark);letter-spacing:-5px;line-height:0.85;margin-bottom:-16px;user-select:none;}
+.lf-eyebrow{font-size:9px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:var(--amber);margin-bottom:8px;}
+.lf-title{font-size:26px;font-weight:900;letter-spacing:-0.8px;line-height:1.05;margin-bottom:10px;}
+.lf-title em{font-style:italic;font-weight:600;color:var(--ink-light);}
+.lf-body{font-size:13px;font-weight:600;font-style:italic;color:var(--ink-light);line-height:1.75;margin-bottom:14px;}
+.lf-score{display:inline-flex;align-items:center;gap:12px;background:var(--white);border:1.5px solid var(--divider);border-radius:12px;padding:10px 16px;box-shadow:0 2px 0 var(--cream-dark);}
+.lf-score-num{font-size:28px;font-weight:900;letter-spacing:-1px;}
+.lf-score-lbl{font-size:9px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-dim);}
+.lf-score-verdict{font-size:12px;font-weight:800;color:var(--green);}
+.lf-img{background:linear-gradient(135deg,#EEEAF8,#D8D0F0);border-radius:16px;height:260px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--purple);box-shadow:0 4px 0 var(--cream-dark);}
+.lf-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;font-size:11px;font-weight:800;}
+.tag-amber{background:var(--amber-lt);border:1.5px solid rgba(200,135,58,0.28);color:var(--amber);}
+.tag-neutral{background:var(--cream);border:1.5px solid var(--divider);color:var(--ink-mid);}
+.tag-green{background:var(--green-lt);border:1.5px solid rgba(39,168,90,0.22);color:var(--green);}
+.tag-blue{background:var(--blue-light);border:1.5px solid rgba(74,143,232,0.22);color:var(--blue-dark);}
+
+.ranked-list{list-style:none;}
+.ranked-item{display:grid;grid-template-columns:52px 1fr 90px;align-items:center;gap:16px;padding:16px 0;border-bottom:1px dashed var(--cream-dark);cursor:pointer;transition:all 0.15s;border-radius:10px;}
+.ranked-item:last-child{border-bottom:none;}
+.ranked-item:hover{background:rgba(240,235,224,0.7);padding:16px;margin:0 -16px;}
+.ranked-item:hover .ri-num{color:var(--amber);}
+.ri-num{font-size:34px;font-weight:900;color:var(--cream-dark);letter-spacing:-2px;line-height:1;user-select:none;transition:color 0.2s;}
+.ri-title{font-size:15px;font-weight:800;margin-bottom:3px;}
+.ri-desc{font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);}
+.ri-score{font-size:22px;font-weight:900;letter-spacing:-0.8px;text-align:right;}
+.ri-score-lbl{font-size:9px;font-weight:800;color:var(--ink-dim);text-align:right;text-transform:uppercase;letter-spacing:0.1em;}
+
+.cluster-card{background:var(--white);border:1.5px solid var(--divider);border-radius:20px;overflow:hidden;box-shadow:0 3px 0 var(--cream-dark);}
+.cc-top{padding:20px 20px 16px;border-bottom:1.5px dashed var(--cream-dark);}
+.cc-eyebrow{font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--amber);margin-bottom:5px;}
+.cc-title{font-size:17px;font-weight:900;margin-bottom:4px;}
+.cc-desc{font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);}
+.cc-games{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--divider);}
+.cc-game{background:var(--white);padding:14px 16px;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:background 0.15s;}
+.cc-game:hover{background:var(--cream);}
+.cc-game-thumb{width:36px;height:36px;border-radius:8px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.cc-game-name{font-size:11px;font-weight:800;}
+.cc-game-meta{font-size:9px;font-weight:700;color:var(--ink-dim);}
+
+.pull-quote{position:relative;padding:24px 28px;background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.07) 1px,transparent 1px);background-size:10px 10px;border-left:4px solid var(--amber);border-radius:0 14px 14px 0;transform:rotate(-0.5deg);box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.pq-text{font-size:17px;font-weight:700;font-style:italic;line-height:1.55;margin-bottom:10px;}
+.pq-attr{font-size:11px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:0.12em;}
+
+.full-bleed{position:relative;border-radius:16px;overflow:hidden;height:280px;display:flex;align-items:flex-end;}
+.fb-bg{position:absolute;inset:0;background:linear-gradient(135deg,#2E2A5A 0%,#4A3A8A 100%);}
+.fb-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.75) 0%,rgba(0,0,0,0) 55%);}
+.fb-body{position:relative;z-index:1;padding:28px 32px;width:100%;}
+.fb-eyebrow{font-size:9px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:8px;}
+.fb-title{font-size:clamp(22px,2.8vw,34px);font-weight:900;color:white;letter-spacing:-0.8px;line-height:1.1;}
+.fb-sub{font-size:13px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.55);margin-top:6px;}
+
+.stacked-art{background:var(--white);border:1.5px solid var(--divider);border-radius:18px;overflow:hidden;box-shadow:0 3px 0 var(--cream-dark);}
+.sa-img{height:200px;background:linear-gradient(135deg,#EAEBF0,#C8D0DC);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mid);}
+.sa-body{padding:20px 22px;}
+.sa-eyebrow{font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.live-dot{width:5px;height:5px;border-radius:50%;animation:pulse 2.2s ease infinite;flex-shrink:0;}
+.ld-blue{background:var(--blue);}
+.sa-title{font-size:19px;font-weight:900;letter-spacing:-0.4px;line-height:1.15;margin-bottom:8px;}
+.sa-desc{font-size:12px;font-weight:600;font-style:italic;color:var(--ink-light);line-height:1.7;margin-bottom:14px;}
+.sa-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1.5px dashed var(--cream-dark);}
+.sa-read-time{font-size:10px;font-weight:800;color:var(--ink-dim);}
+
+.inline-read{background:var(--white);border:1.5px solid var(--divider);border-radius:18px;overflow:hidden;box-shadow:0 3px 0 var(--cream-dark);}
+.ir-header{background:var(--ink);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.ir-badge{background:var(--amber);color:white;font-size:8px;font-weight:900;letter-spacing:0.2em;text-transform:uppercase;padding:4px 10px;border-radius:100px;}
+.ir-title{font-size:14px;font-weight:900;color:white;}
+.ir-body{padding:20px;max-height:260px;overflow-y:auto;}
+.ir-body::-webkit-scrollbar{width:3px;}
+.ir-body::-webkit-scrollbar-thumb{background:var(--cream-dark);border-radius:100px;}
+.ir-text{font-size:13px;font-weight:600;font-style:italic;color:var(--ink-light);line-height:1.8;}
+.ir-text p{margin-bottom:12px;}
+.ir-text strong{color:var(--ink);font-style:normal;font-weight:800;}
+</style>
+</head>
+<body>
+
+<nav class="spec-nav">
+  <a class="spec-nav-logo" href="#">Idle <span>Hours</span></a>
+  <a href="#tokens" class="act">01 Tokens</a>
+  <a href="#typography">02 Type</a>
+  <a href="#layouts">03 Layouts</a>
+  <a href="#components">04 Components</a>
+  <a href="#microinteractions">05 Micro</a>
+  <a href="#transitions">06 Transitions</a>
+  <a href="#paper">07 Paper</a>
+  <a href="#play">08 /play Hub</a>
+  <a href="#identities">09 Game IDs</a>
+  <a href="#rules">10 Rules</a>
+</nav>
+
+<div class="pw">
+
+<!-- MASTHEAD -->
+<div style="padding:64px 0 56px;border-bottom:2px dashed var(--cream-dark);">
+  <div style="font-size:10px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;display:flex;align-items:center;gap:10px;"><span style="display:block;width:18px;height:1.5px;background:var(--amber);"></span>UI Specification v1.0</div>
+  <div style="font-size:clamp(40px,5vw,64px);font-weight:900;letter-spacing:-2px;line-height:0.95;margin-bottom:16px;">Idle Hours<br><em style="font-style:italic;font-weight:600;color:var(--ink-light);">Design System.</em></div>
+  <div style="font-size:13px;font-weight:600;font-style:italic;color:var(--ink-light);line-height:1.75;max-width:580px;">A single source of truth for the Idle Hours UI. Every component is production-accurate — copy CSS variables, keyframes, and structures directly into React. Built for Next.js App Router + Tailwind + GSAP.</div>
+  <div style="display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;">
+    <div style="background:var(--ink);border-radius:100px;padding:7px 14px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.45);">Next.js App Router</div>
+    <div style="background:var(--ink);border-radius:100px;padding:7px 14px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.45);">TypeScript</div>
+    <div style="background:var(--ink);border-radius:100px;padding:7px 14px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.45);">Tailwind CSS</div>
+    <div style="background:var(--ink);border-radius:100px;padding:7px 14px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.45);">GSAP 3</div>
+    <div style="background:var(--ink);border-radius:100px;padding:7px 14px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.45);">Sanity v5</div>
+    <div style="background:var(--amber);border:2px solid var(--amber-dark);border-radius:100px;padding:7px 14px;font-size:10px;font-weight:800;color:white;box-shadow:0 3px 0 var(--amber-dark);">Montserrat — sole typeface</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 01 TOKENS ═══════════════════════════════ -->
+<div class="sec" id="tokens">
+  <div class="sh">
+    <div><div class="sh-n">Section 01</div><div class="sh-t">Design <em>Tokens</em></div></div>
+    <div class="sh-sub">Copy verbatim into globals.css. All colours, gradients, and motion values referenced here.</div>
+  </div>
+
+  <div class="g2 mb20">
+    <div class="dc">
+      <div class="dl">Base palette — cream/ink 60%+30%</div>
+      <div class="swatch-row">
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--cream);border:1.5px solid var(--cream-dark);"></div><div class="swatch-name">--cream<br>#F0EBE0</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--cream-dark);"></div><div class="swatch-name">--cream-dark<br>#E4DBCC</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--white);border:1.5px solid var(--cream-dark);"></div><div class="swatch-name">--white<br>#FDFAF5</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--ink);"></div><div class="swatch-name">--ink<br>#1A1A14</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--ink-light);"></div><div class="swatch-name">--ink-light<br>#6A6A56</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--ink-dim);"></div><div class="swatch-name">--ink-dim<br>#C0B89A</div></div>
+      </div>
+      <div class="dl" style="margin-top:4px;">Game accents — 10% rule, one per screen</div>
+      <div class="swatch-row">
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--blue);"></div><div class="swatch-name">--blue<br>#4A8FE8</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--amber);"></div><div class="swatch-name">--amber<br>#C8873A</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--green);"></div><div class="swatch-name">--green<br>#27A85A</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--purple);"></div><div class="swatch-name">--purple<br>#5B4FCF</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--orange);"></div><div class="swatch-name">--orange<br>#E05A1A</div></div>
+        <div class="swatch-cell"><div class="swatch-box" style="background:var(--brown);"></div><div class="swatch-name">--brown<br>#6B4C3A</div></div>
+      </div>
+    </div>
+    <div class="dc">
+      <div class="dl">Motion tokens — never use ease-in-out</div>
+      <div class="motion-token"><div class="mt-name" style="color:var(--amber);">--spring</div><div class="mt-val">cubic-bezier(0.34, 1.5, 0.64, 1)</div><div class="mt-desc">Overshoots and settles. UI state changes, hover lifts, card pops, popup entrances.</div></div>
+      <div class="motion-token"><div class="mt-name" style="color:var(--blue);">--ease-out</div><div class="mt-val">cubic-bezier(0.22, 1, 0.36, 1)</div><div class="mt-desc">Smooth deceleration. Toast slides, drawers, content reveals.</div></div>
+      <div class="motion-token"><div class="mt-name" style="color:var(--purple);">--wipe</div><div class="mt-val">cubic-bezier(0.77, 0, 0.175, 1)</div><div class="mt-desc">Cinematic circle reveals and directional wipes only. Never on UI elements.</div></div>
+      <div class="motion-token" style="margin:0;"><div class="mt-name" style="color:var(--green);">GSAP back.out(1.4)</div><div class="mt-val">GSAP ease string</div><div class="mt-desc">Popup panel entrances. Pairs with power2.in for dismissal.</div></div>
+    </div>
+  </div>
+
+  <div class="dl mb12">Game world gradients — full-screen colour wash on game entry</div>
+  <div class="game-bar" style="background:var(--grad-game-sense);">
+    <div><div class="game-bar-name">Game Sense</div><div class="game-bar-meta">Blue world · Daily · Fill in the blank</div></div>
+    <div class="game-bar-var">--grad-game-sense · #1a2a4a → #2D6BC4</div>
+  </div>
+  <div class="game-bar" style="background:var(--grad-street-date);">
+    <div><div class="game-bar-name">Street Date</div><div class="game-bar-meta">Green world · Daily · Guess the year</div></div>
+    <div class="game-bar-var">--grad-street-date · #0d1f12 → #1A7A40</div>
+  </div>
+  <div class="game-bar" style="background:var(--grad-shelf-price);">
+    <div><div class="game-bar-name">Shelf Price</div><div class="game-bar-meta">Purple world · Daily · Higher or lower</div></div>
+    <div class="game-bar-var">--grad-shelf-price · #1a1040 → #5B4FCF</div>
+  </div>
+  <div class="game-bar" style="background:var(--grad-blitz);background-image:var(--grad-blitz),linear-gradient(-45deg,rgba(255,255,255,0.07) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.07) 50%,rgba(255,255,255,0.07) 75%,transparent 75%);background-size:cover,28px 28px;animation:stripeScroll 3s linear infinite;">
+    <div><div class="game-bar-name">Blitz</div><div class="game-bar-meta">Orange world · Ongoing · Timed word association · stripe texture always on</div></div>
+    <div class="game-bar-var">--grad-blitz · #2a1000 → #E05A1A</div>
+  </div>
+  <div class="game-bar" style="background:var(--grad-ship-it);">
+    <div><div class="game-bar-name">Ship It</div><div class="game-bar-meta">Brown/grey world · Narrative · No daily reset · Cormorant Garamond for story text</div></div>
+    <div class="game-bar-var">--grad-ship-it · #1a100a → #6B4C3A</div>
+  </div>
+  <div class="spec-note"><strong>React pattern:</strong> Each game page receives a <code>gameTheme</code> prop from <code>lib/gameThemes.ts</code>. Apply to the root layout: <code>style={{ background: theme.gradient }}</code>. Theme exports: <code>gradient</code>, <code>accent</code>, <code>accentDark</code>, <code>worldBg</code>, <code>thumbBg</code>, <code>btnShadow</code>. Never hardcode game colours in components.</div>
+</div>
+
+<!-- ═══════════════════════════════ 02 TYPOGRAPHY ═══════════════════════════════ -->
+<div class="sec" id="typography">
+  <div class="sh">
+    <div><div class="sh-n">Section 02</div><div class="sh-t">Typography <em>Scale</em></div></div>
+    <div class="sh-sub">Montserrat only. No serif except Ship It story text (Cormorant Garamond).</div>
+  </div>
+  <div class="dc" style="padding:0;overflow:hidden;">
+    <div style="background:var(--ink);padding:14px 20px;font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.35);">Montserrat — Google Fonts CDN</div>
+    <div style="padding:20px;">
+      <div class="type-row"><div class="type-token">display · 64px · 900</div><div style="font-size:clamp(36px,4.5vw,64px);font-weight:900;letter-spacing:-2px;line-height:0.9;">Idle Hours</div></div>
+      <div class="type-row"><div class="type-token">h1 · 48px · 900</div><div style="font-size:clamp(28px,3.5vw,48px);font-weight:900;letter-spacing:-1.5px;line-height:1.0;">Something to play.</div></div>
+      <div class="type-row"><div class="type-token">game title · 30px · 900</div><div style="font-size:30px;font-weight:900;letter-spacing:-0.4px;text-transform:uppercase;">GAME SENSE</div></div>
+      <div class="type-row"><div class="type-token">h3 · 22px · 800</div><div style="font-size:22px;font-weight:800;letter-spacing:-0.4px;">Fresh every morning.</div></div>
+      <div class="type-row"><div class="type-token">body · 13px · 600 italic</div><div style="font-size:13px;font-weight:600;font-style:italic;color:var(--ink-light);line-height:1.75;max-width:480px;">We describe it. You name it. The gap between "I know this one" and actually knowing it is where the game lives.</div></div>
+      <div class="type-row"><div class="type-token">label · 9px · 800 caps</div><div style="font-size:9px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-dim);">Daily · Guess the game</div></div>
+      <div class="type-row" style="border:none;"><div class="type-token">mono · 11px · code only</div><div style="font-family:monospace;font-size:11px;color:var(--purple);">cubic-bezier(0.34,1.5,0.64,1)</div></div>
+    </div>
+  </div>
+  <div class="spec-note"><strong>Voice rules:</strong> UK English always — except "cozy" (US spelling kept for SEO). No em dashes, use commas or colons. Contractions mandatory in editorial voice. Banned: deep dive, masterpiece, hidden gem, must-play, game-changing, iconic, unique, amazing, journey. Body copy is always italic 600 weight in --ink-light. Game titles ALL CAPS on cards, title-case in articles.</div>
+</div>
+
+<!-- ═══════════════════════════════ 03 LAYOUTS ═══════════════════════════════ -->
+<div class="sec" id="layouts">
+  <div class="sh">
+    <div><div class="sh-n">Section 03</div><div class="sh-t">Layout <em>Patterns</em></div></div>
+    <div class="sh-sub">Six editorial structures. Max-width 1300px, 48px horizontal padding.</div>
+  </div>
+
+  <!-- 03A featured listicle -->
+  <div class="dl mb20" style="margin-top:0;">03A — Featured Game in Listicle</div>
+  <div class="dc mb20">
+    <div class="lf-grid">
+      <div>
+        <div class="lf-num">03</div>
+        <div class="lf-eyebrow">Best cosy games 2024</div>
+        <div class="lf-title">Venba is the game that made me ring <em>my mum.</em></div>
+        <div class="lf-body">A cooking game about cultural memory. You play as a Tamil woman who immigrated to Canada in the 80s, reconstructing her mother's recipes from a deteriorating cookbook. The food is the language.</div>
+        <div class="lf-score"><div class="lf-score-num">87</div><div><div class="lf-score-lbl">OpenCritic</div><div class="lf-score-verdict">Mighty</div></div></div>
+        <div class="lf-tags"><div class="tag tag-amber">Narrative</div><div class="tag tag-neutral">2–3 hrs</div><div class="tag tag-green">Steam</div><div class="tag tag-blue">Switch</div></div>
+      </div>
+      <div><div class="lf-img">Game cover</div></div>
+    </div>
+    <div class="spec-note" style="margin-top:20px;"><strong>Structure:</strong> Two-column grid <code>1fr 200px</code>. Large dim rank number overlaps headline — purely decorative, <code>user-select:none</code>. Score box is always present at same size, not collapsed. Tags below image, never above headline. Pull quote (amber left rail) optional between body paragraphs.</div>
+  </div>
+
+  <!-- 03B ranked list -->
+  <div class="dl mb20">03B — Ranked List Treatment</div>
+  <div class="dc mb20">
+    <ol class="ranked-list">
+      <li class="ranked-item"><div class="ri-num">01</div><div><div class="ri-title">Stardew Valley</div><div class="ri-desc">The one everyone always recommends first. They're right.</div></div><div><div class="ri-score">94</div><div class="ri-score-lbl">OpenCritic</div></div></li>
+      <li class="ranked-item"><div class="ri-num">02</div><div><div class="ri-title">Hades</div><div class="ri-desc">Not technically cosy. But the vibes are immaculate.</div></div><div><div class="ri-score">93</div><div class="ri-score-lbl">OpenCritic</div></div></li>
+      <li class="ranked-item"><div class="ri-num">03</div><div><div class="ri-title">Venba</div><div class="ri-desc">Two hours. Stays with you longer than most forty-hour games.</div></div><div><div class="ri-score">87</div><div class="ri-score-lbl">OpenCritic</div></div></li>
+      <li class="ranked-item"><div class="ri-num">04</div><div><div class="ri-title">A Short Hike</div><div class="ri-desc">Two hours. Nothing to prove. Perfect.</div></div><div><div class="ri-score">85</div><div class="ri-score-lbl">OpenCritic</div></div></li>
+    </ol>
+    <div class="spec-note"><strong>Structure:</strong> <code>grid-template-columns: 52px 1fr 90px</code>. Hover adds background + padding — the row expands to touch its own padding zone, don't use a separate background element. Number turns amber on hover via <code>transition:color</code> only.</div>
+  </div>
+
+  <!-- 03C cluster + inline read -->
+  <div class="dl mb20">03C — Cluster Card + 60-Second Inline Read</div>
+  <div class="g2 mb20">
+    <div class="cluster-card">
+      <div class="cc-top"><div class="cc-eyebrow">Vibe cluster</div><div class="cc-title">Games for quiet evenings</div><div class="cc-desc">Slow, thoughtful, gentle. Not cosy — quiet. The ones you play with a cup of tea.</div></div>
+      <div class="cc-games">
+        <div class="cc-game"><div class="cc-game-thumb" style="background:rgba(91,79,207,0.1);">🌱</div><div class="cc-game-name">Spiritfarer</div><div class="cc-game-meta">8–10 hrs</div></div>
+        <div class="cc-game"><div class="cc-game-thumb" style="background:rgba(74,143,232,0.1);">🌊</div><div class="cc-game-name">Journey</div><div class="cc-game-meta">2 hrs</div></div>
+        <div class="cc-game"><div class="cc-game-thumb" style="background:rgba(39,168,90,0.1);">🍃</div><div class="cc-game-name">A Short Hike</div><div class="cc-game-meta">2 hrs</div></div>
+      </div>
+    </div>
+    <div class="inline-read">
+      <div class="ir-header"><div class="ir-badge">60-second read</div><div class="ir-title">Why Venba works</div></div>
+      <div class="ir-body"><div class="ir-text"><p>The food is the language. Venba doesn't explain cultural loss — it lets you experience the gap between a dish you know by memory and a recipe card you can't quite read anymore.</p><p><strong>What makes it cosy:</strong> The pace. No timers, no fail states. Just you, a recipe, and the slowly dawning realisation that some knowledge doesn't survive translation.</p><p>Play it in one sitting. Ring your mum afterwards. You know why.</p></div></div>
+    </div>
+  </div>
+  <div class="spec-note mb20"><strong>Inline read:</strong> Lives inside the article page as an expandable block — no navigation required. Dark header bar with amber badge acts as the "fold". Scrollable body with a 260px max-height. This replaces the click-through pattern for short editorial content.</div>
+
+  <!-- 03D pull quote + full bleed -->
+  <div class="dl mb20">03D — Pull Quote (stipple bg) + 03E — Full-bleed Type Overlay</div>
+  <div class="g2 mb20">
+    <div>
+      <div class="pull-quote"><div class="pq-text">"The farming loop is patient in a way most games refuse to be. One thing per day. Come back tomorrow."</div><div class="pq-attr">Beth · Idle Hours</div></div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Pull quote:</strong> Stipple background (<code>radial-gradient</code> dot pattern), amber left border 4px, slight negative rotation <code>rotate(-0.5deg)</code>. Never a filled box — always open stipple surface.</div>
+    </div>
+    <div>
+      <div class="full-bleed"><div class="fb-bg"></div><div class="fb-grad"></div><div class="fb-body"><div class="fb-eyebrow">Section break · Narrative games</div><div class="fb-title">The ones worth setting proper time aside for.</div><div class="fb-sub">Not every game should fit in a lunch break.</div></div></div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Full-bleed break:</strong> Used between major sections in long-form. Image sets mood before text. Gradient <code>to top</code> from 75% opacity black. Text anchored bottom-left. Never used decoratively — structural only.</div>
+    </div>
+  </div>
+
+  <!-- 03F stacked article -->
+  <div class="dl mb20">03F — Stacked Article Card</div>
+  <div class="g2 mb20">
+    <div class="stacked-art">
+      <div class="sa-img">Hero image · 16:9</div>
+      <div class="sa-body">
+        <div class="sa-eyebrow"><div class="live-dot ld-blue"></div>Long read</div>
+        <div class="sa-title">The strange peace of games where nothing goes wrong</div>
+        <div class="sa-desc">Fail states, consequence, drama — most games build tension from what you might lose. These ones do something stranger instead.</div>
+        <div class="sa-foot"><div class="sa-read-time">8 min read · Beth</div><div class="tag tag-blue">Feature</div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="spec-note"><strong>Hero above, body below.</strong> The image is structural — it sets context before text begins. Live dot only appears if the piece was published today. Read-time pulled from Sanity <code>estimatedReadingTime</code> field (word count ÷ 200). Author name always shown.</div>
+      <div class="dc" style="flex:1;">
+        <div class="dl">Card size variants</div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink-light);line-height:1.8;">
+          <div style="padding:8px 0;border-bottom:1px dashed var(--cream-dark);"><strong style="color:var(--ink);">Full</strong> — hero image + full body. Used in featured positions.</div>
+          <div style="padding:8px 0;border-bottom:1px dashed var(--cream-dark);"><strong style="color:var(--ink);">Compact</strong> — no image, title + eyebrow + read-time. Used in article lists.</div>
+          <div style="padding:8px 0;"><strong style="color:var(--ink);">Micro</strong> — title only, single line. Used in sidebar "Also read" blocks.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ 04 COMPONENTS ═══════════════════════════════ -->
+<div class="sec" id="components">
+  <div class="sh">
+    <div><div class="sh-n">Section 04</div><div class="sh-t">Component <em>Library</em></div></div>
+    <div class="sh-sub">All interactive components. Every button variant shown with physical press behaviour.</div>
+  </div>
+
+  <!-- Bevel buttons -->
+  <div class="dl mb20" style="margin-top:0;">04A — Bevel Button System (physical press)</div>
+  <div class="dc mb20">
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;align-items:flex-start;">
+      <button class="bvl-btn btn-blue" onclick="this.classList.add('pressing');setTimeout(()=>this.classList.remove('pressing'),200)">Play today →</button>
+      <button class="bvl-btn btn-amber">Read more</button>
+      <button class="bvl-btn btn-green">Done ✓</button>
+      <button class="bvl-btn btn-purple">Shelf Price</button>
+      <button class="bvl-btn btn-orange" id="blitz-btn">⚡ Start Blitz</button>
+      <button class="bvl-btn btn-ink">← Back</button>
+      <button class="bvl-btn btn-ghost">Maybe later</button>
+    </div>
+    <div class="spec-note"><strong>Bevel system:</strong> The shadow colour is always the darker shade of the button background (not black). On hover: <code>translateY(-3px)</code>, shadow increases. On active/press: <code>translateY(4px)</code>, shadow collapses to <code>0 1px 0</code>. Transition is <code>0.1s var(--spring)</code> — the spring on a downward movement creates the physical snap. Blitz button always has animated diagonal stripe texture.</div>
+  </div>
+
+  <!-- Pill counter -->
+  <div class="dl mb20">04B — Pill Counter (C5)</div>
+  <div class="dc mb20">
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+      <div class="pill-ctr"><div class="pc-lbl">Games played</div><div class="pc-num">42</div></div>
+      <div class="pill-ctr"><div class="pc-lbl">Best streak</div><div class="pc-num blue">7 days</div></div>
+      <div class="pill-ctr"><div class="pc-lbl">Today's score</div><div class="pc-num amber">1,240</div></div>
+      <div class="pill-ctr"><div class="pc-lbl">Badges</div><div class="pc-num green">9 / 14</div></div>
+    </div>
+    <div class="spec-note"><strong>Structure:</strong> <code>border-radius:100px</code> outer. Left zone: cream-mid bg, right-border divider, label text. Right zone: stat value. Never use for navigation — stat display only. Colour variants (blue/amber/green) on the number only, not the container.</div>
+  </div>
+
+  <!-- Tooltips -->
+  <div class="dl mb20">04C — Tooltips (standard + wobble)</div>
+  <div class="g2 mb20">
+    <div class="dc">
+      <div class="dl">Standard tooltip</div>
+      <div style="display:flex;gap:16px;align-items:center;margin-bottom:12px;">
+        <div class="tt-wrap"><div class="tt-target">?</div><div class="tt-box">Hover for tooltip</div></div>
+        <div class="tt-wrap"><div class="tt-target" style="background:var(--blue-light);color:var(--blue);">i</div><div class="tt-box" style="background:var(--blue);">OpenCritic scores from launch day. May shift with patches.<div class="tt-caret tt-blue"></div></div></div>
+        <div class="tt-wrap"><div class="tt-target" style="background:var(--amber-lt);color:var(--amber);">!</div><div class="tt-box" style="background:var(--amber);">7-day streak required for this badge.<div class="tt-caret tt-amber"></div></div></div>
+      </div>
+      <div style="font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);">Hover the icons above.</div>
+    </div>
+    <div class="dc">
+      <div class="dl">Wobble tooltip (inertia)</div>
+      <div style="display:flex;gap:20px;justify-content:center;margin-bottom:12px;">
+        <div class="wob-wrap"><div class="wob-target" style="background:var(--blue-light);font-size:24px;">🎮</div><div class="wob-tip" style="background:var(--blue);">Game Sense</div></div>
+        <div class="wob-wrap"><div class="wob-target" style="background:var(--amber-lt);font-size:24px;">⚡</div><div class="wob-tip" style="background:var(--amber);">Blitz</div></div>
+        <div class="wob-wrap"><div class="wob-target" style="background:var(--purple-lt);font-size:24px;">🏆</div><div class="wob-tip" style="background:var(--purple);">Achievement</div></div>
+      </div>
+      <div style="font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);">Hover the icons above.</div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Wobble:</strong> On hover, tooltip enters with <code>tipWobble</code> keyframe animation — rocks left-right and settles. Target scales and rotates slightly. <code>transform-origin: bottom center</code> on tooltip.</div>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div class="dl mb20">04D — Toast Notification System</div>
+  <div class="dc mb20">
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+      <div class="toast toast-blue"><div class="toast-icon">🎮</div><div class="toast-body"><div class="toast-lbl">Badge earned</div><div class="toast-txt">Game Sense</div></div></div>
+      <div class="toast toast-amber"><div class="toast-icon">🔥</div><div class="toast-body"><div class="toast-lbl">Streak milestone</div><div class="toast-txt">7-day streak!</div></div></div>
+      <div class="toast toast-green"><div class="toast-icon">🏆</div><div class="toast-body"><div class="toast-lbl">Achievement</div><div class="toast-txt">First Perfect Week</div></div></div>
+      <div class="toast toast-ink"><div class="toast-icon">📚</div><div class="toast-body"><div class="toast-lbl">New article</div><div class="toast-txt">Just published</div></div></div>
+      <div class="toast toast-orange"><div class="toast-icon">⚡</div><div class="toast-body"><div class="toast-lbl">Blitz best</div><div class="toast-txt">New personal best!</div></div></div>
+    </div>
+    <button class="bvl-btn btn-blue" onclick="triggerToastDemo()" style="font-size:11px;padding:10px 20px;">▶ Demo: animate in sequence</button>
+    <div class="spec-note" style="margin-top:12px;"><strong>Toast rules:</strong> Slides in from right, <code>toastIn</code> keyframe, <code>--ease-out</code>. Icon pill = solid colour background with a slightly darker darken. Never a browser-style alert. Each colour signals a distinct event type: blue = game progress, amber = streak, green = achievement, ink = editorial, orange = Blitz. Position: fixed bottom-right, stacks upward. Auto-dismisses after 4s with <code>toastOut</code> slide-right.</div>
+  </div>
+
+  <!-- Icon stickers -->
+  <div class="dl mb20">04E — Icon Sticker System</div>
+  <div class="dc mb20">
+    <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:16px;align-items:center;justify-items:center;">
+      <div class="icon-stk" style="background:var(--blue-light);transform:rotate(-3deg);"><img src="https://idlehours.co.uk/images/icons/icon_hourglass-loading-filtering-timer.svg" onerror="this.outerHTML='⏳'" style="width:55%;height:55%;object-fit:contain;filter:invert(36%) sepia(80%) saturate(1000%) hue-rotate(199deg);"></div>
+      <div class="icon-stk" style="background:var(--amber-lt);transform:rotate(2deg);"><img src="https://idlehours.co.uk/images/icons/icon_fire-hot-streak.svg" onerror="this.outerHTML='🔥'" style="width:55%;height:55%;object-fit:contain;filter:invert(52%) sepia(75%) saturate(600%) hue-rotate(6deg);"></div>
+      <div class="icon-stk" style="background:var(--green-lt);transform:rotate(-2deg);">📅</div>
+      <div class="icon-stk" style="background:var(--purple-lt);transform:rotate(4deg);">🚀</div>
+      <div class="icon-stk" style="background:var(--cream-mid);transform:rotate(-4deg);">📚</div>
+      <div class="icon-stk" style="background:var(--blue-light);transform:rotate(3deg);">🏆</div>
+      <div class="icon-stk" style="background:var(--amber-lt);transform:rotate(-2deg);">⭐</div>
+      <div class="icon-stk" style="background:var(--cream-mid);transform:rotate(5deg);">🎯</div>
+    </div>
+    <div class="spec-note" style="margin-top:16px;"><strong>Icon sticker rules:</strong> Circle shape, tinted background matching accent family. Alternating tilt: <code>-3deg / +2deg / -2deg</code> etc. White glow ring: <code>box-shadow: 0 0 0 4px var(--white)</code>. Hover: <code>scale(1.15) rotate(8deg)</code> with <code>--spring</code>. Icons are SVG from idlehours.co.uk/images/icons/. Max one sticker per card. Icon stickers stamped in with <code>stampIn</code> keyframe on page load (staggered 50ms apart).</div>
+  </div>
+
+  <!-- Streak fire -->
+  <div class="dl mb20">04F — Streak Fire (living animation)</div>
+  <div class="dc mb20">
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--ink);border-radius:100px;padding:10px 18px;box-shadow:0 4px 0 rgba(0,0,0,0.35);">
+        <div style="font-size:22px;animation:flameDance 0.8s ease-in-out infinite alternate;">🔥</div>
+        <div style="font-size:22px;font-weight:900;color:var(--amber);letter-spacing:-0.8px;animation:streakPulse 2s ease-in-out infinite;">7</div>
+        <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.5);">day streak</div>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:var(--ink);border-radius:100px;padding:10px 18px;box-shadow:0 4px 0 rgba(0,0,0,0.35);">
+        <div style="font-size:22px;animation:flameDance 0.8s ease-in-out infinite alternate;">🔥</div>
+        <div style="font-size:22px;font-weight:900;color:var(--orange);letter-spacing:-0.8px;animation:streakPulse 2s ease-in-out infinite;">30</div>
+        <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.5);">days</div>
+      </div>
+    </div>
+    <div class="spec-note" style="margin-top:12px;"><strong>Two separate animations:</strong> Flame uses <code>flameDance</code> — alternating keyframe that subtly squashes/stretches and rotates, runs <code>infinite alternate</code>. Number uses <code>streakPulse</code> — scale 1 to 1.06, 2s loop. Never static. Colour: amber up to 29 days, orange at 30+.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 05 MICROINTERACTIONS ═══════════════════════════════ -->
+<div class="sec" id="microinteractions">
+  <div class="sh">
+    <div><div class="sh-n">Section 05</div><div class="sh-t">Micro<em>interactions</em></div></div>
+    <div class="sh-sub">Three Disney principles selected for Idle Hours. All interactive — click to trigger.</div>
+  </div>
+
+  <div class="g3 mb20">
+    <!-- Follow through -->
+    <div class="dc">
+      <div class="dl">04 — Follow Through</div>
+      <div style="text-align:center;padding:24px 0;"><div id="ft" style="font-size:48px;cursor:pointer;transform-origin:bottom left;display:inline-block;" onclick="this.style.animation='none';requestAnimationFrame(()=>{this.style.animation='followThrough 0.8s ease both';})">🚩</div></div>
+      <div style="text-align:center;"><button class="bvl-btn btn-ink" style="font-size:10px;padding:8px 16px;" onclick="document.getElementById('ft').style.animation='none';requestAnimationFrame(()=>{document.getElementById('ft').style.animation='followThrough 0.8s ease both';})">Wave flag</button></div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Use case:</strong> Score submissions, flag placements, milestone unlocks. Applied to the flag emoji on any "day complete" confirmation.</div>
+    </div>
+    <!-- Slow in slow out -->
+    <div class="dc">
+      <div class="dl">05 — Slow In, Slow Out</div>
+      <div style="position:relative;height:60px;display:flex;align-items:center;overflow:hidden;background:var(--cream);border-radius:10px;padding:0 12px;">
+        <div id="siso" style="font-size:28px;position:absolute;" onclick="this.style.animation='none';requestAnimationFrame(()=>{this.style.animation='slowInOut 2s cubic-bezier(0.4,0,0.2,1) infinite';})">🎮</div>
+      </div>
+      <div style="text-align:center;margin-top:12px;"><button class="bvl-btn btn-ink" style="font-size:10px;padding:8px 16px;" onclick="let e=document.getElementById('siso');e.style.animation='none';requestAnimationFrame(()=>{e.style.animation='slowInOut 2s cubic-bezier(0.4,0,0.2,1) infinite';})">Animate</button></div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Use case:</strong> Loading states. The icon slides between two positions — fast in the middle, slow at both ends. Never use <code>linear</code> for loading animations.</div>
+    </div>
+    <!-- Appeal -->
+    <div class="dc">
+      <div class="dl">11 — Appeal</div>
+      <div style="text-align:center;padding:24px 0;">
+        <div id="appeal" style="font-size:48px;display:inline-block;opacity:0;cursor:pointer;" onclick="triggerAppeal()">🏆</div>
+      </div>
+      <div style="text-align:center;"><button class="bvl-btn btn-amber" style="font-size:10px;padding:8px 16px;" onclick="triggerAppeal()">Reveal trophy</button></div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Use case:</strong> Achievement unlocks, badge reveals. Spins in through 360°, overshoots to 120%, wobbles to rest. The spiral entry makes it feel earned — not just popped in.</div>
+    </div>
+  </div>
+
+  <!-- Inertia tooltip -->
+  <div class="dl mb20">Inertia Tooltip (cursor-following)</div>
+  <div class="dc mb20">
+    <div style="font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);margin-bottom:14px;">Move your cursor across the track — the tooltip lags behind with a spring tail.</div>
+    <div id="inertia-zone" style="position:relative;background:var(--cream);border-radius:12px;height:72px;cursor:crosshair;display:flex;align-items:center;overflow:hidden;">
+      <div id="inertia-tip" style="position:absolute;top:50%;transform:translateY(-50%);background:var(--blue);color:white;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;pointer-events:none;white-space:nowrap;left:50%;transition:left 0.25s var(--ease-out);">Hover me</div>
+    </div>
+    <div class="spec-note" style="margin-top:12px;"><strong>Implementation:</strong> <code>mousemove</code> updates a CSS variable, tooltip <code>left</code> transitions with <code>0.25s var(--ease-out)</code> — the lag is the transition delay between cursor position and tooltip position. No JS physics required. Use for score trackers, slider handles, any draggable UI.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 06 PAGE TRANSITIONS ═══════════════════════════════ -->
+<div class="sec" id="transitions">
+  <div class="sh">
+    <div><div class="sh-n">Section 06</div><div class="sh-t">Page <em>Transitions</em></div></div>
+    <div class="sh-sub">Four transition types. All built on CSS clip-path — no canvas, no JS animation loops.</div>
+  </div>
+
+  <div class="g2 mb20">
+    <!-- Circle reveal -->
+    <div class="dc">
+      <div class="dl">Cursor-origin circle reveal</div>
+      <div id="cr-zone" style="position:relative;border-radius:12px;overflow:hidden;height:220px;cursor:pointer;background:var(--cream-mid);display:flex;align-items:center;justify-content:center;" onclick="circleReveal(event,this)">
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim);">Click anywhere</div>
+        <div id="cr-layer" style="position:absolute;inset:0;background:var(--ink);clip-path:circle(0% at 50% 50%);transition:clip-path 0.65s var(--wipe);display:flex;align-items:center;justify-content:center;">
+          <div style="font-size:10px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.6);">Game world</div>
+        </div>
+      </div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Key:</strong> <code>clip-path: circle(0% at Xpx Ypx)</code> where X,Y = cursor position relative to element. Origin is always the click point. Reverse collapses to center-bottom. Uses <code>--wipe</code> easing.</div>
+    </div>
+    <!-- Horizontal + vertical wipes -->
+    <div class="dc">
+      <div class="dl">Directional wipes</div>
+      <div style="position:relative;border-radius:12px;overflow:hidden;height:100px;margin-bottom:12px;cursor:pointer;" onclick="toggleWipeH(this)">
+        <div style="position:absolute;inset:0;background:var(--cream-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-dim);">Click: horizontal wipe →</div>
+        <div class="h-wipe-layer" style="position:absolute;inset:0;background:var(--blue);clip-path:inset(0 100% 0 0);transition:clip-path 0.6s var(--wipe);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:white;">Revealed →</div>
+      </div>
+      <div style="position:relative;border-radius:12px;overflow:hidden;height:100px;cursor:pointer;" onclick="toggleWipeV(this)">
+        <div style="position:absolute;inset:0;background:var(--cream-mid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-dim);">Click: vertical wipe ↓</div>
+        <div class="v-wipe-layer" style="position:absolute;inset:0;background:var(--amber);clip-path:inset(0 0 100% 0);transition:clip-path 0.6s var(--wipe);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:white;">Revealed ↓</div>
+      </div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Horizontal:</strong> <code>clip-path: inset(0 100% 0 0)</code> → <code>inset(0 0% 0 0)</code>. <strong>Vertical:</strong> <code>inset(0 0 100% 0)</code> → <code>inset(0 0 0% 0)</code>. Both use <code>--wipe</code>.</div>
+    </div>
+  </div>
+
+  <!-- Scroll-driven header shrink -->
+  <div class="dl mb20">Scroll-driven header shrink</div>
+  <div class="dc mb20">
+    <div style="border-radius:14px;overflow:hidden;display:flex;flex-direction:column;border:1.5px solid var(--cream-dark);">
+      <div id="sdh" style="background:var(--ink);padding:20px 24px;font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;transition:font-size 0.3s ease,padding 0.3s ease,border-bottom-color 0.3s;border-bottom:1.5px solid transparent;flex-shrink:0;">Today's games</div>
+      <div id="sdh-body" style="overflow-y:auto;max-height:220px;padding:0;background:var(--white);" onscroll="document.getElementById('sdh').style.fontSize=this.scrollTop>20?'14px':'22px';document.getElementById('sdh').style.padding=this.scrollTop>20?'12px 24px':'20px 24px';">
+        <div style="padding:16px 24px;border-bottom:1px dashed var(--cream-dark);"><div style="font-size:13px;font-weight:800;margin-bottom:3px;">Game Sense</div><div style="font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);">Fill in the blank. We describe it.</div></div>
+        <div style="padding:16px 24px;border-bottom:1px dashed var(--cream-dark);"><div style="font-size:13px;font-weight:800;margin-bottom:3px;">Street Date</div><div style="font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);">Guess the release year from cover art.</div></div>
+        <div style="padding:16px 24px;border-bottom:1px dashed var(--cream-dark);"><div style="font-size:13px;font-weight:800;margin-bottom:3px;">Shelf Price</div><div style="font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);">Higher or lower. Five rounds.</div></div>
+        <div style="padding:16px 24px;border-bottom:1px dashed var(--cream-dark);"><div style="font-size:13px;font-weight:800;margin-bottom:3px;">Blitz</div><div style="font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);">Name as many as you can before time runs out.</div></div>
+        <div style="padding:16px 24px;"><div style="font-size:13px;font-weight:800;margin-bottom:3px;">Ship It</div><div style="font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);">Navigate the publishers. No two plays alike.</div></div>
+      </div>
+    </div>
+    <div class="spec-note" style="margin-top:12px;"><strong>Implementation:</strong> <code>scroll</code> event on the content div. Toggle a <code>shrunk</code> class on the header. Only change <code>font-size</code> and <code>padding</code> — no layout reflow. Use <code>transition: 0.3s ease</code> (not spring) for this — it feels more natural on scroll.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 07 PAPER / NOTEBOOK ═══════════════════════════════ -->
+<div class="sec" id="paper">
+  <div class="sh">
+    <div><div class="sh-n">Section 07</div><div class="sh-t">Notebook + <em>Paper Surfaces</em></div></div>
+    <div class="sh-sub">Stipple, pinboard, spiral notebook. The tactile layer that separates Idle Hours from a dashboard.</div>
+  </div>
+
+  <div class="g2 mb20">
+    <!-- Pinboard -->
+    <div>
+      <div class="dl mb20">Pinboard with sticky notes</div>
+      <div style="background:#D4B896;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22%3E%3Crect width=%2240%22 height=%2240%22 fill=%22none%22 stroke=%22rgba(180,140,100,0.3)%22 stroke-width=%220.5%22/%3E%3C/svg%3E');border-radius:16px;padding:28px;display:flex;gap:14px;flex-wrap:wrap;min-height:240px;align-items:flex-start;">
+        <div class="sticky" style="transform:rotate(-2deg);">
+          <div class="sn-pin" style="background:#E05A1A;"></div>
+          <div class="sn-label">Game Sense</div>
+          <div class="sn-title">Add replay button to results screen</div>
+          <div class="sn-sig">— Alfie</div>
+        </div>
+        <div class="sticky" style="transform:rotate(1.5deg);margin-top:16px;background:#FFF9E6;">
+          <div class="sn-pin" style="background:#4A8FE8;"></div>
+          <div class="sn-label">Beth note</div>
+          <div class="sn-title">Venba review: needs a kicker line</div>
+          <div class="sn-sig">— Beth</div>
+        </div>
+        <div class="sticky" style="transform:rotate(-1deg);background:#E8F5EC;">
+          <div class="sn-pin" style="background:#27A85A;"></div>
+          <div class="sn-label">Done ✓</div>
+          <div class="sn-title">LBP popup — play button fires wipe directly</div>
+          <div class="sn-sig">— Alfie</div>
+        </div>
+      </div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Pinboard:</strong> Cork texture via SVG grid pattern. Notes have <code>position:absolute</code> or flow layout with varied <code>margin-top</code> to stagger. Each note: stipple bg, folded corner via CSS pseudo-element, pin via <code>::before</code> circle. Rotation always between -3deg and +3deg.</div>
+    </div>
+
+    <!-- Spiral notebook -->
+    <div>
+      <div class="dl mb20">Spiral notebook</div>
+      <div class="spiral" style="border-radius:4px 16px 16px 4px;border:2px solid var(--cream-dark);overflow:hidden;display:flex;">
+        <div style="width:36px;background:var(--ink);flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:space-around;padding:12px 0;">
+          <div class="coil"></div><div class="coil"></div><div class="coil"></div><div class="coil"></div><div class="coil"></div><div class="coil"></div>
+        </div>
+        <div style="flex:1;background-color:var(--white);background-image:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(74,143,232,0.12) 28px);padding:20px 20px 20px 14px;">
+          <div style="font-size:15px;font-weight:900;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid rgba(192,57,43,0.4);">Design notes — 10 Mar</div>
+          <div style="font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.8;"><p style="margin-bottom:8px;">• LBP popup: Play goes straight to wipe. No second screen.</p><p style="margin-bottom:8px;">• Each game = its own colour world. Gradients from dark → accent.</p><p style="margin-bottom:8px;">• Blitz: stripe texture always on. Only game with animation on bg.</p><p>• Ship It: Cormorant Garamond for story body text only.</p></div>
+        </div>
+      </div>
+      <div class="spec-note" style="margin-top:12px;"><strong>Notebook:</strong> Left binding = <code>var(--ink)</code> column with coil circles. Page: white bg + <code>repeating-linear-gradient</code> for ruled lines (28px interval, 12% blue). Red margin line via border-bottom on title. Use for editorial notes, dev commentary, Beth's voice.</div>
+    </div>
+  </div>
+
+  <!-- Stipple stat card + icon stamp grid -->
+  <div class="g2 mb20">
+    <div class="dc">
+      <div class="dl">Stipple stat card (Variation 11)</div>
+      <div style="background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.07) 1px,transparent 1px);background-size:10px 10px;border-radius:16px;padding:20px;border:1.5px solid var(--cream-dark);box-shadow:0 4px 0 var(--cream-dark),0 8px 20px rgba(0,0,0,0.08);">
+        <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;">Your stats today</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+          <div style="text-align:center;"><div style="font-size:26px;font-weight:900;letter-spacing:-1px;">3</div><div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-dim);">Games</div></div>
+          <div style="text-align:center;"><div style="font-size:26px;font-weight:900;letter-spacing:-1px;color:var(--amber);">7</div><div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-dim);">Streak</div></div>
+          <div style="text-align:center;"><div style="font-size:26px;font-weight:900;letter-spacing:-1px;color:var(--blue);">1,240</div><div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-dim);">Points</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="dc">
+      <div class="dl">Icon stamp grid (Variation 10)</div>
+      <div style="background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.07) 1px,transparent 1px);background-size:10px 10px;border-radius:16px;padding:20px;border:1.5px solid var(--cream-dark);">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;justify-items:center;">
+          <div class="stamp-item"><div class="stamp-circle" style="background:var(--blue-light);">🎮</div><div class="stamp-lbl">Game</div></div>
+          <div class="stamp-item"><div class="stamp-circle" style="background:var(--green-lt);">📅</div><div class="stamp-lbl">Date</div></div>
+          <div class="stamp-item"><div class="stamp-circle" style="background:var(--purple-lt);">💰</div><div class="stamp-lbl">Price</div></div>
+          <div class="stamp-item"><div class="stamp-circle" style="background:var(--amber-lt);">🔥</div><div class="stamp-lbl">Blitz</div></div>
+          <div class="stamp-item"><div class="stamp-circle" style="background:var(--blue-light);">🏆</div><div class="stamp-lbl">Trophy</div></div>
+          <div class="stamp-item"><div class="stamp-circle" style="background:var(--cream-mid);">📚</div><div class="stamp-lbl">Read</div></div>
+          <div class="stamp-item"><div class="stamp-circle" style="background:var(--amber-lt);">⭐</div><div class="stamp-lbl">Star</div></div>
+          <div class="stamp-item"><div class="stamp-circle" style="background:var(--purple-lt);">🚀</div><div class="stamp-lbl">Ship</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The rules block -->
+  <div style="background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.07) 1px,transparent 1px);background-size:10px 10px;border-radius:20px;padding:28px;border:1.5px solid var(--cream-dark);box-shadow:0 4px 0 var(--cream-dark);">
+    <div style="font-size:9px;font-weight:900;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:6px;">The rules</div>
+    <div style="font-size:22px;font-weight:900;letter-spacing:-0.4px;margin-bottom:20px;border-bottom:2px solid rgba(192,57,43,0.3);padding-bottom:12px;">Making It Feel Made</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:12px;font-weight:700;color:var(--ink-mid);line-height:1.9;">
+      <div>Everything tilts. Nothing is straight. Stickers always at -1.5 or +1.5 degrees.<br><br>The cream is never pure white. It breathes.<br><br>Labels are labels. They do not become buttons.<br><br>Stripe texture is energy. Use it once per screen, for Blitz.</div>
+      <div>The stipple background is the desk surface. Sticky notes live on it.<br><br>Shadows go down and slightly right. Never inward.<br><br>Rounded corners are never the same radius twice — cards, chips, pills each have their own.<br><br>Motion has weight. Nothing slides. Things land.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ 08 /PLAY HUB ═══════════════════════════════ -->
+<div class="sec" id="play">
+  <div class="sh">
+    <div><div class="sh-n">Section 08</div><div class="sh-t">/play Hub — <em>Live Demo</em></div></div>
+    <div class="sh-sub">The full interaction system. Click a card, read the popup, press Play, get the wipe. Simulate finishing to see the achievement toast.</div>
+  </div>
+
+  <!-- LIVE DEMO -->
+  <div style="position:relative;background-color:var(--cream-mid);background-image:radial-gradient(circle,rgba(26,26,20,0.055) 1px,transparent 1px);background-size:14px 14px;border-radius:20px;padding:40px 32px;overflow:hidden;min-height:440px;">
+
+    <!-- daily complete badge -->
+    <div id="daily-complete" style="position:absolute;top:16px;right:16px;z-index:20;opacity:0;transform:translateY(-16px);transition:opacity 0.3s,transform 0.5s var(--spring);pointer-events:none;">
+      <div style="background:var(--green);border:2px solid var(--green-dark);border-radius:100px;padding:8px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 0 var(--green-dark),0 6px 20px rgba(39,168,90,0.3);">
+        <div>✓</div><div style="font-size:10px;font-weight:900;color:white;">Daily complete!</div>
+      </div>
+    </div>
+
+    <!-- cards -->
+    <div style="font-size:9px;font-weight:800;letter-spacing:0.24em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:20px;">Today's games — click a card to begin</div>
+    <div id="pd-cards" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+
+      <div class="pd-card" id="card-gs" onclick="openPDPopup('game-sense',this)" style="animation:cardIn 0.5s var(--spring) both;background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 6px 0 var(--cream-dark),0 10px 24px rgba(0,0,0,0.08);transition:transform 0.25s var(--spring),box-shadow 0.25s,filter 0.2s;">
+        <div style="height:5px;background:var(--grad-game-sense);"></div>
+        <div style="margin:-14px auto 0;width:44px;height:44px;border-radius:50%;background:var(--white);box-shadow:0 0 0 4px var(--white),0 3px 10px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;position:relative;z-index:1;transition:transform 0.3s var(--spring);" class="card-lip">⏳</div>
+        <div style="padding:12px 14px 14px;">
+          <div style="font-size:8px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px;">Daily · Fill in the blank</div>
+          <div style="font-size:13px;font-weight:900;letter-spacing:-0.2px;margin-bottom:3px;">GAME SENSE</div>
+          <div style="font-size:9px;font-weight:600;font-style:italic;color:var(--ink-light);margin-bottom:10px;">We describe it. You name it.</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px dashed var(--cream-dark);">
+            <div style="font-size:10px;font-weight:800;color:var(--ink-light);">Best: 940</div>
+            <div style="font-size:10px;font-weight:900;color:var(--blue);">Play →</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pd-card" id="card-sd" onclick="openPDPopup('street-date',this)" style="animation:cardIn 0.5s var(--spring) 0.07s both;background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 6px 0 var(--cream-dark),0 10px 24px rgba(0,0,0,0.08);transition:transform 0.25s var(--spring),box-shadow 0.25s,filter 0.2s;">
+        <div style="height:5px;background:var(--grad-street-date);"></div>
+        <div style="margin:-14px auto 0;width:44px;height:44px;border-radius:50%;background:var(--white);box-shadow:0 0 0 4px var(--white),0 3px 10px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;position:relative;z-index:1;transition:transform 0.3s var(--spring);" class="card-lip">📅</div>
+        <div style="padding:12px 14px 14px;">
+          <div style="font-size:8px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px;">Daily · Guess the year</div>
+          <div style="font-size:13px;font-weight:900;letter-spacing:-0.2px;margin-bottom:3px;">STREET DATE</div>
+          <div style="font-size:9px;font-weight:600;font-style:italic;color:var(--ink-light);margin-bottom:10px;">Name the year from cover art.</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px dashed var(--cream-dark);">
+            <div style="font-size:10px;font-weight:800;color:var(--ink-light);">Best: 780</div>
+            <div style="font-size:10px;font-weight:900;color:var(--green);">Play →</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pd-card" id="card-sp" onclick="openPDPopup('shelf-price',this)" style="animation:cardIn 0.5s var(--spring) 0.14s both;background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 6px 0 var(--cream-dark),0 10px 24px rgba(0,0,0,0.08);transition:transform 0.25s var(--spring),box-shadow 0.25s,filter 0.2s;">
+        <div style="height:5px;background:var(--grad-shelf-price);"></div>
+        <div style="margin:-14px auto 0;width:44px;height:44px;border-radius:50%;background:var(--white);box-shadow:0 0 0 4px var(--white),0 3px 10px rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;position:relative;z-index:1;transition:transform 0.3s var(--spring);" class="card-lip">💰</div>
+        <div style="padding:12px 14px 14px;">
+          <div style="font-size:8px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px;">Daily · Higher or lower</div>
+          <div style="font-size:13px;font-weight:900;letter-spacing:-0.2px;margin-bottom:3px;">SHELF PRICE</div>
+          <div style="font-size:9px;font-weight:600;font-style:italic;color:var(--ink-light);margin-bottom:10px;">Five rounds. Gut instinct wins.</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px dashed var(--cream-dark);">
+            <div style="font-size:10px;font-weight:800;color:var(--ink-light);">Best: 1,100</div>
+            <div style="font-size:10px;font-weight:900;color:var(--purple);">Play →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- popup scrim -->
+    <div id="pd-scrim" style="position:absolute;inset:0;background:transparent;border-radius:20px;z-index:8;pointer-events:none;transition:background 0.35s;" onclick="closePDPopup()"></div>
+
+    <!-- LBP popup -->
+    <div id="pd-popup" style="position:absolute;bottom:-200%;left:50%;transform:translateX(-50%);width:300px;z-index:10;opacity:0;pointer-events:none;transition:none;">
+      <div id="pp-card" style="border-radius:22px;overflow:hidden;border:2.5px solid rgba(255,255,255,0.15);box-shadow:0 12px 40px rgba(0,0,0,0.35);">
+        <div id="pp-top" style="padding:20px 20px 0;">
+          <div style="width:72px;height:72px;border-radius:50%;border:3px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:14px;" id="pp-thumb-wrap"><span id="pp-icon">⏳</span></div>
+          <div id="pp-eyebrow" style="font-size:9px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:4px;"></div>
+          <div id="pp-title" style="font-size:22px;font-weight:900;color:white;letter-spacing:-0.4px;line-height:1.1;margin-bottom:4px;"></div>
+          <div id="pp-desc" style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.5;margin-bottom:14px;"></div>
+          <div style="display:flex;gap:1px;margin-bottom:0;" id="pp-stats">
+            <div style="flex:1;background:rgba(0,0,0,0.18);padding:8px;text-align:center;border-radius:10px 0 0 10px;"><div id="pp-best" style="font-size:16px;font-weight:900;color:white;"></div><div style="font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.38);margin-top:1px;">Best</div></div>
+            <div style="flex:1;background:rgba(0,0,0,0.18);padding:8px;text-align:center;"><div id="pp-played" style="font-size:16px;font-weight:900;color:white;"></div><div style="font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.38);margin-top:1px;">Played</div></div>
+            <div style="flex:1;background:rgba(0,0,0,0.18);padding:8px;text-align:center;border-radius:0 10px 10px 0;"><div id="pp-streak" style="font-size:16px;font-weight:900;color:white;"></div><div style="font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.38);margin-top:1px;">Streak</div></div>
+          </div>
+        </div>
+        <div style="background:rgba(0,0,0,0.15);padding:10px 22px;display:flex;align-items:center;gap:10px;">
+          <div style="flex:1;height:4px;background:rgba(255,255,255,0.12);border-radius:100px;overflow:hidden;"><div id="pp-fill" style="height:100%;border-radius:100px;width:0%;transition:width 0.8s var(--ease-out);" ></div></div>
+          <div id="pp-prog-lbl" style="font-size:10px;font-weight:900;color:rgba(255,255,255,0.45);white-space:nowrap;"></div>
+        </div>
+        <div style="padding:12px 20px 18px;">
+          <button id="pp-btn" onclick="pdLaunchGame()" style="width:100%;border:none;border-radius:100px;padding:13px 0;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:900;color:white;cursor:pointer;transition:transform 0.1s var(--spring),box-shadow 0.1s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'" onmousedown="this.style.transform='translateY(4px)'"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- game flood -->
+    <div id="pd-flood" style="position:absolute;inset:0;border-radius:20px;pointer-events:none;z-index:15;clip-path:circle(0% at 50% 50%);transition:none;">
+      <div id="pd-flood-inner" style="position:absolute;inset:0;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;">
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:4px;">IDLE HOURS</div>
+        <div id="pd-flood-name" style="font-size:48px;font-weight:900;color:white;letter-spacing:-2px;text-transform:uppercase;line-height:0.9;"></div>
+        <div style="width:32px;height:32px;border:3px dashed rgba(255,255,255,0.3);border-radius:50%;margin-top:12px;animation:streakPulse 1s ease-in-out infinite;"></div>
+        <div style="font-size:11px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.4);margin-top:4px;">Loading your game...</div>
+        <button id="pd-return-btn" onclick="pdReturn()" style="margin-top:24px;background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.25);border-radius:100px;padding:10px 24px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;color:white;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 0.3s,transform 0.1s;">← Simulate: finish &amp; return</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-note" style="margin-top:16px;">
+    <strong>Interaction flow:</strong> (1) Card click → others dim/desaturate, LBP popup slides up from below with <code>gsap back.out(1.4)</code>. (2) Play click → popup collapses down into the circle wipe simultaneously — origin is the popup's screen position, not the screen centre. (3) Circle expands via <code>clip-path</code> transition with <code>--wipe</code> easing. (4) Game title rises up, dashed spinner pulses. (5) After game (simulate only): reverse wipe from bottom-centre, green "Daily complete" badge stamps down, achievement toast slides in from right with <code>inkRing</code> animations. Close popup with Escape or clicking the scrim.
+  </div>
+
+  <!-- architecture note -->
+  <div class="dc" style="margin-top:20px;">
+    <div class="dl">React architecture for /play</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;font-size:12px;font-weight:700;color:var(--ink-mid);line-height:1.85;">
+      <div>
+        <strong style="color:var(--ink);display:block;margin-bottom:6px;">State machine</strong>
+        <code style="font-family:monospace;font-size:10px;color:var(--purple);display:block;background:var(--cream);padding:10px;border-radius:8px;line-height:1.8;">
+          type PlayState =<br>
+          &nbsp;&nbsp;| 'idle'<br>
+          &nbsp;&nbsp;| 'selected'    // popup open<br>
+          &nbsp;&nbsp;| 'entering'    // wipe in progress<br>
+          &nbsp;&nbsp;| 'playing'     // game active<br>
+          &nbsp;&nbsp;| 'returning'   // wipe reverse<br>
+          &nbsp;&nbsp;| 'complete'    // toast showing
+        </code>
+      </div>
+      <div>
+        <strong style="color:var(--ink);display:block;margin-bottom:6px;">Game theme config (lib/gameThemes.ts)</strong>
+        <code style="font-family:monospace;font-size:10px;color:var(--purple);display:block;background:var(--cream);padding:10px;border-radius:8px;line-height:1.8;">
+          { id, name, eyebrow,<br>
+          &nbsp;&nbsp;gradient, thumbBg,<br>
+          &nbsp;&nbsp;accent, accentDark,<br>
+          &nbsp;&nbsp;btnText, btnBg, btnShadow,<br>
+          &nbsp;&nbsp;icon, stripTexture?,<br>
+          &nbsp;&nbsp;best, played, streak, prog }
+        </code>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 09 GAME IDENTITIES ═══════════════════════════════ -->
+<div class="sec" id="identities">
+  <div class="sh">
+    <div><div class="sh-n">Section 09</div><div class="sh-t">Game <em>Colour Identities</em></div></div>
+    <div class="sh-sub">Each game is a sub-brand. The gradient is the world. Everything inside it inherits the accent.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+    <div style="background:var(--grad-game-sense);border-radius:20px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,0.2),0 12px 32px rgba(0,0,0,0.15);">
+      <div style="padding:24px;position:relative;">
+        <div style="font-size:8px;font-weight:900;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Daily · Fill in the blank</div>
+        <div style="font-size:30px;font-weight:900;color:white;letter-spacing:-0.8px;margin-bottom:4px;">GAME SENSE</div>
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);font-style:italic;line-height:1.55;">Blue world. Deep navy to mid-blue. Clinical but warm. The blank feels like a puzzle, not a test.</div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          <div style="background:rgba(74,143,232,0.3);border:1.5px solid rgba(74,143,232,0.5);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.8);">Accent: #4A8FE8</div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.55);">--grad-game-sense</div>
+        </div>
+      </div>
+      <div style="background:rgba(0,0,0,0.2);padding:14px 24px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.45);">Input fields: blue border. Correct answers pulse blue. Score counter on navy panel.</div>
+    </div>
+
+    <div style="background:var(--grad-street-date);border-radius:20px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,0.2),0 12px 32px rgba(0,0,0,0.15);">
+      <div style="padding:24px;position:relative;">
+        <div style="font-size:8px;font-weight:900;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Daily · Guess the year</div>
+        <div style="font-size:30px;font-weight:900;color:white;letter-spacing:-0.8px;margin-bottom:4px;">STREET DATE</div>
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);font-style:italic;line-height:1.55;">Green world. Dark forest to mid-green. Archival, editorial. Like flipping through a dusty gaming catalogue.</div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          <div style="background:rgba(39,168,90,0.3);border:1.5px solid rgba(39,168,90,0.5);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.8);">Accent: #27A85A</div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.55);">--grad-street-date</div>
+        </div>
+      </div>
+      <div style="background:rgba(0,0,0,0.2);padding:14px 24px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.45);">Cover art thumbnails desaturated. Year display in green. Timeline slider if used.</div>
+    </div>
+
+    <div style="background:var(--grad-shelf-price);border-radius:20px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,0.2),0 12px 32px rgba(0,0,0,0.15);">
+      <div style="padding:24px;position:relative;">
+        <div style="font-size:8px;font-weight:900;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Daily · Higher or lower</div>
+        <div style="font-size:30px;font-weight:900;color:white;letter-spacing:-0.8px;margin-bottom:4px;">SHELF PRICE</div>
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);font-style:italic;line-height:1.55;">Purple world. Deep indigo to mid-purple. Slightly retail, slightly luxury. Like a shop floor at night.</div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          <div style="background:rgba(91,79,207,0.3);border:1.5px solid rgba(91,79,207,0.5);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.8);">Accent: #5B4FCF</div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.55);">--grad-shelf-price</div>
+        </div>
+      </div>
+      <div style="background:rgba(0,0,0,0.2);padding:14px 24px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.45);">Price tag UI elements. Higher/lower buttons in purple bevel. Correct round = purple flash.</div>
+    </div>
+
+    <div style="background:var(--grad-blitz);background-image:var(--grad-blitz),linear-gradient(-45deg,rgba(255,255,255,0.06) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.06) 50%,rgba(255,255,255,0.06) 75%,transparent 75%);background-size:cover,28px 28px;animation:stripeScroll 3s linear infinite;border-radius:20px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,0.2),0 12px 32px rgba(0,0,0,0.15);">
+      <div style="padding:24px;position:relative;">
+        <div style="font-size:8px;font-weight:900;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:6px;">Ongoing · Timed word association</div>
+        <div style="font-size:30px;font-weight:900;color:white;letter-spacing:-0.8px;margin-bottom:4px;">BLITZ</div>
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);font-style:italic;line-height:1.55;">Orange world. Near-black to hot orange. Stripe texture always-on. High energy, deliberately overwhelming.</div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          <div style="background:rgba(224,90,26,0.35);border:1.5px solid rgba(224,90,26,0.6);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.8);">Accent: #E05A1A</div>
+          <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.55);">Stripe texture: always on</div>
+        </div>
+      </div>
+      <div style="background:rgba(0,0,0,0.2);padding:14px 24px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.45);">Timer arc in orange. Countdown pulse accelerates. Answers stack as orange chips.</div>
+    </div>
+  </div>
+
+  <!-- Ship It full width -->
+  <div style="background:var(--grad-ship-it);border-radius:20px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,0.2),0 12px 32px rgba(0,0,0,0.15);margin-bottom:20px;">
+    <div style="padding:28px 28px 0;display:grid;grid-template-columns:1fr 1fr;gap:28px;">
+      <div>
+        <div style="font-size:8px;font-weight:900;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Narrative · No daily reset</div>
+        <div style="font-size:36px;font-weight:900;color:white;letter-spacing:-1px;margin-bottom:8px;">SHIP IT</div>
+        <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.5);font-style:italic;line-height:1.65;">Brown/grey world. Near-black to warm brown. Corporate boardroom after hours. Candlelit and slightly threatening. Story text in Cormorant Garamond (sole exception to the Montserrat rule).</div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+          <div style="background:rgba(107,76,58,0.4);border:1.5px solid rgba(107,76,58,0.6);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.7);">Accent: #6B4C3A</div>
+          <div style="background:rgba(255,255,255,0.07);border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.4);">Cormorant Garamond: story text only</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 16px;font-size:12px;font-weight:700;color:rgba(255,255,255,0.55);line-height:1.7;font-style:italic;font-family:'Georgia',serif;">"You've pitched to three publishers. Two ghosted you. One wants exclusivity. What do you do?"</div>
+        <div style="display:flex;gap:8px;">
+          <button style="flex:1;background:rgba(107,76,58,0.5);border:2px solid rgba(107,76,58,0.8);border-radius:100px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:900;color:white;cursor:pointer;box-shadow:0 4px 0 rgba(74,50,37,0.8);">Take the deal</button>
+          <button style="flex:1;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);border-radius:100px;padding:10px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:900;color:rgba(255,255,255,0.65);cursor:pointer;">Walk away</button>
+        </div>
+      </div>
+    </div>
+    <div style="background:rgba(0,0,0,0.2);padding:14px 28px;margin-top:20px;font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);">No reset — progress persists across sessions via Sanity. Chapter navigation in sidebar. Never one-play-only.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ 10 RULES ═══════════════════════════════ -->
+<div class="sec sec-last" id="rules">
+  <div class="sh">
+    <div><div class="sh-n">Section 10</div><div class="sh-t">Implementation <em>Rules</em></div></div>
+    <div class="sh-sub">Non-negotiables. These are the decisions already made.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+    <div style="background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;">
+      <div style="background:var(--ink);padding:14px 20px;display:flex;align-items:center;gap:12px;">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:white;flex-shrink:0;">1</div>
+        <div style="font-size:14px;font-weight:900;color:white;">Never transform flex/grid containers</div>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:8px;">GSAP and CSS transforms applied to a flex or grid container break child layout. Always wrap the content in an inner div and transform that instead.</div>
+        <div style="background:rgba(39,168,90,0.08);border:1.5px solid rgba(39,168,90,0.2);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:var(--green);">✓ DO — animate the inner wrapper div</div>
+        <div style="background:rgba(192,57,43,0.07);border:1.5px solid rgba(192,57,43,0.18);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">✗ DON'T — gsap.to('.grid-container', { y: 20 })</div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;">
+      <div style="background:var(--ink);padding:14px 20px;display:flex;align-items:center;gap:12px;">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:white;flex-shrink:0;">2</div>
+        <div style="font-size:14px;font-weight:900;color:white;">Set opacity:0 inline before first paint</div>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:8px;">Any element that starts hidden must have <code style="font-family:monospace;font-size:10px;background:var(--cream);border-radius:3px;padding:1px 5px;">style="opacity:0"</code> in the HTML. CSS classes applied after mount may flash.</div>
+        <div style="background:rgba(39,168,90,0.08);border:1.5px solid rgba(39,168,90,0.2);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:var(--green);">✓ DO — inline style opacity:0, then GSAP sets to 1</div>
+        <div style="background:rgba(192,57,43,0.07);border:1.5px solid rgba(192,57,43,0.18);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">✗ DON'T — rely on className to hide on mount</div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;">
+      <div style="background:var(--ink);padding:14px 20px;display:flex;align-items:center;gap:12px;">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:white;flex-shrink:0;">3</div>
+        <div style="font-size:14px;font-weight:900;color:white;">One accent colour per screen</div>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:8px;">Each game world uses one accent. On hub pages (outside a game), blue is Game Sense, amber is Blitz/editorial warmth. Never render two game accents simultaneously.</div>
+        <div style="background:rgba(39,168,90,0.08);border:1.5px solid rgba(39,168,90,0.2);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:var(--green);">✓ DO — set accent via gameTheme prop, scope to layout</div>
+        <div style="background:rgba(192,57,43,0.07);border:1.5px solid rgba(192,57,43,0.18);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">✗ DON'T — blue CTA next to purple card next to amber tag</div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;">
+      <div style="background:var(--ink);padding:14px 20px;display:flex;align-items:center;gap:12px;">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:white;flex-shrink:0;">4</div>
+        <div style="font-size:14px;font-weight:900;color:white;">Shape grammar is fixed</div>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:8px;">Stat pills = <code style="font-family:monospace;font-size:10px;background:var(--cream);border-radius:3px;padding:1px 5px;">border-radius:100px</code>. Context chips = <code style="font-family:monospace;font-size:10px;background:var(--cream);border-radius:3px;padding:1px 5px;">6px</code>. Cards = <code style="font-family:monospace;font-size:10px;background:var(--cream);border-radius:3px;padding:1px 5px;">16px</code>. Major cards = <code style="font-family:monospace;font-size:10px;background:var(--cream);border-radius:3px;padding:1px 5px;">20px</code>. Popup = <code style="font-family:monospace;font-size:10px;background:var(--cream);border-radius:3px;padding:1px 5px;">22px</code>. Do not mix radii within the same component family.</div>
+        <div style="background:rgba(39,168,90,0.08);border:1.5px solid rgba(39,168,90,0.2);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:var(--green);">✓ DO — pill for stat, chip for tag, card for content</div>
+        <div style="background:rgba(192,57,43,0.07);border:1.5px solid rgba(192,57,43,0.18);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">✗ DON'T — 12px on a pill, 100px on a content card</div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;">
+      <div style="background:var(--ink);padding:14px 20px;display:flex;align-items:center;gap:12px;">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:white;flex-shrink:0;">5</div>
+        <div style="font-size:14px;font-weight:900;color:white;">Stripe texture = Blitz and energy moments only</div>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:8px;">The animated diagonal stripe background is reserved for Blitz (always on) and high-energy moments like score milestones. Never used decoratively on cards, headers, or backgrounds.</div>
+        <div style="background:rgba(39,168,90,0.08);border:1.5px solid rgba(39,168,90,0.2);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:var(--green);">✓ DO — Blitz button, Blitz game world, milestone popup</div>
+        <div style="background:rgba(192,57,43,0.07);border:1.5px solid rgba(192,57,43,0.18);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">✗ DON'T — hero banner, card decorations, nav bar</div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;">
+      <div style="background:var(--ink);padding:14px 20px;display:flex;align-items:center;gap:12px;">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:white;flex-shrink:0;">6</div>
+        <div style="font-size:14px;font-weight:900;color:white;">Reduced motion — skip everything</div>
+      </div>
+      <div style="padding:16px 20px;">
+        <div style="font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.7;margin-bottom:8px;">Check <code style="font-family:monospace;font-size:10px;background:var(--cream);border-radius:3px;padding:1px 5px;">prefers-reduced-motion</code> on mount. If true: skip all GSAP timelines, set all opacities to 1 immediately, disable circle wipe (use instant background swap instead), disable streak animation.</div>
+        <div style="background:rgba(39,168,90,0.08);border:1.5px solid rgba(39,168,90,0.2);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:var(--green);">✓ DO — useReducedMotion hook, skip GSAP entirely</div>
+        <div style="background:rgba(192,57,43,0.07);border:1.5px solid rgba(192,57,43,0.18);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:#C0392B;margin-top:6px;">✗ DON'T — halve durations, still run animation loops</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /pw -->
+
+
+<style>
+/* ─── ADDITIONAL STYLES for components used above ─── */
+
+/* Buttons */
+.bvl-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:100px;border:none;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:900;cursor:pointer;transition:transform 0.1s var(--spring),box-shadow 0.1s;letter-spacing:0.03em;position:relative;text-decoration:none;}
+.bvl-btn:hover{transform:translateY(-3px);}
+.bvl-btn:active{transform:translateY(4px)!important;}
+.btn-blue{background:var(--blue);color:white;box-shadow:0 6px 0 var(--blue-dark),0 8px 20px rgba(74,143,232,0.28);border:2px solid var(--blue-dark);}
+.btn-blue:active{box-shadow:0 1px 0 var(--blue-dark)!important;}
+.btn-amber{background:var(--amber);color:white;box-shadow:0 6px 0 var(--amber-dark),0 8px 20px rgba(200,135,58,0.28);border:2px solid var(--amber-dark);}
+.btn-amber:active{box-shadow:0 1px 0 var(--amber-dark)!important;}
+.btn-green{background:var(--green);color:white;box-shadow:0 6px 0 var(--green-dark),0 8px 20px rgba(39,168,90,0.28);border:2px solid var(--green-dark);}
+.btn-green:active{box-shadow:0 1px 0 var(--green-dark)!important;}
+.btn-purple{background:var(--purple);color:white;box-shadow:0 6px 0 var(--purple-dark),0 8px 20px rgba(91,79,207,0.28);border:2px solid var(--purple-dark);}
+.btn-purple:active{box-shadow:0 1px 0 var(--purple-dark)!important;}
+.btn-orange{background:var(--orange);color:white;box-shadow:0 6px 0 var(--orange-dark),0 8px 20px rgba(224,90,26,0.28);border:2px solid var(--orange-dark);background-image:linear-gradient(-45deg,rgba(255,255,255,0.1) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 75%,transparent 75%);background-size:28px 28px;animation:stripeScroll 3s linear infinite;}
+.btn-orange:active{box-shadow:0 1px 0 var(--orange-dark)!important;}
+.btn-ink{background:var(--ink);color:white;box-shadow:0 6px 0 rgba(0,0,0,0.5),0 8px 20px rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.6);}
+.btn-ink:active{box-shadow:0 1px 0 rgba(0,0,0,0.5)!important;}
+.btn-ghost{background:transparent;color:var(--ink);box-shadow:none;border:2px solid var(--cream-dark);}
+.btn-ghost:hover{border-color:var(--ink);transform:none;}
+
+/* Pill counter */
+.pill-ctr{display:inline-flex;align-items:center;border-radius:100px;overflow:hidden;border:1.5px solid var(--divider);background:var(--white);box-shadow:0 2px 0 var(--cream-dark);}
+.pc-lbl{padding:8px 14px;font-size:11px;font-weight:700;color:var(--ink-light);background:var(--cream-mid);border-right:1.5px solid var(--divider);}
+.pc-num{padding:8px 16px;font-size:14px;font-weight:900;letter-spacing:-0.5px;}
+.pc-num.blue{color:var(--blue);}
+.pc-num.amber{color:var(--amber);}
+.pc-num.green{color:var(--green);}
+
+/* Tooltips */
+.tt-wrap{position:relative;display:inline-block;}
+.tt-target{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--cream-dark);color:var(--ink-light);font-size:11px;font-weight:900;cursor:default;transition:background 0.15s;}
+.tt-target:hover{background:var(--blue);color:white;}
+.tt-box{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(0.9);background:var(--ink);color:white;border-radius:10px;padding:8px 14px;white-space:nowrap;font-size:11px;font-weight:700;line-height:1.4;pointer-events:none;opacity:0;transition:opacity 0.15s,transform 0.2s var(--spring);z-index:20;}
+.tt-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink);}
+.tt-wrap:hover .tt-box{opacity:1;transform:translateX(-50%) scale(1);}
+.tt-caret::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;}
+.tt-blue::after{border-top-color:var(--blue)!important;}
+.tt-amber::after{border-top-color:var(--amber)!important;}
+
+/* Wobble tooltip */
+.wob-wrap{position:relative;display:inline-block;}
+.wob-target{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.2s var(--spring);}
+.wob-target:hover{transform:scale(1.1) rotate(-5deg);}
+.wob-tip{position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(4px);border-radius:10px;padding:8px 14px;font-size:11px;font-weight:700;color:white;white-space:nowrap;pointer-events:none;opacity:0;transform-origin:bottom center;transition:opacity 0.18s,transform 0.28s var(--spring);}
+.wob-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;}
+.wob-wrap:hover .wob-tip{opacity:1;transform:translateX(-50%) translateY(0) scale(1);animation:tipWobble 0.5s var(--spring) both;}
+
+/* Toast */
+.toast{display:flex;align-items:stretch;overflow:hidden;border-radius:14px;box-shadow:0 4px 0 rgba(0,0,0,0.18),0 8px 24px rgba(0,0,0,0.12);}
+.toast-icon{width:56px;min-width:56px;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(0,0,0,0.18);}
+.toast-body{padding:11px 18px 11px 14px;display:flex;flex-direction:column;justify-content:center;gap:2px;}
+.toast-lbl{font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.65);}
+.toast-txt{font-size:16px;font-weight:900;color:white;line-height:1.1;letter-spacing:-0.2px;}
+.toast-blue{background:var(--blue);}
+.toast-amber{background:var(--amber);}
+.toast-green{background:var(--green);}
+.toast-ink{background:var(--ink);}
+.toast-orange{background:var(--orange);}
+
+/* Icon sticker */
+.icon-stk{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 0 4px var(--white),0 4px 14px rgba(0,0,0,0.18);transition:transform 0.25s var(--spring);cursor:default;}
+.icon-stk:hover{transform:scale(1.15) rotate(8deg);}
+
+/* Stamp */
+.stamp-item{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.stamp-circle{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 0 4px var(--white),0 3px 10px rgba(0,0,0,0.15);transition:transform 0.25s var(--spring);cursor:default;}
+.stamp-circle:hover{transform:scale(1.15) rotate(8deg);}
+.stamp-lbl{font-size:8px;font-weight:900;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-dim);}
+
+/* Sticky notes */
+.sticky{background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.07) 1px,transparent 1px);background-size:10px 10px;border-radius:4px 14px 14px 14px;padding:16px 16px 14px;position:relative;box-shadow:0 4px 12px rgba(0,0,0,0.18),0 1px 3px rgba(0,0,0,0.1);width:155px;cursor:default;}
+.sticky::before{content:'';position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 16px 16px 0;border-color:transparent var(--cream-dark) transparent transparent;}
+.sn-pin{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.3);}
+.sn-label{font-size:8px;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:6px;padding-top:4px;}
+.sn-title{font-size:12px;font-weight:900;line-height:1.3;margin-bottom:5px;}
+.sn-sig{font-size:9px;font-weight:800;color:var(--amber);margin-top:8px;}
+
+/* Coil */
+.coil{width:24px;height:20px;border-radius:50%;background:var(--cream-dark);border:3px solid var(--ink-mid);}
+
+/* Card hover lip */
+.pd-card:hover .card-lip{transform:translateY(-5px) rotate(8deg);}
+
+/* Wipe helpers */
+.h-wipe-state{clip-path:inset(0 100% 0 0)!important;}
+
+/* Wob tip colours */
+.wob-wrap:nth-child(1) .wob-tip::after{border-top-color:var(--blue);}
+.wob-wrap:nth-child(2) .wob-tip::after{border-top-color:var(--amber);}
+.wob-wrap:nth-child(3) .wob-tip::after{border-top-color:var(--purple);}
+</style>
+
+<script>
+// ─── INTERACTIVE DEMOS ───
+
+// Appeal trophy
+function triggerAppeal() {
+  const el = document.getElementById('appeal');
+  el.style.animation = 'none';
+  el.style.opacity = '0';
+  requestAnimationFrame(() => {
+    el.style.animation = 'appealIn 1s var(--spring) both';
+    el.style.opacity = '';
+  });
+}
+
+// Circle reveal
+let crOpen = false;
+function circleReveal(e, wrap) {
+  const layer = document.getElementById('cr-layer');
+  const rect = wrap.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+  const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+  if (crOpen) {
+    layer.style.transition = 'clip-path 0.5s var(--wipe)';
+    layer.style.clipPath = `circle(0% at ${x}% ${y}%)`;
+    crOpen = false;
+  } else {
+    layer.style.clipPath = `circle(0% at ${x}% ${y}%)`;
+    layer.style.transition = 'none';
+    layer.getBoundingClientRect();
+    layer.style.transition = 'clip-path 0.65s var(--wipe)';
+    layer.style.clipPath = `circle(150% at ${x}% ${y}%)`;
+    crOpen = true;
+  }
+}
+
+// Wipes
+function toggleWipeH(el) {
+  const layer = el.querySelector('.h-wipe-layer');
+  const cur = layer.style.clipPath;
+  layer.style.clipPath = cur === 'inset(0 0% 0 0)' ? 'inset(0 100% 0 0)' : 'inset(0 0% 0 0)';
+}
+function toggleWipeV(el) {
+  const layer = el.querySelector('.v-wipe-layer');
+  const cur = layer.style.clipPath;
+  layer.style.clipPath = cur === 'inset(0 0 0% 0)' ? 'inset(0 0 100% 0)' : 'inset(0 0 0% 0)';
+}
+
+// Inertia tooltip
+const iz = document.getElementById('inertia-zone');
+const it = document.getElementById('inertia-tip');
+if (iz && it) {
+  iz.addEventListener('mousemove', e => {
+    const rect = iz.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    it.style.left = Math.max(40, Math.min(rect.width - 60, x)) + 'px';
+  });
+}
+
+// Toast demo
+function triggerToastDemo() {
+  const stack = document.querySelector('.toast-demo-stack');
+  if (!stack) return;
+  const toasts = stack.querySelectorAll('.toast');
+  toasts.forEach((t,i) => {
+    t.style.animation = 'none';
+    t.style.transform = 'translateX(120%)';
+    t.style.opacity = '0';
+    setTimeout(() => {
+      t.style.transition = 'transform 0.5s var(--ease-out), opacity 0.5s';
+      t.style.transform = 'translateX(0)';
+      t.style.opacity = '1';
+    }, i * 300 + 100);
+    setTimeout(() => {
+      t.style.transition = 'transform 0.35s ease-in, opacity 0.35s';
+      t.style.transform = 'translateX(120%)';
+      t.style.opacity = '0';
+    }, i * 300 + 2200);
+  });
+}
+
+// ─── /PLAY HUB DEMO ───
+const GAMES = {
+  'game-sense':  { eyebrow:'Daily · Fill in the blank', title:'Game Sense', desc:'We describe it. You name it.', bg:'linear-gradient(155deg,#1a2a4a,#2D6BC4)', thumbBg:'#1a3a6a', icon:'⏳', btnBg:'#4A8FE8', btnShadow:'#2D6BC4', btnText:'Play Game Sense →', best:'940', played:'42', streak:'7', prog:60 },
+  'street-date': { eyebrow:'Daily · Guess the year', title:'Street Date', desc:'Name the year from cover art alone.', bg:'linear-gradient(155deg,#0d1f12,#1A7A40)', thumbBg:'#0d2a18', icon:'📅', btnBg:'#27A85A', btnShadow:'#1A7A40', btnText:'Play Street Date →', best:'780', played:'28', streak:'5', prog:35 },
+  'shelf-price': { eyebrow:'Daily · Higher or lower', title:'Shelf Price', desc:'Five rounds. Gut instinct wins.', bg:'linear-gradient(155deg,#1a1040,#5B4FCF)', thumbBg:'#1a1050', icon:'💰', btnBg:'#5B4FCF', btnShadow:'#3D35A0', btnText:'Play Shelf Price →', best:'1100', played:'35', streak:'3', prog:80 }
+};
+
+let activeGame = null;
+
+function openPDPopup(id, card) {
+  activeGame = id;
+  const g = GAMES[id];
+  document.querySelectorAll('.pd-card').forEach(c => {
+    if (c !== card) c.style.filter = 'brightness(0.45) saturate(0.2)';
+  });
+  document.getElementById('pp-eyebrow').textContent = g.eyebrow;
+  document.getElementById('pp-title').textContent = g.title;
+  document.getElementById('pp-desc').textContent = g.desc;
+  document.getElementById('pp-icon').textContent = g.icon;
+  document.getElementById('pp-best').textContent = g.best;
+  document.getElementById('pp-played').textContent = g.played;
+  document.getElementById('pp-streak').textContent = g.streak;
+  document.getElementById('pp-prog-lbl').textContent = g.prog + '% today';
+  document.getElementById('pp-card').style.background = g.bg;
+  document.getElementById('pp-thumb-wrap').style.background = g.thumbBg;
+  const fill = document.getElementById('pp-fill');
+  fill.style.width = '0%';
+  fill.style.background = g.btnBg;
+  setTimeout(() => { fill.style.width = g.prog + '%'; fill.style.transition = 'width 0.8s var(--ease-out)'; }, 200);
+  const btn = document.getElementById('pp-btn');
+  btn.textContent = g.btnText;
+  btn.style.background = g.btnBg;
+  btn.style.boxShadow = `0 6px 0 ${g.btnShadow}, 0 8px 20px rgba(0,0,0,0.2)`;
+  const scrim = document.getElementById('pd-scrim');
+  scrim.style.pointerEvents = 'all';
+  scrim.style.background = 'rgba(26,26,20,0.5)';
+  const popup = document.getElementById('pd-popup');
+  popup.style.transition = 'none';
+  popup.style.bottom = '-200%';
+  popup.style.opacity = '0';
+  popup.style.pointerEvents = 'all';
+  requestAnimationFrame(() => {
+    popup.style.transition = 'bottom 0.5s var(--spring), opacity 0.3s';
+    popup.style.bottom = '20px';
+    popup.style.opacity = '1';
+  });
+}
+
+function closePDPopup() {
+  const popup = document.getElementById('pd-popup');
+  popup.style.transition = 'bottom 0.3s ease-in, opacity 0.25s';
+  popup.style.bottom = '-200%';
+  popup.style.opacity = '0';
+  popup.style.pointerEvents = 'none';
+  const scrim = document.getElementById('pd-scrim');
+  scrim.style.pointerEvents = 'none';
+  scrim.style.background = 'transparent';
+  document.querySelectorAll('.pd-card').forEach(c => c.style.filter = '');
+}
+
+function pdLaunchGame() {
+  if (!activeGame) return;
+  const g = GAMES[activeGame];
+  const popup = document.getElementById('pd-popup');
+  const rect = popup.getBoundingClientRect();
+  const originX = Math.round(rect.left + rect.width / 2);
+  const originY = Math.round(rect.top + rect.height / 2);
+
+  // Collapse popup into wipe
+  popup.style.transition = 'transform 0.35s ease-in, opacity 0.3s';
+  popup.style.transform = 'translateX(-50%) translateY(80px) scale(0.92)';
+  popup.style.opacity = '0';
+  const scrim = document.getElementById('pd-scrim');
+  scrim.style.transition = 'background 0.25s';
+  scrim.style.background = 'transparent';
+  scrim.style.pointerEvents = 'none';
+  setTimeout(() => {
+    popup.style.pointerEvents = 'none';
+    popup.style.transition = 'none';
+    popup.style.transform = 'translateX(-50%)';
+    popup.style.bottom = '-200%';
+  }, 360);
+
+  // Flood
+  const flood = document.getElementById('pd-flood');
+  const floodInner = document.getElementById('pd-flood-inner');
+  document.getElementById('pd-flood-name').textContent = g.title;
+  floodInner.style.background = g.bg;
+  flood.style.pointerEvents = 'all';
+  flood.style.transition = 'none';
+  flood.style.clipPath = `circle(0% at ${originX}px ${originY}px)`;
+  flood.getBoundingClientRect();
+  flood.style.transition = `clip-path 0.75s cubic-bezier(0.77,0,0.175,1)`;
+  flood.style.clipPath = `circle(150% at ${originX}px ${originY}px)`;
+  document.querySelectorAll('.pd-card').forEach(c => c.style.filter = '');
+
+  setTimeout(() => {
+    const btn = document.getElementById('pd-return-btn');
+    btn.style.opacity = '1';
+    btn.style.pointerEvents = 'all';
+    btn.style.transition = 'opacity 0.3s, transform 0.1s';
+  }, 2800);
+}
+
+function pdReturn() {
+  const flood = document.getElementById('pd-flood');
+  flood.style.transition = 'clip-path 0.6s cubic-bezier(0.77,0,0.175,1)';
+  flood.style.clipPath = `circle(0% at 50% 110%)`;
+  const btn = document.getElementById('pd-return-btn');
+  btn.style.opacity = '0';
+  btn.style.pointerEvents = 'none';
+  setTimeout(() => {
+    flood.style.pointerEvents = 'none';
+    flood.style.transition = 'none';
+    flood.style.clipPath = 'circle(0% at 50% 50%)';
+    // daily complete badge
+    const dc = document.getElementById('daily-complete');
+    dc.style.opacity = '1';
+    dc.style.transform = 'translateY(0)';
+    dc.style.pointerEvents = 'none';
+    setTimeout(() => { dc.style.opacity = '0'; dc.style.transform = 'translateY(-16px)'; }, 3500);
+    // mark card done
+    if (activeGame) {
+      const cardId = activeGame === 'game-sense' ? 'card-gs' : activeGame === 'street-date' ? 'card-sd' : 'card-sp';
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.style.filter = 'brightness(0.65) saturate(0.4)';
+        card.style.pointerEvents = 'none';
+        const foot = card.querySelector('[style*="Play →"]') || card.querySelector('[style*="border-top"]');
+        if (foot) { const cta = foot.lastElementChild; if(cta) cta.textContent = 'Done ✓'; }
+      }
+    }
+    activeGame = null;
+  }, 650);
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closePDPopup(); });
+</script>
+</body>
+</html>

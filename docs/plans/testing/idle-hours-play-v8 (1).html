@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Play — Idle Hours</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:      #F0EBE0;
+  --cream-dark: #E4DBCC;
+  --cream-mid:  #EAE3D6;
+  --white:      #FDFAF5;
+  --ink:        #1A1A14;
+  --ink-mid:    #4A4A3A;
+  --ink-light:  #6A6A56;
+  --ink-dim:    #C0B89A;
+  --divider:    rgba(26,26,20,0.1);
+  --blue:       #4A8FE8;
+  --blue-dark:  #2D6BC4;
+  --blue-light: #EBF2FC;
+  --amber:      #C8873A;
+  --amber-lt:   #F5E6D3;
+  --green:      #27A85A;
+  --purple:     #5B4FCF;
+  --purple-lt:  rgba(91,79,207,0.1);
+  --spring:     cubic-bezier(0.34,1.5,0.64,1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.45;
+}
+
+@keyframes stripeScroll {
+  0%   { background-position: 0 0; }
+  100% { background-position: 28px 28px; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+@keyframes blinkCursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%       { transform: translateY(-5px) rotate(-1deg); }
+}
+
+/* ── LAYOUT ── */
+.wrap {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(240,235,224,0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1.5px dashed var(--cream-dark);
+}
+.nav-inner {
+  max-width: 1300px; margin: 0 auto; padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+.nav-logo-mark {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-logo-mark svg { width: 14px; height: 18px; }
+.nav-logo-text {
+  font-size: 14px; font-weight: 900; color: var(--ink);
+  letter-spacing: -0.2px; text-transform: uppercase;
+}
+.nav-logo-text span { color: var(--amber); }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-light); text-decoration: none; transition: color 0.15s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+/* ── HERO ── */
+.hero {
+  padding: 68px 0 56px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 56px;
+  align-items: end;
+  border-bottom: 1.5px dashed var(--cream-dark);
+}
+.hero-eyebrow {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--amber);
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 18px;
+  animation: fadeUp 0.5s ease both;
+}
+.hero-eyebrow::before {
+  content: ''; display: block; width: 18px; height: 1.5px; background: var(--amber);
+}
+.hero-title {
+  font-size: clamp(32px, 4vw, 50px);
+  font-weight: 700; color: var(--ink);
+  letter-spacing: -1.2px; line-height: 1.15;
+  margin-bottom: 14px;
+  animation: fadeUp 0.5s ease 0.05s both;
+}
+.hero-title em { font-style: italic; font-weight: 600; color: var(--ink-light); }
+.hero-body {
+  font-size: 13px; font-weight: 600; font-style: italic;
+  color: var(--ink-light); line-height: 1.8; max-width: 440px;
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+.hero-right { animation: fadeUp 0.5s ease 0.12s both; }
+.today-card {
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  border-radius: 18px; padding: 20px 22px;
+  box-shadow: 0 3px 0 var(--cream-dark), 0 6px 18px rgba(0,0,0,0.05);
+}
+.today-meta {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ink-light); margin-bottom: 14px;
+}
+.today-meta strong { color: var(--ink); }
+.today-badges { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 14px; }
+.today-badge { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+.tb-ring {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; position: relative;
+  transition: transform 0.22s var(--spring); cursor: default;
+}
+.tb-ring:hover { transform: scale(1.1) rotate(6deg); }
+.tb-ring::before {
+  content: ''; position: absolute; inset: 4px;
+  border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.3); pointer-events: none;
+}
+.tb-blue  { background: var(--blue); box-shadow: 0 0 0 3px var(--blue-light); }
+.tb-empty { background: transparent; border: 2px dashed var(--cream-dark); box-shadow: none; }
+.tb-empty::before { display: none; }
+.tb-name {
+  font-size: 8px; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-light); text-align: center; line-height: 1.3;
+}
+.tb-earned .tb-name { color: var(--blue-dark); }
+.today-divider { height: 1px; background: var(--cream-dark); margin-bottom: 12px; }
+.today-nudge {
+  font-size: 11px; font-weight: 600; font-style: italic; color: var(--ink-light); line-height: 1.5;
+}
+.today-nudge a { color: var(--amber); text-decoration: none; font-style: normal; font-weight: 800; }
+
+/* ── SECTION CHROME ── */
+.section { padding: 56px 0 0; }
+.section-last { padding: 56px 0 80px; }
+.sh {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding-bottom: 16px; margin-bottom: 32px;
+  border-bottom: 2px dashed var(--cream-dark);
+}
+.sh-n {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--ink-light); margin-bottom: 5px;
+}
+.sh-t { font-size: 21px; font-weight: 800; color: var(--ink); letter-spacing: -0.3px; }
+.sh-t em { font-style: italic; font-weight: 600; color: var(--ink-light); }
+.sh-note {
+  font-size: 12px; font-weight: 600; font-style: italic;
+  color: var(--ink-light); text-align: right; max-width: 220px; line-height: 1.55;
+}
+
+/* ══════════════════════════════════════════════
+   GAME CARDS — IMAGE-LED
+   Mueller-Brockmann: image zone / type zone.
+   Image occupies top ~55-60% of card.
+   Type sits below. Neither decorates the other.
+   Each card has a unique image treatment that
+   represents the mechanic, not just names it.
+══════════════════════════════════════════════ */
+
+.daily-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.game-card-wrap {
+  position: relative;
+  padding-top: 10px;
+}
+
+.sticker {
+  position: absolute; top: 0; left: 14px; z-index: 10;
+  display: inline-flex; align-items: center;
+  font-size: 8px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 4px 9px; border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.14);
+}
+.sticker-blue  { background: var(--blue);  color: white; transform: rotate(-1.5deg); }
+.sticker-amber { background: var(--amber); color: white; transform: rotate(1.5deg); }
+
+.game-card {
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  border-radius: 18px; overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--cream-dark), 0 6px 18px rgba(0,0,0,0.05);
+  transition: transform 0.28s var(--spring), box-shadow 0.28s;
+  display: flex; flex-direction: column;
+}
+.game-card:hover {
+  transform: translateY(-5px) rotate(-0.3deg);
+  box-shadow: 0 8px 0 var(--cream-dark), 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* ── IMAGE ZONE — placeholder ──
+   Receives bespoke illustration as <img> or inline SVG.
+   Drop your file into .gc-image and remove .gc-image-placeholder.
+   Height and background tint per game establish the
+   colour world before illustration lands.
+── */
+.gc-image {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  height: 200px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* remove this div once illustration is in place */
+.gc-image-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0.35; user-select: none; pointer-events: none;
+}
+.gc-image-placeholder svg { width: 32px; height: 32px; }
+.gc-image-placeholder span {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+}
+
+/* per-game background tints — colour world while awaiting illustration */
+/* Game Sense: purple world — badge colour territory
+   Illustration brief: the moment just before knowing.
+   Something obscured, a question, anticipation. */
+.gci-sense { background: #EEEAF8; }
+.gci-sense .gc-image-placeholder { color: var(--purple); }
+
+/* Street Date: dark shelf atmosphere
+   Illustration brief: games from different eras, sense of
+   a shelf or archive. Time, collection, history. */
+.gci-date  { background: #EAEBF0; }
+.gci-date  .gc-image-placeholder { color: var(--ink-mid); }
+
+/* Shelf Price: warm amber retail
+   Illustration brief: price, value, the higher/lower
+   tension. A tag, a label, a number to question. */
+.gci-price { background: var(--amber-lt); }
+.gci-price .gc-image-placeholder { color: var(--amber); }
+
+/* ── TYPE ZONE — sits below image, same for all 3 ── */
+.gc-body {
+  padding: 18px 20px 20px;
+  flex: 1; display: flex; flex-direction: column;
+  border-top: 1.5px solid var(--divider);
+}
+.gc-type {
+  font-size: 9px; font-weight: 900; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--ink-mid);
+  display: flex; align-items: center; gap: 7px;
+  margin-bottom: 7px;
+}
+.live-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  animation: pulse 2.2s ease infinite;
+}
+.ld-blue  { background: var(--blue); }
+.ld-amber { background: var(--amber); }
+
+.gc-title {
+  font-size: clamp(24px, 2.6vw, 30px);
+  font-weight: 900; text-transform: uppercase;
+  color: var(--ink); letter-spacing: -1px; line-height: 0.92;
+  margin-bottom: 8px;
+}
+.gc-desc {
+  font-size: 11px; font-weight: 600; font-style: italic;
+  color: var(--ink-light); line-height: 1.65;
+  flex: 1; margin-bottom: 14px;
+}
+.gc-foot {
+  padding-top: 12px; border-top: 1.5px dashed var(--cream-dark);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.gc-score-quick {
+  display: flex; flex-direction: column; gap: 1px;
+}
+.gc-score-val {
+  font-size: 13px; font-weight: 900; color: var(--ink); letter-spacing: -0.3px;
+}
+.gc-score-rank { font-size: 9px; font-weight: 800; color: var(--ink-mid); }
+
+.btn-play {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 16px; border-radius: 100px; border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 800;
+  cursor: pointer; text-decoration: none;
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.btn-play:hover { transform: translateY(-1px); }
+.btn-play:active { transform: translateY(2px); }
+.btn-blue  { background: var(--blue); color: white; box-shadow: 0 3px 0 var(--blue-dark); }
+.btn-blue:active  { box-shadow: 0 1px 0 var(--blue-dark); }
+.btn-amber { background: var(--amber); color: white; box-shadow: 0 3px 0 #9D6328; }
+.btn-amber:active { box-shadow: 0 1px 0 #9D6328; }
+
+/* ── BADGE SHELF — cream, one instance ── */
+.badge-shelf {
+  margin-top: 14px;
+  background: var(--cream-mid);
+  border: 1.5px dashed var(--cream-dark);
+  border-radius: 14px; padding: 16px 22px;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.bs-left { display: flex; flex-direction: column; gap: 2px; }
+.bs-label {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ink-mid);
+}
+.bs-sub { font-size: 11px; font-weight: 600; font-style: italic; color: var(--ink-light); }
+.bs-badges { display: flex; gap: 8px; align-items: center; }
+.bs-badge { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bsb-ring {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; position: relative;
+  transition: transform 0.22s var(--spring); cursor: default;
+}
+.bsb-ring:hover { transform: scale(1.1) rotate(6deg); }
+.bsb-ring::before {
+  content: ''; position: absolute; inset: 4px;
+  border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.3); pointer-events: none;
+}
+.bsb-blue  { background: var(--blue); box-shadow: 0 0 0 3px var(--blue-light); }
+.bsb-empty { background: transparent; border: 2px dashed var(--cream-dark); }
+.bsb-empty::before { display: none; }
+.bsb-lbl {
+  font-size: 7px; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-mid); text-align: center;
+}
+.bsb-earned .bsb-lbl { color: var(--blue-dark); }
+.bs-connector { width: 14px; height: 1px; background: var(--cream-dark); }
+.bs-right { display: flex; align-items: center; gap: 8px; }
+.share-squares { display: flex; gap: 3px; }
+.sq { width: 10px; height: 10px; border-radius: 2px; }
+.sq-g { background: var(--green); }
+.sq-e { background: var(--cream-dark); }
+.share-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 13px; border-radius: 100px;
+  border: 1.5px solid var(--divider);
+  background: var(--white); color: var(--ink-mid);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 800;
+  cursor: pointer; text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.share-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
+
+/* ══════════════════════════════════════════════
+   BLITZ CARD — amber, stripe, image-led too
+   Image zone: the INPUT itself. A text field
+   with a cursor blinking and partial answers.
+   That IS the game — the kinetics of typing fast.
+══════════════════════════════════════════════ */
+.blitz-card {
+  background: var(--amber);
+  border-radius: 20px; overflow: hidden; position: relative; cursor: pointer;
+  box-shadow: 0 4px 0 #9D6328, 0 10px 30px rgba(200,135,58,0.22);
+  transition: transform 0.28s var(--spring), box-shadow 0.28s;
+}
+.blitz-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 0 #9D6328, 0 20px 44px rgba(200,135,58,0.28);
+}
+.blitz-card::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(
+    -45deg, rgba(255,255,255,0.09) 25%, transparent 25%,
+    transparent 50%, rgba(255,255,255,0.09) 50%,
+    rgba(255,255,255,0.09) 75%, transparent 75%
+  );
+  background-size: 28px 28px;
+  animation: stripeScroll 3s linear infinite;
+}
+
+.blitz-inner {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+}
+
+/* left: image zone — the blitz "moment" */
+.blitz-image-zone {
+  padding: 36px 32px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+
+.blitz-eyebrow {
+  font-size: 9px; font-weight: 900; letter-spacing: 0.28em;
+  text-transform: uppercase; color: rgba(255,255,255,0.85);
+  display: flex; align-items: center; gap: 7px; margin-bottom: 14px;
+}
+.blitz-pulse { width: 6px; height: 6px; border-radius: 50%; background: white; animation: pulse 1.2s ease infinite; }
+.blitz-title {
+  font-size: clamp(52px, 6vw, 80px);
+  font-weight: 900; text-transform: uppercase;
+  color: white; letter-spacing: -3px; line-height: 0.85; margin-bottom: 12px;
+}
+.blitz-desc {
+  font-size: 13px; font-weight: 600; font-style: italic;
+  color: rgba(255,255,255,0.6); line-height: 1.65; margin-bottom: 20px;
+}
+.blitz-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px; border-radius: 100px; border: none;
+  background: white; color: var(--amber);
+  font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 900;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+  transition: transform 0.08s, box-shadow 0.08s; width: fit-content;
+}
+.blitz-cta:hover { transform: translateY(-2px); box-shadow: 0 5px 0 rgba(0,0,0,0.1); }
+
+/* right: topics — white card lifted off the stripe */
+.blitz-topics-zone {
+  padding: 28px 28px 28px 0;
+  display: flex; flex-direction: column; justify-content: center; gap: 0;
+}
+.blitz-topics-panel {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 18px 18px;
+  display: flex; flex-direction: column; gap: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+}
+.blitz-topics-label {
+  font-size: 8px; font-weight: 800; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ink-light); margin-bottom: 10px;
+}
+.blitz-topics { display: flex; flex-direction: column; gap: 5px; }
+.blitz-topic {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  background: var(--cream); border-radius: 9px; padding: 10px 13px;
+  border: 1px solid var(--cream-dark); transition: background 0.15s; cursor: pointer;
+}
+.blitz-topic:hover { background: var(--cream-dark); }
+.blitz-topic-name { font-size: 12px; font-weight: 800; color: var(--ink); }
+.blitz-topic-right { display: flex; gap: 6px; align-items: center; }
+.blitz-topic-count { font-size: 10px; font-weight: 600; color: var(--ink-light); }
+.blitz-topic-new {
+  font-size: 7px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--amber); color: white; border-radius: 3px; padding: 2px 5px;
+}
+
+/* ══════════════════════════════════════════════
+   SHIP IT — image-led too.
+   The animal executive illustrations ARE the brand.
+   Left column: the illustrated characters from the brand PDF.
+   We render them as SVG silhouettes — flat, purple world.
+   Right column: type + annotations.
+   
+   The image zone is the left half of the card.
+   This is the Mueller-Brockmann image/type split
+   applied horizontally rather than vertically.
+══════════════════════════════════════════════ */
+.shipit-card {
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  border-radius: 20px; overflow: hidden; cursor: pointer;
+  box-shadow: 0 3px 0 var(--cream-dark), 0 7px 22px rgba(0,0,0,0.06);
+  transition: transform 0.28s var(--spring), box-shadow 0.28s;
+}
+.shipit-card:hover {
+  transform: translateY(-4px) rotate(-0.2deg);
+  box-shadow: 0 7px 0 var(--cream-dark), 0 20px 42px rgba(0,0,0,0.1);
+}
+.shipit-inner { display: grid; grid-template-columns: 340px 1fr; align-items: stretch; }
+
+/* image zone — left column, illustrated characters */
+.si-image {
+  background: #2E2A5A;
+  position: relative; overflow: hidden;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding-top: 28px; min-height: 320px;
+}
+
+/* hourglass texture on dark */
+.si-image::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cg transform='translate(50,50) rotate(-15)'%3E%3Cpath d='M-10-16h20v7l-10 8-10-8v-7zM-10 16h20v-7l-10-8-10 8v7z' fill='white' opacity='0.9'/%3E%3Crect x='-10' y='-19' width='20' height='3' rx='1.5' fill='white' opacity='0.9'/%3E%3Crect x='-10' y='16' width='20' height='3' rx='1.5' fill='white' opacity='0.9'/%3E%3C/g%3E%3Cg transform='translate(150,50) rotate(20)'%3E%3Cpath d='M-10-16h20v7l-10 8-10-8v-7zM-10 16h20v-7l-10-8-10 8v7z' fill='white' opacity='0.9'/%3E%3Crect x='-10' y='-19' width='20' height='3' rx='1.5' fill='white' opacity='0.9'/%3E%3Crect x='-10' y='16' width='20' height='3' rx='1.5' fill='white' opacity='0.9'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 120px 120px; opacity: 0.04;
+}
+
+/* Ship It image zone — placeholder
+   Illustration brief: the executive animal characters from Ship It.
+   Three characters in suits, badge-circle portrait style.
+   Dark purple background (#2E2A5A). Fills left column of card. */
+.si-image {
+  background: #2E2A5A;
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 320px;
+}
+.si-image-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  opacity: 0.3; user-select: none; pointer-events: none; color: white;
+}
+.si-image-placeholder svg { width: 36px; height: 36px; }
+.si-image-placeholder span {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+}
+
+/* type zone — right column */
+.si-body {
+  padding: 30px 32px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.si-sticker {
+  display: inline-flex; align-items: center;
+  font-size: 8px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 4px 9px; border-radius: 5px;
+  background: var(--cream-dark); color: var(--ink-mid);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  transform: rotate(-1.2deg);
+  margin-bottom: 16px; display: inline-block; width: fit-content;
+}
+.si-desc {
+  font-size: 13px; font-weight: 600; color: var(--ink-light);
+  line-height: 1.7; margin-bottom: 24px; flex: 1;
+}
+.si-foot { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.btn-ink {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 20px; border-radius: 100px; border: none;
+  background: var(--ink); color: white;
+  font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 800;
+  cursor: pointer; text-decoration: none;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.38);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.btn-ink:hover { transform: translateY(-1px); }
+.btn-ink:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.38); }
+.si-caveat { font-size: 11px; font-weight: 600; font-style: italic; color: var(--ink-dim); }
+
+/* annotation notes */
+.si-annotations { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.annotation {
+  font-size: 11px; font-weight: 700; font-style: italic;
+  color: var(--ink-mid); line-height: 1.55; max-width: 260px;
+  padding: 9px 12px;
+  background: var(--cream);
+  border-radius: 10px 10px 2px 10px;
+  border: 1px solid var(--cream-dark);
+}
+.annotation em { color: var(--amber); font-style: normal; font-weight: 900; }
+.annotation-sm {
+  font-size: 10px; opacity: 0.75;
+  transform: rotate(0.6deg);
+}
+
+/* ── MORE COMING ── */
+.more-card {
+  background: var(--cream-mid); border: 2px dashed var(--cream-dark);
+  border-radius: 18px; padding: 30px 34px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.more-eyebrow {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--ink-mid); margin-bottom: 8px;
+}
+.more-title { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; line-height: 1.3; }
+.more-title em { font-style: italic; font-weight: 600; color: var(--ink-light); }
+.more-tag {
+  display: inline-flex; align-items: center;
+  font-size: 10px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--amber); background: var(--amber-lt);
+  border: 1.5px solid rgba(200,135,58,0.28); border-radius: 100px;
+  padding: 7px 16px; white-space: nowrap;
+}
+
+/* ── FOOTER ── */
+.footer { background: var(--ink); }
+.footer-inner {
+  max-width: 1300px; margin: 0 auto; padding: 32px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { font-size: 16px; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: -0.2px; }
+.footer-logo span { color: var(--amber); }
+.footer-tag { font-size: 11px; font-weight: 600; font-style: italic; color: rgba(255,255,255,0.28); }
+
+/* ═══════════════════════════════════════
+   V8 ADDITIONS — tactile layer
+   Everything below is additive. Nothing
+   above is touched. Structured page,
+   moments of joy on top.
+═══════════════════════════════════════ */
+
+:root {
+  --vivid-green: #2ECC71;
+  --vivid-green-dark: #1EA055;
+  --vivid-purple: #7B35C8;
+  --vivid-purple-dark: #5E20A0;
+  --amber-dark: #9D6328;
+}
+
+/* ── CARD WRAP — needs relative + overflow visible for lip icon ── */
+.game-card-wrap { overflow: visible; }
+
+/* ── LIP ICON — the LBP icon-on-card-edge trick ── */
+.lip-icon {
+  position: absolute;
+  top: -20px; left: 50%;
+  transform: translateX(-50%);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 4px var(--white), 0 4px 14px rgba(0,0,0,0.18);
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.3s var(--spring);
+  transform: translateX(-50%) translateY(6px);
+}
+.lip-icon img { width: 52%; height: 52%; object-fit: contain; }
+.game-card-wrap:hover .lip-icon {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+/* bobbing when visible */
+@keyframes lipBob {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-5px); }
+}
+.game-card-wrap:hover .lip-icon { animation: lipBob 2.4s ease-in-out infinite; }
+
+/* ── POPUP OVERLAY ── */
+.popup-scrim {
+  position: fixed; inset: 0;
+  background: rgba(26,26,20,0); /* starts transparent */
+  z-index: 300;
+  pointer-events: none;
+  transition: background 0.35s ease;
+}
+.popup-scrim.active {
+  background: rgba(26,26,20,0.55);
+  pointer-events: all;
+}
+
+.popup-panel {
+  position: fixed;
+  bottom: -100%;
+  left: 50%; transform: translateX(-50%);
+  width: 380px;
+  z-index: 400;
+  transition: bottom 0.5s var(--spring);
+  pointer-events: none;
+}
+.popup-panel.open {
+  bottom: 40px;
+  pointer-events: all;
+}
+
+.pp-card {
+  border-radius: 24px;
+  overflow: hidden;
+  border: 2.5px solid rgba(255,255,255,0.15);
+}
+
+/* top coloured zone */
+.pp-top {
+  padding: 22px 22px 18px;
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.pp-thumb-wrap { position: relative; width: 76px; height: 76px; flex-shrink: 0; }
+.pp-thumb {
+  width: 76px; height: 76px; border-radius: 50%;
+  border: 3.5px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.pp-thumb img { width: 48%; height: 48%; object-fit: contain; filter: invert(1); opacity: 0.85; }
+.pp-arc { position: absolute; top: -4px; left: -4px; width: 84px; height: 84px; }
+.pp-spinning-dots {
+  position: absolute; top: -4px; left: -4px; width: 84px; height: 84px;
+  animation: spin 8s linear infinite; opacity: 0.4;
+}
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.pp-meta { flex: 1; padding-top: 4px; }
+.pp-eyebrow {
+  font-size: 9px; font-weight: 900; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 4px;
+}
+.pp-title { font-size: 22px; font-weight: 900; color: white; letter-spacing: -0.4px; line-height: 1.1; margin-bottom: 4px; }
+.pp-desc { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+/* stats row */
+.pp-stats { display: flex; gap: 1px; margin-top: 14px; }
+.pp-stat {
+  flex: 1; background: rgba(0,0,0,0.18);
+  padding: 8px 10px; text-align: center;
+}
+.pp-stat:first-child { border-radius: 10px 0 0 10px; }
+.pp-stat:last-child  { border-radius: 0 10px 10px 0; }
+.pps-val { font-size: 17px; font-weight: 900; color: white; letter-spacing: -0.5px; }
+.pps-lbl { font-size: 8px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.42); margin-top: 2px; }
+
+/* progress bar */
+.pp-prog {
+  background: rgba(0,0,0,0.18);
+  padding: 10px 22px;
+  display: flex; align-items: center; gap: 10px;
+}
+.ppb-track { flex: 1; height: 4px; background: rgba(255,255,255,0.15); border-radius: 100px; overflow: hidden; }
+.ppb-fill  { height: 100%; background: white; border-radius: 100px; width: 0%; transition: width 1.2s ease; }
+.ppb-label { font-size: 10px; font-weight: 900; color: rgba(255,255,255,0.55); white-space: nowrap; }
+
+/* play button — bevel style */
+.pp-btn-wrap { padding: 14px 20px 18px; }
+.pp-btn {
+  width: 100%; display: block;
+  border: none; border-radius: 100px; padding: 13px 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px; font-weight: 900; color: white;
+  cursor: pointer; letter-spacing: 0.02em;
+  transition: transform 0.1s var(--spring), box-shadow 0.1s;
+}
+.pp-btn:hover { transform: translateY(-3px); }
+.pp-btn:active { transform: translateY(4px) !important; }
+
+/* ── CIRCLE WIPE FLOOD ── */
+.flood {
+  position: fixed; inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  opacity: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.15s;
+}
+.flood.active { pointer-events: all; opacity: 1; }
+.flood-inner {
+  position: absolute; inset: 0;
+}
+
+/* Loading state inside flood */
+.flood-loading {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  opacity: 0;
+  transition: opacity 0.4s 0.5s;
+}
+.flood.active .flood-loading { opacity: 1; }
+.flood-logo { font-size: 22px; font-weight: 900; color: white; letter-spacing: -0.5px; text-transform: uppercase; }
+.flood-logo span { opacity: 0.5; }
+.flood-game-name {
+  font-size: 52px; font-weight: 900; color: white; letter-spacing: -2px;
+  line-height: 0.95; text-align: center; text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s 0.7s, transform 0.5s 0.7s var(--spring);
+}
+.flood.active .flood-game-name { opacity: 0.9; transform: translateY(0); }
+.flood-hint {
+  font-size: 12px; font-weight: 600; font-style: italic;
+  color: rgba(255,255,255,0.45); letter-spacing: 0.05em;
+}
+/* Spinning hourglass loader */
+.flood-spinner {
+  width: 40px; height: 40px;
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.3s 0.6s;
+}
+.flood.active .flood-spinner { opacity: 0.6; }
+.flood-spinner svg { animation: spin 2s linear infinite; }
+
+/* Return button */
+.flood-return {
+  margin-top: 40px;
+  background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 100px; padding: 12px 28px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px; font-weight: 800; color: white;
+  cursor: pointer; letter-spacing: 0.05em;
+  box-shadow: 0 5px 0 rgba(0,0,0,0.15);
+  transition: transform 0.1s var(--spring), box-shadow 0.1s;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s, transform 0.1s, box-shadow 0.1s;
+}
+.flood-return.visible { opacity: 1; pointer-events: all; }
+.flood-return:hover { transform: translateY(-2px); box-shadow: 0 7px 0 rgba(0,0,0,0.15); }
+.flood-return:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.15); }
+
+/* ── ACHIEVEMENT TOAST ── */
+.achievement-toast {
+  position: fixed;
+  top: 72px; left: 50%;
+  transform: translateX(-50%) translateY(-140px);
+  width: 360px; z-index: 600;
+  pointer-events: none;
+  transition: transform 0.55s var(--spring), opacity 0.3s;
+  opacity: 0;
+}
+.achievement-toast.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.at-layers { position: relative; padding-bottom: 7px; padding-right: 7px; }
+.at-back2 { position: absolute; inset: 0; background: var(--vivid-green-dark); border-radius: 18px; transform: translate(7px,7px); opacity: 0.3; }
+.at-back1 { position: absolute; inset: 0; background: var(--vivid-green-dark); border-radius: 18px; transform: translate(3.5px,3.5px); opacity: 0.55; }
+.at-front {
+  background: var(--vivid-green);
+  border: 2.5px solid var(--vivid-green-dark);
+  border-radius: 18px; padding: 16px 18px;
+  position: relative; z-index: 1;
+  display: flex; gap: 14px; align-items: center;
+}
+.at-icon-wrap { position: relative; width: 48px; height: 48px; flex-shrink: 0; }
+.at-icon {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.25);
+}
+.at-icon img { width: 54%; height: 54%; object-fit: contain; filter: invert(1); }
+
+@keyframes inkRing {
+  0%   { transform: scale(1); opacity: 0.65; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+.at-ring {
+  position: absolute; inset: -4px; border-radius: 50%;
+  border: 2.5px solid rgba(255,255,255,0.55);
+  animation: inkRing 0.9s ease-out both;
+}
+.at-ring-2 { animation-delay: 0.22s; }
+
+.at-body { flex: 1; }
+.at-label { font-size: 8px; font-weight: 900; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 3px; }
+.at-title { font-size: 17px; font-weight: 900; color: white; letter-spacing: -0.3px; }
+.at-pts { font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.65); margin-top: 2px; }
+
+/* ── BADGE earned state (vivid green ring) ── */
+.bsb-ring.earned-today {
+  background: var(--vivid-green) !important;
+  box-shadow: 0 0 0 3px rgba(46,204,113,0.2) !important;
+  border: none !important;
+}
+@keyframes badgePop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35) rotate(8deg); }
+  70%  { transform: scale(0.9) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+.badge-pop { animation: badgePop 0.55s var(--spring) both; }
+
+/* ── CARD entry animation stagger ── */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.game-card-wrap { animation: cardIn 0.5s ease both; }
+.game-card-wrap:nth-child(1) { animation-delay: 0.05s; }
+.game-card-wrap:nth-child(2) { animation-delay: 0.12s; }
+.game-card-wrap:nth-child(3) { animation-delay: 0.19s; }
+
+@keyframes stampIn {
+  0%   { transform: scale(0.35) translateY(-20px); opacity: 0; }
+  55%  { transform: scale(1.18); opacity: 1; }
+  75%  { transform: scale(0.93); }
+  90%  { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/">
+      <div class="nav-logo-mark">
+        <svg viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="0.5" width="12" height="2.5" rx="1.25" fill="#F0EBE0"/>
+          <path d="M2 3L7 8L12 3H2Z" fill="#F0EBE0"/>
+          <path d="M2 15L7 10L12 15H2Z" fill="#F0EBE0"/>
+          <rect x="1" y="15" width="12" height="2.5" rx="1.25" fill="#F0EBE0"/>
+        </svg>
+      </div>
+      <span class="nav-logo-text">Idle <span>Hours</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/play" class="active">Play</a>
+      <a href="/posts">Posts</a>
+      <a href="/library">Library</a>
+      <a href="/about">About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Games</div>
+      <h1 class="hero-title">
+        Something to play<br>
+        while the kettle boils.<br>
+        <em>Or longer, if you'd like.</em>
+      </h1>
+      <p class="hero-body">
+        Daily games that reset with the morning. A rapid-fire mode that never quite ends.
+        And one that's worth setting proper time aside for.
+      </p>
+    </div>
+    <div class="hero-right">
+      <div class="today-card">
+        <div class="today-meta">Sun 8 Mar &nbsp;·&nbsp; <strong>Today's games</strong></div>
+        <div class="today-badges">
+          <div class="today-badge tb-earned">
+            <div class="tb-ring tb-blue">🎮</div>
+            <div class="tb-name">Game Sense</div>
+          </div>
+          <div class="today-badge">
+            <div class="tb-ring tb-empty"></div>
+            <div class="tb-name">Street Date</div>
+          </div>
+          <div class="today-badge">
+            <div class="tb-ring tb-empty"></div>
+            <div class="tb-name">Shelf Price</div>
+          </div>
+        </div>
+        <div class="today-divider"></div>
+        <p class="today-nudge">Still two to go. <a href="#daily">Street Date's a good one →</a></p>
+      </div>
+    </div>
+  </header>
+</div>
+
+<!-- DAILY GAMES -->
+<div class="wrap">
+  <section class="section" id="daily">
+    <div class="sh">
+      <div>
+        <div class="sh-n">01 — Daily</div>
+        <div class="sh-t">Fresh every morning. <em>Gone by midnight.</em></div>
+      </div>
+      <div class="sh-note">One badge per game. Play them all and you've had a proper idle hour.</div>
+    </div>
+
+    <div class="daily-grid">
+
+      <!-- GAME SENSE — frosted covers, question mark -->
+      <div class="game-card-wrap" style="position:relative;padding-top:24px;">
+        <div class="lip-icon" style="background:#EEEAF8;">
+          <img src="https://idlehours.co.uk/images/icons/icon_hourglass-loading-filtering-timer.svg" style="filter:none;opacity:0.8;">
+        </div>
+        <div class="sticker sticker-blue">Daily</div>
+        <div class="game-card" onclick="openPopup('game-sense',event)"
+          <!-- IMAGE ZONE — Game Sense
+               Brief: the moment just before knowing. Something obscured.
+               Anticipation. Purple world, badge colour territory.
+               Size: full card width × 200px.
+               Drop illustration here and remove .gc-image-placeholder. -->
+          <div class="gc-image gci-sense">
+            <div class="gc-image-placeholder">
+              <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/><path d="M16 10v2M16 14v8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+              <span>Illustration here</span>
+            </div>
+          </div>
+          <div class="gc-body">
+            <div class="gc-type"><div class="live-dot ld-blue"></div>Guess the game</div>
+            <div class="gc-title">Game<br>Sense</div>
+            <p class="gc-desc">We describe it. You name it. The gap between "I know this one" and actually knowing it is where the game lives.</p>
+            <div class="gc-foot">
+              <div class="gc-score-quick">
+                <div class="gc-score-val">740 pts</div>
+                <div class="gc-score-rank">Today's top · Encyclopaedic</div>
+              </div>
+              <a href="#" class="btn-play btn-blue" onclick="event.stopPropagation();openPopup('game-sense',event);return false;">Play →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STREET DATE — stack of coloured game cases -->
+      <div class="game-card-wrap" style="position:relative;padding-top:24px;">
+        <div class="lip-icon" style="background:#EAEBF0;">
+          <img src="https://idlehours.co.uk/images/icons/icon_handheld-console-platform-gameboy-retro.svg" style="opacity:0.7;">
+        </div>
+        <div class="sticker sticker-blue" style="transform: rotate(1.5deg)">Daily</div>
+        <div class="game-card" onclick="openPopup('street-date',event)"
+          <!-- IMAGE ZONE — Street Date
+               Brief: games from different eras, a sense of shelf or archive.
+               Time, collection, history. Mix of cover shapes and periods.
+               Size: full card width × 200px.
+               Drop illustration here and remove .gc-image-placeholder. -->
+          <div class="gc-image gci-date">
+            <div class="gc-image-placeholder">
+              <svg viewBox="0 0 32 32" fill="none"><rect x="4" y="8" width="10" height="14" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="11" y="10" width="10" height="14" rx="1.5" stroke="currentColor" stroke-width="2"/><rect x="18" y="12" width="10" height="14" rx="1.5" stroke="currentColor" stroke-width="2"/></svg>
+              <span>Illustration here</span>
+            </div>
+          </div>
+          <div class="gc-body">
+            <div class="gc-type"><div class="live-dot ld-blue"></div>Guess the year</div>
+            <div class="gc-title">Street<br>Date</div>
+            <p class="gc-desc">Match a game to its release year from the box art alone. Some you'll know instantly. Some will humble you.</p>
+            <div class="gc-foot">
+              <div class="gc-score-quick">
+                <div class="gc-score-val">4 rounds</div>
+                <div class="gc-score-rank">1000 pts max</div>
+              </div>
+              <a href="#" class="btn-play btn-blue" onclick="event.stopPropagation();openPopup('street-date',event);return false;">Play →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHELF PRICE — oversized price tag -->
+      <div class="game-card-wrap" style="position:relative;padding-top:24px;">
+        <div class="lip-icon" style="background:#F5E6D3;">
+          <img src="https://idlehours.co.uk/images/icons/icon_Star-rating-highlight-feature-headericon-backgroundicon.svg" style="opacity:0.75;">
+        </div>
+        <div class="sticker sticker-amber">Daily</div>
+        <div class="game-card" onclick="openPopup('shelf-price',event)"
+          <!-- IMAGE ZONE — Shelf Price
+               Brief: price, value, the higher/lower tension.
+               A tag, a label, a number to question. Amber world.
+               Size: full card width × 200px.
+               Drop illustration here and remove .gc-image-placeholder. -->
+          <div class="gc-image gci-price">
+            <div class="gc-image-placeholder">
+              <svg viewBox="0 0 32 32" fill="none"><path d="M8 4h10l10 10-12 14L4 14V8a4 4 0 014-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="20" cy="12" r="2" fill="currentColor"/></svg>
+              <span>Illustration here</span>
+            </div>
+          </div>
+          <div class="gc-body">
+            <div class="gc-type"><div class="live-dot ld-amber"></div>Guess the price</div>
+            <div class="gc-title">Shelf<br>Price</div>
+            <p class="gc-desc">Higher or lower. Five rounds. Turns out your instinct about what games cost is either better or worse than you'd expect.</p>
+            <div class="gc-foot">
+              <div class="gc-score-quick">
+                <div class="gc-score-val">5 rounds</div>
+                <div class="gc-score-rank">1000 pts max</div>
+              </div>
+              <a href="#" class="btn-play btn-amber" onclick="event.stopPropagation();openPopup('shelf-price',event);return false;">Play →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="badge-shelf">
+      <div class="bs-left">
+        <div class="bs-label">Today's badges</div>
+        <div class="bs-sub">One down. Two left.</div>
+      </div>
+      <div class="bs-badges">
+        <div class="bs-badge bsb-earned">
+          <div class="bsb-ring bsb-blue">🎮</div>
+          <div class="bsb-lbl">Game Sense</div>
+        </div>
+        <div class="bs-connector"></div>
+        <div class="bs-badge">
+          <div class="bsb-ring bsb-empty"></div>
+          <div class="bsb-lbl">Street Date</div>
+        </div>
+        <div class="bs-connector"></div>
+        <div class="bs-badge">
+          <div class="bsb-ring bsb-empty"></div>
+          <div class="bsb-lbl">Shelf Price</div>
+        </div>
+      </div>
+      <div class="bs-right">
+        <div class="share-squares">
+          <div class="sq sq-g"></div><div class="sq sq-e"></div><div class="sq sq-e"></div>
+        </div>
+        <a href="#" class="share-btn">Share today ↗</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- BLITZ -->
+<div class="wrap">
+  <section class="section">
+    <div class="sh">
+      <div>
+        <div class="sh-n">02 — Rapid Fire</div>
+        <div class="sh-t">How many can you <em>actually</em> name?</div>
+      </div>
+      <div class="sh-note">New topics added as the library grows. No daily reset on this one.</div>
+    </div>
+
+    <div class="blitz-card">
+      <div class="blitz-inner">
+        <div class="blitz-image-zone">
+          <div>
+            <div class="blitz-eyebrow"><div class="blitz-pulse"></div>Ongoing · Topics added regularly</div>
+            <div class="blitz-title">Blitz</div>
+            <p class="blitz-desc">Pick a topic. Name as many games as you can think of before the clock runs out. Then wonder why you forgot Celeste.</p>
+          </div>
+          <a href="#" class="blitz-cta" onclick="openPopup('blitz',event);return false;">Play Blitz →</a>
+        </div>
+        <div class="blitz-topics-zone">
+          <div class="blitz-topics-panel">
+            <div class="blitz-topics-label">Today's topics</div>
+            <div class="blitz-topics">
+            <div class="blitz-topic">
+              <span class="blitz-topic-name">Platformers</span>
+              <div class="blitz-topic-right"><span class="blitz-topic-count">243 games</span></div>
+            </div>
+            <div class="blitz-topic">
+              <span class="blitz-topic-name">Indie Darlings</span>
+              <div class="blitz-topic-right"><span class="blitz-topic-count">184 games</span><span class="blitz-topic-new">New</span></div>
+            </div>
+            <div class="blitz-topic">
+              <span class="blitz-topic-name">RPGs</span>
+              <div class="blitz-topic-right"><span class="blitz-topic-count">312 games</span></div>
+            </div>
+            <div class="blitz-topic">
+              <span class="blitz-topic-name">Nintendo exclusives</span>
+              <div class="blitz-topic-right"><span class="blitz-topic-count">97 games</span></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- SHIP IT -->
+<div class="wrap">
+  <section class="section">
+    <div class="sh">
+      <div>
+        <div class="sh-n">03 — Narrative</div>
+        <div class="sh-t">A game about making <em>a game.</em></div>
+      </div>
+      <div class="sh-note">Different from the others. Set some time aside. It's worth it.</div>
+    </div>
+
+    <div class="shipit-card">
+      <div class="shipit-inner">
+
+        <!-- IMAGE ZONE — Ship It
+             Brief: the executive animal characters. Three characters
+             in suits, badge-circle portrait style, overlapping.
+             Dark purple background (#2E2A5A). Left column of card.
+             Size: 340px wide × full card height (min 320px).
+             Drop illustration here and remove .si-image-placeholder. -->
+        <div class="si-image">
+          <div class="si-image-placeholder">
+            <svg viewBox="0 0 36 36" fill="none"><circle cx="12" cy="18" r="9" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="18" r="9" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="14" r="9" stroke="currentColor" stroke-width="2"/></svg>
+            <span>Characters here</span>
+          </div>
+        </div>
+
+        <!-- type zone -->
+        <div class="si-body">
+          <div>
+            <div class="si-sticker">Narrative experience</div>
+            <div class="si-annotations">
+              <div class="annotation">
+                Set the phone down for this one.<br><em>It earns it.</em>
+              </div>
+              <div class="annotation annotation-sm">
+                Loosely based on true events.
+              </div>
+            </div>
+            <p class="si-desc">You're trying to get your game made. There are investors, there are budgets, there are people who want to change things. It's based on how the industry actually works right now, which is to say: a bit grim, occasionally funny, weirdly absorbing.</p>
+          </div>
+          <div class="si-foot">
+            <a href="#" class="btn-ink" onclick="openPopup('ship-it',event);return false;">Start playing →</a>
+            <span class="si-caveat">Best played in one sitting, we think.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- MORE COMING -->
+<div class="wrap">
+  <section class="section-last">
+    <div class="sh">
+      <div>
+        <div class="sh-n">04</div>
+        <div class="sh-t">There's <em>more coming.</em></div>
+      </div>
+    </div>
+    <div class="more-card">
+      <div class="more-text">
+        <div class="more-eyebrow">In the works</div>
+        <div class="more-title">A new game is quietly taking shape.<br><em>We'll say more when there's something to say.</em></div>
+      </div>
+      <div class="more-tag">Watch this space</div>
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">Idle <span>Hours</span></div>
+    <div class="footer-tag">For the games that stayed with you. And the ones you haven't found yet.</div>
+  </div>
+</footer>
+
+<!-- ═══════════ V8 OVERLAYS ═══════════ -->
+
+<!-- Scrim -->
+<div class="popup-scrim" id="popupScrim" onclick="closePopup()"></div>
+
+<!-- Popup panel -->
+<div class="popup-panel" id="popupPanel">
+  <div class="pp-card" id="ppCard">
+    <div class="pp-top">
+      <div class="pp-thumb-wrap">
+        <div class="pp-thumb" id="ppThumb">
+          <img id="ppThumbIcon" src="" alt="">
+        </div>
+        <!-- Static progress arc -->
+        <svg class="pp-arc" viewBox="0 0 84 84">
+          <circle cx="42" cy="42" r="38" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+          <circle id="ppArc" cx="42" cy="42" r="38" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="3"
+            stroke-linecap="round" stroke-dasharray="238" stroke-dashoffset="80"
+            transform="rotate(-90 42 42)"/>
+        </svg>
+        <!-- Spinning dashed ring -->
+        <svg class="pp-spinning-dots" viewBox="0 0 84 84">
+          <circle cx="42" cy="42" r="38" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2" stroke-dasharray="6 5"/>
+        </svg>
+      </div>
+      <div class="pp-meta">
+        <div class="pp-eyebrow" id="ppEyebrow">Daily Game</div>
+        <div class="pp-title" id="ppTitle">Game Sense</div>
+        <div class="pp-desc" id="ppDesc">Fill in the blank</div>
+      </div>
+    </div>
+    <div class="pp-stats">
+      <div class="pp-stat"><div class="pps-val" id="ppBest">740</div><div class="pps-lbl">Best</div></div>
+      <div class="pp-stat"><div class="pps-val" id="ppPlayed">12</div><div class="pps-lbl">Played</div></div>
+      <div class="pp-stat"><div class="pps-val" id="ppStreak">7</div><div class="pps-lbl">Streak</div></div>
+    </div>
+    <div class="pp-prog">
+      <div class="ppb-track"><div class="ppb-fill" id="ppFill"></div></div>
+      <div class="ppb-label" id="ppProgLabel">0% today</div>
+    </div>
+    <div class="pp-btn-wrap">
+      <button class="pp-btn" id="ppBtn" onclick="launchGame()">Play Now →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Circle wipe flood -->
+<div class="flood" id="flood">
+  <div class="flood-inner" id="floodInner"></div>
+  <div class="flood-loading">
+    <div class="flood-logo">Idle <span>Hours</span></div>
+    <div class="flood-game-name" id="floodGameName">Game Sense</div>
+    <div class="flood-spinner">
+      <svg width="40" height="40" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="16" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-dasharray="6 4"/>
+      </svg>
+    </div>
+    <div class="flood-hint">Loading your game...</div>
+    <button class="flood-return" id="floodReturn" onclick="returnFromGame()">← Back to all games</button>
+  </div>
+</div>
+
+<!-- Achievement toast -->
+<div class="achievement-toast" id="achievementToast">
+  <div class="at-layers">
+    <div class="at-back2"></div>
+    <div class="at-back1"></div>
+    <div class="at-front">
+      <div class="at-icon-wrap">
+        <div class="at-ring"></div>
+        <div class="at-ring at-ring-2"></div>
+        <div class="at-icon">
+          <img src="https://idlehours.co.uk/images/icons/icon_Success-Positive-happy-Confirm.svg" id="atIcon">
+        </div>
+      </div>
+      <div class="at-body">
+        <div class="at-label" id="atLabel">Achievement</div>
+        <div class="at-title" id="atTitle">Game Complete</div>
+        <div class="at-pts" id="atPts">+740 pts earned</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ICON_BASE = 'https://idlehours.co.uk/images/icons/';
+
+const GAME_DATA = {
+  'game-sense': {
+    eyebrow: 'Daily · Guess the Game',
+    title: 'Game Sense',
+    desc: 'Read the clue. Fill the blank. Five guesses.',
+    bg: 'linear-gradient(155deg,#2a1f5c 0%,#4A8FE8 100%)',
+    thumbBg: '#2D6BC4',
+    icon: 'icon_hourglass-loading-filtering-timer.svg',
+    iconFilter: 'invert(1)',
+    btnBg: 'var(--blue)',
+    btnShadow: 'var(--blue-dark)',
+    btnText: 'Play Game Sense →',
+    best: 740, played: 12, streak: 7, prog: 65,
+    achIcon: 'icon_trophy-winner-award-score-achieve.svg',
+    achLabel: 'Daily Complete',
+    achTitle: 'Game Sense ✓',
+    achPts: '+740 pts earned',
+  },
+  'street-date': {
+    eyebrow: 'Daily · Guess the Year',
+    title: 'Street Date',
+    desc: 'Match the game to its release year from the cover alone.',
+    bg: 'linear-gradient(155deg,#0d0d0a 0%,#3a3a28 100%)',
+    thumbBg: '#2a2a20',
+    icon: 'icon_handheld-console-platform-gameboy-retro.svg',
+    iconFilter: 'invert(1)',
+    btnBg: 'var(--blue)',
+    btnShadow: 'var(--blue-dark)',
+    btnText: 'Play Street Date →',
+    best: 920, played: 8, streak: 7, prog: 40,
+    achIcon: 'icon_trophy-winner-award-score-achieve.svg',
+    achLabel: 'Daily Complete',
+    achTitle: 'Street Date ✓',
+    achPts: '+920 pts earned',
+  },
+  'shelf-price': {
+    eyebrow: 'Daily · Higher or Lower',
+    title: 'Shelf Price',
+    desc: 'Five rounds. Is the next game pricier?',
+    bg: 'linear-gradient(155deg,#3a1e00 0%,#C8873A 100%)',
+    thumbBg: '#9D6328',
+    icon: 'icon_Star-rating-highlight-feature-headericon-backgroundicon.svg',
+    iconFilter: 'invert(1)',
+    btnBg: 'var(--amber)',
+    btnShadow: '#9D6328',
+    btnText: 'Play Shelf Price →',
+    best: 760, played: 15, streak: 5, prog: 80,
+    achIcon: 'icon_Star-rating-highlight-feature-headericon-backgroundicon.svg',
+    achLabel: 'Daily Complete',
+    achTitle: 'Shelf Price ✓',
+    achPts: '+760 pts earned',
+  },
+  'blitz': {
+    eyebrow: 'Rapid Fire · Ongoing',
+    title: 'Blitz',
+    desc: 'Pick a topic. Name as many as you can before the clock runs out.',
+    bg: 'linear-gradient(155deg,#2a1500 0%,#C8873A 100%)',
+    thumbBg: '#7a4010',
+    icon: 'icon_fire-hot-streak.svg',
+    iconFilter: 'invert(1)',
+    btnBg: 'var(--amber)',
+    btnShadow: '#9D6328',
+    btnText: '⚡ Start Blitz',
+    isBlitz: true,
+    best: 1000, played: 20, streak: 7, prog: 100,
+    achIcon: 'icon_fire-hot-streak.svg',
+    achLabel: 'On Fire',
+    achTitle: 'Blitz Master',
+    achPts: '+1000 pts earned',
+  },
+  'ship-it': {
+    eyebrow: 'Narrative · No Daily Reset',
+    title: 'Ship It',
+    desc: "You're a dev. Navigate the publishers. No two plays alike.",
+    bg: 'linear-gradient(155deg,#1a0a38 0%,#7B35C8 100%)',
+    thumbBg: '#5E20A0',
+    icon: 'icon_ribbon-banner-button shape.svg',
+    iconFilter: 'invert(1)',
+    btnBg: 'var(--vivid-purple)',
+    btnShadow: 'var(--vivid-purple-dark)',
+    btnText: 'Start Playing →',
+    best: 0, played: 0, streak: 0, prog: 0,
+    achIcon: 'icon_ribbon-banner-button shape.svg',
+    achLabel: 'Story Started',
+    achTitle: 'Ship It Begins',
+    achPts: 'Chapter 1 unlocked',
+  },
+};
+
+let activeGame = null;
+let floodTimeout = null;
+
+/* ── OPEN POPUP ── */
+function openPopup(gameId, event) {
+  event && event.stopPropagation();
+  activeGame = gameId;
+  const g = GAME_DATA[gameId];
+  if (!g) return;
+
+  // Populate
+  document.getElementById('ppEyebrow').textContent = g.eyebrow;
+  document.getElementById('ppTitle').textContent = g.title;
+  document.getElementById('ppDesc').textContent = g.desc;
+  document.getElementById('ppBest').textContent = g.best > 0 ? g.best : '—';
+  document.getElementById('ppPlayed').textContent = g.played;
+  document.getElementById('ppStreak').textContent = g.streak;
+  document.getElementById('ppProgLabel').textContent = g.prog + '% today';
+  document.getElementById('ppThumbIcon').src = ICON_BASE + g.icon;
+  document.getElementById('ppThumbIcon').style.filter = g.iconFilter;
+
+  // Colours
+  const card = document.getElementById('ppCard');
+  card.style.background = g.bg;
+  card.style.borderColor = 'rgba(255,255,255,0.12)';
+  document.getElementById('ppThumb').style.background = g.thumbBg;
+
+  // Play button
+  const btn = document.getElementById('ppBtn');
+  btn.textContent = g.btnText;
+  btn.style.background = g.btnBg;
+  btn.style.boxShadow = `0 6px 0 ${g.btnShadow}, 0 8px 20px rgba(0,0,0,0.2)`;
+  if (g.isBlitz) {
+    btn.style.backgroundImage = 'linear-gradient(-45deg,rgba(255,255,255,0.1) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 75%,transparent 75%)';
+    btn.style.backgroundSize = '28px 28px';
+    btn.style.animation = 'stripeScroll 3s linear infinite';
+  } else {
+    btn.style.backgroundImage = '';
+    btn.style.animation = '';
+  }
+
+  // Show
+  document.getElementById('popupScrim').classList.add('active');
+  document.getElementById('popupPanel').classList.add('open');
+
+  // Animate progress bar in
+  document.getElementById('ppFill').style.width = '0%';
+  setTimeout(() => {
+    document.getElementById('ppFill').style.width = g.prog + '%';
+  }, 400);
+
+  // Panel entrance: slide up with GSAP spring feel
+  gsap.fromTo('#popupPanel', { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'back.out(1.4)' });
+}
+
+/* ── CLOSE POPUP ── */
+function closePopup() {
+  gsap.to('#popupPanel', {
+    y: 60, opacity: 0, duration: 0.3, ease: 'power2.in',
+    onComplete: () => {
+      document.getElementById('popupPanel').classList.remove('open');
+      document.getElementById('popupScrim').classList.remove('active');
+      document.getElementById('ppFill').style.width = '0%';
+    }
+  });
+}
+
+/* ── LAUNCH GAME (circle wipe) ── */
+function launchGame() {
+  if (!activeGame) return;
+  const g = GAME_DATA[activeGame];
+
+  closePopup();
+
+  // Short pause then flood
+  setTimeout(() => {
+    const flood = document.getElementById('flood');
+    const floodInner = document.getElementById('floodInner');
+    floodInner.style.background = g.bg;
+
+    document.getElementById('floodGameName').textContent = g.title;
+
+    // Circle wipe from centre
+    flood.classList.add('active');
+    floodInner.style.clipPath = 'circle(0% at 50% 50%)';
+    floodInner.style.transition = 'none';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        floodInner.style.transition = 'clip-path 0.7s cubic-bezier(0.4,0,0.2,1)';
+        floodInner.style.clipPath = 'circle(150% at 50% 50%)';
+      });
+    });
+
+    // Show return button after a moment (simulating game completion)
+    floodTimeout = setTimeout(() => {
+      document.getElementById('floodReturn').classList.add('visible');
+    }, 2200);
+
+  }, 350);
+}
+
+/* ── RETURN FROM GAME ── */
+function returnFromGame() {
+  const g = GAME_DATA[activeGame];
+  clearTimeout(floodTimeout);
+
+  const floodInner = document.getElementById('floodInner');
+
+  // Reverse circle wipe
+  floodInner.style.transition = 'clip-path 0.6s cubic-bezier(0.4,0,0.2,1)';
+  floodInner.style.clipPath = 'circle(0% at 50% 50%)';
+
+  setTimeout(() => {
+    document.getElementById('flood').classList.remove('active');
+    document.getElementById('floodReturn').classList.remove('visible');
+    floodInner.style.clipPath = '';
+    floodInner.style.transition = '';
+
+    // Fire achievement toast
+    if (g) {
+      showAchievement(g.achIcon, g.achLabel, g.achTitle, g.achPts);
+    }
+    activeGame = null;
+  }, 650);
+}
+
+/* ── ACHIEVEMENT TOAST ── */
+function showAchievement(icon, label, title, pts) {
+  document.getElementById('atIcon').src = ICON_BASE + icon;
+  document.getElementById('atLabel').textContent = label;
+  document.getElementById('atTitle').textContent = title;
+  document.getElementById('atPts').textContent = pts;
+
+  // Re-trigger ring animations
+  document.querySelectorAll('.at-ring').forEach(r => {
+    r.style.animation = 'none';
+    void r.offsetWidth;
+    r.style.animation = '';
+  });
+
+  const toast = document.getElementById('achievementToast');
+  toast.classList.add('visible');
+
+  // Also pop the first empty badge in the shelf to earned state
+  const emptyBadge = document.querySelector('.bsb-ring.bsb-empty');
+  if (emptyBadge) {
+    setTimeout(() => {
+      emptyBadge.classList.remove('bsb-empty');
+      emptyBadge.classList.add('bsb-blue', 'earned-today', 'badge-pop');
+      emptyBadge.textContent = '✓';
+      emptyBadge.style.fontSize = '16px';
+      emptyBadge.style.color = 'white';
+      // Also update the label below
+      const label = emptyBadge.closest('.bs-badge');
+      if (label) label.classList.add('bsb-earned');
+    }, 400);
+  }
+
+  setTimeout(() => {
+    toast.classList.remove('visible');
+  }, 4000);
+}
+
+/* ── PAGE ENTRY: stagger blitz + shipit cards in ── */
+window.addEventListener('load', () => {
+  gsap.fromTo('.blitz-card',
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, duration: 0.5, delay: 0.35, ease: 'power2.out' }
+  );
+  gsap.fromTo('.shipit-card',
+    { opacity: 0, y: 20 },
+    { opacity: 1, y: 0, duration: 0.5, delay: 0.45, ease: 'power2.out' }
+  );
+});
+
+/* ── ESC to close popup ── */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closePopup();
+});
+</script>
+
+</body>
+</html>

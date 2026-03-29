@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blitz — Idle Hours Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #F0EBE0;
+  --cream-dark: #E4DBCC;
+  --cream-mid: #EAE3D6;
+  --white: #FDFAF5;
+  --ink: #1A1A14;
+  --ink-mid: #4A4A3A;
+  --ink-light: #8A8A70;
+  --ink-dim: #C0B89A;
+  --blue: #4A8FE8;
+  --blue-dark: #2D6BC4;
+  --blue-light: #EBF2FC;
+  --amber: #C8873A;
+  --green: #27A85A;
+  --red: #C0392B;
+  --divider: rgba(26,26,20,0.1);
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: #B8A898;
+  padding: 32px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* Nav tabs */
+.nav {
+  display: flex;
+  gap: 8px;
+  background: rgba(255,255,255,0.2);
+  padding: 6px;
+  border-radius: 100px;
+  position: sticky;
+  top: 16px;
+  z-index: 100;
+  margin-bottom: 40px;
+}
+.nav-tab {
+  padding: 8px 18px;
+  border-radius: 100px;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255,255,255,0.65);
+  transition: all 0.15s;
+  letter-spacing: 0.04em;
+}
+.nav-tab.active { background: var(--white); color: var(--ink); }
+
+/* Screen wrapper — phone-ish proportions */
+.screen-wrap {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 480px;
+}
+.screen-wrap.visible { display: flex; }
+
+.screen-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+
+/* The "phone" */
+.screen {
+  background: var(--cream);
+  border-radius: 28px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15);
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ══════════════════════════════════════
+   SCREEN 1 — TOPIC SELECT
+══════════════════════════════════════ */
+
+.select-header {
+  padding: 40px 28px 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.select-eyebrow {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+.select-title {
+  font-size: 72px;
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 0.9;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+}
+.select-bolt {
+  color: var(--amber);
+}
+.select-sub {
+  font-size: 13px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--ink-light);
+  margin-top: 4px;
+}
+
+.select-body {
+  padding: 28px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.select-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.select-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--divider);
+}
+
+.topic-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.topic-card {
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.topic-card:hover, .topic-card.selected {
+  border-color: var(--amber);
+  background: rgba(200,135,58,0.04);
+}
+.topic-card.selected { background: rgba(200,135,58,0.07); }
+
+.topic-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+}
+.topic-info { flex: 1; }
+.topic-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.topic-meta {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-light);
+  margin-top: 2px;
+}
+.topic-pool {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-dim);
+  letter-spacing: 0.06em;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.select-divider { height: 1px; background: var(--divider); }
+
+.milestones-row {
+  display: flex;
+  gap: 8px;
+}
+.ms-chip {
+  flex: 1;
+  text-align: center;
+  background: var(--white);
+  border: 1.5px solid var(--divider);
+  border-radius: 10px;
+  padding: 8px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-mid);
+}
+.ms-chip .ms-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--ink-light);
+  display: block;
+  margin-bottom: 2px;
+}
+.ms-chip.gold { border-color: rgba(200,135,58,0.4); }
+.ms-chip.gold .ms-num { color: var(--amber); }
+
+.timer-info {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-light);
+  font-style: italic;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  border-radius: 100px;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--amber);
+  color: white;
+  box-shadow: 0 4px 20px rgba(200,135,58,0.35);
+}
+.btn-primary:hover { transform: translateY(-2px); }
+
+/* ══════════════════════════════════════
+   SCREEN 2 — GAMEPLAY
+══════════════════════════════════════ */
+
+.hud {
+  background: rgba(240,235,224,0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--divider);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.hud-left { display: flex; flex-direction: column; gap: 1px; }
+.hud-game-name {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.hud-theme {
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+}
+
+/* Circular timer */
+.timer-ring-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+}
+.timer-ring-wrap svg {
+  transform: rotate(-90deg);
+  width: 56px;
+  height: 56px;
+}
+.timer-track { fill: none; stroke: var(--cream-dark); stroke-width: 4; }
+.timer-fill-amber { fill: none; stroke: var(--amber); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 138; stroke-dashoffset: 46; }
+.timer-num-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ink);
+}
+
+.hud-right { text-align: right; }
+.hud-score-big {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.hud-score-sub {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 3px;
+  background: var(--cream-dark);
+  position: relative;
+  flex-shrink: 0;
+}
+.progress-fill {
+  height: 100%;
+  width: 35%;
+  background: linear-gradient(90deg, rgba(200,135,58,0.5), var(--amber));
+}
+.ms-dot {
+  position: absolute;
+  top: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--cream-dark);
+  background: var(--cream-dark);
+  transform: translateX(-50%);
+}
+.ms-dot.reached { background: var(--amber); border-color: var(--amber); }
+
+/* Arena */
+.arena {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 220px;
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+}
+
+.word-chip {
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.word-chip.correct {
+  background: var(--white);
+  border: 1.5px solid rgba(200,135,58,0.35);
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.word-chip.wrong {
+  background: rgba(192,57,43,0.07);
+  border: 1.5px solid rgba(192,57,43,0.25);
+  color: var(--red);
+  opacity: 0.6;
+}
+
+/* Input zone */
+.input-zone {
+  border-top: 1px solid var(--divider);
+  background: rgba(240,235,224,0.97);
+  padding: 12px 18px 16px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+.game-input {
+  flex: 1;
+  background: var(--white);
+  border: 2px solid var(--divider);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  outline: none;
+}
+.game-input.focused {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 4px rgba(200,135,58,0.1);
+}
+.btn-submit-sm {
+  background: var(--amber);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 12px 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.input-hint {
+  display: flex;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-light);
+  align-items: center;
+}
+.hint-green { color: var(--green); font-weight: 700; }
+.hint-sep { color: var(--ink-dim); }
+
+/* ══════════════════════════════════════
+   SCREEN 3 — END / NAME ENTRY
+══════════════════════════════════════ */
+
+.end-screen {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.end-result-block {
+  background: var(--white);
+  border-bottom: 1px solid var(--divider);
+  padding: 32px 24px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.end-result-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--amber);
+}
+.end-eyebrow {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+.end-score-huge {
+  font-size: 80px;
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 0.9;
+  letter-spacing: -3px;
+}
+.end-score-sub {
+  font-size: 13px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--ink-light);
+}
+.end-rank-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 800;
+  background: rgba(200,135,58,0.1);
+  border: 1.5px solid rgba(200,135,58,0.35);
+  color: var(--amber);
+}
+.end-time {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-light);
+}
+.end-time span { color: var(--ink-mid); font-weight: 800; }
+
+/* Answers */
+.end-answers {
+  padding: 20px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.end-answers-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.end-answers-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--divider);
+}
+.chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.end-chip {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1.5px solid;
+}
+.end-chip.got {
+  background: rgba(200,135,58,0.08);
+  border-color: rgba(200,135,58,0.3);
+  color: var(--ink);
+}
+.end-chip.missed {
+  background: transparent;
+  border-color: var(--divider);
+  color: var(--ink-dim);
+}
+
+/* Name entry */
+.name-entry {
+  border-top: 1px solid var(--divider);
+  padding: 16px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(240,235,224,0.6);
+}
+.name-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+.name-row {
+  display: flex;
+  gap: 8px;
+}
+.name-input {
+  flex: 1;
+  background: var(--white);
+  border: 2px solid var(--divider);
+  border-radius: 12px;
+  padding: 11px 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  outline: none;
+}
+.btn-post {
+  background: var(--ink);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 11px 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.btn-ghost-sm {
+  background: transparent;
+  border: 2px solid var(--divider);
+  color: var(--ink-mid);
+  padding: 10px;
+  border-radius: 100px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* ══════════════════════════════════════
+   SCREEN 4 — LEADERBOARD
+══════════════════════════════════════ */
+
+.lb-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--divider);
+  padding: 28px 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.lb-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--amber);
+}
+.lb-eyebrow {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 4px;
+}
+.lb-title {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.lb-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.lb-meta {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-light);
+}
+.lb-topic-switch {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--blue);
+  cursor: pointer;
+  border-bottom: 1px solid rgba(74,143,232,0.3);
+  padding-bottom: 1px;
+}
+
+/* Milestone badges in lb header */
+.lb-milestones {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+.lb-ms {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1.5px solid var(--divider);
+  color: var(--ink-mid);
+}
+.lb-ms.gold { border-color: rgba(200,135,58,0.4); color: var(--amber); }
+
+/* Column headers */
+.lb-cols {
+  display: grid;
+  grid-template-columns: 32px 1fr 72px 64px;
+  padding: 8px 24px;
+  border-bottom: 1px solid var(--divider);
+  background: var(--cream-mid);
+}
+.lb-col-hd {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+}
+.lb-col-hd.right { text-align: right; }
+
+/* Rows */
+.lb-rows {
+  flex: 1;
+  overflow-y: auto;
+}
+.lb-row {
+  display: grid;
+  grid-template-columns: 32px 1fr 72px 64px;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--divider);
+  align-items: center;
+  transition: background 0.1s;
+}
+.lb-row:hover { background: rgba(255,255,255,0.5); }
+.lb-row.you {
+  background: rgba(200,135,58,0.07);
+  border-left: 3px solid var(--amber);
+  padding-left: 21px;
+}
+.lb-row.top { background: rgba(200,135,58,0.04); }
+
+.lb-pos {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink-light);
+}
+.lb-row.top .lb-pos { color: var(--amber); }
+.lb-row:nth-child(1) .lb-pos::before { content: '🥇'; font-size: 14px; }
+.lb-row:nth-child(2) .lb-pos::before { content: '🥈'; font-size: 14px; }
+.lb-row:nth-child(3) .lb-pos::before { content: '🥉'; font-size: 14px; }
+
+.lb-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.lb-row.you .lb-name { color: var(--amber); }
+.lb-name-you-tag {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  background: rgba(200,135,58,0.15);
+  color: var(--amber);
+  border-radius: 100px;
+  padding: 2px 7px;
+  margin-left: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+.lb-score {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+  text-align: right;
+}
+.lb-score-total {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ink-light);
+}
+.lb-time {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-mid);
+  text-align: right;
+}
+
+.lb-footer {
+  border-top: 1px solid var(--divider);
+  padding: 14px 24px;
+  display: flex;
+  gap: 8px;
+  background: var(--cream-mid);
+}
+.btn-play-again {
+  flex: 1;
+  padding: 12px;
+  border-radius: 100px;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  background: var(--amber);
+  color: white;
+  box-shadow: 0 3px 12px rgba(200,135,58,0.3);
+}
+.btn-change-topic {
+  padding: 12px 16px;
+  border-radius: 100px;
+  border: 2px solid var(--divider);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink-mid);
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav">
+  <button class="nav-tab active" onclick="show('select')">① Topic Select</button>
+  <button class="nav-tab" onclick="show('game')">② Gameplay</button>
+  <button class="nav-tab" onclick="show('end')">③ End Screen</button>
+  <button class="nav-tab" onclick="show('lb')">④ Leaderboard</button>
+</div>
+
+<!-- ═══════════════════════════════════
+     SCREEN 1 — TOPIC SELECT
+════════════════════════════════════ -->
+<div class="screen-wrap visible" id="wrap-select">
+  <div class="screen-label">Topic Select</div>
+  <div class="screen">
+    <div class="select-header">
+      <div class="select-eyebrow">A game by ◆ Idle Hours</div>
+      <div class="select-title">BLI<span class="select-bolt">⚡</span>TZ</div>
+      <div class="select-sub">Name as many as you can before time runs out.</div>
+    </div>
+
+    <div class="select-body">
+      <div class="select-label">Choose a topic</div>
+
+      <div class="topic-list">
+        <div class="topic-card selected">
+          <div class="topic-icon">🍄</div>
+          <div class="topic-info">
+            <div class="topic-name">Mario Games</div>
+            <div class="topic-meta">Name any game in the Mario series</div>
+          </div>
+          <div class="topic-pool">47 games</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon">🎮</div>
+          <div class="topic-info">
+            <div class="topic-name">PS1 Era</div>
+            <div class="topic-meta">Games released on PlayStation 1</div>
+          </div>
+          <div class="topic-pool">83 games</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon">⚔️</div>
+          <div class="topic-info">
+            <div class="topic-name">FromSoftware</div>
+            <div class="topic-meta">Any game by FromSoftware</div>
+          </div>
+          <div class="topic-pool">22 games</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon">🧱</div>
+          <div class="topic-info">
+            <div class="topic-name">Games released in 2011</div>
+            <div class="topic-meta">Any game released that year</div>
+          </div>
+          <div class="topic-pool">61 games</div>
+        </div>
+      </div>
+
+      <div class="select-divider"></div>
+
+      <div class="milestones-row">
+        <div class="ms-chip">
+          <span class="ms-label">🥉 Bronze</span>
+          <span class="ms-num">7 games</span>
+        </div>
+        <div class="ms-chip">
+          <span class="ms-label">🥈 Silver</span>
+          <span class="ms-num">14 games</span>
+        </div>
+        <div class="ms-chip gold">
+          <span class="ms-label">🥇 Gold</span>
+          <span class="ms-num ms-num">23 games</span>
+        </div>
+      </div>
+
+      <div class="timer-info">You'll have <strong>1:49</strong> — 2 seconds per game, plus 15.</div>
+
+      <button class="btn-primary">Start ⚡</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SCREEN 2 — GAMEPLAY
+════════════════════════════════════ -->
+<div class="screen-wrap" id="wrap-game">
+  <div class="screen-label">Gameplay</div>
+  <div class="screen">
+
+    <div class="hud">
+      <div class="hud-left">
+        <div class="hud-game-name">⚡ Blitz</div>
+        <div class="hud-theme">Mario Games</div>
+      </div>
+      <div class="timer-ring-wrap">
+        <svg viewBox="0 0 56 56">
+          <circle class="timer-track" cx="28" cy="28" r="23"/>
+          <circle class="timer-fill-amber" cx="28" cy="28" r="23"/>
+        </svg>
+        <div class="timer-num-inner">67</div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-score-big">9</div>
+        <div class="hud-score-sub">correct</div>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+      <div class="ms-dot reached" style="left:15%"></div>
+      <div class="ms-dot" style="left:30%"></div>
+      <div class="ms-dot" style="left:49%"></div>
+    </div>
+
+    <div class="arena">
+      <div class="word-chip correct">Super Mario Bros.</div>
+      <div class="word-chip correct">Mario Kart 8</div>
+      <div class="word-chip correct">Super Mario 64</div>
+      <div class="word-chip wrong">Donkey Kong</div>
+      <div class="word-chip correct">Mario Galaxy</div>
+      <div class="word-chip correct">Paper Mario</div>
+      <div class="word-chip correct">Mario Odyssey</div>
+      <div class="word-chip wrong">Yoshi's Island</div>
+      <div class="word-chip correct">Mario Kart 64</div>
+      <div class="word-chip correct">Super Mario World</div>
+      <div class="word-chip correct">Mario Party</div>
+    </div>
+
+    <div class="input-zone">
+      <div class="input-row">
+        <input class="game-input focused" type="text" placeholder="Type a game name…" value="Mario Ka" readonly />
+        <button class="btn-submit-sm">Submit</button>
+      </div>
+      <div class="input-hint">
+        <span class="hint-green">9 correct</span>
+        <span class="hint-sep">·</span>
+        <span>11 guesses</span>
+        <span class="hint-sep">·</span>
+        <span>Silver: 5 to go</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SCREEN 3 — END + NAME ENTRY
+════════════════════════════════════ -->
+<div class="screen-wrap" id="wrap-end">
+  <div class="screen-label">End Screen + Name Entry</div>
+  <div class="screen">
+    <div class="end-screen">
+
+      <div class="end-result-block">
+        <div class="end-eyebrow">⚡ Blitz · Mario Games</div>
+        <div class="end-score-huge">17</div>
+        <div class="end-score-sub">games named correctly out of 47</div>
+        <div class="end-rank-pill">🥇 Gold</div>
+        <div class="end-time">Finished in <span>72s</span> · 1:49 on the clock</div>
+      </div>
+
+      <div class="end-answers">
+        <div class="end-answers-label">You got</div>
+        <div class="chips-wrap">
+          <div class="end-chip got">Super Mario Bros.</div>
+          <div class="end-chip got">Mario Kart 8</div>
+          <div class="end-chip got">Super Mario 64</div>
+          <div class="end-chip got">Mario Galaxy</div>
+          <div class="end-chip got">Paper Mario</div>
+          <div class="end-chip got">Mario Odyssey</div>
+          <div class="end-chip got">Mario Kart 64</div>
+          <div class="end-chip got">Super Mario World</div>
+          <div class="end-chip got">Mario Party</div>
+        </div>
+        <div class="end-answers-label" style="margin-top:4px">Missed</div>
+        <div class="chips-wrap">
+          <div class="end-chip missed">Mario Bros.</div>
+          <div class="end-chip missed">Dr. Mario</div>
+          <div class="end-chip missed">Mario Tennis</div>
+          <div class="end-chip missed">Mario Golf</div>
+          <div class="end-chip missed">Luigi's Mansion</div>
+          <div class="end-chip missed">+21 more</div>
+        </div>
+      </div>
+
+      <div class="name-entry">
+        <div class="name-label">Post your score to the leaderboard</div>
+        <div class="name-row">
+          <input class="name-input" type="text" placeholder="Your name" value="Alfie" readonly />
+          <button class="btn-post">Post →</button>
+        </div>
+        <button class="btn-ghost-sm">Skip — just show me the board</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SCREEN 4 — LEADERBOARD
+════════════════════════════════════ -->
+<div class="screen-wrap" id="wrap-lb">
+  <div class="screen-label">Leaderboard</div>
+  <div class="screen">
+
+    <div class="lb-header">
+      <div class="lb-eyebrow">⚡ Blitz · Leaderboard</div>
+      <div class="lb-title">Mario Games</div>
+      <div class="lb-meta-row">
+        <div class="lb-meta">47 possible · All time</div>
+        <div class="lb-topic-switch">Change topic →</div>
+      </div>
+      <div class="lb-milestones">
+        <div class="lb-ms">🥉 Bronze — 7</div>
+        <div class="lb-ms">🥈 Silver — 14</div>
+        <div class="lb-ms gold">🥇 Gold — 23</div>
+      </div>
+    </div>
+
+    <div class="lb-cols">
+      <div class="lb-col-hd">#</div>
+      <div class="lb-col-hd">Name</div>
+      <div class="lb-col-hd right">Score</div>
+      <div class="lb-col-hd right">Time</div>
+    </div>
+
+    <div class="lb-rows">
+      <div class="lb-row top">
+        <div class="lb-pos"></div>
+        <div class="lb-name">Sam</div>
+        <div class="lb-score">38<span class="lb-score-total">/47</span></div>
+        <div class="lb-time">1:31</div>
+      </div>
+      <div class="lb-row top">
+        <div class="lb-pos"></div>
+        <div class="lb-name">Jess</div>
+        <div class="lb-score">35<span class="lb-score-total">/47</span></div>
+        <div class="lb-time">1:44</div>
+      </div>
+      <div class="lb-row top">
+        <div class="lb-pos"></div>
+        <div class="lb-name">Marco</div>
+        <div class="lb-score">31<span class="lb-score-total">/47</span></div>
+        <div class="lb-time">1:49</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-pos">4</div>
+        <div class="lb-name">Priya</div>
+        <div class="lb-score">28<span class="lb-score-total">/47</span></div>
+        <div class="lb-time">1:38</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-pos">5</div>
+        <div class="lb-name">Tom</div>
+        <div class="lb-score">24<span class="lb-score-total">/47</span></div>
+        <div class="lb-time">1:49</div>
+      </div>
+      <div class="lb-row you">
+        <div class="lb-pos">6</div>
+        <div class="lb-name">Alfie <span class="lb-name-you-tag">You</span></div>
+        <div class="lb-score">17<span class="lb-score-total">/47</span></div>
+        <div class="lb-time">1:12</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-pos">7</div>
+        <div class="lb-name">Kira</div>
+        <div class="lb-score">15<span class="lb-score-total">/47</span></div>
+        <div class="lb-time">1:49</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-pos">8</div>
+        <div class="lb-name">Dan</div>
+        <div class="lb-score">12<span class="lb-score-total">/47</span></div>
+        <div class="lb-time">1:49</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-pos">9</div>
+        <div class="lb-name">Beth</div>
+        <div class="lb-score">10<span class="lb-score-total">/47</span></div>
+        <div class="lb-time">1:49</div>
+      </div>
+    </div>
+
+    <div class="lb-footer">
+      <button class="btn-play-again">Play again ⚡</button>
+      <button class="btn-change-topic">Change topic</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.screen-wrap').forEach(s => s.classList.remove('visible'))
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'))
+    document.getElementById('wrap-' + id).classList.add('visible')
+    event.target.classList.add('active')
+  }
+</script>
+</body>
+</html>

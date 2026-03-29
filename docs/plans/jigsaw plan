@@ -1,0 +1,93 @@
+# Idle Hours — Co-op Jigsaw: Phase 1 Build Spec
+
+## Project context
+
+Idle Hours is a cozy games editorial site (Next.js App Router, TypeScript, Tailwind, Sanity v5, GSAP, Framer Motion). The design system lives at idlehours.co.uk/staging — refer to it for all visual decisions. The site has five existing games at /play. We are building a sixth: a co-op multiplayer jigsaw puzzle.
+
+The full feature will eventually include:
+- Real image slicing via SVG clip paths applied to press kit JPGs
+- Multiplayer via Supabase Realtime — piece positions, live cursors, player presence
+- Named rooms with invite codes (4-letter word e.g. PINE)
+- 200–2000 piece puzzles
+- Snap detection based on adjacency to neighbouring pieces only, not absolute grid position
+- Cluster movement — groups of connected pieces move together
+
+## What we are building now: Phase 1
+
+Phase 1 is the solo canvas. Fully playable single-player jigsaw with correct interaction feel. No networking, no Supabase, no rooms. The goal is to nail the canvas controls, piece interaction, and snap behaviour before any multiplayer layer is added.
+
+## Game identity
+
+This game needs a new entry added to lib/gameThemes.ts. The jigsaw is a slow, collaborative, communal game — it belongs to a warm brown/orange/cream world. Suggested name: Jigsaw.
+
+## Route and files
+app/play/jigsaw/page.tsx           — page shell, metadata, gameTheme applied
+components/play/JigsawCanvas.tsx   — main 'use client' component
+lib/jigsawShapes.ts                — SVG path constants for piece shapes
+lib/jigsawUtils.ts                 — snap detection, cluster logic, grid helpers
+
+## Visual design
+
+Use existing design system tokens and components from the staging library. Do not invent new button styles, colours, or type treatments — pull from what already exists. The canvas itself is a dark surface (the game world), the sidebar UI uses existing component patterns.
+
+## Layout
+
+- Fixed header: site logo left, puzzle title centre, piece count + player count + controls right
+- Collapsible left sidebar (slides to 0 with CSS transition, toggle button stays visible)
+- Sidebar content: progress bar + piece count, player list with coloured presence dots (Phase 1: just "you"), room code display (Phase 1: static placeholder "PINE"), controls hint list at bottom
+- Remaining viewport is the canvas — it must fill 100% of remaining height with no scroll
+
+## Canvas controls — get these right
+
+**Pan:** Left mouse button drag on empty canvas space. No modifier key needed.
+
+**Select:** Right mouse button drag draws a selection rectangle. Pieces whose centre falls within it become selected (highlighted). Selected pieces drag as a group. Right-click on canvas suppresses the browser context menu.
+
+**Zoom:** Mouse wheel zooms centred on the cursor position (not canvas centre). Scale range 0.25× to 4×. + and − buttons zoom centred on viewport centre. A zoom percentage label sits between the two buttons and updates live.
+
+**Piece drag:** Left mouse down on a piece picks it up. If not already selected, deselects everything else and selects only that piece. Dragging moves all selected pieces together preserving relative positions.
+
+**Cursor states:**
+- Empty canvas hover: `default`
+- Left dragging canvas (panning): `grabbing`
+- Right dragging (selecting): `crosshair`
+- Hovering a piece: `grab`
+- Dragging a piece: `grabbing`
+
+## Piece system (Phase 1 placeholder)
+
+Pieces do not use real image data yet. Define 5–6 jigsaw piece SVG path shapes in lib/jigsawShapes.ts — each within a 60×60 viewBox with realistic interlocking tab/blank edges. Each piece is assigned a shape index, a dark placeholder fill colour, a random rotation within ±30°, and a starting position scattered across a large stage (2800×2200px).
+
+## Snap behaviour — this is the most important thing to get right
+
+Pieces snap only when dragged close to a neighbour they actually connect to. Not to absolute grid position.
+
+Each piece has a grid coordinate (col, row). On drag release, check all four neighbours. If a neighbour is already placed and the released piece is within 20px of where it would sit relative to that neighbour, snap it into alignment locked to that neighbour.
+
+Once snapped, the two pieces become a cluster — they move together from that point on. Clusters can snap to other clusters.
+
+No ghost positions, no grid highlight, no visual hint of where a piece belongs. The only feedback is the snap itself. The feel should be like a metal detector — you only know you're close when it fires.
+
+## Reference image popup
+
+Floating panel, positioned top-right of canvas by default. Draggable by its title bar. Shows puzzle image (placeholder in Phase 1). Toggled by a "preview" button in the header. A separate "pin" button keeps it persistently open — toggling pin state is independent of open/close. Header button shows active state when pinned.
+
+## Toast notifications
+
+Use the existing toast system from the component library. In Phase 1: snap confirmation ("piece placed"), copy confirmation ("invite link copied"), puzzle complete ("puzzle complete").
+
+## Out of scope for Phase 1
+
+Do not build: Supabase, real image slicing, multiplayer, rooms, mobile touch, piece rotation, sound effects.
+
+## Definition of done
+
+- Left drag pans smoothly
+- Scroll zooms centred on cursor
+- Right drag selects pieces with a visible selection rectangle
+- Single piece and group drag works correctly
+- Pieces snap to adjacent neighbours only, clusters form and move together
+- Sidebar collapses and expands cleanly
+- Preview popup opens, closes, and pins independently
+- Zoom label updates correctly
+- The canvas feels good to use — this is the whole point of Phase 1
