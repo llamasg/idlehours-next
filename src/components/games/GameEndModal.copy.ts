@@ -75,7 +75,8 @@ export function getStreetDateRank(score: number) {
   if (score >= 800) return 'Time Archivist'
   if (score >= 600) return 'Retro Head'
   if (score >= 350) return 'Occasional Player'
-  return 'New to the Medium'
+  if (score >= 1) return 'New to the Medium'
+  return 'Bust'
 }
 
 export const STREET_DATE_FLAVOUR: Record<string, string[]> = {
@@ -83,13 +84,15 @@ export const STREET_DATE_FLAVOUR: Record<string, string[]> = {
   'Retro Head': ['You know your eras. A few clues to get there.', 'Good instinct. Took a couple of hints.', 'Most of that was muscle memory.'],
   'Occasional Player': ['The tricky ones got you. They get everyone.', 'Some of those covers were tough. Fair result.', "Not bad. Tomorrow's a fresh one."],
   'New to the Medium': ['These things take time.', 'The archive will be here tomorrow.', 'Every guess teaches you something.'],
+  'Bust': ['Zero points. Ouch.', "That one wasn't yours.", 'Tomorrow. Fresh start.'],
 }
 
-export function getShelfPriceRank(streak: number) {
-  if (streak === 10) return 'Industry Insider'
-  if (streak >= 7) return 'Senior Producer'
-  if (streak >= 4) return 'Junior Dev'
-  return 'Just Another Consumer'
+export function getShelfPriceRank(score: number) {
+  if (score === 10) return 'Industry Insider'
+  if (score >= 7) return 'Senior Producer'
+  if (score >= 4) return 'Junior Dev'
+  if (score >= 1) return 'Just Another Consumer'
+  return 'Bust'
 }
 
 export const SHELF_PRICE_FLAVOUR: Record<string, string[]> = {
@@ -97,4 +100,5 @@ export const SHELF_PRICE_FLAVOUR: Record<string, string[]> = {
   'Senior Producer': ["You've shipped things. It shows.", 'A few tricky ones in there. You handled it.', "That's experience talking."],
   'Junior Dev': ['Solid. A few surprised you.', 'You know more than you think.', 'Getting there.'],
   'Just Another Consumer': ['The prices on some of these are genuinely criminal.', "Nobody warned you it would be this hard.", 'To be fair, most people get this one wrong.'],
+  'Bust': ['Zero from ten. Genuinely impressive.', "That was rough. Tomorrow's a reset.", 'Not a single one. Respect for finishing.'],
 }

@@ -28,17 +28,19 @@ export const GAME_SENSE_LADDER: RankThreshold[] = [
 ]
 
 export const STREET_DATE_LADDER: RankThreshold[] = [
-  { name: 'New to the Medium', label: '0\u2013349 pts' },
+  { name: 'Bust', label: '0 pts' },
+  { name: 'New to the Medium', label: '1\u2013349 pts' },
   { name: 'Occasional Player', label: '350\u2013599 pts' },
   { name: 'Retro Head', label: '600\u2013799 pts' },
   { name: 'Time Archivist', label: '800+ pts' },
 ]
 
 export const SHELF_PRICE_LADDER: RankThreshold[] = [
-  { name: 'Just Another Consumer', label: '0\u20133 streak' },
-  { name: 'Junior Dev', label: '4\u20136 streak' },
-  { name: 'Senior Producer', label: '7\u20139 streak' },
-  { name: 'Industry Insider', label: '10 streak' },
+  { name: 'Bust', label: '0 / 10' },
+  { name: 'Just Another Consumer', label: '1\u20133 / 10' },
+  { name: 'Junior Dev', label: '4\u20136 / 10' },
+  { name: 'Senior Producer', label: '7\u20139 / 10' },
+  { name: 'Industry Insider', label: '10 / 10' },
 ]
 
 export type GameSlug = 'game-sense' | 'street-date' | 'shelf-price'
@@ -78,7 +80,7 @@ export function getRankForGame(game: GameSlug, score: number, streak: number): s
   switch (game) {
     case 'game-sense': return getGameSenseRank(score)
     case 'street-date': return getStreetDateRank(score)
-    case 'shelf-price': return getShelfPriceRank(streak)
+    case 'shelf-price': return getShelfPriceRank(score)
   }
 }
 
