@@ -22,6 +22,13 @@ import {
   type V2DayState,
 } from '../lib/gameState'
 import { igdbCoverUrl } from '../../street-date/lib/imageUtils'
+import GameEndModal from '@/components/games/GameEndModal'
+import { COPY, pickRandom, getStreetDateRank, STREET_DATE_FLAVOUR } from '@/components/games/GameEndModal.copy'
+import ResultCard from '@/components/games/ResultCard'
+import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
+import { entrance, useEntranceSteps } from '@/lib/animations'
+import { formatGameNumber, formatDisplayDate } from '../../street-date/lib/dateUtils'
+import Link from 'next/link'
 
 const spring = 'cubic-bezier(0.34,1.5,0.64,1)'
 
@@ -48,6 +55,8 @@ export default function StreetDateV2DayPage({
   const [scorePulse, setScorePulse] = useState(false)
   const [floatingCost, setFloatingCost] = useState<{ key: number; cost: number } | null>(null)
   const [justSubmitted, setJustSubmitted] = useState(false)
+  const [showWinModal, setShowWinModal] = useState(false)
+  const [showLossModal, setShowLossModal] = useState(false)
 
   const wipeTriggered = useRef(false)
   const puzzleRef = useRef<ReturnType<typeof generatePuzzle> | null>(null)
@@ -308,6 +317,12 @@ export default function StreetDateV2DayPage({
     if (guessNum > 1) {
       triggerScorePulse(150)
     }
+
+    if (updatedState.won) {
+      setTimeout(() => setShowWinModal(true), 300)
+    } else if (updatedState.finished) {
+      setTimeout(() => setShowLossModal(true), 300)
+    }
   }, [state, correctOrder, persist])
 
   // Clear all slots
@@ -429,6 +444,37 @@ export default function StreetDateV2DayPage({
       .map(g => g.results.map(emojiForResult).join(''))
       .join('\n')
   }, [state])
+
+  // ── Post-game state ────────────────────────────────────────────────────────
+
+  const isPostGame = state ? state.finished : false
+  const isModalOpen = showWinModal || showLossModal
+  const isPostGameReady = isPostGame && !isModalOpen
+  const pgGaps = useMemo(() => [0, 3500, 400, 300, 300, 400, 500], [])
+  const pgStep = useEntranceSteps(7, pgGaps, isPostGameReady)
+
+  const modalCopy = useMemo(() => {
+    if (!state) return null
+    const score = state.score
+    const result = state.won ? 'win' : 'loss'
+    const rankName = getStreetDateRank(score)
+    const flavours = STREET_DATE_FLAVOUR[rankName] || ['Good game.']
+    return {
+      result: result as 'win' | 'loss',
+      heading: pickRandom(COPY[result].headings),
+      subheading: pickRandom(COPY[result].subheadings),
+      rankName,
+      rankFlavour: pickRandom(flavours),
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state?.won, state?.finished, state?.score])
+
+  const shareText = useMemo(() => {
+    if (!state || !state.finished) return ''
+    const number = formatGameNumber(date)
+    const emojiRows = state.guesses.map(g => g.results.map(emojiForResult).join('')).join('\n')
+    return `Street Date ${number} \u00b7 ${state.score}/1000\n${emojiRows}\nidlehours.co.uk/play/street-date-v2`
+  }, [state?.finished, state?.guesses, state?.score, date])
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
@@ -809,83 +855,128 @@ export default function StreetDateV2DayPage({
               </div>
             )}
 
-            {/* ── Finished state ── */}
-            {state.finished && (
-              <div className="mt-8 flex flex-col items-center gap-6">
-                <div className="text-center">
-                  <div className="text-4xl">
-                    {state.won ? '🎉' : '😞'}
-                  </div>
-                  <h2 className="mt-2 text-2xl font-black text-white">
-                    {state.won ? 'You got it!' : 'Game over'}
-                  </h2>
-                  <p className="mt-1 text-lg font-bold text-white/70">
-                    {state.won
-                      ? `Solved in ${state.guesses.length} ${state.guesses.length === 1 ? 'guess' : 'guesses'}`
-                      : 'Better luck next time'}
-                  </p>
+            {/* ── Post-game layout ── */}
+            {isPostGame && (
+              <>
+                {/* Nav pills */}
+                <div className="mb-6 mt-6 flex flex-wrap items-center justify-center gap-4">
+                  <Link href="/play/street-date-v2" className="bvl-purple">
+                    Today&apos;s game
+                  </Link>
+                  <Link href="/play/archive?game=street-date" className="bvl-purple">
+                    View past games
+                  </Link>
                 </div>
 
-                {/* Final score */}
-                <div className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3">
-                  <span className="font-heading text-3xl font-black text-[hsl(var(--game-ink))]">
-                    {state.score}
-                  </span>
-                  <span className="font-heading text-sm uppercase tracking-wider text-[hsl(var(--game-ink))]/60">
-                    pts
-                  </span>
-                </div>
+                {/* Two-column: left (badges + ResultCard), right (game list) */}
+                <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-[55fr_45fr]">
 
-                {/* Emoji grid */}
-                {emojiGrid && (
-                  <div className="rounded-xl bg-white/10 px-6 py-4">
-                    <pre className="text-center font-mono text-lg leading-relaxed">
-                      {emojiGrid}
-                    </pre>
+                  {/* Left: badges + ResultCard */}
+                  <div className="order-2 flex flex-col gap-6 lg:order-1">
+                    <div
+                      className="grid transition-[grid-template-rows] duration-700 ease-out"
+                      style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
+                    >
+                      <div className="overflow-hidden">
+                        <DailyBadgeShelf currentGame="street-date" animateStamp={pgStep >= 5} />
+                      </div>
+                    </div>
+
+                    <ResultCard
+                      game="street-date"
+                      score={state.score}
+                      streak={0}
+                      won={state.won}
+                      puzzleLabel={`Street Date ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                      onViewResults={() => {}}
+                      hideViewResults
+                      animateEntrance={pgStep >= 1}
+                    />
                   </div>
-                )}
 
-                {/* Correct order */}
-                <div className="w-full max-w-lg">
-                  <p className="mb-3 text-center text-xs font-bold uppercase tracking-widest text-white/40">
-                    Correct order
-                  </p>
-                  <div className="flex justify-center">
-                    <div className="grid grid-cols-4 gap-2 sm:grid-cols-7 sm:gap-3">
-                      {correctOrder.map((id, i) => {
-                        const game = gameById(id)
-                        if (!game) return null
-                        return (
-                          <div
-                            key={id}
-                            className="flex h-[110px] w-[76px] flex-col items-center justify-center rounded-xl border-2 border-green-400/50 bg-white/5 sm:h-[130px] sm:w-[90px]"
-                          >
-                            <span className="absolute-left-1.5 text-[10px] font-bold text-white/40">
-                              {String(i + 1).padStart(2, '0')}
-                            </span>
-                            <img
-                              src={igdbCoverUrl(game.igdbImageId)}
-                              alt={game.title}
-                              className="h-[56px] w-[42px] rounded-md object-cover shadow-md sm:h-[64px] sm:w-[48px]"
-                              loading="lazy"
-                            />
-                            <span className="mt-1 max-w-[68px] truncate text-center text-[9px] font-bold leading-tight text-white sm:max-w-[80px] sm:text-[10px]">
-                              {game.title}
-                            </span>
-                            <span className="text-[10px] font-bold text-green-400">
-                              {game.year}
-                            </span>
-                          </div>
-                        )
-                      })}
+                  {/* Right: game list (vertical stack of 7 games) */}
+                  <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
+                    <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
+                      <div className="px-5 pt-5 pb-3 sm:px-6 sm:pt-6">
+                        <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
+                          Street Date {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
+                        </p>
+                        <p className="mt-1 font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
+                          The correct order
+                        </p>
+                      </div>
+                      <div className="flex flex-1 flex-col px-5 pb-5 sm:px-6 sm:pb-6">
+                        {correctOrder.map((id, i) => {
+                          const game = gameById(id)
+                          if (!game) return null
+                          return (
+                            <div key={id} className="flex flex-1 items-center gap-4 border-b border-[hsl(var(--game-ink))]/8 last:border-b-0 px-4 -mx-4">
+                              <span className="w-7 shrink-0 font-heading text-[16px] font-[800] text-[hsl(var(--game-ink-light))]">
+                                {String(i + 1).padStart(2, '0')}
+                              </span>
+                              <div className="h-[72px] w-[54px] shrink-0 overflow-hidden rounded-lg bg-muted/30 shadow-sm my-2">
+                                <img src={igdbCoverUrl(game.igdbImageId)} alt={game.title} className="h-full w-full object-cover" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-heading text-[15px] font-[700] leading-snug text-[hsl(var(--game-ink))] truncate">{game.title}</p>
+                                <p className="mt-0.5 font-heading text-[11px] font-[600] text-[hsl(var(--game-ink-light))]">{game.year}</p>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </>
             )}
           </main>
         </div>
       </div>
+
+      {/* Win modal */}
+      {showWinModal && state?.won && modalCopy && (
+        <GameEndModal
+          game="street-date"
+          result="win"
+          score={state.score}
+          heading={modalCopy.heading}
+          subheading={modalCopy.subheading}
+          rankName={modalCopy.rankName}
+          rankFlavour={modalCopy.rankFlavour}
+          stats={[
+            { label: 'Score', value: String(state.score) },
+            { label: 'Guesses', value: `${state.guesses.length}/${MAX_GUESSES}` },
+            { label: 'Correct', value: '7/7' },
+          ]}
+          heroZone={null}
+          shareText={shareText}
+          shareUrl="https://idlehours.co.uk/play/street-date-v2"
+          onClose={() => { setShowWinModal(false) }}
+        />
+      )}
+
+      {/* Loss modal */}
+      {showLossModal && state?.finished && !state?.won && modalCopy && (
+        <GameEndModal
+          game="street-date"
+          result="loss"
+          score={state.score}
+          heading={modalCopy.heading}
+          subheading={modalCopy.subheading}
+          rankName={modalCopy.rankName}
+          rankFlavour={modalCopy.rankFlavour}
+          stats={[
+            { label: 'Score', value: String(state.score) },
+            { label: 'Guesses', value: `${state.guesses.length}/${MAX_GUESSES}` },
+            { label: 'Best', value: `${Math.max(...state.guesses.map(g => g.correctCount))}/7` },
+          ]}
+          heroZone={null}
+          shareText={shareText}
+          shareUrl="https://idlehours.co.uk/play/street-date-v2"
+          onClose={() => { setShowLossModal(false) }}
+        />
+      )}
     </>
   )
 }
