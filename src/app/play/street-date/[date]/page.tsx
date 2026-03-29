@@ -551,15 +551,12 @@ export default function StreetDateDayPage({
               </div>
             </div>
           }
-          onShare={async () => {
+          shareText={(() => {
             const number = formatGameNumber(date)
             const wagerEmoji = state.wager === 'high' ? '\u{1F525}' : state.wager === 'mid' ? '\u{1F3AF}' : '\u{1F6E1}\u{FE0F}'
-            const lines = [
-              `Street Date ${number} \u00b7 ${state.score}/1000 ${wagerEmoji}`,
-              'idlehours.co.uk/play/street-date',
-            ]
-            try { await navigator.clipboard.writeText(lines.join('\n')) } catch {}
-          }}
+            return `Street Date ${number} \u00b7 ${state.score}/1000 ${wagerEmoji}\nidlehours.co.uk/play/street-date`
+          })()}
+          shareUrl="https://idlehours.co.uk/play/street-date"
           onClose={() => setShowModal(false)}
         />
       )}

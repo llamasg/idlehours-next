@@ -522,7 +522,6 @@ export default function ShelfPriceDayPage({
           rankFlavour={modalCopy.rankFlavour}
           stats={[
             { label: 'Score', value: String(state.score) },
-            { label: 'Streak', value: String(state.streak) },
             { label: 'Correct', value: `${state.streak}/${TARGET_ROUNDS}` },
           ]}
           heroZone={
@@ -575,15 +574,11 @@ export default function ShelfPriceDayPage({
               ))}
             </div>
           }
-          onShare={async () => {
+          shareText={(() => {
             const number = formatGameNumber(date)
-            const lines = [
-              `Shelf Price ${number} \u00b7 ${state.score}/1000`,
-              `${state.streak}/${TARGET_ROUNDS} correct${state.score === 1000 ? ' \u00b7 Perfect! \u{1F3C6}' : ''}`,
-              'idlehours.co.uk/play/shelf-price',
-            ]
-            try { await navigator.clipboard.writeText(lines.join('\n')) } catch {}
-          }}
+            return `Shelf Price ${number} \u00b7 ${state.score}/1000\n${state.streak}/${TARGET_ROUNDS} correct${state.score === 1000 ? ' \u00b7 Perfect! \u{1F3C6}' : ''}\nidlehours.co.uk/play/shelf-price`
+          })()}
+          shareUrl="https://idlehours.co.uk/play/shelf-price"
           onClose={() => setShowResult(false)}
         />
       )}
