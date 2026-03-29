@@ -403,71 +403,72 @@ export default function ShelfPriceDayPage({
               </div>
             </div>
 
-            {/* Badges — slides open when pgStep >= 5 */}
-            <div
-              className="grid transition-[grid-template-rows] duration-700 ease-out"
-              style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
-            >
-              <div className="overflow-hidden">
-                <div className="mb-6">
-                  <DailyBadgeShelf currentGame="shelf-price" animateStamp={pgStep >= 5} />
+            {/* Two-column post-game: left (55%) badges + results, right (45%) matchups */}
+            <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-[55fr_45fr]">
+
+              {/* ── Left column: badge shelf → gap → ResultCard ── */}
+              <div className="order-2 flex flex-col gap-6 lg:order-1">
+                <div
+                  className="grid transition-[grid-template-rows] duration-700 ease-out"
+                  style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
+                >
+                  <div className="overflow-hidden">
+                    <DailyBadgeShelf currentGame="shelf-price" animateStamp={pgStep >= 5} />
+                  </div>
                 </div>
+
+                <ResultCard
+                  game="shelf-price"
+                  score={state.score}
+                  streak={state.streak}
+                  won={state.won}
+                  puzzleLabel={`Shelf Price ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                  onViewResults={() => setShowResult(true)}
+                  animateEntrance={pgStep >= 1}
+                />
               </div>
-            </div>
 
-            {/* ResultCard — internal 15-step cascade */}
-            <div className="mb-6">
-              <ResultCard
-                game="shelf-price"
-                score={state.score}
-                streak={state.streak}
-                won={state.won}
-                puzzleLabel={`Shelf Price ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                onViewResults={() => setShowResult(true)}
-                animateEntrance={pgStep >= 1}
-              />
-            </div>
-
-            {/* Game info — round results in white card */}
-            <div className="mb-6" style={entrance('slide-up', pgStep >= 2)}>
-              <div className="mx-auto w-full max-w-[850px] overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                <div className="p-5 sm:p-6">
-                  <p className="mb-3 text-center font-heading text-xs font-semibold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
-                    Your matchups
-                  </p>
-                  <div className="grid grid-cols-5 gap-2">
-                    {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
-                      const correct = roundResults[i]
-                      const played = i < state.choices.length
-                      return (
-                        <div
-                          key={i}
-                          className={`flex flex-col items-center gap-1 rounded-lg border-2 p-1.5 ${
-                            !played
-                              ? 'border-transparent opacity-30'
-                              : correct
-                                ? 'border-[hsl(var(--game-green))]/40'
-                                : 'border-[hsl(var(--game-red))]/30'
-                          }`}
-                        >
-                          <div className="flex w-full gap-0.5">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-sm bg-muted/30">
-                              <img src={igdbCoverUrl(left.igdbImageId)} alt={left.title} className="h-full w-full object-cover" />
+              {/* ── Right column: matchups info card ── */}
+              <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
+                <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
+                  <div className="p-5 sm:p-6">
+                    <p className="mb-3 text-center font-heading text-xs font-semibold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
+                      Your matchups
+                    </p>
+                    <div className="grid grid-cols-5 gap-2">
+                      {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
+                        const correct = roundResults[i]
+                        const played = i < state.choices.length
+                        return (
+                          <div
+                            key={i}
+                            className={`flex flex-col items-center gap-1 rounded-lg border-2 p-1.5 ${
+                              !played
+                                ? 'border-transparent opacity-30'
+                                : correct
+                                  ? 'border-[hsl(var(--game-green))]/40'
+                                  : 'border-[hsl(var(--game-red))]/30'
+                            }`}
+                          >
+                            <div className="flex w-full gap-0.5">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-lg bg-muted/30">
+                                <img src={igdbCoverUrl(left.igdbImageId)} alt={left.title} className="h-full w-full object-cover" />
+                              </div>
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-lg bg-muted/30">
+                                <img src={igdbCoverUrl(right.igdbImageId)} alt={right.title} className="h-full w-full object-cover" />
+                              </div>
                             </div>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-sm bg-muted/30">
-                              <img src={igdbCoverUrl(right.igdbImageId)} alt={right.title} className="h-full w-full object-cover" />
-                            </div>
+                            {played && (
+                              <span className={`text-[10px] font-bold ${correct ? 'text-[hsl(var(--game-green))]' : 'text-[hsl(var(--game-red))]'}`}>
+                                {correct ? '\u2713' : '\u2717'}
+                              </span>
+                            )}
                           </div>
-                          {played && (
-                            <span className={`text-[10px] font-bold ${correct ? 'text-[hsl(var(--game-green))]' : 'text-[hsl(var(--game-red))]'}`}>
-                              {correct ? '\u2713' : '\u2717'}
-                            </span>
-                          )}
-                        </div>
-                      )
-                    })}
+                        )
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
