@@ -658,13 +658,13 @@ export default function StreetDateV2DayPage({
                 </button>
               </div>
 
-              {/* White container — sizes to fit slots */}
-              <div className="mx-auto w-fit rounded-2xl bg-white/95 shadow-sm p-5 sm:p-8">
+              {/* White container — full width up to max-w-7xl */}
+              <div className="mx-auto w-full max-w-7xl rounded-2xl bg-white/95 shadow-sm p-5 sm:p-8">
               <div className="flex flex-col gap-5">
 
-                {/* ── Slot grid — wraps onto 2 lines on small screens ── */}
+                {/* ── Slot grid — single row on lg+, wraps on small ── */}
                 <div>
-                  <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+                  <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:flex-nowrap">
                     {state.slots.map((chipId, i) => {
                       const game = chipId ? gameById(chipId) : null
                       const revealed = state.revealedSlots[i]
@@ -687,7 +687,7 @@ export default function StreetDateV2DayPage({
                           onClick={() => handleSlotTap(i)}
                           onDrop={(e) => handleSlotDrop(e, i)}
                           onDragOver={handleDragOver}
-                          className={`relative flex h-[140px] w-[90px] shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border-2 transition-all duration-200 sm:h-[170px] sm:w-[110px] ${slotBorderColor} ${
+                          className={`relative flex h-[140px] w-[90px] shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border-2 transition-all duration-200 sm:h-[170px] sm:w-[110px] lg:w-auto lg:flex-1 ${slotBorderColor} ${
                             hintOnePending && chipId ? 'animate-pulse ring-2 ring-amber-400/50' : ''
                           } ${isSelected ? 'ring-2 ring-blue-400/50 shadow-lg shadow-blue-400/20' : ''}`}
                           style={{
