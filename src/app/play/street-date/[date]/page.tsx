@@ -422,45 +422,57 @@ export default function StreetDateDayPage({
                   />
                 </div>
 
-                {/* Right column: game info card */}
+                {/* Right column: game info card — vertical stack */}
                 <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
                   <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                    <div className="p-5 sm:p-6">
-                      <p className="text-center font-heading text-xs font-semibold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
+                    {/* Header */}
+                    <div className="px-5 pt-5 sm:px-6 sm:pt-6">
+                      <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
                         The answer
                       </p>
-                      <p className="text-center font-heading text-5xl font-black text-[hsl(var(--game-green))]">
+                      <p className="font-heading text-4xl font-black text-[hsl(var(--game-green))]">
                         {answerYear}
                       </p>
-                      <div className="mx-auto mt-4 grid max-w-md grid-cols-5 gap-2">
-                        {roundGames.map((game, i) => {
-                          const wasGuessedOn = state.attempts.length - 1 === i && state.won
-                          const neverReached = i > state.currentCoverIndex
-                          return (
-                            <div key={game.id} className="relative flex flex-col items-center">
-                              <div
-                                className={`aspect-[3/4] w-full overflow-hidden rounded-lg bg-muted/30 shadow-sm ${
-                                  wasGuessedOn ? 'ring-2 ring-[hsl(var(--game-green))] scale-105' : ''
-                                } ${neverReached ? 'opacity-40' : ''}`}
-                              >
-                                <img
-                                  src={igdbCoverUrl(game.igdbImageId)}
-                                  alt={game.title}
-                                  className="h-full w-full object-cover"
-                                />
-                              </div>
-                              {wasGuessedOn && (
-                                <span className="absolute -top-2 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--game-green))] text-[10px] font-bold text-white shadow">
-                                  {i + 1}
-                                </span>
-                              )}
-                              <p className="mt-1.5 line-clamp-2 w-full text-center font-heading text-[10px] font-medium leading-snug text-[hsl(var(--game-ink-mid))]">
+                    </div>
+
+                    {/* Game list */}
+                    <div className="flex flex-1 flex-col divide-y divide-[hsl(var(--game-ink))]/8 px-5 pb-5 pt-3 sm:px-6 sm:pb-6">
+                      {roundGames.map((game, i) => {
+                        const wasGuessedOn = state.attempts.length - 1 === i && state.won
+                        const neverReached = i > state.currentCoverIndex
+                        return (
+                          <div
+                            key={game.id}
+                            className={`flex items-center gap-3 py-3 ${
+                              wasGuessedOn ? 'rounded-lg bg-[hsl(var(--game-green))]/8 px-3 -mx-3' : ''
+                            } ${neverReached ? 'opacity-35' : ''}`}
+                          >
+                            <span className="w-6 shrink-0 font-heading text-[13px] font-[800] text-[hsl(var(--game-ink-light))]">
+                              {String(i + 1).padStart(2, '0')}
+                            </span>
+                            <div className="h-14 w-[42px] shrink-0 overflow-hidden rounded-md bg-muted/30 shadow-sm">
+                              <img
+                                src={igdbCoverUrl(game.igdbImageId)}
+                                alt={game.title}
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-heading text-[13px] font-[700] leading-snug text-[hsl(var(--game-ink))] truncate">
                                 {game.title}
                               </p>
+                              <p className="font-heading text-[11px] font-[600] text-[hsl(var(--game-ink-light))]">
+                                {game.year}
+                              </p>
                             </div>
-                          )
-                        })}
-                      </div>
+                            {wasGuessedOn && (
+                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--game-green))] text-[10px] font-bold text-white">
+                                ✓
+                              </span>
+                            )}
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 </div>

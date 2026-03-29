@@ -428,47 +428,60 @@ export default function ShelfPriceDayPage({
                 />
               </div>
 
-              {/* ── Right column: matchups info card ── */}
+              {/* ── Right column: matchups info card — 2 per row with prices ── */}
               <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
                 <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                  <div className="p-5 sm:p-6">
-                    <p className="mb-3 text-center font-heading text-xs font-semibold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))]">
+                  <div className="px-5 pt-5 sm:px-6 sm:pt-6">
+                    <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
                       Your matchups
                     </p>
-                    <div className="grid grid-cols-5 gap-2">
-                      {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
-                        const correct = roundResults[i]
-                        const played = i < state.choices.length
-                        return (
-                          <div
-                            key={i}
-                            className={`flex flex-col items-center gap-1 rounded-lg border-2 p-1.5 ${
-                              !played
-                                ? 'border-transparent opacity-30'
-                                : correct
-                                  ? 'border-[hsl(var(--game-green))]/40'
-                                  : 'border-[hsl(var(--game-red))]/30'
-                            }`}
-                          >
-                            <div className="flex w-full gap-0.5">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-lg bg-muted/30">
-                                <img src={igdbCoverUrl(left.igdbImageId)} alt={left.title} className="h-full w-full object-cover" />
-                              </div>
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-lg bg-muted/30">
-                                <img src={igdbCoverUrl(right.igdbImageId)} alt={right.title} className="h-full w-full object-cover" />
-                              </div>
-                            </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 p-5 sm:p-6">
+                    {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
+                      const correct = roundResults[i]
+                      const played = i < state.choices.length
+                      return (
+                        <div
+                          key={i}
+                          className={`rounded-xl border-2 p-3 ${
+                            !played
+                              ? 'border-transparent opacity-30'
+                              : correct
+                                ? 'border-[hsl(var(--game-green))]/40 bg-[hsl(var(--game-green))]/5'
+                                : 'border-[hsl(var(--game-red))]/30 bg-[hsl(var(--game-red))]/5'
+                          }`}
+                        >
+                          {/* Round number + result */}
+                          <div className="mb-2 flex items-center justify-between">
+                            <span className="font-heading text-[10px] font-[800] text-[hsl(var(--game-ink-light))]">
+                              Round {i + 1}
+                            </span>
                             {played && (
-                              <span className={`text-[10px] font-bold ${correct ? 'text-[hsl(var(--game-green))]' : 'text-[hsl(var(--game-red))]'}`}>
-                                {correct ? '\u2713' : '\u2717'}
+                              <span className={`font-heading text-[10px] font-[800] ${correct ? 'text-[hsl(var(--game-green))]' : 'text-[hsl(var(--game-red))]'}`}>
+                                {correct ? '✓ Correct' : '✗ Wrong'}
                               </span>
                             )}
                           </div>
-                        )
-                      })}
-                    </div>
+                          {/* Two games side by side */}
+                          <div className="flex gap-2">
+                            {[left, right].map((game, gi) => (
+                              <div key={gi} className="flex flex-1 flex-col items-center gap-1.5">
+                                <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-muted/30 shadow-sm">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img src={igdbCoverUrl(game.igdbImageId)} alt={game.title} className="h-full w-full object-cover" />
+                                </div>
+                                <p className="line-clamp-1 w-full text-center font-heading text-[9px] font-[600] leading-snug text-[hsl(var(--game-ink-mid))]">
+                                  {game.title}
+                                </p>
+                                <span className="font-heading text-[12px] font-[800] text-[hsl(var(--game-ink))]">
+                                  ${game.launchPriceUsd}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
                 </div>
               </div>
