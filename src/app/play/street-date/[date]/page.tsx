@@ -422,11 +422,11 @@ export default function StreetDateDayPage({
                   />
                 </div>
 
-                {/* Right column: game info card — vertical stack */}
+                {/* Right column: game info card — 5 games fill height */}
                 <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
                   <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
                     {/* Header */}
-                    <div className="px-5 pt-5 sm:px-6 sm:pt-6">
+                    <div className="px-5 pt-5 pb-3 sm:px-6 sm:pt-6">
                       <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
                         The answer
                       </p>
@@ -435,22 +435,22 @@ export default function StreetDateDayPage({
                       </p>
                     </div>
 
-                    {/* Game list */}
-                    <div className="flex flex-1 flex-col divide-y divide-[hsl(var(--game-ink))]/8 px-5 pb-5 pt-3 sm:px-6 sm:pb-6">
+                    {/* Game list — 5 items stretch to fill */}
+                    <div className="flex flex-1 flex-col px-5 pb-5 sm:px-6 sm:pb-6">
                       {roundGames.map((game, i) => {
                         const wasGuessedOn = state.attempts.length - 1 === i && state.won
                         const neverReached = i > state.currentCoverIndex
                         return (
                           <div
                             key={game.id}
-                            className={`flex items-center gap-3 py-3 ${
-                              wasGuessedOn ? 'rounded-lg bg-[hsl(var(--game-green))]/8 px-3 -mx-3' : ''
+                            className={`flex flex-1 items-center gap-4 border-b border-[hsl(var(--game-ink))]/8 last:border-b-0 px-4 -mx-4 ${
+                              wasGuessedOn ? 'rounded-xl bg-[hsl(var(--game-green))]/10' : ''
                             } ${neverReached ? 'opacity-35' : ''}`}
                           >
-                            <span className="w-6 shrink-0 font-heading text-[13px] font-[800] text-[hsl(var(--game-ink-light))]">
+                            <span className="w-7 shrink-0 font-heading text-[16px] font-[800] text-[hsl(var(--game-ink-light))]">
                               {String(i + 1).padStart(2, '0')}
                             </span>
-                            <div className="h-14 w-[42px] shrink-0 overflow-hidden rounded-md bg-muted/30 shadow-sm">
+                            <div className="h-[72px] w-[54px] shrink-0 overflow-hidden rounded-lg bg-muted/30 shadow-sm my-2">
                               <img
                                 src={igdbCoverUrl(game.igdbImageId)}
                                 alt={game.title}
@@ -458,15 +458,17 @@ export default function StreetDateDayPage({
                               />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="font-heading text-[13px] font-[700] leading-snug text-[hsl(var(--game-ink))] truncate">
+                              <p className="font-heading text-[15px] font-[700] leading-snug text-[hsl(var(--game-ink))] truncate">
                                 {game.title}
                               </p>
-                              <p className="font-heading text-[11px] font-[600] text-[hsl(var(--game-ink-light))]">
-                                {game.year}
-                              </p>
+                              {game.platforms.length > 0 && (
+                                <p className="mt-0.5 font-heading text-[11px] font-[600] text-[hsl(var(--game-ink-light))] truncate">
+                                  {game.platforms.join(' · ')}
+                                </p>
+                              )}
                             </div>
                             {wasGuessedOn && (
-                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--game-green))] text-[10px] font-bold text-white">
+                              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[hsl(var(--game-green))] text-[11px] font-bold text-white shadow-sm">
                                 ✓
                               </span>
                             )}

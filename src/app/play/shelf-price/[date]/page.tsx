@@ -428,60 +428,64 @@ export default function ShelfPriceDayPage({
                 />
               </div>
 
-              {/* ── Right column: matchups info card — 2 per row with prices ── */}
-              <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
+              {/* ── Right column: matchups — scrollable, capped to left col height ── */}
+              <div className="order-1 lg:order-2 lg:max-h-full lg:overflow-hidden" style={entrance('slide-up', pgStep >= 2)}>
                 <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                  <div className="px-5 pt-5 sm:px-6 sm:pt-6">
+                  <div className="shrink-0 px-5 pt-5 sm:px-6 sm:pt-6">
                     <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
                       Your matchups
                     </p>
                   </div>
-                  <div className="grid grid-cols-2 gap-3 p-5 sm:p-6">
-                    {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
-                      const correct = roundResults[i]
-                      const played = i < state.choices.length
-                      return (
-                        <div
-                          key={i}
-                          className={`rounded-xl border-2 p-3 ${
-                            !played
-                              ? 'border-transparent opacity-30'
-                              : correct
-                                ? 'border-[hsl(var(--game-green))]/40 bg-[hsl(var(--game-green))]/5'
-                                : 'border-[hsl(var(--game-red))]/30 bg-[hsl(var(--game-red))]/5'
-                          }`}
-                        >
-                          {/* Round number + result */}
-                          <div className="mb-2 flex items-center justify-between">
-                            <span className="font-heading text-[10px] font-[800] text-[hsl(var(--game-ink-light))]">
-                              Round {i + 1}
-                            </span>
-                            {played && (
-                              <span className={`font-heading text-[10px] font-[800] ${correct ? 'text-[hsl(var(--game-green))]' : 'text-[hsl(var(--game-red))]'}`}>
-                                {correct ? '✓ Correct' : '✗ Wrong'}
+                  <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-5 pt-3 sm:px-6 sm:pb-6">
+                    <div className="flex flex-col gap-3">
+                      {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
+                        const correct = roundResults[i]
+                        const played = i < state.choices.length
+                        return (
+                          <div
+                            key={i}
+                            className={`rounded-xl border-2 p-3 ${
+                              !played
+                                ? 'border-transparent opacity-30'
+                                : correct
+                                  ? 'border-[hsl(var(--game-green))]/40 bg-[hsl(var(--game-green))]/5'
+                                  : 'border-[hsl(var(--game-red))]/30 bg-[hsl(var(--game-red))]/5'
+                            }`}
+                          >
+                            {/* Round header */}
+                            <div className="mb-2 flex items-center justify-between">
+                              <span className="font-heading text-[10px] font-[800] text-[hsl(var(--game-ink-light))]">
+                                Round {i + 1}
                               </span>
-                            )}
-                          </div>
-                          {/* Two games side by side */}
-                          <div className="flex gap-2">
-                            {[left, right].map((game, gi) => (
-                              <div key={gi} className="flex flex-1 flex-col items-center gap-1.5">
-                                <div className="aspect-[3/4] w-full overflow-hidden rounded-lg bg-muted/30 shadow-sm">
-                                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                                  <img src={igdbCoverUrl(game.igdbImageId)} alt={game.title} className="h-full w-full object-cover" />
-                                </div>
-                                <p className="line-clamp-1 w-full text-center font-heading text-[9px] font-[600] leading-snug text-[hsl(var(--game-ink-mid))]">
-                                  {game.title}
-                                </p>
-                                <span className="font-heading text-[12px] font-[800] text-[hsl(var(--game-ink))]">
-                                  ${game.launchPriceUsd}
+                              {played && (
+                                <span className={`font-heading text-[10px] font-[800] ${correct ? 'text-[hsl(var(--game-green))]' : 'text-[hsl(var(--game-red))]'}`}>
+                                  {correct ? '✓ Correct' : '✗ Wrong'}
                                 </span>
-                              </div>
-                            ))}
+                              )}
+                            </div>
+                            {/* Two games side by side */}
+                            <div className="flex gap-3">
+                              {[left, right].map((game, gi) => (
+                                <div key={gi} className="flex flex-1 items-center gap-2.5">
+                                  <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-muted/30 shadow-sm">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img src={igdbCoverUrl(game.igdbImageId)} alt={game.title} className="h-full w-full object-cover" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="line-clamp-1 font-heading text-[11px] font-[700] leading-snug text-[hsl(var(--game-ink))]">
+                                      {game.title}
+                                    </p>
+                                    <p className="font-heading text-[14px] font-[800] text-[hsl(var(--game-ink))]">
+                                      ${game.launchPriceUsd}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )
-                    })}
+                        )
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
