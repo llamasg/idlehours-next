@@ -640,8 +640,8 @@ export default function StreetDateV2DayPage({
                       hintOnePending
                         ? 'border-amber-400 bg-amber-400 text-black'
                         : state.hintOneUsed
-                          ? 'cursor-not-allowed border-white/10 text-white/30'
-                          : 'border-white/40 text-white hover:border-white hover:bg-white/10'
+                          ? 'cursor-not-allowed border-[hsl(var(--game-ink))]/10 text-[hsl(var(--game-ink-dim))]'
+                          : 'border-[hsl(var(--game-ink))]/20 text-[hsl(var(--game-ink))] hover:border-[hsl(var(--game-ink))]/40 hover:bg-[hsl(var(--game-ink))]/5'
                     }`}
                   >
                     {hintOnePending ? 'pick a slot →' : `Reveal one slot −${HINT_ONE_COST}pts`}
@@ -652,8 +652,8 @@ export default function StreetDateV2DayPage({
                     disabled={state.hintAllUsed}
                     className={`rounded-full border-2 px-4 py-1.5 text-xs font-bold transition-all duration-200 ${
                       state.hintAllUsed
-                        ? 'cursor-not-allowed border-white/10 text-white/30'
-                        : 'border-white/40 text-white hover:border-white hover:bg-white/10'
+                        ? 'cursor-not-allowed border-[hsl(var(--game-ink))]/10 text-[hsl(var(--game-ink-dim))]'
+                        : 'border-[hsl(var(--game-ink))]/20 text-[hsl(var(--game-ink))] hover:border-[hsl(var(--game-ink))]/40 hover:bg-[hsl(var(--game-ink))]/5'
                     }`}
                   >
                     Reveal all slots −{HINT_ALL_COST}pts
@@ -676,8 +676,8 @@ export default function StreetDateV2DayPage({
                         : isSelected
                           ? 'border-blue-400'
                           : chipId
-                            ? 'border-white/60'
-                            : 'border-dashed border-white/30'
+                            ? 'border-[hsl(var(--game-cream-dark))]'
+                            : 'border-dashed border-[hsl(var(--game-ink))]/15'
 
                       return (
                         <div
@@ -689,11 +689,11 @@ export default function StreetDateV2DayPage({
                             hintOnePending && chipId ? 'animate-pulse ring-2 ring-amber-400/50' : ''
                           } ${isSelected ? 'ring-2 ring-blue-400/50 shadow-lg shadow-blue-400/20' : ''}`}
                           style={{
-                            background: chipId ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.03)',
+                            background: chipId ? 'hsl(var(--game-cream))' : 'rgba(0,0,0,0.02)',
                           }}
                         >
                           {/* Slot number */}
-                          <span className="absolute left-1.5 top-1 text-[10px] font-bold text-white/40">
+                          <span className="absolute left-1.5 top-1 text-[10px] font-bold text-[hsl(var(--game-ink-dim))]">
                             {String(i + 1).padStart(2, '0')}
                           </span>
 
@@ -712,7 +712,7 @@ export default function StreetDateV2DayPage({
                                 />
                               </div>
                               <div className="flex flex-col items-center justify-center px-1 py-1">
-                                <span className="max-w-[80px] truncate text-center text-[9px] font-bold leading-tight text-white sm:max-w-[100px] sm:text-[10px]">
+                                <span className="max-w-[80px] truncate text-center text-[9px] font-bold leading-tight text-[hsl(var(--game-ink))] sm:max-w-[100px] sm:text-[10px]">
                                   {game.title}
                                 </span>
                                 {state.revealedYearIds.includes(chipId!) && (
@@ -723,7 +723,7 @@ export default function StreetDateV2DayPage({
                               </div>
                             </div>
                           ) : (
-                            <span className="text-lg text-white/20">+</span>
+                            <span className="text-lg text-[hsl(var(--game-ink-dim))]">+</span>
                           )}
 
                           {/* Result indicator after reveal */}
@@ -748,19 +748,19 @@ export default function StreetDateV2DayPage({
                     {state.guesses.map((guess, i) => (
                       <div
                         key={i}
-                        className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2 text-sm"
+                        className="flex items-center justify-between rounded-lg bg-[hsl(var(--game-ink))]/5 px-3 py-2 text-sm"
                         style={justSubmitted && i === state.guesses.length - 1
                           ? { animation: `gs-fade-in 0.4s ${spring} both` }
                           : undefined
                         }
                       >
-                        <span className="text-white/60">
-                          Guess {i + 1} — <span className="font-bold text-white">{guess.correctCount}/7</span> correct
+                        <span className="text-[hsl(var(--game-ink-light))]">
+                          Guess {i + 1} — <span className="font-bold text-[hsl(var(--game-ink))]">{guess.correctCount}/7</span> correct
                         </span>
                       </div>
                     ))}
                     {lastGuess && !state.finished && (
-                      <p className="text-center text-sm font-bold text-white/70">
+                      <p className="text-center text-sm font-bold text-[hsl(var(--game-ink-light))]">
                         {lastGuess.correctCount}/7 in the correct position
                       </p>
                     )}
@@ -772,7 +772,7 @@ export default function StreetDateV2DayPage({
                   <button
                     type="button"
                     onClick={handleClear}
-                    className="rounded-full border-2 border-white/30 px-6 py-2 text-sm font-bold text-white/70 transition-all hover:border-white/50 hover:text-white"
+                    className="rounded-full border-2 border-[hsl(var(--game-ink))]/20 px-6 py-2 text-sm font-bold text-[hsl(var(--game-ink-light))] transition-all hover:border-[hsl(var(--game-ink))]/40 hover:text-[hsl(var(--game-ink))]"
                   >
                     Clear
                   </button>
@@ -782,8 +782,8 @@ export default function StreetDateV2DayPage({
                     disabled={!allSlotsFilled}
                     className={`rounded-full px-6 py-2 text-sm font-bold transition-all ${
                       allSlotsFilled
-                        ? 'bg-white text-[hsl(var(--game-ink))] shadow-lg hover:bg-white/90'
-                        : 'cursor-not-allowed bg-white/20 text-white/40'
+                        ? 'bg-[hsl(var(--game-green))] text-white shadow-[0_3px_0_hsl(147_61%_32%),0_6px_12px_rgba(0,0,0,0.1)] hover:brightness-110'
+                        : 'cursor-not-allowed bg-[hsl(var(--game-ink))]/10 text-[hsl(var(--game-ink-dim))]'
                     }`}
                   >
                     Submit order
@@ -800,10 +800,10 @@ export default function StreetDateV2DayPage({
                   }}
                   onDrop={handlePoolDrop}
                   onDragOver={handleDragOver}
-                  className="rounded-2xl bg-white/10 p-3 sm:p-4"
+                  className="rounded-2xl bg-[hsl(var(--game-cream))] p-3 sm:p-4"
                   data-pool-bg="true"
                 >
-                  <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-widest text-white/40" data-pool-bg="true">
+                  <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-widest text-[hsl(var(--game-ink-dim))]" data-pool-bg="true">
                     {state.pool.length > 0 ? 'Available games' : 'All games placed'}
                   </p>
                   <div className="flex flex-wrap items-center justify-center gap-2" data-pool-bg="true">
@@ -820,10 +820,10 @@ export default function StreetDateV2DayPage({
                             e.stopPropagation()
                             handlePoolChipTap(chipId)
                           }}
-                          className={`flex h-[140px] w-[90px] cursor-grab flex-col overflow-hidden rounded-xl border-2 bg-white/10 transition-all duration-200 active:cursor-grabbing sm:h-[170px] sm:w-[110px] ${
+                          className={`flex h-[140px] w-[90px] cursor-grab flex-col overflow-hidden rounded-xl border-2 bg-[hsl(var(--game-white))] transition-all duration-200 active:cursor-grabbing sm:h-[170px] sm:w-[110px] ${
                             isSelected
                               ? 'border-blue-400 shadow-lg shadow-blue-400/20 -translate-y-1'
-                              : 'border-white/20 hover:border-white/40'
+                              : 'border-[hsl(var(--game-ink))]/10 hover:border-[hsl(var(--game-ink))]/20'
                           }`}
                           style={
                             entranceStep >= 3 && entranceStep < 6
@@ -840,7 +840,7 @@ export default function StreetDateV2DayPage({
                             />
                           </div>
                           <div className="flex flex-col items-center justify-center px-1 py-1">
-                            <span className="max-w-[80px] truncate text-center text-[9px] font-bold leading-tight text-white sm:max-w-[100px] sm:text-[10px]">
+                            <span className="max-w-[80px] truncate text-center text-[9px] font-bold leading-tight text-[hsl(var(--game-ink))] sm:max-w-[100px] sm:text-[10px]">
                               {game.title}
                             </span>
                             {state.revealedYearIds.includes(chipId) && (
