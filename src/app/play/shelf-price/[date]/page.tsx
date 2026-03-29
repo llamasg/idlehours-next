@@ -216,7 +216,7 @@ export default function ShelfPriceDayPage({
 
       {/* Purple game world */}
       <div
-        className="game-container mx-auto mt-[15px] flex min-h-[900px] max-w-7xl flex-col"
+        className="game-container mx-4 -mt-16 flex flex-1 flex-col rounded-2xl sm:mt-4 sm:rounded-[20px]"
         style={{
           background: 'linear-gradient(155deg, #5B4FCF, #1a1040)',
           borderRadius: 20,

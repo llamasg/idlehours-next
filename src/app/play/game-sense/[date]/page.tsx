@@ -72,7 +72,9 @@ export default function GameSenseDayPage({
   const [wipeStarted, setWipeStarted] = useState(false)
   // Post-game page-level sequencer — each parent section fires one after the other
   // Steps: 1=ResultCard, 2=Sentence, 3=Nav buttons, 4=Title/date, 5=Badges, 6=DiscoverMore, 7=Toast
-  const isPostGameComplete = state ? (state.won || state.score <= 0) : false
+  const isGameOver = state ? (state.won || state.score <= 0) : false
+  const isModalOpen = showWinModal || showLossModal
+  const isPostGameComplete = isGameOver && !isModalOpen
   const pgGaps = useMemo(() => [0, 3500, 400, 300, 300, 400, 500], [])
   const pgStep = useEntranceSteps(7, pgGaps, isPostGameComplete)
   // Pre-compute skip so clip-path renders correctly on first paint (before useEffect)

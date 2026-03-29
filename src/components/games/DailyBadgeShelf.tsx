@@ -137,6 +137,13 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
           className="h-px flex-1 bg-[hsl(var(--game-ink))]/10"
           style={entrance('fade', step >= 2)}
         />
+        <Link
+          href="/play"
+          className="flex-shrink-0 font-heading text-[10px] font-bold text-[hsl(var(--game-ink-light))] transition-colors hover:text-[hsl(var(--game-ink))]"
+          style={entrance('fade', step >= 2)}
+        >
+          Try our other daily games &rarr;
+        </Link>
       </div>
 
       {/* Badge row */}
@@ -206,7 +213,9 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
             <Link
               key={slot.slug}
               href={slot.href}
-              className="group flex flex-col items-center gap-3"
+              prefetch={false}
+              className="group flex flex-col items-center gap-3 cursor-pointer"
+              onClick={(e) => { e.stopPropagation() }}
             >
               {/* Game label */}
               <span
