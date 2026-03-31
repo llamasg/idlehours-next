@@ -703,6 +703,14 @@ export default function StreetDateV2DayPage({
                     )}
                   </div>
                 <div>
+                  {hintOnePending && (
+                    <div className="mb-3 flex justify-center">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-400 px-4 py-1.5 font-heading text-[11px] font-[800] text-black shadow-md">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" strokeWidth="1.5"/><text x="6" y="9" textAnchor="middle" fontSize="7" fontWeight="800" fill="currentColor">?</text></svg>
+                        Tap a game to reveal its position
+                      </span>
+                    </div>
+                  )}
                   <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:flex-nowrap">
                     {state.slots.map((chipId, i) => {
                       const game = chipId ? gameById(chipId) : null
@@ -726,9 +734,11 @@ export default function StreetDateV2DayPage({
                           onClick={() => handleSlotTap(i)}
                           onDrop={(e) => handleSlotDrop(e, i)}
                           onDragOver={handleDragOver}
-                          className={`relative flex h-[170px] w-[110px] shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border-2 transition-all duration-200 sm:h-[220px] sm:w-[145px] lg:w-auto lg:flex-1 ${slotBorderColor} ${
-                            hintOnePending && chipId ? 'animate-pulse ring-2 ring-amber-400/50' : ''
-                          } ${isSelected ? 'ring-2 ring-blue-400/50 shadow-lg shadow-blue-400/20' : ''}`}
+                          className={`relative flex h-[170px] w-[110px] shrink-0 flex-col items-center justify-center rounded-xl border-2 transition-all duration-200 sm:h-[220px] sm:w-[145px] lg:w-auto lg:flex-1 ${slotBorderColor} ${
+                            hintOnePending
+                              ? chipId ? 'cursor-pointer opacity-35 hover:opacity-100' : 'opacity-35'
+                              : 'cursor-pointer'
+                          } ${isSelected && !hintOnePending ? 'ring-2 ring-blue-400/50 shadow-lg shadow-blue-400/20' : ''}`}
                           style={{
                             background: chipId ? 'hsl(var(--game-cream))' : 'rgba(0,0,0,0.02)',
                           }}
@@ -1056,7 +1066,7 @@ export default function StreetDateV2DayPage({
                                         </div>
                                         {/* Hover tooltip — game title */}
                                         {isHovered && (
-                                          <div className="absolute -top-8 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-[hsl(var(--game-ink))] px-2 py-1 text-[9px] font-bold text-white shadow-lg">
+                                          <div className="absolute -top-2 left-1/2 z-[9999] -translate-x-1/2 -translate-y-full max-w-[160px] rounded-lg bg-[hsl(var(--game-ink))] px-3 py-2 text-center text-[11px] font-bold leading-snug text-white shadow-xl">
                                             {game.title}
                                           </div>
                                         )}
