@@ -57,6 +57,8 @@ export default function StreetDateV2DayPage({
   const [justSubmitted, setJustSubmitted] = useState(false)
   const [showWinModal, setShowWinModal] = useState(false)
   const [showLossModal, setShowLossModal] = useState(false)
+  const [postGameTab, setPostGameTab] = useState<'answer' | 'guesses'>('answer')
+  const [hoveredGuessChip, setHoveredGuessChip] = useState<string | null>(null)
 
   const wipeTriggered = useRef(false)
   const puzzleRef = useRef<ReturnType<typeof generatePuzzle> | null>(null)
@@ -157,8 +159,10 @@ export default function StreetDateV2DayPage({
   // ── Interactions ───────────────────────────────────────────────────────────
 
   const persist = useCallback((s: V2DayState) => {
-    setState(s)
-    saveState(date, s)
+    // Auto-set startedAt on first interaction
+    const withStart = s.startedAt ? s : { ...s, startedAt: Date.now() }
+    setState(withStart)
+    saveState(date, withStart)
   }, [date])
 
   // Tap a chip in the pool
@@ -295,6 +299,7 @@ export default function StreetDateV2DayPage({
       won,
       finished,
       revealedSlots: state.revealedSlots,
+      endedAt: finished ? Date.now() : state.endedAt,
     }
 
     // If lost, show correct order in slots with all revealed
@@ -353,20 +358,15 @@ export default function StreetDateV2DayPage({
     if (filledSlots.length === 0) return
 
     const newRevealed = { ...state.revealedSlots }
-    const newRevealedYearIds = [...state.revealedYearIds]
     state.slots.forEach((chipId, i) => {
       if (!chipId) return
       newRevealed[i] = calcSlotResult(i, chipId, correctOrder)
-      if (!newRevealedYearIds.includes(chipId)) {
-        newRevealedYearIds.push(chipId)
-      }
     })
 
     const newScore = Math.max(0, state.score - HINT_ALL_COST)
     persist({
       ...state,
       revealedSlots: newRevealed,
-      revealedYearIds: newRevealedYearIds,
       hintAllUsed: true,
       score: newScore,
     })
@@ -923,36 +923,151 @@ export default function StreetDateV2DayPage({
                     />
                   </div>
 
-                  {/* Right: game list (vertical stack of 7 games) */}
+                  {/* Right: stats + tabbed Answer/Guesses */}
                   <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
                     <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                      <div className="px-5 pt-5 pb-3 sm:px-6 sm:pt-6">
+                      {/* Header */}
+                      <div className="px-5 pt-5 sm:px-6 sm:pt-6">
                         <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
                           Street Date {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
                         </p>
-                        <p className="mt-1 font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
-                          The correct order
-                        </p>
                       </div>
-                      <div className="flex flex-1 flex-col px-5 pb-5 sm:px-6 sm:pb-6">
-                        {correctOrder.map((id, i) => {
-                          const game = gameById(id)
-                          if (!game) return null
-                          return (
-                            <div key={id} className="flex flex-1 items-center gap-4 border-b border-[hsl(var(--game-ink))]/8 last:border-b-0 px-4 -mx-4">
-                              <span className="w-7 shrink-0 font-heading text-[16px] font-[800] text-[hsl(var(--game-ink-light))]">
-                                {String(i + 1).padStart(2, '0')}
-                              </span>
-                              <div className="h-[72px] w-[54px] shrink-0 overflow-hidden rounded-lg bg-muted/30 shadow-sm my-2">
-                                <img src={igdbCoverUrl(game.igdbImageId)} alt={game.title} className="h-full w-full object-cover" />
+
+                      {/* Stats pills */}
+                      <div className="flex gap-1.5 px-5 py-3 sm:gap-2 sm:px-6 sm:py-4">
+                        {[
+                          { label: 'Time', value: (() => {
+                            if (!state.startedAt || !state.endedAt) return '—'
+                            let secs = Math.round((state.endedAt - state.startedAt) / 1000)
+                            if (secs < 60) return `${secs}s`
+                            const mins = Math.floor(secs / 60)
+                            const rem = secs % 60
+                            return `${mins}m ${rem}s`
+                          })() },
+                          { label: 'Guesses', value: String(state.guesses.length) },
+                          { label: 'Best', value: `${Math.max(...state.guesses.map(g => g.correctCount))}/7` },
+                          { label: 'Missteps', value: String(
+                            state.guesses.reduce((count, g, i) => {
+                              if (i === 0) return 0
+                              return count + (g.correctCount < state.guesses[i - 1].correctCount ? 1 : 0)
+                            }, 0)
+                          ) },
+                        ].map(({ label, value }) => (
+                          <div
+                            key={label}
+                            className="flex flex-1 flex-col items-center gap-0.5 rounded-lg bg-[hsl(var(--game-cream-dark))] px-1.5 py-1.5 sm:rounded-xl sm:px-2 sm:py-2"
+                          >
+                            <span className="font-heading text-[14px] font-black text-[hsl(var(--game-ink))] sm:text-[18px]">
+                              {value}
+                            </span>
+                            <span className="font-heading text-[7px] font-extrabold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))] sm:text-[9px] sm:tracking-[0.18em]">
+                              {label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Tab buttons */}
+                      <div className="mx-5 flex gap-0 border-b border-[hsl(var(--game-ink))]/10 sm:mx-6">
+                        <button
+                          onClick={() => setPostGameTab('answer')}
+                          className={`flex-1 py-2 font-heading text-[11px] font-[700] uppercase tracking-wider transition-colors ${
+                            postGameTab === 'answer'
+                              ? 'border-b-2 border-[hsl(var(--game-green))] text-[hsl(var(--game-ink))]'
+                              : 'text-[hsl(var(--game-ink-light))] hover:text-[hsl(var(--game-ink))]'
+                          }`}
+                        >
+                          Answer
+                        </button>
+                        <button
+                          onClick={() => setPostGameTab('guesses')}
+                          className={`flex-1 py-2 font-heading text-[11px] font-[700] uppercase tracking-wider transition-colors ${
+                            postGameTab === 'guesses'
+                              ? 'border-b-2 border-[hsl(var(--game-green))] text-[hsl(var(--game-ink))]'
+                              : 'text-[hsl(var(--game-ink-light))] hover:text-[hsl(var(--game-ink))]'
+                          }`}
+                        >
+                          Guesses ({state.guesses.length})
+                        </button>
+                      </div>
+
+                      {/* Tab content */}
+                      <div className="flex-1 overflow-y-auto overscroll-contain scrollbar-slim">
+                        {postGameTab === 'answer' ? (
+                          /* Answer tab: correct order list */
+                          <div className="flex flex-col px-5 pb-5 pt-2 sm:px-6 sm:pb-6">
+                            {correctOrder.map((id, i) => {
+                              const game = gameById(id)
+                              if (!game) return null
+                              return (
+                                <div key={id} className="flex items-center gap-4 border-b border-[hsl(var(--game-ink))]/8 py-3 last:border-b-0">
+                                  <span className="w-7 shrink-0 font-heading text-[16px] font-[800] text-[hsl(var(--game-ink-light))]">
+                                    {String(i + 1).padStart(2, '0')}
+                                  </span>
+                                  <div className="h-[60px] w-[45px] shrink-0 overflow-hidden rounded-lg bg-muted/30 shadow-sm">
+                                    <img src={igdbCoverUrl(game.igdbImageId)} alt={game.title} className="h-full w-full object-cover" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="font-heading text-[14px] font-[700] leading-snug text-[hsl(var(--game-ink))]">{game.title}</p>
+                                    <p className="mt-0.5 font-heading text-[11px] font-[600] text-[hsl(var(--game-ink-light))]">{game.year}</p>
+                                  </div>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        ) : (
+                          /* Guesses tab: scrollable guess history with poster rows */
+                          <div className="flex flex-col gap-4 px-5 pb-5 pt-3 sm:px-6 sm:pb-6">
+                            {state.guesses.map((guess, gi) => (
+                              <div key={gi} className="rounded-xl border border-[hsl(var(--game-ink))]/10 p-3">
+                                <div className="mb-2 flex items-center justify-between">
+                                  <span className="font-heading text-[10px] font-[700] uppercase tracking-wider text-[hsl(var(--game-ink-dim))]">
+                                    Guess {gi + 1}
+                                  </span>
+                                  <span className="font-heading text-[12px] font-[800] text-[hsl(var(--game-ink))]">
+                                    {guess.correctCount}/7
+                                  </span>
+                                </div>
+                                <div className="flex gap-1">
+                                  {guess.order.map((chipId, ci) => {
+                                    const game = gameById(chipId)
+                                    if (!game) return null
+                                    const result = guess.results[ci]
+                                    const borderColor = result === 'exact'
+                                      ? 'border-green-500'
+                                      : result === 'close'
+                                        ? 'border-amber-400'
+                                        : 'border-red-400'
+                                    const isHovered = hoveredGuessChip === `${gi}-${ci}`
+                                    return (
+                                      <div
+                                        key={ci}
+                                        className={`group/chip relative flex flex-1 flex-col items-center rounded-lg border-2 ${borderColor}`}
+                                        onMouseEnter={() => setHoveredGuessChip(`${gi}-${ci}`)}
+                                        onMouseLeave={() => setHoveredGuessChip(null)}
+                                      >
+                                        <div className="aspect-[3/4] w-full overflow-hidden rounded-md">
+                                          <img
+                                            src={igdbCoverUrl(game.igdbImageId)}
+                                            alt={game.title}
+                                            className="h-full w-full object-cover"
+                                            loading="lazy"
+                                          />
+                                        </div>
+                                        {/* Hover tooltip — game title */}
+                                        {isHovered && (
+                                          <div className="absolute -top-8 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-[hsl(var(--game-ink))] px-2 py-1 text-[9px] font-bold text-white shadow-lg">
+                                            {game.title}
+                                          </div>
+                                        )}
+                                      </div>
+                                    )
+                                  })}
+                                </div>
                               </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="font-heading text-[15px] font-[700] leading-snug text-[hsl(var(--game-ink))] truncate">{game.title}</p>
-                                <p className="mt-0.5 font-heading text-[11px] font-[600] text-[hsl(var(--game-ink-light))]">{game.year}</p>
-                              </div>
-                            </div>
-                          )
-                        })}
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

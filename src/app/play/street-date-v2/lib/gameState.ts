@@ -18,6 +18,8 @@ export interface V2DayState {
   hintAllUsed: boolean
   revealedSlots: Record<number, 'exact' | 'close' | 'wrong'>
   revealedYearIds: string[]
+  startedAt: number | null
+  endedAt: number | null
 }
 
 const STORAGE_PREFIX = 'street_date_v2_'
@@ -43,6 +45,8 @@ export function createInitialState(gameIds: string[], shuffledIds: string[]): V2
     hintAllUsed: false,
     revealedSlots: {},
     revealedYearIds: [],
+    startedAt: null,
+    endedAt: null,
   }
 }
 
