@@ -354,6 +354,7 @@ export default function StreetDateV2DayPage({
   // Hint: reveal all
   const handleHintAll = useCallback(() => {
     if (!state || state.finished || state.hintAllUsed) return
+    if (state.slots.some(s => s === null)) return
     const filledSlots = state.slots.filter(Boolean)
     if (filledSlots.length === 0) return
 
@@ -650,9 +651,9 @@ export default function StreetDateV2DayPage({
                 <button
                   type="button"
                   onClick={handleHintAll}
-                  disabled={state.hintAllUsed}
+                  disabled={state.hintAllUsed || !allSlotsFilled}
                   className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-heading text-[12px] font-[800] transition-all duration-100 ${
-                    state.hintAllUsed
+                    state.hintAllUsed || !allSlotsFilled
                       ? 'cursor-not-allowed bg-white/10 text-white/30 shadow-none'
                       : 'bg-[#5B4FCF] text-white shadow-[0_4px_0_#3D35A0,0_6px_16px_rgba(91,79,207,0.28)] hover:-translate-y-[2px] hover:shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.35)] active:translate-y-[3px] active:shadow-[0_1px_0_#3D35A0]'
                   }`}
