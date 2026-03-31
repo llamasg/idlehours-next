@@ -1,4 +1,4 @@
-import { GAMES, type StreetDateGame } from '../../street-date/data/games'
+import { GAMES, type StreetDateGame } from '../data/games'
 
 // Reuse the existing seeded shuffle LCG
 function seededShuffle<T>(arr: T[], seed: number): T[] {

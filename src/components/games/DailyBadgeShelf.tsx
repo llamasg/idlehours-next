@@ -38,7 +38,7 @@ function getSlotData(slug: GameSlug, dateStr: string): SlotData {
         return { completed: true, rankName, score: state.score }
       }
       case 'street-date': {
-        const raw = localStorage.getItem(`street_date_${dateStr}`)
+        const raw = localStorage.getItem(`street_date_v3_${dateStr}`)
         if (!raw) return { completed: false, rankName: '', score: 0 }
         const state = JSON.parse(raw)
         if (!state.finished) return { completed: false, rankName: '', score: 0 }

@@ -16,10 +16,10 @@ import type { StreetDateGame } from '../data/games'
 // ── Constants ────────────────────────────────────────────────────────────────
 
 /** The date Street Date launched, as a YYYY-MM-DD string. */
-export const LAUNCH_DATE = '2026-03-02'
+export const LAUNCH_DATE = '2026-02-22'
 
 /** Midnight UTC on launch day — the epoch from which day offsets are counted. */
-export const EPOCH = new Date('2026-03-02T00:00:00+00:00')
+export const EPOCH = new Date('2026-02-22T00:00:00+00:00')
 
 /** IANA timezone used for the daily reset boundary. */
 const TZ = 'Europe/London'

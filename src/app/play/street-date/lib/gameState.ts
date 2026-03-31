@@ -23,7 +23,7 @@ export interface V2DayState {
   endedAt: number | null
 }
 
-const STORAGE_PREFIX = 'street_date_v2_'
+const STORAGE_PREFIX = 'street_date_v3_'
 const MAX_GUESSES = 5
 const BASE_SCORE = 1000
 const GUESS_PENALTY = 150
