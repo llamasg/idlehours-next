@@ -630,32 +630,34 @@ export default function StreetDateV2DayPage({
                       : undefined
                 }
               >
-              {/* Hint buttons — outside the white container */}
-              <div className="mb-4 flex items-center justify-center gap-3">
+              {/* Hint buttons — styled like bvl-purple but green, with icons */}
+              <div className="mb-4 flex flex-wrap items-center justify-center gap-3">
                 <button
                   type="button"
                   onClick={hintOnePending ? () => setHintOnePending(false) : handleHintOne}
                   disabled={state.hintOneUsed && !hintOnePending}
-                  className={`rounded-full border-2 px-4 py-1.5 text-xs font-bold transition-all duration-200 ${
+                  className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-heading text-[12px] font-[800] transition-all duration-100 ${
                     hintOnePending
-                      ? 'border-amber-400 bg-amber-400 text-black'
+                      ? 'bg-amber-400 text-black shadow-[0_4px_0_#b8860b,0_6px_16px_rgba(184,134,11,0.3)]'
                       : state.hintOneUsed
-                        ? 'cursor-not-allowed border-white/10 text-white/30'
-                        : 'border-white/30 text-white hover:border-white/60 hover:bg-white/10'
+                        ? 'cursor-not-allowed bg-white/10 text-white/30 shadow-none'
+                        : 'bg-[#5B4FCF] text-white shadow-[0_4px_0_#3D35A0,0_6px_16px_rgba(91,79,207,0.28)] hover:-translate-y-[2px] hover:shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.35)] active:translate-y-[3px] active:shadow-[0_1px_0_#3D35A0]'
                   }`}
                 >
-                  {hintOnePending ? 'pick a slot →' : `Reveal one slot −${HINT_ONE_COST}pts`}
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5"/><text x="7" y="10.5" textAnchor="middle" fontSize="8" fontWeight="800" fill="currentColor" fontFamily="Montserrat,sans-serif">?</text></svg>
+                  {hintOnePending ? 'Pick a slot →' : `Reveal one slot −${HINT_ONE_COST}pts`}
                 </button>
                 <button
                   type="button"
                   onClick={handleHintAll}
                   disabled={state.hintAllUsed}
-                  className={`rounded-full border-2 px-4 py-1.5 text-xs font-bold transition-all duration-200 ${
+                  className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-heading text-[12px] font-[800] transition-all duration-100 ${
                     state.hintAllUsed
-                      ? 'cursor-not-allowed border-white/10 text-white/30'
-                      : 'border-white/30 text-white hover:border-white/60 hover:bg-white/10'
+                      ? 'cursor-not-allowed bg-white/10 text-white/30 shadow-none'
+                      : 'bg-[#5B4FCF] text-white shadow-[0_4px_0_#3D35A0,0_6px_16px_rgba(91,79,207,0.28)] hover:-translate-y-[2px] hover:shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.35)] active:translate-y-[3px] active:shadow-[0_1px_0_#3D35A0]'
                   }`}
                 >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.5"/></svg>
                   Reveal all slots −{HINT_ALL_COST}pts
                 </button>
               </div>
@@ -664,53 +666,24 @@ export default function StreetDateV2DayPage({
               <div className="mx-auto w-full max-w-7xl rounded-2xl bg-white/95 shadow-sm p-5 sm:p-8">
               <div className="flex flex-col gap-5">
 
-                {/* ── Guess history — faded, reads as completed attempts ── */}
+                {/* ── Guess history — simple score pills ── */}
                 {state.guesses.length > 0 && (
-                  <div className="space-y-2">
+                  <div className="flex flex-wrap items-center justify-center gap-2">
                     {state.guesses.map((guess, gi) => (
                       <div
                         key={gi}
-                        className="rounded-xl border border-[hsl(var(--game-ink))]/8 bg-[hsl(var(--game-ink))]/[0.02] p-2.5 opacity-40"
+                        className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-ink))]/[0.03] px-4 py-1.5"
                         style={justSubmitted && gi === state.guesses.length - 1
                           ? { animation: `gs-fade-in 0.4s ${spring} both` }
                           : undefined
                         }
                       >
-                        <div className="mb-1.5 flex items-center justify-between">
-                          <span className="font-heading text-[9px] font-[700] uppercase tracking-wider text-[hsl(var(--game-ink-dim))]">
-                            Guess {gi + 1}
-                          </span>
-                          <span className="font-heading text-[11px] font-[800] text-[hsl(var(--game-ink))]">
-                            {guess.correctCount}/7
-                          </span>
-                        </div>
-                        <div className="flex gap-0.5">
-                          {guess.order.map((chipId, ci) => {
-                            const game = gameById(chipId)
-                            if (!game) return null
-                            const result = guess.results[ci]
-                            const borderColor = result === 'exact'
-                              ? 'border-green-500'
-                              : result === 'close'
-                                ? 'border-amber-400'
-                                : 'border-red-400'
-                            return (
-                              <div key={ci} className={`flex flex-1 flex-col items-center gap-0.5 rounded-md border-2 p-0.5 ${borderColor}`}>
-                                <div className="aspect-[3/4] w-full overflow-hidden rounded-sm grayscale">
-                                  <img
-                                    src={igdbCoverUrl(game.igdbImageId)}
-                                    alt={game.title}
-                                    className="h-full w-full object-cover"
-                                    loading="lazy"
-                                  />
-                                </div>
-                                <span className="line-clamp-1 w-full text-center text-[6px] font-[600] leading-tight text-[hsl(var(--game-ink-light))] sm:text-[7px]">
-                                  {game.title}
-                                </span>
-                              </div>
-                            )
-                          })}
-                        </div>
+                        <span className="font-heading text-[10px] font-[600] text-[hsl(var(--game-ink-dim))]">
+                          Guess {gi + 1}
+                        </span>
+                        <span className="font-heading text-[13px] font-[800] text-[hsl(var(--game-ink))]">
+                          {guess.correctCount}/7
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -753,7 +726,7 @@ export default function StreetDateV2DayPage({
                           onClick={() => handleSlotTap(i)}
                           onDrop={(e) => handleSlotDrop(e, i)}
                           onDragOver={handleDragOver}
-                          className={`relative flex h-[140px] w-[90px] shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border-2 transition-all duration-200 sm:h-[170px] sm:w-[110px] lg:w-auto lg:flex-1 ${slotBorderColor} ${
+                          className={`relative flex h-[170px] w-[110px] shrink-0 cursor-pointer flex-col items-center justify-center rounded-xl border-2 transition-all duration-200 sm:h-[220px] sm:w-[145px] lg:w-auto lg:flex-1 ${slotBorderColor} ${
                             hintOnePending && chipId ? 'animate-pulse ring-2 ring-amber-400/50' : ''
                           } ${isSelected ? 'ring-2 ring-blue-400/50 shadow-lg shadow-blue-400/20' : ''}`}
                           style={{
@@ -780,7 +753,7 @@ export default function StreetDateV2DayPage({
                                 />
                               </div>
                               <div className="flex flex-col items-center justify-center px-1 py-1">
-                                <span className="max-w-[80px] truncate text-center text-[9px] font-bold leading-tight text-[hsl(var(--game-ink))] sm:max-w-[100px] sm:text-[10px]">
+                                <span className="w-full text-center text-[8px] font-bold leading-tight text-[hsl(var(--game-ink))] sm:text-[10px] line-clamp-2">
                                   {game.title}
                                 </span>
                                 {state.revealedYearIds.includes(chipId!) && (
@@ -872,7 +845,7 @@ export default function StreetDateV2DayPage({
                             e.stopPropagation()
                             handlePoolChipTap(chipId)
                           }}
-                          className={`flex h-[140px] w-[90px] cursor-grab flex-col overflow-hidden rounded-xl border-2 bg-[hsl(var(--game-white))] transition-all duration-200 active:cursor-grabbing sm:h-[170px] sm:w-[110px] ${
+                          className={`flex h-[170px] w-[110px] cursor-grab flex-col overflow-hidden rounded-xl border-2 bg-[hsl(var(--game-white))] transition-all duration-200 active:cursor-grabbing sm:h-[220px] sm:w-[145px] ${
                             isSelected
                               ? 'border-blue-400 shadow-lg shadow-blue-400/20 -translate-y-1'
                               : 'border-[hsl(var(--game-ink))]/10 hover:border-[hsl(var(--game-ink))]/20'
@@ -892,7 +865,7 @@ export default function StreetDateV2DayPage({
                             />
                           </div>
                           <div className="flex flex-col items-center justify-center px-1 py-1">
-                            <span className="max-w-[80px] truncate text-center text-[9px] font-bold leading-tight text-[hsl(var(--game-ink))] sm:max-w-[100px] sm:text-[10px]">
+                            <span className="w-full text-center text-[8px] font-bold leading-tight text-[hsl(var(--game-ink))] sm:text-[10px] line-clamp-2">
                               {game.title}
                             </span>
                             {state.revealedYearIds.includes(chipId) && (
