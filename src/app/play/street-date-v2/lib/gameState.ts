@@ -16,7 +16,8 @@ export interface V2DayState {
   finished: boolean
   hintOneUsed: boolean
   hintAllUsed: boolean
-  revealedSlots: Record<number, 'exact' | 'close' | 'wrong'>
+  /** Key is "gameId:slotIndex", value is the result at time of reveal */
+  revealedPairs: Record<string, 'exact' | 'close' | 'wrong'>
   revealedYearIds: string[]
   startedAt: number | null
   endedAt: number | null
@@ -43,7 +44,7 @@ export function createInitialState(gameIds: string[], shuffledIds: string[]): V2
     finished: false,
     hintOneUsed: false,
     hintAllUsed: false,
-    revealedSlots: {},
+    revealedPairs: {},
     revealedYearIds: [],
     startedAt: null,
     endedAt: null,

@@ -191,16 +191,12 @@ export default function StreetDateV2DayPage({
         return
       }
       const result = calcSlotResult(slotIndex, chipInSlot, correctOrder)
-      const newRevealed = { ...state.revealedSlots, [slotIndex]: result }
-      const game = gameById(chipInSlot)
-      const newRevealedYearIds = game
-        ? [...state.revealedYearIds, chipInSlot]
-        : state.revealedYearIds
+      const pairKey = `${chipInSlot}:${slotIndex}`
+      const newRevealedPairs = { ...state.revealedPairs, [pairKey]: result }
       const newScore = Math.max(0, state.score - HINT_ONE_COST)
       persist({
         ...state,
-        revealedSlots: newRevealed,
-        revealedYearIds: newRevealedYearIds,
+        revealedPairs: newRevealedPairs,
         hintOneUsed: true,
         score: newScore,
       })
@@ -298,17 +294,13 @@ export default function StreetDateV2DayPage({
       score: newScore,
       won,
       finished,
-      revealedSlots: state.revealedSlots,
       endedAt: finished ? Date.now() : state.endedAt,
     }
 
-    // If lost, show correct order in slots with all revealed
+    // If lost, show correct order in slots
     if (finished && !won) {
       updatedState.slots = [...correctOrder]
       updatedState.pool = []
-      const allRevealed: Record<number, 'exact' | 'close' | 'wrong'> = {}
-      correctOrder.forEach((_, i) => { allRevealed[i] = 'exact' })
-      updatedState.revealedSlots = allRevealed
     }
 
     persist(updatedState)
@@ -336,7 +328,6 @@ export default function StreetDateV2DayPage({
       ...state,
       slots: Array(7).fill(null),
       pool: allChips,
-      revealedSlots: {},
     })
     setSelectedChip(null)
     setHintOnePending(false)
@@ -353,21 +344,23 @@ export default function StreetDateV2DayPage({
 
   // Hint: reveal all
   const handleHintAll = useCallback(() => {
-    if (!state || state.finished || state.hintAllUsed) return
+    if (!state || state.finished) return
     if (state.slots.some(s => s === null)) return
+    if (state.score < HINT_ALL_COST) return
     const filledSlots = state.slots.filter(Boolean)
     if (filledSlots.length === 0) return
 
-    const newRevealed = { ...state.revealedSlots }
+    const newRevealedPairs = { ...state.revealedPairs }
     state.slots.forEach((chipId, i) => {
       if (!chipId) return
-      newRevealed[i] = calcSlotResult(i, chipId, correctOrder)
+      const pairKey = `${chipId}:${i}`
+      newRevealedPairs[pairKey] = calcSlotResult(i, chipId, correctOrder)
     })
 
     const newScore = Math.max(0, state.score - HINT_ALL_COST)
     persist({
       ...state,
-      revealedSlots: newRevealed,
+      revealedPairs: newRevealedPairs,
       hintAllUsed: true,
       score: newScore,
     })
@@ -651,9 +644,9 @@ export default function StreetDateV2DayPage({
                 <button
                   type="button"
                   onClick={handleHintAll}
-                  disabled={state.hintAllUsed || !allSlotsFilled}
+                  disabled={!allSlotsFilled || state.score < HINT_ALL_COST}
                   className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-heading text-[12px] font-[800] transition-all duration-100 ${
-                    state.hintAllUsed || !allSlotsFilled
+                    !allSlotsFilled || state.score < HINT_ALL_COST
                       ? 'cursor-not-allowed bg-white/10 text-white/30 shadow-none'
                       : 'bg-[#5B4FCF] text-white shadow-[0_4px_0_#3D35A0,0_6px_16px_rgba(91,79,207,0.28)] hover:-translate-y-[2px] hover:shadow-[0_6px_0_#3D35A0,0_8px_20px_rgba(91,79,207,0.35)] active:translate-y-[3px] active:shadow-[0_1px_0_#3D35A0]'
                   }`}
@@ -715,7 +708,8 @@ export default function StreetDateV2DayPage({
                   <div className="flex flex-wrap justify-center gap-3 sm:gap-4 lg:flex-nowrap">
                     {state.slots.map((chipId, i) => {
                       const game = chipId ? gameById(chipId) : null
-                      const revealed = state.revealedSlots[i]
+                      const pairKey = chipId ? `${chipId}:${i}` : ''
+                      const revealed = pairKey ? state.revealedPairs[pairKey] : undefined
                       const isSelected = chipId !== null && chipId === selectedChip
                       const slotBorderColor = revealed
                         ? revealed === 'exact'
