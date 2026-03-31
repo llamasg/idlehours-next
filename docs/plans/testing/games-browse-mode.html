@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Idle Hours — Game Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#F0EBE0;--cream-dark:#E4DBCC;--cream-mid:#EAE3D6;
+  --white:#FDFAF5;--ink:#1A1A14;--ink-mid:#4A4A3A;
+  --ink-light:#6A6A56;--ink-dim:#C0B89A;--divider:rgba(26,26,20,0.1);
+  --blue:#4A8FE8;--blue-dark:#2D6BC4;--blue-light:#EBF2FC;
+  --amber:#C8873A;--amber-lt:#F5E6D3;
+  --green:#27A85A;--green-dark:#1A7A40;
+  --purple:#5B4FCF;--red:#C0392B;
+  --sticky:#F5F0E4;
+  --spring:cubic-bezier(0.34,1.5,0.64,1);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9998;opacity:0.45;}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:900;background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.07);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:52px;gap:0;}
+.nav-logo{font-size:13px;font-weight:900;color:white;letter-spacing:-0.2px;text-transform:uppercase;text-decoration:none;margin-right:40px;flex-shrink:0;}
+.nav-logo span{color:var(--amber);}
+.nav-links{display:flex;gap:0;flex:1;height:100%;}
+.nav-links a{display:flex;align-items:center;padding:0 18px;height:100%;font-size:10px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.38);text-decoration:none;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;white-space:nowrap;}
+.nav-links a:hover{color:rgba(255,255,255,0.78);}
+.nav-links a.active{color:white;border-bottom-color:var(--amber);}
+
+/* ── PAGE WRAPPER ── */
+.pw{max-width:1200px;margin:0 auto;padding:0 40px;}
+
+/* ── PAGE HEADER ── */
+.page-header{padding:48px 0 36px;}
+.page-header-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;}
+.page-title-eyebrow{font-size:10px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:var(--amber);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.page-title-eyebrow::before{content:'';display:block;width:20px;height:2px;background:var(--amber);}
+.page-title{font-size:38px;font-weight:900;letter-spacing:-1.5px;line-height:0.95;}
+.page-desc{font-size:14px;font-weight:600;font-style:italic;color:var(--ink-light);margin-top:8px;line-height:1.7;max-width:480px;}
+
+/* ── VIEW TABS ── */
+.view-tabs{display:inline-flex;background:var(--white);border:1.5px solid var(--divider);border-radius:100px;padding:4px;gap:2px;}
+.view-tab{display:flex;align-items:center;gap:7px;padding:9px 20px;border-radius:100px;border:none;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all 0.2s var(--spring);color:var(--ink-light);background:transparent;}
+.view-tab.active{background:var(--ink);color:white;}
+.view-tab:not(.active):hover{background:var(--cream);color:var(--ink);}
+
+/* ── SECTION LABEL ── */
+.section-label{font-size:10px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--cream-dark);}
+
+/* ── FEATURED BANNER ── */
+.featured{background:var(--ink);border-radius:20px;overflow:hidden;display:grid;grid-template-columns:1fr 420px;margin-bottom:64px;position:relative;}
+.featured-body{padding:48px 48px 48px;}
+.featured-eyebrow{font-size:9px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:var(--amber);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.featured-eyebrow::before{content:'';display:block;width:20px;height:2px;background:var(--amber);}
+.featured-title{font-size:44px;font-weight:900;letter-spacing:-2px;line-height:0.92;color:white;margin-bottom:16px;}
+.featured-desc{font-size:15px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.55);line-height:1.75;margin-bottom:28px;max-width:380px;}
+.featured-meta{display:flex;align-items:center;gap:10px;margin-bottom:32px;flex-wrap:wrap;}
+.featured-tag{font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:5px 14px;color:rgba(255,255,255,0.55);}
+.featured-score{font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;background:rgba(200,135,58,0.15);border:1px solid rgba(200,135,58,0.25);border-radius:100px;padding:5px 14px;color:var(--amber);}
+.featured-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:100px;border:none;background:var(--amber);color:white;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s var(--spring);box-shadow:0 5px 0 #9D6328;}
+.featured-cta:hover{transform:translateY(-2px);box-shadow:0 7px 0 #9D6328;}
+.featured-cta:active{transform:translateY(4px);box-shadow:0 1px 0 #9D6328;}
+.featured-img{background:linear-gradient(155deg,#1A7A40,#0d1f12);position:relative;display:flex;align-items:flex-end;justify-content:flex-start;padding:28px;}
+.featured-img-ph{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,0.6));display:flex;align-items:center;justify-content:center;}
+.featured-img-label{font-size:11px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.25);letter-spacing:0.12em;text-transform:uppercase;}
+.featured-beth-note{position:relative;background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.07) 1px,transparent 1px);background-size:10px 10px;border-radius:4px 14px 14px 14px;padding:14px 16px 12px;box-shadow:0 4px 14px rgba(0,0,0,0.2);transform:rotate(-1.5deg);z-index:2;max-width:200px;}
+.featured-beth-note::before{content:'';position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 16px 16px 0;border-color:transparent var(--cream-dark) transparent transparent;border-radius:0 14px 0 0;}
+.featured-beth-note::after{content:'';position:absolute;top:0;right:0;width:16px;height:16px;background:linear-gradient(155deg,#1A7A40,#0d1f12);clip-path:polygon(100% 0,100% 100%,0 0);border-radius:0 14px 0 0;}
+.fbn-label{font-size:8px;font-weight:900;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-light);margin-bottom:5px;}
+.fbn-text{font-size:11px;font-weight:700;font-style:italic;color:var(--ink-mid);line-height:1.5;}
+.fbn-sig{font-size:8px;font-weight:800;color:var(--amber);margin-top:7px;}
+
+/* ── HORIZONTAL SCROLL ROW ── */
+.game-row{margin-bottom:56px;}
+.row-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;}
+.row-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;}
+.row-title em{font-style:italic;font-weight:600;color:var(--ink-light);}
+.row-see-all{font-size:11px;font-weight:800;color:var(--ink-dim);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color 0.15s;}
+.row-see-all:hover{color:var(--amber);}
+.row-scroll{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x mandatory;-ms-overflow-style:none;scrollbar-width:none;}
+.row-scroll::-webkit-scrollbar{display:none;}
+
+/* ── GAME CARD ── */
+.gc{background:var(--white);border:1.5px solid var(--divider);border-radius:16px;overflow:hidden;flex-shrink:0;width:220px;scroll-snap-align:start;cursor:pointer;transition:transform 0.2s var(--spring),box-shadow 0.2s;}
+.gc:hover{transform:translateY(-5px) rotate(-0.5deg);box-shadow:0 12px 32px rgba(0,0,0,0.1);}
+.gc-cover{height:140px;position:relative;display:flex;align-items:flex-end;padding:10px;}
+.gc-cover-label{font-size:9px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+.gc-score-badge{position:absolute;top:10px;left:10px;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:white;box-shadow:0 2px 8px rgba(0,0,0,0.25);}
+.gc-chips{display:flex;gap:5px;position:relative;z-index:1;}
+.gc-chip{font-size:9px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);border-radius:100px;padding:4px 9px;color:white;}
+.gc-body{padding:13px 14px 14px;}
+.gc-title{font-size:15px;font-weight:900;color:var(--ink);line-height:1.1;letter-spacing:-0.2px;margin-bottom:4px;}
+.gc-meta{font-size:11px;font-weight:600;color:var(--ink-light);}
+.gc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:9px;border-top:1px dashed var(--cream-dark);}
+.gc-tags{display:flex;gap:4px;flex-wrap:wrap;}
+.gc-tag{font-size:9px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;background:var(--cream);border-radius:5px;padding:3px 7px;color:var(--ink-light);}
+.gc-cta{font-size:11px;font-weight:800;color:var(--blue);flex-shrink:0;}
+
+/* Wide card variant for featured rows */
+.gc-wide{width:280px;}
+.gc-wide .gc-cover{height:170px;}
+
+/* ── STICKY NOTE ── */
+.sticky-note{position:relative;background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.07) 1px,transparent 1px);background-size:10px 10px;border-radius:4px 16px 16px 16px;padding:18px 20px 16px;box-shadow:0 4px 14px rgba(0,0,0,0.1),0 1px 3px rgba(0,0,0,0.08);transform:rotate(-1deg);will-change:transform;backface-visibility:hidden;-webkit-font-smoothing:antialiased;flex-shrink:0;width:220px;scroll-snap-align:start;}
+.sticky-note::before{content:'';position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 18px 18px 0;border-color:transparent var(--cream-dark) transparent transparent;border-radius:0 16px 0 0;}
+.sticky-note::after{content:'';position:absolute;top:0;right:0;width:18px;height:18px;background:var(--cream);clip-path:polygon(100% 0,100% 100%,0 0);border-radius:0 16px 0 0;}
+.sn-label{font-size:9px;font-weight:900;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-light);margin-bottom:8px;}
+.sn-title{font-size:15px;font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:6px;}
+.sn-body{font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.6;}
+.sn-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.sn-tag{font-size:10px;font-weight:800;color:var(--ink-mid);background:rgba(26,26,20,0.07);padding:3px 9px;border-radius:4px;}
+.sn-alt{transform:rotate(1.5deg);}
+
+/* ── PULL QUOTE ── */
+.pull-quote{position:relative;padding:24px 28px;background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.07) 1px,transparent 1px);background-size:10px 10px;border-left:4px solid var(--amber);border-radius:0 14px 14px 0;transform:rotate(-0.5deg);box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.pq-text{font-size:19px;font-weight:700;font-style:italic;line-height:1.55;margin-bottom:12px;}
+.pq-attr{font-size:12px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:0.12em;}
+
+/* ── RANKED LIST ── */
+.ranked-card{background:var(--white);border:1.5px solid var(--divider);border-radius:20px;padding:8px 24px;box-shadow:0 2px 0 var(--cream-dark);}
+.ranked-list{list-style:none;}
+.ranked-item{display:grid;grid-template-columns:64px 1fr 100px;align-items:center;gap:18px;padding:18px 0;border-bottom:1px dashed var(--cream-dark);cursor:pointer;transition:all 0.15s;border-radius:10px;}
+.ranked-item:last-child{border-bottom:none;}
+.ranked-item:hover{background:rgba(240,235,224,0.7);padding:18px 16px;margin:0 -16px;}
+.ranked-item:hover .ri-num{color:var(--amber);}
+.ri-num{font-size:40px;font-weight:900;color:var(--cream-dark);letter-spacing:-2px;line-height:1;user-select:none;transition:color 0.2s;}
+.ri-title{font-size:17px;font-weight:800;margin-bottom:4px;}
+.ri-desc{font-size:12px;font-weight:600;font-style:italic;color:var(--ink-light);}
+.ri-score-pill{width:52px;height:52px;border-radius:50%;background:var(--cream);border:1.5px solid var(--divider);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;letter-spacing:-0.5px;margin-left:auto;}
+
+/* ── RECIPE CARD ── */
+.recipe-card{background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.06) 1px,transparent 1px);background-size:10px 10px;border-radius:4px 16px 16px 16px;padding:0;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,0.1);position:relative;flex-shrink:0;width:260px;scroll-snap-align:start;}
+.recipe-card::before{content:'';position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 20px 20px 0;border-color:transparent var(--cream-dark) transparent transparent;border-radius:0 16px 0 0;z-index:2;}
+.recipe-card::after{content:'';position:absolute;top:0;right:0;width:20px;height:20px;background:var(--cream);clip-path:polygon(100% 0,100% 100%,0 0);border-radius:0 16px 0 0;z-index:2;}
+.rc-head{padding:18px 20px 14px;border-bottom:1px dashed rgba(26,26,20,0.12);}
+.rc-kicker{font-size:9px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;color:var(--amber);margin-bottom:6px;}
+.rc-title{font-size:18px;font-weight:900;color:var(--ink);}
+.rc-section{padding:14px 20px;border-bottom:1px dashed rgba(26,26,20,0.12);}
+.rc-section:last-child{border-bottom:none;padding-bottom:18px;}
+.rc-section-label{font-size:8px;font-weight:900;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:10px;}
+.rc-item{font-size:12px;font-weight:600;color:var(--ink-mid);line-height:1.5;display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
+.rc-item:last-child{margin-bottom:0;}
+.rc-bullet{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0;margin-top:6px;}
+.rc-num{font-size:10px;font-weight:900;color:var(--amber);flex-shrink:0;min-width:12px;margin-top:1px;}
+
+/* ── VIBE CLUSTER (mixed layout) ── */
+.vibe-cluster{margin-bottom:56px;}
+.cluster-grid{display:grid;grid-template-columns:1fr 1fr 300px;gap:24px;align-items:start;}
+.cluster-left{display:flex;flex-direction:column;gap:16px;}
+.cluster-right{display:flex;flex-direction:column;gap:16px;}
+
+/* ── STIPPLE INFO POPUP ── */
+.stipple-popup{position:relative;background-color:var(--sticky);background-image:radial-gradient(circle,rgba(26,26,20,0.06) 1px,transparent 1px);background-size:10px 10px;border-radius:12px;padding:14px 16px 12px;box-shadow:0 6px 20px rgba(0,0,0,0.12);transform:rotate(0.8deg);}
+.stipple-popup-left::before{content:'';position:absolute;left:-8px;top:22px;width:0;height:0;border-style:solid;border-width:7px 8px 7px 0;border-color:transparent var(--sticky) transparent transparent;}
+.sp-head{font-size:9px;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;color:var(--amber);margin-bottom:5px;}
+.sp-title{font-size:15px;font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:3px;}
+.sp-meta{font-size:11px;font-weight:600;font-style:italic;color:var(--ink-light);line-height:1.5;}
+.sp-divider{border:none;border-top:1px dashed var(--cream-dark);margin:8px 0;}
+.sp-stat{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.sp-stat:last-child{margin-bottom:0;}
+.sp-stat-k{font-size:10px;font-weight:700;color:var(--ink-light);text-transform:uppercase;letter-spacing:0.08em;}
+.sp-stat-v{font-size:13px;font-weight:900;color:var(--ink);}
+
+/* ── COVER PLACEHOLDER ── */
+.cover-ph{border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,0.18);flex-shrink:0;}
+.cover-ph-label{font-size:10px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.25);letter-spacing:0.1em;text-transform:uppercase;}
+
+/* ── SECTION BREAK ── */
+.section-break{margin:64px 0 48px;padding:32px 40px;background:var(--ink);border-radius:16px;display:flex;align-items:center;justify-content:space-between;}
+.sb-text{font-size:24px;font-weight:900;color:white;letter-spacing:-0.5px;}
+.sb-text em{font-style:italic;font-weight:600;color:var(--amber);}
+.sb-sub{font-size:13px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.45);margin-top:4px;}
+.sb-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:100px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:white;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.sb-btn:hover{background:rgba(255,255,255,0.14);border-color:rgba(255,255,255,0.3);}
+
+/* ── GAME COLOURS ── */
+.bg-stardew{background:linear-gradient(155deg,#3d8c3d,#1a3a1a);}
+.bg-hollow{background:linear-gradient(155deg,#4a3a6e,#1a0f30);}
+.bg-celeste{background:linear-gradient(155deg,#3a6ea8,#0f2040);}
+.bg-unpacking{background:linear-gradient(155deg,#a8783a,#3a2010);}
+.bg-disco{background:linear-gradient(155deg,#6e3a6e,#200f30);}
+.bg-hades{background:linear-gradient(155deg,#8c3030,#300f0f);}
+.bg-acnh{background:linear-gradient(155deg,#3a8c5a,#0f301f);}
+.bg-venba{background:linear-gradient(155deg,#c85a1a,#3a1a08);}
+.bg-short-hike{background:linear-gradient(155deg,#3a78c8,#0f1f40);}
+.bg-spiritfarer{background:linear-gradient(155deg,#c8783a,#3a2010);}
+.bg-lake{background:linear-gradient(155deg,#3a8a6a,#0f2a20);}
+.bg-chicory{background:linear-gradient(155deg,#8a4a9a,#200f30);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Idle<span>Hours</span></a>
+    <div class="nav-links">
+      <a href="#">✏ Posts</a>
+      <a href="#">🎮 Play</a>
+      <a href="#" class="active">📚 Library</a>
+      <a href="#">🌿 About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="pw">
+
+  <!-- PAGE HEADER + TABS -->
+  <div class="page-header">
+    <div class="page-header-top">
+      <div>
+        <div class="page-title-eyebrow">Game Library</div>
+        <div class="page-title">Find something <em style="font-style:italic;font-weight:600;color:var(--ink-light);">to play.</em></div>
+        <div class="page-desc">Our curated collection. Filtered by feel, not just platform.</div>
+      </div>
+      <div class="view-tabs">
+        <button class="view-tab active">📖 Browse</button>
+        <button class="view-tab">⊞ Library</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED BANNER -->
+  <div class="featured" style="margin-bottom:64px;">
+    <div class="featured-body">
+      <div class="featured-eyebrow">Beth's pick this week</div>
+      <div class="featured-title">Stardew<br>Valley</div>
+      <div class="featured-desc">The one we recommend to everyone first. Patient, generous, endlessly itself. If you've not played it yet, now's the time.</div>
+      <div class="featured-meta">
+        <span class="featured-tag">PC · Switch · Mobile</span>
+        <span class="featured-tag">Farming · Sim</span>
+        <span class="featured-score">94 OpenCritic</span>
+      </div>
+      <button class="featured-cta">View game →</button>
+    </div>
+    <div class="featured-img bg-stardew">
+      <div class="featured-img-ph">
+        <span class="featured-img-label">Game cover</span>
+      </div>
+      <div class="featured-beth-note">
+        <div class="fbn-label">Beth says</div>
+        <div class="fbn-text">"Play this when you've got a full afternoon and nowhere to be."</div>
+        <div class="fbn-sig">Beth · Idle Hours</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 1: Good with someone else -->
+  <div class="game-row">
+    <div class="row-header">
+      <div class="row-title">Good with <em>someone else</em></div>
+      <a href="#" class="row-see-all">See all co-op →</a>
+    </div>
+    <div class="row-scroll">
+      <div class="gc gc-wide">
+        <div class="gc-cover bg-hollow">
+          <span class="gc-cover-label">Cover</span>
+          <div class="gc-chips"><span class="gc-chip">Indie</span><span class="gc-chip">Co-op</span></div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">It Takes Two</div>
+          <div class="gc-meta">Xbox · PC · Switch · PS5</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Co-op</span><span class="gc-tag">Easy</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+      <div class="gc gc-wide">
+        <div class="gc-cover bg-stardew">
+          <span class="gc-cover-label">Cover</span>
+          <div class="gc-chips"><span class="gc-chip">Co-op</span></div>
+          <div class="gc-score-badge" style="background:var(--green);">94</div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Stardew Valley</div>
+          <div class="gc-meta">PC · Switch · Mobile</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Farming</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+      <div class="gc gc-wide">
+        <div class="gc-cover bg-acnh">
+          <span class="gc-cover-label">Cover</span>
+          <div class="gc-chips"><span class="gc-chip">Easy</span></div>
+          <div class="gc-score-badge" style="background:var(--blue);">90</div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Animal Crossing: NH</div>
+          <div class="gc-meta">Switch</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Chill</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+      <!-- Sticky note in the scroll row -->
+      <div class="sticky-note sn-alt" style="align-self:center;">
+        <div class="sn-label">Beth's note</div>
+        <div class="sn-title">Grab a second controller</div>
+        <div class="sn-body">These all play better shared. Even Stardew — someone farms, someone mines.</div>
+        <div class="sn-tags"><span class="sn-tag">🎮 Co-op</span></div>
+      </div>
+      <div class="gc gc-wide">
+        <div class="gc-cover bg-spiritfarer">
+          <span class="gc-cover-label">Cover</span>
+          <div class="gc-chips"><span class="gc-chip">Co-op</span><span class="gc-chip">Easy</span></div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Spiritfarer</div>
+          <div class="gc-meta">PC · Switch · Xbox</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Story</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PULL QUOTE -->
+  <div style="margin-bottom:56px;max-width:700px;">
+    <div class="pull-quote">
+      <div class="pq-text">"The best cosy games don't ask you to win. They ask you to come back."</div>
+      <div class="pq-attr">Beth · Idle Hours</div>
+    </div>
+  </div>
+
+  <!-- ROW 2: Spring picks — ranked style -->
+  <div class="game-row">
+    <div class="row-header">
+      <div class="row-title">🌸 Spring picks <em>2025</em></div>
+      <a href="#" class="row-see-all">Full list →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;">
+      <div class="ranked-card">
+        <ol class="ranked-list">
+          <li class="ranked-item">
+            <div class="ri-num">01</div>
+            <div><div class="ri-title">A Short Hike</div><div class="ri-desc">Two hours. Nothing to prove. Perfect for a Saturday morning.</div></div>
+            <div class="ri-score-pill">85</div>
+          </li>
+          <li class="ranked-item">
+            <div class="ri-num">02</div>
+            <div><div class="ri-title">Unpacking</div><div class="ri-desc">A whole life told through what you own. Quietly devastating.</div></div>
+            <div class="ri-score-pill">89</div>
+          </li>
+          <li class="ranked-item">
+            <div class="ri-num">03</div>
+            <div><div class="ri-title">Venba</div><div class="ri-desc">Two hours. Stays with you for weeks.</div></div>
+            <div class="ri-score-pill">87</div>
+          </li>
+          <li class="ranked-item">
+            <div class="ri-num">04</div>
+            <div><div class="ri-title">Lake</div><div class="ri-desc">Deliver post. Talk to people. That's it. That's the game.</div></div>
+            <div class="ri-score-pill">72</div>
+          </li>
+        </ol>
+      </div>
+      <!-- Sticky note alongside -->
+      <div style="display:flex;flex-direction:column;gap:20px;padding-top:8px;">
+        <div class="sticky-note">
+          <div class="sn-label">Why spring?</div>
+          <div class="sn-title">Fresh starts, slow games</div>
+          <div class="sn-body">These all have something gentle about them. New beginnings, small worlds, no urgency. Right for this time of year.</div>
+          <div class="sn-tags"><span class="sn-tag">🌱 Seasonal</span><span class="sn-tag">Chill</span></div>
+        </div>
+        <!-- Recipe card -->
+        <div class="recipe-card" style="transform:rotate(1deg);width:100%;">
+          <div class="rc-head">
+            <div class="rc-kicker">How to play</div>
+            <div class="rc-title">A Short Hike</div>
+          </div>
+          <div class="rc-section">
+            <div class="rc-section-label">You'll need</div>
+            <div class="rc-item"><span class="rc-bullet"></span><span>One free afternoon</span></div>
+            <div class="rc-item"><span class="rc-bullet"></span><span>No agenda</span></div>
+            <div class="rc-item"><span class="rc-bullet"></span><span>Nintendo Switch or PC</span></div>
+          </div>
+          <div class="rc-section">
+            <div class="rc-section-label">Method</div>
+            <div class="rc-item"><span class="rc-num">1</span><span>Start walking uphill.</span></div>
+            <div class="rc-item"><span class="rc-num">2</span><span>Get distracted by the beach.</span></div>
+            <div class="rc-item"><span class="rc-num">3</span><span>Talk to everyone. They're worth it.</span></div>
+            <div class="rc-item"><span class="rc-num">4</span><span>Reach the summit. Feel something.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION BREAK -->
+  <div class="section-break">
+    <div>
+      <div class="sb-text">Under <em>two hours.</em> Worth every minute.</div>
+      <div class="sb-sub">Short games that stay with you longer than most 40-hour ones.</div>
+    </div>
+    <button class="sb-btn">Browse short games →</button>
+  </div>
+
+  <!-- ROW 3: If Stardew was your first -->
+  <div class="game-row">
+    <div class="row-header">
+      <div class="row-title">If <em>Stardew Valley</em> was your first</div>
+      <a href="#" class="row-see-all">See all →</a>
+    </div>
+    <div class="row-scroll">
+      <div class="gc">
+        <div class="gc-cover bg-acnh">
+          <span class="gc-cover-label">Cover</span>
+          <div class="gc-score-badge" style="background:var(--blue);">90</div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Animal Crossing</div>
+          <div class="gc-meta">Switch</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Daily</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+      <div class="gc">
+        <div class="gc-cover bg-spiritfarer">
+          <span class="gc-cover-label">Cover</span>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Spiritfarer</div>
+          <div class="gc-meta">PC · Switch</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Story</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+      <!-- Stipple popup floater -->
+      <div style="display:flex;align-items:flex-start;gap:0;flex-shrink:0;scroll-snap-align:start;width:320px;padding-top:8px;">
+        <div class="cover-ph bg-disco" style="width:100px;height:140px;">
+          <span class="cover-ph-label">Cover</span>
+        </div>
+        <div style="margin-left:12px;flex:1;">
+          <div class="stipple-popup stipple-popup-left">
+            <div class="sp-head">Staff pick</div>
+            <div class="sp-title">Disco Elysium</div>
+            <div class="sp-meta">ZA/UM · 2019 · PC</div>
+            <hr class="sp-divider">
+            <div class="sp-stat"><span class="sp-stat-k">OpenCritic</span><span class="sp-stat-v">97</span></div>
+            <div class="sp-stat"><span class="sp-stat-k">Hours</span><span class="sp-stat-v">~40</span></div>
+            <div class="sp-stat"><span class="sp-stat-k">Vibe</span><span class="sp-stat-v">Very odd</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="gc">
+        <div class="gc-cover bg-lake">
+          <span class="gc-cover-label">Cover</span>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Lake</div>
+          <div class="gc-meta">PC · Xbox</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Chill</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+      <div class="gc">
+        <div class="gc-cover bg-chicory">
+          <span class="gc-cover-label">Cover</span>
+          <div class="gc-score-badge" style="background:var(--purple);">88</div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Chicory</div>
+          <div class="gc-meta">PC · PS4 · Switch</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Creative</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 4: Worth the difficulty -->
+  <div class="game-row">
+    <div class="row-header">
+      <div class="row-title">Worth <em>the difficulty</em></div>
+      <a href="#" class="row-see-all">See all →</a>
+    </div>
+    <div class="row-scroll">
+      <div class="gc gc-wide">
+        <div class="gc-cover bg-hollow">
+          <span class="gc-cover-label">Cover</span>
+          <div class="gc-score-badge" style="background:var(--purple);">87</div>
+          <div class="gc-chips"><span class="gc-chip">Hard</span></div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Hollow Knight</div>
+          <div class="gc-meta">PC · Switch · PS4</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Metroidvania</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+      <div class="gc gc-wide">
+        <div class="gc-cover bg-celeste">
+          <span class="gc-cover-label">Cover</span>
+          <div class="gc-score-badge" style="background:var(--blue);">94</div>
+          <div class="gc-chips"><span class="gc-chip">Hard</span></div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Celeste</div>
+          <div class="gc-meta">PC · Switch · Xbox</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Platformer</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+      <div class="gc gc-wide">
+        <div class="gc-cover bg-hades">
+          <span class="gc-cover-label">Cover</span>
+          <div class="gc-score-badge" style="background:var(--red);">93</div>
+          <div class="gc-chips"><span class="gc-chip">Hard</span></div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Hades</div>
+          <div class="gc-meta">PC · Switch · Xbox</div>
+          <div class="gc-foot"><div class="gc-tags"><span class="gc-tag">Roguelike</span></div><span class="gc-cta">View →</span></div>
+        </div>
+      </div>
+      <div class="sticky-note" style="align-self:center;">
+        <div class="sn-label">Worth it?</div>
+        <div class="sn-title">Yes, but not tonight</div>
+        <div class="sn-body">Start these when you've got patience. They reward it properly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM SPACER -->
+  <div style="height:80px;"></div>
+
+</div><!-- /pw -->
+
+<script>
+// Tab switching
+document.querySelectorAll('.view-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

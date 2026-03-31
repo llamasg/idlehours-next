@@ -72,7 +72,8 @@
       "Bash(sed \"s/tags: \\\\[//\")",
       "Bash(sed \"s/\\\\]//\")",
       "Bash(xxd)",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "Bash(node --import tsx -e \":*)"
     ]
   }
 }

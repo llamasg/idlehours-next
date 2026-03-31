@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blitz — Physics Arena</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,800;0,900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #F0EBE0;
+  --cream-dark: #E4DBCC;
+  --white: #FDFAF5;
+  --ink: #1A1A14;
+  --ink-mid: #4A4A3A;
+  --ink-light: #8A8A70;
+  --ink-dim: #C0B89A;
+  --amber: #C8873A;
+  --green: #27A85A;
+  --red: #C0392B;
+  --divider: rgba(26,26,20,0.1);
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+/* ── LAYOUT ── */
+.game-wrap {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ── HUD ── */
+.hud {
+  flex-shrink: 0;
+  background: rgba(240,235,224,0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--divider);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 20;
+}
+
+.hud-left { display: flex; flex-direction: column; }
+.hud-eyebrow {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.hud-theme {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+  line-height: 1.1;
+}
+
+/* Timer ring */
+.timer-wrap { position: relative; width: 54px; height: 54px; flex-shrink: 0; }
+.timer-wrap svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.t-track { fill: none; stroke: var(--cream-dark); stroke-width: 4.5; }
+.t-fill  { fill: none; stroke: var(--amber); stroke-width: 4.5; stroke-linecap: round;
+           stroke-dasharray: 131.9; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear, stroke 0.4s; }
+.t-fill.danger { stroke: var(--red); }
+.timer-num {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 900; color: var(--ink);
+}
+.timer-num.danger { color: var(--red); }
+
+.hud-right { text-align: right; }
+.hud-score { font-size: 34px; font-weight: 900; color: var(--ink); line-height: 1; letter-spacing: -1px; }
+.hud-score-sub { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-light); }
+
+/* ── PROGRESS BAR ── */
+.progress-bar { height: 3px; background: var(--cream-dark); position: relative; flex-shrink: 0; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, rgba(200,135,58,0.4), var(--amber)); width: 0%; transition: width 0.4s cubic-bezier(0.34,1.4,0.64,1); }
+.ms-dot {
+  position: absolute; top: -3px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--cream-dark); border: 2px solid rgba(0,0,0,0.1);
+  transform: translateX(-50%); transition: all 0.3s;
+}
+.ms-dot.lit { background: var(--amber); border-color: var(--amber); box-shadow: 0 0 6px rgba(200,135,58,0.5); }
+
+/* ── ARENA ── */
+.arena {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+/* Physics word bubbles are drawn on canvas */
+canvas#arena-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Score pop floaters */
+.score-pop {
+  position: absolute;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--green);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+  animation: scorePop 0.75s ease forwards;
+}
+@keyframes scorePop {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  60%  { opacity: 1; transform: translateY(-28px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(-44px) scale(0.9); }
+}
+
+.wrong-pop {
+  position: absolute;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--red);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 10;
+  animation: wrongPop 0.6s ease forwards;
+}
+@keyframes wrongPop {
+  0%   { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Milestone toast */
+.ms-toast {
+  position: absolute;
+  top: 12px; left: 50%;
+  transform: translateX(-50%) translateY(-60px);
+  background: var(--white);
+  border: 1.5px solid rgba(200,135,58,0.5);
+  border-radius: 100px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--amber);
+  white-space: nowrap;
+  z-index: 30;
+  transition: transform 0.4s cubic-bezier(0.34,1.5,0.64,1), opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+.ms-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ── INPUT ZONE ── */
+.input-zone {
+  flex-shrink: 0;
+  border-top: 1px solid var(--divider);
+  background: rgba(240,235,224,0.97);
+  backdrop-filter: blur(8px);
+  padding: 12px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 20;
+}
+.input-row { display: flex; gap: 8px; align-items: center; }
+.game-input {
+  flex: 1;
+  background: var(--white);
+  border: 2px solid var(--divider);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.game-input:focus {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 4px rgba(200,135,58,0.1);
+}
+.game-input.shake { animation: shake 0.28s ease; border-color: var(--red) !important; box-shadow: 0 0 0 4px rgba(192,57,43,0.08) !important; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  50% { transform: translateX(7px); }
+  80% { transform: translateX(-4px); }
+}
+.btn-submit {
+  background: var(--amber);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 12px 22px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.1s, box-shadow 0.15s;
+  box-shadow: 0 3px 12px rgba(200,135,58,0.3);
+}
+.btn-submit:active { transform: scale(0.95); }
+
+.input-hint {
+  display: flex; gap: 8px; align-items: center;
+  font-size: 10px; font-weight: 600; color: var(--ink-light);
+}
+.hint-green { color: var(--green); font-weight: 800; }
+.hint-sep { color: var(--ink-dim); }
+
+/* ── END OVERLAY ── */
+.end-overlay {
+  position: fixed; inset: 0;
+  background: rgba(240,235,224,0.92);
+  backdrop-filter: blur(16px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; z-index: 50;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s;
+  text-align: center; padding: 32px;
+}
+.end-overlay.show { opacity: 1; pointer-events: all; }
+.end-score-big { font-size: 96px; font-weight: 900; color: var(--ink); line-height: 0.9; letter-spacing: -3px; }
+.end-label { font-size: 14px; font-weight: 600; color: var(--ink-light); font-style: italic; }
+.end-rank-pill {
+  padding: 7px 20px; border-radius: 100px; font-size: 12px; font-weight: 800;
+  background: rgba(200,135,58,0.1); border: 1.5px solid rgba(200,135,58,0.4); color: var(--amber);
+}
+.btn-again {
+  background: var(--amber); color: white; border: none; border-radius: 100px;
+  padding: 14px 40px; font-family: 'Montserrat', sans-serif; font-size: 13px;
+  font-weight: 900; letter-spacing: 0.1em; cursor: pointer; margin-top: 8px;
+  box-shadow: 0 4px 20px rgba(200,135,58,0.35);
+}
+</style>
+</head>
+<body>
+
+<div class="game-wrap">
+
+  <!-- HUD -->
+  <div class="hud">
+    <div class="hud-left">
+      <div class="hud-eyebrow">⚡ Blitz</div>
+      <div class="hud-theme">Mario Games</div>
+    </div>
+    <div class="timer-wrap">
+      <svg viewBox="0 0 54 54">
+        <circle class="t-track" cx="27" cy="27" r="21"/>
+        <circle class="t-fill" id="t-fill" cx="27" cy="27" r="21"/>
+      </svg>
+      <div class="timer-num" id="timer-num">109</div>
+    </div>
+    <div class="hud-right">
+      <div class="hud-score" id="hud-score">0</div>
+      <div class="hud-score-sub">correct</div>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="prog-fill"></div>
+    <div class="ms-dot" id="dot-b" style="left:15%"></div>
+    <div class="ms-dot" id="dot-s" style="left:30%"></div>
+    <div class="ms-dot" id="dot-g" style="left:49%"></div>
+  </div>
+
+  <!-- Arena -->
+  <div class="arena" id="arena">
+    <canvas id="arena-canvas"></canvas>
+    <div class="ms-toast" id="ms-toast"></div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-zone">
+    <div class="input-row">
+      <input class="game-input" id="game-input" type="text"
+        placeholder="Type a game name…"
+        autocomplete="off" autocorrect="off" spellcheck="false" />
+      <button class="btn-submit" onclick="submitGuess()">Submit</button>
+    </div>
+    <div class="input-hint">
+      <span class="hint-green" id="hint-correct">0 correct</span>
+      <span class="hint-sep">·</span>
+      <span id="hint-attempts">0 guesses</span>
+      <span class="hint-sep">·</span>
+      <span id="hint-ms">Bronze: 7 to go</span>
+    </div>
+  </div>
+</div>
+
+<!-- End overlay -->
+<div class="end-overlay" id="end-overlay">
+  <div style="font-size:11px;font-weight:800;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-light);">⚡ Blitz · Mario Games</div>
+  <div class="end-score-big" id="end-score-big">0</div>
+  <div class="end-label" id="end-label">games named</div>
+  <div class="end-rank-pill" id="end-rank-pill">—</div>
+  <button class="btn-again" onclick="resetGame()">Play Again ⚡</button>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// PUZZLE DATA
+// ════════════════════════════════════════
+const TOTAL_TIME = 109 // 47 games * 2 + 15
+const MILESTONES = { bronze: 7, silver: 14, gold: 23 }
+const POOL_SIZE = 47
+
+const ANSWERS = [
+  'Super Mario Bros.','Super Mario Bros. 2','Super Mario Bros. 3',
+  'Super Mario World','Super Mario 64','Super Mario Sunshine',
+  'Super Mario Galaxy','Super Mario Galaxy 2','Super Mario 3D Land',
+  'Super Mario 3D World','Super Mario Odyssey','Super Mario Wonder',
+  'New Super Mario Bros.','New Super Mario Bros. Wii','New Super Mario Bros. U',
+  'Super Mario Maker','Super Mario Maker 2','Super Mario Run',
+  'Super Mario Land','Super Mario Land 2','Mario Kart','Mario Kart 64',
+  'Mario Kart: Double Dash!!','Mario Kart DS','Mario Kart Wii',
+  'Mario Kart 7','Mario Kart 8','Mario Kart 8 Deluxe',
+  'Mario Party','Mario Party 2','Mario Party 3','Mario Party Superstars',
+  'Mario Golf','Mario Tennis','Mario Tennis Aces',
+  'Mario Strikers','Dr. Mario','Paper Mario',
+  'Paper Mario: The Thousand-Year Door','Paper Mario: The Origami King',
+  'Mario & Luigi: Superstar Saga',"Luigi's Mansion","Luigi's Mansion 3",
+  'Mario Paint','WarioWare','Yoshi\'s Island','Captain Toad: Treasure Tracker'
+]
+
+const ALIASES = {
+  'super mario bros':0,'smb':0,'mario brothers':0,'super mario brothers':0,
+  'super mario bros 2':1,'mario 2':1,'super mario usa':1,
+  'super mario bros 3':2,'mario 3':2,'smb3':2,
+  'super mario world':3,'smw':3,
+  'super mario 64':4,'sm64':4,'mario 64':4,
+  'super mario sunshine':5,'sms':5,'sunshine':5,
+  'super mario galaxy':6,'galaxy':6,'smg':6,
+  'super mario galaxy 2':7,'galaxy 2':7,'smg2':7,
+  'super mario 3d land':8,'3d land':8,
+  'super mario 3d world':9,'3d world':9,
+  'super mario odyssey':10,'odyssey':10,'smo':10,
+  'super mario wonder':11,'wonder':11,
+  'new super mario bros':12,'nsmb':12,
+  'new super mario bros wii':13,'nsmbw':13,
+  'new super mario bros u':14,'nsmbu':14,
+  'super mario maker':15,'smm':15,'mario maker':15,
+  'super mario maker 2':16,'smm2':16,'mario maker 2':16,
+  'super mario run':17,'mario run':17,
+  'super mario land':18,'sml':18,'mario land':18,
+  'super mario land 2':19,'sml2':19,'mario land 2':19,
+  'mario kart':20,'mk':20,
+  'mario kart 64':21,'mk64':21,
+  'mario kart double dash':22,'double dash':22,
+  'mario kart ds':23,'mkds':23,
+  'mario kart wii':24,'mkwii':24,
+  'mario kart 7':25,'mk7':25,
+  'mario kart 8':26,'mk8':26,
+  'mario kart 8 deluxe':27,'mk8dx':27,'mk8 deluxe':27,
+  'mario party':28,'mp':28,
+  'mario party 2':29,'mp2':29,
+  'mario party 3':30,'mp3':30,
+  'mario party superstars':31,'superstars':31,
+  'mario golf':32,
+  'mario tennis':33,
+  'mario tennis aces':34,'tennis aces':34,
+  'mario strikers':35,'strikers':35,
+  'dr mario':36,'doctor mario':36,
+  'paper mario':37,'pm':37,
+  'paper mario thousand year door':38,'ttyd':38,'thousand year door':38,
+  'paper mario origami king':39,'origami king':39,
+  'mario luigi superstar saga':40,'superstar saga':40,'m&l':40,
+  'luigis mansion':41,"luigi's mansion":41,'luigi mansion':41,
+  'luigis mansion 3':42,"luigi's mansion 3":42,
+  'mario paint':43,
+  'warioware':44,'wario ware':44,
+  'yoshis island':45,"yoshi's island":45,'yoshi island':45,
+  'captain toad':46,'captain toad treasure tracker':46
+}
+
+function normalise(s) {
+  return s.toLowerCase().trim()
+    .replace(/[!?.,:'"-]/g,'').replace(/\s+/g,' ')
+}
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+let score = 0
+let attempts = 0
+let timeLeft = TOTAL_TIME
+let timerInterval = null
+let guessed = new Set()
+let milestonesHit = { bronze: false, silver: false, gold: false }
+
+// ════════════════════════════════════════
+// PHYSICS ENGINE
+// ════════════════════════════════════════
+const GRAVITY = 0.04       // moon gravity — very gentle upward float
+const DAMPING = 0.82       // energy loss on bounce
+const FRICTION = 0.995     // slight air friction
+const PILL_H = 32          // pill height
+const PILL_PAD_X = 14      // horizontal padding
+const PILL_RADIUS = 16     // border radius
+
+const canvas = document.getElementById('arena-canvas')
+const ctx = canvas.getContext('2d')
+const arena = document.getElementById('arena')
+
+let bodies = []     // active physics bodies
+let animFrame = null
+
+function resizeCanvas() {
+  canvas.width = arena.clientWidth
+  canvas.height = arena.clientHeight
+}
+resizeCanvas()
+window.addEventListener('resize', () => { resizeCanvas(); })
+
+// Measure text width for pill sizing
+function pillWidth(text) {
+  ctx.font = '700 12px Montserrat, sans-serif'
+  return ctx.measureText(text).width + PILL_PAD_X * 2
+}
+
+// A body: { x, y, vx, vy, w, h, text, type, alpha, born }
+function spawnBody(text, type, originX, originY) {
+  const w = pillWidth(text)
+  const x = Math.max(w/2 + 4, Math.min(canvas.width - w/2 - 4, originX))
+  // Start at bottom (input zone), shoot upward
+  const speed = 8 + Math.random() * 5
+  const angle = -Math.PI/2 + (Math.random() - 0.5) * 0.6
+  bodies.push({
+    x, y: canvas.height + PILL_H,
+    vx: Math.cos(angle) * speed * 0.4,
+    vy: Math.sin(angle) * speed,
+    w, h: PILL_H,
+    text, type,
+    alpha: 0,
+    born: Date.now(),
+    dead: false
+  })
+}
+
+function drawPill(body) {
+  const { x, y, w, h, text, type, alpha } = body
+  const r = PILL_RADIUS
+  const x0 = x - w/2, y0 = y - h/2
+
+  ctx.save()
+  ctx.globalAlpha = Math.min(1, alpha)
+
+  // Fill
+  ctx.beginPath()
+  ctx.moveTo(x0 + r, y0)
+  ctx.lineTo(x0 + w - r, y0)
+  ctx.quadraticCurveTo(x0 + w, y0, x0 + w, y0 + r)
+  ctx.lineTo(x0 + w, y0 + h - r)
+  ctx.quadraticCurveTo(x0 + w, y0 + h, x0 + w - r, y0 + h)
+  ctx.lineTo(x0 + r, y0 + h)
+  ctx.quadraticCurveTo(x0, y0 + h, x0, y0 + h - r)
+  ctx.lineTo(x0, y0 + r)
+  ctx.quadraticCurveTo(x0, y0, x0 + r, y0)
+  ctx.closePath()
+
+  if (type === 'correct') {
+    ctx.fillStyle = '#FDFAF5'
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(200,135,58,0.4)'
+    ctx.lineWidth = 1.5
+    ctx.stroke()
+    // subtle amber glow shadow
+    ctx.shadowColor = 'rgba(200,135,58,0.15)'
+    ctx.shadowBlur = 8
+    ctx.fill()
+    ctx.shadowBlur = 0
+  } else {
+    // wrong — red tint, fades out fast
+    ctx.fillStyle = 'rgba(192,57,43,0.08)'
+    ctx.fill()
+    ctx.strokeStyle = 'rgba(192,57,43,0.3)'
+    ctx.lineWidth = 1.5
+    ctx.stroke()
+  }
+
+  // Text
+  ctx.font = `700 12px 'Montserrat', sans-serif`
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = type === 'correct' ? '#1A1A14' : '#C0392B'
+  ctx.globalAlpha = Math.min(1, alpha) * (type === 'wrong' ? 0.85 : 1)
+  ctx.fillText(text, x, y)
+
+  ctx.restore()
+}
+
+function physicsStep() {
+  const W = canvas.width
+  const H = canvas.height
+  const now = Date.now()
+
+  // Clear
+  ctx.clearRect(0, 0, W, H)
+
+  for (let i = bodies.length - 1; i >= 0; i--) {
+    const b = bodies[i]
+    const age = (now - b.born) / 1000
+
+    // Wrong bodies fade after 1s
+    if (b.type === 'wrong' && age > 0.8) {
+      b.alpha = Math.max(0, b.alpha - 0.06)
+      if (b.alpha <= 0) { bodies.splice(i, 1); continue }
+    } else {
+      b.alpha = Math.min(1, b.alpha + 0.12)
+    }
+
+    // Moon gravity — pulls UP gently
+    b.vy -= GRAVITY
+
+    // Friction
+    b.vx *= FRICTION
+    b.vy *= FRICTION
+
+    b.x += b.vx
+    b.y += b.vy
+
+    const hw = b.w / 2
+    const hh = b.h / 2
+
+    // Wall collisions
+    if (b.x - hw < 0) { b.x = hw; b.vx = Math.abs(b.vx) * DAMPING }
+    if (b.x + hw > W) { b.x = W - hw; b.vx = -Math.abs(b.vx) * DAMPING }
+
+    // Floor (bottom of arena)
+    if (b.y + hh > H) { b.y = H - hh; b.vy = -Math.abs(b.vy) * DAMPING; b.vx *= 0.85 }
+
+    // Ceiling
+    if (b.y - hh < 0) { b.y = hh; b.vy = Math.abs(b.vy) * DAMPING }
+  }
+
+  // Body-body collision (AABB + impulse)
+  for (let i = 0; i < bodies.length; i++) {
+    for (let j = i + 1; j < bodies.length; j++) {
+      const a = bodies[i], b = bodies[j]
+      if (a.type === 'wrong' && (Date.now() - a.born) > 500) continue
+      if (b.type === 'wrong' && (Date.now() - b.born) > 500) continue
+
+      const dx = b.x - a.x
+      const dy = b.y - a.y
+      const minDistX = (a.w + b.w) / 2
+      const minDistY = (a.h + b.h) / 2
+
+      if (Math.abs(dx) < minDistX && Math.abs(dy) < minDistY) {
+        // Overlap — push apart
+        const overlapX = minDistX - Math.abs(dx)
+        const overlapY = minDistY - Math.abs(dy)
+
+        if (overlapX < overlapY) {
+          const push = overlapX / 2 + 0.5
+          const sign = dx < 0 ? -1 : 1
+          a.x -= push * sign; b.x += push * sign
+          const relVx = b.vx - a.vx
+          const imp = relVx * 0.35
+          a.vx += imp * sign * DAMPING
+          b.vx -= imp * sign * DAMPING
+        } else {
+          const push = overlapY / 2 + 0.5
+          const sign = dy < 0 ? -1 : 1
+          a.y -= push * sign; b.y += push * sign
+          const relVy = b.vy - a.vy
+          const imp = relVy * 0.35
+          a.vy += imp * sign * DAMPING
+          b.vy -= imp * sign * DAMPING
+        }
+      }
+    }
+  }
+
+  // Draw all
+  // Draw correct first, wrong on top
+  bodies.filter(b => b.type === 'correct').forEach(drawPill)
+  bodies.filter(b => b.type === 'wrong').forEach(drawPill)
+
+  animFrame = requestAnimationFrame(physicsStep)
+}
+
+// ════════════════════════════════════════
+// TIMER
+// ════════════════════════════════════════
+const circumference = 2 * Math.PI * 21
+document.getElementById('t-fill').style.strokeDasharray = circumference
+
+function updateTimerRing() {
+  const frac = timeLeft / TOTAL_TIME
+  const offset = circumference * (1 - frac)
+  document.getElementById('t-fill').style.strokeDashoffset = offset
+  const el = document.getElementById('t-fill')
+  const numEl = document.getElementById('timer-num')
+  if (timeLeft <= 15) {
+    el.classList.add('danger')
+    numEl.classList.add('danger')
+  }
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    timeLeft--
+    document.getElementById('timer-num').textContent = timeLeft
+    updateTimerRing()
+    if (timeLeft <= 0) endGame()
+  }, 1000)
+}
+
+// ════════════════════════════════════════
+// SUBMIT
+// ════════════════════════════════════════
+document.getElementById('game-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitGuess()
+})
+
+function getInputOrigin() {
+  const inp = document.getElementById('game-input')
+  const rect = inp.getBoundingClientRect()
+  const arenaRect = arena.getBoundingClientRect()
+  return {
+    x: rect.left + rect.width / 2 - arenaRect.left,
+    y: arenaRect.height
+  }
+}
+
+function submitGuess() {
+  const input = document.getElementById('game-input')
+  const raw = input.value.trim()
+  if (!raw) return
+
+  const norm = normalise(raw)
+  const idx = ALIASES[norm] ?? -1
+
+  attempts++
+
+  if (idx !== -1 && !guessed.has(idx)) {
+    // Correct!
+    guessed.add(idx)
+    score++
+    const text = ANSWERS[idx]
+    const origin = getInputOrigin()
+    spawnBody(text, 'correct', origin.x, origin.y)
+    showScorePop('+1', origin.x, 80)
+    updateHUD()
+    checkMilestones()
+    input.value = ''
+  } else if (guessed.has(idx)) {
+    // Already got it
+    const inp2 = document.getElementById('game-input')
+    inp2.classList.add('shake')
+    setTimeout(() => inp2.classList.remove('shake'), 350)
+    const origin = getInputOrigin()
+    showWrongPop('Already got it!', origin.x, 90)
+    input.value = ''
+  } else {
+    // Wrong
+    const inp2 = document.getElementById('game-input')
+    inp2.classList.add('shake')
+    setTimeout(() => inp2.classList.remove('shake'), 350)
+    const origin = getInputOrigin()
+    spawnBody(raw, 'wrong', origin.x + (Math.random()-0.5)*60, origin.y)
+    showWrongPop('Nope', origin.x, 90)
+    input.value = ''
+  }
+
+  document.getElementById('hint-attempts').textContent = attempts + ' guesses'
+}
+
+function showScorePop(text, x, y) {
+  const el = document.createElement('div')
+  el.className = 'score-pop'
+  el.textContent = text
+  el.style.left = (x - 12) + 'px'
+  el.style.top = y + 'px'
+  arena.appendChild(el)
+  setTimeout(() => el.remove(), 800)
+}
+
+function showWrongPop(text, x, y) {
+  const el = document.createElement('div')
+  el.className = 'wrong-pop'
+  el.textContent = text
+  el.style.left = (x - 20) + 'px'
+  el.style.top = y + 'px'
+  arena.appendChild(el)
+  setTimeout(() => el.remove(), 700)
+}
+
+// ════════════════════════════════════════
+// HUD & MILESTONES
+// ════════════════════════════════════════
+function updateHUD() {
+  document.getElementById('hud-score').textContent = score
+  document.getElementById('hint-correct').textContent = score + ' correct'
+
+  const pct = (score / POOL_SIZE) * 100
+  document.getElementById('prog-fill').style.width = Math.min(100, pct) + '%'
+
+  // milestone hint text
+  const hint = document.getElementById('hint-ms')
+  if (score < MILESTONES.bronze) {
+    hint.textContent = 'Bronze: ' + (MILESTONES.bronze - score) + ' to go'
+  } else if (score < MILESTONES.silver) {
+    hint.textContent = 'Silver: ' + (MILESTONES.silver - score) + ' to go'
+  } else if (score < MILESTONES.gold) {
+    hint.textContent = 'Gold: ' + (MILESTONES.gold - score) + ' to go'
+  } else {
+    hint.textContent = '🥇 Gold reached!'
+  }
+}
+
+function checkMilestones() {
+  if (!milestonesHit.bronze && score >= MILESTONES.bronze) {
+    milestonesHit.bronze = true
+    document.getElementById('dot-b').classList.add('lit')
+    showMsToast('🥉 Bronze unlocked!')
+  } else if (!milestonesHit.silver && score >= MILESTONES.silver) {
+    milestonesHit.silver = true
+    document.getElementById('dot-s').classList.add('lit')
+    showMsToast('🥈 Silver unlocked!')
+  } else if (!milestonesHit.gold && score >= MILESTONES.gold) {
+    milestonesHit.gold = true
+    document.getElementById('dot-g').classList.add('lit')
+    showMsToast('🥇 Gold — you legend!')
+  }
+}
+
+function showMsToast(text) {
+  const t = document.getElementById('ms-toast')
+  t.textContent = text
+  t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), 2200)
+}
+
+// ════════════════════════════════════════
+// END GAME
+// ════════════════════════════════════════
+function endGame() {
+  clearInterval(timerInterval)
+  cancelAnimationFrame(animFrame)
+
+  // Final frame
+  physicsStep()
+  cancelAnimationFrame(animFrame)
+
+  const rank = score >= MILESTONES.gold ? '🥇 Gold'
+             : score >= MILESTONES.silver ? '🥈 Silver'
+             : score >= MILESTONES.bronze ? '🥉 Bronze'
+             : 'No medal'
+
+  document.getElementById('end-score-big').textContent = score
+  document.getElementById('end-label').textContent = `games named out of ${POOL_SIZE}`
+  document.getElementById('end-rank-pill').textContent = rank
+  document.getElementById('end-overlay').classList.add('show')
+}
+
+// ════════════════════════════════════════
+// RESET
+// ════════════════════════════════════════
+function resetGame() {
+  score = 0; attempts = 0; timeLeft = TOTAL_TIME
+  guessed = new Set()
+  milestonesHit = { bronze: false, silver: false, gold: false }
+  bodies = []
+  document.getElementById('end-overlay').classList.remove('show')
+  document.getElementById('hud-score').textContent = '0'
+  document.getElementById('timer-num').textContent = TOTAL_TIME
+  document.getElementById('timer-num').classList.remove('danger')
+  document.getElementById('t-fill').classList.remove('danger')
+  document.getElementById('t-fill').style.strokeDashoffset = 0
+  document.getElementById('prog-fill').style.width = '0%'
+  ;['dot-b','dot-s','dot-g'].forEach(id => document.getElementById(id).classList.remove('lit'))
+  document.getElementById('hint-correct').textContent = '0 correct'
+  document.getElementById('hint-attempts').textContent = '0 guesses'
+  document.getElementById('hint-ms').textContent = 'Bronze: ' + MILESTONES.bronze + ' to go'
+  document.getElementById('game-input').value = ''
+  document.getElementById('game-input').focus()
+  cancelAnimationFrame(animFrame)
+  physicsStep()
+  startTimer()
+}
+
+// ════════════════════════════════════════
+// BOOT
+// ════════════════════════════════════════
+window.addEventListener('load', () => {
+  resizeCanvas()
+  physicsStep()
+  startTimer()
+  document.getElementById('game-input').focus()
+  updateTimerRing()
+})
+</script>
+</body>
+</html>

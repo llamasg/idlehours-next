@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>06 Macro Animations — Idle Hours UI Kit v6</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#F0EBE0;--cream-dark:#E4DBCC;--cream-mid:#EAE3D6;
+  --white:#FDFAF5;--ink:#1A1A14;--ink-mid:#4A4A3A;
+  --ink-light:#6A6A56;--ink-dim:#C0B89A;--divider:rgba(26,26,20,0.1);
+  --blue:#4A8FE8;--blue-dark:#2D6BC4;--blue-light:#EBF2FC;
+  --amber:#C8873A;--amber-lt:#F5E6D3;--green:#27A85A;
+  --red:#C0392B;--purple:#5B4FCF;--purple-lt:rgba(91,79,207,0.08);
+  --spring:cubic-bezier(0.34,1.5,0.64,1);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9998;opacity:0.45;}
+
+@keyframes stripeScroll{0%{background-position:0 0}100%{background-position:28px 28px}}
+@keyframes stripeScrollSlow{0%{background-position:0 0}100%{background-position:40px 40px}}
+
+/* NAV */
+.kit-nav{position:sticky;top:0;z-index:900;background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.07);}
+.kit-nav-inner{max-width:1400px;margin:0 auto;padding:0 40px;display:flex;align-items:center;height:52px;}
+.kit-nav-logo{font-size:13px;font-weight:900;color:white;letter-spacing:-0.2px;text-transform:uppercase;text-decoration:none;margin-right:40px;flex-shrink:0;}
+.kit-nav-logo span{color:var(--amber);}
+.kit-nav-links{display:flex;gap:0;flex:1;height:100%;}
+.kit-nav-links a{display:flex;align-items:center;padding:0 18px;height:100%;font-size:10px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.38);text-decoration:none;border-bottom:2px solid transparent;transition:color 0.15s,border-color 0.15s;white-space:nowrap;}
+.kit-nav-links a:hover{color:rgba(255,255,255,0.78);}
+.kit-nav-links a.active{color:white;border-bottom-color:var(--amber);}
+.kit-nav-pill{margin-left:auto;font-size:9px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.22);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:5px 14px;}
+
+.pw{max-width:1400px;margin:0 auto;padding:0 40px;}
+.section{padding:72px 0 0;}
+.section-last{padding:72px 0 100px;}
+.sh{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:16px;margin-bottom:40px;border-bottom:2px dashed var(--cream-dark);}
+.sh-n{font-size:9px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px;}
+.sh-t{font-size:28px;font-weight:900;color:var(--ink);letter-spacing:-0.4px;}
+.sh-t em{font-style:italic;font-weight:600;color:var(--ink-light);}
+.sh-sub{font-size:12px;font-weight:600;font-style:italic;color:var(--ink-light);text-align:right;max-width:260px;line-height:1.55;}
+.concept{font-size:10px;font-weight:700;font-style:italic;color:var(--purple);line-height:1.65;padding:9px 13px;background:rgba(91,79,207,0.07);border-left:2.5px solid rgba(91,79,207,0.3);border-radius:0 6px 6px 0;margin-top:14px;}
+.card{background:var(--white);border:1.5px solid var(--divider);border-radius:20px;padding:28px;position:relative;overflow:hidden;}
+.card-label{font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.card-label::before{content:'';display:block;width:14px;height:1.5px;background:var(--amber);}
+.demo-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 22px;border-radius:100px;border:none;background:var(--blue);color:white;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;cursor:pointer;margin-top:14px;transition:opacity 0.2s;box-shadow:0 4px 0 var(--blue-dark);}
+.demo-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--blue-dark);}
+.demo-btn.amber{background:var(--amber);box-shadow:0 4px 0 #9D6328;}
+.demo-btn.amber:active{box-shadow:0 1px 0 #9D6328;}
+.demo-btn.ink{background:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,0.5);}
+.demo-btn.purple{background:var(--purple);box-shadow:0 4px 0 #3B2FA3;}
+.demo-btn.green{background:var(--green);box-shadow:0 4px 0 #1A7A40;}
+
+/* ── CIRCLE MASK REVEAL ── */
+.circle-reveal-wrap{
+  position:relative;border-radius:16px;overflow:hidden;
+  width:100%;height:280px;background:var(--ink);cursor:pointer;
+}
+.cr-base{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#1a1044,#3d2b8c);
+}
+.cr-base-content{text-align:center;color:white;}
+.cr-reveal{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:var(--cream);
+  clip-path:circle(0% at 50% 50%);
+  transition:clip-path 0.7s cubic-bezier(0.77,0,0.175,1);
+}
+.cr-reveal.open{clip-path:circle(150% at 50% 50%);}
+.cr-reveal-content{text-align:center;}
+
+/* ── WIPE TRANSITIONS ── */
+.wipe-demo{
+  position:relative;border-radius:16px;overflow:hidden;
+  width:100%;height:240px;cursor:pointer;
+}
+.wipe-layer{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:800;letter-spacing:-0.2px;
+}
+.wipe-layer-a{background:var(--ink);color:white;z-index:1;}
+.wipe-layer-b{background:var(--cream);z-index:2;clip-path:inset(0 100% 0 0);transition:clip-path 0.55s cubic-bezier(0.77,0,0.175,1);}
+.wipe-layer-b.active{clip-path:inset(0 0% 0 0);}
+
+/* Diagonal wipe */
+.wipe-diag .wipe-layer-b{
+  clip-path:polygon(0 0,0 0,0 100%,0 100%);
+  transition:clip-path 0.6s cubic-bezier(0.77,0,0.175,1);
+}
+.wipe-diag .wipe-layer-b.active{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);}
+
+/* ── PAGE TRANSITION SIMULATOR ── */
+.page-sim{
+  position:relative;border-radius:16px;overflow:hidden;
+  width:100%;height:320px;background:var(--cream);
+}
+.ps-screen{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  transition:transform 0.5s cubic-bezier(0.77,0,0.175,1), opacity 0.4s;
+}
+.ps-screen.ps-home{background:var(--cream);}
+.ps-screen.ps-game{background:var(--ink);transform:translateX(100%);}
+.ps-screen.ps-result{background:linear-gradient(135deg,#1a1044,#0d2e1a);transform:translateX(200%);}
+.ps-screen.active{transform:translateX(0%)!important;opacity:1;}
+.ps-screen.past{transform:translateX(-100%)!important;opacity:0;}
+
+/* ── CARD MORPH ── */
+.morph-wrap{position:relative;width:100%;height:380px;perspective:1000px;}
+.morph-card{
+  position:absolute;inset:0;border-radius:20px;
+  backface-visibility:hidden;
+  transition:all 0.6s cubic-bezier(0.77,0,0.175,1);
+}
+.mc-front{
+  background:var(--white);border:1.5px solid var(--divider);
+  display:flex;flex-direction:column;
+  transform:rotateY(0);
+}
+.mc-back{
+  background:var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transform:rotateY(180deg);
+  backface-visibility:hidden;
+}
+.morph-wrap.flipped .mc-front{transform:rotateY(-180deg);}
+.morph-wrap.flipped .mc-back{transform:rotateY(0);}
+
+/* ── STAGGER REVEAL ── */
+.stagger-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.sg-item{
+  background:var(--white);border:1.5px solid var(--divider);border-radius:14px;
+  padding:16px 14px;opacity:0;transform:translateY(24px);
+  transition:opacity 0.35s ease, transform 0.45s var(--spring);
+}
+.sg-item.visible{opacity:1;transform:translateY(0);}
+
+/* ── SCROLL-DRIVEN HEADER ── */
+.scroll-header-demo{
+  border-radius:16px;overflow:hidden;position:relative;background:var(--white);
+  border:1.5px solid var(--divider);
+}
+.sdh-header{
+  display:flex;align-items:center;justify-content:space-between;padding:20px 24px;
+  transition:all 0.3s ease;background:var(--white);border-bottom:1px solid transparent;
+}
+.sdh-header.shrunk{
+  padding:12px 24px;
+  border-bottom-color:var(--cream-dark);
+  background:rgba(253,250,245,0.95);
+  backdrop-filter:blur(8px);
+}
+.sdh-body{height:180px;overflow-y:auto;padding:0 24px;}
+.sdh-body::-webkit-scrollbar{width:4px;}
+.sdh-body::-webkit-scrollbar-track{background:transparent;}
+.sdh-body::-webkit-scrollbar-thumb{background:var(--cream-dark);border-radius:2px;}
+.sdh-title-large{font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-0.3px;transition:font-size 0.3s ease;}
+.sdh-header.shrunk .sdh-title-large{font-size:15px;}
+.sdh-logo{font-size:18px;font-weight:900;color:var(--amber);transition:font-size 0.3s ease;}
+.sdh-header.shrunk .sdh-logo{font-size:14px;}
+
+/* ── SCORE COUNTER ANIMATION ── */
+.score-counter-demo{
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  padding:24px;background:var(--ink);border-radius:16px;
+  position:relative;overflow:hidden;
+}
+.score-counter-demo::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(-45deg,rgba(255,255,255,0.03) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.03) 50%,rgba(255,255,255,0.03) 75%,transparent 75%);
+  background-size:40px 40px;animation:stripeScrollSlow 8s linear infinite;
+}
+.score-digit-wrap{
+  position:relative;overflow:hidden;height:80px;
+  display:flex;align-items:center;justify-content:center;
+}
+.score-digit{
+  font-size:72px;font-weight:900;color:white;letter-spacing:-3px;
+  position:relative;z-index:1;
+  transition:transform 0.4s cubic-bezier(0.34,1.5,0.64,1);
+}
+
+/* ── LOADING SEQUENCE ── */
+.load-demo{
+  background:var(--ink);border-radius:16px;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;padding:32px;height:220px;position:relative;
+}
+.load-demo::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(-45deg,rgba(255,255,255,0.03) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.03) 50%,rgba(255,255,255,0.03) 75%,transparent 75%);
+  background-size:40px 40px;animation:stripeScrollSlow 8s linear infinite;
+}
+.load-logo{font-size:32px;font-weight:900;color:white;z-index:1;opacity:0;transform:scale(0.7);transition:all 0.5s var(--spring);}
+.load-logo.show{opacity:1;transform:scale(1);}
+.load-bar-wrap{width:200px;height:4px;background:rgba(255,255,255,0.1);border-radius:100px;overflow:hidden;z-index:1;}
+.load-bar{height:100%;background:var(--amber);border-radius:100px;width:0;transition:width 0.4s ease;}
+.load-tagline{font-size:12px;font-weight:700;font-style:italic;color:rgba(255,255,255,0.4);z-index:1;opacity:0;transition:opacity 0.4s;}
+.load-tagline.show{opacity:1;}
+
+/* ── HUD MORPH ── */
+.hud-morph-demo{
+  background:var(--cream);border-radius:16px;padding:20px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.hud-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--white);border:1.5px solid var(--divider);border-radius:12px;padding:10px 16px;
+  transition:all 0.4s var(--spring);cursor:pointer;
+}
+.hud-bar:hover{transform:translateX(4px);}
+.hud-bar.expanded{border-color:var(--blue);background:var(--blue-light);}
+.hud-bar-title{font-size:13px;font-weight:800;color:var(--ink);}
+.hud-bar-extra{max-height:0;overflow:hidden;transition:max-height 0.4s ease,opacity 0.3s;opacity:0;}
+.hud-bar.expanded .hud-bar-extra{max-height:80px;opacity:1;}
+
+.kit-footer{background:var(--ink);padding:48px 40px;margin-top:80px;}
+</style>
+</head>
+<body>
+
+<nav class="kit-nav">
+  <div class="kit-nav-inner">
+    <a href="01-layout.html" class="kit-nav-logo">Idle <span>Hours</span></a>
+    <div class="kit-nav-links">
+      <a href="01-layout.html">01 Layout</a>
+      <a href="02-type-components.html">02 Type + Components</a>
+      <a href="03-imagery.html">03 Imagery</a>
+      <a href="04-component-library.html">04 Component Library</a>
+      <a href="05-microinteractions.html">05 Microinteractions</a>
+      <a href="06-macro-animations.html" class="active">06 Macro Animations</a>
+    </div>
+    <div class="kit-nav-pill">UI Kit v6</div>
+  </div>
+</nav>
+
+<div class="pw">
+
+  <!-- MASTHEAD -->
+  <div style="padding:64px 0 56px;border-bottom:2px dashed var(--cream-dark);">
+    <div style="font-size:10px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;color:var(--amber);margin-bottom:12px;display:flex;align-items:center;gap:10px;"><span style="display:block;width:18px;height:1.5px;background:var(--amber);"></span>06 — Macro Animations</div>
+    <div style="font-size:clamp(40px,5vw,64px);font-weight:900;color:var(--ink);letter-spacing:-2px;line-height:0.95;margin-bottom:16px;">Pages That<br><em style="font-style:italic;font-weight:600;color:var(--ink-light);">Move.</em></div>
+    <div style="font-size:13px;font-weight:600;font-style:italic;color:var(--ink-light);line-height:1.7;max-width:480px;">Transitions, reveals, and loading sequences. The macro layer — how whole screens enter, exit, and transform. Every click-through should feel like a physical journey.</div>
+  </div>
+
+  <!-- CIRCLE REVEALS -->
+  <div class="section">
+    <div class="sh">
+      <div><div class="sh-n">Section 01</div><div class="sh-t">Circle Mask <em>Reveal</em></div></div>
+      <div class="sh-sub">The screen opens from the centre like a portal. A transition that says "you're entering something."</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+      <!-- Standard circle reveal -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">Centre reveal — click to toggle</div>
+        <div class="circle-reveal-wrap" id="cr1" onclick="toggleCircle('cr1')">
+          <div class="cr-base">
+            <div class="cr-base-content">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">Current screen</div>
+              <div style="font-size:26px;font-weight:900;color:white;letter-spacing:-0.5px;">Game Sense</div>
+              <div style="font-size:13px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.45);margin-top:4px;">Today's daily</div>
+            </div>
+          </div>
+          <div class="cr-reveal" id="cr1-reveal">
+            <div class="cr-reveal-content">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:10px;">Results screen</div>
+              <div style="font-size:48px;font-weight:900;color:var(--ink);letter-spacing:-2px;line-height:1;">840</div>
+              <div style="font-size:13px;font-weight:600;font-style:italic;color:var(--ink-light);margin-top:4px;">pts · top 12%</div>
+            </div>
+          </div>
+        </div>
+        <div class="concept">clip-path: circle() animates from 0% to 150%. The reveal origin is always 50% 50% (from the centre of the action). 700ms with a sharp cubic-bezier — fast in, slow close.</div>
+      </div>
+
+      <!-- Origin point reveal -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">Cursor-origin reveal — click anywhere</div>
+        <div id="cr2" style="position:relative;border-radius:12px;overflow:hidden;width:100%;height:280px;cursor:pointer;background:var(--cream);" onclick="circleFromCursor(event,this)">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center;">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:8px;">Click anywhere</div>
+              <div style="font-size:22px;font-weight:900;color:var(--ink);">Tap to reveal</div>
+            </div>
+          </div>
+          <div id="cr2-layer" style="position:absolute;inset:0;background:var(--ink);clip-path:circle(0% at 50% 50%);transition:clip-path 0.65s cubic-bezier(0.77,0,0.175,1);display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center;">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:8px;">Next screen</div>
+              <div style="font-size:22px;font-weight:900;color:white;">Shelf Price</div>
+              <div style="font-size:13px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.4);margin-top:4px;">5 rounds · amber world</div>
+            </div>
+          </div>
+        </div>
+        <div class="concept">The circle originates from the exact cursor position. This anchors the transition to the physical click — the screen "pours out" from where you touched it. Resets after 2s.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WIPE TRANSITIONS -->
+  <div class="section">
+    <div class="sh">
+      <div><div class="sh-n">Section 02</div><div class="sh-t">Wipe <em>Transitions</em></div></div>
+      <div class="sh-sub">Directional wipes communicate navigation direction. Going right → screen wipes from left.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+
+      <!-- Horizontal wipe -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">Horizontal wipe →</div>
+        <div class="wipe-demo" id="wipe1" onclick="triggerWipe('wipe1')">
+          <div class="wipe-layer wipe-layer-a">
+            <div style="text-align:center;">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">/play</div>
+              <div style="font-size:20px;font-weight:900;color:white;">Games hub</div>
+            </div>
+          </div>
+          <div class="wipe-layer wipe-layer-b" id="wipe1-b">
+            <div style="text-align:center;">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:6px;">/play/game-sense</div>
+              <div style="font-size:20px;font-weight:900;color:var(--ink);">Game Sense</div>
+            </div>
+          </div>
+        </div>
+        <button class="demo-btn" onclick="triggerWipe('wipe1')">Wipe →</button>
+        <div class="concept">clip-path: inset(0 100% 0 0) → inset(0 0% 0 0). Sharp easing — 550ms. Used for forward navigation: hub → game.</div>
+      </div>
+
+      <!-- Diagonal wipe -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">Diagonal wipe ↗</div>
+        <div class="wipe-demo wipe-diag" id="wipe2" onclick="triggerWipe('wipe2')">
+          <div class="wipe-layer wipe-layer-a" style="background:linear-gradient(135deg,#1a1044,#3d2b8c);">
+            <div style="text-align:center;">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Question</div>
+              <div style="font-size:20px;font-weight:900;color:white;">What year was<br>Stardew Valley?</div>
+            </div>
+          </div>
+          <div class="wipe-layer wipe-layer-b" id="wipe2-b" style="background:var(--amber);">
+            <div style="text-align:center;">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">Answer</div>
+              <div style="font-size:36px;font-weight:900;color:white;">2016 ✓</div>
+            </div>
+          </div>
+        </div>
+        <button class="demo-btn amber" onclick="triggerWipe('wipe2')">Reveal</button>
+        <div class="concept">Diagonal polygon wipe. Feels more dynamic than straight. Used on answer reveal — diagonal suggests "turning a page over."</div>
+      </div>
+
+      <!-- Vertical wipe -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">Vertical wipe ↓</div>
+        <div class="wipe-demo" id="wipe3" onclick="triggerWipe('wipe3')" style="background:var(--cream);">
+          <div class="wipe-layer wipe-layer-a" style="background:var(--cream);">
+            <div style="text-align:center;">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:6px;">Score locked</div>
+              <div style="font-size:36px;font-weight:900;color:var(--ink);letter-spacing:-1px;">???</div>
+            </div>
+          </div>
+          <div class="wipe-layer" id="wipe3-b" style="background:var(--ink);z-index:2;clip-path:inset(0 0 100% 0);transition:clip-path 0.6s cubic-bezier(0.77,0,0.175,1);">
+            <div style="text-align:center;">
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Score revealed</div>
+              <div style="font-size:48px;font-weight:900;color:var(--amber);letter-spacing:-2px;">840</div>
+            </div>
+          </div>
+        </div>
+        <button class="demo-btn ink" onclick="triggerWipeV('wipe3')">Reveal ↓</button>
+        <div class="concept">Top-down curtain drop. Used for score reveals in Shelf Price — the answer "falls" into view like a curtain dropping.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE TRANSITION SIMULATOR -->
+  <div class="section">
+    <div class="sh">
+      <div><div class="sh-n">Section 03</div><div class="sh-t">Page Transition <em>Simulator</em></div></div>
+      <div class="sh-sub">Three screens. Each transition communicates direction of navigation.</div>
+    </div>
+
+    <div class="card" style="padding:20px;">
+      <div class="card-label">Click the nav to transition between screens</div>
+      <div class="page-sim" id="page-sim">
+        <!-- Home -->
+        <div class="ps-screen ps-home active" id="ps-0">
+          <div style="text-align:center;padding:32px;">
+            <div style="font-size:10px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:12px;">/play — Hub</div>
+            <div style="font-size:32px;font-weight:900;color:var(--ink);letter-spacing:-0.8px;margin-bottom:8px;">Today's Games</div>
+            <div style="font-size:14px;font-weight:600;font-style:italic;color:var(--ink-light);">Pick your game. Start the clock.</div>
+          </div>
+        </div>
+        <!-- Game -->
+        <div class="ps-screen ps-game" id="ps-1">
+          <div style="text-align:center;padding:32px;">
+            <div style="font-size:10px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px;">/play/game-sense</div>
+            <div style="font-size:32px;font-weight:900;color:white;letter-spacing:-0.8px;margin-bottom:8px;">Game Sense</div>
+            <div style="font-size:14px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.45);">Fill in the blank. 5 guesses.</div>
+          </div>
+        </div>
+        <!-- Results -->
+        <div class="ps-screen ps-result" id="ps-2">
+          <div style="text-align:center;padding:32px;">
+            <div style="font-size:10px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px;">/play/game-sense/result</div>
+            <div style="font-size:56px;font-weight:900;color:var(--amber);letter-spacing:-2px;line-height:1;margin-bottom:8px;">840</div>
+            <div style="font-size:14px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.45);">Top 12% today · 7-day streak 🔥</div>
+          </div>
+        </div>
+      </div>
+      <!-- Nav -->
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <button class="demo-btn" onclick="goToScreen(0)" style="flex:1;justify-content:center;margin-top:0;">① Hub</button>
+        <button class="demo-btn ink" onclick="goToScreen(1)" style="flex:1;justify-content:center;margin-top:0;">② Game →</button>
+        <button class="demo-btn amber" onclick="goToScreen(2)" style="flex:1;justify-content:center;margin-top:0;">③ Results →</button>
+      </div>
+      <div class="concept">translateX: screens slide in from right (forward), right (backward). The direction communicates location in hierarchy. Easing: 500ms with sharp cubic-bezier — fast deceleration on arrival.</div>
+    </div>
+  </div>
+
+  <!-- CARD MORPH + STAGGER + SCROLL HEADER -->
+  <div class="section">
+    <div class="sh">
+      <div><div class="sh-n">Section 04</div><div class="sh-t">Card Morph, Stagger <em>& Scroll</em></div></div>
+      <div class="sh-sub">Three macro behaviours for the editorial layer of the site.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;">
+
+      <!-- Card flip morph -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">3D card flip — game → result</div>
+        <div class="morph-wrap" id="morph1" onclick="this.classList.toggle('flipped')" style="cursor:pointer;height:300px;perspective:1000px;">
+          <div class="morph-card mc-front">
+            <div style="height:140px;background:linear-gradient(135deg,#1a1044,#3d2b8c);border-radius:18px 18px 0 0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.3);">Game cover</div>
+            <div style="padding:20px;flex:1;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--amber);margin-bottom:6px;">Daily · Game Sense</div>
+                <div style="font-size:20px;font-weight:900;color:var(--ink);letter-spacing:-0.3px;">Stardew Valley</div>
+                <div style="font-size:12px;font-weight:600;font-style:italic;color:var(--ink-light);margin-top:4px;">ConcernedApe · 2016 · Farming</div>
+              </div>
+              <div style="font-size:11px;font-weight:700;color:var(--ink-light);">Click to reveal result →</div>
+            </div>
+          </div>
+          <div class="morph-card mc-back" style="transform:rotateY(180deg);">
+            <div style="font-size:9px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:8px;position:relative;z-index:1;">Your answer</div>
+            <div style="font-size:64px;font-weight:900;color:var(--green);letter-spacing:-3px;line-height:1;position:relative;z-index:1;">✓</div>
+            <div style="font-size:32px;font-weight:900;color:white;letter-spacing:-1px;margin-top:4px;position:relative;z-index:1;">2016</div>
+            <div style="font-size:14px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.45);margin-top:8px;position:relative;z-index:1;">Correct · first guess</div>
+            <div style="position:absolute;inset:0;background-image:linear-gradient(-45deg,rgba(255,255,255,0.03) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.03) 50%,rgba(255,255,255,0.03) 75%,transparent 75%);background-size:40px 40px;animation:stripeScrollSlow 8s linear infinite;border-radius:20px;"></div>
+          </div>
+        </div>
+        <div class="concept">rotateY 0→180 on front; 180→0 on back. backface-visibility:hidden prevents the ghost. 600ms with sharp cubic-bezier. Click to toggle.</div>
+      </div>
+
+      <!-- Stagger grid reveal -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">Stagger reveal — cards enter in sequence</div>
+        <div class="stagger-grid" id="stagger-grid" style="margin-bottom:0;">
+          <div class="sg-item"><div style="font-size:20px;margin-bottom:6px;">🎮</div><div style="font-size:12px;font-weight:800;color:var(--ink);">Game Sense</div><div style="font-size:10px;font-weight:600;color:var(--ink-light);">Daily</div></div>
+          <div class="sg-item"><div style="font-size:20px;margin-bottom:6px;">📅</div><div style="font-size:12px;font-weight:800;color:var(--ink);">Street Date</div><div style="font-size:10px;font-weight:600;color:var(--ink-light);">Daily</div></div>
+          <div class="sg-item"><div style="font-size:20px;margin-bottom:6px;">💰</div><div style="font-size:12px;font-weight:800;color:var(--ink);">Shelf Price</div><div style="font-size:10px;font-weight:600;color:var(--ink-light);">Daily</div></div>
+          <div class="sg-item"><div style="font-size:20px;margin-bottom:6px;">⚡</div><div style="font-size:12px;font-weight:800;color:var(--ink);">Blitz</div><div style="font-size:10px;font-weight:600;color:var(--ink-light);">Anytime</div></div>
+          <div class="sg-item"><div style="font-size:20px;margin-bottom:6px;">🚀</div><div style="font-size:12px;font-weight:800;color:var(--ink);">Ship It</div><div style="font-size:10px;font-weight:600;color:var(--ink-light);">Narrative</div></div>
+          <div class="sg-item"><div style="font-size:20px;margin-bottom:6px;">🏆</div><div style="font-size:12px;font-weight:800;color:var(--ink);">Leaderboard</div><div style="font-size:10px;font-weight:600;color:var(--ink-light);">Weekly</div></div>
+          <div class="sg-item"><div style="font-size:20px;margin-bottom:6px;">📖</div><div style="font-size:12px;font-weight:800;color:var(--ink);">Editorial</div><div style="font-size:10px;font-weight:600;color:var(--ink-light);">Blog</div></div>
+          <div class="sg-item"><div style="font-size:20px;margin-bottom:6px;">⭐</div><div style="font-size:12px;font-weight:800;color:var(--ink);">Achievements</div><div style="font-size:10px;font-weight:600;color:var(--ink-light);">All time</div></div>
+        </div>
+        <button class="demo-btn green" onclick="triggerStagger()" style="margin-top:14px;">Replay stagger</button>
+        <div class="concept">Each card has a staggered transition-delay (0, 60ms, 120ms…). Translates from translateY(24px) opacity:0 → translateY(0) opacity:1. Applied to /play hub on page load.</div>
+      </div>
+
+      <!-- Scroll-shrink header -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">Scroll-driven header shrink</div>
+        <div class="scroll-header-demo">
+          <div class="sdh-header" id="sdh">
+            <div>
+              <div style="font-size:9px;font-weight:800;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:2px;">Idle Hours</div>
+              <div class="sdh-title-large">Today's Games</div>
+            </div>
+            <div class="sdh-logo">IH</div>
+          </div>
+          <div class="sdh-body" id="sdh-body">
+            <div style="padding:16px 0;border-bottom:1px dashed var(--cream-dark);display:flex;align-items:center;gap:12px;">
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--blue-light);flex-shrink:0;display:flex;align-items:center;justify-content:center;">🎮</div>
+              <div><div style="font-size:13px;font-weight:800;color:var(--ink);">Game Sense</div><div style="font-size:11px;font-weight:600;color:var(--ink-light);">Fill in the blank · 5 guesses</div></div>
+            </div>
+            <div style="padding:16px 0;border-bottom:1px dashed var(--cream-dark);display:flex;align-items:center;gap:12px;">
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--amber-lt);flex-shrink:0;display:flex;align-items:center;justify-content:center;">💰</div>
+              <div><div style="font-size:13px;font-weight:800;color:var(--ink);">Shelf Price</div><div style="font-size:11px;font-weight:600;color:var(--ink-light);">Higher or lower · 5 rounds</div></div>
+            </div>
+            <div style="padding:16px 0;border-bottom:1px dashed var(--cream-dark);display:flex;align-items:center;gap:12px;">
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--cream-mid);flex-shrink:0;display:flex;align-items:center;justify-content:center;">📅</div>
+              <div><div style="font-size:13px;font-weight:800;color:var(--ink);">Street Date</div><div style="font-size:11px;font-weight:600;color:var(--ink-light);">Guess the release year</div></div>
+            </div>
+            <div style="padding:16px 0;border-bottom:1px dashed var(--cream-dark);display:flex;align-items:center;gap:12px;">
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--purple-lt);flex-shrink:0;display:flex;align-items:center;justify-content:center;">🚀</div>
+              <div><div style="font-size:13px;font-weight:800;color:var(--ink);">Ship It</div><div style="font-size:11px;font-weight:600;color:var(--ink-light);">Navigate the publishers</div></div>
+            </div>
+            <div style="padding:16px 0;display:flex;align-items:center;gap:12px;">
+              <div style="width:40px;height:40px;border-radius:10px;background:var(--amber-lt);flex-shrink:0;display:flex;align-items:center;justify-content:center;">⚡</div>
+              <div><div style="font-size:13px;font-weight:800;color:var(--ink);">Blitz</div><div style="font-size:11px;font-weight:600;color:var(--ink-light);">Word association · timed</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="concept">Header font shrinks and gains border+blur on scroll. No JS layout reflow — font-size and padding only. Scroll the list above to see it happen.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING + SCORE COUNTER -->
+  <div class="section section-last">
+    <div class="sh">
+      <div><div class="sh-n">Section 05</div><div class="sh-t">Loading + <em>Score Counter</em></div></div>
+      <div class="sh-sub">The two moments users wait. Both should feel intentional, not incidental.</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+
+      <!-- Loading sequence -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">Brand loading sequence</div>
+        <div class="load-demo" id="load-demo">
+          <div class="load-logo" id="load-logo">Idle <span style="color:var(--amber);">Hours</span></div>
+          <div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div>
+          <div class="load-tagline" id="load-tagline">"familiar to use, surprising to look at"</div>
+        </div>
+        <button class="demo-btn" onclick="triggerLoading()" style="margin-top:14px;">Replay</button>
+        <div class="concept">Three-beat sequence: logo appears (scale+opacity), bar fills (width transition), tagline fades in. Total: ~1.8s. Applied to initial /play page seed animation.</div>
+      </div>
+
+      <!-- Score counter -->
+      <div class="card" style="padding:20px;">
+        <div class="card-label">Score counter reveal — counts up</div>
+        <div style="background:var(--ink);border-radius:14px;padding:28px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(-45deg,rgba(255,255,255,0.03) 25%,transparent 25%,transparent 50%,rgba(255,255,255,0.03) 50%,rgba(255,255,255,0.03) 75%,transparent 75%);background-size:40px 40px;animation:stripeScrollSlow 8s linear infinite;"></div>
+          <div style="font-size:9px;font-weight:800;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,255,255,0.3);position:relative;z-index:1;">Game Sense · Result</div>
+          <div style="font-size:80px;font-weight:900;color:white;letter-spacing:-4px;line-height:1;position:relative;z-index:1;" id="score-display">0</div>
+          <div style="font-size:13px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.4);position:relative;z-index:1;" id="score-sub">calculating…</div>
+          <div style="display:flex;gap:6px;margin-top:4px;position:relative;z-index:1;">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--amber);"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);"></div>
+          </div>
+        </div>
+        <button class="demo-btn amber" onclick="triggerScore()" style="margin-top:14px;">Count up</button>
+        <div class="concept">requestAnimationFrame-driven easeOut counter. Starts fast, decelerates to final value — mirrors Slow In/Slow Out. Applied on result screen after game completion.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="kit-footer">
+  <div style="max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;width:100%;padding:0 40px;">
+    <span style="font-size:22px;font-weight:900;color:white;">Idle <span style="color:var(--amber);">Hours</span></span>
+    <div style="text-align:right;">
+      <div style="font-size:11px;font-weight:600;font-style:italic;color:rgba(255,255,255,0.24);">UI Kit v6 · Macro Animations · Page 6 of 6</div>
+      <div style="font-size:10px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.15);margin-top:4px;">All 6 pages complete ✓</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Circle reveal toggle
+function toggleCircle(id) {
+  const r = document.getElementById(id + '-reveal');
+  r.classList.toggle('open');
+}
+
+// Cursor-origin circle reveal
+let cr2open = false;
+function circleFromCursor(e, wrap) {
+  const layer = document.getElementById('cr2-layer');
+  const rect = wrap.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+  const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+
+  if (cr2open) {
+    layer.style.clipPath = `circle(0% at ${x}% ${y}%)`;
+    cr2open = false;
+  } else {
+    layer.style.clipPath = `circle(0% at ${x}% ${y}%)`;
+    layer.style.transition = 'none';
+    layer.getBoundingClientRect();
+    layer.style.transition = 'clip-path 0.65s cubic-bezier(0.77,0,0.175,1)';
+    layer.style.clipPath = `circle(150% at ${x}% ${y}%)`;
+    cr2open = true;
+    setTimeout(() => {
+      layer.style.transition = 'clip-path 0.5s cubic-bezier(0.77,0,0.175,1)';
+      layer.style.clipPath = `circle(0% at 50% 50%)`;
+      cr2open = false;
+    }, 2200);
+  }
+}
+
+// Horizontal wipe
+const wipeStates = {};
+function triggerWipe(id) {
+  const b = document.getElementById(id + '-b');
+  if (!b) return;
+  wipeStates[id] = !wipeStates[id];
+  b.classList.toggle('active', wipeStates[id]);
+}
+
+// Vertical wipe
+function triggerWipeV(id) {
+  const b = document.getElementById(id + '-b');
+  if (!b) return;
+  wipeStates[id] = !wipeStates[id];
+  b.style.clipPath = wipeStates[id] ? 'inset(0 0 0% 0)' : 'inset(0 0 100% 0)';
+}
+
+// Page transition
+let currentScreen = 0;
+function goToScreen(n) {
+  const screens = document.querySelectorAll('.ps-screen');
+  screens.forEach((s, i) => {
+    s.classList.remove('active', 'past');
+    if (i === n) s.classList.add('active');
+    else if (i < n) s.classList.add('past');
+  });
+  currentScreen = n;
+}
+
+// Stagger reveal
+function triggerStagger() {
+  const items = document.querySelectorAll('#stagger-grid .sg-item');
+  items.forEach(item => {
+    item.classList.remove('visible');
+    item.style.transitionDelay = '0s';
+  });
+  requestAnimationFrame(() => {
+    items.forEach((item, i) => {
+      item.style.transitionDelay = `${i * 65}ms`;
+      requestAnimationFrame(() => item.classList.add('visible'));
+    });
+  });
+}
+
+// Scroll-driven header
+const sdhBody = document.getElementById('sdh-body');
+const sdhHeader = document.getElementById('sdh');
+if (sdhBody) {
+  sdhBody.addEventListener('scroll', () => {
+    sdhHeader.classList.toggle('shrunk', sdhBody.scrollTop > 20);
+  });
+}
+
+// Loading sequence
+function triggerLoading() {
+  const logo = document.getElementById('load-logo');
+  const bar = document.getElementById('load-bar');
+  const tag = document.getElementById('load-tagline');
+
+  logo.classList.remove('show');
+  bar.style.width = '0';
+  tag.classList.remove('show');
+
+  setTimeout(() => {
+    logo.classList.add('show');
+  }, 200);
+
+  setTimeout(() => {
+    bar.style.transition = 'width 1s ease';
+    bar.style.width = '100%';
+  }, 600);
+
+  setTimeout(() => {
+    tag.classList.add('show');
+  }, 1400);
+}
+
+// Score counter
+function triggerScore() {
+  const display = document.getElementById('score-display');
+  const sub = document.getElementById('score-sub');
+  const target = 840;
+  const duration = 1600;
+  const start = performance.now();
+
+  sub.textContent = 'calculating…';
+  display.textContent = '0';
+
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function step(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const value = Math.round(easeOut(progress) * target);
+    display.textContent = value;
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      display.textContent = target;
+      sub.textContent = 'top 12% today · 7-day streak 🔥';
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// Auto-trigger on load
+window.addEventListener('load', () => {
+  // Stagger items on load
+  setTimeout(triggerStagger, 400);
+  // Loading sequence on load
+  setTimeout(triggerLoading, 200);
+  // Score on load
+  setTimeout(triggerScore, 800);
+});
+</script>
+</body>
+</html>
