@@ -30,8 +30,9 @@ import RulesModal from '../components/RulesModal'
 import ResultCard from '@/components/games/ResultCard'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
 import { entrance, useEntranceSteps } from '@/lib/animations'
+import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
 
-const spring = 'cubic-bezier(0.34,1.5,0.64,1)'
+const WIN_THRESHOLD = 500
 
 export default function ShelfPriceDayPage({
   params,
@@ -56,7 +57,7 @@ export default function ShelfPriceDayPage({
   // Post-game page-level sequencer (matches Game Sense)
   // Steps: 1=ResultCard, 2=Game info, 3=Nav buttons, 4=Title/date, 5=Badges, 6=DiscoverMore
   const isPostGameComplete = state ? state.finished : false
-  const pgGaps = useMemo(() => [0, 3500, 400, 300, 300, 400, 500], [])
+  const pgGaps = useMemo(() => [...POSTGAME_GAPS], [])
   const pgStep = useEntranceSteps(7, pgGaps, isPostGameComplete && !showResult)
 
   const pairs = getPairsForDate(date)
@@ -93,12 +94,12 @@ export default function ShelfPriceDayPage({
       setEntranceStep(6)
       return
     }
-    const t1 = setTimeout(() => setEntranceStep(1), 350)    // title word-pops
-    const t2 = setTimeout(() => setEntranceStep(2), 1700)   // title moves up, gameplay scales in
-    const t3 = setTimeout(() => setEntranceStep(3), 2400)   // game cards visible
-    const t4 = setTimeout(() => setEntranceStep(4), 3100)   // score + progress visible
-    const t5 = setTimeout(() => setEntranceStep(5), 3400)   // rest fades in
-    const t6 = setTimeout(() => setEntranceStep(6), 3900)   // done
+    const t1 = setTimeout(() => setEntranceStep(1), ENTRANCE_TIMINGS[0])    // title word-pops
+    const t2 = setTimeout(() => setEntranceStep(2), ENTRANCE_TIMINGS[1])   // title moves up, gameplay scales in
+    const t3 = setTimeout(() => setEntranceStep(3), ENTRANCE_TIMINGS[2])   // game cards visible
+    const t4 = setTimeout(() => setEntranceStep(4), ENTRANCE_TIMINGS[3])   // score + progress visible
+    const t5 = setTimeout(() => setEntranceStep(5), ENTRANCE_TIMINGS[4])   // rest fades in
+    const t6 = setTimeout(() => setEntranceStep(6), ENTRANCE_TIMINGS[5])   // done
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); clearTimeout(t6) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [!!state])
@@ -144,7 +145,7 @@ export default function ShelfPriceDayPage({
       }, 1200)
     }
 
-    const newStreak = correct ? state.streak + 1 : state.streak
+    const newStreak = correct ? state.correctCount + 1 : state.correctCount
     const newRound = state.round + 1
     const newScore = correct ? state.score : Math.max(0, state.score - WRONG_PENALTY)
     const finished = newRound >= TARGET_ROUNDS
@@ -152,7 +153,7 @@ export default function ShelfPriceDayPage({
 
     const newState: DayState = {
       score: newScore,
-      streak: newStreak,
+      correctCount: newStreak,
       round: newRound,
       won,
       finished,
@@ -173,8 +174,8 @@ export default function ShelfPriceDayPage({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const modalCopy = useMemo(() => {
     const score = state?.score ?? 0
-    const streak = state?.streak ?? 0
-    const shelfWon = score >= 500
+    const streak = state?.correctCount ?? 0
+    const shelfWon = score >= WIN_THRESHOLD
     const result = shelfWon ? 'win' : 'loss'
     const rankName = getShelfPriceRank(score)
     return {
@@ -249,7 +250,7 @@ export default function ShelfPriceDayPage({
                 className="inline-block"
                 style={
                   entranceStep >= 1 || isPostGame
-                    ? { animation: `gs-word-pop 0.2s ${spring} ${0.1 + i * 0.25}s both` }
+                    ? { animation: `gs-word-pop 0.2s ${SPRING_EASING} ${0.1 + i * 0.25}s both` }
                     : { opacity: 0 }
                 }
               >
@@ -264,7 +265,7 @@ export default function ShelfPriceDayPage({
                 className="inline-block"
                 style={
                   entranceStep >= 1 || isPostGame
-                    ? { animation: `gs-word-pop 0.2s ${spring} ${0.7 + i * 0.15}s both` }
+                    ? { animation: `gs-word-pop 0.2s ${SPRING_EASING} ${0.7 + i * 0.15}s both` }
                     : { opacity: 0 }
                 }
               >
@@ -282,7 +283,7 @@ export default function ShelfPriceDayPage({
                 : (entranceStep < 5
                     ? { opacity: 0 }
                     : entranceStep < 6
-                      ? { animation: `gs-fade-in 0.5s ${spring} both` }
+                      ? { animation: `gs-fade-in 0.5s ${SPRING_EASING} both` }
                       : undefined)
             }
           >
@@ -350,7 +351,7 @@ export default function ShelfPriceDayPage({
         {playable && !state.finished && (
           <div
             className="flex flex-col gap-6"
-            style={entranceStep < 2 ? { opacity: 0, transform: 'scale(0)' } : entranceStep < 6 ? { animation: `gs-box-in 0.7s ${spring} both` } : undefined}
+            style={entranceStep < 2 ? { opacity: 0, transform: 'scale(0)' } : entranceStep < 6 ? { animation: `gs-box-in 0.7s ${SPRING_EASING} both` } : undefined}
           >
             {/* Progress */}
             <div
@@ -416,7 +417,7 @@ export default function ShelfPriceDayPage({
                 <ResultCard
                   game="shelf-price"
                   score={state.score}
-                  streak={state.streak}
+                  streak={state.correctCount}
                   won={state.won}
                   puzzleLabel={`Shelf Price ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
                   onViewResults={() => {}}
@@ -499,7 +500,7 @@ export default function ShelfPriceDayPage({
         {!isPostGame && (
           <div
             className="mt-8 flex flex-wrap items-center justify-center gap-4"
-            style={entranceStep < 5 ? { opacity: 0 } : entranceStep < 6 ? { animation: `gs-fade-in 0.5s ${spring} both` } : undefined}
+            style={entranceStep < 5 ? { opacity: 0 } : entranceStep < 6 ? { animation: `gs-fade-in 0.5s ${SPRING_EASING} both` } : undefined}
           >
             {!today && (
               <Link href="/play/shelf-price" className="bvl-purple">
@@ -540,7 +541,7 @@ export default function ShelfPriceDayPage({
           rankFlavour={modalCopy.rankFlavour}
           stats={[
             { label: 'Score', value: String(state.score) },
-            { label: 'Correct', value: `${state.streak}/${TARGET_ROUNDS}` },
+            { label: 'Correct', value: `${state.correctCount}/${TARGET_ROUNDS}` },
           ]}
           heroZone={
             <div className="px-4 pt-5 pb-2">
@@ -594,7 +595,7 @@ export default function ShelfPriceDayPage({
           }
           shareText={(() => {
             const number = formatGameNumber(date)
-            return `Shelf Price ${number} \u00b7 ${state.score}/1000\n${state.streak}/${TARGET_ROUNDS} correct${state.score === 1000 ? ' \u00b7 Perfect! \u{1F3C6}' : ''}\nidlehours.co.uk/play/shelf-price`
+            return `Shelf Price ${number} \u00b7 ${state.score}/1000\n${state.correctCount}/${TARGET_ROUNDS} correct${state.score === 1000 ? ' \u00b7 Perfect! \u{1F3C6}' : ''}\nidlehours.co.uk/play/shelf-price`
           })()}
           shareUrl="https://idlehours.co.uk/play/shelf-price"
           onClose={() => setShowResult(false)}

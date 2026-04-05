@@ -27,10 +27,9 @@ import { COPY, pickRandom, getStreetDateRank, STREET_DATE_FLAVOUR } from '@/comp
 import ResultCard from '@/components/games/ResultCard'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
 import { entrance, useEntranceSteps } from '@/lib/animations'
+import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
 import { formatGameNumber, formatDisplayDate } from '../lib/dateUtils'
 import Link from 'next/link'
-
-const spring = 'cubic-bezier(0.34,1.5,0.64,1)'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -143,12 +142,12 @@ export default function StreetDateV2DayPage({
       setEntranceStep(6)
       return
     }
-    const t1 = setTimeout(() => setEntranceStep(1), 350)
-    const t2 = setTimeout(() => setEntranceStep(2), 1700)
-    const t3 = setTimeout(() => setEntranceStep(3), 2400)
-    const t4 = setTimeout(() => setEntranceStep(4), 3100)
-    const t5 = setTimeout(() => setEntranceStep(5), 3400)
-    const t6 = setTimeout(() => setEntranceStep(6), 3900)
+    const t1 = setTimeout(() => setEntranceStep(1), ENTRANCE_TIMINGS[0])
+    const t2 = setTimeout(() => setEntranceStep(2), ENTRANCE_TIMINGS[1])
+    const t3 = setTimeout(() => setEntranceStep(3), ENTRANCE_TIMINGS[2])
+    const t4 = setTimeout(() => setEntranceStep(4), ENTRANCE_TIMINGS[3])
+    const t5 = setTimeout(() => setEntranceStep(5), ENTRANCE_TIMINGS[4])
+    const t6 = setTimeout(() => setEntranceStep(6), ENTRANCE_TIMINGS[5])
     return () => {
       clearTimeout(t1); clearTimeout(t2); clearTimeout(t3)
       clearTimeout(t4); clearTimeout(t5); clearTimeout(t6)
@@ -441,7 +440,7 @@ export default function StreetDateV2DayPage({
   const isPostGame = state ? state.finished : false
   const isModalOpen = showWinModal || showLossModal
   const isPostGameReady = isPostGame && !isModalOpen
-  const pgGaps = useMemo(() => [0, 3500, 400, 300, 300, 400, 500], [])
+  const pgGaps = useMemo(() => [...POSTGAME_GAPS], [])
   const pgStep = useEntranceSteps(7, pgGaps, isPostGameReady)
 
   const modalCopy = useMemo(() => {
@@ -553,7 +552,7 @@ export default function StreetDateV2DayPage({
                 entranceStep < 5
                   ? { opacity: 0 }
                   : entranceStep < 6
-                    ? { animation: `gs-fade-in 0.5s ${spring} both` }
+                    ? { animation: `gs-fade-in 0.5s ${SPRING_EASING} both` }
                     : undefined
               }
             >
@@ -620,7 +619,7 @@ export default function StreetDateV2DayPage({
                   entranceStep < 2
                     ? { opacity: 0, transform: 'scale(0)' }
                     : entranceStep < 6
-                      ? { animation: `gs-box-in 0.7s ${spring} both` }
+                      ? { animation: `gs-box-in 0.7s ${SPRING_EASING} both` }
                       : undefined
                 }
               >
@@ -668,7 +667,7 @@ export default function StreetDateV2DayPage({
                         key={gi}
                         className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-ink))]/[0.03] px-4 py-1.5"
                         style={justSubmitted && gi === state.guesses.length - 1
-                          ? { animation: `gs-fade-in 0.4s ${spring} both` }
+                          ? { animation: `gs-fade-in 0.4s ${SPRING_EASING} both` }
                           : undefined
                         }
                       >
@@ -857,7 +856,7 @@ export default function StreetDateV2DayPage({
                           }`}
                           style={
                             entranceStep >= 3 && entranceStep < 6
-                              ? { animation: `gs-fade-in 0.3s ${spring} ${i * 60}ms both` }
+                              ? { animation: `gs-fade-in 0.3s ${SPRING_EASING} ${i * 60}ms both` }
                               : undefined
                           }
                         >

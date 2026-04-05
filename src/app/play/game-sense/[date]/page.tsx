@@ -34,9 +34,10 @@ import ProximityCounter from '../components/ProximityCounter'
 import ResultCard from '@/components/games/ResultCard'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
 import { entrance, useEntranceSteps } from '@/lib/animations'
+import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
 
 const GUESS_COST = 1
-const spring = 'cubic-bezier(0.34,1.5,0.64,1)'
+const HINT_COST = 250
 
 export default function GameSenseDayPage({
   params,
@@ -75,12 +76,11 @@ export default function GameSenseDayPage({
   const isGameOver = state ? (state.won || state.score <= 0) : false
   const isModalOpen = showWinModal || showLossModal
   const isPostGameComplete = isGameOver && !isModalOpen
-  const pgGaps = useMemo(() => [0, 3500, 400, 300, 300, 400, 500], [])
+  const pgGaps = useMemo(() => [...POSTGAME_GAPS], [])
   const pgStep = useEntranceSteps(7, pgGaps, isPostGameComplete)
   // Pre-compute skip so clip-path renders correctly on first paint (before useEffect)
   const shouldAnimate = state ? !(state.won || state.score <= 0) : true
 
-  const HINT_COST = 250
 
   // Force blue status bar on mobile only — solid bg-color for iOS safe-area + theme-color meta
   useEffect(() => {
@@ -150,12 +150,12 @@ export default function GameSenseDayPage({
     // Blue wipe starts immediately (clip-path transition, 700ms)
     requestAnimationFrame(() => requestAnimationFrame(() => setWipeStarted(true)))
     // Sequenced entrance: title centered → title moves up + box → sentence → input → rest
-    const t1 = setTimeout(() => setEntranceStep(1), 350)    // title word-pops (wipe ~halfway down)
-    const t2 = setTimeout(() => setEntranceStep(2), 1700)   // title moves up, box scales in
-    const t3 = setTimeout(() => setEntranceStep(3), 2400)   // sentence mounts
-    const t4 = setTimeout(() => setEntranceStep(4), 3100)   // guess input fades in
-    const t5 = setTimeout(() => setEntranceStep(5), 3400)   // rest fades in (score, nav)
-    const t6 = setTimeout(() => setEntranceStep(6), 3900)   // done — clear animation classes
+    const t1 = setTimeout(() => setEntranceStep(1), ENTRANCE_TIMINGS[0])    // title word-pops (wipe ~halfway down)
+    const t2 = setTimeout(() => setEntranceStep(2), ENTRANCE_TIMINGS[1])   // title moves up, box scales in
+    const t3 = setTimeout(() => setEntranceStep(3), ENTRANCE_TIMINGS[2])   // sentence mounts
+    const t4 = setTimeout(() => setEntranceStep(4), ENTRANCE_TIMINGS[3])   // guess input fades in
+    const t5 = setTimeout(() => setEntranceStep(5), ENTRANCE_TIMINGS[4])   // rest fades in (score, nav)
+    const t6 = setTimeout(() => setEntranceStep(6), ENTRANCE_TIMINGS[5])   // done — clear animation classes
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); clearTimeout(t6) }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [!!state])
@@ -439,7 +439,7 @@ export default function GameSenseDayPage({
                     entranceStep < 5
                       ? { opacity: 0 }
                       : entranceStep < 6
-                        ? { animation: `gs-fade-in 0.5s ${spring} both` }
+                        ? { animation: `gs-fade-in 0.5s ${SPRING_EASING} both` }
                         : undefined
                   }
                 >
@@ -458,7 +458,7 @@ export default function GameSenseDayPage({
                   : (entranceStep < 5
                       ? { opacity: 0 }
                       : entranceStep < 6
-                        ? { animation: `gs-fade-in 0.5s ${spring} both` }
+                        ? { animation: `gs-fade-in 0.5s ${SPRING_EASING} both` }
                         : undefined)
               }
             >
