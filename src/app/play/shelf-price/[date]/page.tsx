@@ -27,8 +27,7 @@ import {
 } from '@/components/games/GameEndModal.copy'
 import { igdbCoverUrl } from '@/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
-import ResultCard from '@/components/games/ResultCard'
-import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
+import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
 
@@ -403,28 +402,16 @@ export default function ShelfPriceDayPage({
             {/* Two-column post-game: left determines height, right scrolls within it */}
             <div className="relative mb-6 flex flex-col gap-6 lg:flex-row">
 
-              {/* ── Left column: badge shelf → ResultCard (determines container height) ── */}
-              <div className="flex flex-col gap-6 lg:w-[55%] lg:shrink-0">
-                <div
-                  className="grid transition-[grid-template-rows] duration-700 ease-out"
-                  style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
-                >
-                  <div className="overflow-hidden">
-                    <DailyBadgeShelf currentGame="shelf-price" animateStamp={pgStep >= 5} />
-                  </div>
-                </div>
-
-                <ResultCard
-                  game="shelf-price"
-                  score={state.score}
-                  streak={state.correctCount}
-                  won={state.won}
-                  puzzleLabel={`Shelf Price ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                  onViewResults={() => {}}
-                  hideViewResults
-                  animateEntrance={pgStep >= 1}
-                />
-              </div>
+              {/* ── Left column: badge shelf + ResultCard (determines container height) ── */}
+              <PostGameLeftColumn
+                game="shelf-price"
+                score={state.score}
+                secondaryStat={state.correctCount}
+                won={state.won}
+                puzzleLabel={`Shelf Price ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                pgStep={pgStep}
+                className="flex flex-col gap-6 lg:w-[55%] lg:shrink-0"
+              />
 
               {/* ── Right column: matchups — absolutely positioned on lg, scrolls within left col height ── */}
               <div

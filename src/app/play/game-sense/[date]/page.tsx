@@ -31,8 +31,7 @@ import {
 import { igdbCoverUrl } from '@/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
 import ProximityCounter from '../components/ProximityCounter'
-import ResultCard from '@/components/games/ResultCard'
-import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
+import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
 
@@ -706,28 +705,15 @@ export default function GameSenseDayPage({
               {/* Two-column post-game: left (55%) badges + results, right (45%) analysis */}
               <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-[55fr_45fr]">
 
-                {/* ── Left column: badge shelf → gap → ResultCard ── */}
-                <div className="order-2 flex flex-col gap-6 lg:order-1">
-                  <div
-                    className="grid transition-[grid-template-rows] duration-700 ease-out"
-                    style={{ gridTemplateRows: pgStep >= 5 ? '1fr' : '0fr' }}
-                  >
-                    <div className="overflow-hidden">
-                      <DailyBadgeShelf currentGame="game-sense" animateStamp={pgStep >= 5} />
-                    </div>
-                  </div>
-
-                  <ResultCard
-                    game="game-sense"
-                    score={state.score}
-                    streak={0}
-                    won={state.won}
-                    puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
-                    onViewResults={() => {}}
-                    hideViewResults
-                    animateEntrance={pgStep >= 1}
-                  />
-                </div>
+                {/* ── Left column: badge shelf + ResultCard ── */}
+                <PostGameLeftColumn
+                  game="game-sense"
+                  score={state.score}
+                  secondaryStat={0}
+                  won={state.won}
+                  puzzleLabel={`Game Sense ${formatGameNumber(date)} \u00b7 ${formatDisplayDate(date)}`}
+                  pgStep={pgStep}
+                />
 
                 {/* ── Right column: single merged analysis card ── */}
                 <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
