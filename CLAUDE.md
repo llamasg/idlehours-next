@@ -2,7 +2,22 @@
 
 ## What this is
 
-Idle Hours is a cozy games editorial and discovery platform at idlehours.co.uk. It combines Beth's editorial voice (reviews, guides, recommendations) with six interactive daily/session games, a curated game library, and an internal content dashboard called Pip. The site is pre-launch with zero public traffic — everything is in active development.
+Idle Hours is a game discovery engine with an editorial voice at idlehours.co.uk. It combines Beth's editorial writing with six interactive daily/session games, a curated game library, and affiliate-linked recommendations. The site is pre-launch with zero public traffic — everything is in active development.
+
+## North Star & Product Principles
+
+Before making any decision about features, architecture, or public-facing copy, read `NORTH-STAR.md` in the repo root.
+
+Read it when:
+- Adding or changing any user-facing feature
+- Evaluating whether something should be built at all
+- Writing or editing any copy that appears on the site
+- Making decisions about what games or content to surface
+
+Do not read it for:
+- Styling-only changes
+- Bug fixes
+- Internal tooling
 
 ## Tech stack
 
@@ -95,7 +110,7 @@ public/
 - **Ship It** (`/play/ship-it`) — publishing deal negotiation game
 
 ### Internal tools
-- **Pip Dashboard** (`/pip/*`) — Beth's content planning tool with AI features
+- **Pip** (`/pip/*`) — Internal ops tool. GA4 analytics visualisation, SEO cluster planning, grammar checks. Password-protected. Not a public-facing feature — do not reference in any user-facing copy or build features around it.
 - **Jobs Board** (`/jobs`) — Kanban board for launch tasks (Supabase-backed)
 - **Staging** (`/staging/*`) — design system playground (tokens, components, animations)
 
@@ -171,6 +186,7 @@ public/
 ### What NOT to read for common tasks
 - `scripts/` — one-off data migration scripts, not part of the app
 - `docs/plans/` — historical design documents, many are outdated
+- `docs/plans/archive/` — archived planning docs, never read unless explicitly asked
 - `studio/` — Sanity Studio, only relevant when changing CMS schemas
 - `src/app/staging/` — design playground, not production code
 - `src/app/parallax/` — experimental, redirects to homepage
@@ -256,3 +272,10 @@ This section documents major changes so future sessions understand why things ar
 8. **Pip dashboard password** — hardcoded in `src/pip/auth/usePipAuth.ts`.
 9. **Environment variable names** — referenced across multiple files and Vercel config.
 10. **The shared GameEndModal component** — used by all 3 daily games with discriminated props. Changes must work for all games.
+
+## Performance rules for this session
+
+- Styling-only tasks: read only the component file and tailwind.config.js. Do not open logic files, hooks, or utilities.
+- Game-specific tasks: each game is self-contained. Do not scan other game folders for context unless explicitly asked.
+- Do not open package.json unless the task involves dependencies.
+- Do not read docs/plans/ unless asked to understand historical context.
