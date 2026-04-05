@@ -19,7 +19,7 @@ export interface RankThreshold {
   label: string // e.g. "0–349 pts" or "4–6 streak"
 }
 
-export const GAME_SENSE_LADDER: RankThreshold[] = [
+const GAME_SENSE_LADDER: RankThreshold[] = [
   { name: 'Bust', label: '0 pts' },
   { name: 'Keep Guessing', label: '1\u2013349 pts' },
   { name: 'Getting Warmer', label: '350\u2013599 pts' },
@@ -27,7 +27,7 @@ export const GAME_SENSE_LADDER: RankThreshold[] = [
   { name: 'Encyclopaedic', label: '800+ pts' },
 ]
 
-export const STREET_DATE_LADDER: RankThreshold[] = [
+const STREET_DATE_LADDER: RankThreshold[] = [
   { name: 'Bust', label: '0 pts' },
   { name: 'New to the Medium', label: '1\u2013349 pts' },
   { name: 'Occasional Player', label: '350\u2013599 pts' },
@@ -35,7 +35,7 @@ export const STREET_DATE_LADDER: RankThreshold[] = [
   { name: 'Time Archivist', label: '800+ pts' },
 ]
 
-export const SHELF_PRICE_LADDER: RankThreshold[] = [
+const SHELF_PRICE_LADDER: RankThreshold[] = [
   { name: 'Bust', label: '0 pts' },
   { name: 'Just Another Consumer', label: '100\u2013300 pts' },
   { name: 'Junior Dev', label: '400\u2013600 pts' },

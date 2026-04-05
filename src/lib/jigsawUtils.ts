@@ -25,7 +25,7 @@ export interface Cluster {
   pieceIds: string[]
 }
 
-export interface SnapResult {
+interface SnapResult {
   targetPieceId: string
   snapX: number
   snapY: number
@@ -101,7 +101,7 @@ function tryAssign(
  * Assigns a PieceShape to each grid cell satisfying edge complement rules.
  * Uses greedy assignment with fast full-grid retries (each attempt is O(n)).
  */
-export function assignShapes(
+function assignShapes(
   cols: number,
   rows: number,
 ): Map<string, PieceShape> {
@@ -177,7 +177,7 @@ export function generatePuzzleGrid(
  * Returns up to 4 adjacent grid coordinates (no bounds filtering — callers
  * should filter based on their grid dimensions).
  */
-export function getNeighbourCoords(
+function getNeighbourCoords(
   col: number,
   row: number,
 ): Array<{ col: number; row: number }> {

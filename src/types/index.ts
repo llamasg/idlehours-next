@@ -174,13 +174,6 @@ export interface Quiz {
   slug?: { current: string }
 }
 
-// ─── PokemonNominee ──────────────────────────────────
-export interface PokemonNominee {
-  name: string
-  votes: number
-  typeColor: string
-}
-
 export type HomepageSection =
   | HeroSection
   | CarouselRowSection

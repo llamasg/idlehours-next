@@ -1,6 +1,6 @@
 // Day-of-week flavour lines — picked randomly on mount for post-game display
 
-export const DAY_FLAVOUR: Record<number, string[]> = {
+const DAY_FLAVOUR: Record<number, string[]> = {
   0: ['Good way to spend a Sunday.', 'Sunday well played.', 'Before the week starts again. Worth it.'],
   1: ['Not bad for a Monday.', 'Better start to the week than most.', 'Monday redeemed, slightly.'],
   2: ['Not bad for a Tuesday.', 'Quietly solid. Very Tuesday of you.', 'Tuesday energy. Understated but present.'],

@@ -82,7 +82,7 @@ export async function getPost(slug: string) {
 }
 
 // Search posts by query
-export async function searchPosts(query: string) {
+async function searchPosts(query: string) {
   const posts = await client.fetch(
     `
     *[_type == "post" && (
@@ -126,7 +126,7 @@ export async function getPostsByCategory(category: string) {
 }
 
 // Get all products
-export async function getAllProducts() {
+async function getAllProducts() {
   const products = await client.fetch(`
     *[_type == "product"] | order(order asc) {
       _id,
@@ -146,7 +146,7 @@ export async function getAllProducts() {
 }
 
 // Get featured products
-export async function getFeaturedProducts() {
+async function getFeaturedProducts() {
   const products = await client.fetch(`
     *[_type == "product" && featured == true] | order(order asc) [0...8] {
       _id,
@@ -164,7 +164,7 @@ export async function getFeaturedProducts() {
 }
 
 // Get products by category
-export async function getProductsByCategory(category: string) {
+async function getProductsByCategory(category: string) {
   const products = await client.fetch(
     `
     *[_type == "product" && category == $category] | order(order asc) {
@@ -201,7 +201,7 @@ export async function getAllQuizzes() {
 }
 
 // Get single quiz by slug
-export async function getQuiz(slug: string) {
+async function getQuiz(slug: string) {
   const quiz = await client.fetch(
     `
     *[_type == "quiz" && slug.current == $slug][0] {
@@ -262,7 +262,7 @@ export async function getHomepageConfig() {
 }
 
 // Get active promotional banner
-export async function getPromoBanner() {
+async function getPromoBanner() {
   const banner = await client.fetch(`
     *[_type == "promoBanner" && isActive == true][0] {
       _id,
@@ -278,7 +278,7 @@ export async function getPromoBanner() {
 // ─── Idle Hours: New queries ──────────────────────────
 
 // Get the modular homepage document with all sections expanded
-export async function getHomePage() {
+async function getHomePage() {
   const homePage = await client.fetch(`
     *[_type == "homePage"][0] {
       _id,

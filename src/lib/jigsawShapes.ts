@@ -1,4 +1,4 @@
-export type EdgeType = 'F' | 'T' | 'B'
+type EdgeType = 'F' | 'T' | 'B'
 
 export interface PieceShape {
   id: string
@@ -92,7 +92,7 @@ for (const base of BASE_PIECES) {
 export const PIECE_SHAPES: PieceShape[] = allShapes
 
 /** Find the first shape matching the given edge combination, or undefined. */
-export function findShape(
+function findShape(
   top: EdgeType,
   right: EdgeType,
   bottom: EdgeType,
