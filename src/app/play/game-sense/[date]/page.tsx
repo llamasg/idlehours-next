@@ -28,7 +28,7 @@ import {
   getGameSenseRank,
   GAME_SENSE_FLAVOUR,
 } from '@/components/games/GameEndModal.copy'
-import { igdbCoverUrl } from '../../street-date/lib/imageUtils'
+import { igdbCoverUrl } from '@/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
 import ProximityCounter from '../components/ProximityCounter'
 import ResultCard from '@/components/games/ResultCard'

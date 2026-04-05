@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import type { ShelfPriceGame } from '../data/games'
-import { igdbCoverUrl } from '../../street-date/lib/imageUtils'
+import { igdbCoverUrl } from '@/lib/imageUtils'
 import { COPY, pickRandom } from '@/components/games/GameEndModal.copy'
 
 type RevealPhase = 'idle' | 'other-counting' | 'chosen-counting' | 'result'

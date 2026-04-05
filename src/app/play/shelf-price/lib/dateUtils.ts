@@ -3,6 +3,16 @@
 
 import { GAMES, type ShelfPriceGame } from '../data/games'
 
+import {
+  getTodayDateString,
+  formatDisplayDate,
+  isToday,
+  getDaysSinceEpoch as _getDaysSinceEpoch,
+  formatGameNumber as _formatGameNumber,
+  isPlayableDate as _isPlayableDate,
+  getArchiveDates as _getArchiveDates,
+} from '@/lib/dateUtils'
+
 // TODO: STABILITY — daily game selection is derived from GAMES.length and array
 // shuffling. Adding games changes past date assignments. This is acceptable pre-launch
 // but must be fixed before significant archive growth.
@@ -16,24 +26,18 @@ import { GAMES, type ShelfPriceGame } from '../data/games'
 export const LAUNCH_DATE = '2026-03-03'
 export const EPOCH = new Date('2026-03-03T00:00:00+00:00')
 
-const TZ = 'Europe/London'
-const MS_PER_DAY = 86_400_000
+// ── Re-export shared utils bound to this game's dates ──────────────────────
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+export { getTodayDateString, formatDisplayDate, isToday }
+export const getDaysSinceEpoch = (dateStr: string) => _getDaysSinceEpoch(EPOCH, dateStr)
+export const formatGameNumber = (dateStr: string) => _formatGameNumber(LAUNCH_DATE, dateStr)
+export const isPlayableDate = (dateStr: string) => _isPlayableDate(LAUNCH_DATE, dateStr)
+export const getArchiveDates = () => _getArchiveDates(LAUNCH_DATE)
 
-function parseUTCDate(dateStr: string): Date {
-  const [y, m, d] = dateStr.split('-').map(Number)
-  return new Date(Date.UTC(y, m - 1, d))
-}
+// ── Game-specific functions ────────────────────────────────────────────────
 
-function ordinal(day: number): string {
-  if (day >= 11 && day <= 13) return 'th'
-  switch (day % 10) {
-    case 1: return 'st'
-    case 2: return 'nd'
-    case 3: return 'rd'
-    default: return 'th'
-  }
+export function getGameNumber(dateStr: string): number {
+  return getDaysSinceEpoch(dateStr) + 1
 }
 
 // ── Seeded PRNG (mulberry32) ────────────────────────────────────────────────
@@ -57,84 +61,6 @@ function shuffle<T>(arr: T[], rng: () => number): T[] {
   return a
 }
 
-// ── Public API ───────────────────────────────────────────────────────────────
-
-export function getTodayDateString(): string {
-  const now = new Date()
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: TZ,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).formatToParts(now)
-
-  const year = parts.find((p) => p.type === 'year')!.value
-  const month = parts.find((p) => p.type === 'month')!.value
-  const day = parts.find((p) => p.type === 'day')!.value
-
-  return `${year}-${month}-${day}`
-}
-
-export function getDaysSinceEpoch(dateStr: string): number {
-  const target = parseUTCDate(dateStr)
-  return Math.floor((target.getTime() - EPOCH.getTime()) / MS_PER_DAY)
-}
-
-export function getGameNumber(dateStr: string): number {
-  return getDaysSinceEpoch(dateStr) + 1
-}
-
-export function formatGameNumber(dateStr: string): string {
-  return `#${String(getGameNumber(dateStr)).padStart(3, '0')}`
-}
-
-export function formatDisplayDate(dateStr: string): string {
-  const date = parseUTCDate(dateStr)
-
-  const weekday = new Intl.DateTimeFormat('en-GB', {
-    weekday: 'short',
-    timeZone: 'UTC',
-  }).format(date)
-
-  const month = new Intl.DateTimeFormat('en-GB', {
-    month: 'short',
-    timeZone: 'UTC',
-  }).format(date)
-
-  const day = date.getUTCDate()
-  const year = date.getUTCFullYear()
-
-  return `${weekday} ${day}${ordinal(day)} ${month} ${year}`
-}
-
-export function isPlayableDate(dateStr: string): boolean {
-  const today = getTodayDateString()
-  return dateStr >= LAUNCH_DATE && dateStr <= today
-}
-
-export function isToday(dateStr: string): boolean {
-  return dateStr === getTodayDateString()
-}
-
-export function getArchiveDates(): string[] {
-  const today = getTodayDateString()
-  const dates: string[] = []
-  const current = new Date(EPOCH)
-
-  while (true) {
-    const y = current.getUTCFullYear()
-    const m = String(current.getUTCMonth() + 1).padStart(2, '0')
-    const d = String(current.getUTCDate()).padStart(2, '0')
-    const ds = `${y}-${m}-${d}`
-
-    if (ds >= today) break
-    dates.push(ds)
-    current.setUTCDate(current.getUTCDate() + 1)
-  }
-
-  return dates.reverse()
-}
-
 // ── Pair generation ─────────────────────────────────────────────────────────
 
 export type GamePair = [ShelfPriceGame, ShelfPriceGame]
@@ -154,7 +80,6 @@ export function getPairsForDate(dateStr: string): GamePair[] {
   while (pairs.length < 11 && i + 1 < shuffled.length) {
     const a = shuffled[i]
     const b = shuffled[i + 1]
-    // Only pair games with different prices
     if (a.launchPriceUsd !== b.launchPriceUsd) {
       pairs.push([a, b])
     }

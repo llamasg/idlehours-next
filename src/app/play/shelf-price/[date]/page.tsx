@@ -25,7 +25,7 @@ import {
   getShelfPriceRank,
   SHELF_PRICE_FLAVOUR,
 } from '@/components/games/GameEndModal.copy'
-import { igdbCoverUrl } from '../../street-date/lib/imageUtils'
+import { igdbCoverUrl } from '@/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
 import ResultCard from '@/components/games/ResultCard'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
