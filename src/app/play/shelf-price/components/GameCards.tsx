@@ -126,8 +126,9 @@ export default function GameCards({
   }, [chosenSide])
 
   return (
-    <div className="relative grid grid-cols-2 items-stretch gap-1 overflow-visible sm:gap-5">
+    <div className="relative mx-auto grid w-fit grid-cols-2 items-stretch gap-1 overflow-visible sm:gap-5">
       <Card
+        key={left.id}
         game={left}
         side="left"
         onChoice={() => onChoice('left')}
@@ -143,6 +144,7 @@ export default function GameCards({
       />
 
       <Card
+        key={right.id}
         game={right}
         side="right"
         onChoice={() => onChoice('right')}
@@ -229,14 +231,14 @@ function Card({
   const displayPrice = animatedPrice !== null ? `$${animatedPrice.toFixed(2)}` : null
 
   return (
-    <div className="relative mx-auto w-full max-w-[450px]">
+    <div className="relative">
       <button
         onClick={onChoice}
         disabled={disabled}
-        className={`group relative w-full overflow-hidden rounded-2xl transition-all ${
+        className={`group relative overflow-hidden rounded-2xl transition-shadow ${
           !disabled ? 'cursor-pointer hover:shadow-2xl' : ''
         }`}
-        style={{ height: 'clamp(320px, 50vw, 480px)' }}
+        style={{ width: 'min(450px, 45vw)', aspectRatio: '3/4' }}
       >
         {/* Background cover image */}
         <div className="absolute inset-0">
