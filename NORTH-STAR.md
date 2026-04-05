@@ -113,9 +113,47 @@ with a "you might like..." card. A sticky note links to a game page.
 A list post links to affiliate storefronts.
 
 **Affiliate links are infrastructure, not monetisation bolted on.**
+
 They are the last step of a discovery journey that starts with trust 
 and ends with a purchase. A reader who trusts a recommendation 
 follows a link. A reader who feels sold to never comes back.
+
+## Affiliate links — how the money actually works
+
+The /games library hub is the commercial engine of the site.
+Every game listed there has affiliate links to storefronts 
+(GOG, Humble Bundle, Green Man Gaming, Fanatical). When 
+someone clicks through and buys, we earn commission.
+
+The funnel is always the same regardless of where it starts:
+
+  Content or puzzle mentions a game
+        ↓
+  Game title links to the lightbox
+        ↓
+  Lightbox shows cover art, vibe, platforms, editorial take
+        ↓
+  Reader clicks the affiliate buy link
+        ↓
+  Commission earned
+
+This means every page on the site — a blog post, a puzzle 
+result, a mood guide, a sticky note — is a top-of-funnel 
+entry point into this conversion flow. No page is decorative.
+If it mentions a game and doesn't link to the lightbox, 
+it's leaving money on the table.
+
+The library hub (~400 curated games) is intentionally small 
+and high quality. We do not list every game we cover in 
+puzzles — only games that pass the Idle Hours test earn a 
+lightbox entry. This protects the editorial trust that makes 
+the affiliate click feel like a recommendation, not an ad.
+
+Status: affiliate programme applications (GOG, Humble, GMG, 
+Fanatical) are the current blocker. Infrastructure is ready.
+Once partner codes are confirmed, a single script appends 
+affiliate parameters to all existing store links in the 
+database simultaneously.
 
 The single metric that predicts all revenue outcomes:
 **Total daily active players across the arcade.**

@@ -73,7 +73,11 @@
       "Bash(sed \"s/\\\\]//\")",
       "Bash(xxd)",
       "Bash(node -e \":*)",
-      "Bash(node --import tsx -e \":*)"
+      "Bash(node --import tsx -e \":*)",
+      "Bash(xargs -I {} bash -c ' if grep -P \"^\\\\s*/\\\\*\" \"{}\" >/dev/null 2>&1; then awk \" /^[[:space:]]*\\\\/\\\\*/ { in_comment=1; comment=\\\\\"\\\\\" } in_comment { comment=comment\\\\\"\\\\n\\\\\"\\\\$0 } /\\\\*\\\\/[[:space:]]*\\\\$/ { in_comment=0; if \\(comment ~ /[^a-zA-Z ]/\\) print FILENAME\\\\\":\\\\\"NR\\\\\":\\\\\"comment; comment=\\\\\"\\\\\" } \" \"{}\" fi ')",
+      "Bash(xargs -I '{}' sh -c 'perl -ne \"if \\(/\\\\/\\\\*.*\\\\*\\\\// && /[{}\\\\[\\\\]\\(\\)=.]/\\) { print FILENAME . \\\\\":\\\\\" . \\\\$_; }\" \"{}\" ')",
+      "Bash(npm uninstall:*)",
+      "Bash(head -100 /d/websites/IdleHours/src/app/play/street-date/[date]/page.tsx)"
     ]
   }
 }

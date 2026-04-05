@@ -34,7 +34,7 @@ function getSlotData(slug: GameSlug, dateStr: string): SlotData {
         if (!raw) return { completed: false, rankName: '', score: 0 }
         const state = JSON.parse(raw)
         if (!state.finished) return { completed: false, rankName: '', score: 0 }
-        const rankName = getRankForGame('shelf-price', state.score, state.streak)
+        const rankName = getRankForGame('shelf-price', state.score, state.correctCount)
         return { completed: true, rankName, score: state.score }
       }
       case 'street-date': {

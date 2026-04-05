@@ -36,6 +36,8 @@ interface GameState {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
+const BURN_RATE_PER_ROUND = 100
+
 const INITIAL_STATE: GameState = {
   gameName: '',
   balance: 300,
@@ -101,7 +103,7 @@ export default function ShipItPage() {
       if (!offer) return prev
 
       // Apply offer effects
-      const newBalance = prev.balance + offer.fundingVal - 100 // burn rate
+      const newBalance = prev.balance + offer.fundingVal - BURN_RATE_PER_ROUND // burn rate
       const newVision = Math.max(
         0,
         Math.min(100, prev.vision - offer.visionVal),
@@ -169,7 +171,7 @@ export default function ShipItPage() {
 
   const handlePass = useCallback(() => {
     setState((prev) => {
-      const newBalance = prev.balance - 100 // burn rate only
+      const newBalance = prev.balance - BURN_RATE_PER_ROUND // burn rate only
       const newDecisions = [...prev.decisions, 'pass' as const]
       const nextOfferInRound = prev.offerInRound + 1
 

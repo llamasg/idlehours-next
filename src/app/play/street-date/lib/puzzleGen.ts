@@ -1,5 +1,23 @@
 import { GAMES, type StreetDateGame } from '../data/games'
 
+// ── Named constants ──────────────────────────────────────────────────────────
+const YEAR_MIN = 1992
+const YEAR_MAX = 2024
+const MAX_GENERATION_ATTEMPTS = 20
+const CLUSTER_CENTER_START = 2000
+const CLUSTER_CENTER_RANGE = 19
+const CLUSTER_VARIANCE = 3
+const MIN_YEAR_SPREAD = 20
+const POPULARITY_TIERS = [
+  { min: 1, max: 30 },   // popular — 2 games
+  { min: 1, max: 30 },   // popular
+  { min: 31, max: 80 },  // mid — 3 games
+  { min: 31, max: 80 },  // mid
+  { min: 31, max: 80 },  // mid
+  { min: 81, max: 999 }, // obscure — 2 games
+  { min: 81, max: 999 }, // obscure
+]
+
 // Reuse the existing seeded shuffle LCG
 function seededShuffle<T>(arr: T[], seed: number): T[] {
   const result = [...arr]
@@ -46,9 +64,9 @@ export function generatePuzzle(dateStr: string): PuzzleResult {
   }
 
   // Available years (must have at least 1 game)
-  const availableYears = [...byYear.keys()].filter(y => y >= 1992 && y <= 2024).sort()
+  const availableYears = [...byYear.keys()].filter(y => y >= YEAR_MIN && y <= YEAR_MAX).sort()
 
-  for (let attempt = 0; attempt < 20; attempt++) {
+  for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
     seed = (seed * 1664525 + 1013904223) & 0x7fffffff
     const picked = pickYearsAndGames(seed, availableYears, byYear)
     if (picked) {
@@ -87,11 +105,11 @@ function pickYearsAndGames(
 
   // Pick cluster center year (2000-2018 for good game density)
   const r1 = seededRandom(s); s = r1.next
-  const clusterCenter = 2000 + Math.floor(r1.value * 19)
+  const clusterCenter = CLUSTER_CENTER_START + Math.floor(r1.value * CLUSTER_CENTER_RANGE)
 
   // Pick 3 years within ±3 of cluster center (all unique)
   const clusterYears: number[] = []
-  const clusterCandidates = availableYears.filter(y => Math.abs(y - clusterCenter) <= 3)
+  const clusterCandidates = availableYears.filter(y => Math.abs(y - clusterCenter) <= CLUSTER_VARIANCE)
   const shuffledCluster = seededShuffle(clusterCandidates, s)
   s = (s * 1664525 + 1013904223) & 0x7fffffff
   for (const y of shuffledCluster) {
@@ -118,19 +136,11 @@ function pickYearsAndGames(
 
   const allYears = [...clusterYears, ...spreadYears].sort()
   const totalSpread = allYears[allYears.length - 1] - allYears[0]
-  if (totalSpread < 20) return null
+  if (totalSpread < MIN_YEAR_SPREAD) return null
 
   // Step 2: Pick one game per year with popularity distribution
   // Desired: 2 popular (rank 1-30), 3 mid (31-80), 2 obscure (81+)
-  const tierTargets: Array<{ min: number; max: number }> = [
-    { min: 1, max: 30 },   // popular
-    { min: 1, max: 30 },   // popular
-    { min: 31, max: 80 },  // mid
-    { min: 31, max: 80 },  // mid
-    { min: 31, max: 80 },  // mid
-    { min: 81, max: 999 }, // obscure
-    { min: 81, max: 999 }, // obscure
-  ]
+  const tierTargets = [...POPULARITY_TIERS]
   // Shuffle tier assignments so popular/obscure slots aren't predictable
   const shuffledTiers = seededShuffle(tierTargets, s)
   s = (s * 1664525 + 1013904223) & 0x7fffffff

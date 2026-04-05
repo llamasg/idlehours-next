@@ -4,7 +4,7 @@
 
 export interface DayState {
   score: number
-  streak: number
+  correctCount: number
   round: number
   won: boolean
   finished: boolean
@@ -29,7 +29,7 @@ function storageKey(dateStr: string): string {
 export function loadDayState(dateStr: string): DayState {
   const defaultState: DayState = {
     score: 1000,
-    streak: 0,
+    correctCount: 0,
     round: 0,
     won: false,
     finished: false,
@@ -44,7 +44,7 @@ export function loadDayState(dateStr: string): DayState {
     const parsed = JSON.parse(raw) as DayState
     // Migration: add score if missing (old saves)
     if (parsed.score === undefined) {
-      parsed.score = 1000 - ((parsed.choices?.length ?? 0) - (parsed.streak ?? 0)) * WRONG_PENALTY
+      parsed.score = 1000 - ((parsed.choices?.length ?? 0) - (parsed.correctCount ?? 0)) * WRONG_PENALTY
       parsed.round = parsed.choices?.length ?? 0
     }
     return parsed

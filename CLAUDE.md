@@ -141,6 +141,38 @@ public/
 
 ## Design system
 
+## Component rules — read before writing any UI code
+
+Before creating any new component, check these locations first:
+- `src/components/ui/` — base primitives (button, badge, input, etc.)
+- `src/components/` — shared site components
+- `src/app/staging/` — the full design system with 11 pages of 
+  documented components, tokens, and patterns
+
+**The rule:** Compose existing components. Do not create a new 
+component if an existing one can be extended or composed.
+
+If a new component is genuinely needed:
+- It must be styled using existing CSS variables from globals.css
+- It must use existing Tailwind token classes, not arbitrary values
+- It must follow the conventions in staging/ (shadows, borders, 
+  hover states, animation presets)
+- Primitives from src/components/ui/ should be the building blocks, 
+  not replaced
+
+**Examples of correct thinking:**
+- Need a button with a dropdown arrow? Use the existing Button 
+  component and add a ChevronDown icon from lucide-react
+- Need a new card variant? Use the existing card shadow and border 
+  tokens, not new arbitrary shadow values
+- Need a new input style? Extend the existing Input primitive
+
+**Never:**
+- Write inline arbitrary Tailwind values for colours that exist 
+  as CSS variables
+- Create a new button component when the existing one can be composed
+- Import a new icon library when lucide-react is already installed
+
 ### Where tokens live
 - **CSS variables:** `src/app/globals.css` — `:root` and `.dark` blocks
 - **Tailwind config:** `tailwind.config.js` — extends colors, animations, fonts
@@ -162,11 +194,108 @@ public/
 - Game containers use `game-container` class which forces light mode tokens in dark mode
 - Section labels: `font-heading text-[11px] font-[900] uppercase tracking-[0.2em]`
 
-### Animation system
-- `entrance(preset, active, delayMs?)` — returns inline CSSProperties
-- `useEntranceSteps(stepCount, gaps, active)` — step sequencer for cascading animations
-- Presets: pop, fade, move, wipe, word-pop, slide-up, rise, wipe-right, wipe-down
-- Game-specific: `gs-box-in`, `gs-word-pop`, `gs-fade-in` (defined in globals.css)
+## Animation system — philosophy and rules
+
+The Idle Hours animation approach was developed building the /play 
+page intro. These principles apply globally — from a small component 
+entering the viewport to a full page load sequence.
+
+### The core mental model
+
+**Work backwards from the finished state.**
+Start with the page fully visible and correct. Then hide everything. 
+The animation sequence is a controlled unhide — "hiding in reverse 
+looks like building." Never think about what appears; think about 
+what was already there waiting to be revealed.
+
+### Container before children — always
+
+When animating a group of elements, wrap them in a container and 
+animate the container first. Children stagger in after.
+
+- Animate the container: fade in, slide up, scale
+- Then stagger children in one by one with small offsets (50–80ms)
+- This applies at every scale — a card group, a nav, a game board, 
+  a full page section
+
+Never animate a group of siblings independently without a parent 
+container move first. It reads as chaos. Container first, children 
+follow.
+
+### The shockwave principle (for page-level sequences)
+
+For full page entrances, animate outward from the most important 
+element (the epicentre) in rings:
+
+- Ring 0: The focal element and its internal content
+- Ring 1: Immediate surrounding elements
+- Ring 2: Adjacent sections
+- Ring 3+: Everything else radiating outward
+
+Everything that is further from the epicentre enters later. 
+The page builds from the centre of gravity out.
+
+### Stagger values
+
+- Siblings within a card: 65ms apart (type → title → desc → footer)
+- Cards within a row: 45–50ms apart
+- Sections within a page: 130–150ms apart
+- Rings in a shockwave: 130–170ms apart
+
+### Technical rules
+
+1. **inline style="opacity:0" in the HTML is the only guarantee.**
+   CSS classes and stylesheets can race with rendering on first 
+   paint and lose. Anything that must be invisible on frame 0 
+   must be set as an inline style before the DOM is painted.
+
+2. **One show() function for all reveals.**
+   Sets style.transition and style.opacity = '1' directly via JS. 
+   No class toggling, no CSS specificity fights. Everything goes 
+   through the same path.
+
+3. **Scale the container, not individual children.**
+   When scaling a group (e.g. three cards), wrap in a single 
+   container and scale it. Gaps scale with it. Overlap is 
+   impossible. One transform operation not three.
+
+4. **getBoundingClientRect() not guesswork.**
+   Measure actual DOM positions. Derive offsets and translations 
+   from real measurements. Never hardcode positions.
+
+5. **GSAP for physics-like multi-segment sequences.**
+   Animations with multiple physical segments each needing 
+   different easing (squash → explode → hold → crash) belong 
+   in a GSAP timeline. One .to() per physical segment with 
+   correct easing per segment. CSS @keyframes can only 
+   approximate this with one outer curve.
+   NOTE: GSAP is installed but not yet implemented — reserved 
+   for the final animation layer post-build.
+
+6. **Plain async/await for reveal chains.**
+   Sequential opacity reveals don't need a framework. 
+   wait() + show() is readable, debuggable, sufficient.
+
+7. **Never use transforms on elements that contain CSS grids.**
+   scale() on a grid/flex container breaks child layout. 
+   Use opacity only for those elements.
+
+### Easing reference
+
+- Spring/pop entrance: `cubic-bezier(0.34, 1.5, 0.64, 1)`
+- Smooth entrance: `cubic-bezier(0.4, 0, 0.2, 1)`
+- Carve/wipe: `cubic-bezier(0.77, 0, 0.18, 1)`
+- Hard stop (impact): `ease-in`
+
+### Existing animation utilities
+
+- `entrance(preset, active, delayMs?)` — inline CSSProperties
+- `useEntranceSteps(stepCount, gaps, active)` — cascading stagger
+- Presets: pop, fade, move, wipe, word-pop, slide-up, rise, 
+  wipe-right, wipe-down
+- Game CSS: `gs-box-in`, `gs-word-pop`, `gs-fade-in` (globals.css)
+
+Use these before writing new animation code.
 
 ### Pip dashboard theme
 - Pip content area is LIGHT themed (cream bg, dark text) — only the sidebar is dark
@@ -198,6 +327,7 @@ public/
 - Server components: async, fetch data directly, no hooks
 
 ## Environment variables
+located in: .env.local
 
 ```
 # Browser-exposed (NEXT_PUBLIC_)

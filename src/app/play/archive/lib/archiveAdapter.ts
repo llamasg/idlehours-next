@@ -18,7 +18,7 @@ import {
   formatDisplayDate as sdFormatDisplay,
   LAUNCH_DATE as SD_LAUNCH,
 } from '@/app/play/street-date/lib/dateUtils'
-import { loadDayState as sdLoadState } from '@/app/play/street-date/lib/storage'
+import { loadState as sdLoadStateRaw } from '@/app/play/street-date/lib/gameState'
 
 // Shelf Price
 import {
@@ -78,11 +78,11 @@ export function getArchiveForGame(slug: GameSlug): ArchiveEntry[] {
     case 'street-date': {
       const dates = sdArchiveDates()
       return dates.map((date) => {
-        const state = sdLoadState(date)
-        const played = state.attempts.length > 0
-        const finished = state.finished
-        const won = state.won
-        const score = state.score
+        const state = sdLoadStateRaw(date)
+        const played = state ? state.guesses.length > 0 : false
+        const finished = state?.finished ?? false
+        const won = state?.won ?? false
+        const score = state?.score ?? 0
         const rank = finished && won ? getRankForGame('street-date', score, 0) : ''
         const scoreDisplay = !played ? '' : finished && won ? `${score} pts` : finished ? 'Lost' : 'In progress'
         return { date, gameNumber: sdFormatNumber(date), displayDate: sdFormatDisplay(date), played, finished, won, score, streak: 0, rank, scoreDisplay }
@@ -97,7 +97,7 @@ export function getArchiveForGame(slug: GameSlug): ArchiveEntry[] {
         const finished = state.finished
         const won = state.won
         const score = state.score
-        const streak = state.streak
+        const streak = state.correctCount
         const rank = finished ? getRankForGame('shelf-price', score, streak) : ''
         const scoreDisplay = !played ? '' : finished ? `${streak}/10` : 'In progress'
         return { date, gameNumber: spFormatNumber(date), displayDate: spFormatDisplay(date), played, finished, won, score, streak, rank, scoreDisplay }
