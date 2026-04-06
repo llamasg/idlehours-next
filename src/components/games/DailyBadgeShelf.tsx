@@ -5,6 +5,14 @@ import Link from 'next/link'
 import { type GameSlug, getRankForGame, GAME_COLORS } from '@/lib/ranks'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 
+// ── Badge image paths ───────────────────────────────────────────────────────
+
+const GAME_SENSE_BADGES: Record<string, string> = {
+  'Skill Issue': '/images/badges/game-sense-skill-issue.png',
+  'Button Masher': '/images/badges/game-sense-button-masher.png',
+  'Big Brain': '/images/badges/game-sense-big-brain.png',
+}
+
 // ── localStorage helpers ────────────────────────────────────────────────────
 
 interface SlotData {
@@ -166,18 +174,30 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
 
                 {/* Badge circle — hover on wrapper since inner has entrance animation */}
                 <div className="relative h-[120px] w-[120px] transition-transform duration-200 group-hover:scale-[1.07] group-hover:rotate-[3deg]">
-                  <div
-                    className="badge-shimmer flex h-[120px] w-[120px] items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-[0.04em] text-white/30"
-                    style={{
-                      backgroundColor: GAME_COLORS[slot.slug].accent,
-                      boxShadow: `0 0 0 4px white, 0 4px 12px ${GAME_COLORS[slot.slug].shadow}`,
-                      transform: justCompleted ? undefined : `rotate(${BADGE_ROTATIONS[slotIndex]})`,
-                      ...entrance('pop', step >= 3, badgeDelay),
-                    }}
-                  >
-                    {/* TODO: replace with rank badge illustration */}
-                    BADGE
-                  </div>
+                  {slot.slug === 'game-sense' && GAME_SENSE_BADGES[slot.rankName] ? (
+                    <div
+                      className="flex h-[120px] w-[120px] items-center justify-center"
+                      style={{
+                        transform: justCompleted ? undefined : `rotate(${BADGE_ROTATIONS[slotIndex]})`,
+                        ...entrance('pop', step >= 3, badgeDelay),
+                      }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={GAME_SENSE_BADGES[slot.rankName]} alt={slot.rankName} className="h-full w-full object-contain" />
+                    </div>
+                  ) : (
+                    <div
+                      className="badge-shimmer flex h-[120px] w-[120px] items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-[0.04em] text-white/30"
+                      style={{
+                        backgroundColor: GAME_COLORS[slot.slug].accent,
+                        boxShadow: `0 0 0 4px white, 0 4px 12px ${GAME_COLORS[slot.slug].shadow}`,
+                        transform: justCompleted ? undefined : `rotate(${BADGE_ROTATIONS[slotIndex]})`,
+                        ...entrance('pop', step >= 3, badgeDelay),
+                      }}
+                    >
+                      BADGE
+                    </div>
+                  )}
 
                   {/* Ink rings — only on just-completed */}
                   {justCompleted && step >= 3 && (
@@ -199,8 +219,8 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
 
                 {/* Rank name */}
                 <span
-                  className="min-h-[18px] text-center font-heading text-[13px] font-extrabold leading-tight"
-                  style={{ color: GAME_COLORS[slot.slug].accent, ...entrance('fade', step >= 4, slotIndex * 150) }}
+                  className="min-h-[18px] text-center font-heading text-[13px] font-extrabold leading-tight text-[hsl(var(--game-ink))]"
+                  style={entrance('fade', step >= 4, slotIndex * 150)}
                 >
                   {slot.rankName}
                 </span>

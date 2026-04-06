@@ -12,6 +12,14 @@ import {
 import { COPY, pickRandom } from '@/components/games/GameEndModal.copy'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 
+// ── Badge image paths ───────────────────────────────────────────────────────
+
+const GAME_SENSE_BADGES: Record<string, string> = {
+  'Skill Issue': '/images/badges/game-sense-skill-issue.png',
+  'Button Masher': '/images/badges/game-sense-button-masher.png',
+  'Big Brain': '/images/badges/game-sense-big-brain.png',
+}
+
 // ── Types ───────────────────────────────────────────────────────────────────
 
 interface ResultCardProps {
@@ -262,16 +270,26 @@ export default function ResultCard({
           {/* Left column — badge + rank */}
           <div className="flex flex-col items-center justify-center gap-3 border-r border-[hsl(var(--game-ink))]/10 px-4 py-6 text-center">
             <div className="transition-transform duration-200 hover:scale-[1.07] hover:rotate-[3deg]">
-              <div
-                className="badge-shimmer flex h-[140px] w-[140px] items-center justify-center rounded-full text-[11px] font-bold uppercase tracking-[0.04em] text-white/30"
-                style={{
-                  backgroundColor: colors.accent,
-                  boxShadow: `0 10px 32px ${colors.shadow}`,
-                  ...entrance('pop', step >= 6),
-                }}
-              >
-                BADGE
-              </div>
+              {game === 'game-sense' && GAME_SENSE_BADGES[rankName] ? (
+                <div
+                  className="flex h-[140px] w-[140px] items-center justify-center drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
+                  style={entrance('pop', step >= 6)}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={GAME_SENSE_BADGES[rankName]} alt={rankName} className="h-full w-full object-contain" />
+                </div>
+              ) : (
+                <div
+                  className="badge-shimmer flex h-[140px] w-[140px] items-center justify-center rounded-full text-[11px] font-bold uppercase tracking-[0.04em] text-white/30"
+                  style={{
+                    backgroundColor: colors.accent,
+                    boxShadow: `0 10px 32px ${colors.shadow}`,
+                    ...entrance('pop', step >= 6),
+                  }}
+                >
+                  BADGE
+                </div>
+              )}
             </div>
             <div className="flex flex-col items-center gap-1.5">
               <p

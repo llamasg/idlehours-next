@@ -21,26 +21,26 @@ export interface RankThreshold {
 
 const GAME_SENSE_LADDER: RankThreshold[] = [
   { name: 'Bust', label: '0 pts' },
-  { name: 'Keep Guessing', label: '1\u2013349 pts' },
-  { name: 'Getting Warmer', label: '350\u2013599 pts' },
-  { name: 'Well Played', label: '600\u2013799 pts' },
-  { name: 'Encyclopaedic', label: '800+ pts' },
+  { name: 'Skill Issue', label: '1\u2013349 pts' },
+  { name: 'Button Masher', label: '350\u2013599 pts' },
+  { name: 'Big Brain', label: '600\u2013998 pts' },
+  { name: 'One Shot', label: '999 pts' },
 ]
 
 const STREET_DATE_LADDER: RankThreshold[] = [
   { name: 'Bust', label: '0 pts' },
-  { name: 'New to the Medium', label: '1\u2013349 pts' },
-  { name: 'Occasional Player', label: '350\u2013599 pts' },
-  { name: 'Retro Head', label: '600\u2013799 pts' },
-  { name: 'Time Archivist', label: '800+ pts' },
+  { name: 'Newbie', label: '1\u2013349 pts' },
+  { name: 'Has a Backlog', label: '350\u2013599 pts' },
+  { name: 'Day One', label: '600\u2013999 pts' },
+  { name: 'The Curator', label: '1000 pts' },
 ]
 
 const SHELF_PRICE_LADDER: RankThreshold[] = [
   { name: 'Bust', label: '0 pts' },
-  { name: 'Just Another Consumer', label: '100\u2013300 pts' },
-  { name: 'Junior Dev', label: '400\u2013600 pts' },
-  { name: 'Senior Producer', label: '700\u2013900 pts' },
-  { name: 'Industry Insider', label: '1000 pts' },
+  { name: 'Moms Credit Card', label: '100\u2013300 pts' },
+  { name: 'Bargain Hunter', label: '400\u2013600 pts' },
+  { name: 'Secret Shopper', label: '700\u2013999 pts' },
+  { name: 'Head of Sales', label: '1000 pts' },
 ]
 
 export type GameSlug = 'game-sense' | 'street-date' | 'shelf-price'

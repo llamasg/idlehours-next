@@ -3,6 +3,14 @@
 import { useState, useEffect, useRef, useMemo, type ReactNode } from 'react'
 import { type GameSlug, GAME_COLORS } from '@/lib/ranks'
 
+// ── Badge image paths ───────────────────────────────────────────────────────
+
+const GAME_SENSE_BADGES: Record<string, string> = {
+  'Skill Issue': '/images/badges/game-sense-skill-issue.png',
+  'Button Masher': '/images/badges/game-sense-button-masher.png',
+  'Big Brain': '/images/badges/game-sense-big-brain.png',
+}
+
 // ── Types ────────────────────────────────────────────────────────────────────
 
 interface GameEndModalProps {
@@ -301,19 +309,28 @@ export default function GameEndModal({
 
             {/* Rank badge block */}
             <div className="flex flex-col items-center gap-2">
-              <div
-                className={`flex h-24 w-24 items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-[0.05em] text-white/40 ${
-                  !isWin ? 'bg-[hsl(var(--game-ink-light))]' : ''
-                }`}
-                style={isWin ? {
-                  backgroundColor: colors.accent,
-                  boxShadow: `0 0 32px ${colors.shadow}`,
-                  animation: 'badge-pulse 1.2s ease-out forwards',
-                } : undefined}
-              >
-                {/* TODO: replace with rank badge illustration */}
-                BADGE
-              </div>
+              {game === 'game-sense' && GAME_SENSE_BADGES[rankName] ? (
+                <div
+                  className="flex h-24 w-24 items-center justify-center"
+                  style={isWin ? { animation: 'badge-pulse 1.2s ease-out forwards' } : undefined}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={GAME_SENSE_BADGES[rankName]} alt={rankName} className="h-full w-full object-contain" />
+                </div>
+              ) : (
+                <div
+                  className={`flex h-24 w-24 items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-[0.05em] text-white/40 ${
+                    !isWin ? 'bg-[hsl(var(--game-ink-light))]' : ''
+                  }`}
+                  style={isWin ? {
+                    backgroundColor: colors.accent,
+                    boxShadow: `0 0 32px ${colors.shadow}`,
+                    animation: 'badge-pulse 1.2s ease-out forwards',
+                  } : undefined}
+                >
+                  BADGE
+                </div>
+              )}
               <p
                 className="font-heading text-lg font-black tracking-[0.02em]"
                 style={{ color: isWin ? colors.accent : 'hsl(var(--game-ink-mid))' }}

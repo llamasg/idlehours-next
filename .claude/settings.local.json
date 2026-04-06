@@ -77,7 +77,17 @@
       "Bash(xargs -I {} bash -c ' if grep -P \"^\\\\s*/\\\\*\" \"{}\" >/dev/null 2>&1; then awk \" /^[[:space:]]*\\\\/\\\\*/ { in_comment=1; comment=\\\\\"\\\\\" } in_comment { comment=comment\\\\\"\\\\n\\\\\"\\\\$0 } /\\\\*\\\\/[[:space:]]*\\\\$/ { in_comment=0; if \\(comment ~ /[^a-zA-Z ]/\\) print FILENAME\\\\\":\\\\\"NR\\\\\":\\\\\"comment; comment=\\\\\"\\\\\" } \" \"{}\" fi ')",
       "Bash(xargs -I '{}' sh -c 'perl -ne \"if \\(/\\\\/\\\\*.*\\\\*\\\\// && /[{}\\\\[\\\\]\\(\\)=.]/\\) { print FILENAME . \\\\\":\\\\\" . \\\\$_; }\" \"{}\" ')",
       "Bash(npm uninstall:*)",
-      "Bash(head -100 /d/websites/IdleHours/src/app/play/street-date/[date]/page.tsx)"
+      "Bash(head -100 /d/websites/IdleHours/src/app/play/street-date/[date]/page.tsx)",
+      "Bash(wait)",
+      "Bash(identify /tmp/mega.jpg /tmp/sniper.jpg /tmp/sniper3.jpg /tmp/sunken.jpg)",
+      "Bash(python3 -c ':*)",
+      "Bash(python -c ':*)",
+      "Read(//tmp/**)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(mv \"public/images/badges/01_Game Sense_Skill Issue.png\" \"public/images/badges/game-sense-skill-issue.png\")",
+      "Bash(mv \"public/images/badges/02_Game Sense_Button Masher.png\" \"public/images/badges/game-sense-button-masher.png\")",
+      "Bash(mv \"public/images/badges/03_Game Sense_Big Brain.png\" \"public/images/badges/game-sense-big-brain.png\")",
+      "Bash(rm -f \"public/images/badges/game-sense.png\")"
     ]
   }
 }
