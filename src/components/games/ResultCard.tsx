@@ -14,10 +14,18 @@ import { entrance, useEntranceSteps } from '@/lib/animations'
 
 // ── Badge image paths ───────────────────────────────────────────────────────
 
-const GAME_SENSE_BADGES: Record<string, string> = {
+const BADGE_IMAGES: Record<string, string> = {
+  // Game Sense
   'Skill Issue': '/images/badges/game-sense-skill-issue.png',
   'Button Masher': '/images/badges/game-sense-button-masher.png',
   'Big Brain': '/images/badges/game-sense-big-brain.png',
+  // Shelf Price
+  'Moms Credit Card': '/images/badges/shelf-price-moms-credit-card.png',
+  'Bargain Hunter': '/images/badges/shelf-price-bargain-hunter.png',
+  'Secret Shopper': '/images/badges/shelf-price-secret-shopper.png',
+  'Head of Sales': '/images/badges/shelf-price-head-of-sales.png',
+  // Street Date
+  'Newbie': '/images/badges/street-date-newbie.png',
 }
 
 // ── Types ───────────────────────────────────────────────────────────────────
@@ -270,13 +278,13 @@ export default function ResultCard({
           {/* Left column — badge + rank */}
           <div className="flex flex-col items-center justify-center gap-3 border-r border-[hsl(var(--game-ink))]/10 px-4 py-6 text-center">
             <div className="transition-transform duration-200 hover:scale-[1.07] hover:rotate-[3deg]">
-              {game === 'game-sense' && GAME_SENSE_BADGES[rankName] ? (
+              {BADGE_IMAGES[rankName] ? (
                 <div
                   className="flex h-[140px] w-[140px] items-center justify-center drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
                   style={entrance('pop', step >= 6)}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={GAME_SENSE_BADGES[rankName]} alt={rankName} className="h-full w-full object-contain" />
+                  <img src={BADGE_IMAGES[rankName]} alt={rankName} className="h-full w-full object-contain" />
                 </div>
               ) : (
                 <div

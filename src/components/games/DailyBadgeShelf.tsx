@@ -7,10 +7,18 @@ import { entrance, useEntranceSteps } from '@/lib/animations'
 
 // ── Badge image paths ───────────────────────────────────────────────────────
 
-const GAME_SENSE_BADGES: Record<string, string> = {
+const BADGE_IMAGES: Record<string, string> = {
+  // Game Sense
   'Skill Issue': '/images/badges/game-sense-skill-issue.png',
   'Button Masher': '/images/badges/game-sense-button-masher.png',
   'Big Brain': '/images/badges/game-sense-big-brain.png',
+  // Shelf Price
+  'Moms Credit Card': '/images/badges/shelf-price-moms-credit-card.png',
+  'Bargain Hunter': '/images/badges/shelf-price-bargain-hunter.png',
+  'Secret Shopper': '/images/badges/shelf-price-secret-shopper.png',
+  'Head of Sales': '/images/badges/shelf-price-head-of-sales.png',
+  // Street Date
+  'Newbie': '/images/badges/street-date-newbie.png',
 }
 
 // ── localStorage helpers ────────────────────────────────────────────────────
@@ -174,7 +182,7 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
 
                 {/* Badge circle — hover on wrapper since inner has entrance animation */}
                 <div className="relative h-[120px] w-[120px] transition-transform duration-200 group-hover:scale-[1.07] group-hover:rotate-[3deg]">
-                  {slot.slug === 'game-sense' && GAME_SENSE_BADGES[slot.rankName] ? (
+                  {BADGE_IMAGES[slot.rankName] ? (
                     <div
                       className="flex h-[120px] w-[120px] items-center justify-center"
                       style={{
@@ -183,7 +191,7 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
                       }}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={GAME_SENSE_BADGES[slot.rankName]} alt={slot.rankName} className="h-full w-full object-contain" />
+                      <img src={BADGE_IMAGES[slot.rankName]} alt={slot.rankName} className="h-full w-full object-contain" />
                     </div>
                   ) : (
                     <div

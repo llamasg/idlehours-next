@@ -5,10 +5,18 @@ import { type GameSlug, GAME_COLORS } from '@/lib/ranks'
 
 // ── Badge image paths ───────────────────────────────────────────────────────
 
-const GAME_SENSE_BADGES: Record<string, string> = {
+const BADGE_IMAGES: Record<string, string> = {
+  // Game Sense
   'Skill Issue': '/images/badges/game-sense-skill-issue.png',
   'Button Masher': '/images/badges/game-sense-button-masher.png',
   'Big Brain': '/images/badges/game-sense-big-brain.png',
+  // Shelf Price
+  'Moms Credit Card': '/images/badges/shelf-price-moms-credit-card.png',
+  'Bargain Hunter': '/images/badges/shelf-price-bargain-hunter.png',
+  'Secret Shopper': '/images/badges/shelf-price-secret-shopper.png',
+  'Head of Sales': '/images/badges/shelf-price-head-of-sales.png',
+  // Street Date
+  'Newbie': '/images/badges/street-date-newbie.png',
 }
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -309,13 +317,13 @@ export default function GameEndModal({
 
             {/* Rank badge block */}
             <div className="flex flex-col items-center gap-2">
-              {game === 'game-sense' && GAME_SENSE_BADGES[rankName] ? (
+              {BADGE_IMAGES[rankName] ? (
                 <div
                   className="flex h-24 w-24 items-center justify-center"
                   style={isWin ? { animation: 'badge-pulse 1.2s ease-out forwards' } : undefined}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={GAME_SENSE_BADGES[rankName]} alt={rankName} className="h-full w-full object-contain" />
+                  <img src={BADGE_IMAGES[rankName]} alt={rankName} className="h-full w-full object-contain" />
                 </div>
               ) : (
                 <div
