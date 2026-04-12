@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo, type ReactNode } from 'react'
 import { type GameSlug, GAME_COLORS } from '@/lib/ranks'
+import BadgeLightbox, { isHoloRank, HoloBadgeWrapper } from '@/components/games/BadgeLightbox'
 
 // ── Badge image paths ───────────────────────────────────────────────────────
 
@@ -246,13 +247,17 @@ export default function GameEndModal({
   onClose,
 }: GameEndModalProps) {
   const colors = GAME_COLORS[game]
+  const [badgeLightbox, setBadgeLightbox] = useState(false)
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        if (badgeLightbox) setBadgeLightbox(false)
+        else onClose()
+      }
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [onClose])
+  }, [onClose, badgeLightbox])
 
   const isWin = result === 'win'
 
@@ -324,13 +329,25 @@ export default function GameEndModal({
             {/* Rank badge block */}
             <div className="flex flex-col items-center gap-2">
               {BADGE_IMAGES[rankName] ? (
+                isHoloRank(rankName) ? (
+                  <HoloBadgeWrapper
+                    src={BADGE_IMAGES[rankName]}
+                    alt={rankName}
+                    size={96}
+                    className="cursor-pointer transition-transform duration-200 hover:scale-[1.07]"
+                    style={isWin ? { animation: 'badge-pulse 1.2s ease-out forwards' } : undefined}
+                    onClick={() => setBadgeLightbox(true)}
+                  />
+                ) : (
                 <div
-                  className="flex h-24 w-24 items-center justify-center"
+                  className="flex h-24 w-24 cursor-pointer items-center justify-center transition-transform duration-200 hover:scale-[1.07]"
                   style={isWin ? { animation: 'badge-pulse 1.2s ease-out forwards' } : undefined}
+                  onClick={() => setBadgeLightbox(true)}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={BADGE_IMAGES[rankName]} alt={rankName} className="h-full w-full object-contain" />
                 </div>
+                )
               ) : (
                 <div
                   className={`flex h-24 w-24 items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-[0.05em] text-white/40 ${
@@ -401,6 +418,9 @@ export default function GameEndModal({
           </div>
         </div>
       </div>
+      {badgeLightbox && BADGE_IMAGES[rankName] && (
+        <BadgeLightbox src={BADGE_IMAGES[rankName]} name={rankName} holo={isHoloRank(rankName)} onClose={() => setBadgeLightbox(false)} />
+      )}
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { type GameSlug, getRankForGame, GAME_COLORS } from '@/lib/ranks'
 import { entrance, useEntranceSteps } from '@/lib/animations'
+import BadgeLightbox, { isHoloRank, HoloBadgeWrapper } from '@/components/games/BadgeLightbox'
 
 // ── Badge image paths ───────────────────────────────────────────────────────
 
@@ -103,6 +104,7 @@ interface DailyBadgeShelfProps {
 }
 
 export default function DailyBadgeShelf({ currentGame, animateStamp = false }: DailyBadgeShelfProps) {
+  const [lightbox, setLightbox] = useState<{ src: string; name: string; holo: boolean } | null>(null)
   const dateStr = useMemo(() => getTodayDateStr(), [])
 
   const slots = useMemo(
@@ -187,8 +189,22 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
                 </span>
 
                 {/* Badge circle — hover on wrapper since inner has entrance animation */}
-                <div className="relative h-[120px] w-[120px] transition-transform duration-200 group-hover:scale-[1.07] group-hover:rotate-[3deg]">
+                <div
+                  className="relative h-[120px] w-[120px] cursor-pointer transition-transform duration-200 group-hover:scale-[1.07] group-hover:rotate-[3deg]"
+                  onClick={() => BADGE_IMAGES[slot.rankName] && setLightbox({ src: BADGE_IMAGES[slot.rankName], name: slot.rankName, holo: isHoloRank(slot.rankName) })}
+                >
                   {BADGE_IMAGES[slot.rankName] ? (
+                    isHoloRank(slot.rankName) ? (
+                      <HoloBadgeWrapper
+                        src={BADGE_IMAGES[slot.rankName]}
+                        alt={slot.rankName}
+                        size={120}
+                        style={{
+                          transform: justCompleted ? undefined : `rotate(${BADGE_ROTATIONS[slotIndex]})`,
+                          ...entrance('pop', step >= 3, badgeDelay),
+                        }}
+                      />
+                    ) : (
                     <div
                       className="flex h-[120px] w-[120px] items-center justify-center"
                       style={{
@@ -199,6 +215,7 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={BADGE_IMAGES[slot.rankName]} alt={slot.rankName} className="h-full w-full object-contain" />
                     </div>
+                    )
                   ) : (
                     <div
                       className="badge-shimmer flex h-[120px] w-[120px] items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-[0.04em] text-white/30"
@@ -289,6 +306,9 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
           )
         })}
       </div>
+      {lightbox && (
+        <BadgeLightbox src={lightbox.src} name={lightbox.name} holo={lightbox.holo} onClose={() => setLightbox(null)} />
+      )}
     </div>
   )
 }

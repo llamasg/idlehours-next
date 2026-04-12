@@ -11,6 +11,7 @@ import {
 } from '@/lib/ranks'
 import { COPY, pickRandom } from '@/components/games/GameEndModal.copy'
 import { entrance, useEntranceSteps } from '@/lib/animations'
+import BadgeLightbox, { isHoloRank, HoloBadgeWrapper } from '@/components/games/BadgeLightbox'
 
 // ── Badge image paths ───────────────────────────────────────────────────────
 
@@ -82,6 +83,7 @@ export default function ResultCard({
   animateEntrance = false,
 }: ResultCardProps) {
   const [ladderOpen, setLadderOpen] = useState(false)
+  const [badgeLightbox, setBadgeLightbox] = useState(false)
 
   // Pick random copy once on mount
   const { heading, subheading, dayFlavour, rankName, rankFlavour } = useMemo(() => {
@@ -111,6 +113,7 @@ export default function ResultCard({
   const rankWords = rankName.split(' ')
 
   return (
+    <>
     <div
       className="mx-auto w-full overflow-hidden rounded-[24px] border-[1.5px] border-[hsl(var(--game-ink))]/10 bg-[hsl(var(--game-white))] shadow-sm"
       style={entrance('wipe', step >= 1)}
@@ -283,8 +286,17 @@ export default function ResultCard({
         <div className="grid min-h-[200px] grid-cols-2">
           {/* Left column — badge + rank */}
           <div className="flex flex-col items-center justify-center gap-3 border-r border-[hsl(var(--game-ink))]/10 px-4 py-6 text-center">
-            <div className="transition-transform duration-200 hover:scale-[1.07] hover:rotate-[3deg]">
+            <div className="cursor-pointer transition-transform duration-200 hover:scale-[1.07] hover:rotate-[3deg]" onClick={() => BADGE_IMAGES[rankName] && setBadgeLightbox(true)}>
               {BADGE_IMAGES[rankName] ? (
+                isHoloRank(rankName) ? (
+                  <HoloBadgeWrapper
+                    src={BADGE_IMAGES[rankName]}
+                    alt={rankName}
+                    size={140}
+                    className="drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
+                    style={entrance('pop', step >= 6)}
+                  />
+                ) : (
                 <div
                   className="flex h-[140px] w-[140px] items-center justify-center drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
                   style={entrance('pop', step >= 6)}
@@ -292,6 +304,7 @@ export default function ResultCard({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={BADGE_IMAGES[rankName]} alt={rankName} className="h-full w-full object-contain" />
                 </div>
+                )
               ) : (
                 <div
                   className="badge-shimmer flex h-[140px] w-[140px] items-center justify-center rounded-full text-[11px] font-bold uppercase tracking-[0.04em] text-white/30"
@@ -444,5 +457,9 @@ export default function ResultCard({
         )}
       </div>
     </div>
+    {badgeLightbox && BADGE_IMAGES[rankName] && (
+      <BadgeLightbox src={BADGE_IMAGES[rankName]} name={rankName} holo={isHoloRank(rankName)} onClose={() => setBadgeLightbox(false)} />
+    )}
+    </>
   )
 }

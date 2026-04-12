@@ -51,6 +51,11 @@ export default {
           '50%': { transform: 'scale(1.1)' },
           '100%': { transform: 'scale(1)', opacity: '1' },
         },
+        'holo-shift': {
+          '0%': { backgroundPosition: '10% 10%' },
+          '50%': { backgroundPosition: '90% 90%' },
+          '100%': { backgroundPosition: '10% 10%' },
+        },
         'stamp-bounce': {
           '0%': { transform: 'scale(1.8) translateY(-20px)', opacity: '0' },
           '60%': { transform: 'scale(0.95) translateY(2px)', opacity: '1' },
@@ -113,6 +118,7 @@ export default {
         'score-flash': 'score-flash 0.4s ease',
         'pip-pulse': 'pip-pulse 1.2s ease-in-out infinite',
         'badge-pulse': 'badge-pulse 1.2s ease-out forwards',
+        'holo-shift': 'holo-shift 4s ease-in-out infinite',
         'stamp-bounce': 'stamp-bounce 0.5s cubic-bezier(0.34,1.56,0.64,1) both',
         'ink-ring': 'ink-ring 0.8s ease-out both',
         'score-float': 'score-float 1.2s ease-out both',
