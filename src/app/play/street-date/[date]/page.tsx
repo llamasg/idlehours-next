@@ -53,10 +53,18 @@ export default function StreetDateV2DayPage({
   const [scorePulse, setScorePulse] = useState(false)
   const [floatingCost, setFloatingCost] = useState<{ key: number; cost: number } | null>(null)
   const [justSubmitted, setJustSubmitted] = useState(false)
-  const [showWinModal, setShowWinModal] = useState(false)
-  const [showLossModal, setShowLossModal] = useState(false)
   const [postGameTab, setPostGameTab] = useState<'answer' | 'guesses'>('answer')
   const [hoveredGuessChip, setHoveredGuessChip] = useState<string | null>(null)
+
+  // Drag state
+  const [dragging, setDragging] = useState<{
+    chipId: string
+    x: number
+    y: number
+    originRect: DOMRect
+  } | null>(null)
+  const slotRefs = useRef<(HTMLDivElement | null)[]>([])
+  const poolRef = useRef<HTMLDivElement | null>(null)
 
   const wipeTriggered = useRef(false)
   const puzzleRef = useRef<ReturnType<typeof generatePuzzle> | null>(null)
@@ -275,9 +283,20 @@ export default function StreetDateV2DayPage({
 
     const guessNum = state.guesses.length + 1
     const { correctCount, results } = calcGuessResults(filledSlots, correctOrder)
-    const newScore = calcScoreAfterGuess(state.score, guessNum)
     const won = correctCount === 7
     const finished = won || guessNum >= MAX_GUESSES
+
+    let newScore: number
+    if (won) {
+      // Correct answer always worth at least 1pt
+      newScore = Math.max(1, calcScoreAfterGuess(state.score, guessNum))
+    } else if (finished) {
+      // Ran out of guesses — bust
+      newScore = 0
+    } else {
+      // Wrong guess, apply penalty
+      newScore = calcScoreAfterGuess(state.score, guessNum)
+    }
 
     const guess = {
       order: filledSlots,
@@ -369,57 +388,108 @@ export default function StreetDateV2DayPage({
     setTimeout(() => setFloatingCost(null), 1200)
   }, [])
 
-  // ── Drag & Drop (Desktop) ─────────────────────────────────────────────────
+  // ── Pointer-based Drag & Drop ──────────────────────────────────────────────
 
-  const handleDragStart = useCallback((e: React.DragEvent, chipId: string) => {
-    e.dataTransfer.setData('text/plain', chipId)
-    e.dataTransfer.effectAllowed = 'move'
-    setSelectedChip(null)
-    setHintOnePending(false)
-  }, [])
+  // Track pointer start position for drag threshold
+  const pointerStart = useRef<{ x: number; y: number; chipId: string; rect: DOMRect } | null>(null)
+  const [pointerDown, setPointerDown] = useState(false)
+  const DRAG_THRESHOLD = 6 // px — below this, treat as tap
 
-  const handleSlotDrop = useCallback((e: React.DragEvent, slotIndex: number) => {
-    e.preventDefault()
+  const handlePointerDragStart = useCallback((e: React.PointerEvent, chipId: string) => {
     if (!state || state.finished) return
-    const chipId = e.dataTransfer.getData('text/plain')
-    if (!chipId) return
+    const target = e.currentTarget as HTMLElement
+    const rect = target.getBoundingClientRect()
+    pointerStart.current = { x: e.clientX, y: e.clientY, chipId, rect }
+    setPointerDown(true)
+  }, [state])
+
+  const handlePointerDragMove = useCallback((e: React.PointerEvent) => {
+    // Check if we should start dragging (exceeded threshold)
+    if (pointerStart.current && !dragging) {
+      const dx = e.clientX - pointerStart.current.x
+      const dy = e.clientY - pointerStart.current.y
+      if (Math.sqrt(dx * dx + dy * dy) >= DRAG_THRESHOLD) {
+        setDragging({
+          chipId: pointerStart.current.chipId,
+          x: e.clientX,
+          y: e.clientY,
+          originRect: pointerStart.current.rect,
+        })
+        setSelectedChip(null)
+        setHintOnePending(false)
+        pointerStart.current = null
+        setPointerDown(false)
+      }
+      return
+    }
+    if (!dragging) return
+    e.preventDefault()
+    setDragging(prev => prev ? { ...prev, x: e.clientX, y: e.clientY } : null)
+  }, [dragging])
+
+  const handlePointerDragEnd = useCallback((e: React.PointerEvent) => {
+    // If we never started dragging, it was a tap — let onClick handle it
+    if (pointerStart.current) {
+      pointerStart.current = null
+      setPointerDown(false)
+      return
+    }
+    if (!dragging || !state) {
+      setDragging(null)
+      return
+    }
+    e.preventDefault()
+    const { chipId } = dragging
+    const dropX = e.clientX
+    const dropY = e.clientY
+
+    // Check which slot we're over
+    let droppedSlot = -1
+    for (let i = 0; i < slotRefs.current.length; i++) {
+      const el = slotRefs.current[i]
+      if (!el) continue
+      const rect = el.getBoundingClientRect()
+      if (dropX >= rect.left && dropX <= rect.right && dropY >= rect.top && dropY <= rect.bottom) {
+        droppedSlot = i
+        break
+      }
+    }
+
+    // Check if over pool
+    let droppedOnPool = false
+    if (poolRef.current) {
+      const rect = poolRef.current.getBoundingClientRect()
+      if (dropX >= rect.left && dropX <= rect.right && dropY >= rect.top && dropY <= rect.bottom) {
+        droppedOnPool = true
+      }
+    }
 
     const isFromPool = state.pool.includes(chipId)
     const fromSlotIndex = state.slots.indexOf(chipId)
-    const chipInSlot = state.slots[slotIndex]
 
-    if (isFromPool) {
+    if (droppedSlot !== -1) {
+      const chipInSlot = state.slots[droppedSlot]
+      if (isFromPool) {
+        const newSlots = [...state.slots]
+        const newPool = state.pool.filter(id => id !== chipId)
+        if (chipInSlot) newPool.push(chipInSlot)
+        newSlots[droppedSlot] = chipId
+        persist({ ...state, slots: newSlots, pool: newPool })
+      } else if (fromSlotIndex !== -1) {
+        const newSlots = [...state.slots]
+        newSlots[fromSlotIndex] = chipInSlot
+        newSlots[droppedSlot] = chipId
+        persist({ ...state, slots: newSlots })
+      }
+    } else if (droppedOnPool && fromSlotIndex !== -1) {
       const newSlots = [...state.slots]
-      const newPool = state.pool.filter(id => id !== chipId)
-      if (chipInSlot) newPool.push(chipInSlot)
-      newSlots[slotIndex] = chipId
-      persist({ ...state, slots: newSlots, pool: newPool })
-    } else if (fromSlotIndex !== -1) {
-      const newSlots = [...state.slots]
-      newSlots[fromSlotIndex] = chipInSlot
-      newSlots[slotIndex] = chipId
-      persist({ ...state, slots: newSlots })
-    }
-  }, [state, persist])
-
-  const handlePoolDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    if (!state || state.finished) return
-    const chipId = e.dataTransfer.getData('text/plain')
-    if (!chipId) return
-    const slotIndex = state.slots.indexOf(chipId)
-    if (slotIndex !== -1) {
-      const newSlots = [...state.slots]
-      newSlots[slotIndex] = null
+      newSlots[fromSlotIndex] = null
       const newPool = [...state.pool, chipId]
       persist({ ...state, slots: newSlots, pool: newPool })
     }
-  }, [state, persist])
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    e.dataTransfer.dropEffect = 'move'
-  }, [])
+    setDragging(null)
+  }, [dragging, state, persist])
 
   // ── Emoji grid for finished state ─────────────────────────────────────────
 
@@ -433,8 +503,7 @@ export default function StreetDateV2DayPage({
   // ── Post-game state ────────────────────────────────────────────────────────
 
   const isPostGame = state ? state.finished : false
-  const isModalOpen = showWinModal || showLossModal
-  const isPostGameReady = isPostGame && !isModalOpen
+  const isPostGameReady = isPostGame
   const pgGaps = useMemo(() => [...POSTGAME_GAPS], [])
   const pgStep = useEntranceSteps(7, pgGaps, isPostGameReady)
 
@@ -480,9 +549,54 @@ export default function StreetDateV2DayPage({
   const allSlotsFilled = state.slots.every(Boolean)
   const lastGuess = state.guesses[state.guesses.length - 1] ?? null
 
+  // Floating ghost card for drag
+  const ghostCard = dragging ? (() => {
+    const game = gameById(dragging.chipId)
+    if (!game) return null
+    const w = dragging.originRect.width
+    const h = dragging.originRect.height
+    return (
+      <div
+        className="pointer-events-none fixed z-[100] overflow-hidden rounded-xl border-2 border-blue-400 bg-[hsl(var(--game-white))] shadow-2xl shadow-blue-400/30"
+        style={{
+          width: w,
+          height: h,
+          left: dragging.x - w / 2,
+          top: dragging.y - h / 2,
+          transform: 'rotate(3deg) scale(1.05)',
+          transition: 'transform 0.15s cubic-bezier(0.34,1.5,0.64,1)',
+        }}
+      >
+        <div className="relative flex-1 overflow-hidden rounded-t-[10px]" style={{ aspectRatio: '3/4' }}>
+          <img
+            src={igdbCoverUrl(game.igdbImageId)}
+            alt={game.title}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </div>
+        <div className="flex flex-col items-center justify-center px-1 py-1">
+          <span className="w-full text-center text-[8px] font-bold leading-tight text-[hsl(var(--game-ink))] sm:text-[10px] line-clamp-2">
+            {game.title}
+          </span>
+        </div>
+      </div>
+    )
+  })() : null
+
   return (
     <>
       <Header />
+
+      {/* Global pointer handlers for drag tracking — covers threshold detection + active drag */}
+      {(dragging || pointerDown) && (
+        <div
+          className="fixed inset-0 z-[99]"
+          style={{ touchAction: 'none', cursor: dragging ? 'grabbing' : 'default' }}
+          onPointerMove={handlePointerDragMove}
+          onPointerUp={handlePointerDragEnd}
+        />
+      )}
+      {ghostCard}
 
       <div className="flex min-h-screen flex-col">
         {/* Green game world */}
@@ -600,7 +714,7 @@ export default function StreetDateV2DayPage({
                     )
                   })}
                   <span className="ml-2 font-heading text-xs font-[800] text-white/50">
-                    {state.guesses.length}/{MAX_GUESSES}
+                    Guess {state.guesses.length}/{MAX_GUESSES}
                   </span>
                 </div>
               )}
@@ -717,12 +831,13 @@ export default function StreetDateV2DayPage({
                             ? 'border-[hsl(var(--game-cream-dark))]'
                             : 'border-dashed border-[hsl(var(--game-ink))]/15'
 
+                      const isDropTarget = dragging && !state.slots.includes(dragging.chipId) ? true :
+                        dragging && state.slots.indexOf(dragging.chipId) !== i
                       return (
                         <div
                           key={i}
-                          onClick={() => handleSlotTap(i)}
-                          onDrop={(e) => handleSlotDrop(e, i)}
-                          onDragOver={handleDragOver}
+                          ref={(el) => { slotRefs.current[i] = el }}
+                          onClick={() => !dragging && handleSlotTap(i)}
                           className={`relative flex h-[170px] w-[110px] shrink-0 flex-col items-center justify-center rounded-xl border-2 transition-all duration-200 sm:h-[220px] sm:w-[145px] lg:w-auto lg:flex-1 ${slotBorderColor} ${
                             hintOnePending
                               ? chipId ? 'cursor-pointer opacity-35 hover:opacity-100' : 'opacity-35'
@@ -739,9 +854,8 @@ export default function StreetDateV2DayPage({
 
                           {game ? (
                             <div
-                              draggable
-                              onDragStart={(e) => handleDragStart(e, chipId!)}
-                              className="flex h-full w-full flex-col cursor-grab active:cursor-grabbing"
+                              onPointerDown={(e) => handlePointerDragStart(e, chipId!)}
+                              className={`flex h-full w-full flex-col cursor-grab active:cursor-grabbing touch-none ${dragging?.chipId === chipId ? 'opacity-30' : ''}`}
                             >
                               <div className="relative flex-1 overflow-hidden rounded-t-[10px]" style={{ aspectRatio: '3/4' }}>
                                 <img
@@ -816,14 +930,14 @@ export default function StreetDateV2DayPage({
 
                 {/* ── Game pool ── */}
                 <div
+                  ref={poolRef}
                   onClick={(e) => {
+                    if (dragging) return
                     // Only trigger if clicking the pool background, not a chip
                     if (e.target === e.currentTarget || (e.target as HTMLElement).dataset.poolBg) {
                       handlePoolAreaTap()
                     }
                   }}
-                  onDrop={handlePoolDrop}
-                  onDragOver={handleDragOver}
                   className="rounded-2xl border-2 border-dashed border-[hsl(var(--game-ink))]/15 bg-[hsl(var(--game-cream-dark))]/40 p-3 sm:p-4"
                   data-pool-bg="true"
                 >
@@ -838,13 +952,13 @@ export default function StreetDateV2DayPage({
                       return (
                         <div
                           key={chipId}
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, chipId)}
+                          onPointerDown={(e) => handlePointerDragStart(e, chipId)}
                           onClick={(e) => {
+                            if (dragging) return
                             e.stopPropagation()
                             handlePoolChipTap(chipId)
                           }}
-                          className={`flex h-[170px] w-[110px] cursor-grab flex-col overflow-hidden rounded-xl border-2 bg-[hsl(var(--game-white))] transition-all duration-200 active:cursor-grabbing sm:h-[220px] sm:w-[145px] ${
+                          className={`flex h-[170px] w-[110px] cursor-grab flex-col overflow-hidden rounded-xl border-2 bg-[hsl(var(--game-white))] transition-all duration-200 active:cursor-grabbing touch-none sm:h-[220px] sm:w-[145px] ${dragging?.chipId === chipId ? 'opacity-30' : ''} ${
                             isSelected
                               ? 'border-blue-400 shadow-lg shadow-blue-400/20 -translate-y-1'
                               : 'border-[hsl(var(--game-ink))]/10 hover:border-[hsl(var(--game-ink))]/20'
