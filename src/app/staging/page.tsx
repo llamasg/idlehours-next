@@ -10,6 +10,7 @@ const SECTIONS = [
   { href: '/staging/macro', num: '07', title: 'Macro Animations', desc: 'Page transitions, circle masks, wipes, gravity drops, scroll effects.', status: 'building' },
   { href: '/staging/notebook', num: '08', title: 'Notebook', desc: 'Stipple textures, sticky notes, pinboards, spiral notebooks, icon stamps.', status: 'building' },
   { href: '/staging/game-identities', num: '09', title: 'Game IDs', desc: 'Five game colour worlds. Gradients, accents, and sub-brand identities.', status: 'building' },
+  { href: '/staging/badges', num: '10', title: 'Badge Artwork', desc: 'All daily game badges with interactive lightbox and holographic shader.', status: 'building' },
 ]
 
 export default function StagingOverview() {

@@ -15,17 +15,23 @@ import { entrance, useEntranceSteps } from '@/lib/animations'
 // ── Badge image paths ───────────────────────────────────────────────────────
 
 const BADGE_IMAGES: Record<string, string> = {
+  // Universal
+  'Bust': '/images/badges/00_BUST.png',
   // Game Sense
-  'Skill Issue': '/images/badges/game-sense-skill-issue.png',
-  'Button Masher': '/images/badges/game-sense-button-masher.png',
-  'Big Brain': '/images/badges/game-sense-big-brain.png',
-  // Shelf Price
-  'Moms Credit Card': '/images/badges/shelf-price-moms-credit-card.png',
-  'Bargain Hunter': '/images/badges/shelf-price-bargain-hunter.png',
-  'Secret Shopper': '/images/badges/shelf-price-secret-shopper.png',
-  'Head of Sales': '/images/badges/shelf-price-head-of-sales.png',
+  'Skill Issue': '/images/badges/Game Sense_01__Skill Issue.png',
+  'Button Masher': '/images/badges/Game Sense_02_Button Masher.png',
+  'Big Brain': '/images/badges/Game Sense_03_Big Brain.png',
+  'One Shot': '/images/badges/Game Sense_04_One Shot.png',
   // Street Date
-  'Newbie': '/images/badges/street-date-newbie.png',
+  'Newbie': '/images/badges/Street Date_01_Newbie.png',
+  'Has a Backlog': '/images/badges/Street Date_02_Has a Backlog.png',
+  'Day One': '/images/badges/Street Date_03_Day One.png',
+  'The Curator': '/images/badges/Street Date_04_The Curator.png',
+  // Shelf Price
+  'Moms Credit Card': '/images/badges/Shelf Price_01_Moms Credit card.png',
+  'Bargain Hunter': '/images/badges/Shelf Price_02_bargain hunter.png',
+  'Secret Shopper': '/images/badges/Shelf Price_03_Secret Shopper.png',
+  'Head of Sales': '/images/badges/Shelf Price_04_head of sales.png',
 }
 
 // ── Types ───────────────────────────────────────────────────────────────────
