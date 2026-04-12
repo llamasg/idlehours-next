@@ -18,7 +18,7 @@ import {
 import { loadDayState, saveDayState, WRONG_PENALTY, TARGET_ROUNDS, type DayState } from '../lib/storage'
 import GameCards from '../components/GameCards'
 import ProgressBar from '../components/ProgressBar'
-import GameEndModal from '@/components/games/GameEndModal'
+
 import {
   COPY,
   pickRandom,
@@ -164,9 +164,7 @@ export default function ShelfPriceDayPage({
     setChosenSide(null)
     setChoiceCorrect(null)
 
-    if (finished) {
-      setTimeout(() => setShowResult(true), 300)
-    }
+    // Post-game screen shows automatically via isPostGame
   }, [state, chosenSide, choiceCorrect, date])
 
   // Modal copy — picked once when modal opens
@@ -516,78 +514,7 @@ export default function ShelfPriceDayPage({
 
       <SiteFooter />
 
-      {/* Result overlay */}
-      {showResult && state.finished && (
-        <GameEndModal
-          game="shelf-price"
-          result={modalCopy.result}
-          score={state.score}
-          heading={modalCopy.heading}
-          subheading={modalCopy.subheading}
-          rankName={modalCopy.rankName}
-          rankFlavour={modalCopy.rankFlavour}
-          stats={[
-            { label: 'Score', value: String(state.score) },
-            { label: 'Correct', value: `${state.correctCount}/${TARGET_ROUNDS}` },
-          ]}
-          heroZone={
-            <div className="px-4 pt-5 pb-2">
-              <div className="grid grid-cols-5 gap-1.5">
-                {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
-                  const correct = roundResults[i]
-                  const played = i < state.choices.length
-                  return (
-                    <div
-                      key={i}
-                      className={`flex flex-col items-center gap-1 rounded-lg border-2 p-1.5 ${
-                        !played
-                          ? 'border-transparent opacity-30'
-                          : correct
-                            ? 'border-[hsl(var(--game-green))]/40'
-                            : 'border-[hsl(var(--game-red))]/30'
-                      }`}
-                    >
-                      <div className="flex w-full gap-0.5">
-                        <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-sm bg-muted/30">
-                          <img src={igdbCoverUrl(left.igdbImageId)} alt="" className="h-full w-full object-cover" />
-                        </div>
-                        <div className="aspect-[3/4] w-1/2 overflow-hidden rounded-sm bg-muted/30">
-                          <img src={igdbCoverUrl(right.igdbImageId)} alt="" className="h-full w-full object-cover" />
-                        </div>
-                      </div>
-                      {played && (
-                        <span className={`text-[10px] font-bold ${correct ? 'text-[hsl(var(--game-green))]' : 'text-[hsl(var(--game-red))]'}`}>
-                          {correct ? '\u2713' : '\u2717'}
-                        </span>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          }
-          pipRow={
-            <div className="flex justify-center gap-1.5">
-              {roundResults.map((correct, i) => (
-                <div
-                  key={i}
-                  className={`h-2.5 w-2.5 rounded-full ${
-                    correct
-                      ? 'bg-[hsl(var(--game-green))]'
-                      : 'bg-[hsl(var(--game-ink-light))]/30'
-                  }`}
-                />
-              ))}
-            </div>
-          }
-          shareText={(() => {
-            const number = formatGameNumber(date)
-            return `Shelf Price ${number} \u00b7 ${state.score}/1000\n${state.correctCount}/${TARGET_ROUNDS} correct${state.score === 1000 ? ' \u00b7 Perfect! \u{1F3C6}' : ''}\nidlehours.co.uk/play/shelf-price`
-          })()}
-          shareUrl="https://idlehours.co.uk/play/shelf-price"
-          onClose={() => setShowResult(false)}
-        />
-      )}
+      {/* GameEndModal removed — post-game screen shows directly */}
 
       {/* Rules modal */}
       {showRules && <RulesModal onClose={() => setShowRules(false)} />}

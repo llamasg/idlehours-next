@@ -22,7 +22,7 @@ import {
   type V2DayState,
 } from '../lib/gameState'
 import { igdbCoverUrl } from '../lib/imageUtils'
-import GameEndModal from '@/components/games/GameEndModal'
+
 import { COPY, pickRandom, getStreetDateRank, STREET_DATE_FLAVOUR } from '@/components/games/GameEndModal.copy'
 import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import { entrance, useEntranceSteps } from '@/lib/animations'
@@ -310,11 +310,7 @@ export default function StreetDateV2DayPage({
       triggerScorePulse(150)
     }
 
-    if (updatedState.won) {
-      setTimeout(() => setShowWinModal(true), 300)
-    } else if (updatedState.finished) {
-      setTimeout(() => setShowLossModal(true), 300)
-    }
+    // Post-game screen shows automatically via isPostGameReady
   }, [state, correctOrder, persist])
 
   // Clear all slots
@@ -1069,48 +1065,7 @@ export default function StreetDateV2DayPage({
       </div>
 
       {/* Win modal */}
-      {showWinModal && state?.won && modalCopy && (
-        <GameEndModal
-          game="street-date"
-          result="win"
-          score={state.score}
-          heading={modalCopy.heading}
-          subheading={modalCopy.subheading}
-          rankName={modalCopy.rankName}
-          rankFlavour={modalCopy.rankFlavour}
-          stats={[
-            { label: 'Score', value: String(state.score) },
-            { label: 'Guesses', value: `${state.guesses.length}/${MAX_GUESSES}` },
-            { label: 'Correct', value: '7/7' },
-          ]}
-          heroZone={null}
-          shareText={shareText}
-          shareUrl="https://idlehours.co.uk/play/street-date"
-          onClose={() => { setShowWinModal(false) }}
-        />
-      )}
-
-      {/* Loss modal */}
-      {showLossModal && state?.finished && !state?.won && modalCopy && (
-        <GameEndModal
-          game="street-date"
-          result="loss"
-          score={state.score}
-          heading={modalCopy.heading}
-          subheading={modalCopy.subheading}
-          rankName={modalCopy.rankName}
-          rankFlavour={modalCopy.rankFlavour}
-          stats={[
-            { label: 'Score', value: String(state.score) },
-            { label: 'Guesses', value: `${state.guesses.length}/${MAX_GUESSES}` },
-            { label: 'Best', value: `${Math.max(...state.guesses.map(g => g.correctCount))}/7` },
-          ]}
-          heroZone={null}
-          shareText={shareText}
-          shareUrl="https://idlehours.co.uk/play/street-date"
-          onClose={() => { setShowLossModal(false) }}
-        />
-      )}
+      {/* GameEndModal removed — post-game screen shows directly */}
     </>
   )
 }

@@ -21,7 +21,7 @@ import AnimatedScore from '@/components/AnimatedScore'
 import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
 import SentenceClue, { type BlankDef, BLANK_COSTS } from '../components/SentenceClue'
-import GameEndModal from '@/components/games/GameEndModal'
+
 import {
   COPY,
   pickRandom,
@@ -184,9 +184,7 @@ export default function GameSenseDayPage({
   useEffect(() => {
     if (!state || state.won || pendingGuess) return
     if (!hasInteractedRef.current) return
-    if (state.score <= 0) {
-      setTimeout(() => setShowLossModal(true), 300)
-    }
+    // Post-game screen shows automatically via isPostGameComplete
   }, [state, pendingGuess])
 
   // Stamp endedAt when the game finishes (win or loss)
@@ -235,9 +233,8 @@ export default function GameSenseDayPage({
     saveDayState(date, newState)
     setPendingGuess(null)
 
-    if (won) {
-      setTimeout(() => setShowWinModal(true), 300)
-    }
+    // Post-game screen shows automatically when game ends
+    void won
     // Loss check handled by the useEffect watching state.score
   }, [pendingGuess, state, date])
 
@@ -287,7 +284,6 @@ export default function GameSenseDayPage({
       }
       setState(newState)
       saveDayState(date, newState)
-      setTimeout(() => setShowLossModal(true), 300)
       return
     }
 
@@ -871,80 +867,7 @@ export default function GameSenseDayPage({
       )}
 
       {/* Win modal */}
-      {showWinModal && state.won && (
-        <GameEndModal
-          result="win"
-          score={state.score}
-          heading={modalCopy.heading}
-          subheading={modalCopy.subheading}
-          rankName={modalCopy.rankName}
-          rankFlavour={modalCopy.rankFlavour}
-          stats={[
-            { label: 'Score', value: String(state.score) },
-            { label: 'Guesses', value: String(state.guesses.length) },
-            { label: 'Clues Revealed', value: `${state.blanksRevealed.length}/5` },
-          ]}
-          heroZone={
-            answer.igdbImageId ? (
-              <div className="relative w-full overflow-hidden bg-secondary" style={{ maxHeight: '240px' }}>
-                <img src={igdbCoverUrl(answer.igdbImageId)} alt={answer.title} className="w-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute bottom-3 left-4 right-4">
-                  <h3 className="font-heading text-xl font-black text-white drop-shadow-md">
-                    {answer.title}
-                  </h3>
-                  <p className="text-xs font-semibold text-white/70">
-                    {answer.year} &middot; {answer.genres.slice(0, 2).join(', ')}
-                  </p>
-                </div>
-              </div>
-            ) : null
-          }
-          shareText={shareText}
-          shareUrl="https://idlehours.co.uk/play/game-sense"
-          onClose={() => {
-            setShowWinModal(false)
-            setShowCompleteToast(true)
-            setTimeout(() => setShowCompleteToast(false), 3000)
-          }}
-        />
-      )}
-
-      {/* Loss modal */}
-      {showLossModal && !state.won && (
-        <GameEndModal
-          result="loss"
-          score={state.score}
-          heading={modalCopy.heading}
-          subheading={modalCopy.subheading}
-          rankName={modalCopy.rankName}
-          rankFlavour={modalCopy.rankFlavour}
-          stats={[
-            { label: 'Score', value: String(state.score) },
-            { label: 'Guesses', value: String(state.guesses.length) },
-            { label: 'Clues Revealed', value: `${state.blanksRevealed.length}/5` },
-          ]}
-          heroZone={
-            answer.igdbImageId ? (
-              <div className="relative w-full overflow-hidden bg-secondary" style={{ maxHeight: '240px' }}>
-                <img src={igdbCoverUrl(answer.igdbImageId)} alt={answer.title} className="w-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute bottom-3 left-4 right-4">
-                  <h3 className="font-heading text-xl font-black text-white drop-shadow-md">
-                    {answer.title}
-                  </h3>
-                  <p className="text-xs font-semibold text-white/70">
-                    {answer.year} &middot; {answer.genres.slice(0, 2).join(', ')}
-                  </p>
-                </div>
-              </div>
-            ) : null
-          }
-          shareText={shareText}
-          shareUrl="https://idlehours.co.uk/play/game-sense"
-          onClose={() => setShowLossModal(false)}
-        />
-      )}
+      {/* GameEndModal removed — post-game screen shows directly */}
     </>
   )
 }
