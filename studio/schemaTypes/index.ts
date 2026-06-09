@@ -4,10 +4,8 @@ import post from './post'
 import author from './author'
 import product from './product'
 import quiz from './quiz'
-import promoBanner from './promoBanner'
 import game from './game'
 import siteSettings from './siteSettings'
-import {homePageSchemas} from './homePage'
 import gameLibrary, {curatedRow, curatedRowGame, featureBanner} from './gameLibrary'
 
 export const schemaTypes = [
@@ -19,7 +17,6 @@ export const schemaTypes = [
   game,
   quiz,
   siteSettings,
-  promoBanner,
   // Game Library (singleton)
   gameLibrary,
   curatedRow,
@@ -27,6 +24,4 @@ export const schemaTypes = [
   featureBanner,
   // Content types
   blockContent,
-  // Homepage (document + section objects)
-  ...homePageSchemas,
 ]
