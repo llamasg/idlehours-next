@@ -6,7 +6,6 @@ import { useState, useEffect, useCallback, useMemo, useRef, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import DiscoverMore from '@/components/DiscoverMore'
-import Link from 'next/link'
 import { GAMES, type GameSenseGame } from '../data/games'
 import {
   getGameIndexForDate,
@@ -24,23 +23,21 @@ import { GAME_COLORS } from '@/lib/ranks'
 import PlayableGuard from '@/components/games/shell/PlayableGuard'
 import SplitShareButton from '@/components/games/SplitShareButton'
 import PostGameAnalysisCard, { StatPillRow, CardDivider } from '@/components/games/shell/PostGameAnalysisCard'
-import AnimatedScore from '@/components/AnimatedScore'
+import GameWorld from '@/components/games/shell/GameWorld'
+import GameTitle from '@/components/games/shell/GameTitle'
+import ScorePill from '@/components/games/shell/ScorePill'
+import GameNavPills, { PostGameNavPills } from '@/components/games/shell/GameNavPills'
+import { useGameEntrance } from '@/lib/game-shell/useGameEntrance'
 import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
 import SentenceClue, { type BlankDef, BLANK_COSTS } from '../components/SentenceClue'
 
-import {
-  COPY,
-  pickRandom,
-  getGameSenseRank,
-  GAME_SENSE_FLAVOUR,
-} from '@/components/games/GameEndModal.copy'
 import { igdbCoverUrl } from '@/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
 import ProximityCounter from '../components/ProximityCounter'
 import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import { entrance, useEntranceSteps } from '@/lib/animations'
-import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
+import { SPRING_EASING, POSTGAME_GAPS } from '@/lib/gameConstants'
 
 const GUESS_COST = 1
 const HINT_COST = 250
@@ -53,10 +50,7 @@ export default function GameSenseDayPage({
   const { date } = use(params)
 
   const [state, setState] = useState<DayState | null>(null)
-  const [showWinModal, setShowWinModal] = useState(false)
-  const [showLossModal, setShowLossModal] = useState(false)
   const [showRules, setShowRules] = useState(false)
-  const [showCompleteToast, setShowCompleteToast] = useState(false)
   const [floatingCost, setFloatingCost] = useState<{ key: string; cost: number } | null>(null)
   const [scorePulse, setScorePulse] = useState(false)
   // Hint tooltip — spring physics (inertia tooltip)
@@ -74,14 +68,12 @@ export default function GameSenseDayPage({
   const hintUsedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hasInteractedRef = useRef(false)
 
-  // Entrance animation: 0=waiting, 1=title centered, 2=title moves up + box, 3=sentence, 4=input, 5=rest, 6=done
-  const [entranceStep, setEntranceStep] = useState(0)
-  const [wipeStarted, setWipeStarted] = useState(false)
-  // Post-game page-level sequencer — each parent section fires one after the other
-  // Steps: 1=ResultCard, 2=Sentence, 3=Nav buttons, 4=Title/date, 5=Badges, 6=DiscoverMore, 7=Toast
+  // Entrance animation — step machine shared via useGameEntrance
   const isGameOver = state ? (state.won || state.score <= 0) : false
-  const isModalOpen = showWinModal || showLossModal
-  const isPostGameComplete = isGameOver && !isModalOpen
+  const { entranceStep, wipeStarted } = useGameEntrance(!!state, isGameOver)
+  // Post-game page-level sequencer — each parent section fires one after the other
+  // Steps: 1=ResultCard, 2=Sentence, 3=Nav buttons, 4=Title/date, 5=Badges, 6=DiscoverMore
+  const isPostGameComplete = isGameOver
   const pgGaps = useMemo(() => [...POSTGAME_GAPS], [])
   const pgStep = useEntranceSteps(7, pgGaps, isPostGameComplete)
   // Pre-compute skip so clip-path renders correctly on first paint (before useEffect)
@@ -115,32 +107,6 @@ export default function GameSenseDayPage({
     setState(loaded)
   }, [date])
 
-  // Entrance animation sequence — starts immediately on mount
-  useEffect(() => {
-    if (!state) return
-    // Skip animation if game already finished or reduced motion
-    const alreadyDone = state.won || state.score <= 0
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (alreadyDone || reducedMotion) {
-      setWipeStarted(true)
-      setEntranceStep(6)
-      return
-    }
-    // Blue wipe starts immediately (clip-path transition, 700ms)
-    requestAnimationFrame(() => requestAnimationFrame(() => setWipeStarted(true)))
-    // Sequenced entrance: title centered → title moves up + box → sentence → input → rest
-    const t1 = setTimeout(() => setEntranceStep(1), ENTRANCE_TIMINGS[0])    // title word-pops (wipe ~halfway down)
-    const t2 = setTimeout(() => setEntranceStep(2), ENTRANCE_TIMINGS[1])   // title moves up, box scales in
-    const t3 = setTimeout(() => setEntranceStep(3), ENTRANCE_TIMINGS[2])   // sentence mounts
-    const t4 = setTimeout(() => setEntranceStep(4), ENTRANCE_TIMINGS[3])   // guess input fades in
-    const t5 = setTimeout(() => setEntranceStep(5), ENTRANCE_TIMINGS[4])   // rest fades in (score, nav)
-    const t6 = setTimeout(() => setEntranceStep(6), ENTRANCE_TIMINGS[5])   // done — clear animation classes
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); clearTimeout(t6) }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [!!state])
-
-  // Post-game sequencing is now handled by useEntranceSteps (pgStep) above
-
   // Hint tooltip spring physics
   useEffect(() => {
     if (!showHintTooltip) return
@@ -159,13 +125,6 @@ export default function GameSenseDayPage({
     hintTipRafRef.current = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(hintTipRafRef.current)
   }, [showHintTooltip])
-
-  // Watch for score hitting 0 — trigger loss (skip on initial load from saved state)
-  useEffect(() => {
-    if (!state || state.won || pendingGuess) return
-    if (!hasInteractedRef.current) return
-    // Post-game screen shows automatically via isPostGameComplete
-  }, [state, pendingGuess])
 
   // Stamp endedAt when the game finishes (win or loss)
   useEffect(() => {
@@ -300,20 +259,6 @@ export default function GameSenseDayPage({
     hintUsedTimer.current = setTimeout(() => setHintJustUsed(false), 2000)
   }, [state, pendingGuess, answer, date, gameOver])
 
-  // Modal copy — picked once when modal opens, stable across re-renders
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const modalCopy = useMemo(() => {
-    const score = state?.score ?? 0
-    const isLoss = showLossModal && !state?.won
-    const rankName = getGameSenseRank(score)
-    return {
-      heading: pickRandom(isLoss ? COPY.loss.headings : COPY.win.headings),
-      subheading: pickRandom(isLoss ? COPY.loss.subheadings : COPY.win.subheadings),
-      rankName,
-      rankFlavour: pickRandom(GAME_SENSE_FLAVOUR[rankName]),
-    }
-  }, [showWinModal, showLossModal])
-
   // Share text for the post-game share button
   const shareText = useMemo(() => {
     if (!state) return ''
@@ -356,13 +301,11 @@ export default function GameSenseDayPage({
       <div className="flex min-h-screen flex-col">
 
       {/* Blue game world — full-width gradient, content constrained inside */}
-      <div
+      <GameWorld
+        gradient="linear-gradient(to bottom, #2D6BC4, #1a2a4a)"
+        wipeStarted={wipeStarted}
+        shouldAnimate={shouldAnimate}
         className="game-container mx-4 -mt-16 flex flex-1 flex-col rounded-2xl sm:mt-4 sm:rounded-[20px]"
-        style={{
-          background: 'linear-gradient(to bottom, #2D6BC4, #1a2a4a)',
-          clipPath: (!shouldAnimate || wipeStarted) ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)',
-          transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
-        }}
       >
         <main className={`font-game mx-auto flex flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 ${isPostGame ? 'w-full max-w-7xl lg:px-8' : 'max-w-2xl sm:justify-center'}`}>
           {/* Title bar — normal flow, scrolls with page */}
@@ -379,36 +322,11 @@ export default function GameSenseDayPage({
             }
           >
             <div className="transition-all duration-700 ease-out">
-              <h1 className="text-[22px] font-black uppercase leading-none text-white sm:text-[clamp(40px,8vw,64px)]">
-                {['Game', 'Sense'].map((word, i) => (
-                  <span
-                    key={word}
-                    className="inline-block"
-                    style={
-                      entranceStep >= 1
-                        ? { animation: `gs-word-pop 0.25s cubic-bezier(0.34,1.56,0.64,1) ${0.1 + i * 0.3}s both` }
-                        : { opacity: 0 }
-                    }
-                  >
-                    {word}{i === 0 ? '\u00a0' : ''}
-                  </span>
-                ))}
-              </h1>
-              <p className="mt-0.5 text-sm font-bold text-white/70 sm:mt-1.5 sm:text-xl">
-                {['Guess', 'the', 'game!'].map((word, i) => (
-                  <span
-                    key={word}
-                    className="inline-block"
-                    style={
-                      entranceStep >= 1
-                        ? { animation: `gs-word-pop 0.2s cubic-bezier(0.34,1.56,0.64,1) ${0.7 + i * 0.3}s both` }
-                        : { opacity: 0 }
-                    }
-                  >
-                    {word}{i < 2 ? '\u00a0' : ''}
-                  </span>
-                ))}
-              </p>
+              <GameTitle
+                title={['Game', 'Sense']}
+                subtitle={['Guess', 'the', 'game!']}
+                animate={entranceStep >= 1}
+              />
               {!isPostGame && (
                 <p
                   className="mt-0 font-heading text-[10px] text-white/50 sm:mt-0.5 sm:text-xs"
@@ -537,31 +455,13 @@ export default function GameSenseDayPage({
                   })()}
                 </div>
                 {/* Center cell — score pill */}
-                <div
-                  className="relative inline-flex items-center gap-2 rounded-full border-2 border-white/20 bg-white px-5 py-2 transition-all duration-300"
-                  style={{
-                    borderColor: scorePulse ? 'hsl(var(--game-red))' : 'rgba(255,255,255,0.3)',
-                    transform: scorePulse ? 'scale(1.1)' : 'scale(1)',
-                  }}
-                >
-                  <AnimatedScore
-                    value={state.score}
-                    className={`font-heading text-2xl font-black transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]' : 'text-[hsl(var(--game-blue))]'}`}
-                  />
-                  <span className={`font-heading text-xs uppercase tracking-wider transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]/60' : 'text-[hsl(var(--game-blue))]/60'}`}>
-                    pts
-                  </span>
-                  {/* Floating cost animation */}
-                  {floatingCost && (
-                    <span
-                      key={floatingCost.key}
-                      className="absolute -top-6 left-1/2 -translate-x-1/2 rounded-full bg-[hsl(var(--game-red))] px-4 py-1 font-heading text-lg font-black text-white shadow-lg"
-                      style={{ animation: 'float-up 1.2s ease-out forwards' }}
-                    >
-                      -{floatingCost.cost}
-                    </span>
-                  )}
-                </div>
+                <ScorePill
+                  score={state.score}
+                  pulse={scorePulse}
+                  floatingCost={floatingCost}
+                  accentClassName="text-[hsl(var(--game-blue))]"
+                  unitClassName="text-[hsl(var(--game-blue))]/60"
+                />
                 {/* Right cell — ? tutorial button */}
                 <div className="flex justify-end">
                   {!gameOver && (
@@ -651,30 +551,19 @@ export default function GameSenseDayPage({
           {isPostGame && (
             <>
               {/* Nav pills — early so user can navigate away quickly */}
-              <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
-                <div style={entrance('pop', pgStep >= 1, 150)}>
+              <PostGameNavPills
+                slug="game-sense"
+                today={today}
+                pgStep={pgStep}
+                share={
                   <SplitShareButton
                     shareText={shareText}
                     shareUrl="https://idlehours.co.uk/play/game-sense"
                     isWin={state.won}
                     accentColor={GAME_COLORS['game-sense'].accent}
                   />
-                </div>
-                {!today && (
-                  <div style={entrance('pop', pgStep >= 1, 300)}>
-                    <Link href="/play/game-sense" className="bvl-purple">
-                      <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                      Today&apos;s game
-                    </Link>
-                  </div>
-                )}
-                <div style={entrance('pop', pgStep >= 1, 450)}>
-                  <Link href="/play/game-sense/archive" className="bvl-purple">
-                    <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                    View past games
-                  </Link>
-                </div>
-              </div>
+                }
+              />
 
               {/* Two-column post-game: left (55%) badges + results, right (45%) analysis */}
               <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-[55fr_45fr]">
@@ -762,26 +651,11 @@ export default function GameSenseDayPage({
               className="mt-4 flex flex-wrap items-center justify-center gap-4"
               style={entranceStep < 5 ? { opacity: 0 } : entranceStep < 6 ? { animation: 'gs-fade-in 0.5s cubic-bezier(0.34,1.5,0.64,1) both' } : undefined}
             >
-              {!today && (
-                <Link
-                  href="/play/game-sense"
-                  className="bvl-purple"
-                >
-                  <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                  Today&apos;s game
-                </Link>
-              )}
-              <Link
-                href="/play/game-sense/archive"
-                className="bvl-purple"
-              >
-                <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                View past games
-              </Link>
+              <GameNavPills slug="game-sense" today={today} />
             </div>
           )}
         </main>
-      </div>
+      </GameWorld>
 
       {/* DiscoverMore — outside the blue area, needs own bg on mobile */}
       {isPostGame && (
@@ -798,27 +672,6 @@ export default function GameSenseDayPage({
 
       {/* Rules modal */}
       {showRules && <RulesModal onClose={() => setShowRules(false)} />}
-
-      {/* Complete toast */}
-      {showCompleteToast && pgStep >= 7 && (
-        <div
-          className="fixed left-1/2 top-6 z-[200] -translate-x-1/2"
-          style={{ animation: 'gs-toast-in 500ms cubic-bezier(0.34, 1.5, 0.64, 1) forwards' }}
-        >
-          <div className="flex items-center gap-2.5 rounded-full bg-emerald-500 px-5 py-2.5 shadow-lg shadow-emerald-500/30">
-            <span className="text-lg">🏆</span>
-            <span className="font-heading text-sm font-black text-white">
-              Game Sense <span className="opacity-80">✓</span>
-            </span>
-            <span className="font-heading text-xs font-semibold text-white/80">
-              +{state.score} pts earned
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Win modal */}
-      {/* GameEndModal removed — post-game screen shows directly */}
     </>
   )
 }
