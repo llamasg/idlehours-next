@@ -81,50 +81,6 @@ export async function getPost(slug: string) {
   return post
 }
 
-// Search posts by query
-async function searchPosts(query: string) {
-  const posts = await client.fetch(
-    `
-    *[_type == "post" && (
-      title match $searchQuery ||
-      subheader match $searchQuery ||
-      categories[] match $searchQuery
-    )] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      subheader,
-      publishedAt,
-      author,
-      "headerImage": headerImage.asset->url,
-      categories
-    }
-  `,
-    { searchQuery: `*${query}*` }
-  )
-  return posts
-}
-
-// Get posts by category
-export async function getPostsByCategory(category: string) {
-  const posts = await client.fetch(
-    `
-    *[_type == "post" && $category in categories] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      subheader,
-      publishedAt,
-      author,
-      "headerImage": headerImage.asset->url,
-      categories
-    }
-  `,
-    { category }
-  )
-  return posts
-}
-
 // Get all products
 async function getAllProducts() {
   const products = await client.fetch(`
@@ -261,20 +217,6 @@ export async function getHomepageConfig() {
   return config
 }
 
-// Get active promotional banner
-async function getPromoBanner() {
-  const banner = await client.fetch(`
-    *[_type == "promoBanner" && isActive == true][0] {
-      _id,
-      text,
-      backgroundColor,
-      textColor,
-      link
-    }
-  `)
-  return banner
-}
-
 // ─── Idle Hours: New queries ──────────────────────────
 
 // Get the modular homepage document with all sections expanded
@@ -401,25 +343,6 @@ export async function getAllGames() {
     }
   `)
   return games
-}
-
-// Get site settings (singleton — document ID: "siteSettings")
-export async function getSiteSettings() {
-  const settings = await client.fetch(`
-    *[_type == "siteSettings"][0] {
-      _id,
-      siteTitle,
-      siteTagline,
-      metaDescription,
-      "defaultSocialImageUrl": defaultSocialImage.asset->url,
-      "defaultSocialImageAlt": defaultSocialImage.alt,
-      "faviconUrl": favicon.asset->url,
-      "logo": logo.asset->url,
-      navLinks,
-      socialLinks
-    }
-  `)
-  return settings
 }
 
 /*
