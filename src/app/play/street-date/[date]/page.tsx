@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic'
 
 import { useState, useEffect, useCallback, useMemo, useRef, use } from 'react'
 import Header from '@/components/Header'
-import AnimatedScore from '@/components/AnimatedScore'
 import { generatePuzzle } from '../lib/puzzleGen'
 import type { StreetDateGame } from '../data/games'
 import { GAMES } from '../data/games'
@@ -23,11 +22,10 @@ import {
 } from '../lib/gameState'
 import { igdbCoverUrl } from '../lib/imageUtils'
 
-import { COPY, pickRandom, getStreetDateRank, STREET_DATE_FLAVOUR } from '@/components/games/GameEndModal.copy'
 import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import { entrance, useEntranceSteps } from '@/lib/animations'
-import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
-import { formatGameNumber, formatDisplayDate, isPlayableDate } from '../lib/dateUtils'
+import { SPRING_EASING, POSTGAME_GAPS } from '@/lib/gameConstants'
+import { formatGameNumber, formatDisplayDate, isPlayableDate, isToday } from '../lib/dateUtils'
 import { formatElapsed } from '@/lib/game-shell/formatElapsed'
 import { buildShareText } from '@/lib/game-shell/buildShareText'
 import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
@@ -36,7 +34,11 @@ import RulesModal from '../components/RulesModal'
 import PlayableGuard from '@/components/games/shell/PlayableGuard'
 import SplitShareButton from '@/components/games/SplitShareButton'
 import PostGameAnalysisCard, { StatPillRow } from '@/components/games/shell/PostGameAnalysisCard'
-import Link from 'next/link'
+import GameWorld from '@/components/games/shell/GameWorld'
+import GameTitle from '@/components/games/shell/GameTitle'
+import ScorePill from '@/components/games/shell/ScorePill'
+import { PostGameNavPills } from '@/components/games/shell/GameNavPills'
+import { useGameEntrance } from '@/lib/game-shell/useGameEntrance'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -54,8 +56,6 @@ export default function StreetDateV2DayPage({
   const { date } = use(params)
 
   const [state, setState] = useState<V2DayState | null>(null)
-  const [wipeStarted, setWipeStarted] = useState(false)
-  const [entranceStep, setEntranceStep] = useState(0)
   const [selectedChip, setSelectedChip] = useState<string | null>(null)
   const [hintOnePending, setHintOnePending] = useState(false)
   const [scorePulse, setScorePulse] = useState(false)
@@ -75,7 +75,6 @@ export default function StreetDateV2DayPage({
   const slotRefs = useRef<(HTMLDivElement | null)[]>([])
   const poolRef = useRef<HTMLDivElement | null>(null)
 
-  const wipeTriggered = useRef(false)
   const puzzleRef = useRef<ReturnType<typeof generatePuzzle> | null>(null)
 
   // Stable puzzle reference
@@ -91,10 +90,14 @@ export default function StreetDateV2DayPage({
   // Pre-compute skip for clip-path
   const shouldAnimate = state ? !(state.won || state.finished) : true
 
+  // Entrance animation — step machine shared via useGameEntrance
+  const { entranceStep, wipeStarted } = useGameEntrance(!!state, state ? state.finished : false)
+
   // Force green status bar on mobile
   useMobileThemeColor('#1A7A40')
 
   const playable = isPlayableDate(date)
+  const today = isToday(date)
 
   // Load state
   useEffect(() => {
@@ -109,43 +112,7 @@ export default function StreetDateV2DayPage({
       setState(fresh)
       saveState(date, fresh)
     }
-
-    // Wipe entrance
-    if (!wipeTriggered.current) {
-      wipeTriggered.current = true
-      const existing = loadState(date)
-      const alreadyDone = existing ? existing.finished : false
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (alreadyDone || reducedMotion) {
-        setWipeStarted(true)
-        setEntranceStep(6)
-      } else {
-        requestAnimationFrame(() => requestAnimationFrame(() => setWipeStarted(true)))
-      }
-    }
   }, [date, puzzle])
-
-  // Entrance animation sequence
-  useEffect(() => {
-    if (!state) return
-    if (state.finished) return
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reducedMotion) {
-      setEntranceStep(6)
-      return
-    }
-    const t1 = setTimeout(() => setEntranceStep(1), ENTRANCE_TIMINGS[0])
-    const t2 = setTimeout(() => setEntranceStep(2), ENTRANCE_TIMINGS[1])
-    const t3 = setTimeout(() => setEntranceStep(3), ENTRANCE_TIMINGS[2])
-    const t4 = setTimeout(() => setEntranceStep(4), ENTRANCE_TIMINGS[3])
-    const t5 = setTimeout(() => setEntranceStep(5), ENTRANCE_TIMINGS[4])
-    const t6 = setTimeout(() => setEntranceStep(6), ENTRANCE_TIMINGS[5])
-    return () => {
-      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3)
-      clearTimeout(t4); clearTimeout(t5); clearTimeout(t6)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [!!state])
 
   // ── Interactions ───────────────────────────────────────────────────────────
 
@@ -483,22 +450,6 @@ export default function StreetDateV2DayPage({
   const pgGaps = useMemo(() => [...POSTGAME_GAPS], [])
   const pgStep = useEntranceSteps(7, pgGaps, isPostGameReady)
 
-  const modalCopy = useMemo(() => {
-    if (!state) return null
-    const score = state.score
-    const result = state.won ? 'win' : 'loss'
-    const rankName = getStreetDateRank(score)
-    const flavours = STREET_DATE_FLAVOUR[rankName] || ['Good game.']
-    return {
-      result: result as 'win' | 'loss',
-      heading: pickRandom(COPY[result].headings),
-      subheading: pickRandom(COPY[result].subheadings),
-      rankName,
-      rankFlavour: pickRandom(flavours),
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state?.won, state?.finished, state?.score])
-
   const shareText = useMemo(() => {
     if (!state || !state.finished) return ''
     return buildShareText({
@@ -580,13 +531,10 @@ export default function StreetDateV2DayPage({
 
       <div className="flex min-h-screen flex-col">
         {/* Green game world */}
-        <div
-          className="game-container mx-0 -mt-16 flex flex-1 flex-col rounded-none sm:mx-4 sm:mt-4 sm:rounded-[20px]"
-          style={{
-            background: 'linear-gradient(155deg, #1A7A40, #0d1f12)',
-            clipPath: (!shouldAnimate || wipeStarted) ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)',
-            transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
-          }}
+        <GameWorld
+          gradient="linear-gradient(155deg, #1A7A40, #0d1f12)"
+          wipeStarted={wipeStarted}
+          shouldAnimate={shouldAnimate}
         >
           <main className="font-game mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 lg:px-8">
             {/* ── Title ── */}
@@ -601,36 +549,12 @@ export default function StreetDateV2DayPage({
               }
             >
               <div className="transition-all duration-700 ease-out">
-                <h1 className="text-[22px] font-black uppercase leading-none text-white sm:text-[clamp(40px,8vw,64px)]">
-                  {['Street', 'Date'].map((word, i) => (
-                    <span
-                      key={word}
-                      className="inline-block"
-                      style={
-                        entranceStep >= 1
-                          ? { animation: `gs-word-pop 0.25s cubic-bezier(0.34,1.56,0.64,1) ${0.1 + i * 0.3}s both` }
-                          : { opacity: 0 }
-                      }
-                    >
-                      {word}{i === 0 ? '\u00a0' : ''}
-                    </span>
-                  ))}
-                </h1>
-                <p className="mt-0.5 text-sm font-bold text-white/70 sm:mt-1.5 sm:text-xl">
-                  {['Place', 'all', 'seven', 'in', 'release', 'order'].map((word, i) => (
-                    <span
-                      key={word}
-                      className="inline-block"
-                      style={
-                        entranceStep >= 1
-                          ? { animation: `gs-word-pop 0.2s cubic-bezier(0.34,1.56,0.64,1) ${0.7 + i * 0.15}s both` }
-                          : { opacity: 0 }
-                      }
-                    >
-                      {word}{i < 5 ? '\u00a0' : ''}
-                    </span>
-                  ))}
-                </p>
+                <GameTitle
+                  title={['Street', 'Date']}
+                  subtitle={['Place', 'all', 'seven', 'in', 'release', 'order']}
+                  animate={entranceStep >= 1}
+                  subtitleStagger={0.15}
+                />
               </div>
             </div>
 
@@ -646,32 +570,14 @@ export default function StreetDateV2DayPage({
               }
             >
               {!state.finished && (
-                <div className="relative inline-block">
-                  <div
-                    className="relative inline-flex items-baseline gap-1 rounded-2xl border-2 bg-white px-8 py-3 transition-all duration-300"
-                    style={{
-                      borderColor: scorePulse ? 'hsl(var(--game-red))' : 'rgba(255,255,255,0.3)',
-                      transform: scorePulse ? 'scale(1.08)' : 'scale(1)',
-                    }}
-                  >
-                    <AnimatedScore
-                      value={state.score}
-                      className={`font-heading text-4xl font-black tracking-tight transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]' : 'text-[hsl(var(--game-ink))]'}`}
-                    />
-                    <span className={`font-heading text-sm font-[800] uppercase tracking-wider transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]/60' : 'text-[hsl(var(--game-ink))]/40'}`}>
-                      pts
-                    </span>
-                  </div>
-                  {floatingCost && (
-                    <span
-                      key={floatingCost.key}
-                      className="absolute -top-6 left-1/2 -translate-x-1/2 rounded-full bg-[hsl(var(--game-red))] px-4 py-1 font-heading text-lg font-black text-white shadow-lg"
-                      style={{ animation: 'float-up 1.2s ease-out forwards' }}
-                    >
-                      -{floatingCost.cost}
-                    </span>
-                  )}
-                </div>
+                <ScorePill
+                  score={state.score}
+                  pulse={scorePulse}
+                  floatingCost={floatingCost}
+                  size="lg"
+                  accentClassName="text-[hsl(var(--game-ink))]"
+                  unitClassName="text-[hsl(var(--game-ink))]/40"
+                />
               )}
 
               {/* Guess pips */}
@@ -998,22 +904,20 @@ export default function StreetDateV2DayPage({
             {isPostGame && (
               <>
                 {/* Nav pills */}
-                <div className="mb-6 mt-6 flex flex-wrap items-center justify-center gap-4">
-                  <div style={entrance('pop', pgStep >= 1, 150)}>
+                <PostGameNavPills
+                  slug="street-date"
+                  today={today}
+                  pgStep={pgStep}
+                  className="mb-6 mt-6 flex flex-wrap items-center justify-center gap-4"
+                  share={
                     <SplitShareButton
                       shareText={shareText}
                       shareUrl="https://idlehours.co.uk/play/street-date"
                       isWin={state.won}
                       accentColor={GAME_COLORS['street-date'].accent}
                     />
-                  </div>
-                  <Link href="/play/street-date" className="bvl-purple">
-                    Today&apos;s game
-                  </Link>
-                  <Link href="/play/archive?game=street-date" className="bvl-purple">
-                    View past games
-                  </Link>
-                </div>
+                  }
+                />
 
                 {/* Two-column: left (badges + ResultCard), right (game list) */}
                 <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-[55fr_45fr]">
@@ -1156,7 +1060,7 @@ export default function StreetDateV2DayPage({
               </>
             )}
           </main>
-        </div>
+        </GameWorld>
       </div>
 
       {/* Rules modal */}
