@@ -18,6 +18,11 @@ import {
 import { calculateRank, getGameAtRank } from '../lib/scoring'
 import { loadDayState, saveDayState, type DayState } from '../lib/storage'
 import { formatElapsed } from '@/lib/game-shell/formatElapsed'
+import { buildShareText } from '@/lib/game-shell/buildShareText'
+import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
+import { GAME_COLORS } from '@/lib/ranks'
+import PlayableGuard from '@/components/games/shell/PlayableGuard'
+import SplitShareButton from '@/components/games/SplitShareButton'
 import AnimatedScore from '@/components/AnimatedScore'
 import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
@@ -83,34 +88,7 @@ export default function GameSenseDayPage({
 
 
   // Force blue status bar on mobile only — solid bg-color for iOS safe-area + theme-color meta
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 639px)')
-    const prevBg = document.body.style.backgroundColor
-
-    function applyMobileBg(mobile: boolean) {
-      document.body.style.backgroundColor = mobile ? '#2D6BC4' : prevBg
-    }
-
-    applyMobileBg(mq.matches)
-    mq.addEventListener('change', (e) => applyMobileBg(e.matches))
-
-    // Theme-color meta for iOS status bar (always set — only iOS uses it)
-    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.remove())
-    const meta = document.createElement('meta')
-    meta.name = 'theme-color'
-    meta.content = '#2D6BC4'
-    document.head.appendChild(meta)
-
-    return () => {
-      document.body.style.backgroundColor = prevBg
-      mq.removeEventListener('change', (e: MediaQueryListEvent) => applyMobileBg(e.matches))
-      meta.remove()
-      const restore = document.createElement('meta')
-      restore.name = 'theme-color'
-      restore.content = '#f5f0e8'
-      document.head.appendChild(restore)
-    }
-  }, [])
+  useMobileThemeColor('#2D6BC4')
 
   // Countdown animation state
   const [pendingGuess, setPendingGuess] = useState<{
@@ -335,10 +313,9 @@ export default function GameSenseDayPage({
     }
   }, [showWinModal, showLossModal])
 
-  // Compute share text for modals
+  // Share text for the post-game share button
   const shareText = useMemo(() => {
     if (!state) return ''
-    const number = formatGameNumber(date)
     const emojiRow = state.guesses
       .map((g) => {
         if (g.proximity <= 50) return '\u{1F7E9}'
@@ -347,15 +324,18 @@ export default function GameSenseDayPage({
         return '\u{1F7E5}'
       })
       .join('')
-    const lines = [
-      `Game Sense ${number} \u00b7 ${state.score}/1000`,
-      emojiRow,
-      state.blanksRevealed.length > 0
-        ? `${state.guesses.length} guesses \u00b7 ${state.blanksRevealed.length}/5 clues`
-        : `${state.guesses.length} guesses`,
-      'idlehours.co.uk/play/game-sense',
-    ]
-    return lines.join('\n')
+    return buildShareText({
+      title: 'Game Sense',
+      number: formatGameNumber(date),
+      score: state.score,
+      rows: [
+        emojiRow,
+        state.blanksRevealed.length > 0
+          ? `${state.guesses.length} guesses \u00b7 ${state.blanksRevealed.length}/5 clues`
+          : `${state.guesses.length} guesses`,
+      ],
+      url: 'idlehours.co.uk/play/game-sense',
+    })
   }, [state, date])
 
   // While loading from localStorage — layout handles the visual loading screen
@@ -600,19 +580,7 @@ export default function GameSenseDayPage({
 
 
           {/* Not playable message */}
-          {!playable && (
-            <div className="mb-8 rounded-lg border border-white/20 bg-white/10 px-4 py-6 text-center backdrop-blur-sm">
-              <p className="text-white/70">
-                This game isn&apos;t available yet. Check back on the right day!
-              </p>
-              <Link
-                href="/play/game-sense"
-                className="mt-3 inline-block text-sm font-semibold text-white transition-colors hover:text-white/80"
-              >
-                Go to today&apos;s game &rarr;
-              </Link>
-            </div>
-          )}
+          {!playable && <PlayableGuard todayHref="/play/game-sense" />}
 
           {/* Game area — white container for clarity on blue bg */}
           {playable && !gameOver && (
@@ -683,6 +651,14 @@ export default function GameSenseDayPage({
             <>
               {/* Nav pills — early so user can navigate away quickly */}
               <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
+                <div style={entrance('pop', pgStep >= 1, 150)}>
+                  <SplitShareButton
+                    shareText={shareText}
+                    shareUrl="https://idlehours.co.uk/play/game-sense"
+                    isWin={state.won}
+                    accentColor={GAME_COLORS['game-sense'].accent}
+                  />
+                </div>
                 {!today && (
                   <div style={entrance('pop', pgStep >= 1, 300)}>
                     <Link href="/play/game-sense" className="bvl-purple">

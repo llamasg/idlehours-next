@@ -18,4 +18,5 @@ const dates = makeGameDates('2026-02-22')
 export const LAUNCH_DATE = dates.LAUNCH_DATE
 export { getTodayDateString, formatDisplayDate } from '@/lib/dateUtils'
 export const formatGameNumber = dates.formatGameNumber
+export const isPlayableDate = dates.isPlayableDate
 export const getArchiveDates = dates.getArchiveDates

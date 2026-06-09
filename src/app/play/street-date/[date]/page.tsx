@@ -27,8 +27,14 @@ import { COPY, pickRandom, getStreetDateRank, STREET_DATE_FLAVOUR } from '@/comp
 import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
-import { formatGameNumber, formatDisplayDate } from '../lib/dateUtils'
+import { formatGameNumber, formatDisplayDate, isPlayableDate } from '../lib/dateUtils'
 import { formatElapsed } from '@/lib/game-shell/formatElapsed'
+import { buildShareText } from '@/lib/game-shell/buildShareText'
+import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
+import { GAME_COLORS } from '@/lib/ranks'
+import RulesModal from '../components/RulesModal'
+import PlayableGuard from '@/components/games/shell/PlayableGuard'
+import SplitShareButton from '@/components/games/SplitShareButton'
 import Link from 'next/link'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -56,6 +62,7 @@ export default function StreetDateV2DayPage({
   const [justSubmitted, setJustSubmitted] = useState(false)
   const [postGameTab, setPostGameTab] = useState<'answer' | 'guesses'>('answer')
   const [hoveredGuessChip, setHoveredGuessChip] = useState<string | null>(null)
+  const [showRules, setShowRules] = useState(false)
 
   // Drag state
   const [dragging, setDragging] = useState<{
@@ -84,33 +91,9 @@ export default function StreetDateV2DayPage({
   const shouldAnimate = state ? !(state.won || state.finished) : true
 
   // Force green status bar on mobile
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 639px)')
-    const prevBg = document.body.style.backgroundColor
+  useMobileThemeColor('#1A7A40')
 
-    function applyMobileBg(mobile: boolean) {
-      document.body.style.backgroundColor = mobile ? '#1A7A40' : prevBg
-    }
-
-    applyMobileBg(mq.matches)
-    mq.addEventListener('change', (e) => applyMobileBg(e.matches))
-
-    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.remove())
-    const meta = document.createElement('meta')
-    meta.name = 'theme-color'
-    meta.content = '#1A7A40'
-    document.head.appendChild(meta)
-
-    return () => {
-      document.body.style.backgroundColor = prevBg
-      mq.removeEventListener('change', (e: MediaQueryListEvent) => applyMobileBg(e.matches))
-      meta.remove()
-      const restore = document.createElement('meta')
-      restore.name = 'theme-color'
-      restore.content = '#f5f0e8'
-      document.head.appendChild(restore)
-    }
-  }, [])
+  const playable = isPlayableDate(date)
 
   // Load state
   useEffect(() => {
@@ -492,15 +475,6 @@ export default function StreetDateV2DayPage({
     setDragging(null)
   }, [dragging, state, persist])
 
-  // ── Emoji grid for finished state ─────────────────────────────────────────
-
-  const emojiGrid = useMemo(() => {
-    if (!state || state.guesses.length === 0) return ''
-    return state.guesses
-      .map(g => g.results.map(emojiForResult).join(''))
-      .join('\n')
-  }, [state])
-
   // ── Post-game state ────────────────────────────────────────────────────────
 
   const isPostGame = state ? state.finished : false
@@ -526,9 +500,13 @@ export default function StreetDateV2DayPage({
 
   const shareText = useMemo(() => {
     if (!state || !state.finished) return ''
-    const number = formatGameNumber(date)
-    const emojiRows = state.guesses.map(g => g.results.map(emojiForResult).join('')).join('\n')
-    return `Street Date ${number} \u00b7 ${state.score}/1000\n${emojiRows}\nidlehours.co.uk/play/street-date`
+    return buildShareText({
+      title: 'Street Date',
+      number: formatGameNumber(date),
+      score: state.score,
+      rows: state.guesses.map(g => g.results.map(emojiForResult).join('')),
+      url: 'idlehours.co.uk/play/street-date',
+    })
   }, [state?.finished, state?.guesses, state?.score, date])
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -719,10 +697,27 @@ export default function StreetDateV2DayPage({
                   </span>
                 </div>
               )}
+
+              {/* Help button — during gameplay */}
+              {!state.finished && (
+                <div className="mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowRules(true)}
+                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border-2 border-white/20 bg-white/10 text-xs font-bold text-white/70 transition-colors hover:bg-white/20 hover:text-white"
+                    aria-label="How to play"
+                  >
+                    ?
+                  </button>
+                </div>
+              )}
             </div>
 
+            {/* Not playable */}
+            {!playable && <PlayableGuard todayHref="/play/street-date" />}
+
             {/* ── Gameplay area ── */}
-            {!state.finished && (
+            {playable && !state.finished && (
               <div
                 className="mt-6"
                 style={
@@ -1003,6 +998,14 @@ export default function StreetDateV2DayPage({
               <>
                 {/* Nav pills */}
                 <div className="mb-6 mt-6 flex flex-wrap items-center justify-center gap-4">
+                  <div style={entrance('pop', pgStep >= 1, 150)}>
+                    <SplitShareButton
+                      shareText={shareText}
+                      shareUrl="https://idlehours.co.uk/play/street-date"
+                      isWin={state.won}
+                      accentColor={GAME_COLORS['street-date'].accent}
+                    />
+                  </div>
                   <Link href="/play/street-date" className="bvl-purple">
                     Today&apos;s game
                   </Link>
@@ -1172,8 +1175,8 @@ export default function StreetDateV2DayPage({
         </div>
       </div>
 
-      {/* Win modal */}
-      {/* GameEndModal removed — post-game screen shows directly */}
+      {/* Rules modal */}
+      {showRules && <RulesModal onClose={() => setShowRules(false)} />}
     </>
   )
 }

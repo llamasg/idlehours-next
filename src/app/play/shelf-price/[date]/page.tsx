@@ -28,6 +28,11 @@ import {
 import { igdbCoverUrl } from '@/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
 import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
+import PlayableGuard from '@/components/games/shell/PlayableGuard'
+import SplitShareButton from '@/components/games/SplitShareButton'
+import { buildShareText } from '@/lib/game-shell/buildShareText'
+import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
+import { GAME_COLORS } from '@/lib/ranks'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
 
@@ -62,6 +67,9 @@ export default function ShelfPriceDayPage({
   const pairs = getPairsForDate(date)
   const playable = isPlayableDate(date)
   const today = isToday(date)
+
+  // Purple status bar on mobile (game-sense and street-date already do this)
+  useMobileThemeColor('#5B4FCF')
 
   // Pre-compute — skip animation if game already finished
   const shouldAnimate = state ? !state.finished : true
@@ -183,6 +191,27 @@ export default function ShelfPriceDayPage({
       rankFlavour: pickRandom(SHELF_PRICE_FLAVOUR[rankName]),
     }
   }, [showResult])
+
+  // Share text for the post-game share button
+  const shareText = useMemo(() => {
+    if (!state || !state.finished) return ''
+    const emojiRow = state.choices
+      .map((choice, i) => {
+        if (i >= pairs.length) return ''
+        const [left, right] = pairs[i]
+        const moreExpensiveSide = left.launchPriceUsd >= right.launchPriceUsd ? 'left' : 'right'
+        return choice === moreExpensiveSide ? '\u{1F7E9}' : '\u{1F7E5}'
+      })
+      .join('')
+    return buildShareText({
+      title: 'Shelf Price',
+      number: formatGameNumber(date),
+      score: state.score,
+      rows: [emojiRow],
+      url: 'idlehours.co.uk/play/shelf-price',
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, date])
 
   // Loading
   if (!state) {
@@ -330,19 +359,7 @@ export default function ShelfPriceDayPage({
         </div>
 
         {/* Not playable */}
-        {!playable && (
-          <div className="mb-8 rounded-lg border border-white/10 bg-white/5 px-4 py-6 text-center">
-            <p className="text-white/60">
-              This game isn&apos;t available yet. Check back on the right day!
-            </p>
-            <Link
-              href="/play/shelf-price"
-              className="mt-3 inline-block text-sm font-semibold text-white transition-colors hover:text-white/80"
-            >
-              Go to today&apos;s game &rarr;
-            </Link>
-          </div>
-        )}
+        {!playable && <PlayableGuard todayHref="/play/shelf-price" />}
 
         {/* Active gameplay — no white container needed, game cards have their own overlays */}
         {playable && !state.finished && (
@@ -381,6 +398,14 @@ export default function ShelfPriceDayPage({
           <>
             {/* Nav pills — early so user can navigate away quickly */}
             <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
+              <div style={entrance('pop', pgStep >= 1, 150)}>
+                <SplitShareButton
+                  shareText={shareText}
+                  shareUrl="https://idlehours.co.uk/play/shelf-price"
+                  isWin={state.won}
+                  accentColor={GAME_COLORS['shelf-price'].accent}
+                />
+              </div>
               {!today && (
                 <div style={entrance('pop', pgStep >= 1, 300)}>
                   <Link href="/play/shelf-price" className="bvl-purple">
