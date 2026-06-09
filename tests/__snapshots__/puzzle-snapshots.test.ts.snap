@@ -1,0 +1,1990 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`game-sense daily selection > selects the same game id per date 1`] = `
+{
+  "2026-02-22": {
+    "id": "bioshock-infinite-the-complete-edition",
+    "index": 2233,
+  },
+  "2026-03-01": {
+    "id": "once-human",
+    "index": 3855,
+  },
+  "2026-03-03": {
+    "id": "stephen-s-sausage-roll",
+    "index": 2648,
+  },
+  "2026-03-15": {
+    "id": "spyro-2-ripto-s-rage",
+    "index": 417,
+  },
+  "2026-04-01": {
+    "id": "new-pok-mon-snap",
+    "index": 3468,
+  },
+  "2026-05-15": {
+    "id": "kirby-air-ride",
+    "index": 767,
+  },
+  "2026-06-09": {
+    "id": "pok-mon-pinball",
+    "index": 434,
+  },
+  "2026-07-04": {
+    "id": "swat-4",
+    "index": 960,
+  },
+  "2026-08-30": {
+    "id": "metro-exodus",
+    "index": 3055,
+  },
+  "2026-10-31": {
+    "id": "lego-fortnite",
+    "index": 3770,
+  },
+  "2026-12-25": {
+    "id": "kirby-squeak-squad",
+    "index": 1107,
+  },
+  "2027-01-01": {
+    "id": "subsistence",
+    "index": 2654,
+  },
+  "2027-02-22": {
+    "id": "ratchet-and-clank-2016",
+    "index": 2661,
+  },
+  "2027-06-09": {
+    "id": "pikuniku",
+    "index": 3094,
+  },
+}
+`;
+
+exports[`shelf-price pair generation > generates the same 11 pairs per date 1`] = `
+{
+  "2026-03-03": [
+    {
+      "left": {
+        "id": "mass-effect-3",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "forgotton-anne",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "deathloop",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "sherlock-holmes-versus-jack-the-ripper",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "wurm-unlimited",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "crash-bandicoot-the-wrath-of-cortex",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "soma",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "for-honor",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "hunt-showdown-1896",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "scarlet-nexus",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "civilization-iv",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "pok-mon-mystery-dungeon-red-rescue-team",
+        "price": 34.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-walking-dead-survival-instinct",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "mafia-definitive-edition",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "fahrenheit-indigo-prophecy-remastered",
+        "price": 9.99,
+      },
+      "right": {
+        "id": "titanfall",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "final-fantasy-vi",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "worldbox",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "dayz",
+        "price": 44.99,
+      },
+      "right": {
+        "id": "dragon-ball-z-budokai-3",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "anno-2070",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "south-park-the-fractured-but-whole",
+        "price": 59.99,
+      },
+    },
+  ],
+  "2026-03-15": [
+    {
+      "left": {
+        "id": "throne-and-liberty",
+        "price": 0,
+      },
+      "right": {
+        "id": "kirbys-dream-land",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "dead-cells",
+        "price": 24.99,
+      },
+      "right": {
+        "id": "hell-let-loose",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "rez",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "final-fantasy-xi-online",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "pok-mon-mystery-dungeon-blue-rescue-team",
+        "price": 34.99,
+      },
+      "right": {
+        "id": "frostpunk",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "wolfenstein",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "hollow-knight-silksong",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "condemned-criminal-origins",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "the-black-mirror",
+        "price": 9.99,
+      },
+    },
+    {
+      "left": {
+        "id": "odin-sphere-leifthrasir",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "command-conquer-3-tiberium-wars",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "resident-evil-0",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "the-sims-3",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "baldurs-gate-ii-throne-of-bhaal",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "counter-strike-2",
+        "price": 0,
+      },
+    },
+    {
+      "left": {
+        "id": "dome-keeper",
+        "price": 17.99,
+      },
+      "right": {
+        "id": "spider-man-3",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "master-of-orion-ii-battle-at-antares",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "populous",
+        "price": 29.99,
+      },
+    },
+  ],
+  "2026-04-01": [
+    {
+      "left": {
+        "id": "project-zomboid",
+        "price": 14.99,
+      },
+      "right": {
+        "id": "blazblue-calamity-trigger",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "vampyr",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "luigis-mansion-3",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "robocraft",
+        "price": 0,
+      },
+      "right": {
+        "id": "world-of-warcraft-classic",
+        "price": 14.99,
+      },
+    },
+    {
+      "left": {
+        "id": "warhammer-40-000-dawn-of-war-winter-assault",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "call-of-duty-black-ops-ii",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "f1-2018",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "life-is-strange",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-stanley-parable-ultra-deluxe",
+        "price": 24.99,
+      },
+      "right": {
+        "id": "battletech",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "battleborn",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "tomb-raider-definitive-edition",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "worms-world-party",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "hogwarts-legacy",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "danganronpa-trigger-happy-havoc",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "gun",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "primordia",
+        "price": 9.99,
+      },
+      "right": {
+        "id": "mark-of-the-ninja",
+        "price": 14.99,
+      },
+    },
+    {
+      "left": {
+        "id": "call-of-duty-black-ops-7",
+        "price": 69.99,
+      },
+      "right": {
+        "id": "killzone",
+        "price": 49.99,
+      },
+    },
+  ],
+  "2026-05-15": [
+    {
+      "left": {
+        "id": "the-curse-of-monkey-island",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "neverwinter",
+        "price": 0,
+      },
+    },
+    {
+      "left": {
+        "id": "dragon-quest-ix-sentinels-of-the-starry-skies",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "sonic-rush-adventure",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "monster-train",
+        "price": 24.99,
+      },
+      "right": {
+        "id": "the-room-4-old-sins",
+        "price": 4.99,
+      },
+    },
+    {
+      "left": {
+        "id": "disciples-ii-dark-prophecy",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "content-warning",
+        "price": 7.99,
+      },
+    },
+    {
+      "left": {
+        "id": "lego-star-wars-the-video-game",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "counter-strike-source",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "wuthering-waves",
+        "price": 0,
+      },
+      "right": {
+        "id": "half-life-blue-shift",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "james-bond-007-quantum-of-solace",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "world-soccer-winning-eleven-7-international",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "60-seconds",
+        "price": 9.99,
+      },
+      "right": {
+        "id": "sunkenland",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "spider-man-2",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "fifa-soccer-12",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "inscryption",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "nightmare-creatures",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "stranglehold",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "arx-fatalis",
+        "price": 49.99,
+      },
+    },
+  ],
+  "2026-06-09": [
+    {
+      "left": {
+        "id": "conarium",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "foundation",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "wwe-13",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "final-fantasy-xiv-shadowbringers",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "serious-sam-ii",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "the-witness-anniversary",
+        "price": 24.99,
+      },
+    },
+    {
+      "left": {
+        "id": "street-fighter",
+        "price": 24.99,
+      },
+      "right": {
+        "id": "wwe-smackdown-vs-raw-2008",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "bioshock-infinite-burial-at-sea",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "jurassic-world-evolution",
+        "price": 54.99,
+      },
+    },
+    {
+      "left": {
+        "id": "halo-2-anniversary",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "trine-3-the-artifacts-of-power",
+        "price": 21.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-godfather-ii",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "neva",
+        "price": 24.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-lost-vikings",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "monument-valley-2",
+        "price": 4.99,
+      },
+    },
+    {
+      "left": {
+        "id": "mario-kart-8",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "mario-party-ds",
+        "price": 34.99,
+      },
+    },
+    {
+      "left": {
+        "id": "batman-the-telltale-series",
+        "price": 24.99,
+      },
+      "right": {
+        "id": "pok-mon-red-version",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "broken-sword-shadow-of-the-templars-the-directors-cut",
+        "price": 14.99,
+      },
+      "right": {
+        "id": "the-evil-within",
+        "price": 59.99,
+      },
+    },
+  ],
+  "2026-07-04": [
+    {
+      "left": {
+        "id": "fable-ii",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "dragon-ball-fighterz",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "infamous-2",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "total-war-shogun-2",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "need-for-speed-shift",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "dark-souls",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "god-of-war-ii",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "forgotton-anne",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "parkitect",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "roblox",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "wolfenstein-enemy-territory",
+        "price": 0,
+      },
+      "right": {
+        "id": "manor-lords",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "disgaea-7",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "warhammer-end-times-vermintide",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "icewind-dale",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "octopath-traveler-ii",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "iron-lung",
+        "price": 24.99,
+      },
+      "right": {
+        "id": "super-meat-boy",
+        "price": 14.99,
+      },
+    },
+    {
+      "left": {
+        "id": "albion-online",
+        "price": 0,
+      },
+      "right": {
+        "id": "naruto-shippuden-ultimate-ninja-storm-3",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "dishonored-definitive-edition",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "hitman",
+        "price": 59.99,
+      },
+    },
+  ],
+  "2026-08-30": [
+    {
+      "left": {
+        "id": "genshin-impact",
+        "price": 0,
+      },
+      "right": {
+        "id": "west-of-loathing",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "dark-cloud-2",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "asuras-wrath",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "obscure-the-aftermath",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "fifa-14",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "mario-tennis-aces",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "wave-race-64",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "outward",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "silent-hill-f",
+        "price": 69.99,
+      },
+    },
+    {
+      "left": {
+        "id": "technobabylon",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "disco-elysium",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "perfect-dark",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "dust-an-elysian-tail",
+        "price": 14.99,
+      },
+    },
+    {
+      "left": {
+        "id": "sable",
+        "price": 24.99,
+      },
+      "right": {
+        "id": "metal-gear-solid-v-the-phantom-pain",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "alone-in-the-dark-the-new-nightmare",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "divinity-original-sin",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "assassins-creed-iii-liberation",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "kane-lynch-2-dog-days",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-lord-of-the-rings-war-of-the-ring",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "mad-father",
+        "price": 14.99,
+      },
+    },
+  ],
+  "2026-10-31": [
+    {
+      "left": {
+        "id": "blade-soul",
+        "price": 0,
+      },
+      "right": {
+        "id": "roller-coaster-tycoon-2",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "resident-evil-outbreak",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "mortal-kombat-vs-dc-universe",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "pok-mon-legends-arceus",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "scrap-mechanic",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "shank",
+        "price": 14.99,
+      },
+      "right": {
+        "id": "pok-mon-gold-version",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "angry-birds-rio",
+        "price": 0.99,
+      },
+      "right": {
+        "id": "james-bond-007-nightfire",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "thief-the-dark-project",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "mortal-kombat-komplete-edition",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "haunting-ground",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "songs-of-conquest",
+        "price": 29.99,
+      },
+    },
+    {
+      "left": {
+        "id": "tropico",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "disney-dreamlight-valley",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "nier",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "pok-mon-sapphire-version",
+        "price": 34.99,
+      },
+    },
+    {
+      "left": {
+        "id": "forza-motorsport",
+        "price": 69.99,
+      },
+      "right": {
+        "id": "cave-story",
+        "price": 0,
+      },
+    },
+    {
+      "left": {
+        "id": "the-survivalists",
+        "price": 24.99,
+      },
+      "right": {
+        "id": "remember-me",
+        "price": 59.99,
+      },
+    },
+  ],
+  "2026-12-25": [
+    {
+      "left": {
+        "id": "hi-fi-rush",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "colin-mcrae-rally-3",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "kane-lynch-2-dog-days",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "hatoful-boyfriend",
+        "price": 14.99,
+      },
+    },
+    {
+      "left": {
+        "id": "football-manager-2013",
+        "price": 34.99,
+      },
+      "right": {
+        "id": "last-day-on-earth",
+        "price": 0,
+      },
+    },
+    {
+      "left": {
+        "id": "the-legend-of-heroes-trails-in-the-sky-sc",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "creaks",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "microsoft-flight-simulator",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "commandos-behind-enemy-lines",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "fifa-19",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "huniepop",
+        "price": 9.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-incredibles",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "fallout-new-vegas",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "metal-slug-x",
+        "price": 14.99,
+      },
+      "right": {
+        "id": "dragon-ball-z-budokai-3",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "triangle-strategy",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "pok-mon-xd-gale-of-darkness",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "deltarune-chapter-2",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "project-i-g-i-im-going-in",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "scorn",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "shadow-warrior-3",
+        "price": 49.99,
+      },
+    },
+  ],
+  "2027-01-01": [
+    {
+      "left": {
+        "id": "mafia-iii",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "battle-city",
+        "price": 4.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-talos-principle-2",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "below-the-stone",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-room-two",
+        "price": 2.99,
+      },
+      "right": {
+        "id": "double-dragon",
+        "price": 24.99,
+      },
+    },
+    {
+      "left": {
+        "id": "old-world",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "astros-playroom",
+        "price": 0,
+      },
+    },
+    {
+      "left": {
+        "id": "abzu",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "arena-breakout-infinite",
+        "price": 0,
+      },
+    },
+    {
+      "left": {
+        "id": "alan-wake",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "heroes-of-might-and-magic-iv",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "persona-q-shadow-of-the-labyrinth",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "goat-simulator",
+        "price": 9.99,
+      },
+    },
+    {
+      "left": {
+        "id": "still-wakes-the-deep",
+        "price": 34.99,
+      },
+      "right": {
+        "id": "banjo-kazooie",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "rock-band-2",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "burnout-revenge",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-gardens-between",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "rock-n-roll-racing",
+        "price": 4.99,
+      },
+    },
+    {
+      "left": {
+        "id": "resident-evil-the-umbrella-chronicles",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "the-lord-of-the-rings-conquest",
+        "price": 59.99,
+      },
+    },
+  ],
+  "2027-02-22": [
+    {
+      "left": {
+        "id": "the-elder-scrolls-v-skyrim-legendary-edition",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "fall-guys",
+        "price": 0,
+      },
+    },
+    {
+      "left": {
+        "id": "the-front",
+        "price": 19.99,
+      },
+      "right": {
+        "id": "pathway",
+        "price": 15.99,
+      },
+    },
+    {
+      "left": {
+        "id": "arcanum-of-steamworks-and-magick-obscura",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "teamfight-tactics",
+        "price": 0,
+      },
+    },
+    {
+      "left": {
+        "id": "guild-wars-2",
+        "price": 0,
+      },
+      "right": {
+        "id": "mortal-kombat-shaolin-monks",
+        "price": 49.99,
+      },
+    },
+    {
+      "left": {
+        "id": "rock-band",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "plague-inc-evolved",
+        "price": 14.99,
+      },
+    },
+    {
+      "left": {
+        "id": "the-elder-scrolls-v-skyrim-hearthfire",
+        "price": 4.99,
+      },
+      "right": {
+        "id": "thronebreaker-the-witcher-tales",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "spiritfarer",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "rayman-origins",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "squad",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "age-of-empires-ii-definitive-edition",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "red-orchestra-2-heroes-of-stalingrad",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "the-cave",
+        "price": 14.99,
+      },
+    },
+    {
+      "left": {
+        "id": "runaway-a-road-adventure",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "loom",
+        "price": 14.99,
+      },
+    },
+    {
+      "left": {
+        "id": "halls-of-torment",
+        "price": 24.99,
+      },
+      "right": {
+        "id": "castlevania-lords-of-shadow-mirror-of-fate",
+        "price": 29.99,
+      },
+    },
+  ],
+  "2027-06-09": [
+    {
+      "left": {
+        "id": "lords-of-the-fallen",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "resident-evil-village",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "final-fantasy-x-x-2-hd-remaster",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "mario-kart-8",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "lego-star-wars-iii-the-clone-wars",
+        "price": 49.99,
+      },
+      "right": {
+        "id": "tom-clancys-ghost-recon-advanced-warfighter",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "guitar-hero-warriors-of-rock",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "star-wars-episode-i-racer",
+        "price": 39.99,
+      },
+    },
+    {
+      "left": {
+        "id": "donut-county",
+        "price": 12.99,
+      },
+      "right": {
+        "id": "lollipop-chainsaw",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "hellblade-senuas-sacrifice",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "claw",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "kirby-canvas-curse",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "mario-party-superstars",
+        "price": 59.99,
+      },
+    },
+    {
+      "left": {
+        "id": "kingdom-hearts-358-2-days",
+        "price": 34.99,
+      },
+      "right": {
+        "id": "dr-langeskov-the-tiger-and-the-terribly-cursed-emerald-a-whirlwind-heist",
+        "price": 0,
+      },
+    },
+    {
+      "left": {
+        "id": "mega-man-zx",
+        "price": 29.99,
+      },
+      "right": {
+        "id": "the-pedestrian",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "zombi",
+        "price": 59.99,
+      },
+      "right": {
+        "id": "the-vanishing-of-ethan-carter",
+        "price": 19.99,
+      },
+    },
+    {
+      "left": {
+        "id": "digimon-rumble-arena",
+        "price": 39.99,
+      },
+      "right": {
+        "id": "tekken-7",
+        "price": 59.99,
+      },
+    },
+  ],
+}
+`;
+
+exports[`street-date puzzle generation > generates the same 7-game puzzle (order + shuffle) per date 1`] = `
+{
+  "2026-02-22": {
+    "games": [
+      {
+        "id": "streets-of-rage-3",
+        "year": 1994,
+      },
+      {
+        "id": "mega-man-bass",
+        "year": 1998,
+      },
+      {
+        "id": "operation-flashpoint-cold-war-crisis",
+        "year": 2001,
+      },
+      {
+        "id": "x-men-legends-ii-rise-of-apocalypse",
+        "year": 2005,
+      },
+      {
+        "id": "the-orange-box",
+        "year": 2007,
+      },
+      {
+        "id": "the-elder-scrolls-blades",
+        "year": 2019,
+      },
+      {
+        "id": "nightingale",
+        "year": 2024,
+      },
+    ],
+    "shuffled": [
+      "operation-flashpoint-cold-war-crisis",
+      "the-elder-scrolls-blades",
+      "streets-of-rage-3",
+      "nightingale",
+      "mega-man-bass",
+      "x-men-legends-ii-rise-of-apocalypse",
+      "the-orange-box",
+    ],
+  },
+  "2026-03-01": {
+    "games": [
+      {
+        "id": "breath-of-fire",
+        "year": 1993,
+      },
+      {
+        "id": "grandia-ii",
+        "year": 2000,
+      },
+      {
+        "id": "counter-strike-source",
+        "year": 2004,
+      },
+      {
+        "id": "god-of-war-2005",
+        "year": 2005,
+      },
+      {
+        "id": "elite-beat-agents",
+        "year": 2006,
+      },
+      {
+        "id": "fire-emblem-shadow-dragon",
+        "year": 2008,
+      },
+      {
+        "id": "cloudpunk",
+        "year": 2020,
+      },
+    ],
+    "shuffled": [
+      "breath-of-fire",
+      "elite-beat-agents",
+      "counter-strike-source",
+      "grandia-ii",
+      "fire-emblem-shadow-dragon",
+      "god-of-war-2005",
+      "cloudpunk",
+    ],
+  },
+  "2026-03-03": {
+    "games": [
+      {
+        "id": "shining-force",
+        "year": 1992,
+      },
+      {
+        "id": "day-of-the-tentacle",
+        "year": 1993,
+      },
+      {
+        "id": "grand-theft-auto-v",
+        "year": 2013,
+      },
+      {
+        "id": "sherlock-holmes-crimes-punishments",
+        "year": 2014,
+      },
+      {
+        "id": "i-expect-you-to-die",
+        "year": 2016,
+      },
+      {
+        "id": "star-wars-jedi-fallen-order",
+        "year": 2019,
+      },
+      {
+        "id": "trek-to-yomi",
+        "year": 2022,
+      },
+    ],
+    "shuffled": [
+      "i-expect-you-to-die",
+      "grand-theft-auto-v",
+      "trek-to-yomi",
+      "day-of-the-tentacle",
+      "shining-force",
+      "sherlock-holmes-crimes-punishments",
+      "star-wars-jedi-fallen-order",
+    ],
+  },
+  "2026-03-15": {
+    "games": [
+      {
+        "id": "ecco-the-dolphin",
+        "year": 1992,
+      },
+      {
+        "id": "the-king-of-fighters-96",
+        "year": 1996,
+      },
+      {
+        "id": "grand-theft-auto-iv",
+        "year": 2008,
+      },
+      {
+        "id": "wii-sports-resort",
+        "year": 2009,
+      },
+      {
+        "id": "deponia",
+        "year": 2012,
+      },
+      {
+        "id": "plants-vs-zombies-2-its-about-time",
+        "year": 2013,
+      },
+      {
+        "id": "the-walking-dead-the-telltale-definitive-series",
+        "year": 2019,
+      },
+    ],
+    "shuffled": [
+      "grand-theft-auto-iv",
+      "wii-sports-resort",
+      "deponia",
+      "the-king-of-fighters-96",
+      "the-walking-dead-the-telltale-definitive-series",
+      "plants-vs-zombies-2-its-about-time",
+      "ecco-the-dolphin",
+    ],
+  },
+  "2026-04-01": {
+    "games": [
+      {
+        "id": "super-mario-land-2-6-golden-coins",
+        "year": 1992,
+      },
+      {
+        "id": "secrets-of-the-ark-a-broken-sword-game",
+        "year": 2006,
+      },
+      {
+        "id": "l-a-noire",
+        "year": 2011,
+      },
+      {
+        "id": "deponia",
+        "year": 2012,
+      },
+      {
+        "id": "her-story",
+        "year": 2015,
+      },
+      {
+        "id": "pathfinder-wrath-of-the-righteous",
+        "year": 2021,
+      },
+      {
+        "id": "the-plucky-squire",
+        "year": 2024,
+      },
+    ],
+    "shuffled": [
+      "l-a-noire",
+      "deponia",
+      "super-mario-land-2-6-golden-coins",
+      "her-story",
+      "secrets-of-the-ark-a-broken-sword-game",
+      "pathfinder-wrath-of-the-righteous",
+      "the-plucky-squire",
+    ],
+  },
+  "2026-05-15": {
+    "games": [
+      {
+        "id": "super-mario-64",
+        "year": 1996,
+      },
+      {
+        "id": "tony-hawks-pro-skater-3",
+        "year": 2001,
+      },
+      {
+        "id": "the-lord-of-the-rings-the-fellowship-of-the-ring",
+        "year": 2002,
+      },
+      {
+        "id": "call-of-duty-3",
+        "year": 2006,
+      },
+      {
+        "id": "world-in-conflict",
+        "year": 2007,
+      },
+      {
+        "id": "splatoon",
+        "year": 2015,
+      },
+      {
+        "id": "darksiders-genesis",
+        "year": 2019,
+      },
+    ],
+    "shuffled": [
+      "darksiders-genesis",
+      "the-lord-of-the-rings-the-fellowship-of-the-ring",
+      "splatoon",
+      "tony-hawks-pro-skater-3",
+      "world-in-conflict",
+      "call-of-duty-3",
+      "super-mario-64",
+    ],
+  },
+  "2026-06-09": {
+    "games": [
+      {
+        "id": "virtua-cop",
+        "year": 1994,
+      },
+      {
+        "id": "x-men-vs-street-fighter",
+        "year": 1996,
+      },
+      {
+        "id": "timesplitters-2",
+        "year": 2002,
+      },
+      {
+        "id": "the-sly-collection",
+        "year": 2010,
+      },
+      {
+        "id": "the-walking-dead",
+        "year": 2012,
+      },
+      {
+        "id": "the-last-of-us-remastered",
+        "year": 2014,
+      },
+      {
+        "id": "sherlock-holmes-the-devils-daughter",
+        "year": 2016,
+      },
+    ],
+    "shuffled": [
+      "virtua-cop",
+      "the-walking-dead",
+      "timesplitters-2",
+      "x-men-vs-street-fighter",
+      "the-last-of-us-remastered",
+      "sherlock-holmes-the-devils-daughter",
+      "the-sly-collection",
+    ],
+  },
+  "2026-07-04": {
+    "games": [
+      {
+        "id": "breath-of-fire-ii",
+        "year": 1994,
+      },
+      {
+        "id": "chrono-trigger",
+        "year": 1995,
+      },
+      {
+        "id": "half-life-2-episode-two",
+        "year": 2007,
+      },
+      {
+        "id": "super-smash-bros-brawl",
+        "year": 2008,
+      },
+      {
+        "id": "dungeon-defenders",
+        "year": 2010,
+      },
+      {
+        "id": "lego-batman-2-dc-super-heroes",
+        "year": 2012,
+      },
+      {
+        "id": "biomutant",
+        "year": 2021,
+      },
+    ],
+    "shuffled": [
+      "breath-of-fire-ii",
+      "half-life-2-episode-two",
+      "dungeon-defenders",
+      "biomutant",
+      "lego-batman-2-dc-super-heroes",
+      "super-smash-bros-brawl",
+      "chrono-trigger",
+    ],
+  },
+  "2026-08-30": {
+    "games": [
+      {
+        "id": "disneys-aladdin",
+        "year": 1993,
+      },
+      {
+        "id": "comix-zone",
+        "year": 1995,
+      },
+      {
+        "id": "doom-64",
+        "year": 1997,
+      },
+      {
+        "id": "heroes-of-might-and-magic-v-tribes-of-the-east",
+        "year": 2007,
+      },
+      {
+        "id": "dishonored",
+        "year": 2012,
+      },
+      {
+        "id": "the-walking-dead-400-days",
+        "year": 2013,
+      },
+      {
+        "id": "dark-souls-ii",
+        "year": 2014,
+      },
+    ],
+    "shuffled": [
+      "doom-64",
+      "dishonored",
+      "dark-souls-ii",
+      "comix-zone",
+      "the-walking-dead-400-days",
+      "heroes-of-might-and-magic-v-tribes-of-the-east",
+      "disneys-aladdin",
+    ],
+  },
+  "2026-10-31": {
+    "games": [
+      {
+        "id": "super-star-wars",
+        "year": 1992,
+      },
+      {
+        "id": "blackthorne",
+        "year": 1994,
+      },
+      {
+        "id": "sound-shapes",
+        "year": 2012,
+      },
+      {
+        "id": "ori-and-the-blind-forest",
+        "year": 2015,
+      },
+      {
+        "id": "oneshot",
+        "year": 2016,
+      },
+      {
+        "id": "darksiders-iii",
+        "year": 2018,
+      },
+      {
+        "id": "subnautica-below-zero",
+        "year": 2021,
+      },
+    ],
+    "shuffled": [
+      "super-star-wars",
+      "sound-shapes",
+      "darksiders-iii",
+      "ori-and-the-blind-forest",
+      "oneshot",
+      "blackthorne",
+      "subnautica-below-zero",
+    ],
+  },
+  "2026-12-25": {
+    "games": [
+      {
+        "id": "warcraft-ii-tides-of-darkness",
+        "year": 1995,
+      },
+      {
+        "id": "mortal-kombat-mythologies-sub-zero",
+        "year": 1997,
+      },
+      {
+        "id": "tekken-4",
+        "year": 2001,
+      },
+      {
+        "id": "tearaway",
+        "year": 2013,
+      },
+      {
+        "id": "shovel-knight",
+        "year": 2014,
+      },
+      {
+        "id": "crypt-of-the-necrodancer",
+        "year": 2015,
+      },
+      {
+        "id": "street-fighter-6",
+        "year": 2023,
+      },
+    ],
+    "shuffled": [
+      "street-fighter-6",
+      "tekken-4",
+      "tearaway",
+      "crypt-of-the-necrodancer",
+      "shovel-knight",
+      "mortal-kombat-mythologies-sub-zero",
+      "warcraft-ii-tides-of-darkness",
+    ],
+  },
+  "2027-01-01": {
+    "games": [
+      {
+        "id": "the-lion-king",
+        "year": 1994,
+      },
+      {
+        "id": "viewtiful-joe",
+        "year": 2003,
+      },
+      {
+        "id": "harry-potter-and-the-prisoner-of-azkaban",
+        "year": 2004,
+      },
+      {
+        "id": "mass-effect-2-kasumi-stolen-memory",
+        "year": 2010,
+      },
+      {
+        "id": "pok-mon-y",
+        "year": 2013,
+      },
+      {
+        "id": "infamous-second-son",
+        "year": 2014,
+      },
+      {
+        "id": "final-fantasy-xii-the-zodiac-age",
+        "year": 2017,
+      },
+    ],
+    "shuffled": [
+      "final-fantasy-xii-the-zodiac-age",
+      "harry-potter-and-the-prisoner-of-azkaban",
+      "mass-effect-2-kasumi-stolen-memory",
+      "viewtiful-joe",
+      "pok-mon-y",
+      "infamous-second-son",
+      "the-lion-king",
+    ],
+  },
+  "2027-02-22": {
+    "games": [
+      {
+        "id": "tekken-3",
+        "year": 1997,
+      },
+      {
+        "id": "vampire-the-masquerade-redemption",
+        "year": 2000,
+      },
+      {
+        "id": "fatal-frame-ii-crimson-butterfly",
+        "year": 2003,
+      },
+      {
+        "id": "tales-of-symphonia-dawn-of-the-new-world",
+        "year": 2008,
+      },
+      {
+        "id": "call-of-juarez-bound-in-blood",
+        "year": 2009,
+      },
+      {
+        "id": "alice-madness-returns",
+        "year": 2011,
+      },
+      {
+        "id": "wayward",
+        "year": 2023,
+      },
+    ],
+    "shuffled": [
+      "tekken-3",
+      "fatal-frame-ii-crimson-butterfly",
+      "call-of-juarez-bound-in-blood",
+      "wayward",
+      "tales-of-symphonia-dawn-of-the-new-world",
+      "vampire-the-masquerade-redemption",
+      "alice-madness-returns",
+    ],
+  },
+  "2027-06-09": {
+    "games": [
+      {
+        "id": "castlevania-dracula-x",
+        "year": 1995,
+      },
+      {
+        "id": "carmageddon",
+        "year": 1997,
+      },
+      {
+        "id": "harry-potter-and-the-deathly-hallows-part-1",
+        "year": 2010,
+      },
+      {
+        "id": "world-of-tanks",
+        "year": 2011,
+      },
+      {
+        "id": "steamworld-dig",
+        "year": 2013,
+      },
+      {
+        "id": "lego-batman-3-beyond-gotham",
+        "year": 2014,
+      },
+      {
+        "id": "cocoon",
+        "year": 2023,
+      },
+    ],
+    "shuffled": [
+      "harry-potter-and-the-deathly-hallows-part-1",
+      "world-of-tanks",
+      "castlevania-dracula-x",
+      "steamworld-dig",
+      "carmageddon",
+      "cocoon",
+      "lego-batman-3-beyond-gotham",
+    ],
+  },
+}
+`;
