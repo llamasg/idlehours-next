@@ -5,7 +5,7 @@ import {schemaTypes} from './schemaTypes'
 import {codeInput} from '@sanity/code-input'
 
 // Singleton document types — appear as single items in the nav, not lists
-const singletons = new Set(['siteSettings', 'pip_dashboard', 'gameLibrary'])
+const singletons = new Set(['siteSettings', 'gameLibrary'])
 
 export default defineConfig({
   name: 'default',
@@ -30,14 +30,6 @@ export default defineConfig({
                 S.document()
                   .schemaType('siteSettings')
                   .documentId('siteSettings')
-              ),
-            S.listItem()
-              .title('Pip Dashboard')
-              .id('pip_dashboard')
-              .child(
-                S.document()
-                  .schemaType('pip_dashboard')
-                  .documentId('pip-dashboard-singleton')
               ),
             S.listItem()
               .title('Game Library')

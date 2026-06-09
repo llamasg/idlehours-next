@@ -8,7 +8,6 @@ import promoBanner from './promoBanner'
 import game from './game'
 import siteSettings from './siteSettings'
 import {homePageSchemas} from './homePage'
-import pipDashboard from './pipDashboard'
 import gameLibrary, {curatedRow, curatedRowGame, featureBanner} from './gameLibrary'
 
 export const schemaTypes = [
@@ -21,8 +20,6 @@ export const schemaTypes = [
   quiz,
   siteSettings,
   promoBanner,
-  // Pip — nightly job results (singleton, written by backend)
-  pipDashboard,
   // Game Library (singleton)
   gameLibrary,
   curatedRow,
