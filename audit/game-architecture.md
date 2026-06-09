@@ -1,6 +1,6 @@
 # Game Architecture — Shared vs Divergent
 
-Audit date: 2026-06-09. Scope: the six games under `src/app/play/` plus the shared components in `src/components/games/` and `src/components/play/`. Classification: **STRUCTURAL** = machinery every game conceptually needs (intro/rules, end screens, share, timers, persistence, streaks, archive); **IDENTITY** = the game itself (core interaction, bespoke visuals, puzzle generation).
+Audit date: 2026-06-09; updated same day after the cleanup sequence (GameEndModal.tsx deleted with `SplitShareButton`/`Confetti` extracted; knip's dead exports removed — line numbers cited below may have shifted slightly in the touched lib files). The shell proposal in §5 is unaffected and remains the plan of record for the badges/manifest work. Scope: the six games under `src/app/play/` plus the shared components in `src/components/games/` and `src/components/play/`. Classification: **STRUCTURAL** = machinery every game conceptually needs (intro/rules, end screens, share, timers, persistence, streaks, archive); **IDENTITY** = the game itself (core interaction, bespoke visuals, puzzle generation).
 
 ## 1. Per-game inventory
 
@@ -16,7 +16,7 @@ Audit date: 2026-06-09. Scope: the six games under `src/app/play/` plus the shar
 | `lib/dateUtils.ts` | 106 | STRUCTURAL wrapper + identity (weighted seeded daily selection, mulberry32) |
 | `lib/scoring.ts` | 105 | IDENTITY |
 | `lib/storage.ts` | 70 | STRUCTURAL — localStorage fork 1 of 3 (`game_sense_`) |
-| `lib/useSanityGame.ts` | 55 | DEAD (unimported) |
+| `lib/useSanityGame.ts` | — | DELETED 2026-06 (`c7958f7`) |
 | `page.tsx` / `archive/page.tsx` / layouts / data | ~60 | STRUCTURAL (today-redirect fork 1 of 3) |
 
 ### street-date (~1,548 lines)
@@ -72,7 +72,7 @@ Mostly IDENTITY (canvas + Supabase realtime: `JigsawCanvas.tsx` 366, `RemoteCurs
 
 | Shared component | game-sense | street-date | shelf-price | blitz | jigsaw | ship-it |
 |---|---|---|---|---|---|---|
-| `GameEndModal.tsx` | — | — | — | — | — | — (**dead: zero importers anywhere**) |
+| `GameEndModal.tsx` | — | — | — | — | — | — (**deleted 2026-06 in `c7958f7`**; `SplitShareButton` + `Confetti` extracted first as standalone files in `src/components/games/`) |
 | `GameEndModal.copy.ts` (ranks/flavour/copy) | ✓ | ✓ | ✓ | — (own `MEDAL_HEADINGS`) | — | — |
 | `PostGameLeftColumn` → `ResultCard` + `DailyBadgeShelf` | ✓ | ✓ | ✓ | — (own EndScreen clone) | — | — |
 | `DiscoverMore` | ✓ | **—** | ✓ | — | — | ✓ |
@@ -91,7 +91,7 @@ Reading: the three daily games have converged on a real shared layer; **blitz an
 | 2 | Intro / how-to-play | game-sense `RulesModal.tsx` (90) vs shelf-price `RulesModal.tsx` (77) — identical shell, only copy + accent differ. **Street-date has none.** Blitz `TopicSelectScreen`, ship-it `StartScreen` fill the same slot bespokely | ~80% | **LOW** — one `RulesModal({accent, children})`; street-date gets rules for free |
 | 3 | "Next game in Xh" countdown | **Does not exist in any game** — only static "midnight GMT" copy | n/a | **LOW** to add once in a shell — feature gap, not duplication |
 | 4 | Streak logic | **No cross-day streak exists anywhere.** `streak` in `ResultCard`/`PostGameLeftColumn`/`archiveAdapter` is shelf-price's within-day `correctCount`, misleadingly named; `getRankForGame` ignores it (`ranks.ts:79`) | n/a | **LOW** to rename; real streaks = new shell feature iterating per-day keys (primitives exist) |
-| 5 | Share-text builders | 5 forks, 2 dead: game-sense page:338-358 (**dead**), street-date page:526-531 (**dead**, + emoji grid at `gameState.ts:96`), blitz `EndScreen:55-66` (live), ship-it `EndScreen:134-147` (live), ship-it `LoseScreen:~40` (live). Shared `SplitShareButton` orphaned inside dead `GameEndModal.tsx` | ~70% format | **LOW** — `buildShareText({game, number, score, rows})` + resurrect SplitShareButton standalone. **No daily game currently has any share UI** |
+| 5 | Share-text builders | 5 forks, 2 dead: game-sense page:338-358 (**dead**), street-date page:526-531 (**dead**, + emoji grid at `gameState.ts:96`), blitz `EndScreen:55-66` (live), ship-it `EndScreen:134-147` (live), ship-it `LoseScreen:~40` (live). `SplitShareButton` now lives standalone at `src/components/games/SplitShareButton.tsx` (extracted 2026-06, zero importers yet) | ~70% format | **LOW** — `buildShareText({game, number, score, rows})` + wire SplitShareButton in. **No daily game currently has any share UI** |
 | 6 | Seeded daily RNG | mulberry32 in game-sense `lib/dateUtils.ts:42-49`; byte-identical mulberry32 again in shelf-price `lib/dateUtils.ts:45-53`; LCG + date-hash in street-date `lib/puzzleGen.ts:22-44` | mulberry32 pair 100% | **MEDIUM** — extraction trivial BUT CLAUDE.md rule 5: output must stay bit-for-bit identical per date; street-date's LCG must remain an LCG |
 | 7 | Per-game dateUtils wrappers | 3 wrappers re-exporting `@/lib/dateUtils` bound to a per-game `LAUNCH_DATE`, identical TODO comment ×3; street-date's 43 lines are 100% boilerplate | ~95% wrapper part | **LOW** — `makeGameDates(LAUNCH_DATE)` factory or per-game config object |
 | 8 | localStorage day-state (write) | `game-sense/lib/storage.ts` (70), `shelf-price/lib/storage.ts` (64), `street-date/lib/gameState.ts:54-68` — same load/save/SSR-guard/try-catch shape | ~85% | **LOW** — generic `createDayStore<T>(prefix, defaultState, migrate?)`; **keys must not change** (CLAUDE.md rule 2) |
@@ -101,7 +101,7 @@ Reading: the three daily games have converged on a real shared layer; **blitz an
 | 12 | Nav pills (Today's game / past games) | 6 copies across the three pages (in-game + post-game variants). Inconsistent: gs routes via `/play/game-sense/archive` redirect hop, sd/sp link `/play/archive?game=` directly; sd's lack icons | ~90% | **LOW** — `<GameNavPills slug isToday>` |
 | 13 | Today-redirect pages | 3 near-identical `router.replace` client pages | ~95% | **LOW** — `getTodayDateString` is timezone-fixed, so a server redirect works |
 | 14 | Mobile theme-color effect | gs page:85-112 (`#2D6BC4`) and sd page:86-112 (`#1A7A40`) line-for-line identical bar the hex; **shelf-price lacks it** (inconsistent iOS status bar) | ~98% | **LOW** — `useMobileThemeColor(hex)` |
-| 15 | `BADGE_IMAGES` map | Verbatim ×3: dead `GameEndModal.tsx:9-27`, `DailyBadgeShelf.tsx:11-29`, `ResultCard.tsx:18-36`. Any badge rename = 3 edits | 100% | **LOW** — move to `@/lib/ranks` next to `GAME_COLORS` |
+| 15 | `BADGE_IMAGES` map | Verbatim ×2 (was ×3 before the GameEndModal deletion): `DailyBadgeShelf.tsx:11-29`, `ResultCard.tsx:18-36`. Any badge rename = 2 edits | 100% | **LOW** — move to `@/lib/ranks` next to `GAME_COLORS` |
 | 16 | "Not playable yet" guard | gs page:602-614, sp page:333-345 (~95% identical); **street-date has none** — future-dated URLs render real puzzles | ~95% | **LOW** |
 | 17 | Dead modal-copy memos + dead modal state | gs page:325-335, sd page:510-524, sp page:172-185 + `showWinModal`/`showLossModal`/`showCompleteToast` (gs), `showResult` (sp, still gates `isPostGame`) | ~90% | **LOW** — delete with care (sp's gates live logic) |
 | 18 | Toast | game-sense inline trophy toast page:852-867 (dead), blitz `MilestoneToast.tsx`, jigsaw `addToast` | ~40% | **MEDIUM** — different visual languages |
@@ -133,7 +133,7 @@ From the table, the shell package (suggested home: `src/components/games/shell/`
 - `getDailyCompletion(slug, date)` — row 9 (single read path; fixes the TodayCard bug; uses Europe/London date)
 - `makeGameDates(launchDate)` — row 7
 - `seededRng` module exposing **both** `mulberry32(seed)` and street-date's LCG, so outputs stay bit-identical — row 6
-- `buildShareText(...)` + standalone `SplitShareButton` (extracted from dead `GameEndModal.tsx` before deletion) — row 5
+- `buildShareText(...)` + `SplitShareButton` (already extracted to `src/components/games/SplitShareButton.tsx`, awaiting wiring) — row 5
 - `useGameEntrance()`, `<GameWorld>`, `<GameTitle>` — row 10
 - `<ScorePill>`, `<GameNavPills>`, `<RulesModal>`, `<PlayableGuard>`, `useMobileThemeColor`, `formatElapsed`, `<NextPuzzleCountdown>` (new) — rows 11, 12, 2, 16, 14, 20, 3
 - `PostGameAnalysisCard` (header + stat-pill row + per-game children slot) — row 1

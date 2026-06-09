@@ -115,7 +115,7 @@ Mental model: build the page fully visible and correct, set the parts that must 
 - **Modify a game:** each game is self-contained under `src/app/play/[game]/`. Do not scan other game folders unless asked.
 - **Game scoring/ranks:** update `src/lib/ranks.ts` AND `src/components/games/GameEndModal.copy.ts` together.
 - **Games database:** `src/data/games-db.ts`; fields: id, title, year, genres, platforms, igdbImageId, vibe, launchPriceUsd, popularityRank.
-- **Sanity content type:** schema in `studio/schemaTypes/`, register in `studio/schemaTypes/index.ts`, GROQ query in `src/lib/queries.ts`. (`musicTrack.ts` is currently defined but unregistered.)
+- **Sanity content type:** schema in `studio/schemaTypes/`, register in `studio/schemaTypes/index.ts`, GROQ query in `src/lib/queries.ts`.
 
 ## Environment variables (.env.local)
 
@@ -178,6 +178,7 @@ Dead since the Pip removal (delete from .env.local and Vercel): `NEXT_PUBLIC_ANT
 | Shelf Price ranks "Just Another Consumer / Junior Dev / Senior Producer / Industry Insider" (docs only) | Moms Credit Card / Bargain Hunter / Secret Shopper / Head of Sales | |
 | `/posts` route | `/blog` | Two components still link to /posts — bug |
 | Hostinger FTP deploy (`deploy.js`) | Vercel auto-deploy from `main` | Script deleted 2026-06 |
+| `homePage` / `promoBanner` / `musicTrack` Sanity schemas | — removed 2026-06 | The modular CMS homepage is deferred until after core features; the homepage is hardcoded in `HomepageClient.tsx`. Orphaned documents remain in the dataset (2 homePage, 1 promoBanner, 2 musicTrack), recoverable. Do not resurrect the section types in `src/types/index.ts` from old code |
 | **Pip (internal ops dashboard)** | — removed 2026-06, tag `pip-v1-final` | Covered `src/pip/`, `src/app/pip/`, the legacy root `pip/` Node backend, the `pip_dashboard` Sanity schema, and the pip-nightly GitHub Actions workflow. Rebuild planned post-auth with real session gating. The `pip-pulse` Tailwind keyframe survives — it belongs to shelf-price's ProgressBar, not Pip |
 | Tailwind 4 (claimed) | Tailwind 3.4 (installed) | Never upgraded; doc claim only |
 | Garnett Bold font (claimed) | not used; Striker is the only custom font | Never shipped |

@@ -1,6 +1,6 @@
 # Foundations Check — Supabase Auth (magic links), badges + RLS, Stripe cosmetics
 
-Audit date: 2026-06-09. Verdict up front: **the foundations do not yet support auth, RLS, or payments — but nothing is architecturally irreversible.** Four prerequisites should land before the badges table (see §6).
+Audit date: 2026-06-09; updated same day after the cleanup sequence (Pip fully removed in `45d5d22` — that resolved the client-exposed Anthropic key and the fake-password pattern). Verdict: **the foundations do not yet support auth, RLS, or payments — but nothing is architecturally irreversible.** Three prerequisites should land before the badges table (see §6).
 
 ## 1. Current Supabase setup
 
@@ -23,26 +23,18 @@ All writes use the anon key, which means RLS on these four tables is currently d
 
 ## 2. Where auth state would live
 
-There is currently no user auth. The only "auth" is Pip's: `src/pip/auth/usePipAuth.ts:5` hardcodes `const PASSWORD = 'idlehours2026'`, compares client-side, persists `localStorage.setItem('pip_auth', 'true')`. It is bypassable from devtools and ships in the public bundle.
+There is currently no auth of any kind. (Pip's hardcoded localStorage password — the only prior "auth" pattern — was removed with Pip in `45d5d22`. Auth is greenfield.)
 
 Natural integration points given current structure:
 
 - **Provider mount point:** `src/components/ClientProviders.tsx` (the single client wrapper used by `src/app/layout.tsx:33`). Current stack: `ThemeProvider` (next-themes) → `GameLightboxProvider` → `ClickSpark` → children. An `AuthProvider`/`SupabaseSessionProvider` slots in here — this is the one place all pages share.
 - **Session refresh:** a new root `middleware.ts` (required by the `@supabase/ssr` magic-link flow for cookie/token refresh). Greenfield — nothing conflicts, nothing exists.
 - **Server-side session:** the root layout is a server component and could read the session once cookie-based clients exist.
-- **Conflicting pattern to retire:** the Pip localStorage-password pattern. Once real auth exists, Pip should be gated by a Supabase session (e.g. an `is_admin` claim), not a hardcoded string — especially because Pip currently "protects" the exposed Anthropic key (§3).
+- **For the Pip rebuild** (planned post-auth): gate it with a Supabase session (e.g. an `is_admin` claim), never a client-side password check; all Claude calls go through server routes with the key server-side only.
 
 ## 3. Client-exposed secrets
 
-**Critical: `NEXT_PUBLIC_ANTHROPIC_API_KEY` is a paid API key compiled into the public JS bundle.** Five `'use client'` files instantiate the Anthropic SDK with `dangerouslyAllowBrowser: true`:
-
-- `src/pip/lib/pipClaude.ts:12-15` (comment claims this is fine because "/pip is password-protected" — but see §2: the password check is a client-side localStorage flag and protects nothing)
-- `src/pip/hooks/useMorningMessage.ts:13-14`
-- `src/pip/hooks/useIdeasRefresh.ts:13-14`
-- `src/pip/hooks/useSocialContent.ts:15-16`
-- `src/pip/views/PipSeoHelper.tsx:12-13`
-
-Anyone can extract the key from the deployed bundle and bill the Anthropic account. Pre-launch zero traffic is the only mitigation. **Must move behind server routes (and the key rotated) before launch, and certainly before a Stripe account is attached to the same project.**
+**RESOLVED in code, pending ops.** The five `'use client'` files that instantiated the Anthropic SDK with `dangerouslyAllowBrowser: true` were deleted with Pip (`45d5d22`). Still pending (owner): delete `NEXT_PUBLIC_ANTHROPIC_API_KEY` from `.env.local` + Vercel, and **rotate the key** — it shipped in prior deployed bundles, and the same key is still inlined into the deployed Sanity Studio bundle via `studio/sanity.cli.ts` (`VITE_ANTHROPIC_API_KEY` in `studio/.env`/`.env.local`, used by the Studio gameGenerator; never git-committed, verified, but deployed Studio JS is publicly fetchable).
 
 Other env var findings:
 
@@ -85,12 +77,11 @@ Readers that duplicate key knowledge and must stay in lockstep: `DailyBadgeShelf
 
 ## 6. Friction list and prerequisites
 
-Ordered; the first four are prerequisites that should land **before** the badges table:
+Ordered; the first three are prerequisites that should land **before** the badges table. (The fourth original prerequisite — removing Pip's client-side Anthropic calls — was completed by the Pip removal `45d5d22`; only the key rotation + env var deletion remain, see §3.)
 
 1. **Install `@supabase/ssr`; create cookie-based browser/server client pair + root `middleware.ts`.** Touches every current supabase importer (§1), but the nullable singleton centralises the change. Decide what to do with the `| null` pattern — fine for optional features, wrong for auth, which needs hard guarantees; expect a required-client/optional-client split.
-2. **Move Pip's Anthropic calls behind server routes; delete `NEXT_PUBLIC_ANTHROPIC_API_KEY`; rotate the key.** Pairs naturally with replacing Pip's fake password with real auth (§2, §3).
-3. **Define the RLS posture for all four existing tables** (`jobs`, `jigsaw_rooms`, `jigsaw_pieces`, `blitz_scores`) at the same time as `badges` — especially `jobs`, currently anonymous-writable from a public route.
-4. **Establish one validated server-route pattern** (zod or equivalent + session check + rate limit) that badge writes and later Stripe webhooks share. `/api/igdb`'s open CORS proxy is the current hygiene example to fix, not follow.
-5. The games are fully client-side (`force-dynamic`, 14 occurrences) with answers shipped to the client — fine for gameplay, but server-side puzzle validation (§5) is the only path to honest badges.
-6. localStorage-to-account migration has no abstraction point: three storage modules with three shapes plus three raw readers. The per-game manifest proposed in `audit/game-architecture.md` §5.3 is the right seam — build it before, or as part of, the badge sync.
-7. Sanity client mixes read+token in one module (`src/lib/sanity.ts:9`) — split server-only before more server code is written.
+2. **Define the RLS posture for all four existing tables** (`jobs`, `jigsaw_rooms`, `jigsaw_pieces`, `blitz_scores`) at the same time as `badges` — especially `jobs`, currently anonymous-writable from a public route (and live in production with no `notFound()` suppression).
+3. **Establish one validated server-route pattern** (zod or equivalent + session check + rate limit) that badge writes and later Stripe webhooks share. `/api/igdb`'s open CORS proxy is the current hygiene example to fix, not follow.
+4. The games are fully client-side (`force-dynamic`) with answers shipped to the client — fine for gameplay, but server-side puzzle validation (§5) is the only path to honest badges.
+5. localStorage-to-account migration has no abstraction point: three storage modules with three shapes plus three raw readers. The per-game manifest proposed in `audit/game-architecture.md` §5.3 is the right seam — build it before, or as part of, the badge sync.
+6. Sanity client mixes read+token in one module (`src/lib/sanity.ts:9`) — split server-only before more server code is written.
