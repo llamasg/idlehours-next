@@ -41,6 +41,28 @@ const SHELF_PRICE_LADDER: RankThreshold[] = [
 
 export type GameSlug = 'game-sense' | 'street-date' | 'shelf-price'
 
+/** Badge artwork per rank name — single source of truth (was duplicated
+ *  verbatim in DailyBadgeShelf and ResultCard). */
+export const BADGE_IMAGES: Record<string, string> = {
+  // Universal
+  'Bust': '/images/badges/00_BUST.png',
+  // Game Sense
+  'Skill Issue': '/images/badges/Game Sense_01__Skill Issue.png',
+  'Button Masher': '/images/badges/Game Sense_02_Button Masher.png',
+  'Big Brain': '/images/badges/Game Sense_03_Big Brain.png',
+  'One Shot': '/images/badges/Game Sense_04_One Shot.png',
+  // Street Date
+  'Newbie': '/images/badges/Street Date_01_Newbie.png',
+  'Has a Backlog': '/images/badges/Street Date_02_Has a Backlog.png',
+  'Day One': '/images/badges/Street Date_03_Day One.png',
+  'The Curator': '/images/badges/Street Date_04_The Curator.png',
+  // Shelf Price
+  'Moms Credit Card': '/images/badges/Shelf Price_01_Moms Credit card.png',
+  'Bargain Hunter': '/images/badges/Shelf Price_02_bargain hunter.png',
+  'Secret Shopper': '/images/badges/Shelf Price_03_Secret Shopper.png',
+  'Head of Sales': '/images/badges/Shelf Price_04_head of sales.png',
+}
+
 /** Per-game accent colours for badges, scores, and highlights */
 export const GAME_COLORS: Record<GameSlug, {
   accent: string       // CSS colour for text/bg accents

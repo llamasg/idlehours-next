@@ -3,11 +3,8 @@
 import { useMemo } from 'react'
 import Link from 'next/link'
 import { type GameSlug, GAME_COLORS } from '@/lib/ranks'
-
-interface SlotData {
-  completed: boolean
-  score: number
-}
+import { getDailyCompletion } from '@/lib/game-shell/completion'
+import { getTodayDateString } from '@/lib/dateUtils'
 
 const DAILY_GAMES: { slug: GameSlug; label: string; emoji: string; href: string }[] = [
   { slug: 'game-sense', label: 'Game Sense', emoji: '🎮', href: '/play/game-sense' },
@@ -15,46 +12,10 @@ const DAILY_GAMES: { slug: GameSlug; label: string; emoji: string; href: string 
   { slug: 'shelf-price', label: 'Shelf Price', emoji: '💰', href: '/play/shelf-price' },
 ]
 
-function getTodayDateStr(): string {
-  const d = new Date()
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
-
-function getSlotData(slug: GameSlug, dateStr: string): SlotData {
-  if (typeof window === 'undefined') return { completed: false, score: 0 }
-  try {
-    switch (slug) {
-      case 'shelf-price': {
-        const raw = localStorage.getItem(`shelf_price_v2_${dateStr}`)
-        if (!raw) return { completed: false, score: 0 }
-        const state = JSON.parse(raw)
-        if (!state.finished) return { completed: false, score: 0 }
-        return { completed: true, score: state.score }
-      }
-      case 'street-date': {
-        const raw = localStorage.getItem(`street_date_${dateStr}`)
-        if (!raw) return { completed: false, score: 0 }
-        const state = JSON.parse(raw)
-        if (!state.finished) return { completed: false, score: 0 }
-        return { completed: true, score: state.score }
-      }
-      case 'game-sense': {
-        const raw = localStorage.getItem(`game_sense_${dateStr}`)
-        if (!raw) return { completed: false, score: 0 }
-        const state = JSON.parse(raw)
-        if (!state.won) return { completed: false, score: 0 }
-        return { completed: true, score: state.score }
-      }
-    }
-  } catch {
-    return { completed: false, score: 0 }
-  }
-}
-
 export default function TodayCard() {
-  const dateStr = useMemo(() => getTodayDateStr(), [])
+  const dateStr = useMemo(() => getTodayDateString(), [])
   const slots = useMemo(
-    () => DAILY_GAMES.map((g) => ({ ...g, ...getSlotData(g.slug, dateStr) })),
+    () => DAILY_GAMES.map((g) => ({ ...g, ...getDailyCompletion(g.slug, dateStr) })),
     [dateStr],
   )
   const completedCount = slots.filter((s) => s.completed).length

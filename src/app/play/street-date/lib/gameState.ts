@@ -23,7 +23,8 @@ export interface V2DayState {
   endedAt: number | null
 }
 
-const STORAGE_PREFIX = 'street_date_v3_'
+import { createDayStore } from '@/lib/game-shell/dayStore'
+
 const MAX_GUESSES = 5
 const BASE_SCORE = 1000
 const GUESS_PENALTY = 150
@@ -51,20 +52,14 @@ export function createInitialState(gameIds: string[], shuffledIds: string[]): V2
   }
 }
 
+const store = createDayStore<V2DayState>('street_date_v3_')
+
 export function loadState(dateStr: string): V2DayState | null {
-  if (typeof window === 'undefined') return null
-  try {
-    const raw = localStorage.getItem(STORAGE_PREFIX + dateStr)
-    if (!raw) return null
-    return JSON.parse(raw)
-  } catch {
-    return null
-  }
+  return store.load(dateStr)
 }
 
 export function saveState(dateStr: string, state: V2DayState): void {
-  if (typeof window === 'undefined') return
-  localStorage.setItem(STORAGE_PREFIX + dateStr, JSON.stringify(state))
+  store.save(dateStr, state)
 }
 
 export function calcSlotResult(

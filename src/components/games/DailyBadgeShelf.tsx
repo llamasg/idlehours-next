@@ -2,85 +2,17 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
-import { type GameSlug, getRankForGame, GAME_COLORS } from '@/lib/ranks'
+import { type GameSlug, GAME_COLORS, BADGE_IMAGES } from '@/lib/ranks'
+import { getDailyCompletion } from '@/lib/game-shell/completion'
+import { getTodayDateString } from '@/lib/dateUtils'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import BadgeLightbox, { isHoloRank, HoloBadgeWrapper } from '@/components/games/BadgeLightbox'
-
-// ── Badge image paths ───────────────────────────────────────────────────────
-
-const BADGE_IMAGES: Record<string, string> = {
-  // Universal
-  'Bust': '/images/badges/00_BUST.png',
-  // Game Sense
-  'Skill Issue': '/images/badges/Game Sense_01__Skill Issue.png',
-  'Button Masher': '/images/badges/Game Sense_02_Button Masher.png',
-  'Big Brain': '/images/badges/Game Sense_03_Big Brain.png',
-  'One Shot': '/images/badges/Game Sense_04_One Shot.png',
-  // Street Date
-  'Newbie': '/images/badges/Street Date_01_Newbie.png',
-  'Has a Backlog': '/images/badges/Street Date_02_Has a Backlog.png',
-  'Day One': '/images/badges/Street Date_03_Day One.png',
-  'The Curator': '/images/badges/Street Date_04_The Curator.png',
-  // Shelf Price
-  'Moms Credit Card': '/images/badges/Shelf Price_01_Moms Credit card.png',
-  'Bargain Hunter': '/images/badges/Shelf Price_02_bargain hunter.png',
-  'Secret Shopper': '/images/badges/Shelf Price_03_Secret Shopper.png',
-  'Head of Sales': '/images/badges/Shelf Price_04_head of sales.png',
-}
-
-// ── localStorage helpers ────────────────────────────────────────────────────
-
-interface SlotData {
-  completed: boolean
-  rankName: string
-  score: number
-}
 
 const GAMES: { slug: GameSlug; label: string; href: string }[] = [
   { slug: 'shelf-price', label: 'Shelf Price', href: '/play/shelf-price' },
   { slug: 'street-date', label: 'Street Date', href: '/play/street-date' },
   { slug: 'game-sense', label: 'Game Sense', href: '/play/game-sense' },
 ]
-
-function getTodayDateStr(): string {
-  const d = new Date()
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
-
-function getSlotData(slug: GameSlug, dateStr: string): SlotData {
-  if (typeof window === 'undefined') return { completed: false, rankName: '', score: 0 }
-
-  try {
-    switch (slug) {
-      case 'shelf-price': {
-        const raw = localStorage.getItem(`shelf_price_v2_${dateStr}`)
-        if (!raw) return { completed: false, rankName: '', score: 0 }
-        const state = JSON.parse(raw)
-        if (!state.finished) return { completed: false, rankName: '', score: 0 }
-        const rankName = getRankForGame('shelf-price', state.score, state.correctCount)
-        return { completed: true, rankName, score: state.score }
-      }
-      case 'street-date': {
-        const raw = localStorage.getItem(`street_date_v3_${dateStr}`)
-        if (!raw) return { completed: false, rankName: '', score: 0 }
-        const state = JSON.parse(raw)
-        if (!state.finished) return { completed: false, rankName: '', score: 0 }
-        const rankName = getRankForGame('street-date', state.score, 0)
-        return { completed: true, rankName, score: state.score }
-      }
-      case 'game-sense': {
-        const raw = localStorage.getItem(`game_sense_${dateStr}`)
-        if (!raw) return { completed: false, rankName: '', score: 0 }
-        const state = JSON.parse(raw)
-        if (!state.won) return { completed: false, rankName: '', score: 0 }
-        const rankName = getRankForGame('game-sense', state.score, 0)
-        return { completed: true, rankName, score: state.score }
-      }
-    }
-  } catch {
-    return { completed: false, rankName: '', score: 0 }
-  }
-}
 
 // ── Step gaps ────────────────────────────────────────────────────────────────
 
@@ -105,10 +37,10 @@ interface DailyBadgeShelfProps {
 
 export default function DailyBadgeShelf({ currentGame, animateStamp = false }: DailyBadgeShelfProps) {
   const [lightbox, setLightbox] = useState<{ src: string; name: string; holo: boolean } | null>(null)
-  const dateStr = useMemo(() => getTodayDateStr(), [])
+  const dateStr = useMemo(() => getTodayDateString(), [])
 
   const slots = useMemo(
-    () => GAMES.map((g) => ({ ...g, ...getSlotData(g.slug, dateStr) })),
+    () => GAMES.map((g) => ({ ...g, ...getDailyCompletion(g.slug, dateStr) })),
     [dateStr],
   )
 

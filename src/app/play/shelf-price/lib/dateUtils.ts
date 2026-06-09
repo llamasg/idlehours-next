@@ -3,15 +3,7 @@
 
 import { GAMES, type ShelfPriceGame } from '../data/games'
 
-import {
-  getTodayDateString,
-  formatDisplayDate,
-  isToday,
-  getDaysSinceEpoch as _getDaysSinceEpoch,
-  formatGameNumber as _formatGameNumber,
-  isPlayableDate as _isPlayableDate,
-  getArchiveDates as _getArchiveDates,
-} from '@/lib/dateUtils'
+import { makeGameDates } from '@/lib/game-shell/gameDates'
 
 // TODO: STABILITY — daily game selection is derived from GAMES.length and array
 // shuffling. Adding games changes past date assignments. This is acceptable pre-launch
@@ -21,18 +13,16 @@ import {
 // Trigger: implement this before launch or before database exceeds 2,000 games,
 // whichever comes first. See docs/plans/daily-schedule-stability.md
 
-// ── Constants ────────────────────────────────────────────────────────────────
+// ── Dates bound to this game's launch ───────────────────────────────────────
 
-export const LAUNCH_DATE = '2026-03-03'
-const EPOCH = new Date('2026-03-03T00:00:00+00:00')
+const dates = makeGameDates('2026-03-03')
 
-// ── Re-export shared utils bound to this game's dates ──────────────────────
-
-export { getTodayDateString, formatDisplayDate, isToday }
-const getDaysSinceEpoch = (dateStr: string) => _getDaysSinceEpoch(EPOCH, dateStr)
-export const formatGameNumber = (dateStr: string) => _formatGameNumber(LAUNCH_DATE, dateStr)
-export const isPlayableDate = (dateStr: string) => _isPlayableDate(LAUNCH_DATE, dateStr)
-export const getArchiveDates = () => _getArchiveDates(LAUNCH_DATE)
+export const LAUNCH_DATE = dates.LAUNCH_DATE
+export { getTodayDateString, formatDisplayDate, isToday } from '@/lib/dateUtils'
+const getDaysSinceEpoch = dates.getDaysSinceEpoch
+export const formatGameNumber = dates.formatGameNumber
+export const isPlayableDate = dates.isPlayableDate
+export const getArchiveDates = dates.getArchiveDates
 
 // ── Seeded PRNG (mulberry32) ────────────────────────────────────────────────
 

@@ -28,6 +28,7 @@ import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
 import { formatGameNumber, formatDisplayDate } from '../lib/dateUtils'
+import { formatElapsed } from '@/lib/game-shell/formatElapsed'
 import Link from 'next/link'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -1036,14 +1037,7 @@ export default function StreetDateV2DayPage({
                       {/* Stats pills */}
                       <div className="flex gap-1.5 px-5 py-3 sm:gap-2 sm:px-6 sm:py-4">
                         {[
-                          { label: 'Time', value: (() => {
-                            if (!state.startedAt || !state.endedAt) return '—'
-                            let secs = Math.round((state.endedAt - state.startedAt) / 1000)
-                            if (secs < 60) return `${secs}s`
-                            const mins = Math.floor(secs / 60)
-                            const rem = secs % 60
-                            return `${mins}m ${rem}s`
-                          })() },
+                          { label: 'Time', value: formatElapsed(state.startedAt, state.endedAt) },
                           { label: 'Guesses', value: String(state.guesses.length) },
                           { label: 'Best', value: `${Math.max(...state.guesses.map(g => g.correctCount))}/7` },
                           { label: 'Missteps', value: String(

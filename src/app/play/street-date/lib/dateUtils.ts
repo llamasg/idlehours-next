@@ -1,12 +1,7 @@
 // src/app/play/street-date/lib/dateUtils.ts
 // Street Date — date math, epoch, display helpers
 
-import {
-  getTodayDateString,
-  formatDisplayDate,
-  formatGameNumber as _formatGameNumber,
-  getArchiveDates as _getArchiveDates,
-} from '@/lib/dateUtils'
+import { makeGameDates } from '@/lib/game-shell/gameDates'
 
 // TODO: STABILITY — daily game selection is derived from GAMES.length and array
 // shuffling. Adding games changes past date assignments. This is acceptable pre-launch
@@ -16,13 +11,11 @@ import {
 // Trigger: implement this before launch or before database exceeds 2,000 games,
 // whichever comes first. See docs/plans/daily-schedule-stability.md
 
-// ── Constants ────────────────────────────────────────────────────────────────
+// ── Dates bound to this game's launch ───────────────────────────────────────
 
-/** The date Street Date launched, as a YYYY-MM-DD string. */
-export const LAUNCH_DATE = '2026-02-22'
+const dates = makeGameDates('2026-02-22')
 
-// ── Re-export shared utils bound to this game's dates ──────────────────────
-
-export { getTodayDateString, formatDisplayDate }
-export const formatGameNumber = (dateStr: string) => _formatGameNumber(LAUNCH_DATE, dateStr)
-export const getArchiveDates = () => _getArchiveDates(LAUNCH_DATE)
+export const LAUNCH_DATE = dates.LAUNCH_DATE
+export { getTodayDateString, formatDisplayDate } from '@/lib/dateUtils'
+export const formatGameNumber = dates.formatGameNumber
+export const getArchiveDates = dates.getArchiveDates

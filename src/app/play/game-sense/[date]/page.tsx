@@ -17,6 +17,7 @@ import {
 } from '../lib/dateUtils'
 import { calculateRank, getGameAtRank } from '../lib/scoring'
 import { loadDayState, saveDayState, type DayState } from '../lib/storage'
+import { formatElapsed } from '@/lib/game-shell/formatElapsed'
 import AnimatedScore from '@/components/AnimatedScore'
 import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
@@ -745,17 +746,7 @@ export default function GameSenseDayPage({
                     <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
                     <div className="flex gap-1.5 px-5 py-3 sm:gap-2 sm:px-6 sm:py-4">
                       {[
-                        { label: 'Time', value: (() => {
-                          if (!state.startedAt || !state.endedAt) return '—'
-                          let secs = Math.round((state.endedAt - state.startedAt) / 1000)
-                          if (secs < 60) return `${secs}s`
-                          const hrs = Math.floor(secs / 3600)
-                          secs %= 3600
-                          const mins = Math.floor(secs / 60)
-                          const rem = secs % 60
-                          if (hrs > 0) return `${hrs}h ${mins}m ${rem}s`
-                          return `${mins}m ${rem}s`
-                        })() },
+                        { label: 'Time', value: formatElapsed(state.startedAt, state.endedAt) },
                         { label: 'Guesses', value: String(state.guesses.filter(g => !g.isHint).length) },
                         { label: 'Clues', value: `${state.blanksRevealed.length}/5` },
                         { label: 'Hints', value: String(state.guesses.filter(g => g.isHint).length) },
