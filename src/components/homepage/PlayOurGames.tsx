@@ -8,12 +8,21 @@ import { getTodayDateString as getShelfPriceToday } from '@/app/play/shelf-price
 
 const CYCLE_MS = 10_000
 
-const GAMES = [
+const GAMES: Array<{
+  title: string
+  subtitle: string
+  src: string
+  type: 'video' | 'gif' | 'image'
+  playTime: string
+  getHref: () => string
+  bg?: string
+}> = [
   {
     title: 'Game Sense',
     subtitle: 'Guess the game from clues. Daily.',
-    src: '/videos/skill issue.mp4',
-    type: 'video' as const,
+    src: '/images/game banner/game sense logo-03.png',
+    type: 'image' as const,
+    bg: '#5B5BEB',
     playTime: '3 min',
     getHref: () => `/play/game-sense/${getGameSenseToday()}`,
   },
@@ -28,8 +37,9 @@ const GAMES = [
   {
     title: 'Shelf Price',
     subtitle: 'Guess the launch price. How well do you know your games?',
-    src: '/videos/game3.gif',
-    type: 'gif' as const,
+    src: '/images/game banner/shelf price logo temp.png',
+    type: 'image' as const,
+    bg: '#555B6E',
     playTime: '2 min',
     getHref: () => `/play/shelf-price/${getShelfPriceToday()}`,
   },
@@ -106,7 +116,8 @@ export default function PlayOurGames() {
                   <img
                     src={game.src}
                     alt={game.title}
-                    className="h-full w-full object-cover"
+                    className={`h-full w-full ${game.type === 'image' ? 'object-contain' : 'object-cover'}`}
+                    style={game.bg ? { backgroundColor: game.bg } : undefined}
                     loading="lazy"
                   />
                 )}

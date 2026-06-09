@@ -10,6 +10,7 @@ interface PlayGameCardProps {
   imageBg: string
   btnClass: string
   stickerClass?: string
+  imageSrc?: string
 }
 
 export default function PlayGameCard({
@@ -20,6 +21,7 @@ export default function PlayGameCard({
   imageBg,
   btnClass,
   stickerClass = 'bg-blue-500 text-white',
+  imageSrc,
 }: PlayGameCardProps) {
   return (
     <Link href={href} className="relative block pt-2.5">
@@ -31,11 +33,19 @@ export default function PlayGameCard({
       </div>
       <div className="group flex cursor-pointer flex-col overflow-hidden rounded-[18px] border border-border/60 bg-card shadow-[0_3px_0_hsl(var(--border)),0_6px_18px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:-rotate-[0.3deg] hover:shadow-[0_8px_0_hsl(var(--border)),0_20px_40px_rgba(0,0,0,0.1)]">
         <div className={`flex h-[200px] items-center justify-center ${imageBg}`}>
-          <div className="flex flex-col items-center gap-2 opacity-30 select-none">
-            <span className="font-heading text-[9px] font-extrabold uppercase tracking-[0.18em]">
-              Illustration here
-            </span>
-          </div>
+          {imageSrc ? (
+            <img
+              src={imageSrc}
+              alt={title}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex flex-col items-center gap-2 opacity-30 select-none">
+              <span className="font-heading text-[9px] font-extrabold uppercase tracking-[0.18em]">
+                Illustration here
+              </span>
+            </div>
+          )}
         </div>
         <div className="flex flex-1 flex-col border-t border-border/60 p-5">
           <p className="mb-1.5 flex items-center gap-2 font-heading text-[9px] font-black uppercase tracking-[0.26em] text-muted-foreground">

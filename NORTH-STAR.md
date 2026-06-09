@@ -241,23 +241,6 @@ If a post doesn't do any of these, do not publish it.
 
 ---
 
-## Internal Tools
-
-**Pip** lives at /pip. It is an internal ops tool, not a 
-public-facing feature.
-
-Used by Beth and Alfie for:
-- GA4 analytics visualisation and traffic reporting
-- SEO cluster planning and keyword tracking
-- Grammar and clarity checks on drafts
-- Progress tracking towards monthly revenue targets
-
-All content on Idle Hours is human-written. Pip assists 
-the process, it does not generate it. Do not reference 
-Pip in public-facing copy or treat it as a site feature.
-
----
-]
 ## The Games
 
 All three games are daily puzzle format with share card mechanics 

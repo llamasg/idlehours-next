@@ -82,6 +82,7 @@ export default function PlayHubPage() {
               href={`/play/game-sense/${getGameSenseToday()}`}
               imageBg="bg-[#EEEAF8]"
               btnClass="bg-blue-500"
+              imageSrc="/images/game banner/game sense logo-03.png"
             />
             <PlayGameCard
               title="Street Date"
@@ -99,6 +100,7 @@ export default function PlayHubPage() {
               imageBg="bg-amber-100"
               btnClass="bg-amber-600"
               stickerClass="bg-amber-600 text-white"
+              imageSrc="/images/game banner/shelf price logo temp.png"
             />
           </div>
           <div className="mt-4">

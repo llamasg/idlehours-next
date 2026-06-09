@@ -87,7 +87,19 @@
       "Bash(mv \"public/images/badges/01_Game Sense_Skill Issue.png\" \"public/images/badges/game-sense-skill-issue.png\")",
       "Bash(mv \"public/images/badges/02_Game Sense_Button Masher.png\" \"public/images/badges/game-sense-button-masher.png\")",
       "Bash(mv \"public/images/badges/03_Game Sense_Big Brain.png\" \"public/images/badges/game-sense-big-brain.png\")",
-      "Bash(rm -f \"public/images/badges/game-sense.png\")"
+      "Bash(rm -f \"public/images/badges/game-sense.png\")",
+      "Bash(rm -f game-sense-skill-issue.png game-sense-button-masher.png game-sense-big-brain.png)",
+      "Bash(mv \"01_Game Sense_Skill Issue.png\" game-sense-skill-issue.png)",
+      "Bash(mv \"02_Game Sense_Button Masher.png\" game-sense-button-masher.png)",
+      "Bash(mv \"03_Game Sense_Big Brain.png\" game-sense-big-brain.png)",
+      "Bash(mv \"01_Shelf Price_Moms Credit card.png\" shelf-price-moms-credit-card.png)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(git log:*)",
+      "mcp__plugin_claude-mem_mcp-search__smart_outline",
+      "Bash(npm run:*)",
+      "WebFetch(domain:localhost)"
     ]
   }
 }
