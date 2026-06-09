@@ -46,3 +46,4 @@ scripts/.igdb-staging.json
 
 # Next.js build
 .next/
+tsconfig.tsbuildinfo
