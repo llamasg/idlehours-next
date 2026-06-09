@@ -23,6 +23,7 @@ import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
 import { GAME_COLORS } from '@/lib/ranks'
 import PlayableGuard from '@/components/games/shell/PlayableGuard'
 import SplitShareButton from '@/components/games/SplitShareButton'
+import PostGameAnalysisCard, { StatPillRow, CardDivider } from '@/components/games/shell/PostGameAnalysisCard'
 import AnimatedScore from '@/components/AnimatedScore'
 import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
@@ -690,15 +691,10 @@ export default function GameSenseDayPage({
 
                 {/* ── Right column: single merged analysis card ── */}
                 <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
-                  <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-
-                    {/* Puzzle label */}
-                    <div className="px-5 pt-4 sm:px-6">
-                      <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
-                        Game Sense {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-                      </p>
-                    </div>
-
+                  <PostGameAnalysisCard
+                    label={<>Game Sense {formatGameNumber(date)} &middot; {formatDisplayDate(date)}</>}
+                    headerClassName="px-5 pt-4 sm:px-6"
+                  >
                     {/* Game answer — prominent poster */}
                     <div className="flex items-center gap-4 px-5 py-4 sm:px-6">
                       {answer.igdbImageId && (
@@ -719,30 +715,18 @@ export default function GameSenseDayPage({
                     </div>
 
                     {/* Stats row — all 4 inline */}
-                    <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
-                    <div className="flex gap-1.5 px-5 py-3 sm:gap-2 sm:px-6 sm:py-4">
-                      {[
+                    <CardDivider />
+                    <StatPillRow
+                      stats={[
                         { label: 'Time', value: formatElapsed(state.startedAt, state.endedAt) },
                         { label: 'Guesses', value: String(state.guesses.filter(g => !g.isHint).length) },
                         { label: 'Clues', value: `${state.blanksRevealed.length}/5` },
                         { label: 'Hints', value: String(state.guesses.filter(g => g.isHint).length) },
-                      ].map(({ label, value }) => (
-                        <div
-                          key={label}
-                          className="flex flex-1 flex-col items-center gap-0.5 rounded-lg bg-[hsl(var(--game-cream-dark))] px-1.5 py-1.5 sm:rounded-xl sm:px-2 sm:py-2"
-                        >
-                          <span className="font-heading text-[14px] font-black text-[hsl(var(--game-ink))] sm:text-[18px]">
-                            {value}
-                          </span>
-                          <span className="font-heading text-[7px] font-extrabold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))] sm:text-[9px] sm:tracking-[0.18em]">
-                            {label}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                      ]}
+                    />
 
                     {/* Revealed sentence */}
-                    <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
+                    <CardDivider />
                     <div className="p-5 sm:p-6">
                       <SentenceClue
                         answer={answer}
@@ -757,7 +741,7 @@ export default function GameSenseDayPage({
                     {/* Guess history — scrollable if it overflows */}
                     {state.guesses.length > 0 && (
                       <>
-                        <div className="mx-5 border-t border-dashed border-[hsl(var(--game-ink))]/15 sm:mx-6" />
+                        <CardDivider />
                         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-5 sm:p-6">
                           <p className="mb-3 font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
                             Your guesses
@@ -766,7 +750,7 @@ export default function GameSenseDayPage({
                         </div>
                       </>
                     )}
-                  </div>
+                  </PostGameAnalysisCard>
                 </div>
               </div>
             </>

@@ -30,6 +30,7 @@ import RulesModal from '../components/RulesModal'
 import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import PlayableGuard from '@/components/games/shell/PlayableGuard'
 import SplitShareButton from '@/components/games/SplitShareButton'
+import PostGameAnalysisCard from '@/components/games/shell/PostGameAnalysisCard'
 import { buildShareText } from '@/lib/game-shell/buildShareText'
 import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
 import { GAME_COLORS } from '@/lib/ranks'
@@ -441,15 +442,11 @@ export default function ShelfPriceDayPage({
                 className="lg:absolute lg:top-0 lg:bottom-0 lg:right-0 lg:w-[calc(45%-1.5rem)]"
                 style={entrance('slide-up', pgStep >= 2)}
               >
-                <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                  <div className="shrink-0 px-5 pt-5 sm:px-6 sm:pt-6">
-                    <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
-                      Shelf Price {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-                    </p>
-                    <p className="mt-1 font-heading text-[13px] font-[700] text-[hsl(var(--game-ink))]">
-                      Your matchups
-                    </p>
-                  </div>
+                <PostGameAnalysisCard
+                  label={<>Shelf Price {formatGameNumber(date)} &middot; {formatDisplayDate(date)}</>}
+                  subtitle="Your matchups"
+                  headerClassName="shrink-0 px-5 pt-5 sm:px-6 sm:pt-6"
+                >
                   <div className="flex-1 overflow-y-auto overscroll-contain scrollbar-slim px-5 pb-5 pt-3 sm:px-6 sm:pb-6">
                     <div className="flex flex-col gap-3">
                       {pairs.slice(0, TARGET_ROUNDS).map(([left, right], i) => {
@@ -499,7 +496,7 @@ export default function ShelfPriceDayPage({
                       })}
                     </div>
                   </div>
-                </div>
+                </PostGameAnalysisCard>
               </div>
             </div>
 

@@ -35,6 +35,7 @@ import { GAME_COLORS } from '@/lib/ranks'
 import RulesModal from '../components/RulesModal'
 import PlayableGuard from '@/components/games/shell/PlayableGuard'
 import SplitShareButton from '@/components/games/SplitShareButton'
+import PostGameAnalysisCard, { StatPillRow } from '@/components/games/shell/PostGameAnalysisCard'
 import Link from 'next/link'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -1029,17 +1030,12 @@ export default function StreetDateV2DayPage({
 
                   {/* Right: stats + tabbed Answer/Guesses */}
                   <div className="order-1 lg:order-2" style={entrance('slide-up', pgStep >= 2)}>
-                    <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white/95 shadow-sm">
-                      {/* Header */}
-                      <div className="px-5 pt-5 sm:px-6 sm:pt-6">
-                        <p className="font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
-                          Street Date {formatGameNumber(date)} &middot; {formatDisplayDate(date)}
-                        </p>
-                      </div>
-
+                    <PostGameAnalysisCard
+                      label={<>Street Date {formatGameNumber(date)} &middot; {formatDisplayDate(date)}</>}
+                    >
                       {/* Stats pills */}
-                      <div className="flex gap-1.5 px-5 py-3 sm:gap-2 sm:px-6 sm:py-4">
-                        {[
+                      <StatPillRow
+                        stats={[
                           { label: 'Time', value: formatElapsed(state.startedAt, state.endedAt) },
                           { label: 'Guesses', value: String(state.guesses.length) },
                           { label: 'Best', value: `${Math.max(...state.guesses.map(g => g.correctCount))}/7` },
@@ -1049,20 +1045,8 @@ export default function StreetDateV2DayPage({
                               return count + (g.correctCount < state.guesses[i - 1].correctCount ? 1 : 0)
                             }, 0)
                           ) },
-                        ].map(({ label, value }) => (
-                          <div
-                            key={label}
-                            className="flex flex-1 flex-col items-center gap-0.5 rounded-lg bg-[hsl(var(--game-cream-dark))] px-1.5 py-1.5 sm:rounded-xl sm:px-2 sm:py-2"
-                          >
-                            <span className="font-heading text-[14px] font-black text-[hsl(var(--game-ink))] sm:text-[18px]">
-                              {value}
-                            </span>
-                            <span className="font-heading text-[7px] font-extrabold uppercase tracking-[0.15em] text-[hsl(var(--game-ink-light))] sm:text-[9px] sm:tracking-[0.18em]">
-                              {label}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                        ]}
+                      />
 
                       {/* Tab buttons */}
                       <div className="mx-5 flex gap-0 border-b border-[hsl(var(--game-ink))]/10 sm:mx-6">
@@ -1166,7 +1150,7 @@ export default function StreetDateV2DayPage({
                           </div>
                         )}
                       </div>
-                    </div>
+                    </PostGameAnalysisCard>
                   </div>
                 </div>
               </>
