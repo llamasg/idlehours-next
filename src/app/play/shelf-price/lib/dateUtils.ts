@@ -24,21 +24,15 @@ import {
 // ── Constants ────────────────────────────────────────────────────────────────
 
 export const LAUNCH_DATE = '2026-03-03'
-export const EPOCH = new Date('2026-03-03T00:00:00+00:00')
+const EPOCH = new Date('2026-03-03T00:00:00+00:00')
 
 // ── Re-export shared utils bound to this game's dates ──────────────────────
 
 export { getTodayDateString, formatDisplayDate, isToday }
-export const getDaysSinceEpoch = (dateStr: string) => _getDaysSinceEpoch(EPOCH, dateStr)
+const getDaysSinceEpoch = (dateStr: string) => _getDaysSinceEpoch(EPOCH, dateStr)
 export const formatGameNumber = (dateStr: string) => _formatGameNumber(LAUNCH_DATE, dateStr)
 export const isPlayableDate = (dateStr: string) => _isPlayableDate(LAUNCH_DATE, dateStr)
 export const getArchiveDates = () => _getArchiveDates(LAUNCH_DATE)
-
-// ── Game-specific functions ────────────────────────────────────────────────
-
-export function getGameNumber(dateStr: string): number {
-  return getDaysSinceEpoch(dateStr) + 1
-}
 
 // ── Seeded PRNG (mulberry32) ────────────────────────────────────────────────
 

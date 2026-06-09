@@ -10,10 +10,6 @@ import {
   SHELF_PRICE_FLAVOUR,
 } from '@/components/games/GameEndModal.copy'
 
-// Re-export the rank functions for convenience
-export { getGameSenseRank, getStreetDateRank, getShelfPriceRank }
-export { GAME_SENSE_FLAVOUR, STREET_DATE_FLAVOUR, SHELF_PRICE_FLAVOUR }
-
 export interface RankThreshold {
   name: string
   label: string // e.g. "0–349 pts" or "4–6 streak"

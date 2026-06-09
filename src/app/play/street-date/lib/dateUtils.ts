@@ -4,10 +4,7 @@
 import {
   getTodayDateString,
   formatDisplayDate,
-  isToday,
-  getDaysSinceEpoch as _getDaysSinceEpoch,
   formatGameNumber as _formatGameNumber,
-  isPlayableDate as _isPlayableDate,
   getArchiveDates as _getArchiveDates,
 } from '@/lib/dateUtils'
 
@@ -24,20 +21,8 @@ import {
 /** The date Street Date launched, as a YYYY-MM-DD string. */
 export const LAUNCH_DATE = '2026-02-22'
 
-/** Midnight UTC on launch day — the epoch from which day offsets are counted. */
-export const EPOCH = new Date('2026-02-22T00:00:00+00:00')
-
 // ── Re-export shared utils bound to this game's dates ──────────────────────
 
-export { getTodayDateString, formatDisplayDate, isToday }
-export const getDaysSinceEpoch = (dateStr: string) => _getDaysSinceEpoch(EPOCH, dateStr)
+export { getTodayDateString, formatDisplayDate }
 export const formatGameNumber = (dateStr: string) => _formatGameNumber(LAUNCH_DATE, dateStr)
-export const isPlayableDate = (dateStr: string) => _isPlayableDate(LAUNCH_DATE, dateStr)
 export const getArchiveDates = () => _getArchiveDates(LAUNCH_DATE)
-
-/**
- * Sequential, 1-indexed game number.
- */
-export function getGameNumber(dateStr: string): number {
-  return getDaysSinceEpoch(dateStr) + 1
-}

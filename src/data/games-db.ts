@@ -59646,13 +59646,3 @@ export const GAMES_DB: GameEntry[] = [
     popularityRank: 2,
   },
 ]
-
-// ── Blitz utilities ─────────────────────────────────────────────────────────
-
-export function getBlitzPool(tag: string): GameEntry[] {
-  return GAMES_DB.filter(g => g.tags.includes(tag))
-}
-
-export function getBlitzPoolSize(tag: string): number {
-  return getBlitzPool(tag).length
-}

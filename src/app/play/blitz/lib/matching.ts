@@ -1,7 +1,7 @@
 import { type GameEntry } from '@/data/games-db'
 
 /** Lowercase, strip punctuation, collapse whitespace */
-export function normalize(s: string): string {
+function normalize(s: string): string {
   return s
     .toLowerCase()
     .replace(/[''\u2019.,:;!?\-"()&]/g, '')

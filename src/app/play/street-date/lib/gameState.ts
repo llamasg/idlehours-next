@@ -1,4 +1,4 @@
-export interface V2Guess {
+interface V2Guess {
   order: string[]
   correctCount: number
   results: ('exact' | 'close' | 'wrong')[]
@@ -30,7 +30,7 @@ const GUESS_PENALTY = 150
 const HINT_ONE_COST = 100
 const HINT_ALL_COST = 300
 
-export { MAX_GUESSES, BASE_SCORE, GUESS_PENALTY, HINT_ONE_COST, HINT_ALL_COST }
+export { MAX_GUESSES, HINT_ONE_COST, HINT_ALL_COST }
 
 export function createInitialState(gameIds: string[], shuffledIds: string[]): V2DayState {
   return {

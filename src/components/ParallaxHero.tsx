@@ -194,12 +194,12 @@ function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3)
 }
 
-// --- Layout constants (exported for use by parent components) ---
-export const NAV_HEIGHT = 64
-export const CARD_GAP = 24
-export const CARD_TOP = NAV_HEIGHT + CARD_GAP
-export const CARD_SIDE_PADDING = 32
-export const CARD_MAX_WIDTH = 1280
+// --- Layout constants ---
+const NAV_HEIGHT = 64
+const CARD_GAP = 24
+const CARD_TOP = NAV_HEIGHT + CARD_GAP
+const CARD_SIDE_PADDING = 32
+const CARD_MAX_WIDTH = 1280
 const CARD_BORDER_RADIUS = 16
 const CARD_ASPECT_RATIO = 16 / 9
 const PARALLAX_OVERREACH = 200

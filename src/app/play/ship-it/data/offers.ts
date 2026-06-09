@@ -1,6 +1,6 @@
 // ─── Interfaces ────────────────────────────────────────────────────────────────
 
-export interface Exec {
+interface Exec {
   name: string
   title: string
   avatar: string // Emoji fallback
@@ -17,7 +17,7 @@ export interface Sticker {
   rot: string // CSS rotation, e.g. "-3deg"
 }
 
-export interface ReviewNote {
+interface ReviewNote {
   text: string
   impact: 'neg' | 'pos' | 'neutral'
   score: number // Added to base 75. Negative for bad, positive for good
@@ -39,7 +39,7 @@ export interface Offer {
 
 // ─── Offers ────────────────────────────────────────────────────────────────────
 
-export const ALL_OFFERS: Offer[] = [
+const ALL_OFFERS: Offer[] = [
   // ── Original 9 ──────────────────────────────────────────────────────────────
 
   // 1. Microtransactions

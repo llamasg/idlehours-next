@@ -14,11 +14,11 @@ export interface Body {
 }
 
 // Constants
-export const GRAVITY = 0.012
-export const DAMPING = 0.72
-export const FRICTION = 0.995
+const GRAVITY = 0.012
+const DAMPING = 0.72
+const FRICTION = 0.995
 export const PILL_H = 32
-export const PILL_PAD_X = 14
+const PILL_PAD_X = 14
 const WRONG_FADE_MS = 800
 const MIN_SEP_VEL = 0.5
 const IMPULSE_MULT = 0.55

@@ -9,7 +9,7 @@ const MS_PER_DAY = 86_400_000
 /**
  * Parse a YYYY-MM-DD string into a Date at midnight UTC.
  */
-export function parseUTCDate(dateStr: string): Date {
+function parseUTCDate(dateStr: string): Date {
   const [y, m, d] = dateStr.split('-').map(Number)
   return new Date(Date.UTC(y, m - 1, d))
 }
@@ -17,7 +17,7 @@ export function parseUTCDate(dateStr: string): Date {
 /**
  * Return the ordinal suffix for a day-of-month number.
  */
-export function ordinal(day: number): string {
+function ordinal(day: number): string {
   if (day >= 11 && day <= 13) return 'th'
   switch (day % 10) {
     case 1:

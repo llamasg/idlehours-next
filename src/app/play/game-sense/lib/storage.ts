@@ -19,7 +19,7 @@ export interface DayState {
   endedAt?: number;
 }
 
-export const STARTING_SCORE = 1000;
+const STARTING_SCORE = 1000;
 
 // ---------------------------------------------------------------------------
 // Private helper
