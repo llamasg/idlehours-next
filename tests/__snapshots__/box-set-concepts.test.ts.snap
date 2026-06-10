@@ -1,3 +1,22 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`box-set concept bank > bank composition snapshot (totals per tier) 1`] = `{}`;
+exports[`box-set concept bank > bank composition snapshot (totals per tier) 1`] = `
+{
+  "blue": {
+    "available": 51,
+    "used": 0,
+  },
+  "green": {
+    "available": 57,
+    "used": 0,
+  },
+  "purple": {
+    "available": 90,
+    "used": 0,
+  },
+  "yellow": {
+    "available": 24,
+    "used": 0,
+  },
+}
+`;
