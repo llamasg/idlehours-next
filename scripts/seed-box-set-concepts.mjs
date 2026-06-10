@@ -29,7 +29,7 @@ const MIN_MATCHES = 6
 /** Purple (wordplay) concepts bank at 4+; 4–5 flagged as tight. */
 const MIN_PURPLE = 4
 /** Stored gameIds are the most popular matches, capped. */
-const STORE_CAP = 40
+const STORE_CAP = 60
 
 // ── Tier definitions ─────────────────────────────────────────────────────────
 
@@ -252,6 +252,24 @@ for (const d of DECADES) {
     predicate: { field: 'year', op: 'between', value: d.range },
   }, MIN_MATCHES)
   r.banked ? report.yellow++ : report.rejected.push(`yellow-decade-${d.id} (${r.popular})`)
+}
+
+// YELLOW — genre × decade combos ("1990s PLATFORMERS") to give the yellow
+// tier enough depth for one retirement per day
+for (const [genre, glabel] of Object.entries(GENRE_LABELS)) {
+  for (const d of DECADES) {
+    const r = bank(concepts, {
+      id: `yellow-${genre.toLowerCase()}-${d.id}`,
+      label: `${d.id} ${glabel}`,
+      tier: 'yellow',
+      type: 'procedural',
+      predicate: { all: [
+        { field: 'genres', op: 'includes', value: genre },
+        { field: 'year', op: 'between', value: d.range },
+      ] },
+    }, MIN_MATCHES)
+    if (r.banked) report.yellow++
+  }
 }
 
 // GREEN — narrow procedural
