@@ -81,18 +81,28 @@ function getGameIndexForDateV1(dateStr: string): number {
 /** Dates on/after this use banded selection; before it, V1. FROZEN once live. */
 export const SELECTION_V2_CUTOVER = '2026-06-15';
 
+/** Selecting for date D excludes the previous N days' picks (stateless,
+ *  deterministic lookback — see getGameIndexForDateV2). */
+export const EXCLUSION_WINDOW_DAYS = 30;
+
 /**
  * Weekday difficulty bands over popularityRank VALUES (1 = most popular,
  * ~213 = deepest; band membership is rank-range based so db growth cannot
- * reshuffle assignments). Mon/Tue easiest → Sat/Sun deepest.
+ * reshuffle assignments). Mon/Tue easiest → Saturday deepest; Sunday sits
+ * with Wednesday (weekends are peak new-player discovery — Saturday keeps
+ * the deep-cut culture, Sunday is fair ground).
  * getUTCDay(): 0 = Sunday … 6 = Saturday.
+ *
+ * PROVISIONAL EDGES: pending /staging/recognition-audit calibration.
+ * Edge changes are free until public launch; after launch they require a
+ * new versioned cutover (V3), never an in-place edit.
  */
 export const WEEKDAY_BANDS = [
   { name: 'mon-tue',  days: [1, 2], minRank: 1,   maxRank: 20 },
-  { name: 'wed',      days: [3],    minRank: 21,  maxRank: 50 },
+  { name: 'wed-sun',  days: [3, 0], minRank: 21,  maxRank: 50 },
   { name: 'thu',      days: [4],    minRank: 51,  maxRank: 90 },
   { name: 'fri',      days: [5],    minRank: 91,  maxRank: 140 },
-  { name: 'weekend',  days: [6, 0], minRank: 141, maxRank: Number.MAX_SAFE_INTEGER },
+  { name: 'saturday', days: [6],    minRank: 141, maxRank: Number.MAX_SAFE_INTEGER },
 ] as const;
 
 export function bandForDate(dateStr: string) {
@@ -100,20 +110,24 @@ export function bandForDate(dateStr: string) {
   return WEEKDAY_BANDS.find((b) => (b.days as readonly number[]).includes(weekday))!;
 }
 
-/**
- * V2 selection: rendezvous (highest-random-weight) hashing within the date's
- * weekday band. Each band member gets a deterministic per-date score from
- * hash(date:gameId); the highest score wins. Adding a game to the db only
- * reassigns dates the new game itself would have won (~1/bandSize of them) —
- * existing assignments otherwise stand, resolving the V1 stability caveat.
- */
-function getGameIndexForDateV2(dateStr: string): number {
+// ── V2 internals ─────────────────────────────────────────────────────────────
+
+const CUTOVER_MS = Date.parse(`${SELECTION_V2_CUTOVER}T00:00:00Z`);
+const MS_PER_DAY = 86_400_000;
+
+function v2DateForOffset(offset: number): string {
+  return new Date(CUTOVER_MS + offset * MS_PER_DAY).toISOString().slice(0, 10);
+}
+
+/** Rendezvous pick within a band, skipping excluded ids. */
+function rendezvousPick(dateStr: string, excluded: Set<string>): number {
   const band = bandForDate(dateStr);
   let bestIndex = -1;
   let bestScore = -1;
   for (let i = 0; i < GAMES.length; i++) {
     const rank = GAMES[i].popularityRank;
     if (rank === null || rank < band.minRank || rank > band.maxRank) continue;
+    if (excluded.has(GAMES[i].id)) continue;
     const score = mulberry32(hashDateSeed(`${dateStr}:${GAMES[i].id}`))();
     if (score > bestScore) {
       bestScore = score;
@@ -121,6 +135,34 @@ function getGameIndexForDateV2(dateStr: string): number {
     }
   }
   return bestIndex;
+}
+
+// Sequential pick cache: index k = the pick for cutover+k days. The exclusion
+// window makes picks inductive (day D depends on days D-1..D-30), so V2 picks
+// are a deterministic fold from the cutover, lazily extended and cached for
+// the session. Smallest band (~392) vs window (30) means exhaustion is
+// impossible. Stability note: a db addition that wins an early date can
+// ripple through later exclusion sets — weaker than pure rendezvous but still
+// far more stable than V1, and snapshots pin the outputs.
+const v2Picks: number[] = [];
+
+/**
+ * V2 selection: weekday-banded rendezvous (highest-random-weight) hashing
+ * with a stateless EXCLUSION_WINDOW_DAYS lookback — the previous 30 days'
+ * picks are recomputed deterministically and excluded, then the
+ * highest-scoring survivor wins.
+ */
+function getGameIndexForDateV2(dateStr: string): number {
+  const offset = Math.round((Date.parse(`${dateStr}T00:00:00Z`) - CUTOVER_MS) / MS_PER_DAY);
+  while (v2Picks.length <= offset) {
+    const day = v2Picks.length;
+    const excluded = new Set<string>();
+    for (let back = Math.max(0, day - EXCLUSION_WINDOW_DAYS); back < day; back++) {
+      excluded.add(GAMES[v2Picks[back]].id);
+    }
+    v2Picks.push(rendezvousPick(v2DateForOffset(day), excluded));
+  }
+  return v2Picks[offset];
 }
 
 /**
