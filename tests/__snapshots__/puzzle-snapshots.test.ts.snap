@@ -64,8 +64,8 @@ exports[`game-sense daily selection > V2 banded selection per date (post-cutover
   },
   "2026-06-25": {
     "band": "thu",
-    "id": "condemned-2-bloodshot",
-    "rank": 76,
+    "id": "arcania-gothic-4",
+    "rank": 73,
     "weekday": 4,
   },
   "2026-06-26": {
@@ -132,8 +132,8 @@ exports[`game-sense daily selection > selects the same game id per date 1`] = `
     "index": 3225,
   },
   "2026-12-25": {
-    "id": "shin-megami-tensei-iv",
-    "index": 2023,
+    "id": "dungeon-defenders",
+    "index": 1562,
   },
   "2027-01-01": {
     "id": "harry-potter-and-the-goblet-of-fire",

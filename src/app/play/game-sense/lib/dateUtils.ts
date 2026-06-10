@@ -93,15 +93,18 @@ export const EXCLUSION_WINDOW_DAYS = 30;
  * the deep-cut culture, Sunday is fair ground).
  * getUTCDay(): 0 = Sunday … 6 = Saturday.
  *
- * PROVISIONAL EDGES: pending /staging/recognition-audit calibration.
- * Edge changes are free until public launch; after launch they require a
- * new versioned cutover (V3), never an in-place edit.
+ * EDGES CALIBRATED from /staging/recognition-audit (2026-06): recognition
+ * is flat at ~76% across ranks 16–60 with a cliff at ~60 (→47%) — the
+ * thu/fri edge sits at that empirically located cliff. A focused 50–90
+ * re-audit may refine it. Edge changes remain free until public launch;
+ * after launch they require a new versioned cutover (V3), never an
+ * in-place edit.
  */
 export const WEEKDAY_BANDS = [
   { name: 'mon-tue',  days: [1, 2], minRank: 1,   maxRank: 20 },
   { name: 'wed-sun',  days: [3, 0], minRank: 21,  maxRank: 50 },
-  { name: 'thu',      days: [4],    minRank: 51,  maxRank: 90 },
-  { name: 'fri',      days: [5],    minRank: 91,  maxRank: 140 },
+  { name: 'thu',      days: [4],    minRank: 51,  maxRank: 75 },
+  { name: 'fri',      days: [5],    minRank: 76,  maxRank: 140 },
   { name: 'saturday', days: [6],    minRank: 141, maxRank: Number.MAX_SAFE_INTEGER },
 ] as const;
 
