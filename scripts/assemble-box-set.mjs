@@ -69,11 +69,15 @@ const puzzles = fs.existsSync(PUZZLES_PATH)
   ? JSON.parse(fs.readFileSync(PUZZLES_PATH, 'utf8'))
   : {}
 
-// recently-used game ids, date → Set
+// game ids used within the freshness window of forDate — BIDIRECTIONAL, so
+// regenerating a single day inside an existing batch can't reuse a game that
+// appears in the following days either
 function recentGameIds(forDate) {
   const out = new Set()
   for (const [date, p] of Object.entries(puzzles)) {
-    const diff = (new Date(`${forDate}T00:00:00Z`) - new Date(`${date}T00:00:00Z`)) / 86_400_000
+    const diff = Math.abs(
+      (new Date(`${forDate}T00:00:00Z`) - new Date(`${date}T00:00:00Z`)) / 86_400_000,
+    )
     if (diff > 0 && diff <= REUSE_WINDOW_DAYS) {
       for (const t of p.tiles) out.add(t.id)
     }
@@ -266,8 +270,16 @@ fs.mkdirSync(REVIEW_DIR, { recursive: true })
 const ordered = Object.fromEntries(Object.entries(puzzles).sort(([a], [b]) => a.localeCompare(b)))
 fs.writeFileSync(PUZZLES_PATH, JSON.stringify(ordered, null, 2) + '\n')
 fs.writeFileSync(CONCEPTS_PATH, JSON.stringify(bank, null, 2) + '\n')
+// Append when a review doc for this start date already exists (e.g. a
+// single-day regeneration inside an existing batch) — never clobber the
+// batch's review history.
 const reviewPath = path.join(REVIEW_DIR, `review-${START}.md`)
-fs.writeFileSync(reviewPath, reviewLines.join('\n') + '\n')
+if (fs.existsSync(reviewPath) && built > 0) {
+  const addendum = ['', '---', `# Regeneration addendum (${built} day${built === 1 ? '' : 's'} rebuilt)`, '', ...reviewLines.slice(6)]
+  fs.appendFileSync(reviewPath, addendum.join('\n') + '\n')
+} else if (built > 0) {
+  fs.writeFileSync(reviewPath, reviewLines.join('\n') + '\n')
+}
 
 const dates = Object.keys(ordered)
 console.log(`Built ${built} new puzzles (${dates.length} total committed)`)
