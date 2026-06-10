@@ -38,7 +38,6 @@ import {
   GAME_SENSE_LETTER_PATTERN_COST,
   GAME_SENSE_FIRST_LETTER_COST,
   GAME_SENSE_GIVE_UP_MIN_GUESSES,
-  GAME_SENSE_GUESS_DECAY,
   GAME_SENSE_SCORE_FLOOR,
 } from '@/lib/gameConstants'
 
@@ -121,18 +120,8 @@ export default function GameSenseDayPage({
 
       const proximity = calculateRank(game, answer)
 
-      // v2 economy: first real guess is free; every guess FROM the 2nd costs
-      // GAME_SENSE_GUESS_DECAY, floored at GAME_SENSE_SCORE_FLOOR (Bust stays
-      // give-up-only). Replaces the legacy flat 1pt guess cost.
-      const realGuessNumber = state.guesses.filter((g) => !g.isHint).length + 1
-      const decay = realGuessNumber >= 2 ? GAME_SENSE_GUESS_DECAY : 0
-      const newState: DayState = {
-        ...state,
-        score: Math.max(GAME_SENSE_SCORE_FLOOR, state.score - decay),
-      }
-      setState(newState)
-      saveDayState(date, newState)
-
+      // Guessing is FREE — no deduction of any kind. Score changes only via
+      // paid reveals (note blanks + spine hints) and give-up.
       // Start the countdown animation
       setPendingGuess({ game, proximity })
     },

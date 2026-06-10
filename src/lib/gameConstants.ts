@@ -44,10 +44,8 @@ export const GAME_SENSE_FIRST_LETTER_COST = 200
 /** Standalone give-up unlocks after this many real (non-hint) guesses. */
 export const GAME_SENSE_GIVE_UP_MIN_GUESSES = 5
 
-/** Guess decay: every real guess FROM the 2nd costs this (1-guess win = 1000
- *  = One Shot; a 60-guess convergence win lands mid-rank, not One Shot). */
-export const GAME_SENSE_GUESS_DECAY = 15
-
-/** Score never decays/spends below this — Bust stays give-up-only. Paid
- *  reveals cannot be bought with points inside the floor. */
+/** Score never spends below this — Bust stays give-up-only. Paid reveals
+ *  cannot be bought with points inside the floor. (Guessing itself is FREE:
+ *  the guess-decay experiment was removed by playtest decision 2026-06 —
+ *  score moves only on paid reveals and give-up.) */
 export const GAME_SENSE_SCORE_FLOOR = 50
