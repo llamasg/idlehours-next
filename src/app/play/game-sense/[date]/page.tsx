@@ -38,6 +38,8 @@ import {
   GAME_SENSE_LETTER_PATTERN_COST,
   GAME_SENSE_FIRST_LETTER_COST,
   GAME_SENSE_GIVE_UP_MIN_GUESSES,
+  GAME_SENSE_GUESS_DECAY,
+  GAME_SENSE_SCORE_FLOOR,
 } from '@/lib/gameConstants'
 
 import { igdbCoverUrl } from '@/lib/imageUtils'
@@ -47,7 +49,6 @@ import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import { SPRING_EASING, POSTGAME_GAPS } from '@/lib/gameConstants'
 
-const GUESS_COST = 1 // legacy — replaced by guess decay in phase 5
 
 export default function GameSenseDayPage({
   params,
@@ -120,10 +121,14 @@ export default function GameSenseDayPage({
 
       const proximity = calculateRank(game, answer)
 
-      // Deduct guess cost immediately
+      // v2 economy: first real guess is free; every guess FROM the 2nd costs
+      // GAME_SENSE_GUESS_DECAY, floored at GAME_SENSE_SCORE_FLOOR (Bust stays
+      // give-up-only). Replaces the legacy flat 1pt guess cost.
+      const realGuessNumber = state.guesses.filter((g) => !g.isHint).length + 1
+      const decay = realGuessNumber >= 2 ? GAME_SENSE_GUESS_DECAY : 0
       const newState: DayState = {
         ...state,
-        score: Math.max(0, state.score - GUESS_COST),
+        score: Math.max(GAME_SENSE_SCORE_FLOOR, state.score - decay),
       }
       setState(newState)
       saveDayState(date, newState)
@@ -168,7 +173,7 @@ export default function GameSenseDayPage({
       const cost = BLANK_COSTS[blank.key] ?? 0
       const newState: DayState = {
         ...state,
-        score: Math.max(0, state.score - cost),
+        score: Math.max(GAME_SENSE_SCORE_FLOOR, state.score - cost),
         blanksRevealed: [...state.blanksRevealed, blank.key],
       }
 
@@ -195,11 +200,12 @@ export default function GameSenseDayPage({
       if (!state || gameOver || pendingGuess) return
       const cost = kind === 'pattern' ? GAME_SENSE_LETTER_PATTERN_COST : GAME_SENSE_FIRST_LETTER_COST
       const hints = state.spineHints ?? { pattern: false, firstLetter: false }
-      if (hints[kind] || state.score < cost) return
+      // Purchases may not spend into the floor (Bust stays give-up-only)
+      if (hints[kind] || state.score - cost < GAME_SENSE_SCORE_FLOOR) return
 
       const newState: DayState = {
         ...state,
-        score: Math.max(0, state.score - cost),
+        score: Math.max(GAME_SENSE_SCORE_FLOOR, state.score - cost),
         spineHints: { ...hints, [kind]: true },
       }
       setState(newState)
@@ -410,7 +416,8 @@ export default function GameSenseDayPage({
                     <SentenceClue
                       answer={answer}
                       blanksRevealed={state.blanksRevealed}
-                      score={state.score}
+                      // Spendable points only: purchases can't dip into the floor
+                      score={state.score - GAME_SENSE_SCORE_FLOOR}
                       onRevealBlank={handleRevealBlank}
                       disabled={gameOver || isAnimating}
                       skipEntrance={entranceStep < 3}
@@ -500,7 +507,7 @@ export default function GameSenseDayPage({
                         <button
                           type="button"
                           onClick={() => handleSpineHint('pattern')}
-                          disabled={state.score < GAME_SENSE_LETTER_PATTERN_COST}
+                          disabled={state.score - GAME_SENSE_LETTER_PATTERN_COST < GAME_SENSE_SCORE_FLOOR}
                           className="rounded-full border-2 border-white/25 py-1.5 font-heading text-[11px] font-[800] text-white/80 transition-colors hover:border-white/50 hover:text-white disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/30"
                         >
                           Letter pattern &minus;{GAME_SENSE_LETTER_PATTERN_COST}
@@ -514,7 +521,7 @@ export default function GameSenseDayPage({
                         <button
                           type="button"
                           onClick={() => handleSpineHint('firstLetter')}
-                          disabled={state.score < GAME_SENSE_FIRST_LETTER_COST}
+                          disabled={state.score - GAME_SENSE_FIRST_LETTER_COST < GAME_SENSE_SCORE_FLOOR}
                           className="rounded-full border-2 border-white/25 py-1.5 font-heading text-[11px] font-[800] text-white/80 transition-colors hover:border-white/50 hover:text-white disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/30"
                         >
                           First letter &minus;{GAME_SENSE_FIRST_LETTER_COST}
