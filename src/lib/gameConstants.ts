@@ -17,11 +17,21 @@ export const GAME_SENSE_MAX_PATCHES = 6
 /**
  * Best-proximity thresholds that unlock patches: best ≤ value unlocks patch N.
  * Step function of BEST guess so far — never cumulative across guesses.
+ *
+ * CALIBRATED 2026-06 from 1,050 popularity-weighted guess pairs (guess draw
+ * ∝ 1/popularityRank) against answers sampled from the final weekday bands
+ * at weekday frequency. Percentile targets → empirical rates:
+ *   patch 1 top 10%   → ≤500 (10.3%)     patch 4 top 0.6%  → ≤60 (0.76%)
+ *   patch 2 top 4%    → ≤200 (4.0%)      patch 5 top 0.25% → ≤25 (0.29%)
+ *   patch 3 top 1.5%  → ≤85  (1.5%)      patch 6 top 4 ranks → ≤5
+ * The raw 0.25th percentile collapsed onto rank 5 (sparse tail); 25 is the
+ * monotone bridge so patch 5 ≠ patch 6.
+ *
  * NOTE: tuned against the METADATA distance distribution (RANKINGS is null —
  * the semantic precompute never shipped). If a semantic scorer lands, these
  * need retuning against its distribution.
  */
-export const GAME_SENSE_REVEAL_THRESHOLDS = [1500, 600, 250, 100, 40, 12] as const
+export const GAME_SENSE_REVEAL_THRESHOLDS = [500, 200, 85, 60, 25, 5] as const
 
 // ── Game Sense v2 — spine hints + give-up (TUNING CONSTANTS) ─────────────────
 
