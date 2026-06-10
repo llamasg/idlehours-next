@@ -2,12 +2,10 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect, useCallback, useMemo, useRef, use } from 'react'
+import { useState, useEffect, useCallback, useMemo, use } from 'react'
 import Header from '@/components/Header'
 import SiteFooter from '@/components/SiteFooter'
 import DiscoverMore from '@/components/DiscoverMore'
-import AnimatedScore from '@/components/AnimatedScore'
-import Link from 'next/link'
 import {
   getPairsForDate,
   formatGameNumber,
@@ -19,25 +17,22 @@ import { loadDayState, saveDayState, WRONG_PENALTY, TARGET_ROUNDS, type DayState
 import GameCards from '../components/GameCards'
 import ProgressBar from '../components/ProgressBar'
 
-import {
-  COPY,
-  pickRandom,
-  getShelfPriceRank,
-  SHELF_PRICE_FLAVOUR,
-} from '@/components/games/GameEndModal.copy'
 import { igdbCoverUrl } from '@/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
 import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import PlayableGuard from '@/components/games/shell/PlayableGuard'
 import SplitShareButton from '@/components/games/SplitShareButton'
 import PostGameAnalysisCard from '@/components/games/shell/PostGameAnalysisCard'
+import GameWorld from '@/components/games/shell/GameWorld'
+import GameTitle from '@/components/games/shell/GameTitle'
+import ScorePill from '@/components/games/shell/ScorePill'
+import GameNavPills, { PostGameNavPills } from '@/components/games/shell/GameNavPills'
+import { useGameEntrance } from '@/lib/game-shell/useGameEntrance'
 import { buildShareText } from '@/lib/game-shell/buildShareText'
 import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
 import { GAME_COLORS } from '@/lib/ranks'
 import { entrance, useEntranceSteps } from '@/lib/animations'
-import { SPRING_EASING, ENTRANCE_TIMINGS, POSTGAME_GAPS } from '@/lib/gameConstants'
-
-const WIN_THRESHOLD = 500
+import { SPRING_EASING, POSTGAME_GAPS } from '@/lib/gameConstants'
 
 export default function ShelfPriceDayPage({
   params,
@@ -47,23 +42,20 @@ export default function ShelfPriceDayPage({
   const { date } = use(params)
 
   const [state, setState] = useState<DayState | null>(null)
-  const [showResult, setShowResult] = useState(false)
   const [chosenSide, setChosenSide] = useState<'left' | 'right' | null>(null)
   const [choiceCorrect, setChoiceCorrect] = useState<boolean | null>(null)
   const [floatingCost, setFloatingCost] = useState(false)
   const [scorePulse, setScorePulse] = useState(false)
   const [showRules, setShowRules] = useState(false)
-  const [wipeStarted, setWipeStarted] = useState(false)
-  const wipeTriggered = useRef(false)
 
-  // Entrance animation: 0=waiting, 1=title word-pops, 2=title moves up + gameplay scales in, 3=cards visible, 4=score/progress visible, 5=rest, 6=done
-  const [entranceStep, setEntranceStep] = useState(0)
+  // Entrance animation — step machine shared via useGameEntrance
+  const { entranceStep, wipeStarted } = useGameEntrance(!!state, state ? state.finished : false)
 
   // Post-game page-level sequencer (matches Game Sense)
   // Steps: 1=ResultCard, 2=Game info, 3=Nav buttons, 4=Title/date, 5=Badges, 6=DiscoverMore
   const isPostGameComplete = state ? state.finished : false
   const pgGaps = useMemo(() => [...POSTGAME_GAPS], [])
-  const pgStep = useEntranceSteps(7, pgGaps, isPostGameComplete && !showResult)
+  const pgStep = useEntranceSteps(7, pgGaps, isPostGameComplete)
 
   const pairs = getPairsForDate(date)
   const playable = isPlayableDate(date)
@@ -79,38 +71,7 @@ export default function ShelfPriceDayPage({
   useEffect(() => {
     const loaded = loadDayState(date)
     setState(loaded)
-    // Trigger purple world wipe entrance
-    if (!wipeTriggered.current) {
-      wipeTriggered.current = true
-      const alreadyDone = loaded.finished
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (alreadyDone || reducedMotion) {
-        setWipeStarted(true)
-        setEntranceStep(6)
-      } else {
-        requestAnimationFrame(() => requestAnimationFrame(() => setWipeStarted(true)))
-      }
-    }
   }, [date])
-
-  // Entrance animation sequence — matches Game Sense timing
-  useEffect(() => {
-    if (!state) return
-    if (state.finished) return // already handled above
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reducedMotion) {
-      setEntranceStep(6)
-      return
-    }
-    const t1 = setTimeout(() => setEntranceStep(1), ENTRANCE_TIMINGS[0])    // title word-pops
-    const t2 = setTimeout(() => setEntranceStep(2), ENTRANCE_TIMINGS[1])   // title moves up, gameplay scales in
-    const t3 = setTimeout(() => setEntranceStep(3), ENTRANCE_TIMINGS[2])   // game cards visible
-    const t4 = setTimeout(() => setEntranceStep(4), ENTRANCE_TIMINGS[3])   // score + progress visible
-    const t5 = setTimeout(() => setEntranceStep(5), ENTRANCE_TIMINGS[4])   // rest fades in
-    const t6 = setTimeout(() => setEntranceStep(6), ENTRANCE_TIMINGS[5])   // done
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); clearTimeout(t6) }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [!!state])
 
   // Compute per-round results from choices + pairs
   const roundResults: boolean[] = state
@@ -176,23 +137,6 @@ export default function ShelfPriceDayPage({
     // Post-game screen shows automatically via isPostGame
   }, [state, chosenSide, choiceCorrect, date])
 
-  // Modal copy — picked once when modal opens
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const modalCopy = useMemo(() => {
-    const score = state?.score ?? 0
-    const streak = state?.correctCount ?? 0
-    const shelfWon = score >= WIN_THRESHOLD
-    const result = shelfWon ? 'win' : 'loss'
-    const rankName = getShelfPriceRank(score)
-    return {
-      result: result as 'win' | 'loss',
-      heading: pickRandom(COPY[result].headings),
-      subheading: pickRandom(COPY[result].subheadings),
-      rankName,
-      rankFlavour: pickRandom(SHELF_PRICE_FLAVOUR[rankName]),
-    }
-  }, [showResult])
-
   // Share text for the post-game share button
   const shareText = useMemo(() => {
     if (!state || !state.finished) return ''
@@ -236,21 +180,20 @@ export default function ShelfPriceDayPage({
 
   const currentPairIndex = state.round
   const currentPair = pairs[currentPairIndex] ?? pairs[pairs.length - 1]
-  const isPostGame = state.finished && !showResult
+  const isPostGame = state.finished
 
   return (
     <>
       <Header />
 
       {/* Purple game world */}
-      <div
-        className="game-container mx-0 -mt-16 flex flex-1 flex-col rounded-none sm:mx-4 sm:mt-4 sm:rounded-[20px]"
+      <GameWorld
+        gradient="linear-gradient(155deg, #5B4FCF, #1a1040)"
+        wipeStarted={wipeStarted}
+        shouldAnimate={shouldAnimate}
         style={{
-          background: 'linear-gradient(155deg, #5B4FCF, #1a1040)',
           borderRadius: 20,
           boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12)',
-          clipPath: (!shouldAnimate || wipeStarted) ? 'circle(150% at 50% 50%)' : 'circle(0% at 50% 50%)',
-          transition: shouldAnimate ? 'clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
         }}
       >
       <main className={`font-game mx-auto flex flex-1 flex-col px-4 py-8 ${isPostGame ? 'w-full max-w-7xl lg:px-8' : 'max-w-5xl justify-center'}`}>
@@ -270,36 +213,15 @@ export default function ShelfPriceDayPage({
                       : { opacity: 1, transform: 'translateY(0)' })
             }
           >
-          <h1 className="text-[22px] font-black uppercase leading-none text-white sm:text-[clamp(40px,8vw,64px)]">
-            {['Shelf', 'Price'].map((word, i) => (
-              <span
-                key={word}
-                className="inline-block"
-                style={
-                  entranceStep >= 1 || isPostGame
-                    ? { animation: `gs-word-pop 0.2s ${SPRING_EASING} ${0.1 + i * 0.25}s both` }
-                    : { opacity: 0 }
-                }
-              >
-                {word}{i < 1 ? '\u00a0' : ''}
-              </span>
-            ))}
-          </h1>
-          <p className="mt-0.5 text-sm font-bold text-white/70 sm:mt-1.5 sm:text-xl">
-            {['Which', 'cost', 'more', 'at', 'launch?'].map((word, i) => (
-              <span
-                key={word}
-                className="inline-block"
-                style={
-                  entranceStep >= 1 || isPostGame
-                    ? { animation: `gs-word-pop 0.2s ${SPRING_EASING} ${0.7 + i * 0.15}s both` }
-                    : { opacity: 0 }
-                }
-              >
-                {word}{i < 4 ? '\u00a0' : ''}
-              </span>
-            ))}
-          </p>
+          <GameTitle
+            title={['Shelf', 'Price']}
+            subtitle={['Which', 'cost', 'more', 'at', 'launch?']}
+            animate={entranceStep >= 1 || isPostGame}
+            titleDuration={0.2}
+            titleStagger={0.25}
+            subtitleStagger={0.15}
+            easing={SPRING_EASING}
+          />
           </div>
 
           {/* Date + score — fade in with rest */}
@@ -316,31 +238,15 @@ export default function ShelfPriceDayPage({
           >
             {/* Score pill — only during gameplay */}
             {!isPostGame && !state.finished && (
-              <div
-                className="relative mt-3 inline-flex items-center gap-2 rounded-full border-2 bg-white px-5 py-2 transition-all duration-300"
-                style={{
-                  borderColor: scorePulse
-                    ? 'hsl(var(--game-red))'
-                    : 'rgba(255,255,255,0.2)',
-                  transform: scorePulse ? 'scale(1.1)' : 'scale(1)',
-                }}
-              >
-                <AnimatedScore
-                  value={state.score}
-                  className={`font-heading text-2xl font-black transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]' : 'text-[hsl(var(--game-ink))]'}`}
-                />
-                <span className={`font-heading text-xs uppercase tracking-wider transition-colors duration-300 ${scorePulse ? 'text-[hsl(var(--game-red))]/60' : 'text-[hsl(var(--game-ink))]/60'}`}>
-                  pts
-                </span>
-                {floatingCost && (
-                  <span
-                    className="absolute -top-6 left-1/2 -translate-x-1/2 rounded-full bg-[hsl(var(--game-red))] px-4 py-1 font-heading text-lg font-black text-white shadow-lg"
-                    style={{ animation: 'float-up 1.2s ease-out forwards' }}
-                  >
-                    -{WRONG_PENALTY}
-                  </span>
-                )}
-              </div>
+              <ScorePill
+                score={state.score}
+                pulse={scorePulse}
+                floatingCost={floatingCost ? { key: 'wrong', cost: WRONG_PENALTY } : null}
+                accentClassName="text-[hsl(var(--game-ink))]"
+                unitClassName="text-[hsl(var(--game-ink))]/60"
+                baseBorderColor="rgba(255,255,255,0.2)"
+                className="mt-3"
+              />
             )}
 
             {/* Help button — during gameplay */}
@@ -398,30 +304,19 @@ export default function ShelfPriceDayPage({
         {isPostGame && (
           <>
             {/* Nav pills — early so user can navigate away quickly */}
-            <div className="mb-6 flex flex-wrap items-center justify-center gap-4">
-              <div style={entrance('pop', pgStep >= 1, 150)}>
+            <PostGameNavPills
+              slug="shelf-price"
+              today={today}
+              pgStep={pgStep}
+              share={
                 <SplitShareButton
                   shareText={shareText}
                   shareUrl="https://idlehours.co.uk/play/shelf-price"
                   isWin={state.won}
                   accentColor={GAME_COLORS['shelf-price'].accent}
                 />
-              </div>
-              {!today && (
-                <div style={entrance('pop', pgStep >= 1, 300)}>
-                  <Link href="/play/shelf-price" className="bvl-purple">
-                    <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                    Today&apos;s game
-                  </Link>
-                </div>
-              )}
-              <div style={entrance('pop', pgStep >= 1, 450)}>
-                <Link href="/play/archive?game=shelf-price" className="bvl-purple">
-                  <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                  View past games
-                </Link>
-              </div>
-            </div>
+              }
+            />
 
             {/* Two-column post-game: left determines height, right scrolls within it */}
             <div className="relative mb-6 flex flex-col gap-6 lg:flex-row">
@@ -509,20 +404,11 @@ export default function ShelfPriceDayPage({
             className="mt-8 flex flex-wrap items-center justify-center gap-4"
             style={entranceStep < 5 ? { opacity: 0 } : entranceStep < 6 ? { animation: `gs-fade-in 0.5s ${SPRING_EASING} both` } : undefined}
           >
-            {!today && (
-              <Link href="/play/shelf-price" className="bvl-purple">
-                <img src="/images/icons/icon_Target-aim-practice-games-play.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-                Today&apos;s game
-              </Link>
-            )}
-            <Link href="/play/archive?game=shelf-price" className="bvl-purple">
-              <img src="/images/icons/icon_hourglass-loading-filtering-timer.svg" alt="" className="h-5 w-5 brightness-0 invert" />
-              View past games
-            </Link>
+            <GameNavPills slug="shelf-price" today={today} />
           </div>
         )}
       </main>
-      </div>
+      </GameWorld>
 
       {/* DiscoverMore — OUTSIDE the purple area */}
       {isPostGame && (
