@@ -14,11 +14,11 @@ import { evaluatePredicate, resolveConcept } from './predicates.mjs'
 import conceptsJson from '../data/concepts.json'
 
 export type ConceptTier = 'yellow' | 'green' | 'blue' | 'purple'
-export type ConceptType = 'procedural' | 'tag' | 'wordplay'
+export type ConceptType = 'procedural' | 'tag' | 'wordplay' | 'curated'
 
 export interface PredicateLeaf {
   field?: keyof GameEntry
-  op: 'includes' | 'eq' | 'gte' | 'lte' | 'between' | 'only' | 'wordplay'
+  op: 'includes' | 'eq' | 'gte' | 'lte' | 'between' | 'only' | 'memberOf' | 'wordplay'
   value?: unknown
   matcher?: string
 }
@@ -35,6 +35,8 @@ export interface Concept {
   gameIds: string[]
   /** Puzzle date that consumed this concept, null while available. */
   usedOn: string | null
+  /** Provenance note for curated concepts (e.g. "TGA GOTY winners 2014–24"). */
+  note?: string
 }
 
 export const CONCEPTS: Concept[] = conceptsJson.concepts as Concept[]

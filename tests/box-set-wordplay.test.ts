@@ -40,11 +40,14 @@ describe('wordplay matchers', () => {
     expect(m('roman-numeral')('Victor Vran')).toBe(false)
   })
 
-  it('hides-<sub> requires the substring inside a longer word', () => {
-    expect(m('hides-ape')('Escape Academy')).toBe(true) // esc-APE
-    expect(m('hides-ape')('Ape Out')).toBe(false) // whole word doesn't count
-    expect(m('hides-rat')('Stratego')).toBe(true) // st-RAT-ego
-    expect(m('hides-rat')('Rat Race')).toBe(false)
+  it('hides-<sub> requires the substring inside a longer word (4+ letter words only)', () => {
+    expect(m('hides-king')('Viking Conquest')).toBe(true) // vi-KING
+    expect(m('hides-king')('King of Fighters')).toBe(false) // whole word doesn't count
+    expect(m('hides-port')('Portal 2')).toBe(true) // PORT-al
+    expect(m('hides-port')('Port Royale')).toBe(false)
+    // 3-letter hide words were pruned after playtest feedback
+    expect(WORDPLAY_MATCHERS['hides-ape']).toBeUndefined()
+    expect(WORDPLAY_MATCHERS['hides-ore']).toBeUndefined()
   })
 
   it('possessive-title', () => {

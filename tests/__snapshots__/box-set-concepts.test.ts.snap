@@ -3,19 +3,19 @@
 exports[`box-set concept bank > bank composition snapshot (totals per tier) 1`] = `
 {
   "blue": {
-    "available": 16,
-    "used": 35,
-  },
-  "green": {
     "available": 22,
     "used": 35,
   },
+  "green": {
+    "available": 18,
+    "used": 35,
+  },
   "purple": {
-    "available": 55,
+    "available": 34,
     "used": 35,
   },
   "yellow": {
-    "available": 57,
+    "available": 58,
     "used": 35,
   },
 }

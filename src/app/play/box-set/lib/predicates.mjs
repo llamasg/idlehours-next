@@ -10,6 +10,9 @@
 //   { field, op: 'eq' | 'gte' | 'lte', value }        — scalar comparison
 //   { field, op: 'between', value: [min, max] }       — inclusive range
 //   { field: 'platforms', op: 'only', value: [...] }  — every platform within set
+//   { field: 'id', op: 'memberOf', value: [...] }     — curated id list (human-
+//                                                       reviewed; the predicate
+//                                                       verifies membership only)
 //   { op: 'wordplay', matcher: '<name>' }             — named title-string matcher
 
 // ── Wordplay helpers ─────────────────────────────────────────────────────────
@@ -88,6 +91,8 @@ export function evaluatePredicate(spec, game) {
         value.length > 0 &&
         value.every((v) => spec.value.includes(v))
       )
+    case 'memberOf':
+      return Array.isArray(spec.value) && spec.value.includes(game.id)
     default:
       throw new Error(`Unknown predicate op: ${spec.op}`)
   }

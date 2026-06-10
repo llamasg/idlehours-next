@@ -69,7 +69,10 @@ export const WORD_LISTS = {
 
 const ONE_WORD_VERBS = ['dredge', 'escape', 'rust', 'blink', 'dash', 'leap', 'strike', 'smash', 'jump', 'race', 'hunt', 'control', 'outlast', 'unravel', 'brawl', 'drift', 'raid', 'snipe', 'breathe', 'observe', 'descend', 'ascend', 'stray', 'grow', 'spin', 'turn', 'slay', 'crawl', 'climb', 'fly', 'dig', 'jet', 'punch', 'kick', 'roll', 'rush', 'surge', 'forge', 'haunt', 'prey', 'quake', 'wreck', 'splash', 'boom', 'crash', 'dive', 'glide', 'hollow']
 
-const HIDE_SUBSTRINGS = ['ape', 'rat', 'cat', 'art', 'war', 'ten', 'ace', 'ice', 'ash', 'ear', 'arm', 'eve', 'end', 'red', 'age', 'man', 'den', 'era', 'owl', 'ant', 'elf', 'ore', 'win', 'sun', 'hero', 'king', 'son', 'rid', 'lab', 'ray', 'gun', 'pet', 'hat', 'rim', 'tar', 'net', 'bot']
+// Playtest feedback: 3-letter hidden substrings ("hides ORE") read as
+// "titles with these letters in them" — too abstract. Only significant words
+// of 4+ letters are candidates now.
+const HIDE_SUBSTRINGS = ['hero', 'king', 'star', 'ring', 'gold', 'wind', 'mine', 'port', 'over', 'rock', 'land', 'card', 'ward', 'lord', 'moon', 'fire']
 
 // ── Structural matchers ──────────────────────────────────────────────────────
 

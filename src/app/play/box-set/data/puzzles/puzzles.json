@@ -3,1405 +3,25 @@
     "date": "2026-06-10",
     "groups": [
       {
-        "conceptId": "yellow-puzzle-1980s",
+        "conceptId": "yellow-action-1990s",
         "tier": "yellow",
-        "label": "1980s PUZZLE GAMES",
+        "label": "1990s ACTION GAMES",
         "gameIds": [
-          "battle-city",
-          "lode-runner",
-          "q-bert",
-          "indiana-jones-and-the-last-crusade-the-graphic-adventure"
-        ]
-      },
-      {
-        "conceptId": "green-year-2010",
-        "tier": "green",
-        "label": "RELEASED IN 2010",
-        "gameIds": [
-          "fruit-ninja",
-          "castlevania-lords-of-shadow",
-          "mass-effect-2",
-          "red-dead-redemption"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-zombies",
-        "tier": "blue",
-        "label": "ZOMBIES INVOLVED",
-        "gameIds": [
-          "resident-evil-3-nemesis",
-          "super-smash-bros-ultimate",
-          "call-of-duty-black-ops-4",
-          "halo-4"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-ape",
-        "tier": "purple",
-        "label": "TITLES HIDING 'APE'",
-        "gameIds": [
-          "escape-from-tarkov",
-          "apex-legends",
-          "super-paper-mario",
-          "paperboy"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "apex-legends",
-        "title": "Apex Legends"
-      },
-      {
-        "id": "resident-evil-3-nemesis",
-        "title": "Resident Evil 3: Nemesis"
-      },
-      {
-        "id": "fruit-ninja",
-        "title": "Fruit Ninja"
-      },
-      {
-        "id": "mass-effect-2",
-        "title": "Mass Effect 2"
-      },
-      {
-        "id": "paperboy",
-        "title": "Paperboy"
-      },
-      {
-        "id": "battle-city",
-        "title": "Battle City"
-      },
-      {
-        "id": "super-smash-bros-ultimate",
-        "title": "Super Smash Bros. Ultimate"
-      },
-      {
-        "id": "halo-4",
-        "title": "Halo 4"
-      },
-      {
-        "id": "super-paper-mario",
-        "title": "Super Paper Mario"
-      },
-      {
-        "id": "escape-from-tarkov",
-        "title": "Escape from Tarkov"
-      },
-      {
-        "id": "red-dead-redemption",
-        "title": "Red Dead Redemption"
-      },
-      {
-        "id": "castlevania-lords-of-shadow",
-        "title": "Castlevania: Lords of Shadow"
-      },
-      {
-        "id": "lode-runner",
-        "title": "Lode Runner"
-      },
-      {
-        "id": "q-bert",
-        "title": "Q*bert"
-      },
-      {
-        "id": "call-of-duty-black-ops-4",
-        "title": "Call of Duty: Black Ops 4"
-      },
-      {
-        "id": "indiana-jones-and-the-last-crusade-the-graphic-adventure",
-        "title": "Indiana Jones and the Last Crusade: The Graphic Adventure"
-      }
-    ]
-  },
-  "2026-06-11": {
-    "date": "2026-06-11",
-    "groups": [
-      {
-        "conceptId": "yellow-sandbox-2020s",
-        "tier": "yellow",
-        "label": "2020s SANDBOX GAMES",
-        "gameIds": [
-          "dystopika",
-          "lego-fortnite",
-          "palworld",
-          "lightyear-frontier"
-        ]
-      },
-      {
-        "conceptId": "green-year-1996",
-        "tier": "green",
-        "label": "RELEASED IN 1996",
-        "gameIds": [
-          "heroes-of-might-and-magic-ii-the-succession-wars",
-          "duke-nukem-3d",
-          "super-mario-rpg-legend-of-the-seven-stars",
-          "diablo"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-war",
-        "tier": "blue",
-        "label": "GAMES SET AT WAR",
-        "gameIds": [
-          "command-conquer-generals",
-          "halo-3-odst",
-          "medal-of-honor",
-          "command-conquer-tiberian-sun"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-time",
-        "tier": "purple",
-        "label": "TITLES ABOUT TIME",
-        "gameIds": [
-          "like-a-dragon-infinite-wealth",
-          "plants-vs-zombies-2-its-about-time",
-          "duke-nukem-forever",
-          "bugs-bunny-lost-in-time"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "lightyear-frontier",
-        "title": "Lightyear Frontier"
-      },
-      {
-        "id": "dystopika",
-        "title": "Dystopika"
-      },
-      {
-        "id": "super-mario-rpg-legend-of-the-seven-stars",
-        "title": "Super Mario RPG: Legend of the Seven Stars"
-      },
-      {
-        "id": "palworld",
-        "title": "Palworld"
-      },
-      {
-        "id": "command-conquer-tiberian-sun",
-        "title": "Command & Conquer: Tiberian Sun"
-      },
-      {
-        "id": "duke-nukem-forever",
-        "title": "Duke Nukem Forever"
-      },
-      {
-        "id": "diablo",
-        "title": "Diablo"
-      },
-      {
-        "id": "command-conquer-generals",
-        "title": "Command & Conquer: Generals"
-      },
-      {
-        "id": "plants-vs-zombies-2-its-about-time",
-        "title": "Plants vs. Zombies 2: It's About Time"
-      },
-      {
-        "id": "like-a-dragon-infinite-wealth",
-        "title": "Like a Dragon: Infinite Wealth"
-      },
-      {
-        "id": "lego-fortnite",
-        "title": "Lego Fortnite"
-      },
-      {
-        "id": "medal-of-honor",
-        "title": "Medal of Honor"
-      },
-      {
-        "id": "duke-nukem-3d",
-        "title": "Duke Nukem 3D"
-      },
-      {
-        "id": "bugs-bunny-lost-in-time",
-        "title": "Bugs Bunny: Lost in Time"
-      },
-      {
-        "id": "heroes-of-might-and-magic-ii-the-succession-wars",
-        "title": "Heroes of Might and Magic II: The Succession Wars"
-      },
-      {
-        "id": "halo-3-odst",
-        "title": "Halo 3: ODST"
-      }
-    ]
-  },
-  "2026-06-12": {
-    "date": "2026-06-12",
-    "groups": [
-      {
-        "conceptId": "yellow-genre-platform",
-        "tier": "yellow",
-        "label": "PLATFORMERS",
-        "gameIds": [
-          "balloon-fight",
-          "kirbys-dream-land",
-          "uncharted-drakes-fortune",
-          "castlevania-ii-simons-quest"
-        ]
-      },
-      {
-        "conceptId": "green-year-2023",
-        "tier": "green",
-        "label": "RELEASED IN 2023",
-        "gameIds": [
-          "fire-emblem-engage",
-          "star-wars-jedi-survivor",
-          "atomic-heart",
-          "lethal-company"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-sci-fi",
-        "tier": "blue",
-        "label": "SCIENCE FICTION",
-        "gameIds": [
-          "super-metroid",
+          "the-legend-of-zelda-ocarina-of-time",
           "half-life",
-          "starcraft",
-          "dead-space"
+          "crash-bandicoot-warped",
+          "streets-of-rage"
         ]
       },
       {
-        "conceptId": "purple-hides-end",
-        "tier": "purple",
-        "label": "TITLES HIDING 'END'",
-        "gameIds": [
-          "the-legend-of-zelda-the-wind-waker-hd",
-          "the-legend-of-heroes-trails-in-the-sky-sc",
-          "nintendo-switch-sports",
-          "the-legend-of-zelda-oracle-of-seasons"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "star-wars-jedi-survivor",
-        "title": "Star Wars Jedi: Survivor"
-      },
-      {
-        "id": "the-legend-of-zelda-the-wind-waker-hd",
-        "title": "The Legend of Zelda: The Wind Waker HD"
-      },
-      {
-        "id": "lethal-company",
-        "title": "Lethal Company"
-      },
-      {
-        "id": "balloon-fight",
-        "title": "Balloon Fight"
-      },
-      {
-        "id": "nintendo-switch-sports",
-        "title": "Nintendo Switch Sports"
-      },
-      {
-        "id": "atomic-heart",
-        "title": "Atomic Heart"
-      },
-      {
-        "id": "fire-emblem-engage",
-        "title": "Fire Emblem Engage"
-      },
-      {
-        "id": "super-metroid",
-        "title": "Super Metroid"
-      },
-      {
-        "id": "uncharted-drakes-fortune",
-        "title": "Uncharted: Drake's Fortune"
-      },
-      {
-        "id": "the-legend-of-zelda-oracle-of-seasons",
-        "title": "The Legend of Zelda: Oracle of Seasons"
-      },
-      {
-        "id": "castlevania-ii-simons-quest",
-        "title": "Castlevania II: Simon's Quest"
-      },
-      {
-        "id": "the-legend-of-heroes-trails-in-the-sky-sc",
-        "title": "The Legend of Heroes: Trails in the Sky SC"
-      },
-      {
-        "id": "half-life",
-        "title": "Half-Life"
-      },
-      {
-        "id": "starcraft",
-        "title": "StarCraft"
-      },
-      {
-        "id": "kirbys-dream-land",
-        "title": "Kirby's Dream Land"
-      },
-      {
-        "id": "dead-space",
-        "title": "Dead Space"
-      }
-    ]
-  },
-  "2026-06-13": {
-    "date": "2026-06-13",
-    "groups": [
-      {
-        "conceptId": "yellow-genre-horror",
-        "tier": "yellow",
-        "label": "HORROR GAMES",
-        "gameIds": [
-          "the-house-of-the-dead-2",
-          "silent-hill-2",
-          "silent-hill",
-          "the-last-of-us-remastered"
-        ]
-      },
-      {
-        "conceptId": "green-year-2020",
+        "conceptId": "green-year-2003",
         "tier": "green",
-        "label": "RELEASED IN 2020",
+        "label": "RELEASED IN 2003",
         "gameIds": [
-          "mafia-ii-definitive-edition",
-          "fortnite",
-          "the-last-of-us-part-ii",
-          "marvels-spider-man-miles-morales"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-dinosaurs",
-        "tier": "blue",
-        "label": "DINOSAURS INVOLVED",
-        "gameIds": [
-          "bulletstorm",
-          "star-fox-adventures",
-          "turok-dinosaur-hunter",
-          "peter-jacksons-king-kong-the-official-game-of-the-movie"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-ray",
-        "tier": "purple",
-        "label": "TITLES HIDING 'RAY'",
-        "gameIds": [
-          "stray",
-          "rayman",
-          "rayman-2-the-great-escape",
-          "rayman-origins"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "rayman-2-the-great-escape",
-        "title": "Rayman 2: The Great Escape"
-      },
-      {
-        "id": "the-last-of-us-part-ii",
-        "title": "The Last of Us Part II"
-      },
-      {
-        "id": "the-last-of-us-remastered",
-        "title": "The Last of Us Remastered"
-      },
-      {
-        "id": "marvels-spider-man-miles-morales",
-        "title": "Marvel's Spider-Man: Miles Morales"
-      },
-      {
-        "id": "peter-jacksons-king-kong-the-official-game-of-the-movie",
-        "title": "Peter Jackson's King Kong: The Official Game of the Movie"
-      },
-      {
-        "id": "stray",
-        "title": "Stray"
-      },
-      {
-        "id": "silent-hill-2",
-        "title": "Silent Hill 2"
-      },
-      {
-        "id": "rayman",
-        "title": "Rayman"
-      },
-      {
-        "id": "star-fox-adventures",
-        "title": "Star Fox Adventures"
-      },
-      {
-        "id": "turok-dinosaur-hunter",
-        "title": "Turok: Dinosaur Hunter"
-      },
-      {
-        "id": "the-house-of-the-dead-2",
-        "title": "The House of the Dead 2"
-      },
-      {
-        "id": "mafia-ii-definitive-edition",
-        "title": "Mafia II: Definitive Edition"
-      },
-      {
-        "id": "rayman-origins",
-        "title": "Rayman Origins"
-      },
-      {
-        "id": "bulletstorm",
-        "title": "Bulletstorm"
-      },
-      {
-        "id": "fortnite",
-        "title": "Fortnite"
-      },
-      {
-        "id": "silent-hill",
-        "title": "Silent Hill"
-      }
-    ]
-  },
-  "2026-06-14": {
-    "date": "2026-06-14",
-    "groups": [
-      {
-        "conceptId": "yellow-genre-racing",
-        "tier": "yellow",
-        "label": "RACING GAMES",
-        "gameIds": [
-          "my-summer-car",
-          "super-mario-kart",
-          "the-simpsons-hit-run",
-          "rocket-league"
-        ]
-      },
-      {
-        "conceptId": "green-price-69-99",
-        "tier": "green",
-        "label": "LAUNCHED AT $69.99",
-        "gameIds": [
-          "call-of-duty-black-ops-6",
-          "doom-the-dark-ages",
-          "silent-hill-f",
-          "stellar-blade"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-cyberpunk",
-        "tier": "blue",
-        "label": "CYBERPUNK WORLDS",
-        "gameIds": [
-          "watch-dogs-legion",
-          "deus-ex-human-revolution",
-          "remember-me",
-          "mega-man-x7"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-weather",
-        "tier": "purple",
-        "label": "TITLES CONTAINING WEATHER",
-        "gameIds": [
-          "the-legend-of-zelda-the-wind-waker",
-          "naruto-shippuden-ultimate-ninja-storm-4",
-          "rain-world",
-          "naruto-ultimate-ninja-storm"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "rain-world",
-        "title": "Rain World"
-      },
-      {
-        "id": "super-mario-kart",
-        "title": "Super Mario Kart"
-      },
-      {
-        "id": "watch-dogs-legion",
-        "title": "Watch Dogs: Legion"
-      },
-      {
-        "id": "remember-me",
-        "title": "Remember Me"
-      },
-      {
-        "id": "naruto-shippuden-ultimate-ninja-storm-4",
-        "title": "Naruto Shippuden: Ultimate Ninja Storm 4"
-      },
-      {
-        "id": "mega-man-x7",
-        "title": "Mega Man X7"
-      },
-      {
-        "id": "the-simpsons-hit-run",
-        "title": "The Simpsons: Hit & Run"
-      },
-      {
-        "id": "naruto-ultimate-ninja-storm",
-        "title": "Naruto: Ultimate Ninja Storm"
-      },
-      {
-        "id": "call-of-duty-black-ops-6",
-        "title": "Call of Duty: Black Ops 6"
-      },
-      {
-        "id": "rocket-league",
-        "title": "Rocket League"
-      },
-      {
-        "id": "stellar-blade",
-        "title": "Stellar Blade"
-      },
-      {
-        "id": "my-summer-car",
-        "title": "My Summer Car"
-      },
-      {
-        "id": "deus-ex-human-revolution",
-        "title": "Deus Ex: Human Revolution"
-      },
-      {
-        "id": "silent-hill-f",
-        "title": "Silent Hill f"
-      },
-      {
-        "id": "the-legend-of-zelda-the-wind-waker",
-        "title": "The Legend of Zelda: The Wind Waker"
-      },
-      {
-        "id": "doom-the-dark-ages",
-        "title": "Doom: The Dark Ages"
-      }
-    ]
-  },
-  "2026-06-15": {
-    "date": "2026-06-15",
-    "groups": [
-      {
-        "conceptId": "yellow-genre-arcade",
-        "tier": "yellow",
-        "label": "ARCADE GAMES",
-        "gameIds": [
-          "broforce",
-          "flatout-2",
-          "streets-of-rage-2",
-          "golden-axe"
-        ]
-      },
-      {
-        "conceptId": "green-year-2016",
-        "tier": "green",
-        "label": "RELEASED IN 2016",
-        "gameIds": [
-          "abzu",
-          "the-witness",
-          "stardew-valley",
-          "sid-meiers-civilization-vi"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-crime",
-        "tier": "blue",
-        "label": "A LIFE OF CRIME",
-        "gameIds": [
-          "rainbow-six-siege",
-          "grand-theft-auto-iv",
-          "virtua-cop",
-          "max-payne-2-the-fall-of-max-payne"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-rat",
-        "tier": "purple",
-        "label": "TITLES HIDING 'RAT'",
-        "gameIds": [
-          "ratchet-clank-going-commando",
-          "doki-doki-literature-club-plus",
-          "heroes-of-might-and-magic-a-strategic-quest",
-          "heroes-of-might-and-magic-iii-the-restoration-of-erathia"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "doki-doki-literature-club-plus",
-        "title": "Doki Doki Literature Club Plus!"
-      },
-      {
-        "id": "abzu",
-        "title": "Abzu"
-      },
-      {
-        "id": "stardew-valley",
-        "title": "Stardew Valley"
-      },
-      {
-        "id": "ratchet-clank-going-commando",
-        "title": "Ratchet & Clank: Going Commando"
-      },
-      {
-        "id": "max-payne-2-the-fall-of-max-payne",
-        "title": "Max Payne 2: The Fall of Max Payne"
-      },
-      {
-        "id": "virtua-cop",
-        "title": "Virtua Cop"
-      },
-      {
-        "id": "heroes-of-might-and-magic-iii-the-restoration-of-erathia",
-        "title": "Heroes of Might and Magic III: The Restoration of Erathia"
-      },
-      {
-        "id": "grand-theft-auto-iv",
-        "title": "Grand Theft Auto IV"
-      },
-      {
-        "id": "heroes-of-might-and-magic-a-strategic-quest",
-        "title": "Heroes of Might and Magic: A Strategic Quest"
-      },
-      {
-        "id": "the-witness",
-        "title": "The Witness"
-      },
-      {
-        "id": "sid-meiers-civilization-vi",
-        "title": "Sid Meier's Civilization VI"
-      },
-      {
-        "id": "rainbow-six-siege",
-        "title": "Rainbow Six Siege"
-      },
-      {
-        "id": "streets-of-rage-2",
-        "title": "Streets of Rage 2"
-      },
-      {
-        "id": "broforce",
-        "title": "Broforce"
-      },
-      {
-        "id": "flatout-2",
-        "title": "FlatOut 2"
-      },
-      {
-        "id": "golden-axe",
-        "title": "Golden Axe"
-      }
-    ]
-  },
-  "2026-06-16": {
-    "date": "2026-06-16",
-    "groups": [
-      {
-        "conceptId": "yellow-simulator-2010s",
-        "tier": "yellow",
-        "label": "2010s SIMULATORS",
-        "gameIds": [
-          "nier",
-          "animal-crossing-new-leaf",
-          "fifa-soccer-12",
-          "fallout-shelter"
-        ]
-      },
-      {
-        "conceptId": "green-opencritic-rough",
-        "tier": "green",
-        "label": "CRITICS WERE NOT KIND (60 OR BELOW)",
-        "gameIds": [
-          "my-hero-ultra-rumble",
-          "hexen-beyond-heretic",
-          "dragon-ball-z-ultimate-battle-22",
-          "medal-of-honor-warfighter"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-ninja",
-        "tier": "blue",
-        "label": "NINJA GAMES",
-        "gameIds": [
-          "ninja-gaiden-iii-the-ancient-ship-of-doom",
-          "mortal-kombat-trilogy",
-          "ninja-gaiden-black",
-          "mark-of-the-ninja"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-music",
-        "tier": "purple",
-        "label": "MUSICAL TITLES",
-        "gameIds": [
-          "guitar-hero-ii",
-          "deep-rock-galactic-survivor",
-          "castlevania-symphony-of-the-night",
-          "rock-band"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "medal-of-honor-warfighter",
-        "title": "Medal of Honor: Warfighter"
-      },
-      {
-        "id": "mark-of-the-ninja",
-        "title": "Mark of the Ninja"
-      },
-      {
-        "id": "hexen-beyond-heretic",
-        "title": "Hexen: Beyond Heretic"
-      },
-      {
-        "id": "dragon-ball-z-ultimate-battle-22",
-        "title": "Dragon Ball Z: Ultimate Battle 22"
-      },
-      {
-        "id": "fifa-soccer-12",
-        "title": "FIFA Soccer 12"
-      },
-      {
-        "id": "castlevania-symphony-of-the-night",
-        "title": "Castlevania: Symphony of the Night"
-      },
-      {
-        "id": "nier",
-        "title": "NieR"
-      },
-      {
-        "id": "mortal-kombat-trilogy",
-        "title": "Mortal Kombat Trilogy"
-      },
-      {
-        "id": "rock-band",
-        "title": "Rock Band"
-      },
-      {
-        "id": "animal-crossing-new-leaf",
-        "title": "Animal Crossing: New Leaf"
-      },
-      {
-        "id": "my-hero-ultra-rumble",
-        "title": "My Hero Ultra Rumble"
-      },
-      {
-        "id": "deep-rock-galactic-survivor",
-        "title": "Deep Rock Galactic: Survivor"
-      },
-      {
-        "id": "ninja-gaiden-iii-the-ancient-ship-of-doom",
-        "title": "Ninja Gaiden III: The Ancient Ship of Doom"
-      },
-      {
-        "id": "guitar-hero-ii",
-        "title": "Guitar Hero II"
-      },
-      {
-        "id": "fallout-shelter",
-        "title": "Fallout Shelter"
-      },
-      {
-        "id": "ninja-gaiden-black",
-        "title": "Ninja Gaiden Black"
-      }
-    ]
-  },
-  "2026-06-17": {
-    "date": "2026-06-17",
-    "groups": [
-      {
-        "conceptId": "yellow-platform-1980s",
-        "tier": "yellow",
-        "label": "1980s PLATFORMERS",
-        "gameIds": [
-          "hudsons-adventure-island",
-          "pitfall",
-          "metroid",
-          "ice-climber"
-        ]
-      },
-      {
-        "conceptId": "green-year-2019",
-        "tier": "green",
-        "label": "RELEASED IN 2019",
-        "gameIds": [
-          "outer-wilds",
-          "sekiro-shadows-die-twice",
-          "ai-the-somnium-files",
-          "control"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-superhero",
-        "tier": "blue",
-        "label": "SUPERHERO GAMES",
-        "gameIds": [
-          "marvels-avengers",
-          "marvels-midnight-suns",
-          "dragon-ball-gt-final-bout",
-          "lego-batman-the-videogame"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-divine",
-        "tier": "purple",
-        "label": "HEAVENLY (OR HELLISH) TITLES",
-        "gameIds": [
-          "neighbours-from-hell-2-on-vacation",
-          "god-of-war-ascension",
-          "god-of-war-2005",
-          "sacred-2-fallen-angel"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "sacred-2-fallen-angel",
-        "title": "Sacred 2: Fallen Angel"
-      },
-      {
-        "id": "dragon-ball-gt-final-bout",
-        "title": "Dragon Ball GT: Final Bout"
-      },
-      {
-        "id": "sekiro-shadows-die-twice",
-        "title": "Sekiro: Shadows Die Twice"
-      },
-      {
-        "id": "marvels-midnight-suns",
-        "title": "Marvel's Midnight Suns"
-      },
-      {
-        "id": "lego-batman-the-videogame",
-        "title": "LEGO Batman: The Videogame"
-      },
-      {
-        "id": "god-of-war-2005",
-        "title": "God of War"
-      },
-      {
-        "id": "marvels-avengers",
-        "title": "Marvel's Avengers"
-      },
-      {
-        "id": "metroid",
-        "title": "Metroid"
-      },
-      {
-        "id": "ai-the-somnium-files",
-        "title": "AI: The Somnium Files"
-      },
-      {
-        "id": "ice-climber",
-        "title": "Ice Climber"
-      },
-      {
-        "id": "pitfall",
-        "title": "Pitfall!"
-      },
-      {
-        "id": "god-of-war-ascension",
-        "title": "God of War: Ascension"
-      },
-      {
-        "id": "control",
-        "title": "Control"
-      },
-      {
-        "id": "hudsons-adventure-island",
-        "title": "Hudson's Adventure Island"
-      },
-      {
-        "id": "outer-wilds",
-        "title": "Outer Wilds"
-      },
-      {
-        "id": "neighbours-from-hell-2-on-vacation",
-        "title": "Neighbours from Hell 2: On Vacation"
-      }
-    ]
-  },
-  "2026-06-18": {
-    "date": "2026-06-18",
-    "groups": [
-      {
-        "conceptId": "yellow-arcade-1990s",
-        "tier": "yellow",
-        "label": "1990s ARCADE GAMES",
-        "gameIds": [
-          "time-crisis",
-          "die-hard-trilogy",
-          "gunstar-heroes",
-          "virtua-fighter-2"
-        ]
-      },
-      {
-        "conceptId": "green-year-2008",
-        "tier": "green",
-        "label": "RELEASED IN 2008",
-        "gameIds": [
-          "world-of-warcraft-wrath-of-the-lich-king",
-          "littlebigplanet",
-          "mortal-kombat-vs-dc-universe",
-          "castle-crashers"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-post-apocalyptic",
-        "tier": "blue",
-        "label": "AFTER THE APOCALYPSE",
-        "gameIds": [
-          "remnant-ii",
-          "the-last-of-us",
-          "arc-raiders",
-          "death-stranding"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-son",
-        "tier": "purple",
-        "label": "TITLES HIDING 'SON'",
-        "gameIds": [
-          "harry-potter-and-the-prisoner-of-azkaban",
-          "persona-4-golden",
-          "sonic-advance",
-          "sonic-and-the-secret-rings"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "die-hard-trilogy",
-        "title": "Die Hard Trilogy"
-      },
-      {
-        "id": "castle-crashers",
-        "title": "Castle Crashers"
-      },
-      {
-        "id": "littlebigplanet",
-        "title": "LittleBigPlanet"
-      },
-      {
-        "id": "death-stranding",
-        "title": "Death Stranding"
-      },
-      {
-        "id": "the-last-of-us",
-        "title": "The Last of Us"
-      },
-      {
-        "id": "world-of-warcraft-wrath-of-the-lich-king",
-        "title": "World of Warcraft: Wrath of the Lich King"
-      },
-      {
-        "id": "persona-4-golden",
-        "title": "Persona 4 Golden"
-      },
-      {
-        "id": "gunstar-heroes",
-        "title": "Gunstar Heroes"
-      },
-      {
-        "id": "time-crisis",
-        "title": "Time Crisis"
-      },
-      {
-        "id": "arc-raiders",
-        "title": "ARC Raiders"
-      },
-      {
-        "id": "harry-potter-and-the-prisoner-of-azkaban",
-        "title": "Harry Potter and the Prisoner of Azkaban"
-      },
-      {
-        "id": "remnant-ii",
-        "title": "Remnant II"
-      },
-      {
-        "id": "sonic-advance",
-        "title": "Sonic Advance"
-      },
-      {
-        "id": "sonic-and-the-secret-rings",
-        "title": "Sonic and the Secret Rings"
-      },
-      {
-        "id": "virtua-fighter-2",
-        "title": "Virtua Fighter 2"
-      },
-      {
-        "id": "mortal-kombat-vs-dc-universe",
-        "title": "Mortal Kombat vs. DC Universe"
-      }
-    ]
-  },
-  "2026-06-19": {
-    "date": "2026-06-19",
-    "groups": [
-      {
-        "conceptId": "yellow-horror-1990s",
-        "tier": "yellow",
-        "label": "1990s HORROR GAMES",
-        "gameIds": [
-          "resident-evil-1996",
-          "resident-evil-2",
-          "alone-in-the-dark",
-          "system-shock-2"
-        ]
-      },
-      {
-        "conceptId": "green-year-2024",
-        "tier": "green",
-        "label": "RELEASED IN 2024",
-        "gameIds": [
-          "wuthering-waves",
-          "little-kitty-big-city",
-          "astro-bot",
-          "marvel-rivals"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-ghosts",
-        "tier": "blue",
-        "label": "GHOSTS INVOLVED",
-        "gameIds": [
-          "the-binding-of-isaac-rebirth",
-          "persona-2-innocent-sin",
-          "murdered-soul-suspect",
-          "persona-2-eternal-punishment"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-us-place",
-        "tier": "purple",
-        "label": "TITLES CONTAINING AN AMERICAN PLACE",
-        "gameIds": [
-          "hotline-miami-2-wrong-number",
-          "american-truck-simulator",
-          "true-crime-new-york-city",
-          "fallout-new-vegas"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "wuthering-waves",
-        "title": "Wuthering Waves"
-      },
-      {
-        "id": "the-binding-of-isaac-rebirth",
-        "title": "The Binding of Isaac: Rebirth"
-      },
-      {
-        "id": "little-kitty-big-city",
-        "title": "Little Kitty, Big City"
-      },
-      {
-        "id": "resident-evil-1996",
-        "title": "Resident Evil"
-      },
-      {
-        "id": "fallout-new-vegas",
-        "title": "Fallout: New Vegas"
-      },
-      {
-        "id": "true-crime-new-york-city",
-        "title": "True Crime: New York City"
-      },
-      {
-        "id": "persona-2-innocent-sin",
-        "title": "Persona 2: Innocent Sin"
-      },
-      {
-        "id": "alone-in-the-dark",
-        "title": "Alone in the Dark"
-      },
-      {
-        "id": "resident-evil-2",
-        "title": "Resident Evil 2"
-      },
-      {
-        "id": "system-shock-2",
-        "title": "System Shock 2"
-      },
-      {
-        "id": "american-truck-simulator",
-        "title": "American Truck Simulator"
-      },
-      {
-        "id": "astro-bot",
-        "title": "Astro Bot"
-      },
-      {
-        "id": "hotline-miami-2-wrong-number",
-        "title": "Hotline Miami 2: Wrong Number"
-      },
-      {
-        "id": "marvel-rivals",
-        "title": "Marvel Rivals"
-      },
-      {
-        "id": "murdered-soul-suspect",
-        "title": "Murdered: Soul Suspect"
-      },
-      {
-        "id": "persona-2-eternal-punishment",
-        "title": "Persona 2: Eternal Punishment"
-      }
-    ]
-  },
-  "2026-06-20": {
-    "date": "2026-06-20",
-    "groups": [
-      {
-        "conceptId": "yellow-genre-sport",
-        "tier": "yellow",
-        "label": "SPORTS GAMES",
-        "gameIds": [
-          "colin-mcrae-dirt",
-          "tony-hawks-pro-skater",
-          "fifa-road-to-world-cup-98",
-          "ea-sports-fc-25"
-        ]
-      },
-      {
-        "conceptId": "green-year-2022",
-        "tier": "green",
-        "label": "RELEASED IN 2022",
-        "gameIds": [
-          "pok-mon-legends-arceus",
-          "uncharted-4-a-thiefs-end-remastered",
-          "nobody-saves-the-world",
-          "neon-white"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-robots",
-        "tier": "blue",
-        "label": "ROBOTS INVOLVED",
-        "gameIds": [
-          "ratchet-clank-future-tools-of-destruction",
-          "syberia",
-          "mega-man-x3",
-          "machinarium"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-ore",
-        "tier": "purple",
-        "label": "TITLES HIDING 'ORE'",
-        "gameIds": [
-          "core-keeper",
-          "no-one-lives-forever-2-a-spy-in-h-a-r-m-s-way",
-          "spore",
-          "pok-mon-mystery-dungeon-explorers-of-time"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "no-one-lives-forever-2-a-spy-in-h-a-r-m-s-way",
-        "title": "No One Lives Forever 2: A Spy in H.A.R.M.'s Way"
-      },
-      {
-        "id": "core-keeper",
-        "title": "Core Keeper"
-      },
-      {
-        "id": "spore",
-        "title": "Spore"
-      },
-      {
-        "id": "colin-mcrae-dirt",
-        "title": "Colin McRae: Dirt"
-      },
-      {
-        "id": "ratchet-clank-future-tools-of-destruction",
-        "title": "Ratchet & Clank Future: Tools of Destruction"
-      },
-      {
-        "id": "syberia",
-        "title": "Syberia"
-      },
-      {
-        "id": "neon-white",
-        "title": "Neon White"
-      },
-      {
-        "id": "tony-hawks-pro-skater",
-        "title": "Tony Hawk's Pro Skater"
-      },
-      {
-        "id": "machinarium",
-        "title": "Machinarium"
-      },
-      {
-        "id": "uncharted-4-a-thiefs-end-remastered",
-        "title": "Uncharted 4: A Thief's End - Remastered"
-      },
-      {
-        "id": "nobody-saves-the-world",
-        "title": "Nobody Saves the World"
-      },
-      {
-        "id": "pok-mon-legends-arceus",
-        "title": "Pokémon Legends: Arceus"
-      },
-      {
-        "id": "mega-man-x3",
-        "title": "Mega Man X3"
-      },
-      {
-        "id": "pok-mon-mystery-dungeon-explorers-of-time",
-        "title": "Pokémon Mystery Dungeon: Explorers of Time"
-      },
-      {
-        "id": "fifa-road-to-world-cup-98",
-        "title": "FIFA: Road to World Cup 98"
-      },
-      {
-        "id": "ea-sports-fc-25",
-        "title": "EA Sports FC 25"
-      }
-    ]
-  },
-  "2026-06-21": {
-    "date": "2026-06-21",
-    "groups": [
-      {
-        "conceptId": "yellow-genre-strategy",
-        "tier": "yellow",
-        "label": "STRATEGY GAMES",
-        "gameIds": [
-          "dragon-age-origins",
-          "baldurs-gate-3",
-          "battlefield-4",
-          "inscryption"
-        ]
-      },
-      {
-        "conceptId": "green-exclusive-pc",
-        "tier": "green",
-        "label": "NEVER LEFT THE PC",
-        "gameIds": [
-          "fallout-2",
-          "centipede",
-          "pong",
-          "fallout-a-post-nuclear-role-playing-game"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-open-world",
-        "tier": "blue",
-        "label": "OPEN WORLDS",
-        "gameIds": [
-          "infamous",
-          "fable-the-lost-chapters",
-          "horizon-zero-dawn",
-          "burnout-paradise"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-celestial",
-        "tier": "purple",
-        "label": "TITLES IN THE SKY (CELESTIAL WORDS)",
-        "gameIds": [
-          "star-wars-knights-of-the-old-republic",
-          "star-fox",
-          "star-wars-rogue-squadron",
-          "star-fox-64"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "pong",
-        "title": "Pong"
-      },
-      {
-        "id": "fallout-2",
-        "title": "Fallout 2"
-      },
-      {
-        "id": "horizon-zero-dawn",
-        "title": "Horizon Zero Dawn"
-      },
-      {
-        "id": "star-wars-rogue-squadron",
-        "title": "Star Wars: Rogue Squadron"
-      },
-      {
-        "id": "burnout-paradise",
-        "title": "Burnout Paradise"
-      },
-      {
-        "id": "star-fox-64",
-        "title": "Star Fox 64"
-      },
-      {
-        "id": "star-wars-knights-of-the-old-republic",
-        "title": "Star Wars: Knights of the Old Republic"
-      },
-      {
-        "id": "baldurs-gate-3",
-        "title": "Baldur's Gate 3"
-      },
-      {
-        "id": "dragon-age-origins",
-        "title": "Dragon Age: Origins"
-      },
-      {
-        "id": "centipede",
-        "title": "Centipede"
-      },
-      {
-        "id": "fallout-a-post-nuclear-role-playing-game",
-        "title": "Fallout: A Post Nuclear Role Playing Game"
-      },
-      {
-        "id": "infamous",
-        "title": "inFamous"
-      },
-      {
-        "id": "battlefield-4",
-        "title": "Battlefield 4"
-      },
-      {
-        "id": "inscryption",
-        "title": "Inscryption"
-      },
-      {
-        "id": "fable-the-lost-chapters",
-        "title": "Fable: The Lost Chapters"
-      },
-      {
-        "id": "star-fox",
-        "title": "Star Fox"
-      }
-    ]
-  },
-  "2026-06-22": {
-    "date": "2026-06-22",
-    "groups": [
-      {
-        "conceptId": "yellow-sport-1990s",
-        "tier": "yellow",
-        "label": "1990s SPORTS GAMES",
-        "gameIds": [
-          "rock-n-roll-racing",
-          "fifa-2000-major-league-soccer",
-          "international-superstar-soccer-deluxe",
-          "wave-race-64"
-        ]
-      },
-      {
-        "conceptId": "green-year-2009",
-        "tier": "green",
-        "label": "RELEASED IN 2009",
-        "gameIds": [
-          "plants-vs-zombies",
-          "uncharted-2-among-thieves",
-          "batman-arkham-asylum",
-          "flower"
+          "simcity-4",
+          "star-wars-jedi-knight-jedi-academy",
+          "tomb-raider-the-angel-of-darkness",
+          "the-simpsons-hit-run"
         ]
       },
       {
@@ -1409,930 +29,10 @@
         "tier": "blue",
         "label": "SET IN MEDIEVAL TIMES",
         "gameIds": [
-          "discworld",
-          "the-elder-scrolls-ii-daggerfall",
-          "age-of-empires-ii-definitive-edition",
-          "mount-blade-ii-bannerlord"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-era",
-        "tier": "purple",
-        "label": "TITLES HIDING 'ERA'",
-        "gameIds": [
-          "vampire-the-masquerade-bloodlines",
-          "like-a-dragon-gaiden-the-man-who-erased-his-name",
-          "pokemon-emerald",
-          "desperados-wanted-dead-or-alive"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "discworld",
-        "title": "Discworld"
-      },
-      {
-        "id": "pokemon-emerald",
-        "title": "Pokémon Emerald"
-      },
-      {
-        "id": "fifa-2000-major-league-soccer",
-        "title": "FIFA 2000: Major League Soccer"
-      },
-      {
-        "id": "desperados-wanted-dead-or-alive",
-        "title": "Desperados: Wanted Dead or Alive"
-      },
-      {
-        "id": "wave-race-64",
-        "title": "Wave Race 64"
-      },
-      {
-        "id": "international-superstar-soccer-deluxe",
-        "title": "International Superstar Soccer Deluxe"
-      },
-      {
-        "id": "batman-arkham-asylum",
-        "title": "Batman: Arkham Asylum"
-      },
-      {
-        "id": "rock-n-roll-racing",
-        "title": "Rock n' Roll Racing"
-      },
-      {
-        "id": "mount-blade-ii-bannerlord",
-        "title": "Mount & Blade II: Bannerlord"
-      },
-      {
-        "id": "the-elder-scrolls-ii-daggerfall",
-        "title": "The Elder Scrolls II: Daggerfall"
-      },
-      {
-        "id": "plants-vs-zombies",
-        "title": "Plants vs. Zombies"
-      },
-      {
-        "id": "age-of-empires-ii-definitive-edition",
-        "title": "Age of Empires II: Definitive Edition"
-      },
-      {
-        "id": "vampire-the-masquerade-bloodlines",
-        "title": "Vampire: The Masquerade - Bloodlines"
-      },
-      {
-        "id": "uncharted-2-among-thieves",
-        "title": "Uncharted 2: Among Thieves"
-      },
-      {
-        "id": "like-a-dragon-gaiden-the-man-who-erased-his-name",
-        "title": "Like a Dragon Gaiden: The Man Who Erased His Name"
-      },
-      {
-        "id": "flower",
-        "title": "Flower"
-      }
-    ]
-  },
-  "2026-06-23": {
-    "date": "2026-06-23",
-    "groups": [
-      {
-        "conceptId": "yellow-genre-music",
-        "tier": "yellow",
-        "label": "MUSIC GAMES",
-        "gameIds": [
-          "audiosurf",
-          "parappa-the-rapper",
-          "guitar-hero-5",
-          "osu"
-        ]
-      },
-      {
-        "conceptId": "green-year-2011",
-        "tier": "green",
-        "label": "RELEASED IN 2011",
-        "gameIds": [
-          "dark-souls",
-          "mario-kart-7",
-          "crysis-2",
-          "littlebigplanet-2"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-cars",
-        "tier": "blue",
-        "label": "CARS INVOLVED",
-        "gameIds": [
-          "need-for-speed-carbon",
-          "forza-horizon-3",
-          "gran-turismo-3-a-spec",
-          "death-rally"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-profession",
-        "tier": "purple",
-        "label": "TITLES CONTAINING A JOB",
-        "gameIds": [
-          "uncharted-4-a-thief-s-end",
-          "shinobi-iii-return-of-the-ninja-master",
-          "assassin-s-creed-ii",
-          "star-wars-knights-of-the-old-republic-ii-the-sith-lords"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "crysis-2",
-        "title": "Crysis 2"
-      },
-      {
-        "id": "guitar-hero-5",
-        "title": "Guitar Hero 5"
-      },
-      {
-        "id": "dark-souls",
-        "title": "Dark Souls"
-      },
-      {
-        "id": "audiosurf",
-        "title": "Audiosurf"
-      },
-      {
-        "id": "forza-horizon-3",
-        "title": "Forza Horizon 3"
-      },
-      {
-        "id": "death-rally",
-        "title": "Death Rally"
-      },
-      {
-        "id": "uncharted-4-a-thief-s-end",
-        "title": "Uncharted 4: A Thief's End"
-      },
-      {
-        "id": "gran-turismo-3-a-spec",
-        "title": "Gran Turismo 3: A-Spec"
-      },
-      {
-        "id": "assassin-s-creed-ii",
-        "title": "Assassin's Creed II"
-      },
-      {
-        "id": "shinobi-iii-return-of-the-ninja-master",
-        "title": "Shinobi III: Return of the Ninja Master"
-      },
-      {
-        "id": "parappa-the-rapper",
-        "title": "PaRappa the Rapper"
-      },
-      {
-        "id": "osu",
-        "title": "Osu!"
-      },
-      {
-        "id": "star-wars-knights-of-the-old-republic-ii-the-sith-lords",
-        "title": "Star Wars: Knights of the Old Republic II - The Sith Lords"
-      },
-      {
-        "id": "need-for-speed-carbon",
-        "title": "Need for Speed: Carbon"
-      },
-      {
-        "id": "littlebigplanet-2",
-        "title": "LittleBigPlanet 2"
-      },
-      {
-        "id": "mario-kart-7",
-        "title": "Mario Kart 7"
-      }
-    ]
-  },
-  "2026-06-24": {
-    "date": "2026-06-24",
-    "groups": [
-      {
-        "conceptId": "yellow-arcade-2000s",
-        "tier": "yellow",
-        "label": "2000s ARCADE GAMES",
-        "gameIds": [
-          "tekken-4",
-          "ratchet-clank-future-a-crack-in-time",
-          "kirby-air-ride",
-          "angry-birds"
-        ]
-      },
-      {
-        "conceptId": "green-price-29-99",
-        "tier": "green",
-        "label": "LAUNCHED AT $29.99",
-        "gameIds": [
-          "dragons-lair",
-          "road-fighter",
-          "mario-bros",
-          "duck-hunt"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-wrestling",
-        "tier": "blue",
-        "label": "WRESTLING GAMES",
-        "gameIds": [
-          "wwe-smackdown-vs-raw-2011",
-          "wwf-smackdown-2-know-your-role",
-          "tekken-8",
-          "wwf-smackdown"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-colour",
-        "tier": "purple",
-        "label": "TITLES CONTAINING A COLOUR",
-        "gameIds": [
-          "red-faction-ii",
-          "black-myth-wukong",
-          "call-of-duty-2-big-red-one",
-          "black-white-2"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "wwe-smackdown-vs-raw-2011",
-        "title": "WWE SmackDown vs. Raw 2011"
-      },
-      {
-        "id": "black-myth-wukong",
-        "title": "Black Myth: Wukong"
-      },
-      {
-        "id": "road-fighter",
-        "title": "Road Fighter"
-      },
-      {
-        "id": "black-white-2",
-        "title": "Black & White 2"
-      },
-      {
-        "id": "wwf-smackdown",
-        "title": "WWF SmackDown!"
-      },
-      {
-        "id": "mario-bros",
-        "title": "Mario Bros."
-      },
-      {
-        "id": "duck-hunt",
-        "title": "Duck Hunt"
-      },
-      {
-        "id": "ratchet-clank-future-a-crack-in-time",
-        "title": "Ratchet & Clank Future: A Crack in Time"
-      },
-      {
-        "id": "angry-birds",
-        "title": "Angry Birds"
-      },
-      {
-        "id": "red-faction-ii",
-        "title": "Red Faction II"
-      },
-      {
-        "id": "dragons-lair",
-        "title": "Dragon's Lair"
-      },
-      {
-        "id": "kirby-air-ride",
-        "title": "Kirby Air Ride"
-      },
-      {
-        "id": "tekken-8",
-        "title": "Tekken 8"
-      },
-      {
-        "id": "tekken-4",
-        "title": "Tekken 4"
-      },
-      {
-        "id": "call-of-duty-2-big-red-one",
-        "title": "Call of Duty 2: Big Red One"
-      },
-      {
-        "id": "wwf-smackdown-2-know-your-role",
-        "title": "WWF SmackDown! 2: Know Your Role"
-      }
-    ]
-  },
-  "2026-06-25": {
-    "date": "2026-06-25",
-    "groups": [
-      {
-        "conceptId": "yellow-sport-2010s",
-        "tier": "yellow",
-        "label": "2010s SPORTS GAMES",
-        "gameIds": [
-          "sonic-all-stars-racing-transformed",
-          "football-manager-2020",
-          "dirt-3",
-          "fifa-soccer-11"
-        ]
-      },
-      {
-        "conceptId": "green-year-2017",
-        "tier": "green",
-        "label": "RELEASED IN 2017",
-        "gameIds": [
-          "a-hat-in-time",
-          "resident-evil-7-biohazard",
-          "super-mario-odyssey",
-          "sniper-elite-4"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-magic",
-        "tier": "blue",
-        "label": "GAMES FULL OF MAGIC",
-        "gameIds": [
-          "fire-emblem-path-of-radiance",
-          "super-mario-land",
-          "bioshock-2",
-          "blood-omen-legacy-of-kain"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-number-word",
-        "tier": "purple",
-        "label": "TITLES SPELLING OUT A NUMBER",
-        "gameIds": [
-          "it-takes-two",
-          "half-life-2-episode-one",
-          "half-life-2-episode-two",
-          "two-point-hospital"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "a-hat-in-time",
-        "title": "A Hat in Time"
-      },
-      {
-        "id": "sonic-all-stars-racing-transformed",
-        "title": "Sonic & All-Stars Racing Transformed"
-      },
-      {
-        "id": "two-point-hospital",
-        "title": "Two Point Hospital"
-      },
-      {
-        "id": "super-mario-odyssey",
-        "title": "Super Mario Odyssey"
-      },
-      {
-        "id": "fire-emblem-path-of-radiance",
-        "title": "Fire Emblem: Path of Radiance"
-      },
-      {
-        "id": "bioshock-2",
-        "title": "BioShock 2"
-      },
-      {
-        "id": "super-mario-land",
-        "title": "Super Mario Land"
-      },
-      {
-        "id": "sniper-elite-4",
-        "title": "Sniper Elite 4"
-      },
-      {
-        "id": "half-life-2-episode-one",
-        "title": "Half-Life 2: Episode One"
-      },
-      {
-        "id": "it-takes-two",
-        "title": "It Takes Two"
-      },
-      {
-        "id": "football-manager-2020",
-        "title": "Football Manager 2020"
-      },
-      {
-        "id": "fifa-soccer-11",
-        "title": "FIFA Soccer 11"
-      },
-      {
-        "id": "blood-omen-legacy-of-kain",
-        "title": "Blood Omen: Legacy of Kain"
-      },
-      {
-        "id": "half-life-2-episode-two",
-        "title": "Half-Life 2: Episode Two"
-      },
-      {
-        "id": "dirt-3",
-        "title": "Dirt 3"
-      },
-      {
-        "id": "resident-evil-7-biohazard",
-        "title": "Resident Evil 7: Biohazard"
-      }
-    ]
-  },
-  "2026-06-26": {
-    "date": "2026-06-26",
-    "groups": [
-      {
-        "conceptId": "yellow-adventure-1980s",
-        "tier": "yellow",
-        "label": "1980s ADVENTURE GAMES",
-        "gameIds": [
-          "the-legend-of-zelda",
-          "zelda-ii-the-adventure-of-link",
-          "metal-gear",
-          "super-mario-bros-2"
-        ]
-      },
-      {
-        "conceptId": "green-year-1999",
-        "tier": "green",
-        "label": "RELEASED IN 1999",
-        "gameIds": [
-          "dino-crisis",
-          "legacy-of-kain-soul-reaver",
-          "half-life-opposing-force",
-          "quake-iii-arena"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-crafting",
-        "tier": "blue",
-        "label": "GAMES WHERE YOU CRAFT",
-        "gameIds": [
-          "eve-online",
-          "my-time-at-portia",
-          "fallout-4",
-          "xenoblade-chronicles"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-time-of-day",
-        "tier": "purple",
-        "label": "TITLES CONTAINING A TIME OF DAY",
-        "gameIds": [
-          "horizon-zero-dawn-complete-edition",
-          "day-of-the-tentacle",
-          "day-of-defeat",
-          "warhammer-40-000-dawn-of-war-winter-assault"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "my-time-at-portia",
-        "title": "My Time at Portia"
-      },
-      {
-        "id": "xenoblade-chronicles",
-        "title": "Xenoblade Chronicles"
-      },
-      {
-        "id": "horizon-zero-dawn-complete-edition",
-        "title": "Horizon Zero Dawn: Complete Edition"
-      },
-      {
-        "id": "warhammer-40-000-dawn-of-war-winter-assault",
-        "title": "Warhammer 40,000: Dawn of War - Winter Assault"
-      },
-      {
-        "id": "half-life-opposing-force",
-        "title": "Half-Life: Opposing Force"
-      },
-      {
-        "id": "quake-iii-arena",
-        "title": "Quake III Arena"
-      },
-      {
-        "id": "fallout-4",
-        "title": "Fallout 4"
-      },
-      {
-        "id": "metal-gear",
-        "title": "Metal Gear"
-      },
-      {
-        "id": "day-of-the-tentacle",
-        "title": "Day of the Tentacle"
-      },
-      {
-        "id": "dino-crisis",
-        "title": "Dino Crisis"
-      },
-      {
-        "id": "legacy-of-kain-soul-reaver",
-        "title": "Legacy of Kain: Soul Reaver"
-      },
-      {
-        "id": "the-legend-of-zelda",
-        "title": "The Legend of Zelda"
-      },
-      {
-        "id": "eve-online",
-        "title": "Eve Online"
-      },
-      {
-        "id": "day-of-defeat",
-        "title": "Day of Defeat"
-      },
-      {
-        "id": "super-mario-bros-2",
-        "title": "Super Mario Bros. 2"
-      },
-      {
-        "id": "zelda-ii-the-adventure-of-link",
-        "title": "Zelda II: The Adventure of Link"
-      }
-    ]
-  },
-  "2026-06-27": {
-    "date": "2026-06-27",
-    "groups": [
-      {
-        "conceptId": "yellow-racing-2000s",
-        "tier": "yellow",
-        "label": "2000s RACING GAMES",
-        "gameIds": [
-          "mario-kart-ds",
-          "forza-motorsport-2",
-          "grand-theft-auto-liberty-city-stories",
-          "wii-sports-resort"
-        ]
-      },
-      {
-        "conceptId": "green-year-2018",
-        "tier": "green",
-        "label": "RELEASED IN 2018",
-        "gameIds": [
-          "the-messenger",
-          "hitman-2",
-          "dead-cells",
-          "rust"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-samurai",
-        "tier": "blue",
-        "label": "SAMURAI GAMES",
-        "gameIds": [
-          "assassin-s-creed-shadows",
-          "final-fantasy-iii",
-          "no-more-heroes",
-          "sid-meiers-civilization-v"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-fortune",
-        "tier": "purple",
-        "label": "TITLES ABOUT GETTING RICH",
-        "gameIds": [
-          "another-crabs-treasure",
-          "game-dev-tycoon",
-          "zoo-tycoon",
-          "transport-tycoon-deluxe"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "no-more-heroes",
-        "title": "No More Heroes"
-      },
-      {
-        "id": "grand-theft-auto-liberty-city-stories",
-        "title": "Grand Theft Auto: Liberty City Stories"
-      },
-      {
-        "id": "another-crabs-treasure",
-        "title": "Another Crab's Treasure"
-      },
-      {
-        "id": "assassin-s-creed-shadows",
-        "title": "Assassin's Creed Shadows"
-      },
-      {
-        "id": "the-messenger",
-        "title": "The Messenger"
-      },
-      {
-        "id": "mario-kart-ds",
-        "title": "Mario Kart DS"
-      },
-      {
-        "id": "final-fantasy-iii",
-        "title": "Final Fantasy III"
-      },
-      {
-        "id": "hitman-2",
-        "title": "Hitman 2"
-      },
-      {
-        "id": "sid-meiers-civilization-v",
-        "title": "Sid Meier's Civilization V"
-      },
-      {
-        "id": "rust",
-        "title": "Rust"
-      },
-      {
-        "id": "wii-sports-resort",
-        "title": "Wii Sports Resort"
-      },
-      {
-        "id": "transport-tycoon-deluxe",
-        "title": "Transport Tycoon Deluxe"
-      },
-      {
-        "id": "zoo-tycoon",
-        "title": "Zoo Tycoon"
-      },
-      {
-        "id": "forza-motorsport-2",
-        "title": "Forza Motorsport 2"
-      },
-      {
-        "id": "game-dev-tycoon",
-        "title": "Game Dev Tycoon"
-      },
-      {
-        "id": "dead-cells",
-        "title": "Dead Cells"
-      }
-    ]
-  },
-  "2026-06-28": {
-    "date": "2026-06-28",
-    "groups": [
-      {
-        "conceptId": "yellow-horror-2010s",
-        "tier": "yellow",
-        "label": "2010s HORROR GAMES",
-        "gameIds": [
-          "dead-by-daylight",
-          "bloodborne",
-          "little-nightmares",
-          "amnesia-the-dark-descent"
-        ]
-      },
-      {
-        "conceptId": "green-year-1992",
-        "tier": "green",
-        "label": "RELEASED IN 1992",
-        "gameIds": [
-          "indiana-jones-and-the-fate-of-atlantis",
-          "alien-3",
-          "contra-iii-the-alien-wars",
-          "super-mario-land-2-6-golden-coins"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-roguelike",
-        "tier": "blue",
-        "label": "ROGUELIKES",
-        "gameIds": [
-          "monster-train",
-          "balatro",
-          "slay-the-spire",
-          "spelunky"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-magic",
-        "tier": "purple",
-        "label": "MAGICAL TITLES",
-        "gameIds": [
-          "secret-of-mana",
-          "heroes-of-might-and-magic-iv",
-          "harry-potter-and-the-sorcerer-s-stone",
-          "might-magic-heroes-vi"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "spelunky",
-        "title": "Spelunky"
-      },
-      {
-        "id": "secret-of-mana",
-        "title": "Secret of Mana"
-      },
-      {
-        "id": "little-nightmares",
-        "title": "Little Nightmares"
-      },
-      {
-        "id": "monster-train",
-        "title": "Monster Train"
-      },
-      {
-        "id": "heroes-of-might-and-magic-iv",
-        "title": "Heroes of Might and Magic IV"
-      },
-      {
-        "id": "dead-by-daylight",
-        "title": "Dead by Daylight"
-      },
-      {
-        "id": "slay-the-spire",
-        "title": "Slay the Spire"
-      },
-      {
-        "id": "bloodborne",
-        "title": "Bloodborne"
-      },
-      {
-        "id": "alien-3",
-        "title": "Alien 3"
-      },
-      {
-        "id": "contra-iii-the-alien-wars",
-        "title": "Contra III: The Alien Wars"
-      },
-      {
-        "id": "indiana-jones-and-the-fate-of-atlantis",
-        "title": "Indiana Jones and the Fate of Atlantis"
-      },
-      {
-        "id": "might-magic-heroes-vi",
-        "title": "Might & Magic: Heroes VI"
-      },
-      {
-        "id": "amnesia-the-dark-descent",
-        "title": "Amnesia: The Dark Descent"
-      },
-      {
-        "id": "harry-potter-and-the-sorcerer-s-stone",
-        "title": "Harry Potter and the Sorcerer's Stone"
-      },
-      {
-        "id": "super-mario-land-2-6-golden-coins",
-        "title": "Super Mario Land 2: 6 Golden Coins"
-      },
-      {
-        "id": "balatro",
-        "title": "Balatro"
-      }
-    ]
-  },
-  "2026-06-29": {
-    "date": "2026-06-29",
-    "groups": [
-      {
-        "conceptId": "yellow-racing-1990s",
-        "tier": "yellow",
-        "label": "1990s RACING GAMES",
-        "gameIds": [
-          "need-for-speed-ii",
-          "driver",
-          "crash-team-racing",
-          "mario-kart-64"
-        ]
-      },
-      {
-        "conceptId": "green-year-2015",
-        "tier": "green",
-        "label": "RELEASED IN 2015",
-        "gameIds": [
-          "ori-and-the-blind-forest",
-          "cities-skylines",
-          "saints-row-gat-out-of-hell",
-          "metal-gear-solid-v-the-phantom-pain"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-space",
-        "tier": "blue",
-        "label": "SET IN SPACE",
-        "gameIds": [
-          "star-wars-empire-at-war",
-          "astroneer",
-          "space-rangers-2-dominators",
-          "observation"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-emotion",
-        "tier": "purple",
-        "label": "TITLES WITH STRONG FEELINGS",
-        "gameIds": [
-          "the-dark-pictures-anthology-little-hope",
-          "castlevania-dawn-of-sorrow",
-          "super-mario-3d-world-bowsers-fury",
-          "monkey-island-2-lechuck-s-revenge"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "ori-and-the-blind-forest",
-        "title": "Ori and the Blind Forest"
-      },
-      {
-        "id": "observation",
-        "title": "Observation"
-      },
-      {
-        "id": "saints-row-gat-out-of-hell",
-        "title": "Saints Row: Gat Out of Hell"
-      },
-      {
-        "id": "mario-kart-64",
-        "title": "Mario Kart 64"
-      },
-      {
-        "id": "astroneer",
-        "title": "Astroneer"
-      },
-      {
-        "id": "cities-skylines",
-        "title": "Cities: Skylines"
-      },
-      {
-        "id": "driver",
-        "title": "Driver"
-      },
-      {
-        "id": "space-rangers-2-dominators",
-        "title": "Space Rangers 2: Dominators"
-      },
-      {
-        "id": "need-for-speed-ii",
-        "title": "Need for Speed II"
-      },
-      {
-        "id": "the-dark-pictures-anthology-little-hope",
-        "title": "The Dark Pictures Anthology: Little Hope"
-      },
-      {
-        "id": "metal-gear-solid-v-the-phantom-pain",
-        "title": "Metal Gear Solid V: The Phantom Pain"
-      },
-      {
-        "id": "castlevania-dawn-of-sorrow",
-        "title": "Castlevania: Dawn of Sorrow"
-      },
-      {
-        "id": "star-wars-empire-at-war",
-        "title": "Star Wars: Empire at War"
-      },
-      {
-        "id": "monkey-island-2-lechuck-s-revenge",
-        "title": "Monkey Island 2: LeChuck's Revenge"
-      },
-      {
-        "id": "crash-team-racing",
-        "title": "Crash Team Racing"
-      },
-      {
-        "id": "super-mario-3d-world-bowsers-fury",
-        "title": "Super Mario 3D World + Bowser's Fury"
-      }
-    ]
-  },
-  "2026-06-30": {
-    "date": "2026-06-30",
-    "groups": [
-      {
-        "conceptId": "yellow-adventure-1990s",
-        "tier": "yellow",
-        "label": "1990s ADVENTURE GAMES",
-        "gameIds": [
-          "final-fantasy-viii",
-          "final-fantasy-adventure",
-          "circle-of-blood",
-          "toejam-earl"
-        ]
-      },
-      {
-        "conceptId": "green-year-2002",
-        "tier": "green",
-        "label": "RELEASED IN 2002",
-        "gameIds": [
-          "kirby-nightmare-in-dream-land",
-          "metal-slug-4",
-          "the-thing",
-          "medal-of-honor-allied-assault-spearhead"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-free-to-play",
-        "tier": "blue",
-        "label": "FREE TO PLAY",
-        "gameIds": [
-          "paladins",
-          "defense-of-the-ancients",
-          "the-finals",
-          "planetside-2"
+          "diablo",
+          "the-settlers-iii",
+          "demons-souls",
+          "ultima-online"
         ]
       },
       {
@@ -2340,448 +40,678 @@
         "tier": "purple",
         "label": "TITLES POINTING SOMEWHERE",
         "gameIds": [
-          "south-park-the-stick-of-truth",
-          "sid-meiers-civilization-iv-beyond-the-sword",
-          "mirrors-edge",
-          "forza-horizon-4"
+          "hexen-beyond-heretic",
+          "horizon-zero-dawn-complete-edition",
+          "lightyear-frontier",
+          "sid-meiers-civilization-beyond-earth"
         ]
       }
     ],
     "tiles": [
       {
-        "id": "the-finals",
-        "title": "The Finals"
+        "id": "simcity-4",
+        "title": "SimCity 4"
       },
       {
-        "id": "medal-of-honor-allied-assault-spearhead",
-        "title": "Medal of Honor: Allied Assault - Spearhead"
+        "id": "hexen-beyond-heretic",
+        "title": "Hexen: Beyond Heretic"
       },
       {
-        "id": "circle-of-blood",
-        "title": "Circle of Blood"
+        "id": "diablo",
+        "title": "Diablo"
       },
       {
-        "id": "final-fantasy-adventure",
-        "title": "Final Fantasy Adventure"
+        "id": "lightyear-frontier",
+        "title": "Lightyear Frontier"
       },
       {
-        "id": "mirrors-edge",
-        "title": "Mirror's Edge"
+        "id": "ultima-online",
+        "title": "Ultima Online"
       },
       {
-        "id": "planetside-2",
-        "title": "PlanetSide 2"
+        "id": "streets-of-rage",
+        "title": "Streets of Rage"
       },
       {
-        "id": "the-thing",
-        "title": "The Thing"
+        "id": "the-simpsons-hit-run",
+        "title": "The Simpsons: Hit & Run"
       },
       {
-        "id": "south-park-the-stick-of-truth",
-        "title": "South Park: The Stick of Truth"
+        "id": "the-legend-of-zelda-ocarina-of-time",
+        "title": "The Legend of Zelda: Ocarina of Time"
       },
       {
-        "id": "toejam-earl",
-        "title": "ToeJam & Earl"
+        "id": "the-settlers-iii",
+        "title": "The Settlers III"
       },
       {
-        "id": "paladins",
-        "title": "Paladins"
+        "id": "demons-souls",
+        "title": "Demon's Souls"
       },
       {
-        "id": "kirby-nightmare-in-dream-land",
-        "title": "Kirby: Nightmare in Dream Land"
+        "id": "tomb-raider-the-angel-of-darkness",
+        "title": "Tomb Raider: The Angel of Darkness"
       },
       {
-        "id": "metal-slug-4",
-        "title": "Metal Slug 4"
+        "id": "crash-bandicoot-warped",
+        "title": "Crash Bandicoot: Warped"
       },
       {
-        "id": "forza-horizon-4",
-        "title": "Forza Horizon 4"
+        "id": "sid-meiers-civilization-beyond-earth",
+        "title": "Sid Meier's Civilization: Beyond Earth"
       },
       {
-        "id": "defense-of-the-ancients",
-        "title": "Defense of the Ancients"
+        "id": "half-life",
+        "title": "Half-Life"
       },
       {
-        "id": "sid-meiers-civilization-iv-beyond-the-sword",
-        "title": "Sid Meier's Civilization IV: Beyond the Sword"
+        "id": "star-wars-jedi-knight-jedi-academy",
+        "title": "Star Wars: Jedi Knight - Jedi Academy"
       },
       {
-        "id": "final-fantasy-viii",
-        "title": "Final Fantasy VIII"
+        "id": "horizon-zero-dawn-complete-edition",
+        "title": "Horizon Zero Dawn: Complete Edition"
       }
     ]
   },
-  "2026-07-01": {
-    "date": "2026-07-01",
+  "2026-06-11": {
+    "date": "2026-06-11",
     "groups": [
       {
-        "conceptId": "yellow-puzzle-2020s",
+        "conceptId": "yellow-platform-2000s",
         "tier": "yellow",
-        "label": "2020s PUZZLE GAMES",
+        "label": "2000s PLATFORMERS",
         "gameIds": [
-          "lego-star-wars-the-skywalker-saga",
-          "turnip-boy-commits-tax-evasion",
-          "dorfromantik",
-          "resident-evil-requiem"
+          "lego-indiana-jones-the-original-adventures",
+          "metal-slug-5",
+          "littlebigplanet",
+          "assassins-creed"
         ]
       },
       {
-        "conceptId": "green-year-2005",
+        "conceptId": "green-year-2023",
         "tier": "green",
-        "label": "RELEASED IN 2005",
+        "label": "RELEASED IN 2023",
         "gameIds": [
-          "sonic-rush",
-          "soulcalibur-iii",
-          "pok-mon-xd-gale-of-darkness",
-          "animal-crossing-wild-world"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-female-protagonist",
-        "tier": "blue",
-        "label": "YOU PLAY AS A WOMAN",
-        "gameIds": [
-          "perfect-dark",
-          "infinity-nikki",
-          "metroid-other-m",
-          "ghost-of-yotei"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-water-body",
-        "tier": "purple",
-        "label": "TITLES CONTAINING A BODY OF WATER",
-        "gameIds": [
-          "the-secret-of-monkey-island",
-          "monkey-island-2-special-edition-lechucks-revenge",
-          "super-mario-world-2-yoshis-island",
-          "dead-island-riptide"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "dorfromantik",
-        "title": "Dorfromantik"
-      },
-      {
-        "id": "super-mario-world-2-yoshis-island",
-        "title": "Super Mario World 2: Yoshi's Island"
-      },
-      {
-        "id": "turnip-boy-commits-tax-evasion",
-        "title": "Turnip Boy Commits Tax Evasion"
-      },
-      {
-        "id": "resident-evil-requiem",
-        "title": "Resident Evil Requiem"
-      },
-      {
-        "id": "ghost-of-yotei",
-        "title": "Ghost of Yotei"
-      },
-      {
-        "id": "dead-island-riptide",
-        "title": "Dead Island: Riptide"
-      },
-      {
-        "id": "pok-mon-xd-gale-of-darkness",
-        "title": "Pokémon XD: Gale of Darkness"
-      },
-      {
-        "id": "animal-crossing-wild-world",
-        "title": "Animal Crossing: Wild World"
-      },
-      {
-        "id": "infinity-nikki",
-        "title": "Infinity Nikki"
-      },
-      {
-        "id": "lego-star-wars-the-skywalker-saga",
-        "title": "LEGO Star Wars: The Skywalker Saga"
-      },
-      {
-        "id": "the-secret-of-monkey-island",
-        "title": "The Secret of Monkey Island"
-      },
-      {
-        "id": "monkey-island-2-special-edition-lechucks-revenge",
-        "title": "Monkey Island 2 Special Edition: LeChuck's Revenge"
-      },
-      {
-        "id": "soulcalibur-iii",
-        "title": "SoulCalibur III"
-      },
-      {
-        "id": "metroid-other-m",
-        "title": "Metroid: Other M"
-      },
-      {
-        "id": "sonic-rush",
-        "title": "Sonic Rush"
-      },
-      {
-        "id": "perfect-dark",
-        "title": "Perfect Dark"
-      }
-    ]
-  },
-  "2026-07-02": {
-    "date": "2026-07-02",
-    "groups": [
-      {
-        "conceptId": "yellow-indie-2010s",
-        "tier": "yellow",
-        "label": "2010s INDIE GAMES",
-        "gameIds": [
-          "among-us",
-          "deponia",
-          "gone-home",
-          "limbo"
-        ]
-      },
-      {
-        "conceptId": "green-price-59-99",
-        "tier": "green",
-        "label": "LAUNCHED AT $59.99",
-        "gameIds": [
-          "tomb-raider",
-          "super-mario-world",
-          "resident-evil-village",
-          "donkey-kong-country"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-anime",
-        "tier": "blue",
-        "label": "ANIME STYLE",
-        "gameIds": [
-          "dragon-ball-xenoverse",
-          "tactics-ogre-let-us-cling-together",
-          "genshin-impact",
-          "river-city-ransom"
-        ]
-      },
-      {
-        "conceptId": "purple-title-with-exclamation",
-        "tier": "purple",
-        "label": "TITLES WITH AN EXCLAMATION MARK",
-        "gameIds": [
-          "donkey-kong-country-3-dixie-kongs-double-trouble",
-          "thank-goodness-youre-here",
-          "wwe-smackdown-here-comes-the-pain",
-          "warioware-touched"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "genshin-impact",
-        "title": "Genshin Impact"
-      },
-      {
-        "id": "super-mario-world",
-        "title": "Super Mario World"
-      },
-      {
-        "id": "gone-home",
-        "title": "Gone Home"
-      },
-      {
-        "id": "tomb-raider",
-        "title": "Tomb Raider"
-      },
-      {
-        "id": "river-city-ransom",
-        "title": "River City Ransom"
-      },
-      {
-        "id": "donkey-kong-country-3-dixie-kongs-double-trouble",
-        "title": "Donkey Kong Country 3: Dixie Kong's Double Trouble!"
-      },
-      {
-        "id": "donkey-kong-country",
-        "title": "Donkey Kong Country"
-      },
-      {
-        "id": "tactics-ogre-let-us-cling-together",
-        "title": "Tactics Ogre: Let Us Cling Together"
-      },
-      {
-        "id": "wwe-smackdown-here-comes-the-pain",
-        "title": "WWE Smackdown! Here Comes the Pain"
-      },
-      {
-        "id": "among-us",
-        "title": "Among Us"
-      },
-      {
-        "id": "limbo",
-        "title": "Limbo"
-      },
-      {
-        "id": "dragon-ball-xenoverse",
-        "title": "Dragon Ball: Xenoverse"
-      },
-      {
-        "id": "resident-evil-village",
-        "title": "Resident Evil Village"
-      },
-      {
-        "id": "deponia",
-        "title": "Deponia"
-      },
-      {
-        "id": "warioware-touched",
-        "title": "WarioWare: Touched!"
-      },
-      {
-        "id": "thank-goodness-youre-here",
-        "title": "Thank Goodness You're Here!"
-      }
-    ]
-  },
-  "2026-07-03": {
-    "date": "2026-07-03",
-    "groups": [
-      {
-        "conceptId": "yellow-shooter-2020s",
-        "tier": "yellow",
-        "label": "2020s SHOOTERS",
-        "gameIds": [
-          "warhammer-40-000-space-marine-ii",
+          "the-legend-of-zelda-tears-of-the-kingdom",
           "brotato",
-          "half-life-alyx",
-          "far-cry-6"
+          "dead-island-2",
+          "lies-of-p"
         ]
       },
       {
-        "conceptId": "green-year-2001",
-        "tier": "green",
-        "label": "RELEASED IN 2001",
-        "gameIds": [
-          "sid-meiers-civilization-iii",
-          "baldurs-gate-ii-throne-of-bhaal",
-          "crash-bandicoot-the-wrath-of-cortex",
-          "spider-man-2-enter-electro"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-pirates",
+        "conceptId": "blue-tag-time-travel",
         "tier": "blue",
-        "label": "PIRATES INVOLVED",
+        "label": "TIME TRAVEL INVOLVED",
         "gameIds": [
-          "metroid-fusion",
-          "rogue-galaxy",
-          "disneys-goof-troop",
-          "donkey-kong-country-2-diddy-s-kong-quest"
+          "blood-omen-2-legacy-of-kain",
+          "chrono-trigger",
+          "the-forgotten-city",
+          "zero-escape-zero-time-dilemma"
         ]
       },
       {
-        "conceptId": "purple-hides-bot",
+        "conceptId": "purple-title-with-ampersand",
         "tier": "purple",
-        "label": "TITLES HIDING 'BOT'",
+        "label": "TITLES WITH AN AMPERSAND",
         "gameIds": [
-          "the-saboteur",
-          "botanicula",
-          "dr-robotniks-mean-bean-machine",
-          "spongebob-squarepants-battle-for-bikini-bottom-rehydrated"
+          "kane-lynch-2-dog-days",
+          "mount-blade",
+          "ratchet-and-clank",
+          "warcraft-orcs-humans"
         ]
       }
     ],
     "tiles": [
       {
-        "id": "crash-bandicoot-the-wrath-of-cortex",
-        "title": "Crash Bandicoot: The Wrath of Cortex"
-      },
-      {
-        "id": "spider-man-2-enter-electro",
-        "title": "Spider-Man 2: Enter Electro"
-      },
-      {
-        "id": "the-saboteur",
-        "title": "The Saboteur"
-      },
-      {
-        "id": "sid-meiers-civilization-iii",
-        "title": "Sid Meier's Civilization III"
-      },
-      {
-        "id": "spongebob-squarepants-battle-for-bikini-bottom-rehydrated",
-        "title": "SpongeBob SquarePants: Battle for Bikini Bottom - Rehydrated"
-      },
-      {
-        "id": "dr-robotniks-mean-bean-machine",
-        "title": "Dr. Robotnik's Mean Bean Machine"
+        "id": "zero-escape-zero-time-dilemma",
+        "title": "Zero Escape: Zero Time Dilemma"
       },
       {
         "id": "brotato",
         "title": "Brotato"
       },
       {
-        "id": "warhammer-40-000-space-marine-ii",
-        "title": "Warhammer 40,000: Space Marine II"
+        "id": "metal-slug-5",
+        "title": "Metal Slug 5"
       },
       {
-        "id": "baldurs-gate-ii-throne-of-bhaal",
-        "title": "Baldur's Gate II: Throne of Bhaal"
+        "id": "dead-island-2",
+        "title": "Dead Island 2"
       },
       {
-        "id": "metroid-fusion",
-        "title": "Metroid Fusion"
+        "id": "kane-lynch-2-dog-days",
+        "title": "Kane & Lynch 2: Dog Days"
       },
       {
-        "id": "disneys-goof-troop",
-        "title": "Disney's Goof Troop"
+        "id": "warcraft-orcs-humans",
+        "title": "Warcraft: Orcs & Humans"
       },
       {
-        "id": "half-life-alyx",
-        "title": "Half-Life: Alyx"
+        "id": "mount-blade",
+        "title": "Mount & Blade"
       },
       {
-        "id": "botanicula",
-        "title": "Botanicula"
+        "id": "blood-omen-2-legacy-of-kain",
+        "title": "Blood Omen 2: Legacy of Kain"
       },
       {
-        "id": "far-cry-6",
-        "title": "Far Cry 6"
+        "id": "ratchet-and-clank",
+        "title": "Ratchet & Clank"
       },
       {
-        "id": "rogue-galaxy",
-        "title": "Rogue Galaxy"
+        "id": "lies-of-p",
+        "title": "Lies of P"
       },
       {
-        "id": "donkey-kong-country-2-diddy-s-kong-quest",
-        "title": "Donkey Kong Country 2: Diddy's Kong Quest"
+        "id": "assassins-creed",
+        "title": "Assassin's Creed"
+      },
+      {
+        "id": "the-legend-of-zelda-tears-of-the-kingdom",
+        "title": "The Legend of Zelda: Tears of the Kingdom"
+      },
+      {
+        "id": "littlebigplanet",
+        "title": "LittleBigPlanet"
+      },
+      {
+        "id": "chrono-trigger",
+        "title": "Chrono Trigger"
+      },
+      {
+        "id": "lego-indiana-jones-the-original-adventures",
+        "title": "LEGO Indiana Jones: The Original Adventures"
+      },
+      {
+        "id": "the-forgotten-city",
+        "title": "The Forgotten City"
       }
     ]
   },
-  "2026-07-04": {
-    "date": "2026-07-04",
+  "2026-06-12": {
+    "date": "2026-06-12",
     "groups": [
       {
-        "conceptId": "yellow-indie-2020s",
+        "conceptId": "yellow-horror-2000s",
         "tier": "yellow",
-        "label": "2020s INDIE GAMES",
+        "label": "2000s HORROR GAMES",
         "gameIds": [
-          "hollow-knight-silksong",
-          "the-invincible",
-          "hytale",
-          "cocoon"
+          "resident-evil-4",
+          "silent-hill-2",
+          "condemned-criminal-origins",
+          "left-4-dead"
         ]
       },
       {
-        "conceptId": "green-year-1994",
+        "conceptId": "green-year-2006",
         "tier": "green",
-        "label": "RELEASED IN 1994",
+        "label": "RELEASED IN 2006",
         "gameIds": [
-          "sonic-the-hedgehog-3-knuckles",
-          "earthbound",
-          "primal-rage",
-          "twinsens-little-big-adventure-classic"
+          "half-life-2-episode-one",
+          "gears-of-war",
+          "tomb-raider-legend",
+          "flatout-2"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-dark-fantasy",
+        "tier": "blue",
+        "label": "DARK FANTASY WORLDS",
+        "gameIds": [
+          "mortal-shell",
+          "black-desert",
+          "dark-souls-iii",
+          "drakengard"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-emotion",
+        "tier": "purple",
+        "label": "TITLES WITH STRONG FEELINGS",
+        "gameIds": [
+          "the-revenge-of-shinobi",
+          "star-wars-episode-iii-revenge-of-the-sith",
+          "castlevania-ii-belmonts-revenge",
+          "spyro-2-ripto-s-rage"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "mortal-shell",
+        "title": "Mortal Shell"
+      },
+      {
+        "id": "castlevania-ii-belmonts-revenge",
+        "title": "Castlevania II: Belmont's Revenge"
+      },
+      {
+        "id": "silent-hill-2",
+        "title": "Silent Hill 2"
+      },
+      {
+        "id": "condemned-criminal-origins",
+        "title": "Condemned: Criminal Origins"
+      },
+      {
+        "id": "black-desert",
+        "title": "Black Desert"
+      },
+      {
+        "id": "spyro-2-ripto-s-rage",
+        "title": "Spyro 2: Ripto's Rage!"
+      },
+      {
+        "id": "half-life-2-episode-one",
+        "title": "Half-Life 2: Episode One"
+      },
+      {
+        "id": "the-revenge-of-shinobi",
+        "title": "The Revenge of Shinobi"
+      },
+      {
+        "id": "flatout-2",
+        "title": "FlatOut 2"
+      },
+      {
+        "id": "star-wars-episode-iii-revenge-of-the-sith",
+        "title": "Star Wars: Episode III - Revenge of the Sith"
+      },
+      {
+        "id": "left-4-dead",
+        "title": "Left 4 Dead"
+      },
+      {
+        "id": "gears-of-war",
+        "title": "Gears of War"
+      },
+      {
+        "id": "resident-evil-4",
+        "title": "Resident Evil 4"
+      },
+      {
+        "id": "drakengard",
+        "title": "Drakengard"
+      },
+      {
+        "id": "dark-souls-iii",
+        "title": "Dark Souls III"
+      },
+      {
+        "id": "tomb-raider-legend",
+        "title": "Tomb Raider: Legend"
+      }
+    ]
+  },
+  "2026-06-13": {
+    "date": "2026-06-13",
+    "groups": [
+      {
+        "conceptId": "yellow-action-2020s",
+        "tier": "yellow",
+        "label": "2020s ACTION GAMES",
+        "gameIds": [
+          "teenage-mutant-ninja-turtles-shredders-revenge",
+          "star-wars-jedi-survivor",
+          "cult-of-the-lamb",
+          "diablo-iv"
+        ]
+      },
+      {
+        "conceptId": "green-year-2018",
+        "tier": "green",
+        "label": "RELEASED IN 2018",
+        "gameIds": [
+          "the-forest",
+          "frostpunk",
+          "marvel-s-spider-man",
+          "pok-mon-lets-go-pikachu"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-boss-fight",
+        "tier": "blue",
+        "label": "BIG BOSS FIGHTS",
+        "gameIds": [
+          "killer7",
+          "medievil-ii",
+          "lara-croft-and-the-guardian-of-light",
+          "crisis-core-final-fantasy-vii-reunion"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-journey",
+        "tier": "purple",
+        "label": "TITLES ABOUT A JOURNEY",
+        "gameIds": [
+          "cat-quest",
+          "flashback-the-quest-for-identity",
+          "dragon-quest-ix-sentinels-of-the-starry-skies",
+          "dreamfall-the-longest-journey"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "medievil-ii",
+        "title": "MediEvil II"
+      },
+      {
+        "id": "cat-quest",
+        "title": "Cat Quest"
+      },
+      {
+        "id": "frostpunk",
+        "title": "Frostpunk"
+      },
+      {
+        "id": "the-forest",
+        "title": "The Forest"
+      },
+      {
+        "id": "marvel-s-spider-man",
+        "title": "Marvel's Spider-Man"
+      },
+      {
+        "id": "flashback-the-quest-for-identity",
+        "title": "Flashback: The Quest for Identity"
+      },
+      {
+        "id": "killer7",
+        "title": "Killer7"
+      },
+      {
+        "id": "cult-of-the-lamb",
+        "title": "Cult of the Lamb"
+      },
+      {
+        "id": "crisis-core-final-fantasy-vii-reunion",
+        "title": "Crisis Core: Final Fantasy VII - Reunion"
+      },
+      {
+        "id": "dreamfall-the-longest-journey",
+        "title": "Dreamfall: The Longest Journey"
+      },
+      {
+        "id": "lara-croft-and-the-guardian-of-light",
+        "title": "Lara Croft and the Guardian of Light"
+      },
+      {
+        "id": "star-wars-jedi-survivor",
+        "title": "Star Wars Jedi: Survivor"
+      },
+      {
+        "id": "teenage-mutant-ninja-turtles-shredders-revenge",
+        "title": "Teenage Mutant Ninja Turtles: Shredder's Revenge"
+      },
+      {
+        "id": "pok-mon-lets-go-pikachu",
+        "title": "Pokémon: Let's Go, Pikachu!"
+      },
+      {
+        "id": "dragon-quest-ix-sentinels-of-the-starry-skies",
+        "title": "Dragon Quest IX: Sentinels of the Starry Skies"
+      },
+      {
+        "id": "diablo-iv",
+        "title": "Diablo IV"
+      }
+    ]
+  },
+  "2026-06-14": {
+    "date": "2026-06-14",
+    "groups": [
+      {
+        "conceptId": "yellow-arcade-2020s",
+        "tier": "yellow",
+        "label": "2020s ARCADE GAMES",
+        "gameIds": [
+          "cuphead-the-delicious-last-course",
+          "crab-game",
+          "hot-wheels-unleashed",
+          "streets-of-rage-4"
+        ]
+      },
+      {
+        "conceptId": "green-year-1997",
+        "tier": "green",
+        "label": "RELEASED IN 1997",
+        "gameIds": [
+          "age-of-empires",
+          "final-fantasy-tactics",
+          "mortal-kombat-4",
+          "gran-turismo"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-crafting",
+        "tier": "blue",
+        "label": "GAMES WHERE YOU CRAFT",
+        "gameIds": [
+          "far-cry-5",
+          "diablo-iii",
+          "the-witcher-2-assassins-of-kings",
+          "far-cry-primal"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-us-place",
+        "tier": "purple",
+        "label": "TITLES CONTAINING AN AMERICAN PLACE",
+        "gameIds": [
+          "american-chopper",
+          "alan-wakes-american-nightmare",
+          "tom-clancys-rainbow-six-vegas",
+          "california-games"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "crab-game",
+        "title": "Crab Game"
+      },
+      {
+        "id": "gran-turismo",
+        "title": "Gran Turismo"
+      },
+      {
+        "id": "tom-clancys-rainbow-six-vegas",
+        "title": "Tom Clancy's Rainbow Six: Vegas"
+      },
+      {
+        "id": "streets-of-rage-4",
+        "title": "Streets of Rage 4"
+      },
+      {
+        "id": "california-games",
+        "title": "California Games"
+      },
+      {
+        "id": "far-cry-primal",
+        "title": "Far Cry: Primal"
+      },
+      {
+        "id": "diablo-iii",
+        "title": "Diablo III"
+      },
+      {
+        "id": "final-fantasy-tactics",
+        "title": "Final Fantasy Tactics"
+      },
+      {
+        "id": "cuphead-the-delicious-last-course",
+        "title": "Cuphead: The Delicious Last Course"
+      },
+      {
+        "id": "hot-wheels-unleashed",
+        "title": "Hot Wheels Unleashed"
+      },
+      {
+        "id": "the-witcher-2-assassins-of-kings",
+        "title": "The Witcher 2: Assassins of Kings"
+      },
+      {
+        "id": "mortal-kombat-4",
+        "title": "Mortal Kombat 4"
+      },
+      {
+        "id": "age-of-empires",
+        "title": "Age of Empires"
+      },
+      {
+        "id": "alan-wakes-american-nightmare",
+        "title": "Alan Wake's American Nightmare"
+      },
+      {
+        "id": "far-cry-5",
+        "title": "Far Cry 5"
+      },
+      {
+        "id": "american-chopper",
+        "title": "American Chopper"
+      }
+    ]
+  },
+  "2026-06-15": {
+    "date": "2026-06-15",
+    "groups": [
+      {
+        "conceptId": "yellow-horror-1990s",
+        "tier": "yellow",
+        "label": "1990s HORROR GAMES",
+        "gameIds": [
+          "silent-hill",
+          "system-shock-2",
+          "alone-in-the-dark",
+          "resident-evil-1996"
+        ]
+      },
+      {
+        "conceptId": "green-console-3ds",
+        "tier": "green",
+        "label": "PLAYABLE ON THE 3DS",
+        "gameIds": [
+          "donkey-kong-country-3-dixie-kongs-double-trouble",
+          "the-legend-of-zelda-ocarina-of-time-3d",
+          "donkey-kong",
+          "kirbys-dream-land"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-underwater",
+        "tier": "blue",
+        "label": "SET UNDERWATER",
+        "gameIds": [
+          "maneater",
+          "iron-lung",
+          "horizon-forbidden-west",
+          "soma"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-magic",
+        "tier": "purple",
+        "label": "MAGICAL TITLES",
+        "gameIds": [
+          "dark-messiah-of-might-and-magic",
+          "simon-the-sorcerer",
+          "heroes-of-might-and-magic-iii-the-restoration-of-erathia",
+          "heroes-of-might-and-magic-iii-the-shadow-of-death"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "soma",
+        "title": "SOMA"
+      },
+      {
+        "id": "heroes-of-might-and-magic-iii-the-shadow-of-death",
+        "title": "Heroes of Might and Magic III: The Shadow of Death"
+      },
+      {
+        "id": "the-legend-of-zelda-ocarina-of-time-3d",
+        "title": "The Legend of Zelda: Ocarina of Time 3D"
+      },
+      {
+        "id": "maneater",
+        "title": "Maneater"
+      },
+      {
+        "id": "kirbys-dream-land",
+        "title": "Kirby's Dream Land"
+      },
+      {
+        "id": "alone-in-the-dark",
+        "title": "Alone in the Dark"
+      },
+      {
+        "id": "simon-the-sorcerer",
+        "title": "Simon the Sorcerer"
+      },
+      {
+        "id": "system-shock-2",
+        "title": "System Shock 2"
+      },
+      {
+        "id": "resident-evil-1996",
+        "title": "Resident Evil"
+      },
+      {
+        "id": "dark-messiah-of-might-and-magic",
+        "title": "Dark Messiah of Might and Magic"
+      },
+      {
+        "id": "silent-hill",
+        "title": "Silent Hill"
+      },
+      {
+        "id": "iron-lung",
+        "title": "Iron Lung"
+      },
+      {
+        "id": "donkey-kong-country-3-dixie-kongs-double-trouble",
+        "title": "Donkey Kong Country 3: Dixie Kong's Double Trouble!"
+      },
+      {
+        "id": "donkey-kong",
+        "title": "Donkey Kong"
+      },
+      {
+        "id": "horizon-forbidden-west",
+        "title": "Horizon Forbidden West"
+      },
+      {
+        "id": "heroes-of-might-and-magic-iii-the-restoration-of-erathia",
+        "title": "Heroes of Might and Magic III: The Restoration of Erathia"
+      }
+    ]
+  },
+  "2026-06-16": {
+    "date": "2026-06-16",
+    "groups": [
+      {
+        "conceptId": "yellow-adventure-1980s",
+        "tier": "yellow",
+        "label": "1980s ADVENTURE GAMES",
+        "gameIds": [
+          "double-dragon",
+          "alex-kidd-in-miracle-world",
+          "balloon-fight",
+          "pitfall"
+        ]
+      },
+      {
+        "conceptId": "green-console-gameboy",
+        "tier": "green",
+        "label": "PLAYABLE ON THE GAME BOY",
+        "gameIds": [
+          "pok-mon-trading-card-game",
+          "final-fantasy-tactics-advance",
+          "super-mario-land",
+          "desert-strike-return-to-the-gulf"
         ]
       },
       {
@@ -2789,103 +719,103 @@
         "tier": "blue",
         "label": "GAMES ABOUT GOING FAST",
         "gameIds": [
-          "gran-turismo-4",
-          "grand-theft-auto",
-          "forza-horizon-5",
-          "mafia-iii"
+          "forza-horizon-4",
+          "saints-row-the-third",
+          "grand-theft-auto-iv-the-ballad-of-gay-tony",
+          "my-summer-car"
         ]
       },
       {
-        "conceptId": "purple-hides-king",
+        "conceptId": "purple-hides-star",
         "tier": "purple",
-        "label": "TITLES HIDING 'KING'",
+        "label": "TITLES HIDING 'STAR'",
         "gameIds": [
-          "kingdom-hearts-re-chain-of-memories",
-          "kingdom-come-deliverance-ii",
-          "the-witcher-2-assassins-of-kings",
-          "kingdom-hearts-re-coded"
+          "starbound",
+          "starcraft-ii-wings-of-liberty",
+          "super-mario-all-stars",
+          "starcraft-brood-war"
         ]
       }
     ],
     "tiles": [
       {
-        "id": "hytale",
-        "title": "Hytale"
+        "id": "starcraft-ii-wings-of-liberty",
+        "title": "StarCraft II: Wings of Liberty"
       },
       {
-        "id": "the-invincible",
-        "title": "The Invincible"
+        "id": "balloon-fight",
+        "title": "Balloon Fight"
       },
       {
-        "id": "kingdom-hearts-re-chain-of-memories",
-        "title": "Kingdom Hearts Re:Chain of Memories"
+        "id": "final-fantasy-tactics-advance",
+        "title": "Final Fantasy Tactics Advance"
       },
       {
-        "id": "grand-theft-auto",
-        "title": "Grand Theft Auto"
+        "id": "starbound",
+        "title": "Starbound"
       },
       {
-        "id": "twinsens-little-big-adventure-classic",
-        "title": "Twinsen's Little Big Adventure Classic"
+        "id": "my-summer-car",
+        "title": "My Summer Car"
       },
       {
-        "id": "earthbound",
-        "title": "EarthBound"
+        "id": "super-mario-all-stars",
+        "title": "Super Mario All-Stars"
       },
       {
-        "id": "primal-rage",
-        "title": "Primal Rage"
+        "id": "starcraft-brood-war",
+        "title": "StarCraft: Brood War"
       },
       {
-        "id": "kingdom-come-deliverance-ii",
-        "title": "Kingdom Come: Deliverance II"
+        "id": "super-mario-land",
+        "title": "Super Mario Land"
       },
       {
-        "id": "mafia-iii",
-        "title": "Mafia III"
+        "id": "alex-kidd-in-miracle-world",
+        "title": "Alex Kidd in Miracle World"
       },
       {
-        "id": "forza-horizon-5",
-        "title": "Forza Horizon 5"
+        "id": "desert-strike-return-to-the-gulf",
+        "title": "Desert Strike: Return to the Gulf"
       },
       {
-        "id": "the-witcher-2-assassins-of-kings",
-        "title": "The Witcher 2: Assassins of Kings"
+        "id": "saints-row-the-third",
+        "title": "Saints Row: The Third"
       },
       {
-        "id": "hollow-knight-silksong",
-        "title": "Hollow Knight: Silksong"
+        "id": "pitfall",
+        "title": "Pitfall!"
       },
       {
-        "id": "gran-turismo-4",
-        "title": "Gran Turismo 4"
+        "id": "grand-theft-auto-iv-the-ballad-of-gay-tony",
+        "title": "Grand Theft Auto IV: The Ballad of Gay Tony"
       },
       {
-        "id": "cocoon",
-        "title": "Cocoon"
+        "id": "double-dragon",
+        "title": "Double Dragon"
       },
       {
-        "id": "kingdom-hearts-re-coded",
-        "title": "Kingdom Hearts Re:coded"
+        "id": "forza-horizon-4",
+        "title": "Forza Horizon 4"
       },
       {
-        "id": "sonic-the-hedgehog-3-knuckles",
-        "title": "Sonic the Hedgehog 3 & Knuckles"
+        "id": "pok-mon-trading-card-game",
+        "title": "Pokémon Trading Card Game"
       }
     ]
   },
-  "2026-07-05": {
-    "date": "2026-07-05",
+  "2026-06-17": {
+    "date": "2026-06-17",
     "groups": [
       {
-        "conceptId": "yellow-racing-2010s",
+        "conceptId": "yellow-genre-racing",
         "tier": "yellow",
-        "label": "2010s RACING GAMES",
+        "label": "RACING GAMES",
         "gameIds": [
-          "mafia-ii",
-          "rage",
-          "ultimate-chicken-horse",
-          "need-for-speed-heat"
+          "just-cause-2",
+          "twisted-metal-2",
+          "saints-row-2",
+          "the-need-for-speed"
         ]
       },
       {
@@ -2894,31 +824,31 @@
         "label": "RELEASED IN 2021",
         "gameIds": [
           "valheim",
-          "outer-wilds-echoes-of-the-eye",
-          "the-elder-scrolls-v-skyrim-anniversary-edition",
-          "marvels-guardians-of-the-galaxy"
+          "subnautica-below-zero",
+          "nier-replicant-ver-1-22474487139",
+          "it-takes-two"
         ]
       },
       {
-        "conceptId": "blue-tag-stealth",
+        "conceptId": "blue-tag-cooking",
         "tier": "blue",
-        "label": "GAMES WHERE YOU SNEAK",
+        "label": "GAMES WHERE YOU COOK",
         "gameIds": [
-          "metal-gear-solid-3-snake-eater",
-          "batman-arkham-city",
-          "the-evil-within-2",
-          "metal-gear-solid-peace-walker"
+          "aquaria",
+          "overcooked-2",
+          "overcooked",
+          "tales-of-the-abyss"
         ]
       },
       {
-        "conceptId": "purple-hides-win",
+        "conceptId": "purple-hides-king",
         "tier": "purple",
-        "label": "TITLES HIDING 'WIN'",
+        "label": "TITLES HIDING 'KING'",
         "gameIds": [
-          "icewind-dale",
-          "neverwinter-nights",
-          "where-winds-meet",
-          "crash-twinsanity"
+          "kingdoms-of-amalur-reckoning",
+          "the-walking-dead-a-new-frontier",
+          "kingdom-hearts-re-coded",
+          "kingdom-come-deliverance-ii"
         ]
       }
     ],
@@ -2928,550 +858,205 @@
         "title": "Valheim"
       },
       {
-        "id": "mafia-ii",
-        "title": "Mafia II"
+        "id": "the-walking-dead-a-new-frontier",
+        "title": "The Walking Dead: A New Frontier"
       },
       {
-        "id": "marvels-guardians-of-the-galaxy",
-        "title": "Marvel's Guardians of the Galaxy"
-      },
-      {
-        "id": "crash-twinsanity",
-        "title": "Crash Twinsanity"
-      },
-      {
-        "id": "where-winds-meet",
-        "title": "Where Winds Meet"
-      },
-      {
-        "id": "need-for-speed-heat",
-        "title": "Need for Speed: Heat"
-      },
-      {
-        "id": "neverwinter-nights",
-        "title": "Neverwinter Nights"
-      },
-      {
-        "id": "icewind-dale",
-        "title": "Icewind Dale"
-      },
-      {
-        "id": "outer-wilds-echoes-of-the-eye",
-        "title": "Outer Wilds: Echoes of the Eye"
-      },
-      {
-        "id": "the-evil-within-2",
-        "title": "The Evil Within 2"
-      },
-      {
-        "id": "the-elder-scrolls-v-skyrim-anniversary-edition",
-        "title": "The Elder Scrolls V: Skyrim - Anniversary Edition"
-      },
-      {
-        "id": "ultimate-chicken-horse",
-        "title": "Ultimate Chicken Horse"
-      },
-      {
-        "id": "batman-arkham-city",
-        "title": "Batman: Arkham City"
-      },
-      {
-        "id": "metal-gear-solid-peace-walker",
-        "title": "Metal Gear Solid: Peace Walker"
-      },
-      {
-        "id": "metal-gear-solid-3-snake-eater",
-        "title": "Metal Gear Solid 3: Snake Eater"
-      },
-      {
-        "id": "rage",
-        "title": "Rage"
-      }
-    ]
-  },
-  "2026-07-06": {
-    "date": "2026-07-06",
-    "groups": [
-      {
-        "conceptId": "yellow-genre-roguelike",
-        "tier": "yellow",
-        "label": "ROGUELIKES",
-        "gameIds": [
-          "dont-starve",
-          "hades",
-          "returnal",
-          "slay-the-spire-2"
-        ]
-      },
-      {
-        "conceptId": "green-year-1993",
-        "tier": "green",
-        "label": "RELEASED IN 1993",
-        "gameIds": [
-          "the-legend-of-zelda-links-awakening",
-          "street-fighter-ii-turbo",
-          "disneys-aladdin",
-          "super-mario-all-stars"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-martial-arts",
-        "tier": "blue",
-        "label": "MARTIAL ARTS GAMES",
-        "gameIds": [
-          "sleeping-dogs",
-          "metal-gear-rising-revengeance",
-          "the-king-of-fighters-98",
-          "devil-may-cry-3-dantes-awakening"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-art",
-        "tier": "purple",
-        "label": "TITLES HIDING 'ART'",
-        "gameIds": [
-          "middle-earth-shadow-of-mordor",
-          "doom-ii-hell-on-earth",
-          "pok-mon-heartgold-version",
-          "earthworm-jim-2"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "returnal",
-        "title": "Returnal"
-      },
-      {
-        "id": "middle-earth-shadow-of-mordor",
-        "title": "Middle-earth: Shadow of Mordor"
-      },
-      {
-        "id": "hades",
-        "title": "Hades"
-      },
-      {
-        "id": "street-fighter-ii-turbo",
-        "title": "Street Fighter II' Turbo"
-      },
-      {
-        "id": "devil-may-cry-3-dantes-awakening",
-        "title": "Devil May Cry 3: Dante's Awakening"
-      },
-      {
-        "id": "sleeping-dogs",
-        "title": "Sleeping Dogs"
-      },
-      {
-        "id": "pok-mon-heartgold-version",
-        "title": "Pokémon HeartGold Version"
-      },
-      {
-        "id": "the-king-of-fighters-98",
-        "title": "The King of Fighters '98"
-      },
-      {
-        "id": "doom-ii-hell-on-earth",
-        "title": "Doom II: Hell on Earth"
-      },
-      {
-        "id": "earthworm-jim-2",
-        "title": "Earthworm Jim 2"
-      },
-      {
-        "id": "dont-starve",
-        "title": "Don't Starve"
-      },
-      {
-        "id": "super-mario-all-stars",
-        "title": "Super Mario All-Stars"
-      },
-      {
-        "id": "the-legend-of-zelda-links-awakening",
-        "title": "The Legend of Zelda: Link's Awakening"
-      },
-      {
-        "id": "slay-the-spire-2",
-        "title": "Slay the Spire 2"
-      },
-      {
-        "id": "metal-gear-rising-revengeance",
-        "title": "Metal Gear Rising: Revengeance"
-      },
-      {
-        "id": "disneys-aladdin",
-        "title": "Disney's Aladdin"
-      }
-    ]
-  },
-  "2026-07-07": {
-    "date": "2026-07-07",
-    "groups": [
-      {
-        "conceptId": "yellow-roguelike-2020s",
-        "tier": "yellow",
-        "label": "2020s ROGUELIKES",
-        "gameIds": [
-          "muck",
-          "against-the-storm",
-          "curse-of-the-dead-gods",
-          "darkest-dungeon-ii"
-        ]
-      },
-      {
-        "conceptId": "green-year-1998",
-        "tier": "green",
-        "label": "RELEASED IN 1998",
-        "gameIds": [
-          "the-legend-of-zelda-ocarina-of-time",
-          "starcraft-brood-war",
-          "parasite-eve",
-          "1080-snowboarding"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-cooking",
-        "tier": "blue",
-        "label": "GAMES WHERE YOU COOK",
-        "gameIds": [
-          "tales-of-the-abyss",
-          "tales-of-vesperia",
-          "overcooked-2",
-          "patapon"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-red",
-        "tier": "purple",
-        "label": "TITLES HIDING 'RED'",
-        "gameIds": [
-          "day-of-the-tentacle-remastered",
-          "the-whispered-world",
-          "the-last-of-us-part-ii-remastered",
-          "uncharted-3-drakes-deception-remastered"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "the-last-of-us-part-ii-remastered",
-        "title": "The Last of Us Part II Remastered"
-      },
-      {
-        "id": "overcooked-2",
-        "title": "Overcooked! 2"
+        "id": "it-takes-two",
+        "title": "It Takes Two"
       },
       {
         "id": "tales-of-the-abyss",
         "title": "Tales of the Abyss"
       },
       {
-        "id": "parasite-eve",
-        "title": "Parasite Eve"
+        "id": "overcooked",
+        "title": "Overcooked!"
       },
       {
-        "id": "uncharted-3-drakes-deception-remastered",
-        "title": "Uncharted 3: Drake's Deception Remastered"
+        "id": "nier-replicant-ver-1-22474487139",
+        "title": "NieR Replicant ver.1.22474487139..."
       },
       {
-        "id": "day-of-the-tentacle-remastered",
-        "title": "Day of the Tentacle Remastered"
+        "id": "kingdom-come-deliverance-ii",
+        "title": "Kingdom Come: Deliverance II"
       },
       {
-        "id": "muck",
-        "title": "Muck"
+        "id": "aquaria",
+        "title": "Aquaria"
       },
       {
-        "id": "darkest-dungeon-ii",
-        "title": "Darkest Dungeon II"
+        "id": "just-cause-2",
+        "title": "Just Cause 2"
       },
       {
-        "id": "patapon",
-        "title": "Patapon"
+        "id": "the-need-for-speed",
+        "title": "The Need for Speed"
       },
       {
-        "id": "against-the-storm",
-        "title": "Against the Storm"
+        "id": "kingdom-hearts-re-coded",
+        "title": "Kingdom Hearts Re:coded"
       },
       {
-        "id": "curse-of-the-dead-gods",
-        "title": "Curse of the Dead Gods"
+        "id": "twisted-metal-2",
+        "title": "Twisted Metal 2"
       },
       {
-        "id": "tales-of-vesperia",
-        "title": "Tales of Vesperia"
+        "id": "subnautica-below-zero",
+        "title": "Subnautica: Below Zero"
       },
       {
-        "id": "1080-snowboarding",
-        "title": "1080° Snowboarding"
+        "id": "kingdoms-of-amalur-reckoning",
+        "title": "Kingdoms of Amalur: Reckoning"
       },
       {
-        "id": "the-legend-of-zelda-ocarina-of-time",
-        "title": "The Legend of Zelda: Ocarina of Time"
+        "id": "saints-row-2",
+        "title": "Saints Row 2"
       },
       {
-        "id": "the-whispered-world",
-        "title": "The Whispered World"
-      },
-      {
-        "id": "starcraft-brood-war",
-        "title": "StarCraft: Brood War"
+        "id": "overcooked-2",
+        "title": "Overcooked! 2"
       }
     ]
   },
-  "2026-07-08": {
-    "date": "2026-07-08",
+  "2026-06-18": {
+    "date": "2026-06-18",
     "groups": [
       {
-        "conceptId": "yellow-genre-sandbox",
+        "conceptId": "yellow-simulator-2010s",
         "tier": "yellow",
-        "label": "SANDBOX GAMES",
+        "label": "2010s SIMULATORS",
         "gameIds": [
-          "supermarket-together",
-          "kerbal-space-program",
-          "7-days-to-die",
-          "the-sims"
+          "forager",
+          "getting-over-it-with-bennett-foddy",
+          "huniepop",
+          "state-of-decay"
         ]
       },
       {
-        "conceptId": "green-year-1997",
+        "conceptId": "green-year-2011",
         "tier": "green",
-        "label": "RELEASED IN 1997",
+        "label": "RELEASED IN 2011",
         "gameIds": [
-          "age-of-empires",
-          "yoshis-story",
-          "goldeneye-007",
-          "dungeon-keeper"
+          "dirt-3",
+          "battlefield-3",
+          "payday-the-heist",
+          "bastion"
         ]
       },
       {
-        "conceptId": "blue-tag-pixel-art",
+        "conceptId": "blue-tag-sci-fi",
         "tier": "blue",
-        "label": "PIXEL ART GAMES",
+        "label": "SCIENCE FICTION",
         "gameIds": [
-          "suikoden-ii",
-          "arma-2",
-          "katana-zero",
-          "songs-of-conquest"
+          "battlefield-2142",
+          "zerospace",
+          "quake-4",
+          "scarlet-nexus"
         ]
       },
       {
-        "conceptId": "purple-contains-animal",
+        "conceptId": "purple-hides-hero",
         "tier": "purple",
-        "label": "TITLES CONTAINING AN ANIMAL",
+        "label": "TITLES HIDING 'HERO'",
         "gameIds": [
-          "kane-lynch-2-dog-days",
-          "marvel-s-spider-man",
-          "tom-clancys-rainbow-six-3-raven-shield",
-          "metal-gear-2-solid-snake"
+          "heroes-of-might-and-magic-iv",
+          "marvel-super-heroes-vs-street-fighter",
+          "marvel-vs-capcom-clash-of-super-heroes",
+          "heroes-of-might-and-magic-v-hammers-of-fate"
         ]
       }
     ],
     "tiles": [
       {
-        "id": "arma-2",
-        "title": "Arma 2"
+        "id": "marvel-vs-capcom-clash-of-super-heroes",
+        "title": "Marvel vs. Capcom: Clash of Super Heroes"
       },
       {
-        "id": "metal-gear-2-solid-snake",
-        "title": "Metal Gear 2: Solid Snake"
+        "id": "heroes-of-might-and-magic-iv",
+        "title": "Heroes of Might and Magic IV"
       },
       {
-        "id": "7-days-to-die",
-        "title": "7 Days to Die"
+        "id": "forager",
+        "title": "Forager"
       },
       {
-        "id": "dungeon-keeper",
-        "title": "Dungeon Keeper"
+        "id": "bastion",
+        "title": "Bastion"
       },
       {
-        "id": "kane-lynch-2-dog-days",
-        "title": "Kane & Lynch 2: Dog Days"
+        "id": "battlefield-3",
+        "title": "Battlefield 3"
       },
       {
-        "id": "katana-zero",
-        "title": "Katana Zero"
+        "id": "getting-over-it-with-bennett-foddy",
+        "title": "Getting Over It with Bennett Foddy"
       },
       {
-        "id": "suikoden-ii",
-        "title": "Suikoden II"
+        "id": "scarlet-nexus",
+        "title": "Scarlet Nexus"
       },
       {
-        "id": "age-of-empires",
-        "title": "Age of Empires"
+        "id": "quake-4",
+        "title": "Quake 4"
       },
       {
-        "id": "songs-of-conquest",
-        "title": "Songs of Conquest"
+        "id": "payday-the-heist",
+        "title": "Payday: The Heist"
       },
       {
-        "id": "marvel-s-spider-man",
-        "title": "Marvel's Spider-Man"
+        "id": "zerospace",
+        "title": "ZeroSpace"
       },
       {
-        "id": "goldeneye-007",
-        "title": "GoldenEye 007"
+        "id": "dirt-3",
+        "title": "Dirt 3"
       },
       {
-        "id": "the-sims",
-        "title": "The Sims"
+        "id": "state-of-decay",
+        "title": "State of Decay"
       },
       {
-        "id": "supermarket-together",
-        "title": "Supermarket Together"
+        "id": "heroes-of-might-and-magic-v-hammers-of-fate",
+        "title": "Heroes of Might and Magic V: Hammers of Fate"
       },
       {
-        "id": "yoshis-story",
-        "title": "Yoshi's Story"
+        "id": "battlefield-2142",
+        "title": "Battlefield 2142"
       },
       {
-        "id": "kerbal-space-program",
-        "title": "Kerbal Space Program"
+        "id": "marvel-super-heroes-vs-street-fighter",
+        "title": "Marvel Super Heroes vs. Street Fighter"
       },
       {
-        "id": "tom-clancys-rainbow-six-3-raven-shield",
-        "title": "Tom Clancy's Rainbow Six 3: Raven Shield"
+        "id": "huniepop",
+        "title": "HuniePop"
       }
     ]
   },
-  "2026-07-09": {
-    "date": "2026-07-09",
+  "2026-06-19": {
+    "date": "2026-06-19",
     "groups": [
       {
-        "conceptId": "yellow-strategy-2000s",
+        "conceptId": "yellow-arcade-1980s",
         "tier": "yellow",
-        "label": "2000s STRATEGY GAMES",
+        "label": "1980s ARCADE GAMES",
         "gameIds": [
-          "br-tal-legend",
-          "warcraft-iii-reign-of-chaos",
-          "warcraft-iii-the-frozen-throne",
-          "the-lord-of-the-rings-the-battle-for-middle-earth"
+          "teenage-mutant-ninja-turtles",
+          "street-fighter",
+          "ninja-gaiden",
+          "q-bert"
         ]
       },
       {
-        "conceptId": "green-year-2006",
+        "conceptId": "green-ps5-early",
         "tier": "green",
-        "label": "RELEASED IN 2006",
+        "label": "EARLY PS5 GAMES (2020-21)",
         "gameIds": [
-          "the-elder-scrolls-iv-oblivion",
-          "hitman-blood-money",
-          "flow",
-          "roblox"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-military",
-        "tier": "blue",
-        "label": "MILITARY OPERATIONS",
-        "gameIds": [
-          "mount-blade-warband",
-          "medal-of-honor-frontline",
-          "gears-of-war-4",
-          "mini-royale"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-rim",
-        "tier": "purple",
-        "label": "TITLES HIDING 'RIM'",
-        "gameIds": [
-          "scott-pilgrim-vs-the-world-the-game",
-          "the-elder-scrolls-v-skyrim-special-edition",
-          "metroid-prime-3-corruption",
-          "sherlock-holmes-crimes-punishments"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "the-elder-scrolls-v-skyrim-special-edition",
-        "title": "The Elder Scrolls V: Skyrim - Special Edition"
-      },
-      {
-        "id": "flow",
-        "title": "flOw"
-      },
-      {
-        "id": "metroid-prime-3-corruption",
-        "title": "Metroid Prime 3: Corruption"
-      },
-      {
-        "id": "hitman-blood-money",
-        "title": "Hitman: Blood Money"
-      },
-      {
-        "id": "the-elder-scrolls-iv-oblivion",
-        "title": "The Elder Scrolls IV: Oblivion"
-      },
-      {
-        "id": "scott-pilgrim-vs-the-world-the-game",
-        "title": "Scott Pilgrim vs. the World: The Game"
-      },
-      {
-        "id": "sherlock-holmes-crimes-punishments",
-        "title": "Sherlock Holmes: Crimes & Punishments"
-      },
-      {
-        "id": "mini-royale",
-        "title": "Mini Royale"
-      },
-      {
-        "id": "warcraft-iii-reign-of-chaos",
-        "title": "Warcraft III: Reign of Chaos"
-      },
-      {
-        "id": "warcraft-iii-the-frozen-throne",
-        "title": "Warcraft III: The Frozen Throne"
-      },
-      {
-        "id": "br-tal-legend",
-        "title": "Brütal Legend"
-      },
-      {
-        "id": "medal-of-honor-frontline",
-        "title": "Medal of Honor: Frontline"
-      },
-      {
-        "id": "mount-blade-warband",
-        "title": "Mount & Blade: Warband"
-      },
-      {
-        "id": "the-lord-of-the-rings-the-battle-for-middle-earth",
-        "title": "The Lord of the Rings: The Battle for Middle-earth"
-      },
-      {
-        "id": "gears-of-war-4",
-        "title": "Gears of War 4"
-      },
-      {
-        "id": "roblox",
-        "title": "Roblox"
-      }
-    ]
-  },
-  "2026-07-10": {
-    "date": "2026-07-10",
-    "groups": [
-      {
-        "conceptId": "yellow-rpg-2020s",
-        "tier": "yellow",
-        "label": "2020s RPGS",
-        "gameIds": [
-          "clair-obscur-expedition-33",
-          "baldur-s-gate-iii",
-          "path-of-exile-2",
-          "hogwarts-legacy"
-        ]
-      },
-      {
-        "conceptId": "green-year-2012",
-        "tier": "green",
-        "label": "RELEASED IN 2012",
-        "gameIds": [
-          "little-inferno",
-          "dust-an-elysian-tail",
-          "clash-of-clans",
-          "far-cry-3"
+          "alan-wake-remastered",
+          "forza-horizon-5",
+          "marvels-avengers",
+          "twelve-minutes"
         ]
       },
       {
@@ -3479,333 +1064,103 @@
         "tier": "blue",
         "label": "SURVIVAL HORROR",
         "gameIds": [
-          "resident-evil-directors-cut",
-          "outlast-ii",
-          "blair-witch",
-          "resident-evil-code-veronica-x"
+          "obscure-the-aftermath",
+          "silent-hill-3",
+          "the-last-of-us",
+          "the-thing"
         ]
       },
       {
-        "conceptId": "purple-starts-and-ends-same-letter",
+        "conceptId": "purple-hides-port",
         "tier": "purple",
-        "label": "START AND END WITH THE SAME LETTER",
+        "label": "TITLES HIDING 'PORT'",
         "gameIds": [
-          "stellaris",
-          "timeshift",
-          "ristar",
-          "vvvvvv"
+          "wii-sports",
+          "persona-3-portable",
+          "my-time-at-portia",
+          "transport-tycoon-deluxe"
         ]
       }
     ],
     "tiles": [
       {
-        "id": "clair-obscur-expedition-33",
-        "title": "Clair Obscur: Expedition 33"
+        "id": "persona-3-portable",
+        "title": "Persona 3 Portable"
       },
       {
-        "id": "path-of-exile-2",
-        "title": "Path of Exile 2"
+        "id": "twelve-minutes",
+        "title": "Twelve Minutes"
       },
       {
-        "id": "timeshift",
-        "title": "TimeShift"
+        "id": "ninja-gaiden",
+        "title": "Ninja Gaiden"
       },
       {
-        "id": "outlast-ii",
-        "title": "Outlast II"
+        "id": "forza-horizon-5",
+        "title": "Forza Horizon 5"
       },
       {
-        "id": "vvvvvv",
-        "title": "VVVVVV"
+        "id": "the-thing",
+        "title": "The Thing"
       },
       {
-        "id": "little-inferno",
-        "title": "Little Inferno"
+        "id": "wii-sports",
+        "title": "Wii Sports"
       },
       {
-        "id": "dust-an-elysian-tail",
-        "title": "Dust: An Elysian Tail"
+        "id": "obscure-the-aftermath",
+        "title": "ObsCure: The Aftermath"
       },
       {
-        "id": "hogwarts-legacy",
-        "title": "Hogwarts Legacy"
+        "id": "street-fighter",
+        "title": "Street Fighter"
       },
       {
-        "id": "stellaris",
-        "title": "Stellaris"
+        "id": "my-time-at-portia",
+        "title": "My Time at Portia"
       },
       {
-        "id": "blair-witch",
-        "title": "Blair Witch"
-      },
-      {
-        "id": "resident-evil-directors-cut",
-        "title": "Resident Evil: Director's Cut"
-      },
-      {
-        "id": "resident-evil-code-veronica-x",
-        "title": "Resident Evil Code: Veronica X"
-      },
-      {
-        "id": "baldur-s-gate-iii",
-        "title": "Baldur's Gate III"
-      },
-      {
-        "id": "clash-of-clans",
-        "title": "Clash of Clans"
-      },
-      {
-        "id": "ristar",
-        "title": "Ristar"
-      },
-      {
-        "id": "far-cry-3",
-        "title": "Far Cry 3"
-      }
-    ]
-  },
-  "2026-07-11": {
-    "date": "2026-07-11",
-    "groups": [
-      {
-        "conceptId": "yellow-genre-indie",
-        "tier": "yellow",
-        "label": "INDIE GAMES",
-        "gameIds": [
-          "hellblade-senuas-sacrifice",
-          "blue-prince",
-          "signalis",
-          "the-stanley-parable"
-        ]
-      },
-      {
-        "conceptId": "green-exclusive-playstation",
-        "tier": "green",
-        "label": "PLAYSTATION EXCLUSIVES",
-        "gameIds": [
-          "jak-ii",
-          "uncharted-3-drake-s-deception",
-          "gran-turismo-2",
-          "final-fantasy-tactics"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-metroidvania",
-        "tier": "blue",
-        "label": "METROIDVANIAS",
-        "gameIds": [
-          "castlevania-order-of-ecclesia",
-          "hollow-knight",
-          "castlevania-dracula-x",
-          "kirby-the-amazing-mirror"
-        ]
-      },
-      {
-        "conceptId": "purple-hides-sun",
-        "tier": "purple",
-        "label": "TITLES HIDING 'SUN'",
-        "gameIds": [
-          "sunset-riders",
-          "sunflower-land",
-          "sunset-overdrive",
-          "super-mario-sunshine"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "final-fantasy-tactics",
-        "title": "Final Fantasy Tactics"
-      },
-      {
-        "id": "signalis",
-        "title": "Signalis"
-      },
-      {
-        "id": "blue-prince",
-        "title": "Blue Prince"
-      },
-      {
-        "id": "super-mario-sunshine",
-        "title": "Super Mario Sunshine"
-      },
-      {
-        "id": "castlevania-order-of-ecclesia",
-        "title": "Castlevania: Order of Ecclesia"
-      },
-      {
-        "id": "sunset-riders",
-        "title": "Sunset Riders"
-      },
-      {
-        "id": "hollow-knight",
-        "title": "Hollow Knight"
-      },
-      {
-        "id": "kirby-the-amazing-mirror",
-        "title": "Kirby & the Amazing Mirror"
-      },
-      {
-        "id": "gran-turismo-2",
-        "title": "Gran Turismo 2"
-      },
-      {
-        "id": "jak-ii",
-        "title": "Jak II"
-      },
-      {
-        "id": "the-stanley-parable",
-        "title": "The Stanley Parable"
-      },
-      {
-        "id": "uncharted-3-drake-s-deception",
-        "title": "Uncharted 3: Drake's Deception"
-      },
-      {
-        "id": "castlevania-dracula-x",
-        "title": "Castlevania: Dracula X"
-      },
-      {
-        "id": "sunflower-land",
-        "title": "Sunflower Land"
-      },
-      {
-        "id": "hellblade-senuas-sacrifice",
-        "title": "Hellblade: Senua's Sacrifice"
-      },
-      {
-        "id": "sunset-overdrive",
-        "title": "Sunset Overdrive"
-      }
-    ]
-  },
-  "2026-07-12": {
-    "date": "2026-07-12",
-    "groups": [
-      {
-        "conceptId": "yellow-action-1980s",
-        "tier": "yellow",
-        "label": "1980s ACTION GAMES",
-        "gameIds": [
-          "super-mario-bros",
-          "teenage-mutant-ninja-turtles",
-          "the-revenge-of-shinobi",
-          "double-dragon"
-        ]
-      },
-      {
-        "conceptId": "green-year-2007",
-        "tier": "green",
-        "label": "RELEASED IN 2007",
-        "gameIds": [
-          "jade-empire-special-edition",
-          "silent-hill-origins",
-          "unreal-tournament-iii",
-          "assassins-creed"
-        ]
-      },
-      {
-        "conceptId": "blue-tag-detective",
-        "tier": "blue",
-        "label": "GAMES WHERE YOU INVESTIGATE",
-        "gameIds": [
-          "danganronpa-2-goodbye-despair",
-          "disco-elysium-the-final-cut",
-          "sherlock-holmes-chapter-one",
-          "condemned-2-bloodshot"
-        ]
-      },
-      {
-        "conceptId": "purple-contains-sports-gear",
-        "tier": "purple",
-        "label": "TITLES CONTAINING SPORTS WORDS",
-        "gameIds": [
-          "fifa-soccer-2005",
-          "dragon-ball-z-budokai-tenkaichi-2",
-          "fifa-soccer-2002-major-league-soccer",
-          "super-monkey-ball-2"
-        ]
-      }
-    ],
-    "tiles": [
-      {
-        "id": "assassins-creed",
-        "title": "Assassin's Creed"
-      },
-      {
-        "id": "silent-hill-origins",
-        "title": "Silent Hill: Origins"
-      },
-      {
-        "id": "unreal-tournament-iii",
-        "title": "Unreal Tournament III"
-      },
-      {
-        "id": "condemned-2-bloodshot",
-        "title": "Condemned 2: Bloodshot"
-      },
-      {
-        "id": "dragon-ball-z-budokai-tenkaichi-2",
-        "title": "Dragon Ball Z: Budokai Tenkaichi 2"
+        "id": "alan-wake-remastered",
+        "title": "Alan Wake Remastered"
       },
       {
         "id": "teenage-mutant-ninja-turtles",
         "title": "Teenage Mutant Ninja Turtles"
       },
       {
-        "id": "the-revenge-of-shinobi",
-        "title": "The Revenge of Shinobi"
+        "id": "silent-hill-3",
+        "title": "Silent Hill 3"
       },
       {
-        "id": "disco-elysium-the-final-cut",
-        "title": "Disco Elysium: The Final Cut"
+        "id": "transport-tycoon-deluxe",
+        "title": "Transport Tycoon Deluxe"
       },
       {
-        "id": "fifa-soccer-2005",
-        "title": "FIFA Soccer 2005"
+        "id": "marvels-avengers",
+        "title": "Marvel's Avengers"
       },
       {
-        "id": "danganronpa-2-goodbye-despair",
-        "title": "Danganronpa 2: Goodbye Despair"
+        "id": "the-last-of-us",
+        "title": "The Last of Us"
       },
       {
-        "id": "super-mario-bros",
-        "title": "Super Mario Bros."
-      },
-      {
-        "id": "sherlock-holmes-chapter-one",
-        "title": "Sherlock Holmes: Chapter One"
-      },
-      {
-        "id": "jade-empire-special-edition",
-        "title": "Jade Empire: Special Edition"
-      },
-      {
-        "id": "fifa-soccer-2002-major-league-soccer",
-        "title": "FIFA Soccer 2002: Major League Soccer"
-      },
-      {
-        "id": "super-monkey-ball-2",
-        "title": "Super Monkey Ball 2"
-      },
-      {
-        "id": "double-dragon",
-        "title": "Double Dragon"
+        "id": "q-bert",
+        "title": "Q*bert"
       }
     ]
   },
-  "2026-07-13": {
-    "date": "2026-07-13",
+  "2026-06-20": {
+    "date": "2026-06-20",
     "groups": [
       {
-        "conceptId": "yellow-racing-2020s",
+        "conceptId": "yellow-genre-music",
         "tier": "yellow",
-        "label": "2020s RACING GAMES",
+        "label": "MUSIC GAMES",
         "gameIds": [
-          "forza-motorsport",
-          "grand-theft-auto-san-andreas-the-definitive-edition",
-          "grand-theft-auto-iii-the-definitive-edition",
-          "need-for-speed-hot-pursuit-remastered"
+          "br-tal-legend",
+          "super-hexagon",
+          "jet-set-radio-future",
+          "mario-paint"
         ]
       },
       {
@@ -3813,21 +1168,2436 @@
         "tier": "green",
         "label": "RELEASED IN 2004",
         "gameIds": [
-          "halo-2",
+          "medal-of-honor-pacific-assault",
+          "the-legend-of-zelda-the-minish-cap",
           "half-life-2",
-          "world-of-warcraft",
-          "sly-2-band-of-thieves"
+          "crash-twinsanity"
         ]
       },
       {
-        "conceptId": "blue-tag-building",
+        "conceptId": "blue-tag-martial-arts",
         "tier": "blue",
-        "label": "GAMES WHERE YOU BUILD",
+        "label": "MARTIAL ARTS GAMES",
         "gameIds": [
-          "tom-clancys-ghost-recon-wildlands",
-          "simcity",
+          "resident-evil-5",
+          "dragon-ball-z-ultimate-battle-22",
+          "shinobi-iii-return-of-the-ninja-master",
+          "sleeping-dogs"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-weapon",
+        "tier": "purple",
+        "label": "TITLES CONTAINING A WEAPON",
+        "gameIds": [
+          "blade-runner",
+          "shadow-tactics-blades-of-the-shogun",
+          "metal-gear-solid-4-guns-of-the-patriots",
+          "golden-axe-ii"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "resident-evil-5",
+        "title": "Resident Evil 5"
+      },
+      {
+        "id": "super-hexagon",
+        "title": "Super Hexagon"
+      },
+      {
+        "id": "the-legend-of-zelda-the-minish-cap",
+        "title": "The Legend of Zelda: The Minish Cap"
+      },
+      {
+        "id": "dragon-ball-z-ultimate-battle-22",
+        "title": "Dragon Ball Z: Ultimate Battle 22"
+      },
+      {
+        "id": "golden-axe-ii",
+        "title": "Golden Axe II"
+      },
+      {
+        "id": "crash-twinsanity",
+        "title": "Crash Twinsanity"
+      },
+      {
+        "id": "half-life-2",
+        "title": "Half-Life 2"
+      },
+      {
+        "id": "sleeping-dogs",
+        "title": "Sleeping Dogs"
+      },
+      {
+        "id": "metal-gear-solid-4-guns-of-the-patriots",
+        "title": "Metal Gear Solid 4: Guns of the Patriots"
+      },
+      {
+        "id": "shadow-tactics-blades-of-the-shogun",
+        "title": "Shadow Tactics: Blades of the Shogun"
+      },
+      {
+        "id": "medal-of-honor-pacific-assault",
+        "title": "Medal of Honor: Pacific Assault"
+      },
+      {
+        "id": "mario-paint",
+        "title": "Mario Paint"
+      },
+      {
+        "id": "br-tal-legend",
+        "title": "Brütal Legend"
+      },
+      {
+        "id": "shinobi-iii-return-of-the-ninja-master",
+        "title": "Shinobi III: Return of the Ninja Master"
+      },
+      {
+        "id": "jet-set-radio-future",
+        "title": "Jet Set Radio Future"
+      },
+      {
+        "id": "blade-runner",
+        "title": "Blade Runner"
+      }
+    ]
+  },
+  "2026-06-21": {
+    "date": "2026-06-21",
+    "groups": [
+      {
+        "conceptId": "yellow-racing-2020s",
+        "tier": "yellow",
+        "label": "2020s RACING GAMES",
+        "gameIds": [
+          "need-for-speed-unbound",
+          "gran-turismo-7",
+          "snowrunner",
+          "forza-motorsport"
+        ]
+      },
+      {
+        "conceptId": "green-year-2009",
+        "tier": "green",
+        "label": "RELEASED IN 2009",
+        "gameIds": [
+          "empire-total-war",
+          "infamous",
+          "wii-sports-resort",
+          "the-legend-of-zelda-spirit-tracks"
+        ]
+      },
+      {
+        "conceptId": "blue-curated-controversial-sequel",
+        "tier": "blue",
+        "label": "SEQUELS THAT SPLIT THE FANBASE",
+        "gameIds": [
+          "fallout-76",
+          "duke-nukem-forever",
+          "the-last-of-us-part-ii",
+          "dmc-devil-may-cry"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-profession",
+        "tier": "purple",
+        "label": "TITLES CONTAINING A JOB",
+        "gameIds": [
+          "arc-raiders",
+          "assassins-creed-iv-black-flag",
+          "hollow-knight-silksong",
+          "gabriel-knight-sins-of-the-fathers"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "infamous",
+        "title": "inFamous"
+      },
+      {
+        "id": "fallout-76",
+        "title": "Fallout 76"
+      },
+      {
+        "id": "gran-turismo-7",
+        "title": "Gran Turismo 7"
+      },
+      {
+        "id": "need-for-speed-unbound",
+        "title": "Need for Speed: Unbound"
+      },
+      {
+        "id": "snowrunner",
+        "title": "SnowRunner"
+      },
+      {
+        "id": "forza-motorsport",
+        "title": "Forza Motorsport"
+      },
+      {
+        "id": "dmc-devil-may-cry",
+        "title": "DmC: Devil May Cry"
+      },
+      {
+        "id": "the-last-of-us-part-ii",
+        "title": "The Last of Us Part II"
+      },
+      {
+        "id": "empire-total-war",
+        "title": "Empire: Total War"
+      },
+      {
+        "id": "arc-raiders",
+        "title": "ARC Raiders"
+      },
+      {
+        "id": "assassins-creed-iv-black-flag",
+        "title": "Assassin's Creed IV: Black Flag"
+      },
+      {
+        "id": "gabriel-knight-sins-of-the-fathers",
+        "title": "Gabriel Knight: Sins of the Fathers"
+      },
+      {
+        "id": "the-legend-of-zelda-spirit-tracks",
+        "title": "The Legend of Zelda: Spirit Tracks"
+      },
+      {
+        "id": "wii-sports-resort",
+        "title": "Wii Sports Resort"
+      },
+      {
+        "id": "hollow-knight-silksong",
+        "title": "Hollow Knight: Silksong"
+      },
+      {
+        "id": "duke-nukem-forever",
+        "title": "Duke Nukem Forever"
+      }
+    ]
+  },
+  "2026-06-22": {
+    "date": "2026-06-22",
+    "groups": [
+      {
+        "conceptId": "yellow-simulator-2020s",
+        "tier": "yellow",
+        "label": "2020s SIMULATORS",
+        "gameIds": [
+          "squad",
+          "schedule-i",
+          "immortality",
+          "the-stanley-parable-ultra-deluxe"
+        ]
+      },
+      {
+        "conceptId": "green-console-gamecube",
+        "tier": "green",
+        "label": "PLAYABLE ON THE GAMECUBE",
+        "gameIds": [
+          "resident-evil-3-nemesis",
+          "spider-man-2",
+          "crash-bandicoot-the-wrath-of-cortex",
+          "need-for-speed-hot-pursuit-2"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-cyberpunk",
+        "tier": "blue",
+        "label": "CYBERPUNK WORLDS",
+        "gameIds": [
+          "astral-chain",
+          "remember-me",
+          "system-shock",
+          "oni"
+        ]
+      },
+      {
+        "conceptId": "purple-roman-numeral",
+        "tier": "purple",
+        "label": "ROMAN NUMERALS",
+        "gameIds": [
+          "quake-iii-arena",
+          "zelda-ii-the-adventure-of-link",
+          "the-elder-scrolls-iv-oblivion",
+          "final-fantasy-ii"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "need-for-speed-hot-pursuit-2",
+        "title": "Need for Speed: Hot Pursuit 2"
+      },
+      {
+        "id": "quake-iii-arena",
+        "title": "Quake III Arena"
+      },
+      {
+        "id": "system-shock",
+        "title": "System Shock"
+      },
+      {
+        "id": "crash-bandicoot-the-wrath-of-cortex",
+        "title": "Crash Bandicoot: The Wrath of Cortex"
+      },
+      {
+        "id": "immortality",
+        "title": "Immortality"
+      },
+      {
+        "id": "the-stanley-parable-ultra-deluxe",
+        "title": "The Stanley Parable: Ultra Deluxe"
+      },
+      {
+        "id": "remember-me",
+        "title": "Remember Me"
+      },
+      {
+        "id": "resident-evil-3-nemesis",
+        "title": "Resident Evil 3: Nemesis"
+      },
+      {
+        "id": "oni",
+        "title": "Oni"
+      },
+      {
+        "id": "squad",
+        "title": "Squad"
+      },
+      {
+        "id": "schedule-i",
+        "title": "Schedule I"
+      },
+      {
+        "id": "spider-man-2",
+        "title": "Spider-Man 2"
+      },
+      {
+        "id": "the-elder-scrolls-iv-oblivion",
+        "title": "The Elder Scrolls IV: Oblivion"
+      },
+      {
+        "id": "zelda-ii-the-adventure-of-link",
+        "title": "Zelda II: The Adventure of Link"
+      },
+      {
+        "id": "final-fantasy-ii",
+        "title": "Final Fantasy II"
+      },
+      {
+        "id": "astral-chain",
+        "title": "Astral Chain"
+      }
+    ]
+  },
+  "2026-06-23": {
+    "date": "2026-06-23",
+    "groups": [
+      {
+        "conceptId": "yellow-genre-indie",
+        "tier": "yellow",
+        "label": "INDIE GAMES",
+        "gameIds": [
+          "fall-guys",
+          "the-binding-of-isaac-rebirth",
+          "castle-crashers",
+          "hytale"
+        ]
+      },
+      {
+        "conceptId": "green-year-2010",
+        "tier": "green",
+        "label": "RELEASED IN 2010",
+        "gameIds": [
+          "xenoblade-chronicles",
+          "battlefield-bad-company-2",
+          "assassins-creed-brotherhood",
+          "darksiders"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-dinosaurs",
+        "tier": "blue",
+        "label": "DINOSAURS INVOLVED",
+        "gameIds": [
+          "jurassic-park-the-game",
+          "super-mario-world-2-yoshis-island",
+          "spore",
+          "guild-wars-factions"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-space",
+        "tier": "purple",
+        "label": "TITLES IN SPACE",
+        "gameIds": [
+          "star-fox-64",
+          "star-wars-knights-of-the-old-republic",
+          "star-wars-tie-fighter",
+          "space-invaders"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "jurassic-park-the-game",
+        "title": "Jurassic Park: The Game"
+      },
+      {
+        "id": "xenoblade-chronicles",
+        "title": "Xenoblade Chronicles"
+      },
+      {
+        "id": "star-wars-knights-of-the-old-republic",
+        "title": "Star Wars: Knights of the Old Republic"
+      },
+      {
+        "id": "hytale",
+        "title": "Hytale"
+      },
+      {
+        "id": "star-fox-64",
+        "title": "Star Fox 64"
+      },
+      {
+        "id": "battlefield-bad-company-2",
+        "title": "Battlefield: Bad Company 2"
+      },
+      {
+        "id": "fall-guys",
+        "title": "Fall Guys"
+      },
+      {
+        "id": "star-wars-tie-fighter",
+        "title": "Star Wars: TIE Fighter"
+      },
+      {
+        "id": "spore",
+        "title": "Spore"
+      },
+      {
+        "id": "assassins-creed-brotherhood",
+        "title": "Assassin's Creed Brotherhood"
+      },
+      {
+        "id": "darksiders",
+        "title": "Darksiders"
+      },
+      {
+        "id": "guild-wars-factions",
+        "title": "Guild Wars: Factions"
+      },
+      {
+        "id": "the-binding-of-isaac-rebirth",
+        "title": "The Binding of Isaac: Rebirth"
+      },
+      {
+        "id": "super-mario-world-2-yoshis-island",
+        "title": "Super Mario World 2: Yoshi's Island"
+      },
+      {
+        "id": "castle-crashers",
+        "title": "Castle Crashers"
+      },
+      {
+        "id": "space-invaders",
+        "title": "Space Invaders"
+      }
+    ]
+  },
+  "2026-06-24": {
+    "date": "2026-06-24",
+    "groups": [
+      {
+        "conceptId": "yellow-horror-2020s",
+        "tier": "yellow",
+        "label": "2020s HORROR GAMES",
+        "gameIds": [
+          "escape-the-backrooms",
+          "resident-evil-village",
+          "7-days-to-die",
+          "resident-evil-3"
+        ]
+      },
+      {
+        "conceptId": "green-year-2002",
+        "tier": "green",
+        "label": "RELEASED IN 2002",
+        "gameIds": [
+          "mega-man-zero",
+          "unreal-tournament-2003",
+          "grand-theft-auto-vice-city",
+          "warcraft-iii-reign-of-chaos"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-detective",
+        "tier": "blue",
+        "label": "GAMES WHERE YOU INVESTIGATE",
+        "gameIds": [
+          "turnip-boy-commits-tax-evasion",
+          "alan-wake-ii",
+          "murdered-soul-suspect",
+          "the-vanishing-of-ethan-carter"
+        ]
+      },
+      {
+        "conceptId": "purple-hides-fire",
+        "tier": "purple",
+        "label": "TITLES HIDING 'FIRE'",
+        "gameIds": [
+          "pok-mon-firered-version",
+          "firewatch",
+          "armored-core-vi-fires-of-rubicon",
+          "command-conquer-tiberian-sun-firestorm"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "7-days-to-die",
+        "title": "7 Days to Die"
+      },
+      {
+        "id": "murdered-soul-suspect",
+        "title": "Murdered: Soul Suspect"
+      },
+      {
+        "id": "firewatch",
+        "title": "Firewatch"
+      },
+      {
+        "id": "command-conquer-tiberian-sun-firestorm",
+        "title": "Command & Conquer: Tiberian Sun - Firestorm"
+      },
+      {
+        "id": "resident-evil-3",
+        "title": "Resident Evil 3"
+      },
+      {
+        "id": "escape-the-backrooms",
+        "title": "Escape the Backrooms"
+      },
+      {
+        "id": "turnip-boy-commits-tax-evasion",
+        "title": "Turnip Boy Commits Tax Evasion"
+      },
+      {
+        "id": "unreal-tournament-2003",
+        "title": "Unreal Tournament 2003"
+      },
+      {
+        "id": "mega-man-zero",
+        "title": "Mega Man Zero"
+      },
+      {
+        "id": "pok-mon-firered-version",
+        "title": "Pokémon FireRed Version"
+      },
+      {
+        "id": "the-vanishing-of-ethan-carter",
+        "title": "The Vanishing of Ethan Carter"
+      },
+      {
+        "id": "resident-evil-village",
+        "title": "Resident Evil Village"
+      },
+      {
+        "id": "armored-core-vi-fires-of-rubicon",
+        "title": "Armored Core VI: Fires of Rubicon"
+      },
+      {
+        "id": "alan-wake-ii",
+        "title": "Alan Wake II"
+      },
+      {
+        "id": "warcraft-iii-reign-of-chaos",
+        "title": "Warcraft III: Reign of Chaos"
+      },
+      {
+        "id": "grand-theft-auto-vice-city",
+        "title": "Grand Theft Auto: Vice City"
+      }
+    ]
+  },
+  "2026-06-25": {
+    "date": "2026-06-25",
+    "groups": [
+      {
+        "conceptId": "yellow-platform-1980s",
+        "tier": "yellow",
+        "label": "1980s PLATFORMERS",
+        "gameIds": [
+          "super-mario-bros-2",
+          "lode-runner",
+          "castlevania-ii-simons-quest",
+          "super-contra"
+        ]
+      },
+      {
+        "conceptId": "green-year-1995",
+        "tier": "green",
+        "label": "RELEASED IN 1995",
+        "gameIds": [
+          "the-king-of-fighters-95",
+          "virtua-cop-2",
+          "panel-de-pon",
+          "ultimate-mortal-kombat-3"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-open-world",
+        "tier": "blue",
+        "label": "OPEN WORLDS",
+        "gameIds": [
+          "grand-theft-auto-san-andreas",
+          "assassin-s-creed-ii",
+          "infamous-second-son",
+          "ghost-of-tsushima"
+        ]
+      },
+      {
+        "conceptId": "purple-one-word-gerund",
+        "tier": "purple",
+        "label": "ONE WORD, ENDS IN -ING",
+        "gameIds": [
+          "iracing",
+          "mouthwashing",
+          "unpacking",
+          "stacking"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "infamous-second-son",
+        "title": "Infamous Second Son"
+      },
+      {
+        "id": "virtua-cop-2",
+        "title": "Virtua Cop 2"
+      },
+      {
+        "id": "panel-de-pon",
+        "title": "Tetris Attack"
+      },
+      {
+        "id": "castlevania-ii-simons-quest",
+        "title": "Castlevania II: Simon's Quest"
+      },
+      {
+        "id": "mouthwashing",
+        "title": "Mouthwashing"
+      },
+      {
+        "id": "ultimate-mortal-kombat-3",
+        "title": "Ultimate Mortal Kombat 3"
+      },
+      {
+        "id": "ghost-of-tsushima",
+        "title": "Ghost of Tsushima"
+      },
+      {
+        "id": "super-contra",
+        "title": "Super Contra"
+      },
+      {
+        "id": "grand-theft-auto-san-andreas",
+        "title": "Grand Theft Auto: San Andreas"
+      },
+      {
+        "id": "the-king-of-fighters-95",
+        "title": "The King of Fighters '95"
+      },
+      {
+        "id": "lode-runner",
+        "title": "Lode Runner"
+      },
+      {
+        "id": "super-mario-bros-2",
+        "title": "Super Mario Bros. 2"
+      },
+      {
+        "id": "unpacking",
+        "title": "Unpacking"
+      },
+      {
+        "id": "assassin-s-creed-ii",
+        "title": "Assassin's Creed II"
+      },
+      {
+        "id": "stacking",
+        "title": "Stacking"
+      },
+      {
+        "id": "iracing",
+        "title": "iRacing"
+      }
+    ]
+  },
+  "2026-06-26": {
+    "date": "2026-06-26",
+    "groups": [
+      {
+        "conceptId": "yellow-strategy-1990s",
+        "tier": "yellow",
+        "label": "1990s STRATEGY GAMES",
+        "gameIds": [
+          "simcity-3000",
+          "age-of-empires-ii-the-age-of-kings",
+          "dungeon-keeper",
+          "loom"
+        ]
+      },
+      {
+        "conceptId": "green-year-2024",
+        "tier": "green",
+        "label": "RELEASED IN 2024",
+        "gameIds": [
+          "banishers-ghosts-of-new-eden",
+          "the-first-descendant",
+          "last-epoch",
+          "dragon-ball-sparking-zero"
+        ]
+      },
+      {
+        "conceptId": "blue-curated-esports",
+        "tier": "blue",
+        "label": "ESPORTS MAINSTAYS",
+        "gameIds": [
+          "apex-legends",
+          "dota-2",
+          "overwatch",
+          "valorant"
+        ]
+      },
+      {
+        "conceptId": "purple-of-the-title",
+        "tier": "purple",
+        "label": "TITLES CONTAINING 'OF THE'",
+        "gameIds": [
+          "the-lord-of-the-rings-the-battle-for-middle-earth-ii",
+          "mark-of-the-ninja",
+          "shadow-of-the-colossus",
+          "the-legend-of-zelda-breath-of-the-wild"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "simcity-3000",
+        "title": "SimCity 3000"
+      },
+      {
+        "id": "loom",
+        "title": "Loom"
+      },
+      {
+        "id": "banishers-ghosts-of-new-eden",
+        "title": "Banishers: Ghosts of New Eden"
+      },
+      {
+        "id": "overwatch",
+        "title": "Overwatch"
+      },
+      {
+        "id": "dungeon-keeper",
+        "title": "Dungeon Keeper"
+      },
+      {
+        "id": "shadow-of-the-colossus",
+        "title": "Shadow of the Colossus"
+      },
+      {
+        "id": "apex-legends",
+        "title": "Apex Legends"
+      },
+      {
+        "id": "valorant",
+        "title": "Valorant"
+      },
+      {
+        "id": "the-lord-of-the-rings-the-battle-for-middle-earth-ii",
+        "title": "The Lord of the Rings: The Battle for Middle-earth II"
+      },
+      {
+        "id": "mark-of-the-ninja",
+        "title": "Mark of the Ninja"
+      },
+      {
+        "id": "age-of-empires-ii-the-age-of-kings",
+        "title": "Age of Empires II: The Age of Kings"
+      },
+      {
+        "id": "dragon-ball-sparking-zero",
+        "title": "Dragon Ball: Sparking! Zero"
+      },
+      {
+        "id": "last-epoch",
+        "title": "Last Epoch"
+      },
+      {
+        "id": "dota-2",
+        "title": "Dota 2"
+      },
+      {
+        "id": "the-legend-of-zelda-breath-of-the-wild",
+        "title": "The Legend of Zelda: Breath of the Wild"
+      },
+      {
+        "id": "the-first-descendant",
+        "title": "The First Descendant"
+      }
+    ]
+  },
+  "2026-06-27": {
+    "date": "2026-06-27",
+    "groups": [
+      {
+        "conceptId": "yellow-racing-2010s",
+        "tier": "yellow",
+        "label": "2010s RACING GAMES",
+        "gameIds": [
+          "mafia-iii",
+          "ultimate-chicken-horse",
+          "trials-fusion",
+          "mafia-ii"
+        ]
+      },
+      {
+        "conceptId": "green-year-1996",
+        "tier": "green",
+        "label": "RELEASED IN 1996",
+        "gameIds": [
+          "final-doom",
+          "the-king-of-fighters-96",
+          "crash-bandicoot",
+          "pandemonium"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-zombies",
+        "tier": "blue",
+        "label": "ZOMBIES INVOLVED",
+        "gameIds": [
+          "zombies-ate-my-neighbors",
+          "resident-evil-0",
+          "super-ghoulsn-ghosts",
+          "the-walking-dead"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-legend",
+        "tier": "purple",
+        "label": "TITLES OF LEGEND",
+        "gameIds": [
+          "the-legend-of-zelda",
+          "a-plague-tale-requiem",
+          "league-of-legends",
+          "heroes-of-the-storm"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "the-walking-dead",
+        "title": "The Walking Dead"
+      },
+      {
+        "id": "the-king-of-fighters-96",
+        "title": "The King of Fighters '96"
+      },
+      {
+        "id": "final-doom",
+        "title": "Final Doom"
+      },
+      {
+        "id": "mafia-ii",
+        "title": "Mafia II"
+      },
+      {
+        "id": "zombies-ate-my-neighbors",
+        "title": "Zombies Ate My Neighbors"
+      },
+      {
+        "id": "trials-fusion",
+        "title": "Trials Fusion"
+      },
+      {
+        "id": "ultimate-chicken-horse",
+        "title": "Ultimate Chicken Horse"
+      },
+      {
+        "id": "super-ghoulsn-ghosts",
+        "title": "Super Ghouls'n Ghosts"
+      },
+      {
+        "id": "resident-evil-0",
+        "title": "Resident Evil 0"
+      },
+      {
+        "id": "league-of-legends",
+        "title": "League of Legends"
+      },
+      {
+        "id": "pandemonium",
+        "title": "Pandemonium!"
+      },
+      {
+        "id": "mafia-iii",
+        "title": "Mafia III"
+      },
+      {
+        "id": "heroes-of-the-storm",
+        "title": "Heroes of the Storm"
+      },
+      {
+        "id": "crash-bandicoot",
+        "title": "Crash Bandicoot"
+      },
+      {
+        "id": "the-legend-of-zelda",
+        "title": "The Legend of Zelda"
+      },
+      {
+        "id": "a-plague-tale-requiem",
+        "title": "A Plague Tale: Requiem"
+      }
+    ]
+  },
+  "2026-06-28": {
+    "date": "2026-06-28",
+    "groups": [
+      {
+        "conceptId": "yellow-genre-horror",
+        "tier": "yellow",
+        "label": "HORROR GAMES",
+        "gameIds": [
+          "r-e-p-o",
+          "little-nightmares-ii",
+          "alien-isolation",
+          "until-dawn"
+        ]
+      },
+      {
+        "conceptId": "green-year-2007",
+        "tier": "green",
+        "label": "RELEASED IN 2007",
+        "gameIds": [
+          "super-mario-galaxy",
+          "uncharted-drakes-fortune",
+          "portal",
+          "crash-of-the-titans"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-farming",
+        "tier": "blue",
+        "label": "GAMES WHERE YOU FARM",
+        "gameIds": [
+          "viva-pi-ata",
+          "stardew-valley",
+          "harvest-moon",
+          "disney-dreamlight-valley"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-water-body",
+        "tier": "purple",
+        "label": "TITLES CONTAINING A BODY OF WATER",
+        "gameIds": [
+          "monkey-island-2-special-edition-lechucks-revenge",
+          "yoshis-island-super-mario-advance-3",
+          "monkey-island-2-lechuck-s-revenge",
+          "call-of-the-sea"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "call-of-the-sea",
+        "title": "Call of the Sea"
+      },
+      {
+        "id": "portal",
+        "title": "Portal"
+      },
+      {
+        "id": "little-nightmares-ii",
+        "title": "Little Nightmares II"
+      },
+      {
+        "id": "stardew-valley",
+        "title": "Stardew Valley"
+      },
+      {
+        "id": "uncharted-drakes-fortune",
+        "title": "Uncharted: Drake's Fortune"
+      },
+      {
+        "id": "r-e-p-o",
+        "title": "R.E.P.O."
+      },
+      {
+        "id": "monkey-island-2-lechuck-s-revenge",
+        "title": "Monkey Island 2: LeChuck's Revenge"
+      },
+      {
+        "id": "crash-of-the-titans",
+        "title": "Crash of the Titans"
+      },
+      {
+        "id": "viva-pi-ata",
+        "title": "Viva Piñata"
+      },
+      {
+        "id": "harvest-moon",
+        "title": "Harvest Moon"
+      },
+      {
+        "id": "yoshis-island-super-mario-advance-3",
+        "title": "Yoshi's Island: Super Mario Advance 3"
+      },
+      {
+        "id": "alien-isolation",
+        "title": "Alien: Isolation"
+      },
+      {
+        "id": "monkey-island-2-special-edition-lechucks-revenge",
+        "title": "Monkey Island 2 Special Edition: LeChuck's Revenge"
+      },
+      {
+        "id": "super-mario-galaxy",
+        "title": "Super Mario Galaxy"
+      },
+      {
+        "id": "until-dawn",
+        "title": "Until Dawn"
+      },
+      {
+        "id": "disney-dreamlight-valley",
+        "title": "Disney Dreamlight Valley"
+      }
+    ]
+  },
+  "2026-06-29": {
+    "date": "2026-06-29",
+    "groups": [
+      {
+        "conceptId": "yellow-sport-2020s",
+        "tier": "yellow",
+        "label": "2020s SPORTS GAMES",
+        "gameIds": [
+          "ea-sports-fc-24",
+          "fifa-23",
+          "nintendo-switch-sports",
+          "fifa-21"
+        ]
+      },
+      {
+        "conceptId": "green-year-1992",
+        "tier": "green",
+        "label": "RELEASED IN 1992",
+        "gameIds": [
+          "teenage-mutant-ninja-turtles-iv-turtles-in-time",
+          "indiana-jones-and-the-fate-of-atlantis",
+          "super-mario-kart",
+          "final-fantasy-v"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-stealth",
+        "tier": "blue",
+        "label": "GAMES WHERE YOU SNEAK",
+        "gameIds": [
+          "tom-clancys-ghost-recon-breakpoint",
+          "sniper-elite-iii",
+          "metal-gear-solid-2-substance",
+          "assassins-creed-iii-remastered"
+        ]
+      },
+      {
+        "conceptId": "purple-long-single-word",
+        "tier": "purple",
+        "label": "ONE LONG WORD (9+ LETTERS)",
+        "gameIds": [
+          "supervive",
+          "inscryption",
+          "pentiment",
+          "undertale"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "sniper-elite-iii",
+        "title": "Sniper Elite III"
+      },
+      {
+        "id": "fifa-23",
+        "title": "FIFA 23"
+      },
+      {
+        "id": "final-fantasy-v",
+        "title": "Final Fantasy V"
+      },
+      {
+        "id": "inscryption",
+        "title": "Inscryption"
+      },
+      {
+        "id": "teenage-mutant-ninja-turtles-iv-turtles-in-time",
+        "title": "Teenage Mutant Ninja Turtles IV: Turtles in Time"
+      },
+      {
+        "id": "indiana-jones-and-the-fate-of-atlantis",
+        "title": "Indiana Jones and the Fate of Atlantis"
+      },
+      {
+        "id": "fifa-21",
+        "title": "FIFA 21"
+      },
+      {
+        "id": "metal-gear-solid-2-substance",
+        "title": "Metal Gear Solid 2: Substance"
+      },
+      {
+        "id": "nintendo-switch-sports",
+        "title": "Nintendo Switch Sports"
+      },
+      {
+        "id": "ea-sports-fc-24",
+        "title": "EA Sports FC 24"
+      },
+      {
+        "id": "supervive",
+        "title": "Supervive"
+      },
+      {
+        "id": "undertale",
+        "title": "Undertale"
+      },
+      {
+        "id": "tom-clancys-ghost-recon-breakpoint",
+        "title": "Tom Clancy's Ghost Recon: Breakpoint"
+      },
+      {
+        "id": "super-mario-kart",
+        "title": "Super Mario Kart"
+      },
+      {
+        "id": "assassins-creed-iii-remastered",
+        "title": "Assassin's Creed III Remastered"
+      },
+      {
+        "id": "pentiment",
+        "title": "Pentiment"
+      }
+    ]
+  },
+  "2026-06-30": {
+    "date": "2026-06-30",
+    "groups": [
+      {
+        "conceptId": "yellow-genre-sport",
+        "tier": "yellow",
+        "label": "SPORTS GAMES",
+        "gameIds": [
+          "fifa-14",
+          "fifa-16",
+          "fifa-street",
+          "fifa-soccer-11"
+        ]
+      },
+      {
+        "conceptId": "green-year-1989",
+        "tier": "green",
+        "label": "RELEASED IN 1989",
+        "gameIds": [
+          "golden-axe",
+          "tetris",
+          "final-fight",
+          "disneys-ducktales"
+        ]
+      },
+      {
+        "conceptId": "blue-curated-rough-launch",
+        "tier": "blue",
+        "label": "NOTORIOUSLY ROUGH LAUNCHES",
+        "gameIds": [
+          "cyberpunk-2077",
+          "battlefield-2042",
+          "no-man-s-sky",
+          "simcity"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-single-letter",
+        "tier": "purple",
+        "label": "TITLES WITH A SINGLE-LETTER WORD",
+        "gameIds": [
+          "daemon-x-machina",
+          "mega-man-x",
+          "grand-theft-auto-v",
+          "world-war-z"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "simcity",
+        "title": "SimCity"
+      },
+      {
+        "id": "cyberpunk-2077",
+        "title": "Cyberpunk 2077"
+      },
+      {
+        "id": "fifa-16",
+        "title": "FIFA 16"
+      },
+      {
+        "id": "final-fight",
+        "title": "Final Fight"
+      },
+      {
+        "id": "disneys-ducktales",
+        "title": "Disney's DuckTales"
+      },
+      {
+        "id": "tetris",
+        "title": "Tetris"
+      },
+      {
+        "id": "daemon-x-machina",
+        "title": "Daemon X Machina"
+      },
+      {
+        "id": "golden-axe",
+        "title": "Golden Axe"
+      },
+      {
+        "id": "grand-theft-auto-v",
+        "title": "Grand Theft Auto V"
+      },
+      {
+        "id": "world-war-z",
+        "title": "World War Z"
+      },
+      {
+        "id": "mega-man-x",
+        "title": "Mega Man X"
+      },
+      {
+        "id": "fifa-street",
+        "title": "FIFA Street"
+      },
+      {
+        "id": "fifa-soccer-11",
+        "title": "FIFA Soccer 11"
+      },
+      {
+        "id": "fifa-14",
+        "title": "FIFA 14"
+      },
+      {
+        "id": "no-man-s-sky",
+        "title": "No Man's Sky"
+      },
+      {
+        "id": "battlefield-2042",
+        "title": "Battlefield 2042"
+      }
+    ]
+  },
+  "2026-07-01": {
+    "date": "2026-07-01",
+    "groups": [
+      {
+        "conceptId": "yellow-sandbox-2020s",
+        "tier": "yellow",
+        "label": "2020s SANDBOX GAMES",
+        "gameIds": [
+          "core-keeper",
+          "raft",
+          "palworld",
+          "satisfactory"
+        ]
+      },
+      {
+        "conceptId": "green-year-2016",
+        "tier": "green",
+        "label": "RELEASED IN 2016",
+        "gameIds": [
+          "ratchet-clank",
+          "superhot",
+          "final-fantasy-xv",
+          "stellaris"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-ghosts",
+        "tier": "blue",
+        "label": "GHOSTS INVOLVED",
+        "gameIds": [
+          "rogue-legacy",
+          "beyond-two-souls",
+          "child-of-light",
+          "luigis-mansion-3"
+        ]
+      },
+      {
+        "conceptId": "purple-hides-land",
+        "tier": "purple",
+        "label": "TITLES HIDING 'LAND'",
+        "gameIds": [
+          "yokus-island-express",
+          "the-curse-of-monkey-island",
+          "tales-from-the-borderlands",
+          "the-secret-of-monkey-island"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "final-fantasy-xv",
+        "title": "Final Fantasy XV"
+      },
+      {
+        "id": "satisfactory",
+        "title": "Satisfactory"
+      },
+      {
+        "id": "tales-from-the-borderlands",
+        "title": "Tales from the Borderlands"
+      },
+      {
+        "id": "beyond-two-souls",
+        "title": "Beyond: Two Souls"
+      },
+      {
+        "id": "luigis-mansion-3",
+        "title": "Luigi's Mansion 3"
+      },
+      {
+        "id": "child-of-light",
+        "title": "Child of Light"
+      },
+      {
+        "id": "stellaris",
+        "title": "Stellaris"
+      },
+      {
+        "id": "palworld",
+        "title": "Palworld"
+      },
+      {
+        "id": "yokus-island-express",
+        "title": "Yoku's Island Express"
+      },
+      {
+        "id": "superhot",
+        "title": "SuperHot"
+      },
+      {
+        "id": "the-curse-of-monkey-island",
+        "title": "The Curse of Monkey Island"
+      },
+      {
+        "id": "the-secret-of-monkey-island",
+        "title": "The Secret of Monkey Island"
+      },
+      {
+        "id": "ratchet-clank",
+        "title": "Ratchet & Clank"
+      },
+      {
+        "id": "core-keeper",
+        "title": "Core Keeper"
+      },
+      {
+        "id": "rogue-legacy",
+        "title": "Rogue Legacy"
+      },
+      {
+        "id": "raft",
+        "title": "Raft"
+      }
+    ]
+  },
+  "2026-07-02": {
+    "date": "2026-07-02",
+    "groups": [
+      {
+        "conceptId": "yellow-shooter-2000s",
+        "tier": "yellow",
+        "label": "2000s SHOOTERS",
+        "gameIds": [
           "call-of-duty-modern-warfare-2",
-          "uncharted-drakes-fortune"
+          "dead-space",
+          "call-of-duty",
+          "left-4-dead-2"
+        ]
+      },
+      {
+        "conceptId": "green-year-2012",
+        "tier": "green",
+        "label": "RELEASED IN 2012",
+        "gameIds": [
+          "animal-crossing-new-leaf",
+          "dishonored",
+          "prototype-2",
+          "far-cry-3"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-female-protagonist",
+        "tier": "blue",
+        "label": "YOU PLAY AS A WOMAN",
+        "gameIds": [
+          "silent-hill-f",
+          "haunting-ground",
+          "metroid-samus-returns",
+          "assassins-creed-chronicles-china"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-royalty",
+        "tier": "purple",
+        "label": "TITLES FIT FOR ROYALTY",
+        "gameIds": [
+          "warcraft-iii-the-frozen-throne",
+          "kingdom-rush",
+          "castlevania-lords-of-shadow",
+          "bramble-the-mountain-king"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "prototype-2",
+        "title": "Prototype 2"
+      },
+      {
+        "id": "warcraft-iii-the-frozen-throne",
+        "title": "Warcraft III: The Frozen Throne"
+      },
+      {
+        "id": "silent-hill-f",
+        "title": "Silent Hill f"
+      },
+      {
+        "id": "haunting-ground",
+        "title": "Haunting Ground"
+      },
+      {
+        "id": "castlevania-lords-of-shadow",
+        "title": "Castlevania: Lords of Shadow"
+      },
+      {
+        "id": "assassins-creed-chronicles-china",
+        "title": "Assassin's Creed Chronicles: China"
+      },
+      {
+        "id": "call-of-duty-modern-warfare-2",
+        "title": "Call of Duty: Modern Warfare 2"
+      },
+      {
+        "id": "metroid-samus-returns",
+        "title": "Metroid: Samus Returns"
+      },
+      {
+        "id": "bramble-the-mountain-king",
+        "title": "Bramble: The Mountain King"
+      },
+      {
+        "id": "dead-space",
+        "title": "Dead Space"
+      },
+      {
+        "id": "kingdom-rush",
+        "title": "Kingdom Rush"
+      },
+      {
+        "id": "left-4-dead-2",
+        "title": "Left 4 Dead 2"
+      },
+      {
+        "id": "animal-crossing-new-leaf",
+        "title": "Animal Crossing: New Leaf"
+      },
+      {
+        "id": "far-cry-3",
+        "title": "Far Cry 3"
+      },
+      {
+        "id": "dishonored",
+        "title": "Dishonored"
+      },
+      {
+        "id": "call-of-duty",
+        "title": "Call of Duty"
+      }
+    ]
+  },
+  "2026-07-03": {
+    "date": "2026-07-03",
+    "groups": [
+      {
+        "conceptId": "yellow-genre-simulator",
+        "tier": "yellow",
+        "label": "SIMULATORS",
+        "gameIds": [
+          "pong",
+          "sid-meiers-civilization-v",
+          "stronghold",
+          "rollercoaster-tycoon"
+        ]
+      },
+      {
+        "conceptId": "green-console-ds",
+        "tier": "green",
+        "label": "PLAYABLE ON THE DS",
+        "gameIds": [
+          "pok-mon-mystery-dungeon-blue-rescue-team",
+          "professor-layton-and-the-last-specter",
+          "pok-mon-platinum-version",
+          "sonic-rush"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-horror",
+        "tier": "blue",
+        "label": "HORROR GAMES",
+        "gameIds": [
+          "resident-evil-requiem",
+          "bloodborne",
+          "lethal-company",
+          "outlast-whistleblower"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-body-part",
+        "tier": "purple",
+        "label": "TITLES CONTAINING A BODY PART",
+        "gameIds": [
+          "hearts-of-iron-iv",
+          "circle-of-blood",
+          "kingdom-hearts-ii",
+          "call-of-juarez-bound-in-blood"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "resident-evil-requiem",
+        "title": "Resident Evil Requiem"
+      },
+      {
+        "id": "pok-mon-mystery-dungeon-blue-rescue-team",
+        "title": "Pokémon Mystery Dungeon: Blue Rescue Team"
+      },
+      {
+        "id": "sonic-rush",
+        "title": "Sonic Rush"
+      },
+      {
+        "id": "circle-of-blood",
+        "title": "Circle of Blood"
+      },
+      {
+        "id": "rollercoaster-tycoon",
+        "title": "RollerCoaster Tycoon"
+      },
+      {
+        "id": "bloodborne",
+        "title": "Bloodborne"
+      },
+      {
+        "id": "stronghold",
+        "title": "Stronghold"
+      },
+      {
+        "id": "pong",
+        "title": "Pong"
+      },
+      {
+        "id": "pok-mon-platinum-version",
+        "title": "Pokémon Platinum Version"
+      },
+      {
+        "id": "outlast-whistleblower",
+        "title": "Outlast: Whistleblower"
+      },
+      {
+        "id": "sid-meiers-civilization-v",
+        "title": "Sid Meier's Civilization V"
+      },
+      {
+        "id": "kingdom-hearts-ii",
+        "title": "Kingdom Hearts II"
+      },
+      {
+        "id": "call-of-juarez-bound-in-blood",
+        "title": "Call of Juarez: Bound In Blood"
+      },
+      {
+        "id": "hearts-of-iron-iv",
+        "title": "Hearts of Iron IV"
+      },
+      {
+        "id": "professor-layton-and-the-last-specter",
+        "title": "Professor Layton and the Last Specter"
+      },
+      {
+        "id": "lethal-company",
+        "title": "Lethal Company"
+      }
+    ]
+  },
+  "2026-07-04": {
+    "date": "2026-07-04",
+    "groups": [
+      {
+        "conceptId": "yellow-sport-2000s",
+        "tier": "yellow",
+        "label": "2000s SPORTS GAMES",
+        "gameIds": [
+          "wii-play",
+          "world-soccer-winning-eleven-7-international",
+          "colin-mcrae-rally-2-0",
+          "wii-fit"
+        ]
+      },
+      {
+        "conceptId": "green-year-1991",
+        "tier": "green",
+        "label": "RELEASED IN 1991",
+        "gameIds": [
+          "lemmings",
+          "the-simpsons-arcade-game",
+          "duke-nukem",
+          "sid-meiers-civilization"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-military",
+        "tier": "blue",
+        "label": "MILITARY OPERATIONS",
+        "gameIds": [
+          "medal-of-honor",
+          "command-conquer-generals",
+          "halo-the-master-chief-collection",
+          "killzone-2"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-creature",
+        "tier": "purple",
+        "label": "TITLES CONTAINING A MONSTER",
+        "gameIds": [
+          "devil-may-cry-2",
+          "vampire-survivors",
+          "dragons-lair",
+          "the-beast-within-a-gabriel-knight-mystery"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "halo-the-master-chief-collection",
+        "title": "Halo: The Master Chief Collection"
+      },
+      {
+        "id": "wii-play",
+        "title": "Wii Play"
+      },
+      {
+        "id": "vampire-survivors",
+        "title": "Vampire Survivors"
+      },
+      {
+        "id": "killzone-2",
+        "title": "Killzone 2"
+      },
+      {
+        "id": "world-soccer-winning-eleven-7-international",
+        "title": "World Soccer: Winning Eleven 7 International"
+      },
+      {
+        "id": "command-conquer-generals",
+        "title": "Command & Conquer: Generals"
+      },
+      {
+        "id": "the-beast-within-a-gabriel-knight-mystery",
+        "title": "The Beast Within: A Gabriel Knight Mystery"
+      },
+      {
+        "id": "lemmings",
+        "title": "Lemmings"
+      },
+      {
+        "id": "medal-of-honor",
+        "title": "Medal of Honor"
+      },
+      {
+        "id": "dragons-lair",
+        "title": "Dragon's Lair"
+      },
+      {
+        "id": "duke-nukem",
+        "title": "Duke Nukem"
+      },
+      {
+        "id": "sid-meiers-civilization",
+        "title": "Sid Meier's Civilization"
+      },
+      {
+        "id": "colin-mcrae-rally-2-0",
+        "title": "Colin McRae Rally 2.0"
+      },
+      {
+        "id": "devil-may-cry-2",
+        "title": "Devil May Cry 2"
+      },
+      {
+        "id": "wii-fit",
+        "title": "Wii Fit"
+      },
+      {
+        "id": "the-simpsons-arcade-game",
+        "title": "The Simpsons Arcade Game"
+      }
+    ]
+  },
+  "2026-07-05": {
+    "date": "2026-07-05",
+    "groups": [
+      {
+        "conceptId": "yellow-platform-2010s",
+        "tier": "yellow",
+        "label": "2010s PLATFORMERS",
+        "gameIds": [
+          "splatoon",
+          "uncharted-3-drake-s-deception",
+          "donkey-kong-country-returns",
+          "enslaved-odyssey-to-the-west"
+        ]
+      },
+      {
+        "conceptId": "green-year-1990",
+        "tier": "green",
+        "label": "RELEASED IN 1990",
+        "gameIds": [
+          "super-mario-world",
+          "mega-man-3",
+          "dr-mario",
+          "metal-gear-2-solid-snake"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-robots",
+        "tier": "blue",
+        "label": "ROBOTS INVOLVED",
+        "gameIds": [
+          "mega-man-x3",
+          "mega-man-x4",
+          "timesplitters",
+          "ratchet-deadlocked"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-colour",
+        "tier": "purple",
+        "label": "TITLES CONTAINING A COLOUR",
+        "gameIds": [
+          "black-white",
+          "command-conquer-red-alert-2",
+          "pok-mon-red-version",
+          "call-of-duty-black-ops-cold-war"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "ratchet-deadlocked",
+        "title": "Ratchet: Deadlocked"
+      },
+      {
+        "id": "mega-man-3",
+        "title": "Mega Man 3"
+      },
+      {
+        "id": "black-white",
+        "title": "Black & White"
+      },
+      {
+        "id": "enslaved-odyssey-to-the-west",
+        "title": "Enslaved: Odyssey to the West"
+      },
+      {
+        "id": "command-conquer-red-alert-2",
+        "title": "Command & Conquer: Red Alert 2"
+      },
+      {
+        "id": "metal-gear-2-solid-snake",
+        "title": "Metal Gear 2: Solid Snake"
+      },
+      {
+        "id": "call-of-duty-black-ops-cold-war",
+        "title": "Call of Duty: Black Ops Cold War"
+      },
+      {
+        "id": "timesplitters",
+        "title": "TimeSplitters"
+      },
+      {
+        "id": "mega-man-x4",
+        "title": "Mega Man X4"
+      },
+      {
+        "id": "donkey-kong-country-returns",
+        "title": "Donkey Kong Country Returns"
+      },
+      {
+        "id": "uncharted-3-drake-s-deception",
+        "title": "Uncharted 3: Drake's Deception"
+      },
+      {
+        "id": "dr-mario",
+        "title": "Dr. Mario"
+      },
+      {
+        "id": "super-mario-world",
+        "title": "Super Mario World"
+      },
+      {
+        "id": "mega-man-x3",
+        "title": "Mega Man X3"
+      },
+      {
+        "id": "splatoon",
+        "title": "Splatoon"
+      },
+      {
+        "id": "pok-mon-red-version",
+        "title": "Pokémon Red Version"
+      }
+    ]
+  },
+  "2026-07-06": {
+    "date": "2026-07-06",
+    "groups": [
+      {
+        "conceptId": "yellow-sport-1990s",
+        "tier": "yellow",
+        "label": "1990s SPORTS GAMES",
+        "gameIds": [
+          "rock-n-roll-racing",
+          "tony-hawks-pro-skater",
+          "fifa-99",
+          "fifa-road-to-world-cup-98"
+        ]
+      },
+      {
+        "conceptId": "green-year-2025",
+        "tier": "green",
+        "label": "RELEASED IN 2025",
+        "gameIds": [
+          "arena-breakout-infinite",
+          "cronos-the-new-dawn",
+          "professor-layton-and-the-new-world-of-steam",
+          "dispatch"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-space",
+        "tier": "blue",
+        "label": "SET IN SPACE",
+        "gameIds": [
+          "starfield",
+          "hardspace-shipbreaker",
+          "mass-effect-3",
+          "marvels-guardians-of-the-galaxy"
+        ]
+      },
+      {
+        "conceptId": "purple-title-with-exclamation",
+        "tier": "purple",
+        "label": "TITLES WITH AN EXCLAMATION MARK",
+        "gameIds": [
+          "punch-out",
+          "doki-doki-literature-club",
+          "wwf-smackdown-2-know-your-role",
+          "warioware-inc"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "starfield",
+        "title": "Starfield"
+      },
+      {
+        "id": "wwf-smackdown-2-know-your-role",
+        "title": "WWF SmackDown! 2: Know Your Role"
+      },
+      {
+        "id": "hardspace-shipbreaker",
+        "title": "Hardspace: Shipbreaker"
+      },
+      {
+        "id": "cronos-the-new-dawn",
+        "title": "Cronos: The New Dawn"
+      },
+      {
+        "id": "fifa-road-to-world-cup-98",
+        "title": "FIFA: Road to World Cup 98"
+      },
+      {
+        "id": "rock-n-roll-racing",
+        "title": "Rock n' Roll Racing"
+      },
+      {
+        "id": "mass-effect-3",
+        "title": "Mass Effect 3"
+      },
+      {
+        "id": "fifa-99",
+        "title": "FIFA 99"
+      },
+      {
+        "id": "punch-out",
+        "title": "Punch-Out!!"
+      },
+      {
+        "id": "warioware-inc",
+        "title": "WarioWare, Inc.: Mega Microgames!"
+      },
+      {
+        "id": "dispatch",
+        "title": "Dispatch"
+      },
+      {
+        "id": "professor-layton-and-the-new-world-of-steam",
+        "title": "Professor Layton and the New World of Steam"
+      },
+      {
+        "id": "doki-doki-literature-club",
+        "title": "Doki Doki Literature Club!"
+      },
+      {
+        "id": "tony-hawks-pro-skater",
+        "title": "Tony Hawk's Pro Skater"
+      },
+      {
+        "id": "marvels-guardians-of-the-galaxy",
+        "title": "Marvel's Guardians of the Galaxy"
+      },
+      {
+        "id": "arena-breakout-infinite",
+        "title": "Arena Breakout: Infinite"
+      }
+    ]
+  },
+  "2026-07-07": {
+    "date": "2026-07-07",
+    "groups": [
+      {
+        "conceptId": "yellow-music-2000s",
+        "tier": "yellow",
+        "label": "2000s MUSIC GAMES",
+        "gameIds": [
+          "guitar-hero-aerosmith",
+          "the-beatles-rock-band",
+          "guitar-hero-5",
+          "guitar-hero"
+        ]
+      },
+      {
+        "conceptId": "green-year-2017",
+        "tier": "green",
+        "label": "RELEASED IN 2017",
+        "gameIds": [
+          "cuphead",
+          "hollow-knight",
+          "rime",
+          "injustice-2"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-crime",
+        "tier": "blue",
+        "label": "A LIFE OF CRIME",
+        "gameIds": [
+          "grand-theft-auto-iii",
+          "grand-theft-auto-chinatown-wars",
+          "grand-theft-auto-iv-the-lost-and-damned",
+          "grand-theft-auto-iv-complete-edition"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-element",
+        "tier": "purple",
+        "label": "TITLES CONTAINING AN ELEMENT",
+        "gameIds": [
+          "fire-emblem-path-of-radiance",
+          "dantes-inferno",
+          "fire-emblem-awakening",
+          "fire-emblem-the-binding-blade"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "the-beatles-rock-band",
+        "title": "The Beatles: Rock Band"
+      },
+      {
+        "id": "grand-theft-auto-iv-complete-edition",
+        "title": "Grand Theft Auto IV: Complete Edition"
+      },
+      {
+        "id": "cuphead",
+        "title": "Cuphead"
+      },
+      {
+        "id": "guitar-hero-aerosmith",
+        "title": "Guitar Hero: Aerosmith"
+      },
+      {
+        "id": "guitar-hero-5",
+        "title": "Guitar Hero 5"
+      },
+      {
+        "id": "grand-theft-auto-iii",
+        "title": "Grand Theft Auto III"
+      },
+      {
+        "id": "hollow-knight",
+        "title": "Hollow Knight"
+      },
+      {
+        "id": "grand-theft-auto-iv-the-lost-and-damned",
+        "title": "Grand Theft Auto IV: The Lost and Damned"
+      },
+      {
+        "id": "grand-theft-auto-chinatown-wars",
+        "title": "Grand Theft Auto: Chinatown Wars"
+      },
+      {
+        "id": "rime",
+        "title": "RiME"
+      },
+      {
+        "id": "fire-emblem-the-binding-blade",
+        "title": "Fire Emblem: The Binding Blade"
+      },
+      {
+        "id": "guitar-hero",
+        "title": "Guitar Hero"
+      },
+      {
+        "id": "fire-emblem-path-of-radiance",
+        "title": "Fire Emblem: Path of Radiance"
+      },
+      {
+        "id": "fire-emblem-awakening",
+        "title": "Fire Emblem Awakening"
+      },
+      {
+        "id": "dantes-inferno",
+        "title": "Dante's Inferno"
+      },
+      {
+        "id": "injustice-2",
+        "title": "Injustice 2"
+      }
+    ]
+  },
+  "2026-07-08": {
+    "date": "2026-07-08",
+    "groups": [
+      {
+        "conceptId": "yellow-sport-2010s",
+        "tier": "yellow",
+        "label": "2010s SPORTS GAMES",
+        "gameIds": [
+          "forza-motorsport-4",
+          "project-cars",
+          "football-manager-2020",
+          "need-for-speed-heat"
+        ]
+      },
+      {
+        "conceptId": "green-console-wii",
+        "tier": "green",
+        "label": "PLAYABLE ON THE WII",
+        "gameIds": [
+          "excitebike",
+          "road-fighter",
+          "metal-slug",
+          "commando"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-mythology",
+        "tier": "blue",
+        "label": "BUILT ON MYTHOLOGY",
+        "gameIds": [
+          "perfect-world",
+          "god-of-war-2005",
+          "pok-mon-diamond-version",
+          "god-of-war-ii"
+        ]
+      },
+      {
+        "conceptId": "purple-hides-mine",
+        "tier": "purple",
+        "label": "TITLES HIDING 'MINE'",
+        "gameIds": [
+          "minecraft-java-edition",
+          "bioshock-2-minervas-den",
+          "minecraft-dungeons",
+          "harvest-moon-friends-of-mineral-town"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "forza-motorsport-4",
+        "title": "Forza Motorsport 4"
+      },
+      {
+        "id": "minecraft-java-edition",
+        "title": "Minecraft: Java Edition"
+      },
+      {
+        "id": "pok-mon-diamond-version",
+        "title": "Pokémon Diamond Version"
+      },
+      {
+        "id": "god-of-war-2005",
+        "title": "God of War"
+      },
+      {
+        "id": "commando",
+        "title": "Commando"
+      },
+      {
+        "id": "metal-slug",
+        "title": "Metal Slug"
+      },
+      {
+        "id": "road-fighter",
+        "title": "Road Fighter"
+      },
+      {
+        "id": "football-manager-2020",
+        "title": "Football Manager 2020"
+      },
+      {
+        "id": "need-for-speed-heat",
+        "title": "Need for Speed: Heat"
+      },
+      {
+        "id": "perfect-world",
+        "title": "Perfect World"
+      },
+      {
+        "id": "project-cars",
+        "title": "Project CARS"
+      },
+      {
+        "id": "minecraft-dungeons",
+        "title": "Minecraft Dungeons"
+      },
+      {
+        "id": "bioshock-2-minervas-den",
+        "title": "BioShock 2: Minerva's Den"
+      },
+      {
+        "id": "harvest-moon-friends-of-mineral-town",
+        "title": "Harvest Moon: Friends of Mineral Town"
+      },
+      {
+        "id": "god-of-war-ii",
+        "title": "God of War II"
+      },
+      {
+        "id": "excitebike",
+        "title": "Excitebike"
+      }
+    ]
+  },
+  "2026-07-09": {
+    "date": "2026-07-09",
+    "groups": [
+      {
+        "conceptId": "yellow-horror-2010s",
+        "tier": "yellow",
+        "label": "2010s HORROR GAMES",
+        "gameIds": [
+          "resident-evil",
+          "the-last-of-us-remastered",
+          "resident-evil-7-biohazard",
+          "the-dark-pictures-anthology-man-of-medan"
+        ]
+      },
+      {
+        "conceptId": "green-year-2008",
+        "tier": "green",
+        "label": "RELEASED IN 2008",
+        "gameIds": [
+          "tom-clancys-rainbow-six-vegas-2",
+          "race-driver-grid",
+          "professor-layton-and-the-unwound-future",
+          "castlevania-order-of-ecclesia"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-superhero",
+        "tier": "blue",
+        "label": "SUPERHERO GAMES",
+        "gameIds": [
+          "the-punisher",
+          "batman-arkham-asylum",
+          "suicide-squad-kill-the-justice-league",
+          "marvel-rivals"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-time-of-day",
+        "tier": "purple",
+        "label": "TITLES CONTAINING A TIME OF DAY",
+        "gameIds": [
+          "castlevania-symphony-of-the-night",
+          "days-gone",
+          "night-in-the-woods",
+          "warhammer-40-000-dawn-of-war"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "professor-layton-and-the-unwound-future",
+        "title": "Professor Layton and the Unwound Future"
+      },
+      {
+        "id": "castlevania-symphony-of-the-night",
+        "title": "Castlevania: Symphony of the Night"
+      },
+      {
+        "id": "marvel-rivals",
+        "title": "Marvel Rivals"
+      },
+      {
+        "id": "castlevania-order-of-ecclesia",
+        "title": "Castlevania: Order of Ecclesia"
+      },
+      {
+        "id": "resident-evil",
+        "title": "Resident Evil"
+      },
+      {
+        "id": "suicide-squad-kill-the-justice-league",
+        "title": "Suicide Squad: Kill the Justice League"
+      },
+      {
+        "id": "the-last-of-us-remastered",
+        "title": "The Last of Us Remastered"
+      },
+      {
+        "id": "resident-evil-7-biohazard",
+        "title": "Resident Evil 7: Biohazard"
+      },
+      {
+        "id": "tom-clancys-rainbow-six-vegas-2",
+        "title": "Tom Clancy's Rainbow Six: Vegas 2"
+      },
+      {
+        "id": "the-punisher",
+        "title": "The Punisher"
+      },
+      {
+        "id": "days-gone",
+        "title": "Days Gone"
+      },
+      {
+        "id": "night-in-the-woods",
+        "title": "Night in the Woods"
+      },
+      {
+        "id": "the-dark-pictures-anthology-man-of-medan",
+        "title": "The Dark Pictures Anthology: Man of Medan"
+      },
+      {
+        "id": "batman-arkham-asylum",
+        "title": "Batman: Arkham Asylum"
+      },
+      {
+        "id": "race-driver-grid",
+        "title": "Race Driver: Grid"
+      },
+      {
+        "id": "warhammer-40-000-dawn-of-war",
+        "title": "Warhammer 40,000: Dawn of War"
+      }
+    ]
+  },
+  "2026-07-10": {
+    "date": "2026-07-10",
+    "groups": [
+      {
+        "conceptId": "yellow-simulator-1990s",
+        "tier": "yellow",
+        "label": "1990s SIMULATORS",
+        "gameIds": [
+          "simcity-2000",
+          "need-for-speed-ii",
+          "digimon-world",
+          "theme-park"
+        ]
+      },
+      {
+        "conceptId": "green-year-2000",
+        "tier": "green",
+        "label": "RELEASED IN 2000",
+        "gameIds": [
+          "pok-mon-crystal-version",
+          "dark-cloud",
+          "driver-2-back-on-the-streets",
+          "final-fantasy-ix"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-co-op",
+        "tier": "blue",
+        "label": "BETTER WITH A FRIEND (CO-OP)",
+        "gameIds": [
+          "dying-light-2-stay-human",
+          "dying-light",
+          "deep-rock-galactic",
+          "monster-hunter-world"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-time",
+        "tier": "purple",
+        "label": "TITLES ABOUT TIME",
+        "gameIds": [
+          "zero-time-dilemma",
+          "bioshock-infinite",
+          "pillars-of-eternity-ii-deadfire",
+          "crash-bandicoot-4-its-about-time"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "crash-bandicoot-4-its-about-time",
+        "title": "Crash Bandicoot 4: It's About Time"
+      },
+      {
+        "id": "pok-mon-crystal-version",
+        "title": "Pokémon Crystal Version"
+      },
+      {
+        "id": "bioshock-infinite",
+        "title": "BioShock Infinite"
+      },
+      {
+        "id": "theme-park",
+        "title": "Theme Park"
+      },
+      {
+        "id": "driver-2-back-on-the-streets",
+        "title": "Driver 2: Back on the Streets"
+      },
+      {
+        "id": "need-for-speed-ii",
+        "title": "Need for Speed II"
+      },
+      {
+        "id": "dying-light-2-stay-human",
+        "title": "Dying Light 2: Stay Human"
+      },
+      {
+        "id": "monster-hunter-world",
+        "title": "Monster Hunter: World"
+      },
+      {
+        "id": "zero-time-dilemma",
+        "title": "Zero Time Dilemma"
+      },
+      {
+        "id": "simcity-2000",
+        "title": "SimCity 2000"
+      },
+      {
+        "id": "digimon-world",
+        "title": "Digimon World"
+      },
+      {
+        "id": "pillars-of-eternity-ii-deadfire",
+        "title": "Pillars of Eternity II: Deadfire"
+      },
+      {
+        "id": "dying-light",
+        "title": "Dying Light"
+      },
+      {
+        "id": "dark-cloud",
+        "title": "Dark Cloud"
+      },
+      {
+        "id": "deep-rock-galactic",
+        "title": "Deep Rock Galactic"
+      },
+      {
+        "id": "final-fantasy-ix",
+        "title": "Final Fantasy IX"
+      }
+    ]
+  },
+  "2026-07-11": {
+    "date": "2026-07-11",
+    "groups": [
+      {
+        "conceptId": "yellow-survival-2020s",
+        "tier": "yellow",
+        "label": "2020s SURVIVAL GAMES",
+        "gameIds": [
+          "aska",
+          "grounded",
+          "sons-of-the-forest",
+          "dwarf-fortress"
+        ]
+      },
+      {
+        "conceptId": "green-console-ps1",
+        "tier": "green",
+        "label": "PLAYABLE ON THE PS1",
+        "gameIds": [
+          "command-conquer",
+          "parasite-eve",
+          "time-crisis",
+          "destruction-derby"
+        ]
+      },
+      {
+        "conceptId": "blue-curated-started-as-mods",
+        "tier": "blue",
+        "label": "STARTED LIFE AS A MOD",
+        "gameIds": [
+          "pubg-battlegrounds",
+          "team-fortress-2",
+          "counter-strike",
+          "dayz"
         ]
       },
       {
@@ -3835,77 +3605,307 @@
         "tier": "purple",
         "label": "ONE-WORD TITLES THAT ARE VERBS",
         "gameIds": [
-          "prey",
-          "outlast",
+          "stray",
           "dredge",
+          "outlast",
           "quake"
         ]
       }
     ],
     "tiles": [
       {
-        "id": "call-of-duty-modern-warfare-2",
-        "title": "Call of Duty: Modern Warfare 2"
-      },
-      {
-        "id": "simcity",
-        "title": "SimCity"
-      },
-      {
-        "id": "tom-clancys-ghost-recon-wildlands",
-        "title": "Tom Clancy's Ghost Recon: Wildlands"
-      },
-      {
         "id": "dredge",
         "title": "Dredge"
-      },
-      {
-        "id": "need-for-speed-hot-pursuit-remastered",
-        "title": "Need for Speed: Hot Pursuit - Remastered"
-      },
-      {
-        "id": "half-life-2",
-        "title": "Half-Life 2"
       },
       {
         "id": "outlast",
         "title": "Outlast"
       },
       {
-        "id": "uncharted-drakes-fortune",
-        "title": "Uncharted: Drake's Fortune"
+        "id": "parasite-eve",
+        "title": "Parasite Eve"
       },
       {
-        "id": "forza-motorsport",
-        "title": "Forza Motorsport"
+        "id": "command-conquer",
+        "title": "Command & Conquer"
       },
       {
-        "id": "grand-theft-auto-iii-the-definitive-edition",
-        "title": "Grand Theft Auto III: The Definitive Edition"
+        "id": "aska",
+        "title": "Aska"
       },
       {
-        "id": "world-of-warcraft",
-        "title": "World of Warcraft"
+        "id": "team-fortress-2",
+        "title": "Team Fortress 2"
       },
       {
-        "id": "grand-theft-auto-san-andreas-the-definitive-edition",
-        "title": "Grand Theft Auto: San Andreas - The Definitive Edition"
+        "id": "dayz",
+        "title": "DayZ"
       },
       {
-        "id": "sly-2-band-of-thieves",
-        "title": "Sly 2: Band of Thieves"
+        "id": "time-crisis",
+        "title": "Time Crisis"
+      },
+      {
+        "id": "stray",
+        "title": "Stray"
+      },
+      {
+        "id": "sons-of-the-forest",
+        "title": "Sons of the Forest"
+      },
+      {
+        "id": "pubg-battlegrounds",
+        "title": "PUBG: Battlegrounds"
+      },
+      {
+        "id": "dwarf-fortress",
+        "title": "Dwarf Fortress"
       },
       {
         "id": "quake",
         "title": "Quake"
       },
       {
-        "id": "halo-2",
-        "title": "Halo 2"
+        "id": "grounded",
+        "title": "Grounded"
       },
       {
-        "id": "prey",
-        "title": "Prey"
+        "id": "destruction-derby",
+        "title": "Destruction Derby"
+      },
+      {
+        "id": "counter-strike",
+        "title": "Counter-Strike"
+      }
+    ]
+  },
+  "2026-07-12": {
+    "date": "2026-07-12",
+    "groups": [
+      {
+        "conceptId": "yellow-genre-sandbox",
+        "tier": "yellow",
+        "label": "SANDBOX GAMES",
+        "gameIds": [
+          "nightingale",
+          "terraria",
+          "littlebigplanet",
+          "scribblenauts-unlimited"
+        ]
+      },
+      {
+        "conceptId": "green-year-1993",
+        "tier": "green",
+        "label": "RELEASED IN 1993",
+        "gameIds": [
+          "sam-max-hit-the-road",
+          "star-wars-x-wing",
+          "day-of-the-tentacle",
+          "samurai-shodown"
+        ]
+      },
+      {
+        "conceptId": "blue-curated-mmo",
+        "tier": "blue",
+        "label": "FAMOUS MMOS",
+        "gameIds": [
+          "world-of-warcraft",
+          "guild-wars-2",
+          "runescape",
+          "guild-wars"
+        ]
+      },
+      {
+        "conceptId": "purple-hides-lord",
+        "tier": "purple",
+        "label": "TITLES HIDING 'LORD'",
+        "gameIds": [
+          "world-of-warcraft-warlords-of-draenor",
+          "mass-effect-2-overlord",
+          "overlord",
+          "star-wars-knights-of-the-old-republic-ii-the-sith-lords"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "terraria",
+        "title": "Terraria"
+      },
+      {
+        "id": "sam-max-hit-the-road",
+        "title": "Sam & Max Hit the Road"
+      },
+      {
+        "id": "star-wars-knights-of-the-old-republic-ii-the-sith-lords",
+        "title": "Star Wars: Knights of the Old Republic II - The Sith Lords"
+      },
+      {
+        "id": "samurai-shodown",
+        "title": "Samurai Shodown"
+      },
+      {
+        "id": "mass-effect-2-overlord",
+        "title": "Mass Effect 2: Overlord"
+      },
+      {
+        "id": "scribblenauts-unlimited",
+        "title": "Scribblenauts Unlimited"
+      },
+      {
+        "id": "nightingale",
+        "title": "Nightingale"
+      },
+      {
+        "id": "overlord",
+        "title": "Overlord"
+      },
+      {
+        "id": "guild-wars-2",
+        "title": "Guild Wars 2"
+      },
+      {
+        "id": "world-of-warcraft",
+        "title": "World of Warcraft"
+      },
+      {
+        "id": "world-of-warcraft-warlords-of-draenor",
+        "title": "World of Warcraft: Warlords of Draenor"
+      },
+      {
+        "id": "day-of-the-tentacle",
+        "title": "Day of the Tentacle"
+      },
+      {
+        "id": "runescape",
+        "title": "RuneScape"
+      },
+      {
+        "id": "star-wars-x-wing",
+        "title": "Star Wars: X-Wing"
+      },
+      {
+        "id": "littlebigplanet",
+        "title": "LittleBigPlanet"
+      },
+      {
+        "id": "guild-wars",
+        "title": "Guild Wars"
+      }
+    ]
+  },
+  "2026-07-13": {
+    "date": "2026-07-13",
+    "groups": [
+      {
+        "conceptId": "yellow-indie-2010s",
+        "tier": "yellow",
+        "label": "2010s INDIE GAMES",
+        "gameIds": [
+          "inside",
+          "super-meat-boy",
+          "deponia",
+          "the-binding-of-isaac"
+        ]
+      },
+      {
+        "conceptId": "green-console-psp",
+        "tier": "green",
+        "label": "PLAYABLE ON THE PSP",
+        "gameIds": [
+          "dino-crisis-2",
+          "lego-batman-the-videogame",
+          "dino-crisis",
+          "command-conquer-red-alert"
+        ]
+      },
+      {
+        "conceptId": "blue-tag-building",
+        "tier": "blue",
+        "label": "GAMES WHERE YOU BUILD",
+        "gameIds": [
+          "the-sims-4",
+          "tom-clancys-ghost-recon-wildlands",
+          "crackdown",
+          "crysis-2"
+        ]
+      },
+      {
+        "conceptId": "purple-contains-structure",
+        "tier": "purple",
+        "label": "TITLES CONTAINING A BUILDING",
+        "gameIds": [
+          "batman-arkham-city-game-of-the-year-edition",
+          "the-lord-of-the-rings-the-two-towers",
+          "maniac-mansion",
+          "the-house-of-the-dead-2"
+        ]
+      }
+    ],
+    "tiles": [
+      {
+        "id": "deponia",
+        "title": "Deponia"
+      },
+      {
+        "id": "dino-crisis",
+        "title": "Dino Crisis"
+      },
+      {
+        "id": "the-sims-4",
+        "title": "The Sims 4"
+      },
+      {
+        "id": "maniac-mansion",
+        "title": "Maniac Mansion"
+      },
+      {
+        "id": "crysis-2",
+        "title": "Crysis 2"
+      },
+      {
+        "id": "the-binding-of-isaac",
+        "title": "The Binding of Isaac"
+      },
+      {
+        "id": "tom-clancys-ghost-recon-wildlands",
+        "title": "Tom Clancy's Ghost Recon: Wildlands"
+      },
+      {
+        "id": "the-lord-of-the-rings-the-two-towers",
+        "title": "The Lord of the Rings: The Two Towers"
+      },
+      {
+        "id": "lego-batman-the-videogame",
+        "title": "LEGO Batman: The Videogame"
+      },
+      {
+        "id": "batman-arkham-city-game-of-the-year-edition",
+        "title": "Batman: Arkham City - Game of the Year Edition"
+      },
+      {
+        "id": "the-house-of-the-dead-2",
+        "title": "The House of the Dead 2"
+      },
+      {
+        "id": "dino-crisis-2",
+        "title": "Dino Crisis 2"
+      },
+      {
+        "id": "crackdown",
+        "title": "Crackdown"
+      },
+      {
+        "id": "inside",
+        "title": "Inside"
+      },
+      {
+        "id": "command-conquer-red-alert",
+        "title": "Command & Conquer: Red Alert"
+      },
+      {
+        "id": "super-meat-boy",
+        "title": "Super Meat Boy"
       }
     ]
   },
@@ -3913,114 +3913,114 @@
     "date": "2026-07-14",
     "groups": [
       {
-        "conceptId": "yellow-strategy-2020s",
+        "conceptId": "yellow-fighting-1990s",
         "tier": "yellow",
-        "label": "2020s STRATEGY GAMES",
+        "label": "1990s FIGHTING GAMES",
         "gameIds": [
-          "buckshot-roulette",
-          "pok-mon-scarlet",
-          "pok-mon-brilliant-diamond",
-          "legends-of-runeterra"
+          "tekken-2",
+          "final-fight-2",
+          "captain-commando",
+          "super-smash-bros"
         ]
       },
       {
-        "conceptId": "green-exclusive-xbox",
+        "conceptId": "green-year-2019",
         "tier": "green",
-        "label": "XBOX EXCLUSIVES",
+        "label": "RELEASED IN 2019",
         "gameIds": [
-          "gears-of-war-3",
-          "fable-ii",
-          "ms-pac-man",
-          "galaga"
+          "rage-2",
+          "a-plague-tale-innocence",
+          "wolfenstein-youngblood",
+          "the-sinking-city"
         ]
       },
       {
-        "conceptId": "blue-tag-jrpg",
+        "conceptId": "blue-tag-skateboarding",
         "tier": "blue",
-        "label": "JRPGS",
+        "label": "SKATEBOARDING GAMES",
         "gameIds": [
-          "final-fantasy-x",
-          "breath-of-fire-iii",
-          "chrono-trigger",
-          "final-fantasy-vi"
+          "tony-hawks-pro-skater-1-2",
+          "mario-strikers-charged",
+          "tony-hawks-pro-skater-3",
+          "tony-hawk-s-pro-skater-2"
         ]
       },
       {
-        "conceptId": "purple-hides-tar",
+        "conceptId": "purple-contains-dark-light",
         "tier": "purple",
-        "label": "TITLES HIDING 'TAR'",
+        "label": "TITLES OF DARKNESS AND LIGHT",
         "gameIds": [
-          "star-fox-adventures",
-          "star-wars-battlefront-ii",
-          "guitar-hero-world-tour",
-          "phantasy-star-iv-the-end-of-the-millennium"
+          "eternal-darkness-sanitys-requiem",
+          "the-dark-pictures-house-of-ashes",
+          "dark-souls-iii",
+          "doom-the-dark-ages"
         ]
       }
     ],
     "tiles": [
       {
-        "id": "star-fox-adventures",
-        "title": "Star Fox Adventures"
+        "id": "doom-the-dark-ages",
+        "title": "Doom: The Dark Ages"
       },
       {
-        "id": "final-fantasy-vi",
-        "title": "Final Fantasy VI"
+        "id": "rage-2",
+        "title": "Rage 2"
       },
       {
-        "id": "guitar-hero-world-tour",
-        "title": "Guitar Hero World Tour"
+        "id": "tony-hawks-pro-skater-3",
+        "title": "Tony Hawk's Pro Skater 3"
       },
       {
-        "id": "gears-of-war-3",
-        "title": "Gears of War 3"
+        "id": "wolfenstein-youngblood",
+        "title": "Wolfenstein: Youngblood"
       },
       {
-        "id": "buckshot-roulette",
-        "title": "Buckshot Roulette"
+        "id": "tony-hawks-pro-skater-1-2",
+        "title": "Tony Hawk's Pro Skater 1+2"
       },
       {
-        "id": "ms-pac-man",
-        "title": "Ms. Pac-Man"
+        "id": "super-smash-bros",
+        "title": "Super Smash Bros."
       },
       {
-        "id": "galaga",
-        "title": "Galaga"
+        "id": "captain-commando",
+        "title": "Captain Commando"
       },
       {
-        "id": "pok-mon-scarlet",
-        "title": "Pokémon Scarlet"
+        "id": "tony-hawk-s-pro-skater-2",
+        "title": "Tony Hawk's Pro Skater 2"
       },
       {
-        "id": "star-wars-battlefront-ii",
-        "title": "Star Wars: Battlefront II"
+        "id": "a-plague-tale-innocence",
+        "title": "A Plague Tale: Innocence"
       },
       {
-        "id": "chrono-trigger",
-        "title": "Chrono Trigger"
+        "id": "dark-souls-iii",
+        "title": "Dark Souls III"
       },
       {
-        "id": "final-fantasy-x",
-        "title": "Final Fantasy X"
+        "id": "tekken-2",
+        "title": "Tekken 2"
       },
       {
-        "id": "phantasy-star-iv-the-end-of-the-millennium",
-        "title": "Phantasy Star IV: The End of the Millennium"
+        "id": "mario-strikers-charged",
+        "title": "Mario Strikers Charged"
       },
       {
-        "id": "legends-of-runeterra",
-        "title": "Legends of Runeterra"
+        "id": "the-sinking-city",
+        "title": "The Sinking City"
       },
       {
-        "id": "breath-of-fire-iii",
-        "title": "Breath of Fire III"
+        "id": "final-fight-2",
+        "title": "Final Fight 2"
       },
       {
-        "id": "fable-ii",
-        "title": "Fable II"
+        "id": "the-dark-pictures-house-of-ashes",
+        "title": "The Dark Pictures: House of Ashes"
       },
       {
-        "id": "pok-mon-brilliant-diamond",
-        "title": "Pokémon Brilliant Diamond"
+        "id": "eternal-darkness-sanitys-requiem",
+        "title": "Eternal Darkness: Sanity's Requiem"
       }
     ]
   }

@@ -294,7 +294,7 @@
         "x-com-ufo-defense",
         "metal-gear-solid-3-subsistence"
       ],
-      "usedOn": "2026-06-21"
+      "usedOn": null
     },
     {
       "id": "yellow-genre-action",
@@ -516,7 +516,7 @@
         "serious-sam-the-second-encounter",
         "cocoon"
       ],
-      "usedOn": "2026-07-11"
+      "usedOn": "2026-06-23"
     },
     {
       "id": "yellow-genre-platform",
@@ -590,7 +590,7 @@
         "metal-slug",
         "mega-man-x2"
       ],
-      "usedOn": "2026-06-12"
+      "usedOn": null
     },
     {
       "id": "yellow-genre-simulator",
@@ -664,7 +664,7 @@
         "fifa-23",
         "star-wars-tie-fighter"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-03"
     },
     {
       "id": "yellow-genre-racing",
@@ -738,7 +738,7 @@
         "driver-2-back-on-the-streets",
         "race-driver-grid"
       ],
-      "usedOn": "2026-06-14"
+      "usedOn": "2026-06-17"
     },
     {
       "id": "yellow-genre-arcade",
@@ -812,7 +812,7 @@
         "dr-robotniks-mean-bean-machine",
         "the-king-of-fighters-95"
       ],
-      "usedOn": "2026-06-15"
+      "usedOn": null
     },
     {
       "id": "yellow-genre-fighting",
@@ -960,7 +960,7 @@
         "forza-motorsport-3",
         "wwf-smackdown-2-know-your-role"
       ],
-      "usedOn": "2026-06-20"
+      "usedOn": "2026-06-30"
     },
     {
       "id": "yellow-genre-survival",
@@ -1108,7 +1108,7 @@
         "detention",
         "escape-the-backrooms"
       ],
-      "usedOn": "2026-06-13"
+      "usedOn": "2026-06-28"
     },
     {
       "id": "yellow-genre-sandbox",
@@ -1158,7 +1158,7 @@
         "abiotic-factor",
         "cataclismo"
       ],
-      "usedOn": "2026-07-08"
+      "usedOn": "2026-07-12"
     },
     {
       "id": "yellow-genre-music",
@@ -1201,7 +1201,7 @@
         "guitar-hero-metallica",
         "muse-dash"
       ],
-      "usedOn": "2026-06-23"
+      "usedOn": "2026-06-20"
     },
     {
       "id": "yellow-genre-roguelike",
@@ -1230,7 +1230,7 @@
         "bad-north",
         "deep-rock-galactic-survivor"
       ],
-      "usedOn": "2026-07-06"
+      "usedOn": null
     },
     {
       "id": "yellow-genre-metroidvania",
@@ -1679,7 +1679,7 @@
         "teenage-mutant-ninja-turtles",
         "metal-gear"
       ],
-      "usedOn": "2026-06-26"
+      "usedOn": "2026-06-16"
     },
     {
       "id": "yellow-adventure-1990s",
@@ -1765,7 +1765,7 @@
         "i-have-no-mouth-and-i-must-scream",
         "final-fantasy-adventure"
       ],
-      "usedOn": "2026-06-30"
+      "usedOn": null
     },
     {
       "id": "yellow-adventure-2000s",
@@ -2367,7 +2367,7 @@
         "robocop-rogue-city",
         "pok-mon-legends-z-a"
       ],
-      "usedOn": "2026-07-10"
+      "usedOn": null
     },
     {
       "id": "yellow-shooter-1980s",
@@ -2575,7 +2575,7 @@
         "perfect-dark",
         "ratchet-and-clank"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-02"
     },
     {
       "id": "yellow-shooter-2010s",
@@ -2747,7 +2747,7 @@
         "star-wars-outlaws",
         "death-stranding-directors-cut"
       ],
-      "usedOn": "2026-07-03"
+      "usedOn": null
     },
     {
       "id": "yellow-strategy-1990s",
@@ -2833,7 +2833,7 @@
         "fire-emblem-genealogy-of-the-holy-war",
         "tom-clancys-rainbow-six"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-26"
     },
     {
       "id": "yellow-strategy-2000s",
@@ -2919,7 +2919,7 @@
         "br-tal-legend",
         "pok-mon-colosseum"
       ],
-      "usedOn": "2026-07-09"
+      "usedOn": null
     },
     {
       "id": "yellow-strategy-2010s",
@@ -3091,7 +3091,7 @@
         "jurassic-world-evolution-2",
         "ghostrunner-ii"
       ],
-      "usedOn": "2026-07-14"
+      "usedOn": null
     },
     {
       "id": "yellow-action-1980s",
@@ -3128,7 +3128,7 @@
         "the-revenge-of-shinobi",
         "teenage-mutant-ninja-turtles"
       ],
-      "usedOn": "2026-07-12"
+      "usedOn": null
     },
     {
       "id": "yellow-action-1990s",
@@ -3214,7 +3214,7 @@
         "twisted-metal-2",
         "soulcalibur"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-10"
     },
     {
       "id": "yellow-action-2000s",
@@ -3472,7 +3472,7 @@
         "half-life-alyx",
         "returnal"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-13"
     },
     {
       "id": "yellow-puzzle-1980s",
@@ -3504,7 +3504,7 @@
         "indiana-jones-and-the-last-crusade-the-graphic-adventure",
         "tetris"
       ],
-      "usedOn": "2026-06-10"
+      "usedOn": null
     },
     {
       "id": "yellow-puzzle-1990s",
@@ -3838,7 +3838,7 @@
         "bugsnax",
         "norco"
       ],
-      "usedOn": "2026-07-01"
+      "usedOn": null
     },
     {
       "id": "yellow-indie-2000s",
@@ -3980,7 +3980,7 @@
         "steamworld-dig-2",
         "moonlighter"
       ],
-      "usedOn": "2026-07-02"
+      "usedOn": "2026-07-13"
     },
     {
       "id": "yellow-indie-2020s",
@@ -4066,7 +4066,7 @@
         "outer-wilds-echoes-of-the-eye",
         "nobody-saves-the-world"
       ],
-      "usedOn": "2026-07-04"
+      "usedOn": null
     },
     {
       "id": "yellow-platform-1980s",
@@ -4115,7 +4115,7 @@
         "the-revenge-of-shinobi",
         "castlevania-the-adventure"
       ],
-      "usedOn": "2026-06-17"
+      "usedOn": "2026-06-25"
     },
     {
       "id": "yellow-platform-1990s",
@@ -4287,7 +4287,7 @@
         "sonic-advance-2",
         "mega-man-x6"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-11"
     },
     {
       "id": "yellow-platform-2010s",
@@ -4373,7 +4373,7 @@
         "infamous-first-light",
         "uncharted-golden-abyss"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-05"
     },
     {
       "id": "yellow-platform-2020s",
@@ -4506,7 +4506,7 @@
         "harvest-moon-back-to-nature",
         "need-for-speed-high-stakes"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-10"
     },
     {
       "id": "yellow-simulator-2000s",
@@ -4678,7 +4678,7 @@
         "forager",
         "forza-motorsport-4"
       ],
-      "usedOn": "2026-06-16"
+      "usedOn": "2026-06-18"
     },
     {
       "id": "yellow-simulator-2020s",
@@ -4761,7 +4761,7 @@
         "yes-your-grace",
         "nba-2k21"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-22"
     },
     {
       "id": "yellow-racing-1990s",
@@ -4822,7 +4822,7 @@
         "grand-theft-auto-2",
         "need-for-speed-high-stakes"
       ],
-      "usedOn": "2026-06-29"
+      "usedOn": null
     },
     {
       "id": "yellow-racing-2000s",
@@ -4908,7 +4908,7 @@
         "motorstorm-pacific-rift",
         "jak-x-combat-racing"
       ],
-      "usedOn": "2026-06-27"
+      "usedOn": null
     },
     {
       "id": "yellow-racing-2010s",
@@ -4986,7 +4986,7 @@
         "speedrunners",
         "gran-turismo-6"
       ],
-      "usedOn": "2026-07-05"
+      "usedOn": "2026-06-27"
     },
     {
       "id": "yellow-racing-2020s",
@@ -5025,7 +5025,7 @@
         "need-for-speed-hot-pursuit-remastered",
         "grand-theft-auto-iii-the-definitive-edition"
       ],
-      "usedOn": "2026-07-13"
+      "usedOn": "2026-06-21"
     },
     {
       "id": "yellow-arcade-1980s",
@@ -5074,7 +5074,7 @@
         "teenage-mutant-ninja-turtles",
         "super-hang-on"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-19"
     },
     {
       "id": "yellow-arcade-1990s",
@@ -5138,7 +5138,7 @@
         "dead-or-alive-2",
         "garou-mark-of-the-wolves"
       ],
-      "usedOn": "2026-06-18"
+      "usedOn": null
     },
     {
       "id": "yellow-arcade-2000s",
@@ -5194,7 +5194,7 @@
         "need-for-speed-undercover",
         "zumas-revenge"
       ],
-      "usedOn": "2026-06-24"
+      "usedOn": null
     },
     {
       "id": "yellow-arcade-2010s",
@@ -5321,7 +5321,7 @@
         "crab-game",
         "20-minutes-till-dawn"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-14"
     },
     {
       "id": "yellow-fighting-1990s",
@@ -5384,7 +5384,7 @@
         "garou-mark-of-the-wolves",
         "the-king-of-fighters-99-millennium-battle"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-14"
     },
     {
       "id": "yellow-fighting-2000s",
@@ -5610,7 +5610,7 @@
         "fifa-2000-major-league-soccer",
         "mario-golf"
       ],
-      "usedOn": "2026-06-22"
+      "usedOn": "2026-07-06"
     },
     {
       "id": "yellow-sport-2000s",
@@ -5687,7 +5687,7 @@
         "tony-hawks-underground",
         "wwe-smackdown-vs-raw-2009"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-04"
     },
     {
       "id": "yellow-sport-2010s",
@@ -5750,7 +5750,7 @@
         "horizon-chase-turbo",
         "gran-turismo-6"
       ],
-      "usedOn": "2026-06-25"
+      "usedOn": "2026-07-08"
     },
     {
       "id": "yellow-sport-2020s",
@@ -5791,7 +5791,7 @@
         "nintendo-switch-sports",
         "nba-2k21"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-29"
     },
     {
       "id": "yellow-survival-2010s",
@@ -5911,7 +5911,7 @@
         "escape-the-backrooms",
         "deep-rock-galactic-survivor"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-11"
     },
     {
       "id": "yellow-horror-1990s",
@@ -5943,7 +5943,7 @@
         "the-house-of-the-dead-2",
         "resident-evil-2"
       ],
-      "usedOn": "2026-06-19"
+      "usedOn": "2026-06-15"
     },
     {
       "id": "yellow-horror-2000s",
@@ -5980,7 +5980,7 @@
         "penumbra-overture",
         "penumbra-black-plague"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-12"
     },
     {
       "id": "yellow-horror-2010s",
@@ -6030,7 +6030,7 @@
         "darkwood",
         "detention"
       ],
-      "usedOn": "2026-06-28"
+      "usedOn": "2026-07-09"
     },
     {
       "id": "yellow-horror-2020s",
@@ -6075,7 +6075,7 @@
         "visage",
         "escape-the-backrooms"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-24"
     },
     {
       "id": "yellow-sandbox-2010s",
@@ -6160,7 +6160,7 @@
         "abiotic-factor",
         "cataclismo"
       ],
-      "usedOn": "2026-06-11"
+      "usedOn": "2026-07-01"
     },
     {
       "id": "yellow-music-2000s",
@@ -6203,7 +6203,7 @@
         "the-beatles-rock-band",
         "guitar-hero-metallica"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-07"
     },
     {
       "id": "yellow-music-2010s",
@@ -6272,747 +6272,75 @@
         "curse-of-the-dead-gods",
         "deep-rock-galactic-survivor"
       ],
-      "usedOn": "2026-07-07"
-    },
-    {
-      "id": "green-price-9-99",
-      "label": "LAUNCHED AT $9.99",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 9.99
-      },
-      "gameIds": [
-        "centipede",
-        "lode-runner",
-        "undertale",
-        "battle-chess",
-        "counter-strike",
-        "hotline-miami",
-        "leisure-suit-larry-in-the-land-of-the-lounge-lizards",
-        "postal-2",
-        "the-ultimate-doom",
-        "terraria",
-        "super-star-wars",
-        "garrys-mod",
-        "duke-nukem",
-        "suikoden",
-        "papers-please",
-        "shining-force",
-        "the-witcher-3-wild-hunt-hearts-of-stone",
-        "hexen-beyond-heretic",
-        "miside",
-        "system-shock",
-        "fez",
-        "lethal-company",
-        "ftl-faster-than-light",
-        "neighbours-from-hell",
-        "game-dev-tycoon",
-        "sid-meiers-colonization",
-        "simon-the-sorcerer",
-        "postal",
-        "flower",
-        "mouthwashing",
-        "final-doom",
-        "the-beginners-guide",
-        "blade-runner",
-        "audiosurf",
-        "goat-simulator",
-        "the-secret-of-monkey-island-special-edition",
-        "breath-of-fire-iv",
-        "red-dead-redemption-undead-nightmare",
-        "magicka",
-        "thomas-was-alone",
-        "steamworld-dig",
-        "dear-esther",
-        "bloons-td-6",
-        "the-black-mirror",
-        "half-life-source",
-        "huniepop",
-        "the-cat-lady",
-        "call-of-duty-2-big-red-one",
-        "mini-metro",
-        "assassins-creed-chronicles-china",
-        "minit",
-        "thief-gold",
-        "neighbours-from-hell-2-on-vacation",
-        "mass-effect-2-lair-of-the-shadow-broker",
-        "the-elder-scrolls-iv-knights-of-the-nine",
-        "monkey-island-2-special-edition-lechucks-revenge",
-        "botanicula",
-        "risk-of-rain",
-        "advance-wars-2-black-hole-rising",
-        "fallout-new-vegas-dead-money"
-      ],
       "usedOn": null
     },
     {
-      "id": "green-price-14-99",
-      "label": "LAUNCHED AT $14.99",
-      "tier": "green",
+      "id": "yellow-arcade-era",
+      "label": "STARTED IN THE ARCADES",
+      "tier": "yellow",
       "type": "procedural",
       "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 14.99
-      },
-      "gameIds": [
-        "balatro",
-        "stardew-valley",
-        "hollow-knight",
-        "limbo",
-        "the-stanley-parable",
-        "loom",
-        "braid",
-        "journey",
-        "brothers-a-tale-of-two-sons",
-        "slay-the-spire",
-        "super-meat-boy",
-        "bastion",
-        "katana-zero",
-        "shovel-knight",
-        "castle-crashers",
-        "the-binding-of-isaac-rebirth",
-        "hotline-miami-2-wrong-number",
-        "valiant-hearts-the-great-war",
-        "broforce",
-        "mark-of-the-ninja",
-        "far-cry-3-blood-dragon",
-        "loop-hero",
-        "marble-racing-manager",
-        "alan-wakes-american-nightmare",
-        "dont-starve",
-        "call-of-juarez-gunslinger",
-        "child-of-light",
-        "trine-2",
-        "rogue-legacy",
-        "into-the-breach",
-        "the-last-of-us-left-behind",
-        "enter-the-gungeon",
-        "metal-slug-x",
-        "grim-fandango-remastered",
-        "baba-is-you",
-        "doki-doki-literature-club-plus",
-        "chants-of-sennaar",
-        "saya-no-uta",
-        "spelunky",
-        "ratchet-clank-future-quest-for-booty",
-        "crypt-of-the-necrodancer",
-        "dont-starve-together",
-        "human-fall-flat",
-        "assassins-creed-freedom-cry",
-        "starbound",
-        "gorogoa",
-        "outer-wilds-echoes-of-the-eye",
-        "lara-croft-and-the-guardian-of-light",
-        "plague-inc-evolved",
-        "before-your-eyes",
-        "dust-an-elysian-tail",
-        "the-walking-dead-michonne",
-        "batman-the-enemy-within",
-        "battleblock-theater",
-        "storyteller",
-        "little-inferno",
-        "never-alone-kisima-ingitchuna",
-        "venba",
-        "infamous-first-light",
-        "guacamelee"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "green-price-19-99",
-      "label": "LAUNCHED AT $19.99",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 19.99
-      },
-      "gameIds": [
-        "space-invaders",
-        "portal",
-        "half-life-2-episode-one",
-        "life-is-strange",
-        "inscryption",
-        "inside",
-        "celeste",
-        "indiana-jones-and-the-last-crusade-the-graphic-adventure",
-        "kirbys-dream-land",
-        "star-wars-jedi-knight-jedi-academy",
-        "ori-and-the-blind-forest",
-        "firewatch",
-        "maniac-mansion",
-        "rocket-league",
-        "what-remains-of-edith-finch",
-        "half-life-blue-shift",
-        "plants-vs-zombies",
-        "cuphead",
-        "valheim",
-        "little-nightmares",
-        "black-mesa",
-        "half-life-opposing-force",
-        "machinarium",
-        "counter-strike-source",
-        "unpacking",
-        "serious-sam-the-first-encounter",
-        "heroes-of-might-and-magic-iii-complete",
-        "world-of-goo",
-        "outlast",
-        "return-of-the-obra-dinn",
-        "superhot",
-        "sonic-the-hedgehog-spinball",
-        "fable-the-lost-chapters",
-        "amnesia-the-dark-descent",
-        "kirbys-dream-land-2",
-        "serious-sam-ii",
-        "gone-home",
-        "abzu",
-        "raft",
-        "signalis",
-        "supermarket-simulator",
-        "trine",
-        "transistor",
-        "wolfenstein-the-old-blood",
-        "the-witcher-3-wild-hunt-blood-and-wine",
-        "euro-truck-simulator-2",
-        "the-forest",
-        "grand-theft-auto-iv-the-lost-and-damned",
-        "danganronpa-trigger-happy-havoc",
-        "deaths-door",
-        "serious-sam-the-second-encounter",
-        "grand-theft-auto-iv-the-ballad-of-gay-tony",
-        "torchlight-ii",
-        "superliminal",
-        "discworld",
-        "the-longest-journey",
-        "stronghold-crusader",
-        "sonic-mania",
-        "dr-robotniks-mean-bean-machine",
-        "oxenfree"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "green-price-24-99",
-      "label": "LAUNCHED AT $24.99",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 24.99
-      },
-      "gameIds": [
-        "excitebike",
-        "hades",
-        "1942",
-        "double-dragon",
-        "the-wolf-among-us",
-        "outer-wilds",
-        "street-fighter",
-        "dead-cells",
-        "cult-of-the-lamb",
-        "peak",
-        "blue-prince",
-        "tales-from-the-borderlands",
-        "the-stanley-parable-ultra-deluxe",
-        "schedule-i",
-        "twelve-minutes",
-        "dredge",
-        "teenage-mutant-ninja-turtles-shredders-revenge",
-        "blasphemous",
-        "risk-of-rain-2",
-        "darkest-dungeon",
-        "cocoon",
-        "animal-well",
-        "overcooked-2",
-        "streets-of-rage-4",
-        "the-forgotten-city",
-        "powerwash-simulator",
-        "batman-the-telltale-series",
-        "my-summer-car",
-        "metro-2033-redux",
-        "the-walking-dead-a-new-frontier",
-        "resident-evil-revelations-2",
-        "return-to-monkey-island",
-        "viewfinder",
-        "mini-royale",
-        "jusant",
-        "the-banner-saga",
-        "nine-sols",
-        "metro-last-light-redux",
-        "amnesia-the-bunker",
-        "citizen-sleeper",
-        "oxygen-not-included",
-        "superhot-mind-control-delete",
-        "back-to-the-future-the-game",
-        "broken-age",
-        "furi",
-        "little-kitty-big-city",
-        "grim-dawn",
-        "shovel-knight-treasure-trove",
-        "ender-lilies-quietus-of-the-knights",
-        "chivalry-medieval-warfare",
-        "neva",
-        "minecraft-story-mode",
-        "halls-of-torment",
-        "sable",
-        "rogue-legacy-2",
-        "metro-redux",
-        "party-animals",
-        "observation",
-        "owlboy",
-        "warhammer-40-000-boltgun"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "green-price-29-99",
-      "label": "LAUNCHED AT $29.99",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 29.99
+        "all": [
+          {
+            "field": "genres",
+            "op": "includes",
+            "value": "Arcade"
+          },
+          {
+            "field": "year",
+            "op": "lte",
+            "value": 1995
+          }
+        ]
       },
       "gameIds": [
         "pong",
-        "pitfall",
+        "space-invaders",
+        "galaga",
+        "donkey-kong",
         "duck-hunt",
-        "zelda-ii-the-adventure-of-link",
-        "super-mario-land",
-        "castlevania",
-        "mega-man",
+        "super-mario-kart",
+        "centipede",
+        "ms-pac-man",
+        "excitebike",
         "super-contra",
         "golden-axe",
-        "hollow-knight-silksong",
-        "sokolor",
         "dragons-lair",
         "paperboy",
-        "super-mario-bros-the-lost-levels",
-        "disneys-ducktales",
-        "super-mario-land-2-6-golden-coins",
+        "dig-dug",
         "mario-bros",
+        "1942",
         "ice-climber",
-        "metroid",
         "ninja-gaiden",
         "final-fight",
-        "f-zero",
         "streets-of-rage-2",
-        "pok-mon-red-version",
         "q-bert",
         "road-fighter",
         "balloon-fight",
-        "alex-kidd-in-miracle-world",
-        "final-fantasy-iv",
-        "the-legend-of-zelda-links-awakening",
-        "warcraft-iii-the-frozen-throne",
-        "half-life-2-episode-two",
-        "the-walking-dead",
-        "stray",
-        "palworld",
-        "dispatch",
-        "kid-icarus",
-        "castlevania-ii-simons-quest",
-        "super-castlevania-iv",
+        "double-dragon",
         "teenage-mutant-ninja-turtles-iv-turtles-in-time",
-        "hellblade-senuas-sacrifice",
-        "little-nightmares-ii",
-        "castlevania-the-adventure",
-        "simcity-2000",
-        "pok-mon-yellow-version-special-pikachu-edition",
-        "populous",
-        "mega-man-4",
-        "kirbys-adventure",
-        "ultimate-mortal-kombat-3",
-        "ori-and-the-will-of-the-wisps",
-        "star-wars-dark-forces",
-        "tunic",
-        "satisfactory",
-        "super-hang-on",
-        "tetris",
-        "mega-man-5",
-        "sonic-cd",
-        "warcraft-orcs-humans",
-        "comix-zone",
-        "a-way-out"
-      ],
-      "usedOn": "2026-06-24"
-    },
-    {
-      "id": "green-price-34-99",
-      "label": "LAUNCHED AT $34.99",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 34.99
-      },
-      "gameIds": [
-        "new-super-mario-bros",
-        "pokemon-emerald",
-        "pok-mon-crystal-version",
-        "pok-mon-emerald-version",
-        "mario-kart-ds",
-        "pok-mon-diamond-version",
-        "pok-mon-firered-version",
-        "pok-mon-ruby-version",
-        "sid-meiers-civilization-ii",
-        "pok-mon-platinum-version",
-        "the-legend-of-zelda-the-minish-cap",
-        "the-legend-of-zelda-phantom-hourglass",
-        "pok-mon-sapphire-version",
-        "steins-gate",
-        "mario-luigi-superstar-saga",
-        "professor-layton-and-the-curious-village",
-        "pok-mon-leafgreen-version",
-        "animal-crossing-wild-world",
-        "pok-mon-pearl-version",
-        "pok-mon-black-version",
-        "rimworld",
-        "super-mario-64-ds",
-        "mario-luigi-partners-in-time",
-        "pok-mon-white-version",
-        "sea-of-stars",
-        "still-wakes-the-deep",
-        "the-legend-of-zelda-spirit-tracks",
-        "last-epoch",
-        "castlevania-dawn-of-sorrow",
-        "pok-mon-mystery-dungeon-red-rescue-team",
-        "pok-mon-black-version-2",
-        "sonic-rush",
-        "slay-the-spire-2",
-        "kingdom-hearts-chain-of-memories",
-        "pok-mon-ranger",
-        "mario-luigi-bowsers-inside-story",
-        "pok-mon-mystery-dungeon-blue-rescue-team",
-        "professor-layton-and-the-unwound-future",
-        "kingdom-hearts-358-2-days",
-        "the-long-dark",
-        "castlevania-portrait-of-ruin",
-        "pok-mon-white-version-2",
-        "kirby-super-star-ultra",
-        "mario-party-ds",
-        "two-point-hospital",
-        "dirt-rally",
-        "warioware-touched",
-        "tales-of-monkey-island",
-        "kirby-squeak-squad",
-        "fire-emblem-shadow-dragon",
-        "pok-mon-mystery-dungeon-explorers-of-sky",
-        "rhythm-heaven",
-        "visage",
-        "metroid-prime-hunters",
-        "advance-wars-dual-strike",
-        "fatal-frame-ii-crimson-butterfly",
-        "mega-man-9",
-        "mutant-year-zero-road-to-eden",
-        "workers-and-resources-soviet-republic",
-        "pok-mon-ranger-shadows-of-almia"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "green-price-39-99",
-      "label": "LAUNCHED AT $39.99",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 39.99
-      },
-      "gameIds": [
-        "shadow-of-the-colossus",
-        "it-takes-two",
-        "the-secret-of-monkey-island",
-        "day-of-the-tentacle",
-        "disco-elysium",
-        "heroes-of-might-and-magic-iii-the-restoration-of-erathia",
-        "helldivers-2",
-        "arc-raiders",
-        "altered-beast",
-        "command-conquer",
-        "overwatch",
-        "the-revenge-of-shinobi",
-        "doom-ii-hell-on-earth",
-        "grand-theft-auto",
-        "split-fiction",
-        "duke-nukem-3d",
+        "street-fighter",
         "teenage-mutant-ninja-turtles",
-        "flashback-the-quest-for-identity",
-        "command-conquer-red-alert-2",
-        "command-conquer-red-alert",
-        "the-curse-of-monkey-island",
-        "hitman-codename-47",
-        "metal-slug",
-        "spider-man",
-        "final-fantasy-ii",
-        "need-for-speed-porsche-unleashed",
-        "flatout-2",
-        "castlevania-aria-of-sorrow",
-        "okami",
-        "sifu",
-        "zombies-ate-my-neighbors",
-        "theme-park",
-        "kami",
-        "tomb-raider-iii-adventures-of-lara-croft",
-        "syberia",
-        "pok-mon-soulsilver-version",
-        "dark-souls-remastered",
-        "mafia-definitive-edition",
-        "need-for-speed-ii",
-        "crash-bash",
-        "world-of-warcraft-the-burning-crusade",
-        "kena-bridge-of-spirits",
-        "final-fantasy-adventure",
-        "grand-theft-auto-liberty-city-stories",
-        "the-neverhood",
-        "tony-hawks-pro-skater",
-        "final-fantasy-x-2",
-        "pok-mon-heartgold-version",
-        "the-witness",
-        "uncharted-the-lost-legacy",
-        "elden-ring-nightreign",
+        "sunset-riders",
+        "super-hang-on",
+        "comix-zone",
+        "the-simpsons-arcade-game",
+        "duke-nukem",
+        "gunstar-heroes",
+        "sonic-the-hedgehog-spinball",
         "ninja-gaiden-iii-the-ancient-ship-of-doom",
-        "crash-bandicoot-the-wrath-of-cortex",
-        "god-of-war-chains-of-olympus",
-        "the-legend-of-zelda-ocarina-of-time-3d",
-        "disco-elysium-the-final-cut",
-        "sonic-the-hedgehog",
-        "medievil",
-        "driver",
-        "dino-crisis-2"
+        "final-fight-2",
+        "time-crisis",
+        "virtua-fighter-2",
+        "final-fight-3",
+        "dr-robotniks-mean-bean-machine",
+        "the-king-of-fighters-95",
+        "super-bomberman",
+        "disneys-the-jungle-book",
+        "disneys-aladdin",
+        "3d-pinball-space-cadet"
       ],
       "usedOn": null
-    },
-    {
-      "id": "green-price-49-99",
-      "label": "LAUNCHED AT $49.99",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 49.99
-      },
-      "gameIds": [
-        "donkey-kong",
-        "super-mario-bros",
-        "the-legend-of-zelda",
-        "super-mario-bros-2",
-        "the-legend-of-zelda-a-link-to-the-past",
-        "super-mario-kart",
-        "doom",
-        "super-metroid",
-        "chrono-trigger",
-        "super-mario-64",
-        "castlevania-symphony-of-the-night",
-        "half-life",
-        "age-of-empires-ii",
-        "diablo-ii",
-        "max-payne",
-        "grand-theft-auto-vice-city",
-        "star-wars-knights-of-the-old-republic",
-        "grand-theft-auto-san-andreas",
-        "portal-2",
-        "clair-obscur-expedition-33",
-        "monkey-island-2-lechuck-s-revenge",
-        "indiana-jones-and-the-fate-of-atlantis",
-        "super-mario-world-2-yoshis-island",
-        "crash-bandicoot",
-        "age-of-empires",
-        "the-legend-of-zelda-ocarina-of-time",
-        "age-of-empires-ii-the-age-of-kings",
-        "final-fantasy-ix",
-        "grand-theft-auto-iii",
-        "warcraft-iii-reign-of-chaos",
-        "max-payne-2-the-fall-of-max-payne",
-        "half-life-2",
-        "call-of-duty-2",
-        "commando",
-        "final-fantasy",
-        "mega-man-3",
-        "sid-meiers-civilization",
-        "final-fantasy-iii",
-        "mario-kart-64",
-        "fallout-a-post-nuclear-role-playing-game",
-        "metal-gear-solid",
-        "the-legend-of-zelda-majora-s-mask",
-        "silent-hill-2",
-        "mafia",
-        "metal-gear-solid-3-snake-eater",
-        "hitman-blood-money",
-        "super-mario-all-stars",
-        "warcraft-ii-tides-of-darkness",
-        "tekken-3",
-        "starcraft",
-        "silent-hill",
-        "deus-ex",
-        "super-smash-bros-melee",
-        "the-legend-of-zelda-the-wind-waker",
-        "prince-of-persia-the-sands-of-time",
-        "world-of-warcraft",
-        "kingdom-hearts-ii",
-        "castlevania-iii-dracula-s-curse",
-        "earthbound",
-        "diablo"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "green-price-59-99",
-      "label": "LAUNCHED AT $59.99",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 59.99
-      },
-      "gameIds": [
-        "super-mario-world",
-        "the-elder-scrolls-iv-oblivion",
-        "grand-theft-auto-iv",
-        "assassin-s-creed-ii",
-        "mass-effect-2",
-        "far-cry-3",
-        "grand-theft-auto-v",
-        "the-last-of-us-remastered",
-        "the-witcher-3-wild-hunt",
-        "uncharted-4-a-thief-s-end",
-        "the-legend-of-zelda-breath-of-the-wild",
-        "red-dead-redemption-2",
-        "sekiro-shadows-die-twice",
-        "the-last-of-us-part-ii",
-        "elden-ring",
-        "baldurs-gate-3",
-        "final-fantasy-vi",
-        "bioshock",
-        "fallout-3",
-        "batman-arkham-asylum",
-        "red-dead-redemption",
-        "the-elder-scrolls-v-skyrim",
-        "dishonored",
-        "the-last-of-us",
-        "middle-earth-shadow-of-mordor",
-        "dark-souls-iii",
-        "horizon-zero-dawn",
-        "god-of-war",
-        "resident-evil-village",
-        "god-of-war-ragnarok",
-        "baldur-s-gate-iii",
-        "mega-man-x",
-        "donkey-kong-country-2-diddy-s-kong-quest",
-        "call-of-duty",
-        "god-of-war-2005",
-        "mass-effect",
-        "dead-space",
-        "uncharted-2-among-thieves",
-        "fallout-new-vegas",
-        "batman-arkham-city",
-        "borderlands-2",
-        "bioshock-infinite",
-        "wolfenstein-the-new-order",
-        "marvel-s-spider-man",
-        "star-wars-jedi-fallen-order",
-        "cyberpunk-2077",
-        "donkey-kong-country",
-        "gears-of-war",
-        "assassins-creed",
-        "mirrors-edge",
-        "dragon-age-origins",
-        "assassins-creed-brotherhood",
-        "mass-effect-3",
-        "tomb-raider",
-        "south-park-the-stick-of-truth",
-        "bloodborne",
-        "super-mario-odyssey",
-        "control",
-        "ghost-of-tsushima",
-        "marvels-guardians-of-the-galaxy"
-      ],
-      "usedOn": "2026-07-02"
-    },
-    {
-      "id": "green-price-69-99",
-      "label": "LAUNCHED AT $69.99",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "launchPriceUsd",
-        "op": "eq",
-        "value": 69.99
-      },
-      "gameIds": [
-        "resident-evil-requiem",
-        "hytale",
-        "god-of-war-ragnar-k",
-        "the-legend-of-zelda-tears-of-the-kingdom",
-        "escape-from-tarkov",
-        "the-last-of-us-part-i",
-        "diablo-iv",
-        "starfield",
-        "ratchet-clank-rift-apart",
-        "marvels-spider-man-2",
-        "indiana-jones-and-the-great-circle",
-        "battlefield-6",
-        "r-e-p-o",
-        "call-of-duty-black-ops-6",
-        "doom-the-dark-ages",
-        "star-wars-jedi-survivor",
-        "assassin-s-creed-shadows",
-        "silent-hill-f",
-        "atomic-heart",
-        "dragon-age-the-veilguard",
-        "the-elder-scrolls-iv-oblivion-remastered",
-        "final-fantasy-vii-rebirth",
-        "avowed",
-        "call-of-duty-modern-warfare-ii",
-        "final-fantasy-xvi",
-        "ghost-of-yotei",
-        "mafia-the-old-country",
-        "returnal",
-        "tekken-8",
-        "the-alters",
-        "call-of-duty-modern-warfare-iii",
-        "stellar-blade",
-        "donkey-kong-bananza",
-        "demons-souls-remake",
-        "call-of-duty-black-ops-7",
-        "dead-island-2",
-        "death-stranding-2-on-the-beach",
-        "ea-sports-fc-24",
-        "monster-hunter-wilds",
-        "fifa-23",
-        "borderlands-4",
-        "star-wars-outlaws",
-        "cyberpunk-2077-ultimate-edition",
-        "gran-turismo-7",
-        "metaphor-refantazio",
-        "metal-gear-solid-delta-snake-eater",
-        "ea-sports-fc-25",
-        "mortal-kombat-1",
-        "dying-light-the-beast",
-        "final-fantasy-vii-remake-intergrade",
-        "civilization-vii",
-        "dragons-dogma-2",
-        "need-for-speed-unbound",
-        "dragon-ball-sparking-zero",
-        "marvels-wolverine",
-        "dragons-dogma-ii",
-        "state-of-decay-3",
-        "banishers-ghosts-of-new-eden",
-        "nobody-wants-to-die",
-        "like-a-dragon-infinite-wealth"
-      ],
-      "usedOn": "2026-06-14"
     },
     {
       "id": "green-price-free",
@@ -7465,308 +6793,719 @@
         "jump-force",
         "medal-of-honor-allied-assault-breakthrough"
       ],
+      "usedOn": null
+    },
+    {
+      "id": "green-console-snes",
+      "label": "PLAYABLE ON THE SNES",
+      "tier": "green",
+      "type": "procedural",
+      "predicate": {
+        "field": "platforms",
+        "op": "includes",
+        "value": "SNES"
+      },
+      "gameIds": [
+        "super-mario-kart",
+        "super-mario-world-2-yoshis-island",
+        "final-fantasy-iii",
+        "donkey-kong-country-2-diddy-s-kong-quest",
+        "f-zero",
+        "super-mario-all-stars",
+        "final-fantasy-iv",
+        "earthbound",
+        "super-castlevania-iv",
+        "teenage-mutant-ninja-turtles-iv-turtles-in-time",
+        "simcity-2000",
+        "the-lion-king",
+        "contra-iii-the-alien-wars",
+        "super-ghoulsn-ghosts",
+        "star-fox",
+        "mega-man-x3",
+        "donkey-kong-country-3-dixie-kongs-double-trouble",
+        "mario-paint",
+        "super-mario-rpg-legend-of-the-seven-stars",
+        "desert-strike-return-to-the-gulf",
+        "mega-man-7",
+        "theme-park",
+        "terranigma",
+        "illusion-of-gaia",
+        "final-fight-2",
+        "alien-3",
+        "samurai-shodown",
+        "super-punch-out",
+        "final-fight-3",
+        "trials-of-mana",
+        "super-bomberman",
+        "breath-of-fire-ii",
+        "tactics-ogre-let-us-cling-together",
+        "harvest-moon",
+        "blackthorne",
+        "breath-of-fire",
+        "demons-crest",
+        "tales-of-phantasia",
+        "disneys-aladdin",
+        "cool-spot",
+        "international-superstar-soccer-deluxe",
+        "fire-emblem-genealogy-of-the-holy-war",
+        "disneys-goof-troop",
+        "disneys-toy-story",
+        "kirbys-dream-land-3",
+        "mega-man-bass"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "green-console-n64",
+      "label": "PLAYABLE ON THE N64",
+      "tier": "green",
+      "type": "procedural",
+      "predicate": {
+        "field": "platforms",
+        "op": "includes",
+        "value": "N64"
+      },
+      "gameIds": [
+        "command-conquer",
+        "grand-theft-auto",
+        "spider-man",
+        "paper-mario",
+        "mortal-kombat-4",
+        "mortal-kombat-trilogy",
+        "pok-mon-snap",
+        "pok-mon-stadium-2",
+        "perfect-dark",
+        "banjo-tooie",
+        "fifa-road-to-world-cup-98",
+        "yoshis-story",
+        "star-wars-rogue-squadron",
+        "star-wars-episode-i-racer",
+        "wave-race-64",
+        "star-wars-shadows-of-the-empire",
+        "fifa-99",
+        "kirby-64-the-crystal-shards",
+        "doom-64",
+        "turok-dinosaur-hunter",
+        "mario-party-3",
+        "disneys-tarzan",
+        "1080-snowboarding",
+        "toy-story-2-buzz-lightyear-to-the-rescue",
+        "bomberman-64",
+        "tom-clancys-rainbow-six",
+        "vigilante-8",
+        "re-volt",
+        "a-bugs-life",
+        "south-park",
+        "nightmare-creatures",
+        "lego-racers",
+        "turok-2-seeds-of-evil",
+        "mortal-kombat-mythologies-sub-zero",
+        "pok-mon-puzzle-league",
+        "jet-force-gemini",
+        "fifa-2000-major-league-soccer",
+        "shadow-man",
+        "mario-golf"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "green-console-gamecube",
+      "label": "PLAYABLE ON THE GAMECUBE",
+      "tier": "green",
+      "type": "procedural",
+      "predicate": {
+        "field": "platforms",
+        "op": "includes",
+        "value": "GameCube"
+      },
+      "gameIds": [
+        "resident-evil-3-nemesis",
+        "beyond-good-evil",
+        "the-simpsons-hit-run",
+        "hitman-2-silent-assassin",
+        "luigis-mansion",
+        "sonic-heroes",
+        "crash-bandicoot-the-wrath-of-cortex",
+        "need-for-speed-hot-pursuit-2",
+        "neighbours-from-hell",
+        "enter-the-matrix",
+        "spider-man-2",
+        "xiii",
+        "peter-jacksons-king-kong-the-official-game-of-the-movie",
+        "rayman-3-hoodlum-havoc",
+        "bloodrayne",
+        "pok-mon-colosseum",
+        "freedom-fighters",
+        "resident-evil-zero",
+        "fire-emblem-path-of-radiance",
+        "resident-evil-code-veronica-x",
+        "medal-of-honor-frontline",
+        "metroid-prime-2-echoes",
+        "true-crime-streets-of-la",
+        "star-fox-adventures",
+        "fifa-soccer-07",
+        "worms-3d",
+        "shadow-the-hedgehog",
+        "medal-of-honor-rising-sun",
+        "sonic-adventure-2-battle",
+        "dragon-ball-z-budokai",
+        "timesplitters-future-perfect",
+        "eternal-darkness-sanitys-requiem",
+        "sonic-adventure-dx-directors-cut",
+        "mortal-kombat-deadly-alliance",
+        "dragon-ball-z-budokai-2",
+        "pok-mon-xd-gale-of-darkness",
+        "f-zero-gx",
+        "mario-party-5",
+        "kirby-air-ride",
+        "crash-twinsanity",
+        "red-faction-ii",
+        "baldurs-gate-dark-alliance",
+        "tom-clancys-ghost-recon",
+        "fifa-street",
+        "nba-street",
+        "mortal-kombat-deception",
+        "sonic-riders",
+        "burnout-2-point-of-impact",
+        "tom-clancys-ghost-recon-advanced-warfighter",
+        "driv3r",
+        "call-of-duty-2-big-red-one",
+        "metal-gear-solid-the-twin-snakes",
+        "enclave",
+        "the-suffering",
+        "killer7",
+        "the-simpsons-road-rage",
+        "def-jam-fight-for-ny",
+        "true-crime-new-york-city",
+        "spyro-enter-the-dragonfly",
+        "mario-party-7"
+      ],
+      "usedOn": "2026-06-22"
+    },
+    {
+      "id": "green-console-gameboy",
+      "label": "PLAYABLE ON THE GAME BOY",
+      "tier": "green",
+      "type": "procedural",
+      "predicate": {
+        "field": "platforms",
+        "op": "includes",
+        "value": "Game Boy"
+      },
+      "gameIds": [
+        "super-mario-land",
+        "pok-mon-red-version",
+        "kirbys-dream-land",
+        "earthbound",
+        "castlevania-the-adventure",
+        "simcity-2000",
+        "pok-mon-yellow-version-special-pikachu-edition",
+        "pok-mon-emerald-version",
+        "tetris",
+        "comix-zone",
+        "pok-mon-silver-version",
+        "pok-mon-gold-version",
+        "desert-strike-return-to-the-gulf",
+        "wario-land-super-mario-land-3",
+        "the-legend-of-zelda-links-awakening-dx",
+        "the-legend-of-zelda-the-minish-cap",
+        "metroid-fusion",
+        "final-fantasy-adventure",
+        "rock-n-roll-racing",
+        "the-legend-of-zelda-oracle-of-seasons",
+        "pok-mon-sapphire-version",
+        "castlevania-ii-belmonts-revenge",
+        "sonic-the-hedgehog-spinball",
+        "kirbys-dream-land-2",
+        "pok-mon-trading-card-game",
+        "driver",
+        "mario-kart-super-circuit",
+        "mario-luigi-superstar-saga",
+        "metroid-zero-mission",
+        "out-of-this-world",
+        "wolfenstein-3d",
+        "pok-mon-leafgreen-version",
+        "final-fantasy-tactics-advance",
+        "the-legend-of-zelda-oracle-of-ages",
+        "worms-world-party",
+        "mother-3",
+        "blackthorne",
+        "golden-sun",
+        "disneys-aladdin",
+        "castlevania-harmony-of-dissonance",
+        "sonic-advance",
+        "pok-mon-pinball",
+        "castlevania-circle-of-the-moon",
+        "kirby-nightmare-in-dream-land",
+        "pok-mon-mystery-dungeon-red-rescue-team",
+        "fire-emblem-the-sacred-stones",
+        "mega-man-zero",
+        "golden-sun-the-lost-age",
+        "kingdom-hearts-chain-of-memories",
+        "mega-man-bass",
+        "wario-land-ii",
+        "dragon-ball-z-the-legacy-of-goku",
+        "kirby-the-amazing-mirror",
+        "wario-land-3",
+        "sonic-advance-2",
+        "super-mario-world-super-mario-advance-2",
+        "wario-land-4",
+        "mega-man-battle-network",
+        "fire-emblem-the-binding-blade",
+        "grand-theft-auto-london-1969"
+      ],
       "usedOn": "2026-06-16"
     },
     {
-      "id": "green-exclusive-pc",
-      "label": "NEVER LEFT THE PC",
+      "id": "green-console-ps1",
+      "label": "PLAYABLE ON THE PS1",
       "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
-        "op": "only",
-        "value": [
-          "PC",
-          "Mac",
-          "Linux"
-        ]
+        "op": "includes",
+        "value": "PS1"
       },
       "gameIds": [
-        "pong",
-        "half-life",
-        "diablo-ii",
-        "centipede",
-        "lode-runner",
-        "super-contra",
-        "the-secret-of-monkey-island",
-        "monkey-island-2-lechuck-s-revenge",
-        "indiana-jones-and-the-fate-of-atlantis",
-        "day-of-the-tentacle",
-        "age-of-empires",
-        "age-of-empires-ii-the-age-of-kings",
-        "warcraft-iii-reign-of-chaos",
-        "half-life-2",
-        "hytale",
-        "sokolor",
-        "battle-chess",
-        "sid-meiers-civilization",
-        "fallout-a-post-nuclear-role-playing-game",
-        "metal-gear-solid",
-        "heroes-of-might-and-magic-iii-the-restoration-of-erathia",
-        "call-of-duty",
-        "escape-from-tarkov",
-        "warcraft-ii-tides-of-darkness",
-        "tekken-3",
-        "starcraft",
-        "deus-ex",
-        "prince-of-persia-the-sands-of-time",
-        "world-of-warcraft",
-        "minecraft-java-edition",
-        "indiana-jones-and-the-last-crusade-the-graphic-adventure",
-        "fallout-2",
-        "counter-strike",
-        "warcraft-iii-the-frozen-throne",
-        "doom-ii-hell-on-earth",
-        "baldur-s-gate-ii-shadows-of-amn",
-        "metal-gear-solid-2-sons-of-liberty",
-        "f-e-a-r",
-        "maniac-mansion",
-        "microsoft-minesweeper",
-        "lemmings",
-        "full-throttle",
-        "tomb-raider-1996",
-        "the-sims",
-        "age-of-empires-iii",
-        "the-stanley-parable",
-        "street-fighter",
-        "populous",
-        "loom",
-        "duke-nukem-3d",
-        "tomb-raider-ii",
-        "grim-fandango",
-        "league-of-legends",
-        "sid-meiers-civilization-v",
-        "counter-strike-2",
-        "leisure-suit-larry-in-the-land-of-the-lounge-lizards",
-        "flashback-the-quest-for-identity",
-        "myst",
-        "quake",
-        "quake-ii"
-      ],
-      "usedOn": "2026-06-21"
-    },
-    {
-      "id": "green-exclusive-playstation",
-      "label": "PLAYSTATION EXCLUSIVES",
-      "tier": "green",
-      "type": "procedural",
-      "predicate": {
-        "field": "platforms",
-        "op": "only",
-        "value": [
-          "PlayStation",
-          "PS1",
-          "PS2",
-          "PS3",
-          "PS4",
-          "PS5",
-          "PSP",
-          "PS Vita"
-        ]
-      },
-      "gameIds": [
-        "castlevania-symphony-of-the-night",
-        "shadow-of-the-colossus",
-        "the-last-of-us-remastered",
-        "the-last-of-us",
-        "god-of-war-2005",
-        "silent-hill",
-        "kingdom-hearts-ii",
-        "bloodborne",
-        "q-bert",
-        "tekken-2",
-        "uncharted-3-drake-s-deception",
-        "uncharted-drakes-fortune",
-        "metal-gear-solid-4-guns-of-the-patriots",
-        "persona-5",
-        "marvels-spider-man-2",
-        "god-of-war-ii",
-        "final-fantasy-xii",
+        "command-conquer",
+        "diablo",
+        "grand-theft-auto",
+        "simcity-2000",
+        "resident-evil-3-nemesis",
+        "star-wars-dark-forces",
+        "command-conquer-red-alert",
         "gran-turismo",
-        "jak-and-daxter-the-precursor-legacy",
-        "metal-gear-solid-3-subsistence",
+        "spider-man",
+        "oddworld-abes-oddysee",
+        "need-for-speed-iii-hot-pursuit",
+        "need-for-speed-porsche-unleashed",
         "captain-commando",
-        "ico",
-        "devil-may-cry-2",
-        "final-fantasy-tactics",
-        "god-of-war-iii",
-        "astro-bot",
+        "theme-park",
+        "sid-meiers-civilization-ii",
+        "mortal-kombat-4",
+        "suikoden",
+        "tomb-raider-iii-adventures-of-lara-croft",
+        "need-for-speed-ii",
         "crash-bash",
-        "jak-ii",
-        "demons-souls",
-        "grand-theft-auto-liberty-city-stories",
-        "infamous",
-        "astros-playroom",
-        "twisted-metal",
+        "the-need-for-speed",
+        "mortal-kombat-trilogy",
+        "the-neverhood",
         "tony-hawks-pro-skater",
-        "tekken-4",
-        "ratchet-and-clank",
-        "final-fantasy-x-2",
-        "infamous-second-son",
-        "god-of-war-chains-of-olympus",
-        "ghost-of-yotei",
+        "warcraft-ii-beyond-the-dark-portal",
+        "disneys-hercules-action-game",
         "parappa-the-rapper",
+        "broken-sword-the-smoking-mirror",
         "medievil",
-        "twisted-metal-2",
-        "ratchet-clank-going-commando",
-        "grand-theft-auto-vice-city-stories",
-        "littlebigplanet",
-        "shadow-of-the-colossus-2018",
+        "driver",
+        "dino-crisis-2",
+        "mega-man-x4",
+        "descent",
         "time-crisis",
-        "gran-turismo-2",
-        "ratchet-clank",
-        "mega-man-8",
-        "crisis-core-final-fantasy-vii",
-        "demons-souls-remake",
+        "fifa-road-to-world-cup-98",
+        "samurai-shodown",
+        "oddworld-abes-exoddus",
+        "colin-mcrae-rally-2-0",
+        "discworld",
+        "mdk",
         "parasite-eve",
+        "the-king-of-fighters-95",
         "xenogears",
-        "sly-cooper-and-the-thievius-raccoonus",
-        "soulcalibur-iii",
-        "uncharted-the-nathan-drake-collection",
-        "death-stranding-2-on-the-beach",
-        "primal-rage"
+        "twinsens-little-big-adventure-classic",
+        "fifa-99",
+        "legacy-of-kain-soul-reaver",
+        "worms-world-party",
+        "primal-rage",
+        "destruction-derby",
+        "blood-omen-legacy-of-kain",
+        "colin-mcrae-rally",
+        "dino-crisis",
+        "tactics-ogre-let-us-cling-together",
+        "suikoden-ii",
+        "x-men-vs-street-fighter",
+        "tomb-raider-the-last-revelation",
+        "dragon-ball-z-ultimate-battle-22",
+        "pandemonium",
+        "riven-the-sequel-to-myst",
+        "final-doom"
       ],
       "usedOn": "2026-07-11"
     },
     {
-      "id": "green-exclusive-nintendo",
-      "label": "NINTENDO EXCLUSIVES",
+      "id": "green-console-psp",
+      "label": "PLAYABLE ON THE PSP",
       "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
-        "op": "only",
-        "value": [
-          "Nintendo",
-          "Switch",
-          "Wii",
-          "Wii U",
-          "3DS",
-          "DS",
-          "SNES",
-          "N64",
-          "GameCube",
-          "Game Boy"
-        ]
+        "op": "includes",
+        "value": "PSP"
+      },
+      "gameIds": [
+        "star-wars-battlefront-ii",
+        "resident-evil-3-nemesis",
+        "star-wars-dark-forces",
+        "command-conquer-red-alert",
+        "metal-slug",
+        "oddworld-abes-oddysee",
+        "theme-park",
+        "suikoden",
+        "tomb-raider-iii-adventures-of-lara-croft",
+        "crash-bash",
+        "metal-slug-2",
+        "grand-theft-auto-liberty-city-stories",
+        "disneys-hercules-action-game",
+        "god-of-war-chains-of-olympus",
+        "steins-gate",
+        "medievil",
+        "driver",
+        "dino-crisis-2",
+        "grand-theft-auto-vice-city-stories",
+        "samurai-shodown",
+        "danganronpa-trigger-happy-havoc",
+        "oddworld-abes-exoddus",
+        "crisis-core-final-fantasy-vii",
+        "lego-batman-the-videogame",
+        "parasite-eve",
+        "the-king-of-fighters-95",
+        "xenogears",
+        "legacy-of-kain-soul-reaver",
+        "destruction-derby",
+        "blood-omen-legacy-of-kain",
+        "dino-crisis",
+        "lego-indiana-jones-the-original-adventures",
+        "suikoden-ii",
+        "angry-birds",
+        "god-of-war-ghost-of-sparta",
+        "danganronpa-2-goodbye-despair",
+        "tomb-raider-the-last-revelation",
+        "pandemonium",
+        "silent-hill-origins",
+        "metal-gear-solid-peace-walker",
+        "the-king-of-fighters-96",
+        "tomb-raider-chronicles",
+        "grand-theft-auto-chinatown-wars",
+        "dantes-inferno",
+        "fighting-force",
+        "disneys-tarzan",
+        "rayman",
+        "vagrant-story",
+        "syphon-filter-2",
+        "crash-of-the-titans",
+        "the-king-of-fighters-97",
+        "the-king-of-fighters-98",
+        "syphon-filter",
+        "breath-of-fire-iv",
+        "worms",
+        "resident-evil-directors-cut",
+        "kingdom-hearts-birth-by-sleep",
+        "ape-escape",
+        "mega-man-legends",
+        "manhunt-2"
+      ],
+      "usedOn": "2026-07-13"
+    },
+    {
+      "id": "green-console-ds",
+      "label": "PLAYABLE ON THE DS",
+      "tier": "green",
+      "type": "procedural",
+      "predicate": {
+        "field": "platforms",
+        "op": "includes",
+        "value": "DS"
+      },
+      "gameIds": [
+        "new-super-mario-bros",
+        "pok-mon-diamond-version",
+        "pok-mon-platinum-version",
+        "pok-mon-soulsilver-version",
+        "pok-mon-heartgold-version",
+        "pok-mon-black-version",
+        "phoenix-wright-ace-attorney-trials-and-tribulations",
+        "phoenix-wright-ace-attorney-justice-for-all",
+        "super-mario-64-ds",
+        "mario-luigi-partners-in-time",
+        "pok-mon-white-version",
+        "apollo-justice-ace-attorney",
+        "the-legend-of-zelda-spirit-tracks",
+        "castlevania-dawn-of-sorrow",
+        "grand-theft-auto-chinatown-wars",
+        "pok-mon-black-version-2",
+        "sonic-rush",
+        "professor-layton-and-the-diabolical-box",
+        "pok-mon-ranger",
+        "mario-luigi-bowsers-inside-story",
+        "pok-mon-mystery-dungeon-blue-rescue-team",
+        "kingdom-hearts-358-2-days",
+        "castlevania-portrait-of-ruin",
+        "castlevania-order-of-ecclesia",
+        "pok-mon-white-version-2",
+        "kirby-super-star-ultra",
+        "mario-party-ds",
+        "warioware-touched",
+        "hotel-dusk-room-215",
+        "ace-attorney-investigations-miles-edgeworth",
+        "ghost-trick-phantom-detective",
+        "kirby-squeak-squad",
+        "fire-emblem-shadow-dragon",
+        "pok-mon-mystery-dungeon-explorers-of-sky",
+        "rhythm-heaven",
+        "metroid-prime-hunters",
+        "advance-wars-dual-strike",
+        "anno-1701",
+        "pok-mon-mystery-dungeon-explorers-of-time",
+        "wwe-smackdown-vs-raw-2010",
+        "james-bond-007-blood-stone",
+        "professor-layton-and-the-last-specter",
+        "pok-mon-ranger-shadows-of-almia",
+        "elite-beat-agents",
+        "mini-ninjas",
+        "mega-man-zx",
+        "inazuma-eleven",
+        "kirby-canvas-curse",
+        "the-incredible-hulk",
+        "kingdom-hearts-re-coded",
+        "final-fantasy-tactics-a2-grimoire-of-the-rift",
+        "dragon-quest-ix-sentinels-of-the-starry-skies",
+        "pok-mon-mystery-dungeon-explorers-of-darkness",
+        "zumas-revenge",
+        "sonic-rush-adventure"
+      ],
+      "usedOn": "2026-07-03"
+    },
+    {
+      "id": "green-console-wii",
+      "label": "PLAYABLE ON THE WII",
+      "tier": "green",
+      "type": "procedural",
+      "predicate": {
+        "field": "platforms",
+        "op": "includes",
+        "value": "Wii"
       },
       "gameIds": [
         "donkey-kong",
-        "duck-hunt",
-        "super-mario-bros",
         "the-legend-of-zelda",
         "zelda-ii-the-adventure-of-link",
         "super-mario-bros-2",
-        "super-mario-land",
-        "super-mario-world",
-        "the-legend-of-zelda-a-link-to-the-past",
         "super-mario-kart",
-        "super-metroid",
-        "super-mario-64",
-        "the-legend-of-zelda-breath-of-the-wild",
         "excitebike",
         "battle-city",
         "castlevania",
         "mega-man",
-        "super-mario-world-2-yoshis-island",
-        "the-legend-of-zelda-ocarina-of-time",
+        "golden-axe",
         "commando",
         "super-mario-bros-the-lost-levels",
         "final-fantasy",
         "disneys-ducktales",
-        "super-mario-land-2-6-golden-coins",
         "final-fantasy-iii",
         "donkey-kong-country-2-diddy-s-kong-quest",
-        "mario-kart-64",
-        "the-legend-of-zelda-majora-s-mask",
-        "the-legend-of-zelda-tears-of-the-kingdom",
         "mario-bros",
+        "1942",
         "ice-climber",
         "hudsons-adventure-island",
         "metroid",
         "ninja-gaiden",
         "f-zero",
-        "streets-of-rage",
-        "super-mario-all-stars",
-        "donkey-kong-country",
-        "pok-mon-red-version",
-        "super-smash-bros-melee",
-        "the-legend-of-zelda-the-wind-waker",
-        "super-mario-odyssey",
+        "streets-of-rage-2",
         "road-fighter",
         "balloon-fight",
+        "alex-kidd-in-miracle-world",
+        "altered-beast",
         "castlevania-iii-dracula-s-curse",
         "final-fantasy-iv",
-        "kirbys-dream-land",
-        "the-legend-of-zelda-links-awakening",
-        "earthbound",
-        "metroid-prime",
-        "wii-sports",
         "kid-icarus",
         "castlevania-ii-simons-quest",
-        "metal-gear-2-solid-snake",
+        "the-revenge-of-shinobi",
         "super-castlevania-iv",
-        "teenage-mutant-ninja-turtles-iv-turtles-in-time",
-        "pok-mon-blue-version",
-        "super-smash-bros",
-        "new-super-mario-bros",
-        "super-mario-galaxy"
+        "mega-man-4",
+        "contra-iii-the-alien-wars",
+        "kirbys-adventure",
+        "earthworm-jim",
+        "super-hang-on",
+        "super-ghoulsn-ghosts",
+        "mega-man-5",
+        "comix-zone",
+        "metal-gear",
+        "metal-slug",
+        "california-games",
+        "river-city-ransom",
+        "final-fantasy-ii",
+        "donkey-kong-country-3-dixie-kongs-double-trouble",
+        "paper-mario",
+        "super-mario-rpg-legend-of-the-seven-stars",
+        "super-star-wars",
+        "zombies-ate-my-neighbors",
+        "kami",
+        "toejam-earl",
+        "shining-force",
+        "gunstar-heroes",
+        "metal-slug-2",
+        "pok-mon-snap",
+        "sonic-the-hedgehog-spinball",
+        "streets-of-rage-3"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-08"
     },
     {
-      "id": "green-exclusive-xbox",
-      "label": "XBOX EXCLUSIVES",
+      "id": "green-console-3ds",
+      "label": "PLAYABLE ON THE 3DS",
       "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
-        "op": "only",
-        "value": [
-          "Xbox",
-          "Xbox 360",
-          "Xbox One",
-          "Xbox Series X"
+        "op": "includes",
+        "value": "3DS"
+      },
+      "gameIds": [
+        "donkey-kong",
+        "the-legend-of-zelda",
+        "zelda-ii-the-adventure-of-link",
+        "super-mario-bros-2",
+        "super-mario-land",
+        "super-mario-kart",
+        "battle-city",
+        "castlevania",
+        "mega-man",
+        "super-mario-bros-the-lost-levels",
+        "final-fantasy",
+        "final-fantasy-iii",
+        "donkey-kong-country-2-diddy-s-kong-quest",
+        "mario-bros",
+        "ice-climber",
+        "hudsons-adventure-island",
+        "metroid",
+        "f-zero",
+        "pok-mon-red-version",
+        "balloon-fight",
+        "castlevania-iii-dracula-s-curse",
+        "final-fantasy-iv",
+        "kirbys-dream-land",
+        "earthbound",
+        "castlevania-ii-simons-quest",
+        "super-castlevania-iv",
+        "castlevania-the-adventure",
+        "pok-mon-yellow-version-special-pikachu-edition",
+        "mega-man-4",
+        "contra-iii-the-alien-wars",
+        "tetris",
+        "super-ghoulsn-ghosts",
+        "mega-man-5",
+        "mega-man-x3",
+        "pok-mon-silver-version",
+        "river-city-ransom",
+        "donkey-kong-country-3-dixie-kongs-double-trouble",
+        "pok-mon-gold-version",
+        "wario-land-super-mario-land-3",
+        "mega-man-7",
+        "the-legend-of-zelda-links-awakening-dx",
+        "mega-man-6",
+        "the-legend-of-zelda-the-minish-cap",
+        "metroid-fusion",
+        "the-legend-of-zelda-oracle-of-seasons",
+        "the-binding-of-isaac-rebirth",
+        "ninja-gaiden-iii-the-ancient-ship-of-doom",
+        "kirbys-dream-land-2",
+        "pok-mon-trading-card-game",
+        "the-legend-of-zelda-ocarina-of-time-3d",
+        "mario-kart-super-circuit",
+        "final-fight-2",
+        "super-punch-out",
+        "final-fight-3",
+        "the-legend-of-zelda-oracle-of-ages",
+        "super-mario-3d-land",
+        "breath-of-fire-ii",
+        "animal-crossing-new-leaf",
+        "breath-of-fire",
+        "apollo-justice-ace-attorney"
+      ],
+      "usedOn": "2026-06-15"
+    },
+    {
+      "id": "green-ps5-early",
+      "label": "EARLY PS5 GAMES (2020-21)",
+      "tier": "green",
+      "type": "procedural",
+      "predicate": {
+        "all": [
+          {
+            "field": "platforms",
+            "op": "includes",
+            "value": "PS5"
+          },
+          {
+            "field": "year",
+            "op": "between",
+            "value": [
+              2020,
+              2021
+            ]
+          }
         ]
       },
       "gameIds": [
-        "galaga",
-        "ms-pac-man",
-        "dig-dug",
-        "double-dragon",
-        "teenage-mutant-ninja-turtles",
-        "gears-of-war-2",
-        "fable-ii",
-        "soulcalibur-ii",
-        "burnout-3-takedown",
-        "gears-of-war-3",
-        "conkers-bad-fur-day",
-        "timesplitters-2",
-        "jade-empire",
-        "halo-5-guardians",
-        "soulcalibur-iv",
-        "halo-wars",
-        "crackdown",
-        "jet-set-radio-future",
-        "ssx-tricky",
-        "forza-horizon",
-        "forza-motorsport-3",
-        "forza-horizon-2",
-        "gears-of-war-judgment",
-        "dead-or-alive-3",
-        "forza-motorsport-2",
-        "tales-of-vesperia",
-        "banjo-kazooie-nuts-bolts",
-        "forza-motorsport-4",
-        "midnight-club-3-dub-edition",
-        "dynasty-warriors-3",
-        "ninja-gaiden-ii",
-        "perfect-dark-zero",
-        "ninja-gaiden-black",
-        "lost-odyssey",
-        "nba-street-vol-2",
-        "saints-row"
+        "fortnite",
+        "forza-horizon-5",
+        "genshin-impact",
+        "ratchet-clank-rift-apart",
+        "ghost-of-tsushima-directors-cut",
+        "far-cry-6",
+        "deathloop",
+        "twelve-minutes",
+        "kena-bridge-of-spirits",
+        "astros-playroom",
+        "hitman-3",
+        "marvels-spider-man-remastered",
+        "disco-elysium-the-final-cut",
+        "risk-of-rain-2",
+        "ghostrunner",
+        "deaths-door",
+        "the-dark-pictures-anthology-house-of-ashes",
+        "call-of-duty-black-ops-cold-war",
+        "the-dark-pictures-anthology-little-hope",
+        "the-forgotten-city",
+        "battlefield-2042",
+        "carrion",
+        "alan-wake-remastered",
+        "road-96",
+        "marvels-avengers",
+        "death-stranding-directors-cut",
+        "back-4-blood",
+        "watch-dogs-legion",
+        "crash-bandicoot-4-its-about-time",
+        "doki-doki-literature-club-plus",
+        "final-fantasy-vii-remake-intergrade",
+        "mount-blade-ii-bannerlord",
+        "totally-accurate-battle-simulator",
+        "star-wars-squadrons",
+        "call-of-duty-vanguard",
+        "new-world-aeternum",
+        "fifa-22",
+        "tony-hawks-pro-skater-1-2",
+        "scarlet-nexus",
+        "call-of-the-sea",
+        "biomutant",
+        "fifa-21",
+        "outriders",
+        "maneater",
+        "the-ascent",
+        "control-ultimate-edition",
+        "tales-of-arise",
+        "outer-wilds-echoes-of-the-eye",
+        "poppy-playtime",
+        "dragon-ball-z-kakarot",
+        "the-elder-scrolls-v-skyrim-anniversary-edition",
+        "trackmania",
+        "guilty-gear-strive",
+        "lake",
+        "sable",
+        "the-artful-escape",
+        "hot-wheels-unleashed",
+        "chivalry-2",
+        "grand-theft-auto-san-andreas-the-definitive-edition",
+        "dirt-5"
       ],
-      "usedOn": "2026-07-14"
+      "usedOn": "2026-06-19"
     },
     {
       "id": "green-year-1989",
@@ -7790,7 +7529,7 @@
         "teenage-mutant-ninja-turtles",
         "tetris"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-30"
     },
     {
       "id": "green-year-1990",
@@ -7820,7 +7559,7 @@
         "dr-mario",
         "super-mario-bros-3"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-05"
     },
     {
       "id": "green-year-1991",
@@ -7856,7 +7595,7 @@
         "sonic-the-hedgehog",
         "out-of-this-world"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-04"
     },
     {
       "id": "green-year-1992",
@@ -7894,7 +7633,7 @@
         "sonic-the-hedgehog-2",
         "alien-3"
       ],
-      "usedOn": "2026-06-28"
+      "usedOn": "2026-06-29"
     },
     {
       "id": "green-year-1993",
@@ -7947,7 +7686,7 @@
         "cool-spot",
         "disneys-goof-troop"
       ],
-      "usedOn": "2026-07-06"
+      "usedOn": "2026-07-12"
     },
     {
       "id": "green-year-1994",
@@ -7997,7 +7736,7 @@
         "disneys-the-jungle-book",
         "mortal-kombat-ii"
       ],
-      "usedOn": "2026-07-04"
+      "usedOn": null
     },
     {
       "id": "green-year-1995",
@@ -8055,7 +7794,7 @@
         "panel-de-pon",
         "worms"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-25"
     },
     {
       "id": "green-year-1996",
@@ -8113,7 +7852,7 @@
         "resident-evil-1996",
         "street-fighter-alpha-2"
       ],
-      "usedOn": "2026-06-11"
+      "usedOn": "2026-06-27"
     },
     {
       "id": "green-year-1997",
@@ -8184,7 +7923,7 @@
         "carmageddon",
         "mortal-kombat-mythologies-sub-zero"
       ],
-      "usedOn": "2026-07-08"
+      "usedOn": "2026-06-14"
     },
     {
       "id": "green-year-1998",
@@ -8254,7 +7993,7 @@
         "turok-2-seeds-of-evil",
         "sonic-r"
       ],
-      "usedOn": "2026-07-07"
+      "usedOn": null
     },
     {
       "id": "green-year-1999",
@@ -8328,7 +8067,7 @@
         "sid-meiers-alpha-centauri",
         "garou-mark-of-the-wolves"
       ],
-      "usedOn": "2026-06-26"
+      "usedOn": null
     },
     {
       "id": "green-year-2000",
@@ -8402,7 +8141,7 @@
         "jackie-chan-stuntmaster",
         "carmageddon-tdr-2000"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-10"
     },
     {
       "id": "green-year-2001",
@@ -8476,7 +8215,7 @@
         "ssx-tricky",
         "cossacks-european-wars"
       ],
-      "usedOn": "2026-07-03"
+      "usedOn": null
     },
     {
       "id": "green-year-2002",
@@ -8550,7 +8289,7 @@
         "divine-divinity",
         "the-thing"
       ],
-      "usedOn": "2026-06-30"
+      "usedOn": "2026-06-24"
     },
     {
       "id": "green-year-2003",
@@ -8624,7 +8363,7 @@
         "alien-shooter",
         "wolfenstein-enemy-territory"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-10"
     },
     {
       "id": "green-year-2004",
@@ -8698,7 +8437,7 @@
         "yume-nikki",
         "metal-gear-solid-the-twin-snakes"
       ],
-      "usedOn": "2026-07-13"
+      "usedOn": "2026-06-20"
     },
     {
       "id": "green-year-2005",
@@ -8772,7 +8511,7 @@
         "call-of-duty-2-big-red-one",
         "yakuza"
       ],
-      "usedOn": "2026-07-01"
+      "usedOn": null
     },
     {
       "id": "green-year-2006",
@@ -8846,7 +8585,7 @@
         "god-hand",
         "wwe-smackdown-vs-raw-2007"
       ],
-      "usedOn": "2026-07-09"
+      "usedOn": "2026-06-12"
     },
     {
       "id": "green-year-2007",
@@ -8920,7 +8659,7 @@
         "flatout-ultimate-carnage",
         "hotel-dusk-room-215"
       ],
-      "usedOn": "2026-07-12"
+      "usedOn": "2026-06-28"
     },
     {
       "id": "green-year-2008",
@@ -8994,7 +8733,7 @@
         "dark-sector",
         "james-bond-007-quantum-of-solace"
       ],
-      "usedOn": "2026-06-18"
+      "usedOn": "2026-07-09"
     },
     {
       "id": "green-year-2009",
@@ -9068,7 +8807,7 @@
         "lego-indiana-jones-2-the-adventure-continues",
         "the-chronicles-of-riddick-assault-on-dark-athena"
       ],
-      "usedOn": "2026-06-22"
+      "usedOn": "2026-06-21"
     },
     {
       "id": "green-year-2010",
@@ -9142,7 +8881,7 @@
         "naruto-shippuden-ultimate-ninja-storm-2",
         "sniper-ghost-warrior"
       ],
-      "usedOn": "2026-06-10"
+      "usedOn": "2026-06-23"
     },
     {
       "id": "green-year-2011",
@@ -9216,7 +8955,7 @@
         "uncharted-golden-abyss",
         "tekken-tag-tournament-2"
       ],
-      "usedOn": "2026-06-23"
+      "usedOn": "2026-06-18"
     },
     {
       "id": "green-year-2012",
@@ -9290,7 +9029,7 @@
         "lego-batman-2-dc-super-heroes",
         "forza-horizon"
       ],
-      "usedOn": "2026-07-10"
+      "usedOn": "2026-07-02"
     },
     {
       "id": "green-year-2013",
@@ -9512,7 +9251,7 @@
         "mini-metro",
         "assassins-creed-chronicles-china"
       ],
-      "usedOn": "2026-06-29"
+      "usedOn": null
     },
     {
       "id": "green-year-2016",
@@ -9586,7 +9325,7 @@
         "the-witcher-3-wild-hunt-complete-edition",
         "naruto-shippuden-ultimate-ninja-storm-4"
       ],
-      "usedOn": "2026-06-15"
+      "usedOn": "2026-07-01"
     },
     {
       "id": "green-year-2017",
@@ -9660,7 +9399,7 @@
         "dragon-quest-xi-echoes-of-an-elusive-age",
         "tacoma"
       ],
-      "usedOn": "2026-06-25"
+      "usedOn": "2026-07-07"
     },
     {
       "id": "green-year-2018",
@@ -9734,7 +9473,7 @@
         "pubg-mobile",
         "soulcalibur-vi"
       ],
-      "usedOn": "2026-06-27"
+      "usedOn": "2026-06-13"
     },
     {
       "id": "green-year-2019",
@@ -9808,7 +9547,7 @@
         "sayonara-wild-hearts",
         "ai-the-somnium-files"
       ],
-      "usedOn": "2026-06-17"
+      "usedOn": "2026-07-14"
     },
     {
       "id": "green-year-2020",
@@ -9882,7 +9621,7 @@
         "mortal-shell",
         "trackmania"
       ],
-      "usedOn": "2026-06-13"
+      "usedOn": null
     },
     {
       "id": "green-year-2021",
@@ -9956,7 +9695,7 @@
         "the-legend-of-zelda-skyward-sword-hd",
         "the-gunk"
       ],
-      "usedOn": "2026-07-05"
+      "usedOn": "2026-06-17"
     },
     {
       "id": "green-year-2022",
@@ -10030,7 +9769,7 @@
         "xenoblade-chronicles-3",
         "sniper-elite-5"
       ],
-      "usedOn": "2026-06-20"
+      "usedOn": null
     },
     {
       "id": "green-year-2023",
@@ -10104,7 +9843,7 @@
         "fire-emblem-engage",
         "the-talos-principle-2"
       ],
-      "usedOn": "2026-06-12"
+      "usedOn": "2026-06-11"
     },
     {
       "id": "green-year-2024",
@@ -10178,7 +9917,7 @@
         "the-plucky-squire",
         "suicide-squad-kill-the-justice-league"
       ],
-      "usedOn": "2026-06-19"
+      "usedOn": "2026-06-26"
     },
     {
       "id": "green-year-2025",
@@ -10239,7 +9978,203 @@
         "state-of-decay-3",
         "zerospace"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-06"
+    },
+    {
+      "id": "blue-curated-tga-goty",
+      "label": "WON GAME OF THE YEAR AT THE GAME AWARDS",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "dragon-age-inquisition",
+          "the-witcher-3-wild-hunt",
+          "overwatch",
+          "the-legend-of-zelda-breath-of-the-wild",
+          "god-of-war",
+          "sekiro-shadows-die-twice",
+          "the-last-of-us-part-ii",
+          "it-takes-two",
+          "elden-ring",
+          "baldurs-gate-3",
+          "astro-bot"
+        ]
+      },
+      "gameIds": [
+        "the-witcher-3-wild-hunt",
+        "the-legend-of-zelda-breath-of-the-wild",
+        "sekiro-shadows-die-twice",
+        "the-last-of-us-part-ii",
+        "it-takes-two",
+        "elden-ring",
+        "baldurs-gate-3",
+        "god-of-war",
+        "overwatch",
+        "dragon-age-inquisition",
+        "astro-bot"
+      ],
+      "usedOn": null,
+      "note": "TGA GOTY winners 2014-2024"
+    },
+    {
+      "id": "blue-curated-mmo",
+      "label": "FAMOUS MMOS",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "world-of-warcraft",
+          "final-fantasy-xiv",
+          "guild-wars-2",
+          "runescape",
+          "the-elder-scrolls-online",
+          "black-desert",
+          "lost-ark",
+          "star-wars-the-old-republic",
+          "guild-wars"
+        ]
+      },
+      "gameIds": [
+        "world-of-warcraft",
+        "guild-wars-2",
+        "runescape",
+        "the-elder-scrolls-online",
+        "guild-wars",
+        "star-wars-the-old-republic",
+        "final-fantasy-xiv",
+        "black-desert",
+        "lost-ark"
+      ],
+      "usedOn": "2026-07-12",
+      "note": "long-running massively multiplayer online games"
+    },
+    {
+      "id": "blue-curated-esports",
+      "label": "ESPORTS MAINSTAYS",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "counter-strike-global-offensive",
+          "dota-2",
+          "league-of-legends",
+          "rocket-league",
+          "starcraft-ii-wings-of-liberty",
+          "valorant",
+          "overwatch",
+          "apex-legends",
+          "super-smash-bros-melee",
+          "fortnite"
+        ]
+      },
+      "gameIds": [
+        "super-smash-bros-melee",
+        "overwatch",
+        "fortnite",
+        "counter-strike-global-offensive",
+        "league-of-legends",
+        "rocket-league",
+        "apex-legends",
+        "starcraft-ii-wings-of-liberty",
+        "dota-2",
+        "valorant"
+      ],
+      "usedOn": "2026-06-26",
+      "note": "staple competitive titles with major pro scenes"
+    },
+    {
+      "id": "blue-curated-rough-launch",
+      "label": "NOTORIOUSLY ROUGH LAUNCHES",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "cyberpunk-2077",
+          "no-man-s-sky",
+          "fallout-76",
+          "battlefield-2042",
+          "anthem",
+          "simcity",
+          "diablo-iii"
+        ]
+      },
+      "gameIds": [
+        "cyberpunk-2077",
+        "diablo-iii",
+        "no-man-s-sky",
+        "fallout-76",
+        "battlefield-2042",
+        "anthem",
+        "simcity"
+      ],
+      "usedOn": "2026-06-30",
+      "note": "famous broken/underwhelming launch states, later fixed or not"
+    },
+    {
+      "id": "blue-curated-controversial-sequel",
+      "label": "SEQUELS THAT SPLIT THE FANBASE",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "the-last-of-us-part-ii",
+          "duke-nukem-forever",
+          "dmc-devil-may-cry",
+          "diablo-iii",
+          "fallout-76",
+          "mighty-no-9"
+        ]
+      },
+      "gameIds": [
+        "the-last-of-us-part-ii",
+        "diablo-iii",
+        "dmc-devil-may-cry",
+        "fallout-76",
+        "duke-nukem-forever",
+        "mighty-no-9"
+      ],
+      "usedOn": "2026-06-21",
+      "note": "divisive follow-ups (2017 Battlefront II and ME: Andromeda not in db)"
+    },
+    {
+      "id": "blue-curated-started-as-mods",
+      "label": "STARTED LIFE AS A MOD",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "counter-strike",
+          "dota-2",
+          "dayz",
+          "team-fortress-2",
+          "garrys-mod",
+          "pubg-battlegrounds",
+          "team-fortress-classic"
+        ]
+      },
+      "gameIds": [
+        "counter-strike",
+        "team-fortress-2",
+        "dota-2",
+        "garrys-mod",
+        "pubg-battlegrounds",
+        "dayz",
+        "team-fortress-classic"
+      ],
+      "usedOn": "2026-07-11",
+      "note": "shipped games that began as mods of other games"
     },
     {
       "id": "blue-tag-magic",
@@ -10313,7 +10248,7 @@
         "magicka",
         "claw"
       ],
-      "usedOn": "2026-06-25"
+      "usedOn": null
     },
     {
       "id": "blue-tag-atmospheric",
@@ -10461,7 +10396,7 @@
         "commandos-beyond-the-call-of-duty",
         "battlefield-2142"
       ],
-      "usedOn": "2026-07-09"
+      "usedOn": "2026-07-04"
     },
     {
       "id": "blue-tag-crafting",
@@ -10535,7 +10470,7 @@
         "albion-online",
         "avatar-frontiers-of-pandora"
       ],
-      "usedOn": "2026-06-26"
+      "usedOn": "2026-06-14"
     },
     {
       "id": "blue-tag-martial-arts",
@@ -10609,7 +10544,7 @@
         "the-matrix-path-of-neo",
         "oni"
       ],
-      "usedOn": "2026-07-06"
+      "usedOn": "2026-06-20"
     },
     {
       "id": "blue-tag-medieval",
@@ -10683,7 +10618,7 @@
         "the-elder-scrolls-iii-tribunal",
         "the-elder-scrolls-iv-knights-of-the-nine"
       ],
-      "usedOn": "2026-06-22"
+      "usedOn": "2026-06-10"
     },
     {
       "id": "blue-tag-post-apocalyptic",
@@ -10757,7 +10692,7 @@
         "world-war-z",
         "red-faction-ii"
       ],
-      "usedOn": "2026-06-18"
+      "usedOn": null
     },
     {
       "id": "blue-tag-sci-fi",
@@ -10831,7 +10766,7 @@
         "outriders",
         "warhammer-40-000-dawn-of-war-dark-crusade"
       ],
-      "usedOn": "2026-06-12"
+      "usedOn": "2026-06-18"
     },
     {
       "id": "blue-tag-aliens",
@@ -10979,7 +10914,7 @@
         "assassins-creed-iii-remastered",
         "the-outlast-trials"
       ],
-      "usedOn": "2026-07-05"
+      "usedOn": "2026-06-29"
     },
     {
       "id": "blue-tag-zombies",
@@ -11053,7 +10988,7 @@
         "state-of-decay",
         "cold-fear"
       ],
-      "usedOn": "2026-06-10"
+      "usedOn": "2026-06-27"
     },
     {
       "id": "blue-tag-crime",
@@ -11127,7 +11062,7 @@
         "saints-row",
         "sherlock-holmes-the-devils-daughter"
       ],
-      "usedOn": "2026-06-15"
+      "usedOn": "2026-07-07"
     },
     {
       "id": "blue-tag-robots",
@@ -11196,7 +11131,7 @@
         "alien-hominid",
         "the-book-of-unwritten-tales"
       ],
-      "usedOn": "2026-06-20"
+      "usedOn": "2026-07-05"
     },
     {
       "id": "blue-tag-cyberpunk",
@@ -11262,7 +11197,7 @@
         "mega-man-x7",
         "the-red-strings-club"
       ],
-      "usedOn": "2026-06-14"
+      "usedOn": "2026-06-22"
     },
     {
       "id": "blue-tag-ninja",
@@ -11323,7 +11258,7 @@
         "super-smash-bros-brawl",
         "scott-pilgrim-vs-the-world-the-game"
       ],
-      "usedOn": "2026-06-16"
+      "usedOn": null
     },
     {
       "id": "blue-tag-superhero",
@@ -11384,7 +11319,7 @@
         "injustice-gods-among-us-ultimate-edition",
         "speedrunners"
       ],
-      "usedOn": "2026-06-17"
+      "usedOn": "2026-07-09"
     },
     {
       "id": "blue-tag-detective",
@@ -11443,7 +11378,7 @@
         "sherlock-holmes-the-devils-daughter",
         "sherlock-holmes-chapter-one"
       ],
-      "usedOn": "2026-07-12"
+      "usedOn": "2026-06-24"
     },
     {
       "id": "blue-tag-war",
@@ -11504,7 +11439,7 @@
         "army-of-two-the-40th-day",
         "red-orchestra-2-heroes-of-stalingrad"
       ],
-      "usedOn": "2026-06-11"
+      "usedOn": null
     },
     {
       "id": "blue-tag-dark-fantasy",
@@ -11566,7 +11501,7 @@
         "tyranny",
         "salt-and-sanctuary"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-12"
     },
     {
       "id": "blue-tag-ghosts",
@@ -11620,7 +11555,7 @@
         "deadly-premonition",
         "mario-vs-donkey-kong"
       ],
-      "usedOn": "2026-06-19"
+      "usedOn": "2026-07-01"
     },
     {
       "id": "blue-tag-pixel-art",
@@ -11694,7 +11629,7 @@
         "shantae-and-the-pirates-curse",
         "arco"
       ],
-      "usedOn": "2026-07-08"
+      "usedOn": null
     },
     {
       "id": "blue-tag-female-protagonist",
@@ -11768,7 +11703,7 @@
         "dungeon-siege-iii",
         "gravity-rush"
       ],
-      "usedOn": "2026-07-01"
+      "usedOn": "2026-07-02"
     },
     {
       "id": "blue-tag-multiple-endings",
@@ -11916,7 +11851,7 @@
         "kingdom-hearts-358-2-days",
         "dragon-ball-xenoverse"
       ],
-      "usedOn": "2026-07-02"
+      "usedOn": null
     },
     {
       "id": "blue-tag-open-world",
@@ -11990,7 +11925,7 @@
         "driver",
         "grand-theft-auto-vice-city-stories"
       ],
-      "usedOn": "2026-06-21"
+      "usedOn": "2026-06-25"
     },
     {
       "id": "blue-tag-co-op",
@@ -12064,7 +11999,7 @@
         "far-cry-new-dawn",
         "the-dark-pictures-anthology-little-hope"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-10"
     },
     {
       "id": "blue-tag-survival-horror",
@@ -12136,7 +12071,7 @@
         "penumbra-requiem",
         "silent-hill-downpour"
       ],
-      "usedOn": "2026-07-10"
+      "usedOn": "2026-06-19"
     },
     {
       "id": "blue-tag-horror",
@@ -12203,7 +12138,7 @@
         "doom-3-bfg-edition",
         "escape-the-backrooms"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-03"
     },
     {
       "id": "blue-tag-free-to-play",
@@ -12277,7 +12212,7 @@
         "vrchat",
         "plants-vs-zombies-2-its-about-time"
       ],
-      "usedOn": "2026-06-30"
+      "usedOn": null
     },
     {
       "id": "blue-tag-jrpg",
@@ -12351,7 +12286,7 @@
         "persona-2-eternal-punishment",
         "fire-emblem-radiant-dawn"
       ],
-      "usedOn": "2026-07-14"
+      "usedOn": null
     },
     {
       "id": "blue-tag-metroidvania",
@@ -12425,7 +12360,7 @@
         "iconoclasts",
         "salt-and-sanctuary"
       ],
-      "usedOn": "2026-07-11"
+      "usedOn": null
     },
     {
       "id": "blue-tag-roguelike",
@@ -12473,7 +12408,7 @@
         "bad-north",
         "deep-rock-galactic-survivor"
       ],
-      "usedOn": "2026-06-28"
+      "usedOn": null
     },
     {
       "id": "blue-tag-side-scrolling",
@@ -12671,7 +12606,7 @@
         "shantae-and-the-pirates-curse",
         "stacking"
       ],
-      "usedOn": "2026-07-03"
+      "usedOn": null
     },
     {
       "id": "blue-tag-dinosaurs",
@@ -12710,7 +12645,7 @@
         "ark-survival-ascended",
         "jurassic-park-the-game"
       ],
-      "usedOn": "2026-06-13"
+      "usedOn": "2026-06-23"
     },
     {
       "id": "blue-tag-fantasy",
@@ -12816,7 +12751,7 @@
         "hardspace-shipbreaker",
         "space-rangers-2-dominators"
       ],
-      "usedOn": "2026-06-29"
+      "usedOn": "2026-07-06"
     },
     {
       "id": "blue-tag-racing",
@@ -12890,7 +12825,7 @@
         "need-for-speed-payback",
         "test-drive-unlimited"
       ],
-      "usedOn": "2026-07-04"
+      "usedOn": "2026-06-16"
     },
     {
       "id": "blue-tag-farming",
@@ -12918,7 +12853,7 @@
         "harvest-moon-friends-of-mineral-town",
         "medieval-dynasty"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-28"
     },
     {
       "id": "blue-tag-cooking",
@@ -12940,7 +12875,7 @@
         "tales-of-vesperia",
         "aquaria"
       ],
-      "usedOn": "2026-07-07"
+      "usedOn": "2026-06-17"
     },
     {
       "id": "blue-tag-time-travel",
@@ -12998,7 +12933,7 @@
         "day-of-the-tentacle-remastered",
         "sly-cooper-thieves-in-time"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-11"
     },
     {
       "id": "blue-tag-dystopian",
@@ -13081,7 +13016,7 @@
         "asuras-wrath",
         "perfect-world"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-08"
     },
     {
       "id": "blue-tag-samurai",
@@ -13115,7 +13050,7 @@
         "onimusha-2-samurais-destiny",
         "like-a-dragon-ishin"
       ],
-      "usedOn": "2026-06-27"
+      "usedOn": null
     },
     {
       "id": "blue-tag-building",
@@ -13185,7 +13120,7 @@
         "the-spongebob-squarepants-movie",
         "aquaria"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-15"
     },
     {
       "id": "blue-tag-boss-fight",
@@ -13244,7 +13179,7 @@
         "pacify",
         "monster-hunter-tri"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-13"
     },
     {
       "id": "blue-tag-wrestling",
@@ -13267,7 +13202,7 @@
         "wwe-smackdown-vs-raw-2011",
         "wwe-smackdown-vs-raw-2010"
       ],
-      "usedOn": "2026-06-24"
+      "usedOn": null
     },
     {
       "id": "blue-tag-skateboarding",
@@ -13291,7 +13226,7 @@
         "tony-hawks-american-wasteland",
         "tony-hawks-underground"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-14"
     },
     {
       "id": "blue-tag-cars",
@@ -13322,7 +13257,7 @@
         "assetto-corsa",
         "need-for-speed-carbon"
       ],
-      "usedOn": "2026-06-23"
+      "usedOn": null
     },
     {
       "id": "purple-one-word-title",
@@ -13760,7 +13695,7 @@
         "diablo-ii-lord-of-destruction",
         "final-fantasy-xiii"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-22"
     },
     {
       "id": "purple-starts-with-the",
@@ -13906,7 +13841,7 @@
         "ender-lilies-quietus-of-the-knights",
         "garou-mark-of-the-wolves"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-26"
     },
     {
       "id": "purple-possessive-title",
@@ -14066,7 +14001,7 @@
         "iracing",
         "stacking"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-25"
     },
     {
       "id": "purple-title-with-ampersand",
@@ -14139,7 +14074,7 @@
         "pokemon-diamond-pearl",
         "pokemon-firered-leafgreen"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-11"
     },
     {
       "id": "purple-title-with-exclamation",
@@ -14187,7 +14122,7 @@
         "zumas-revenge",
         "warioware-inc"
       ],
-      "usedOn": "2026-07-02"
+      "usedOn": "2026-07-06"
     },
     {
       "id": "purple-one-word-verb",
@@ -14208,7 +14143,7 @@
         "rust",
         "unravel"
       ],
-      "usedOn": "2026-07-13"
+      "usedOn": "2026-07-11"
     },
     {
       "id": "purple-repeated-word-title",
@@ -14317,7 +14252,7 @@
         "speedrunners",
         "darkwood"
       ],
-      "usedOn": "2026-07-10"
+      "usedOn": null
     },
     {
       "id": "purple-hyphenated-title",
@@ -14463,7 +14398,7 @@
         "homefront",
         "titanfall"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-29"
     },
     {
       "id": "purple-contains-colour",
@@ -14531,7 +14466,7 @@
         "sonic-and-the-black-knight",
         "red-orchestra-2-heroes-of-stalingrad"
       ],
-      "usedOn": "2026-06-24"
+      "usedOn": "2026-07-05"
     },
     {
       "id": "purple-contains-number-word",
@@ -14601,7 +14536,7 @@
         "sherlock-holmes-chapter-one",
         "prince-of-persia-the-two-thrones"
       ],
-      "usedOn": "2026-06-25"
+      "usedOn": null
     },
     {
       "id": "purple-contains-animal",
@@ -14674,7 +14609,7 @@
         "star-fox-64-3d",
         "dr-langeskov-the-tiger-and-the-terribly-cursed-emerald-a-whirlwind-heist"
       ],
-      "usedOn": "2026-07-08"
+      "usedOn": null
     },
     {
       "id": "purple-contains-body-part",
@@ -14726,7 +14661,7 @@
         "infamous-festival-of-blood",
         "kingdom-hearts-ii-final-mix"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-03"
     },
     {
       "id": "purple-contains-weather",
@@ -14759,7 +14694,7 @@
         "naruto-shippuden-ultimate-ninja-storm-revolution",
         "rain-world-downpour"
       ],
-      "usedOn": "2026-06-14"
+      "usedOn": null
     },
     {
       "id": "purple-contains-celestial",
@@ -14832,7 +14767,7 @@
         "skies-of-arcadia",
         "pok-mon-ultra-sun"
       ],
-      "usedOn": "2026-06-21"
+      "usedOn": null
     },
     {
       "id": "purple-contains-time-of-day",
@@ -14893,7 +14828,7 @@
         "last-day-of-june",
         "army-of-two-the-40th-day"
       ],
-      "usedOn": "2026-06-26"
+      "usedOn": "2026-07-09"
     },
     {
       "id": "purple-contains-element",
@@ -14942,7 +14877,7 @@
         "mount-blade-with-fire-and-sword",
         "harry-potter-and-the-goblet-of-fire"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-07"
     },
     {
       "id": "purple-contains-metal-or-gem",
@@ -15061,7 +14996,7 @@
         "kings-bounty-armored-princess",
         "titan-quest-immortal-throne"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-02"
     },
     {
       "id": "purple-contains-death",
@@ -15280,7 +15215,7 @@
         "dragon-quest-viii-journey-of-the-cursed-king",
         "banishers-ghosts-of-new-eden"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-04"
     },
     {
       "id": "purple-contains-divine",
@@ -15324,7 +15259,7 @@
         "injustice-gods-among-us-ultimate-edition",
         "god-of-war-collection"
       ],
-      "usedOn": "2026-06-17"
+      "usedOn": null
     },
     {
       "id": "purple-contains-water-body",
@@ -15369,7 +15304,7 @@
         "torment-tides-of-numenera",
         "sea-of-solitude"
       ],
-      "usedOn": "2026-07-01"
+      "usedOn": "2026-06-28"
     },
     {
       "id": "purple-contains-structure",
@@ -15442,7 +15377,7 @@
         "pok-mon-mystery-dungeon-explorers-of-darkness",
         "ancient-cities"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-13"
     },
     {
       "id": "purple-contains-direction",
@@ -15486,7 +15421,7 @@
         "horizon-chase-turbo",
         "bad-north"
       ],
-      "usedOn": "2026-06-30"
+      "usedOn": "2026-06-10"
     },
     {
       "id": "purple-contains-journey",
@@ -15542,7 +15477,7 @@
         "dragon-quest-ix-sentinels-of-the-starry-skies",
         "dlc-quest"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-13"
     },
     {
       "id": "purple-contains-profession",
@@ -15615,7 +15550,7 @@
         "the-awesome-adventures-of-captain-spirit",
         "uncharted-legacy-of-thieves-collection"
       ],
-      "usedOn": "2026-06-23"
+      "usedOn": "2026-06-21"
     },
     {
       "id": "purple-contains-family",
@@ -15689,7 +15624,7 @@
         "pathfinder-wrath-of-the-righteous",
         "danganronpa-another-episode-ultra-despair-girls"
       ],
-      "usedOn": "2026-06-29"
+      "usedOn": "2026-06-12"
     },
     {
       "id": "purple-contains-dark-light",
@@ -15762,7 +15697,7 @@
         "the-long-dark",
         "warhammer-40-000-dawn-of-war-dark-crusade"
       ],
-      "usedOn": null
+      "usedOn": "2026-07-14"
     },
     {
       "id": "purple-contains-fortune",
@@ -15790,7 +15725,7 @@
         "captain-toad-treasure-tracker",
         "kings-bounty-armored-princess"
       ],
-      "usedOn": "2026-06-27"
+      "usedOn": null
     },
     {
       "id": "purple-contains-legend",
@@ -15863,7 +15798,7 @@
         "tales-of-phantasia",
         "no-more-heroes"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-27"
     },
     {
       "id": "purple-contains-world",
@@ -15970,7 +15905,7 @@
         "red-orchestra-2-heroes-of-stalingrad",
         "deep-rock-galactic-survivor"
       ],
-      "usedOn": "2026-06-16"
+      "usedOn": null
     },
     {
       "id": "purple-contains-sports-gear",
@@ -16036,7 +15971,7 @@
         "fifa-soccer-2005",
         "pro-evolution-soccer-2009"
       ],
-      "usedOn": "2026-07-12"
+      "usedOn": null
     },
     {
       "id": "purple-contains-vehicle",
@@ -16122,7 +16057,7 @@
         "sly-cooper-thieves-in-time",
         "eternal-sonata"
       ],
-      "usedOn": "2026-06-11"
+      "usedOn": "2026-07-10"
     },
     {
       "id": "purple-contains-weapon",
@@ -16169,7 +16104,7 @@
         "gun",
         "the-elder-scrolls-blades"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-20"
     },
     {
       "id": "purple-contains-magic",
@@ -16202,7 +16137,7 @@
         "heroes-of-might-and-magic-v-tribes-of-the-east",
         "magic-the-gathering-arena"
       ],
-      "usedOn": "2026-06-28"
+      "usedOn": "2026-06-15"
     },
     {
       "id": "purple-contains-cold",
@@ -16336,7 +16271,7 @@
         "star-fox-assault",
         "sonic-sega-all-stars-racing"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-23"
     },
     {
       "id": "purple-contains-us-place",
@@ -16367,7 +16302,7 @@
         "tony-hawks-american-wasteland",
         "fallout-new-vegas-ultimate-edition"
       ],
-      "usedOn": "2026-06-19"
+      "usedOn": "2026-06-14"
     },
     {
       "id": "purple-contains-single-letter",
@@ -16436,7 +16371,7 @@
         "the-elder-scrolls-v-skyrim-hearthfire",
         "sid-meiers-civilization-v-brave-new-world"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-30"
     },
     {
       "id": "purple-contains-superlative",
@@ -16612,1131 +16547,6 @@
       "usedOn": null
     },
     {
-      "id": "purple-hides-ape",
-      "label": "TITLES HIDING 'APE'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-ape"
-      },
-      "gameIds": [
-        "paperboy",
-        "escape-from-tarkov",
-        "apex-legends",
-        "planescape-torment",
-        "paper-mario",
-        "paper-mario-the-thousand-year-door",
-        "papers-please",
-        "super-paper-mario",
-        "escape-from-monkey-island",
-        "runescape",
-        "diablo-iii-reaper-of-souls",
-        "the-chronicles-of-riddick-escape-from-butcher-bay",
-        "aperture-desk-job",
-        "ape-escape",
-        "zero-escape-virtues-last-reward",
-        "the-artful-escape",
-        "zero-escape-zero-time-dilemma",
-        "ape-escape-2",
-        "rayman-2-the-great-escape",
-        "escape-academy",
-        "paper-mario-the-origami-king",
-        "old-school-runescape",
-        "escape-simulator",
-        "escape-the-backrooms"
-      ],
-      "usedOn": "2026-06-10"
-    },
-    {
-      "id": "purple-hides-rat",
-      "label": "TITLES HIDING 'RAT'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-rat"
-      },
-      "gameIds": [
-        "heroes-of-might-and-magic-iii-the-restoration-of-erathia",
-        "ratchet-clank-rift-apart",
-        "ratchet-and-clank",
-        "crash-bandicoot-the-wrath-of-cortex",
-        "doki-doki-literature-club",
-        "world-of-warcraft-wrath-of-the-lich-king",
-        "ratchet-clank-going-commando",
-        "heroes-of-might-and-magic-a-strategic-quest",
-        "ratchet-clank",
-        "the-operative-no-one-lives-forever",
-        "ratchet-clank-future-tools-of-destruction",
-        "ratchet-clank-up-your-arsenal",
-        "ratchet-deadlocked",
-        "ni-no-kuni-wrath-of-the-white-witch",
-        "doki-doki-literature-club-plus",
-        "totally-accurate-battle-simulator",
-        "ratchet-clank-future-a-crack-in-time",
-        "assassins-creed-iii-liberation",
-        "ratchet-clank-future-quest-for-booty",
-        "sid-meiers-pirates",
-        "ratchet-clank-size-matters",
-        "lego-pirates-of-the-caribbean-the-video-game",
-        "spongebob-squarepants-battle-for-bikini-bottom-rehydrated",
-        "operation-flashpoint-cold-war-crisis",
-        "command-conquer-3-kanes-wrath",
-        "fallout-3-operation-anchorage",
-        "resident-evil-4-separate-ways",
-        "pirates-of-the-caribbean",
-        "no-more-heroes-2-desperate-struggle",
-        "jurassic-park-operation-genesis",
-        "oddworld-strangers-wrath",
-        "assassins-creed-liberation-hd",
-        "triangle-strategy",
-        "asuras-wrath",
-        "ratchet-clank-all-4-one",
-        "resident-evil-operation-raccoon-city",
-        "shantae-and-the-pirates-curse",
-        "champions-of-norrath",
-        "rise-of-the-tomb-raider-20-year-celebration",
-        "pathfinder-wrath-of-the-righteous"
-      ],
-      "usedOn": "2026-06-15"
-    },
-    {
-      "id": "purple-hides-cat",
-      "label": "TITLES HIDING 'CAT'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-cat"
-      },
-      "gameIds": [
-        "assassins-creed-syndicate",
-        "world-of-warcraft-cataclysm",
-        "mirrors-edge-catalyst",
-        "catherine",
-        "neighbours-from-hell-2-on-vacation",
-        "syndicate",
-        "octodad-dadliest-catch",
-        "cataclismo"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-art",
-      "label": "TITLES HIDING 'ART'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-art"
-      },
-      "gameIds": [
-        "super-mario-kart",
-        "uncharted-4-a-thief-s-end",
-        "the-last-of-us-part-ii",
-        "middle-earth-shadow-of-mordor",
-        "mario-kart-64",
-        "uncharted-2-among-thieves",
-        "kingdom-hearts-ii",
-        "the-last-of-us-part-i",
-        "hogwarts-legacy",
-        "earthbound",
-        "doom-ii-hell-on-earth",
-        "uncharted-3-drake-s-deception",
-        "kingdom-hearts",
-        "uncharted-drakes-fortune",
-        "ratchet-clank-rift-apart",
-        "earthworm-jim",
-        "mario-kart-double-dash",
-        "mario-kart-ds",
-        "mario-kart-wii",
-        "hearthstone",
-        "mario-kart-8",
-        "king-s-quest-v-absence-makes-the-heart-go-yonder",
-        "the-last-of-us-part-ii-remastered",
-        "mario-kart-8-deluxe",
-        "mario-party",
-        "the-lord-of-the-rings-the-battle-for-middle-earth-ii",
-        "the-witcher-3-wild-hunt-hearts-of-stone",
-        "atomic-heart",
-        "pok-mon-heartgold-version",
-        "uncharted-the-lost-legacy",
-        "s-t-a-l-k-e-r-2-heart-of-chornobyl",
-        "mario-kart-super-circuit",
-        "middle-earth-shadow-of-war",
-        "the-lord-of-the-rings-the-battle-for-middle-earth",
-        "valiant-hearts-the-great-war",
-        "uncharted-the-nathan-drake-collection",
-        "worms-world-party",
-        "call-of-cthulhu-dark-corners-of-the-earth",
-        "empire-earth",
-        "mario-luigi-partners-in-time",
-        "the-vanishing-of-ethan-carter",
-        "kingdom-hearts-iii",
-        "god-of-war-ghost-of-sparta",
-        "mario-party-3",
-        "mario-kart-7",
-        "mario-party-2",
-        "mario-party-8",
-        "heart-of-darkness",
-        "starcraft-ii-heart-of-the-swarm",
-        "uncharted-legacy-of-thieves-collection",
-        "earthworm-jim-2",
-        "kingdom-hearts-birth-by-sleep",
-        "super-mario-party",
-        "mario-party-5",
-        "kingdom-hearts-chain-of-memories",
-        "kingdom-hearts-358-2-days",
-        "uncharted-4-a-thiefs-end-remastered",
-        "the-lord-of-the-rings-the-battle-for-middle-earth-ii-the-rise-of-the-witch-king",
-        "mario-party-ds",
-        "uncharted-2-among-thieves-remastered"
-      ],
-      "usedOn": "2026-07-06"
-    },
-    {
-      "id": "purple-hides-war",
-      "label": "TITLES HIDING 'WAR'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-war"
-      },
-      "gameIds": [
-        "star-wars-knights-of-the-old-republic",
-        "warcraft-iii-reign-of-chaos",
-        "star-wars-jedi-fallen-order",
-        "warcraft-ii-tides-of-darkness",
-        "world-of-warcraft",
-        "hogwarts-legacy",
-        "warcraft-iii-the-frozen-throne",
-        "star-wars-knights-of-the-old-republic-ii-the-sith-lords",
-        "star-wars-battlefront-ii",
-        "call-of-duty-modern-warfare-2",
-        "crash-bandicoot-warped",
-        "star-wars-jedi-knight-jedi-academy",
-        "contra-iii-the-alien-wars",
-        "star-wars-dark-forces",
-        "call-of-duty-modern-warfare-3",
-        "warcraft-orcs-humans",
-        "star-wars-the-force-unleashed",
-        "star-wars-jedi-survivor",
-        "wario-land-super-mario-land-3",
-        "lego-star-wars-the-complete-saga",
-        "call-of-duty-advanced-warfare",
-        "super-star-wars",
-        "star-wars-jedi-knight-ii-jedi-outcast",
-        "call-of-duty-modern-warfare",
-        "warhammer-40-000-space-marine-ii",
-        "heroes-of-might-and-magic-ii-the-succession-wars",
-        "star-wars-republic-commando",
-        "world-of-warcraft-the-burning-crusade",
-        "call-of-duty-modern-warfare-ii",
-        "warcraft-ii-beyond-the-dark-portal",
-        "command-conquer-3-tiberium-wars",
-        "world-of-warcraft-wrath-of-the-lich-king",
-        "star-wars-battlefront",
-        "mount-blade-warband",
-        "star-wars-rogue-squadron",
-        "warframe",
-        "lego-star-wars-the-skywalker-saga",
-        "call-of-duty-modern-warfare-iii",
-        "star-wars-jedi-knight-dark-forces-ii",
-        "star-wars-episode-i-racer",
-        "the-legend-of-zelda-skyward-sword",
-        "guild-wars-2",
-        "star-wars-shadows-of-the-empire",
-        "star-wars-the-force-unleashed-ii",
-        "crysis-warhead",
-        "warhammer-40-000-dawn-of-war",
-        "call-of-duty-infinite-warfare",
-        "call-of-duty-warzone",
-        "star-wars-tie-fighter",
-        "advance-wars",
-        "star-wars-outlaws",
-        "star-wars-x-wing",
-        "guild-wars",
-        "grand-theft-auto-chinatown-wars",
-        "star-wars-the-old-republic",
-        "world-of-warcraft-cataclysm",
-        "starcraft-ii-heart-of-the-swarm",
-        "star-wars-empire-at-war",
-        "star-wars-squadrons",
-        "onimusha-warlords"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-ten",
-      "label": "TITLES HIDING 'TEN'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-ten"
-      },
-      "gameIds": [
-        "day-of-the-tentacle",
-        "metal-gear-solid-3-subsistence",
-        "dragon-ball-z-budokai-tenkaichi-3",
-        "mario-tennis",
-        "the-forgotten-city",
-        "dragon-ball-z-budokai-tenkaichi-2",
-        "tenchu-stealth-assassins",
-        "dragon-ball-z-budokai-tenkaichi",
-        "content-warning",
-        "tenchu-2-birth-of-the-stealth-assassins",
-        "super-smash-bros-for-nintendo-3ds",
-        "va-11-hall-a-cyberpunk-bartender-action",
-        "virtua-tennis",
-        "shin-megami-tensei-nocturne",
-        "mario-power-tennis",
-        "mario-tennis-aces",
-        "nintendo-switch-sports",
-        "day-of-the-tentacle-remastered",
-        "shin-megami-tensei-v",
-        "nintendo-land",
-        "detention",
-        "the-book-of-unwritten-tales"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-ace",
-      "label": "TITLES HIDING 'ACE'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-ace"
-      },
-      "gameIds": [
-        "space-invaders",
-        "dead-space",
-        "dead-space-2",
-        "dead-space-2023",
-        "warhammer-40-000-space-marine-ii",
-        "star-wars-episode-i-racer",
-        "wave-race-64",
-        "dead-space-3",
-        "race-driver-grid",
-        "metal-gear-solid-peace-walker",
-        "3d-pinball-space-cadet",
-        "kerbal-space-program",
-        "warhammer-40-000-space-marine",
-        "zerospace",
-        "r4-ridge-racer-type-4",
-        "star-wars-episode-i-the-phantom-menace",
-        "lego-racers",
-        "james-bond-007-quantum-of-solace",
-        "scarface-the-world-is-yours",
-        "mario-tennis-aces",
-        "yes-your-grace",
-        "hardspace-shipbreaker",
-        "space-rangers-2-dominators",
-        "lovers-in-a-dangerous-spacetime"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-ice",
-      "label": "TITLES HIDING 'ICE'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-ice"
-      },
-      "gameIds": [
-        "grand-theft-auto-vice-city",
-        "sekiro-shadows-die-twice",
-        "hellblade-senuas-sacrifice",
-        "grand-theft-auto-vice-city-stories",
-        "american-mcgees-alice",
-        "phoenix-wright-ace-attorney-justice-for-all",
-        "alice-madness-returns",
-        "apollo-justice-ace-attorney",
-        "icewind-dale",
-        "injustice-gods-among-us",
-        "injustice-2",
-        "icewind-dale-ii",
-        "suicide-squad-kill-the-justice-league",
-        "monster-hunter-world-iceborne",
-        "contraband-police",
-        "this-is-the-police",
-        "injustice-gods-among-us-ultimate-edition",
-        "dune-spice-wars",
-        "mass-effect-2-zaeed-the-price-of-revenge"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-ash",
-      "label": "TITLES HIDING 'ASH'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-ash"
-      },
-      "gameIds": [
-        "crash-bandicoot",
-        "super-smash-bros-melee",
-        "crash-bandicoot-2-cortex-strikes-back",
-        "crash-bandicoot-warped",
-        "super-smash-bros",
-        "super-smash-bros-ultimate",
-        "crash-team-racing",
-        "flashback-the-quest-for-identity",
-        "mario-kart-double-dash",
-        "star-wars-the-force-unleashed",
-        "need-for-speed-porsche-unleashed",
-        "crash-bash",
-        "castle-crashers",
-        "crash-bandicoot-the-wrath-of-cortex",
-        "remnant-from-the-ashes",
-        "crash-bandicoot-n-sane-trilogy",
-        "the-dark-pictures-house-of-ashes",
-        "the-dark-pictures-anthology-house-of-ashes",
-        "star-wars-the-force-unleashed-ii",
-        "powerwash-simulator",
-        "marvel-vs-capcom-clash-of-super-heroes",
-        "mouthwashing",
-        "super-smash-bros-for-wii-u",
-        "crash-bandicoot-4-its-about-time",
-        "crash-of-the-titans",
-        "clash-of-clans",
-        "crash-twinsanity",
-        "geometry-dash",
-        "super-smash-bros-for-nintendo-3ds",
-        "clash-royale",
-        "operation-flashpoint-cold-war-crisis",
-        "crash-team-racing-nitro-fueled",
-        "need-for-speed-shift-2-unleashed",
-        "hot-wheels-unleashed",
-        "crash-mind-over-mutant",
-        "zeno-clash",
-        "sonic-unleashed",
-        "muse-dash",
-        "super-smash-bros-brawl"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-ear",
-      "label": "TITLES HIDING 'EAR'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-ear"
-      },
-      "gameIds": [
-        "middle-earth-shadow-of-mordor",
-        "fallout-a-post-nuclear-role-playing-game",
-        "metal-gear-solid",
-        "metal-gear-solid-3-snake-eater",
-        "the-legend-of-zelda-tears-of-the-kingdom",
-        "kingdom-hearts-ii",
-        "gears-of-war",
-        "earthbound",
-        "metal-gear-2-solid-snake",
-        "doom-ii-hell-on-earth",
-        "metal-gear-solid-2-sons-of-liberty",
-        "kingdom-hearts",
-        "metal-gear-solid-4-guns-of-the-patriots",
-        "earthworm-jim",
-        "metal-gear-solid-v-the-phantom-pain",
-        "hearthstone",
-        "metal-gear",
-        "king-s-quest-v-absence-makes-the-heart-go-yonder",
-        "paper-mario-the-thousand-year-door",
-        "metal-gear-solid-3-subsistence",
-        "spyro-year-of-the-dragon",
-        "gears-of-war-2",
-        "toejam-earl",
-        "the-lord-of-the-rings-the-battle-for-middle-earth-ii",
-        "the-witcher-3-wild-hunt-hearts-of-stone",
-        "the-witcher-3-wild-hunt-game-of-the-year-edition",
-        "atomic-heart",
-        "pok-mon-heartgold-version",
-        "s-t-a-l-k-e-r-2-heart-of-chornobyl",
-        "spear-of-destiny",
-        "metal-gear-solid-v-ground-zeroes",
-        "metal-gear-rising-revengeance",
-        "middle-earth-shadow-of-war",
-        "pok-mon-pearl-version",
-        "gears-5",
-        "the-lord-of-the-rings-the-battle-for-middle-earth",
-        "valiant-hearts-the-great-war",
-        "xenogears",
-        "metal-gear-solid-2-substance",
-        "call-of-cthulhu-dark-corners-of-the-earth",
-        "gears-of-war-3",
-        "empire-earth",
-        "s-t-a-l-k-e-r-clear-sky",
-        "kingdom-hearts-iii",
-        "fallout-3-game-of-the-year-edition",
-        "metal-gear-solid-peace-walker",
-        "metal-gear-solid-delta-snake-eater",
-        "heart-of-darkness",
-        "starcraft-ii-heart-of-the-swarm",
-        "toy-story-2-buzz-lightyear-to-the-rescue",
-        "earthworm-jim-2",
-        "layers-of-fear",
-        "kingdom-hearts-birth-by-sleep",
-        "gears-of-war-4",
-        "batman-arkham-asylum-game-of-the-year-edition",
-        "kingdom-hearts-chain-of-memories",
-        "medal-of-honor-allied-assault-spearhead",
-        "kingdom-hearts-358-2-days",
-        "dear-esther",
-        "the-lord-of-the-rings-the-battle-for-middle-earth-ii-the-rise-of-the-witch-king"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-arm",
-      "label": "TITLES HIDING 'ARM'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-arm"
-      },
-      "gameIds": [
-        "worms-armageddon",
-        "carmageddon-ii-carpocalypse-now",
-        "armored-core-vi-fires-of-rubicon",
-        "castlevania-harmony-of-dissonance",
-        "mortal-kombat-armageddon",
-        "starcraft-ii-heart-of-the-swarm",
-        "brothers-in-arms-road-to-hill-30",
-        "heroes-of-might-and-magic-iii-armageddons-blade",
-        "danganronpa-v3-killing-harmony",
-        "army-of-two",
-        "brothers-in-arms-hells-highway",
-        "carmageddon",
-        "brothers-in-arms-earned-in-blood",
-        "carmageddon-tdr-2000",
-        "red-faction-armageddon",
-        "arma-2",
-        "kings-bounty-armored-princess",
-        "arma-3",
-        "alien-swarm",
-        "darksiders-warmastered-edition",
-        "army-of-two-the-40th-day"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-eve",
-      "label": "TITLES HIDING 'EVE'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-eve"
-      },
-      "gameIds": [
-        "monkey-island-2-lechuck-s-revenge",
-        "super-mario-bros-the-lost-levels",
-        "uncharted-2-among-thieves",
-        "the-revenge-of-shinobi",
-        "assassins-creed-revelations",
-        "super-mario-rpg-legend-of-the-seven-stars",
-        "teenage-mutant-ninja-turtles-shredders-revenge",
-        "castlevania-ii-belmonts-revenge",
-        "the-neverhood",
-        "metal-gear-rising-revengeance",
-        "neverwinter-nights",
-        "the-operative-no-one-lives-forever",
-        "sea-of-thieves",
-        "tomb-raider-the-last-revelation",
-        "neverwinter-nights-2",
-        "command-conquer-red-alert-2-yuris-revenge",
-        "duke-nukem-forever",
-        "sly-3-honor-among-thieves",
-        "resident-evil-revelations-2",
-        "burnout-revenge",
-        "uncharted-legacy-of-thieves-collection",
-        "no-one-lives-forever-2-a-spy-in-h-a-r-m-s-way",
-        "resident-evil-revelations",
-        "sly-2-band-of-thieves",
-        "everybodys-gone-to-the-rapture",
-        "pok-mon-lets-go-eevee",
-        "uncharted-2-among-thieves-remastered",
-        "ni-no-kuni-ii-revenant-kingdom",
-        "never-alone-kisima-ingitchuna",
-        "monkey-island-2-special-edition-lechucks-revenge",
-        "trackmania-nations-forever",
-        "everlasting-summer",
-        "everhood",
-        "world-soccer-winning-eleven-7-international",
-        "momodora-reverie-under-the-moonlight",
-        "inazuma-eleven",
-        "neverwinter-nights-hordes-of-the-underdark",
-        "james-bond-007-everything-or-nothing",
-        "myst-iv-revelation",
-        "winning-eleven-pro-evolution-soccer-2007",
-        "star-wars-episode-iii-revenge-of-the-sith",
-        "mass-effect-2-zaeed-the-price-of-revenge",
-        "zumas-revenge",
-        "sly-cooper-thieves-in-time",
-        "neverwinter"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-end",
-      "label": "TITLES HIDING 'END'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-end"
-      },
-      "gameIds": [
-        "the-legend-of-zelda",
-        "the-legend-of-zelda-a-link-to-the-past",
-        "the-legend-of-zelda-breath-of-the-wild",
-        "the-legend-of-zelda-ocarina-of-time",
-        "the-legend-of-zelda-majora-s-mask",
-        "the-legend-of-zelda-tears-of-the-kingdom",
-        "the-legend-of-zelda-the-wind-waker",
-        "the-legend-of-zelda-links-awakening",
-        "league-of-legends",
-        "apex-legends",
-        "mass-effect-legendary-edition",
-        "tomb-raider-legend",
-        "super-mario-rpg-legend-of-the-seven-stars",
-        "pok-mon-legends-arceus",
-        "the-legend-of-zelda-links-awakening-dx",
-        "guitar-hero-iii-legends-of-rock",
-        "the-legend-of-zelda-a-link-between-worlds",
-        "the-legend-of-zelda-the-minish-cap",
-        "the-legend-of-zelda-phantom-hourglass",
-        "the-legend-of-zelda-oracle-of-seasons",
-        "rayman-legends",
-        "the-legend-of-zelda-ocarina-of-time-3d",
-        "the-legend-of-zelda-skyward-sword",
-        "the-legend-of-zelda-oracle-of-ages",
-        "the-first-descendant",
-        "br-tal-legend",
-        "the-legend-of-zelda-the-wind-waker-hd",
-        "pok-mon-legends-z-a",
-        "the-legend-of-zelda-spirit-tracks",
-        "croc-legend-of-the-gobbos",
-        "my-friend-pedro",
-        "the-world-ends-with-you",
-        "the-legend-of-zelda-majoras-mask-3d",
-        "the-legend-of-zelda-echoes-of-wisdom",
-        "mega-man-legends",
-        "the-legend-of-zelda-twilight-princess",
-        "the-legend-of-dragoon",
-        "super-smash-bros-for-nintendo-3ds",
-        "kings-bounty-the-legend",
-        "ender-lilies-quietus-of-the-knights",
-        "robin-hood-the-legend-of-sherwood",
-        "the-legend-of-zelda-skyward-sword-hd",
-        "va-11-hall-a-cyberpunk-bartender-action",
-        "the-legend-of-heroes-trails-in-the-sky",
-        "legends-of-runeterra",
-        "the-legend-of-zelda-four-swords-adventures",
-        "legend-of-mana",
-        "x-men-legends-ii-rise-of-apocalypse",
-        "the-legend-of-heroes-trails-in-the-sky-sc",
-        "dungeon-defenders",
-        "nintendo-switch-sports",
-        "golf-with-your-friends",
-        "final-fantasy-xiv-endwalker",
-        "legend-of-grimrock",
-        "ark-survival-ascended",
-        "the-legend-of-zelda-twilight-princess-hd",
-        "hatoful-boyfriend",
-        "nintendo-land",
-        "harvest-moon-friends-of-mineral-town"
-      ],
-      "usedOn": "2026-06-12"
-    },
-    {
-      "id": "purple-hides-red",
-      "label": "TITLES HIDING 'RED'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-red"
-      },
-      "gameIds": [
-        "the-last-of-us-remastered",
-        "red-dead-redemption-2",
-        "red-dead-redemption",
-        "dishonored",
-        "altered-beast",
-        "pok-mon-firered-version",
-        "dishonored-2",
-        "the-last-of-us-part-ii-remastered",
-        "dark-souls-remastered",
-        "dredge",
-        "the-elder-scrolls-iv-oblivion-remastered",
-        "the-incredible-machine",
-        "teenage-mutant-ninja-turtles-shredders-revenge",
-        "marvels-spider-man-remastered",
-        "south-park-the-fractured-but-whole",
-        "alan-wake-remastered",
-        "armored-core-vi-fires-of-rubicon",
-        "metro-2033-redux",
-        "grim-fandango-remastered",
-        "murdered-soul-suspect",
-        "red-dead-redemption-undead-nightmare",
-        "dishonored-death-of-the-outsider",
-        "metroid-prime-remastered",
-        "aliens-vs-predator",
-        "metro-last-light-redux",
-        "fire-emblem-the-sacred-stones",
-        "vampire-the-masquerade-redemption",
-        "aliens-versus-predator-2",
-        "god-of-war-iii-remastered",
-        "call-of-duty-modern-warfare-remastered",
-        "bioshock-remastered",
-        "predecessor",
-        "call-of-duty-modern-warfare-2-campaign-remastered",
-        "uncharted-4-a-thiefs-end-remastered",
-        "silent-hill-shattered-memories",
-        "uncharted-2-among-thieves-remastered",
-        "aliens-versus-predator",
-        "uncharted-drakes-fortune-remastered",
-        "uncharted-3-drakes-deception-remastered",
-        "metro-redux",
-        "dishonored-definitive-edition",
-        "assassins-creed-iii-remastered",
-        "bioshock-2-remastered",
-        "kings-bounty-armored-princess",
-        "battlebit-remastered",
-        "ducktales-remastered",
-        "need-for-speed-hot-pursuit-remastered",
-        "sacred-2-fallen-angel",
-        "full-throttle-remastered",
-        "day-of-the-tentacle-remastered",
-        "redfall",
-        "the-incredible-hulk",
-        "broken-sword-the-smoking-mirror-remastered",
-        "crysis-remastered",
-        "darksiders-warmastered-edition",
-        "gravity-rush-remastered",
-        "dishonored-the-knife-of-dunwall",
-        "the-whispered-world",
-        "pokemon-firered-leafgreen"
-      ],
-      "usedOn": "2026-07-07"
-    },
-    {
-      "id": "purple-hides-age",
-      "label": "TITLES HIDING 'AGE'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-age"
-      },
-      "gameIds": [
-        "resident-evil-village",
-        "streets-of-rage",
-        "streets-of-rage-2",
-        "teenage-mutant-ninja-turtles-iv-turtles-in-time",
-        "teenage-mutant-ninja-turtles",
-        "doom-the-dark-ages",
-        "worms-armageddon",
-        "teenage-mutant-ninja-turtles-shredders-revenge",
-        "streets-of-rage-3",
-        "commandos-2-men-of-courage",
-        "professor-layton-and-the-curious-village",
-        "spyro-2-ripto-s-rage",
-        "the-legend-of-zelda-oracle-of-ages",
-        "streets-of-rage-4",
-        "primal-rage",
-        "marble-racing-manager",
-        "rage",
-        "carmageddon-ii-carpocalypse-now",
-        "rage-2",
-        "mortal-kombat-armageddon",
-        "heroes-of-might-and-magic-iii-armageddons-blade",
-        "lineage-ii",
-        "carmageddon",
-        "flatout-ultimate-carnage",
-        "fire-emblem-engage",
-        "carmageddon-tdr-2000",
-        "visage",
-        "football-manager-2024",
-        "the-simpsons-road-rage",
-        "fallout-3-operation-anchorage",
-        "red-faction-armageddon",
-        "journey-to-the-savage-planet",
-        "forager",
-        "james-bond-007-agent-under-fire",
-        "elite-beat-agents",
-        "tom-clancys-splinter-cell-double-agent",
-        "football-manager-2020",
-        "rock-of-ages",
-        "football-manager-2008"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-man",
-      "label": "TITLES HIDING 'MAN'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-man"
-      },
-      "gameIds": [
-        "batman-arkham-asylum",
-        "commando",
-        "hitman-blood-money",
-        "batman-arkham-city",
-        "command-conquer",
-        "detroit-become-human",
-        "secret-of-mana",
-        "maniac-mansion",
-        "command-conquer-red-alert-2",
-        "warcraft-orcs-humans",
-        "command-conquer-red-alert",
-        "hitman-codename-47",
-        "hitman-2-silent-assassin",
-        "command-conquer-generals",
-        "deus-ex-human-revolution",
-        "dying-light-2-stay-human",
-        "manhunt",
-        "captain-commando",
-        "commandos-behind-enemy-lines",
-        "hitman-absolution",
-        "hitman",
-        "luigis-mansion",
-        "star-wars-republic-commando",
-        "deus-ex-mankind-divided",
-        "rayman-legends",
-        "hitman-3",
-        "batman-returns",
-        "hitman-contracts",
-        "command-conquer-3-tiberium-wars",
-        "commandos-2-men-of-courage",
-        "ratchet-clank-going-commando",
-        "rayman-origins",
-        "hitman-2",
-        "lego-batman-the-videogame",
-        "sonic-mania",
-        "trials-of-mana",
-        "rayman-3-hoodlum-havoc",
-        "super-bomberman",
-        "command-conquer-generals-zero-hour",
-        "marble-racing-manager",
-        "command-conquer-tiberian-sun",
-        "command-conquer-red-alert-3",
-        "batman-the-telltale-series",
-        "luigis-mansion-3",
-        "command-conquer-red-alert-2-yuris-revenge",
-        "rayman",
-        "once-human",
-        "bomberman-64",
-        "command-conquer-renegade",
-        "commandos-beyond-the-call-of-duty",
-        "commandos-3-destination-berlin",
-        "batman-arkham-asylum-game-of-the-year-edition",
-        "f-e-a-r-perseus-mandate",
-        "manhunt-2",
-        "rayman-raving-rabbids",
-        "human-fall-flat",
-        "maneater",
-        "batman-the-enemy-within",
-        "command-conquer-tiberian-sun-firestorm",
-        "lego-batman-2-dc-super-heroes"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-den",
-      "label": "TITLES HIDING 'DEN'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-den"
-      },
-      "gameIds": [
-        "elden-ring",
-        "resident-evil-requiem",
-        "golden-axe",
-        "resident-evil-village",
-        "super-mario-land-2-6-golden-coins",
-        "ninja-gaiden",
-        "horizon-forbidden-west",
-        "goldeneye-007",
-        "resident-evil-3-nemesis",
-        "resident-evil-7-biohazard",
-        "flashback-the-quest-for-identity",
-        "resident-evil-5",
-        "hitman-codename-47",
-        "resident-evil-3",
-        "ninja-gaiden-ii-the-dark-sword-of-chaos",
-        "golden-axe-ii",
-        "suikoden",
-        "persona-4-golden",
-        "elden-ring-nightreign",
-        "ninja-gaiden-iii-the-ancient-ship-of-doom",
-        "resident-evil-6",
-        "resident-evil-4",
-        "elden-ring-shadow-of-the-erdtree",
-        "resident-evil",
-        "golden-axe-iii",
-        "suikoden-ii",
-        "golden-sun",
-        "resident-evil-zero",
-        "resident-evil-code-veronica-x",
-        "resident-evil-revelations-2",
-        "resident-evil-revelations",
-        "resident-evil-1996",
-        "resident-evil-directors-cut",
-        "resident-evil-survivor",
-        "golden-sun-the-lost-age",
-        "yu-gi-oh-forbidden-memories",
-        "banishers-ghosts-of-new-eden",
-        "the-case-of-the-golden-idol",
-        "resident-evil-0",
-        "resident-evil-2",
-        "naruto-shippuden-ultimate-ninja-storm-2",
-        "uncharted-golden-abyss",
-        "naruto-shippuden-ultimate-ninja-storm-4",
-        "like-a-dragon-gaiden-the-man-who-erased-his-name",
-        "resident-evil-outbreak",
-        "resident-evil-the-umbrella-chronicles",
-        "horizon-forbidden-west-burning-shores",
-        "resident-evil-4-separate-ways",
-        "plants-vs-zombies-garden-warfare",
-        "ninja-gaiden-sigma",
-        "the-rise-of-the-golden-idol",
-        "mutant-year-zero-road-to-eden",
-        "naruto-shippuden-ultimate-ninja-storm-3",
-        "ninja-gaiden-ii",
-        "the-gardens-between",
-        "naruto-shippuden-ultimate-ninja-5",
-        "ninja-gaiden-black",
-        "resident-evil-operation-raccoon-city",
-        "resident-evil-the-darkside-chronicles",
-        "naruto-shippuden-ultimate-ninja-storm-revolution"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-era",
-      "label": "TITLES HIDING 'ERA'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-era"
-      },
-      "gameIds": [
-        "heroes-of-might-and-magic-iii-the-restoration-of-erathia",
-        "pokemon-emerald",
-        "kingdom-come-deliverance-ii",
-        "pok-mon-emerald-version",
-        "vampire-the-masquerade-bloodlines",
-        "command-conquer-generals",
-        "kingdom-come-deliverance",
-        "doki-doki-literature-club",
-        "the-operative-no-one-lives-forever",
-        "command-conquer-generals-zero-hour",
-        "doki-doki-literature-club-plus",
-        "vampire-the-masquerade-redemption",
-        "assassins-creed-iii-liberation",
-        "desperados-wanted-dead-or-alive",
-        "desperados-iii",
-        "operation-flashpoint-cold-war-crisis",
-        "like-a-dragon-gaiden-the-man-who-erased-his-name",
-        "tera",
-        "fallout-3-operation-anchorage",
-        "no-more-heroes-2-desperate-struggle",
-        "jurassic-park-operation-genesis",
-        "assassins-creed-liberation-hd",
-        "resident-evil-operation-raccoon-city",
-        "harvest-moon-friends-of-mineral-town",
-        "dr-langeskov-the-tiger-and-the-terribly-cursed-emerald-a-whirlwind-heist",
-        "torment-tides-of-numenera"
-      ],
-      "usedOn": "2026-06-22"
-    },
-    {
-      "id": "purple-hides-ant",
-      "label": "TITLES HIDING 'ANT'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-ant"
-      },
-      "gameIds": [
-        "indiana-jones-and-the-fate-of-atlantis",
-        "final-fantasy-vi",
-        "final-fantasy-ix",
-        "final-fantasy",
-        "final-fantasy-iii",
-        "final-fantasy-iv",
-        "final-fantasy-viii",
-        "final-fantasy-x",
-        "teenage-mutant-ninja-turtles-iv-turtles-in-time",
-        "final-fantasy-v",
-        "teenage-mutant-ninja-turtles",
-        "metal-gear-solid-v-the-phantom-pain",
-        "final-fantasy-xii",
-        "plants-vs-zombies",
-        "devil-may-cry-3-dantes-awakening",
-        "final-fantasy-ii",
-        "final-fantasy-xiii",
-        "final-fantasy-xv",
-        "final-fantasy-vii-remake",
-        "cyberpunk-2077-phantom-liberty",
-        "valorant",
-        "final-fantasy-mystic-quest",
-        "final-fantasy-tactics",
-        "the-legend-of-zelda-phantom-hourglass",
-        "final-fantasy-adventure",
-        "teenage-mutant-ninja-turtles-shredders-revenge",
-        "final-fantasy-vii-rebirth",
-        "final-fantasy-x-2",
-        "final-fantasy-xvi",
-        "remnant-from-the-ashes",
-        "nier-replicant-ver-1-22474487139",
-        "final-fantasy-tactics-advance",
-        "crisis-core-final-fantasy-vii",
-        "valiant-hearts-the-great-war",
-        "the-dark-pictures-anthology-man-of-medan",
-        "the-dark-pictures-anthology-house-of-ashes",
-        "master-of-orion-ii-battle-at-antares",
-        "klonoa-door-to-phantomile",
-        "the-first-descendant",
-        "the-dark-pictures-anthology-little-hope",
-        "phantasy-star-iv-the-end-of-the-millennium",
-        "phantasmagoria",
-        "quantum-break",
-        "xdefiant",
-        "devil-may-cry-3-dantes-awakening-special-edition",
-        "tales-of-phantasia",
-        "dantes-inferno",
-        "remnant-ii",
-        "metaphor-refantazio",
-        "vagrant-story",
-        "the-dark-pictures-anthology-the-devil-in-me",
-        "jusant",
-        "final-fantasy-vii-remake-intergrade",
-        "chants-of-sennaar",
-        "phantom-brave-the-lost-hero",
-        "vigilante-8",
-        "anthem",
-        "final-fantasy-xiii-2",
-        "desperados-wanted-dead-or-alive",
-        "final-fantasy-xiv"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-ore",
-      "label": "TITLES HIDING 'ORE'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-ore"
-      },
-      "gameIds": [
-        "dishonored",
-        "ori-and-the-blind-forest",
-        "dishonored-2",
-        "spore",
-        "life-is-strange-before-the-storm",
-        "the-forest",
-        "crisis-core-final-fantasy-vii",
-        "the-operative-no-one-lives-forever",
-        "sons-of-the-forest",
-        "armored-core-vi-fires-of-rubicon",
-        "no-more-heroes",
-        "duke-nukem-forever",
-        "no-one-lives-forever-2-a-spy-in-h-a-r-m-s-way",
-        "ori-and-the-blind-forest-definitive-edition",
-        "dishonored-death-of-the-outsider",
-        "before-your-eyes",
-        "crisis-core-final-fantasy-vii-reunion",
-        "core-keeper",
-        "pok-mon-mystery-dungeon-explorers-of-sky",
-        "florence",
-        "horizon-forbidden-west-burning-shores",
-        "dishonored-definitive-edition",
-        "trackmania-nations-forever",
-        "pok-mon-mystery-dungeon-explorers-of-time",
-        "kings-bounty-armored-princess",
-        "no-more-heroes-2-desperate-struggle",
-        "pok-mon-mystery-dungeon-explorers-of-darkness",
-        "dishonored-the-knife-of-dunwall"
-      ],
-      "usedOn": "2026-06-20"
-    },
-    {
-      "id": "purple-hides-win",
-      "label": "TITLES HIDING 'WIN'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-win"
-      },
-      "gameIds": [
-        "the-legend-of-zelda-the-wind-waker",
-        "the-elder-scrolls-iii-morrowind",
-        "starcraft-ii-wings-of-liberty",
-        "neverwinter-nights",
-        "the-witcher-3-wild-hunt-blood-and-wine",
-        "twinsens-little-big-adventure-classic",
-        "the-legend-of-zelda-the-wind-waker-hd",
-        "where-winds-meet",
-        "icewind-dale",
-        "neverwinter-nights-2",
-        "star-wars-x-wing",
-        "icewind-dale-ii",
-        "crash-twinsanity",
-        "warhammer-40-000-dawn-of-war-winter-assault",
-        "metal-gear-solid-the-twin-snakes",
-        "world-soccer-winning-eleven-7-international",
-        "neverwinter-nights-hordes-of-the-underdark",
-        "the-elder-scrolls-iii-morrowind-game-of-the-year-edition",
-        "winning-eleven-pro-evolution-soccer-2007",
-        "neverwinter",
-        "dr-langeskov-the-tiger-and-the-terribly-cursed-emerald-a-whirlwind-heist"
-      ],
-      "usedOn": "2026-07-05"
-    },
-    {
-      "id": "purple-hides-sun",
-      "label": "TITLES HIDING 'SUN'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-sun"
-      },
-      "gameIds": [
-        "super-mario-sunshine",
-        "sunset-riders",
-        "sunflower-land",
-        "marvels-midnight-suns",
-        "sunset-overdrive"
-      ],
-      "usedOn": "2026-07-11"
-    },
-    {
       "id": "purple-hides-hero",
       "label": "TITLES HIDING 'HERO'",
       "tier": "purple",
@@ -17776,7 +16586,7 @@
         "company-of-heroes-3",
         "red-orchestra-2-heroes-of-stalingrad"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-18"
     },
     {
       "id": "purple-hides-king",
@@ -17827,326 +16637,295 @@
         "kingdom-classic",
         "stacking"
       ],
-      "usedOn": "2026-07-04"
+      "usedOn": "2026-06-17"
     },
     {
-      "id": "purple-hides-son",
-      "label": "TITLES HIDING 'SON'",
+      "id": "purple-hides-star",
+      "label": "TITLES HIDING 'STAR'",
       "tier": "purple",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
-        "matcher": "hides-son"
+        "matcher": "hides-star"
       },
       "gameIds": [
-        "hollow-knight-silksong",
-        "hudsons-adventure-island",
-        "metal-gear-solid-2-sons-of-liberty",
-        "persona-5",
-        "sonic-knuckles",
-        "the-walking-dead-season-two",
-        "sonic-cd",
-        "the-simpsons-hit-run",
-        "brothers-a-tale-of-two-sons",
-        "sonic-the-hedgehog-3-knuckles",
-        "the-simpsons-arcade-game",
-        "sonic-heroes",
-        "the-legend-of-zelda-oracle-of-seasons",
-        "persona-4-golden",
-        "sonic-the-hedgehog-spinball",
-        "sonic-the-hedgehog",
-        "sonic-the-hedgehog-2",
-        "sonic-3d-blast",
-        "persona-4",
-        "peter-jacksons-king-kong-the-official-game-of-the-movie",
-        "sonic-mania",
-        "sons-of-the-forest",
-        "persona-3-fes",
-        "the-walking-dead-the-final-season",
-        "castlevania-harmony-of-dissonance",
-        "sonic-advance",
-        "persona-3",
-        "sonic-adventure-2-battle",
-        "sonic-adventure-dx-directors-cut",
-        "prison-architect",
-        "sonic-rush",
-        "sonic-frontiers",
-        "persona-3-portable",
-        "the-murder-of-sonic-the-hedgehog",
-        "persona-2-innocent-sin",
-        "sonic-advance-2",
-        "sonic-riders",
-        "sonic-r",
-        "persona-2-eternal-punishment",
-        "sonic-all-stars-racing-transformed",
-        "persona-5-strikers",
-        "the-simpsons-road-rage",
-        "mario-sonic-at-the-olympic-games",
-        "sonic-forces",
-        "fatal-frame-ii-crimson-butterfly",
-        "songs-of-conquest",
-        "sonic-advance-3",
-        "sonic-sega-all-stars-racing",
-        "sonic-and-the-secret-rings",
-        "sonic-battle",
-        "sonic-and-the-black-knight",
-        "sonic-unleashed",
-        "sonic-the-hedgehog-4-episode-i",
-        "harry-potter-and-the-prisoner-of-azkaban",
-        "sonic-rush-adventure",
-        "eternal-sonata"
-      ],
-      "usedOn": "2026-06-18"
-    },
-    {
-      "id": "purple-hides-rid",
-      "label": "TITLES HIDING 'RID'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-rid"
-      },
-      "gameIds": [
-        "sunset-riders",
-        "kena-bridge-of-spirits",
-        "race-driver-grid",
-        "the-chronicles-of-riddick-escape-from-butcher-bay",
-        "outriders",
-        "kirby-air-ride",
-        "r4-ridge-racer-type-4",
-        "sonic-riders",
-        "the-chronicles-of-riddick-assault-on-dark-athena",
-        "jetpack-joyride",
-        "grid-2",
-        "friday-the-13th-the-game"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-ray",
-      "label": "TITLES HIDING 'RAY'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-ray"
-      },
-      "gameIds": [
-        "stray",
-        "rayman-legends",
-        "rayman-origins",
-        "rayman-3-hoodlum-havoc",
-        "bloodrayne",
-        "rayman",
-        "rayman-raving-rabbids",
-        "bloodrayne-2",
-        "rayman-2-the-great-escape"
-      ],
-      "usedOn": "2026-06-13"
-    },
-    {
-      "id": "purple-hides-gun",
-      "label": "TITLES HIDING 'GUN'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-gun"
-      },
-      "gameIds": [
-        "metal-gear-solid-4-guns-of-the-patriots",
-        "gunstar-heroes",
-        "call-of-juarez-gunslinger",
-        "enter-the-gungeon",
-        "total-war-shogun-2",
-        "shogun-total-war",
-        "the-gunk",
-        "shadow-tactics-blades-of-the-shogun",
-        "warhammer-40-000-boltgun",
-        "gunpoint",
-        "resogun"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-hat",
-      "label": "TITLES HIDING 'HAT'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-hat"
-      },
-      "gameIds": [
-        "what-remains-of-edith-finch",
-        "silent-hill-shattered-memories",
-        "duke-nukem-manhattan-project",
-        "vrchat",
-        "hatoful-boyfriend"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "purple-hides-rim",
-      "label": "TITLES HIDING 'RIM'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-rim"
-      },
-      "gameIds": [
-        "the-elder-scrolls-v-skyrim",
-        "metroid-prime",
-        "grim-fandango",
-        "condemned-criminal-origins",
-        "far-cry-primal",
-        "rimworld",
-        "the-elder-scrolls-v-skyrim-special-edition",
-        "primal-rage",
-        "metroid-prime-3-corruption",
-        "metroid-prime-2-echoes",
-        "true-crime-streets-of-la",
-        "grim-fandango-remastered",
-        "rime",
-        "metroid-prime-remastered",
-        "grim-dawn",
-        "the-elder-scrolls-v-skyrim-anniversary-edition",
-        "sherlock-holmes-crimes-punishments",
-        "true-crime-new-york-city",
-        "metroid-prime-hunters",
-        "the-elder-scrolls-v-skyrim-dragonborn",
-        "fatal-frame-ii-crimson-butterfly",
-        "the-elder-scrolls-v-skyrim-dawnguard",
-        "legend-of-grimrock",
-        "final-fantasy-tactics-a2-grimoire-of-the-rift",
-        "pilgrims",
-        "scott-pilgrim-vs-the-world-the-game",
-        "the-elder-scrolls-v-skyrim-hearthfire"
-      ],
-      "usedOn": "2026-07-09"
-    },
-    {
-      "id": "purple-hides-tar",
-      "label": "TITLES HIDING 'TAR'",
-      "tier": "purple",
-      "type": "wordplay",
-      "predicate": {
-        "op": "wordplay",
-        "matcher": "hides-tar"
-      },
-      "gameIds": [
-        "star-wars-knights-of-the-old-republic",
         "stardew-valley",
-        "star-wars-jedi-fallen-order",
-        "escape-from-tarkov",
         "super-mario-all-stars",
         "starcraft",
-        "star-wars-knights-of-the-old-republic-ii-the-sith-lords",
-        "star-wars-battlefront-ii",
-        "star-wars-jedi-knight-jedi-academy",
         "starfield",
-        "star-wars-dark-forces",
         "starcraft-ii-wings-of-liberty",
-        "star-fox",
-        "star-fox-64",
         "starcraft-brood-war",
-        "star-wars-the-force-unleashed",
-        "star-wars-jedi-survivor",
         "super-mario-rpg-legend-of-the-seven-stars",
-        "lego-star-wars-the-complete-saga",
-        "super-star-wars",
-        "star-wars-jedi-knight-ii-jedi-outcast",
-        "guitar-hero-iii-legends-of-rock",
-        "star-wars-republic-commando",
         "gunstar-heroes",
-        "kirby-super-star",
         "mario-luigi-superstar-saga",
-        "star-wars-battlefront",
-        "star-wars-rogue-squadron",
-        "lego-star-wars-the-skywalker-saga",
-        "star-wars-jedi-knight-dark-forces-ii",
-        "star-wars-episode-i-racer",
-        "star-wars-shadows-of-the-empire",
-        "star-wars-the-force-unleashed-ii",
-        "master-of-orion-ii-battle-at-antares",
-        "guitar-hero-ii",
         "sea-of-stars",
         "dont-starve",
-        "star-wars-tie-fighter",
         "ristar",
-        "guitar-hero",
-        "phantasy-star-iv-the-end-of-the-millennium",
-        "star-wars-outlaws",
-        "star-wars-x-wing",
-        "sanitarium",
-        "star-fox-adventures",
-        "star-wars-the-old-republic",
         "international-superstar-soccer-deluxe",
-        "disneys-tarzan",
         "starcraft-ii-heart-of-the-swarm",
-        "guitar-hero-world-tour",
         "starcraft-ii-legacy-of-the-void",
-        "star-wars-empire-at-war",
-        "star-wars-squadrons",
         "dont-starve-together",
-        "star-wars-episode-i-the-phantom-menace",
         "starbound",
-        "kirby-super-star-ultra",
         "sonic-all-stars-racing-transformed",
-        "lego-star-wars-iii-the-clone-wars",
-        "star-wars-galactic-battlegrounds"
+        "mario-party-superstars",
+        "sonic-sega-all-stars-racing",
+        "brawl-stars",
+        "super-mario-3d-all-stars",
+        "dragon-quest-ix-sentinels-of-the-starry-skies"
       ],
-      "usedOn": "2026-07-14"
+      "usedOn": "2026-06-16"
     },
     {
-      "id": "purple-hides-net",
-      "label": "TITLES HIDING 'NET'",
+      "id": "purple-hides-ring",
+      "label": "TITLES HIDING 'RING'",
       "tier": "purple",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
-        "matcher": "hides-net"
+        "matcher": "hides-ring"
       },
       "gameIds": [
-        "bayonetta",
-        "littlebigplanet",
-        "planet-of-lana",
-        "lost-planet-extreme-condition",
-        "bayonetta-2",
-        "littlebigplanet-2",
-        "getting-over-it-with-bennett-foddy",
-        "mega-man-battle-network",
-        "legends-of-runeterra",
-        "journey-to-the-savage-planet",
-        "the-planet-crafter",
-        "bayonetta-3",
-        "planetside-2",
-        "planet-coaster",
-        "littlebigplanet-3",
-        "planet-zoo",
-        "lost-planet-2",
-        "planet-coaster-2"
+        "wuthering-waves",
+        "the-lord-of-the-rings-the-battle-for-middle-earth-ii",
+        "the-lord-of-the-rings-the-battle-for-middle-earth",
+        "the-lord-of-the-rings-online",
+        "the-elder-scrolls-iv-shivering-isles",
+        "the-lord-of-the-rings-war-in-the-north",
+        "the-lord-of-the-rings-the-battle-for-middle-earth-ii-the-rise-of-the-witch-king",
+        "the-suffering",
+        "dark-souls-iii-the-ringed-city",
+        "the-lord-of-the-rings-the-two-towers",
+        "the-lord-of-the-rings-the-fellowship-of-the-ring",
+        "sonic-and-the-secret-rings",
+        "final-fantasy-xiv-shadowbringers",
+        "magic-the-gathering-arena",
+        "the-lord-of-the-rings-war-of-the-ring",
+        "the-turing-test",
+        "mass-effect-bring-down-the-sky",
+        "the-red-strings-club",
+        "the-lord-of-the-rings-the-return-of-the-king"
       ],
       "usedOn": null
     },
     {
-      "id": "purple-hides-bot",
-      "label": "TITLES HIDING 'BOT'",
+      "id": "purple-hides-gold",
+      "label": "TITLES HIDING 'GOLD'",
       "tier": "purple",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
-        "matcher": "hides-bot"
+        "matcher": "hides-gold"
       },
       "gameIds": [
-        "dr-robotniks-mean-bean-machine",
-        "the-saboteur",
-        "spongebob-squarepants-battle-for-bikini-bottom-rehydrated",
-        "botanicula"
+        "golden-axe",
+        "super-mario-land-2-6-golden-coins",
+        "goldeneye-007",
+        "golden-axe-ii",
+        "persona-4-golden",
+        "pok-mon-heartgold-version",
+        "golden-axe-iii",
+        "golden-sun",
+        "golden-sun-the-lost-age",
+        "the-case-of-the-golden-idol",
+        "uncharted-golden-abyss",
+        "the-rise-of-the-golden-idol"
       ],
-      "usedOn": "2026-07-03"
+      "usedOn": null
+    },
+    {
+      "id": "purple-hides-wind",
+      "label": "TITLES HIDING 'WIND'",
+      "tier": "purple",
+      "type": "wordplay",
+      "predicate": {
+        "op": "wordplay",
+        "matcher": "hides-wind"
+      },
+      "gameIds": [
+        "the-elder-scrolls-iii-morrowind",
+        "where-winds-meet",
+        "icewind-dale",
+        "icewind-dale-ii",
+        "the-elder-scrolls-iii-morrowind-game-of-the-year-edition",
+        "dr-langeskov-the-tiger-and-the-terribly-cursed-emerald-a-whirlwind-heist"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "purple-hides-mine",
+      "label": "TITLES HIDING 'MINE'",
+      "tier": "purple",
+      "type": "wordplay",
+      "predicate": {
+        "op": "wordplay",
+        "matcher": "hides-mine"
+      },
+      "gameIds": [
+        "minecraft-java-edition",
+        "microsoft-minesweeper",
+        "minecraft-dungeons",
+        "minecraft-story-mode",
+        "bioshock-2-minervas-den",
+        "harvest-moon-friends-of-mineral-town"
+      ],
+      "usedOn": "2026-07-08"
+    },
+    {
+      "id": "purple-hides-port",
+      "label": "TITLES HIDING 'PORT'",
+      "tier": "purple",
+      "type": "wordplay",
+      "predicate": {
+        "op": "wordplay",
+        "matcher": "hides-port"
+      },
+      "gameIds": [
+        "portal",
+        "portal-2",
+        "wii-sports",
+        "warcraft-ii-beyond-the-dark-portal",
+        "ea-sports-fc-24",
+        "wii-sports-resort",
+        "transport-tycoon-deluxe",
+        "ea-sports-fc-25",
+        "persona-3-portable",
+        "castlevania-portrait-of-ruin",
+        "forza-motorsport",
+        "my-time-at-portia",
+        "forza-motorsport-3",
+        "metal-gear-solid-portable-ops",
+        "forza-motorsport-2",
+        "gran-turismo-sport",
+        "forza-motorsport-4",
+        "nintendo-switch-sports"
+      ],
+      "usedOn": "2026-06-19"
+    },
+    {
+      "id": "purple-hides-over",
+      "label": "TITLES HIDING 'OVER'",
+      "tier": "purple",
+      "type": "wordplay",
+      "predicate": {
+        "op": "wordplay",
+        "matcher": "hides-over"
+      },
+      "gameIds": [
+        "overwatch",
+        "overcooked-2",
+        "overlord",
+        "overcooked",
+        "dawn-of-discovery",
+        "total-overdose",
+        "dragon-ball-xenoverse",
+        "penumbra-overture",
+        "sunset-overdrive",
+        "i-g-i-2-covert-strike",
+        "overlord-ii",
+        "unicorn-overlord",
+        "dragon-ball-xenoverse-2",
+        "needy-streamer-overload",
+        "mass-effect-2-overlord",
+        "lego-city-undercover",
+        "need-for-speed-undercover",
+        "lovers-in-a-dangerous-spacetime"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "purple-hides-land",
+      "label": "TITLES HIDING 'LAND'",
+      "tier": "purple",
+      "type": "wordplay",
+      "predicate": {
+        "op": "wordplay",
+        "matcher": "hides-land"
+      },
+      "gameIds": [
+        "the-secret-of-monkey-island",
+        "monkey-island-2-lechuck-s-revenge",
+        "super-mario-world-2-yoshis-island",
+        "borderlands-2",
+        "hudsons-adventure-island",
+        "borderlands",
+        "the-curse-of-monkey-island",
+        "borderlands-3",
+        "tales-from-the-borderlands",
+        "dead-island",
+        "escape-from-monkey-island",
+        "dead-island-2",
+        "borderlands-the-pre-sequel",
+        "tom-clancys-ghost-recon-wildlands",
+        "borderlands-4",
+        "return-to-monkey-island",
+        "the-secret-of-monkey-island-special-edition",
+        "tiny-tinas-wonderlands",
+        "wasteland-3",
+        "tales-of-monkey-island",
+        "pony-island",
+        "yoshis-island-super-mario-advance-3",
+        "monkey-island-2-special-edition-lechucks-revenge",
+        "yokus-island-express",
+        "dead-island-riptide",
+        "ghost-of-tsushima-iki-island",
+        "evoland",
+        "borderlands-game-of-the-year-edition",
+        "supraland",
+        "stacklands",
+        "tony-hawks-american-wasteland",
+        "world-of-warcraft-shadowlands"
+      ],
+      "usedOn": "2026-07-01"
+    },
+    {
+      "id": "purple-hides-lord",
+      "label": "TITLES HIDING 'LORD'",
+      "tier": "purple",
+      "type": "wordplay",
+      "predicate": {
+        "op": "wordplay",
+        "matcher": "hides-lord"
+      },
+      "gameIds": [
+        "star-wars-knights-of-the-old-republic-ii-the-sith-lords",
+        "overlord",
+        "castlevania-lords-of-shadow",
+        "mount-blade-ii-bannerlord",
+        "lords-of-the-fallen-2023",
+        "onimusha-warlords",
+        "lords-of-the-fallen",
+        "overlord-ii",
+        "world-of-warcraft-warlords-of-draenor",
+        "castlevania-lords-of-shadow-2",
+        "unicorn-overlord",
+        "manor-lords",
+        "mass-effect-2-overlord",
+        "dota-underlords"
+      ],
+      "usedOn": "2026-07-12"
+    },
+    {
+      "id": "purple-hides-fire",
+      "label": "TITLES HIDING 'FIRE'",
+      "tier": "purple",
+      "type": "wordplay",
+      "predicate": {
+        "op": "wordplay",
+        "matcher": "hides-fire"
+      },
+      "gameIds": [
+        "firewatch",
+        "pok-mon-firered-version",
+        "armored-core-vi-fires-of-rubicon",
+        "diablo-hellfire",
+        "command-conquer-tiberian-sun-firestorm",
+        "pillars-of-eternity-ii-deadfire",
+        "james-bond-007-nightfire",
+        "aliens-fireteam-elite",
+        "the-elder-scrolls-v-skyrim-hearthfire",
+        "pokemon-firered-leafgreen"
+      ],
+      "usedOn": "2026-06-24"
     }
   ]
 }

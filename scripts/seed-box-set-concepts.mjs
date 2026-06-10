@@ -63,14 +63,64 @@ const DECADES = [
   { id: '2020s', label: 'RELEASED IN THE 2020s', range: [2020, 2029] },
 ]
 
-const PRICES = [9.99, 14.99, 19.99, 24.99, 29.99, 34.99, 39.99, 49.99, 59.99, 69.99]
-
-const PLATFORM_FAMILIES = {
-  pc: { label: 'NEVER LEFT THE PC', platforms: ['PC', 'Mac', 'Linux'] },
-  playstation: { label: 'PLAYSTATION EXCLUSIVES', platforms: ['PlayStation', 'PS1', 'PS2', 'PS3', 'PS4', 'PS5', 'PSP', 'PS Vita'] },
-  nintendo: { label: 'NINTENDO EXCLUSIVES', platforms: ['Nintendo', 'Switch', 'Wii', 'Wii U', '3DS', 'DS', 'SNES', 'N64', 'GameCube', 'Game Boy'] },
-  xbox: { label: 'XBOX EXCLUSIVES', platforms: ['Xbox', 'Xbox 360', 'Xbox One', 'Xbox Series X'] },
+// Playtest feedback: price-band concepts ("LAUNCHED AT $19.99") are too
+// unknown — removed. Family-level exclusives (PlayStation/Xbox) were too
+// broad — replaced with retro/niche console presence, which players can
+// actually reason about.
+const RETRO_PLATFORMS = {
+  snes: { label: 'PLAYABLE ON THE SNES', platform: 'SNES' },
+  n64: { label: 'PLAYABLE ON THE N64', platform: 'N64' },
+  gamecube: { label: 'PLAYABLE ON THE GAMECUBE', platform: 'GameCube' },
+  gameboy: { label: 'PLAYABLE ON THE GAME BOY', platform: 'Game Boy' },
+  ps1: { label: 'PLAYABLE ON THE PS1', platform: 'PS1' },
+  psp: { label: 'PLAYABLE ON THE PSP', platform: 'PSP' },
+  ds: { label: 'PLAYABLE ON THE DS', platform: 'DS' },
+  wii: { label: 'PLAYABLE ON THE WII', platform: 'Wii' },
+  '3ds': { label: 'PLAYABLE ON THE 3DS', platform: '3DS' },
 }
+
+// Curated concepts — human-researched id lists, verified as membership
+// predicates (zero runtime external facts; the truth claim is the reviewed
+// list itself). Overlaps between lists are fine: assembly's unambiguity
+// check prevents two overlapping concepts sharing a day.
+const CURATED = [
+  {
+    id: 'blue-curated-tga-goty',
+    label: 'WON GAME OF THE YEAR AT THE GAME AWARDS',
+    note: 'TGA GOTY winners 2014-2024',
+    gameIds: ['dragon-age-inquisition', 'the-witcher-3-wild-hunt', 'overwatch', 'the-legend-of-zelda-breath-of-the-wild', 'god-of-war', 'sekiro-shadows-die-twice', 'the-last-of-us-part-ii', 'it-takes-two', 'elden-ring', 'baldurs-gate-3', 'astro-bot'],
+  },
+  {
+    id: 'blue-curated-mmo',
+    label: 'FAMOUS MMOS',
+    note: 'long-running massively multiplayer online games',
+    gameIds: ['world-of-warcraft', 'final-fantasy-xiv', 'guild-wars-2', 'runescape', 'the-elder-scrolls-online', 'black-desert', 'lost-ark', 'star-wars-the-old-republic', 'guild-wars'],
+  },
+  {
+    id: 'blue-curated-esports',
+    label: 'ESPORTS MAINSTAYS',
+    note: 'staple competitive titles with major pro scenes',
+    gameIds: ['counter-strike-global-offensive', 'dota-2', 'league-of-legends', 'rocket-league', 'starcraft-ii-wings-of-liberty', 'valorant', 'overwatch', 'apex-legends', 'super-smash-bros-melee', 'fortnite'],
+  },
+  {
+    id: 'blue-curated-rough-launch',
+    label: 'NOTORIOUSLY ROUGH LAUNCHES',
+    note: 'famous broken/underwhelming launch states, later fixed or not',
+    gameIds: ['cyberpunk-2077', 'no-man-s-sky', 'fallout-76', 'battlefield-2042', 'anthem', 'simcity', 'diablo-iii'],
+  },
+  {
+    id: 'blue-curated-controversial-sequel',
+    label: 'SEQUELS THAT SPLIT THE FANBASE',
+    note: 'divisive follow-ups (2017 Battlefront II and ME: Andromeda not in db)',
+    gameIds: ['the-last-of-us-part-ii', 'duke-nukem-forever', 'dmc-devil-may-cry', 'diablo-iii', 'fallout-76', 'mighty-no-9'],
+  },
+  {
+    id: 'blue-curated-started-as-mods',
+    label: 'STARTED LIFE AS A MOD',
+    note: 'shipped games that began as mods of other games',
+    gameIds: ['counter-strike', 'dota-2', 'dayz', 'team-fortress-2', 'garrys-mod', 'pubg-battlegrounds', 'team-fortress-classic'],
+  },
+]
 
 // Blue tier: tag → human label. Only tags listed here are eligible — quality
 // over coverage. Tags that resist a clean label are reported, not banked.
@@ -215,18 +265,21 @@ function resolve(predicate) {
   return db.filter((g) => evaluatePredicate(predicate, g))
 }
 
-function bank(concepts, { id, label, tier, type, predicate }, minMatches) {
+function bank(concepts, { id, label, tier, type, predicate, note }, minMatches, opts = {}) {
   const matches = resolve(predicate)
-  const popularMatches = matches.filter(popular)
-  if (popularMatches.length < minMatches) {
-    return { banked: false, popular: popularMatches.length }
+  // Curated lists are recognisable by human judgment — skip the rank filter.
+  const eligible = opts.skipPopularity ? matches : matches.filter(popular)
+  if (eligible.length < minMatches) {
+    return { banked: false, popular: eligible.length }
   }
-  const gameIds = popularMatches
+  const gameIds = eligible
     .sort((a, b) => a.popularityRank - b.popularityRank)
     .slice(0, STORE_CAP)
     .map((g) => g.id)
-  concepts.push({ id, label, tier, type, predicate, gameIds, usedOn: null })
-  return { banked: true, popular: popularMatches.length }
+  const concept = { id, label, tier, type, predicate, gameIds, usedOn: null }
+  if (note) concept.note = note
+  concepts.push(concept)
+  return { banked: true, popular: eligible.length }
 }
 
 const concepts = []
@@ -272,17 +325,19 @@ for (const [genre, glabel] of Object.entries(GENRE_LABELS)) {
   }
 }
 
+// YELLOW — arcade-era classics (playtest suggestion: Pac-Man/Tetris energy)
+bank(concepts, {
+  id: 'yellow-arcade-era',
+  label: 'STARTED IN THE ARCADES',
+  tier: 'yellow',
+  type: 'procedural',
+  predicate: { all: [
+    { field: 'genres', op: 'includes', value: 'Arcade' },
+    { field: 'year', op: 'lte', value: 1995 },
+  ] },
+}, MIN_MATCHES) && report.yellow++
+
 // GREEN — narrow procedural
-for (const price of PRICES) {
-  const r = bank(concepts, {
-    id: `green-price-${String(price).replace('.', '-')}`,
-    label: `LAUNCHED AT $${price}`,
-    tier: 'green',
-    type: 'procedural',
-    predicate: { field: 'launchPriceUsd', op: 'eq', value: price },
-  }, MIN_MATCHES)
-  r.banked ? report.green++ : report.rejected.push(`green-price-${price} (${r.popular})`)
-}
 bank(concepts, {
   id: 'green-price-free',
   label: 'FREE AT LAUNCH',
@@ -314,16 +369,28 @@ bank(concepts, {
   type: 'procedural',
   predicate: { all: [{ field: 'openCritic', op: 'gte', value: 1 }, { field: 'openCritic', op: 'lte', value: 60 }] },
 }, MIN_MATCHES) && report.green++
-for (const [famId, fam] of Object.entries(PLATFORM_FAMILIES)) {
+for (const [consoleId, c] of Object.entries(RETRO_PLATFORMS)) {
   const r = bank(concepts, {
-    id: `green-exclusive-${famId}`,
-    label: fam.label,
+    id: `green-console-${consoleId}`,
+    label: c.label,
     tier: 'green',
     type: 'procedural',
-    predicate: { field: 'platforms', op: 'only', value: fam.platforms },
+    predicate: { field: 'platforms', op: 'includes', value: c.platform },
   }, MIN_MATCHES)
-  r.banked ? report.green++ : report.rejected.push(`green-exclusive-${famId} (${r.popular})`)
+  r.banked ? report.green++ : report.rejected.push(`green-console-${consoleId} (${r.popular})`)
 }
+// Console-specific narrow window (playtest: modern consoles only work with
+// a tight filter)
+bank(concepts, {
+  id: 'green-ps5-early',
+  label: 'EARLY PS5 GAMES (2020-21)',
+  tier: 'green',
+  type: 'procedural',
+  predicate: { all: [
+    { field: 'platforms', op: 'includes', value: 'PS5' },
+    { field: 'year', op: 'between', value: [2020, 2021] },
+  ] },
+}, MIN_MATCHES) && report.green++
 // Single release years with enough popular games
 for (let year = 1988; year <= 2025; year++) {
   const r = bank(concepts, {
@@ -334,6 +401,19 @@ for (let year = 1988; year <= 2025; year++) {
     predicate: { field: 'year', op: 'eq', value: year },
   }, 8)
   if (r.banked) report.green++
+}
+
+// BLUE — curated, human-researched lists (membership predicates)
+for (const c of CURATED) {
+  const r = bank(concepts, {
+    id: c.id,
+    label: c.label,
+    tier: 'blue',
+    type: 'curated',
+    note: c.note,
+    predicate: { field: 'id', op: 'memberOf', value: c.gameIds },
+  }, MIN_PURPLE, { skipPopularity: true })
+  r.banked ? report.blue++ : report.rejected.push(`${c.id} (${r.popular})`)
 }
 
 // BLUE — thematic via tags
