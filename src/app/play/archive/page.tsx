@@ -23,12 +23,15 @@ const GAME_GRADIENTS: Record<DailyGameSlug, { start: HSL; end: HSL }> = {
   'game-sense':  { start: { h: 215, s: 63, l: 47 }, end: { h: 224, s: 62, l: 27 } },
   'street-date': { start: { h: 148, s: 65, l: 29 }, end: { h: 148, s: 41, l: 9 } },
   'shelf-price': { start: { h: 246, s: 55, l: 56 }, end: { h: 260, s: 60, l: 16 } },
+  // Box Set block-out amber — review with GAME_THEME['box-set']
+  'box-set':     { start: { h: 30, s: 55, l: 50 }, end: { h: 28, s: 52, l: 11 } },
 }
 
 const CALENDAR_BG: Record<DailyGameSlug, string> = {
   'game-sense':  '#132251',
   'street-date': '#081e0f',
   'shelf-price': '#1a1040',
+  'box-set':     '#2b1d0e',
 }
 
 function hslStr(c: HSL): string {

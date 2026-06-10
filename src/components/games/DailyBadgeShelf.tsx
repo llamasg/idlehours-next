@@ -4,15 +4,19 @@ import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { type DailyGameSlug, GAME_THEME, BADGE_IMAGES } from '@/lib/ranks'
 import { getDailyCompletion } from '@/lib/game-shell/completion'
+import { DAILY_GAMES } from '@/lib/game-shell/registry'
 import { getTodayDateString } from '@/lib/dateUtils'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import BadgeLightbox, { isHoloRank, HoloBadgeWrapper } from '@/components/games/BadgeLightbox'
 
-const GAMES: { slug: DailyGameSlug; label: string; href: string }[] = [
-  { slug: 'shelf-price', label: 'Shelf Price', href: '/play/shelf-price' },
-  { slug: 'street-date', label: 'Street Date', href: '/play/street-date' },
-  { slug: 'game-sense', label: 'Game Sense', href: '/play/game-sense' },
-]
+// Derived from the manifest registry — a new daily game appears here with
+// zero per-game wiring. (Registry order; previously a hardcoded, reversed
+// three-game list.)
+const GAMES = DAILY_GAMES.map((m) => ({
+  slug: m.slug,
+  label: m.label,
+  href: `/play/${m.slug}`,
+}))
 
 // ── Step gaps ────────────────────────────────────────────────────────────────
 
@@ -25,7 +29,7 @@ const STEP_GAPS = [
 
 // ── Badge rotations per slot position ────────────────────────────────────────
 
-const BADGE_ROTATIONS = ['-3deg', '2deg', '-1deg']
+const BADGE_ROTATIONS = ['-3deg', '2deg', '-1deg', '2.5deg']
 
 // ── Component ───────────────────────────────────────────────────────────────
 
@@ -103,7 +107,7 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
       </div>
 
       {/* Badge row */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className={`grid gap-6 ${slots.length === 4 ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'}`}>
         {slots.map((slot, slotIndex) => {
           const justCompleted = slot.slug === currentGame && slot.completed
           // Stagger badges 200ms apart within step 3

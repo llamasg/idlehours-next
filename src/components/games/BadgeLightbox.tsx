@@ -4,7 +4,7 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 
 // ── Holo badge ranks ────────────────────────────────────────────────────────
 
-const HOLO_RANKS = new Set(['One Shot', 'The Curator', 'Head of Sales'])
+const HOLO_RANKS = new Set(['One Shot', 'The Curator', 'Head of Sales', "Collector's Edition"])
 
 export function isHoloRank(rankName: string): boolean {
   return HOLO_RANKS.has(rankName)

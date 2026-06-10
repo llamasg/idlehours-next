@@ -87,6 +87,22 @@ export const STREET_DATE_FLAVOUR: Record<string, string[]> = {
   'Bust': ['Zero points. Ouch.', "That one wasn't yours.", 'Tomorrow. Fresh start.'],
 }
 
+export function getBoxSetRank(score: number) {
+  if (score >= 1000) return "Collector's Edition"
+  if (score >= 750) return 'Limited Edition'
+  if (score >= 500) return 'Starter Pack'
+  if (score >= 250) return 'Shovelware'
+  return 'Bust'
+}
+
+export const BOX_SET_FLAVOUR: Record<string, string[]> = {
+  "Collector's Edition": ['Display case worthy.', 'Not a single wrong box.', 'Shrink-wrap still on.'],
+  'Limited Edition': ['Numbered and know it.', 'One slip. Still a keeper.', 'Almost mint.'],
+  'Starter Pack': ['Everyone starts somewhere.', 'A couple of boxes in the wrong pile.', 'The shelf survives.'],
+  'Shovelware': ['Straight to the bargain bin.', 'It compiles. Just about.', 'Sold by the pallet.'],
+  'Bust': ['Recalled from shelves.', 'The groups got away from you.', "Tomorrow's a fresh box."],
+}
+
 export function getShelfPriceRank(score: number) {
   if (score >= 1000) return 'Head of Sales'
   if (score >= 700) return 'Secret Shopper'

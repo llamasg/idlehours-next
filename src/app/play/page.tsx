@@ -72,7 +72,7 @@ export default function PlayHubPage() {
             title={<>Fresh every morning. <em className="font-semibold italic text-muted-foreground">Gone by midnight.</em></>}
             note="One badge per game. Play them all and you've had a proper idle hour."
           />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <PlayGameCard
               title="Game Sense"
               subtitle="Guess the game"
@@ -99,6 +99,15 @@ export default function PlayHubPage() {
               btnClass="bg-amber-600"
               stickerClass="bg-amber-600 text-white"
               imageSrc="/images/game banner/shelf price logo temp.png"
+            />
+            {/* Box Set — block-out card; copy + artwork pending editorial review */}
+            <PlayGameCard
+              title="Box Set"
+              subtitle="Find the groups"
+              description="Sixteen games, four hidden connections. Some links are obvious. One of them is hiding in the titles themselves."
+              href={`/play/box-set/${getTodayDateString()}`}
+              imageBg="bg-orange-50"
+              btnClass="bg-amber-600"
             />
           </div>
           <div className="mt-4">

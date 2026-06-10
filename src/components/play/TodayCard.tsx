@@ -2,15 +2,19 @@
 
 import { useMemo } from 'react'
 import Link from 'next/link'
-import { type DailyGameSlug, GAME_THEME } from '@/lib/ranks'
+import { GAME_THEME } from '@/lib/ranks'
 import { getDailyCompletion } from '@/lib/game-shell/completion'
+import { DAILY_GAMES as MANIFEST_GAMES } from '@/lib/game-shell/registry'
 import { getTodayDateString } from '@/lib/dateUtils'
 
-const DAILY_GAMES: { slug: DailyGameSlug; label: string; emoji: string; href: string }[] = [
-  { slug: 'game-sense', label: 'Game Sense', emoji: '🎮', href: '/play/game-sense' },
-  { slug: 'street-date', label: 'Street Date', emoji: '📅', href: '/play/street-date' },
-  { slug: 'shelf-price', label: 'Shelf Price', emoji: '💰', href: '/play/shelf-price' },
-]
+// Derived from the manifest registry — a new daily game appears here with
+// zero per-game wiring (emoji comes from the manifest).
+const DAILY_GAMES = MANIFEST_GAMES.map((m) => ({
+  slug: m.slug,
+  label: m.label,
+  emoji: m.emoji,
+  href: `/play/${m.slug}`,
+}))
 
 export default function TodayCard() {
   const dateStr = useMemo(() => getTodayDateString(), [])
@@ -22,11 +26,11 @@ export default function TodayCard() {
   const today = new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
 
   const nudge =
-    completedCount === 3
+    completedCount === slots.length
       ? 'All done for today. Come back tomorrow!'
       : completedCount === 0
-        ? 'Three games waiting for you.'
-        : `${3 - completedCount} still to go.`
+        ? `${slots.length} games waiting for you.`
+        : `${slots.length - completedCount} still to go.`
 
   return (
     <div className="rounded-[18px] border border-border/60 bg-card p-5 shadow-[0_3px_0_hsl(var(--border)),0_6px_18px_rgba(0,0,0,0.05)]">

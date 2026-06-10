@@ -75,6 +75,19 @@ export interface ShelfPriceDayState {
   choices: ('left' | 'right')[]
 }
 
+export interface BoxSetDayState {
+  /** Concept ids of solved groups, in solve order. */
+  groupsSolved: string[]
+  /** Every submitted guess: 4 tile (game) ids, in guess order. */
+  guesses: string[][]
+  mistakes: number
+  finished: boolean
+  won: boolean
+  score: number
+  startedAt?: number
+  endedAt?: number
+}
+
 // ── Stores (key prefixes verbatim; migrations moved from the game modules) ──
 
 export const gameSenseStore = createDayStore<GameSenseDayState>('game_sense_', (parsed) => {
@@ -89,6 +102,9 @@ export const gameSenseStore = createDayStore<GameSenseDayState>('game_sense_', (
 })
 
 export const streetDateStore = createDayStore<StreetDateDayState>('street_date_v3_')
+
+// Prefix FROZEN since the first Box Set commit.
+export const boxSetStore = createDayStore<BoxSetDayState>('box_set_')
 
 export const shelfPriceStore = createDayStore<ShelfPriceDayState>('shelf_price_v2_', (parsed) => {
   // Migration: add score if missing (old saves; 100 = wrong-answer penalty)
@@ -129,6 +145,8 @@ const NOT_PLAYED: DayResult = {
 export interface DailyGameManifest<TState> {
   slug: DailyGameSlug
   label: string
+  /** Small glyph used by TodayCard's completion slots. */
+  emoji: string
   launchDate: string
   storageKeyPrefix: string
   dates: GameDates
@@ -142,6 +160,7 @@ export interface DailyGameManifest<TState> {
 export const gameSenseManifest: DailyGameManifest<GameSenseDayState> = {
   slug: 'game-sense',
   label: 'Game Sense',
+  emoji: '🎮',
   launchDate: '2026-02-22',
   storageKeyPrefix: 'game_sense_',
   dates: makeGameDates('2026-02-22'),
@@ -171,6 +190,7 @@ export const gameSenseManifest: DailyGameManifest<GameSenseDayState> = {
 export const streetDateManifest: DailyGameManifest<StreetDateDayState> = {
   slug: 'street-date',
   label: 'Street Date',
+  emoji: '📅',
   launchDate: '2026-02-22',
   storageKeyPrefix: 'street_date_v3_',
   dates: makeGameDates('2026-02-22'),
@@ -199,6 +219,7 @@ export const streetDateManifest: DailyGameManifest<StreetDateDayState> = {
 export const shelfPriceManifest: DailyGameManifest<ShelfPriceDayState> = {
   slug: 'shelf-price',
   label: 'Shelf Price',
+  emoji: '💰',
   launchDate: '2026-03-03',
   storageKeyPrefix: 'shelf_price_v2_',
   dates: makeGameDates('2026-03-03'),
@@ -224,6 +245,36 @@ export const shelfPriceManifest: DailyGameManifest<ShelfPriceDayState> = {
   playUrl: (date) => `/play/shelf-price/${date}`,
 }
 
+export const boxSetManifest: DailyGameManifest<BoxSetDayState> = {
+  slug: 'box-set',
+  label: 'Box Set',
+  emoji: '📦',
+  // PROVISIONAL — first committed puzzle date; confirm before launch.
+  launchDate: '2026-06-10',
+  storageKeyPrefix: 'box_set_',
+  dates: makeGameDates('2026-06-10'),
+  theme: GAME_THEME['box-set'],
+  store: boxSetStore,
+  loadDayState: (date) => boxSetStore.load(date),
+  toDayResult(state) {
+    if (!state) return NOT_PLAYED
+    const played = state.guesses.length > 0 || state.groupsSolved.length > 0
+    const rank = state.finished ? getRankForGame('box-set', state.score, 0) : ''
+    return {
+      played,
+      completed: state.finished,
+      finished: state.finished,
+      won: state.won,
+      score: state.score,
+      secondaryStat: state.mistakes,
+      rank,
+      archiveRank: rank,
+      scoreDisplay: !played ? '' : state.finished ? (state.won ? `${state.score} pts` : 'Lost') : 'In progress',
+    }
+  },
+  playUrl: (date) => `/play/box-set/${date}`,
+}
+
 // ── Registry ─────────────────────────────────────────────────────────────────
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -231,11 +282,13 @@ export const DAILY_GAMES: DailyGameManifest<any>[] = [
   gameSenseManifest,
   streetDateManifest,
   shelfPriceManifest,
+  boxSetManifest,
 ]
 
 export const MANIFESTS: Record<DailyGameSlug, DailyGameManifest<any>> = {
   'game-sense': gameSenseManifest,
   'street-date': streetDateManifest,
   'shelf-price': shelfPriceManifest,
+  'box-set': boxSetManifest,
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */

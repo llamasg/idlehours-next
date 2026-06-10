@@ -5,9 +5,11 @@ import {
   getGameSenseRank,
   getStreetDateRank,
   getShelfPriceRank,
+  getBoxSetRank,
   GAME_SENSE_FLAVOUR,
   STREET_DATE_FLAVOUR,
   SHELF_PRICE_FLAVOUR,
+  BOX_SET_FLAVOUR,
 } from '@/components/games/GameEndModal.copy'
 
 export interface RankThreshold {
@@ -39,8 +41,16 @@ const SHELF_PRICE_LADDER: RankThreshold[] = [
   { name: 'Head of Sales', label: '1000 pts' },
 ]
 
-/** The three daily games — rank ladders, badges, and themes exist for these. */
-export type DailyGameSlug = 'game-sense' | 'street-date' | 'shelf-price'
+const BOX_SET_LADDER: RankThreshold[] = [
+  { name: 'Bust', label: '0 pts' },
+  { name: 'Shovelware', label: '250 pts' },
+  { name: 'Starter Pack', label: '500 pts' },
+  { name: 'Limited Edition', label: '750 pts' },
+  { name: "Collector's Edition", label: '1000 pts' },
+]
+
+/** The daily games — rank ladders, badges, and themes exist for these. */
+export type DailyGameSlug = 'game-sense' | 'street-date' | 'shelf-price' | 'box-set'
 
 /** Every game on the site. Type-level prep for the badges/accounts work —
  *  session games have no rank ladder or theme yet. */
@@ -103,6 +113,15 @@ export const GAME_THEME: Record<DailyGameSlug, GameTheme> = {
     worldGradient: 'linear-gradient(155deg, #5B4FCF, #1a1040)',
     statusBarHex: '#5B4FCF',
   },
+  // Box Set block-out theme — amber suggested, FLAGGED FOR REVIEW
+  'box-set': {
+    accent: 'hsl(var(--game-amber))', // ≈ #C8873A
+    accentDark: '#8a5a26',
+    shadow: 'rgba(200,135,58,0.35)',
+    confetti: ['#C8873A', '#E8B05C', '#27A85A', '#F0EBE0', '#4A8FE8'],
+    worldGradient: 'linear-gradient(155deg, #C8873A, #2b1d0e)',
+    statusBarHex: '#C8873A',
+  },
 }
 
 export function getLadderForGame(game: DailyGameSlug): RankThreshold[] {
@@ -110,6 +129,7 @@ export function getLadderForGame(game: DailyGameSlug): RankThreshold[] {
     case 'game-sense': return GAME_SENSE_LADDER
     case 'street-date': return STREET_DATE_LADDER
     case 'shelf-price': return SHELF_PRICE_LADDER
+    case 'box-set': return BOX_SET_LADDER
   }
 }
 
@@ -118,6 +138,7 @@ export function getRankForGame(game: DailyGameSlug, score: number, streak: numbe
     case 'game-sense': return getGameSenseRank(score)
     case 'street-date': return getStreetDateRank(score)
     case 'shelf-price': return getShelfPriceRank(score)
+    case 'box-set': return getBoxSetRank(score)
   }
 }
 
@@ -126,5 +147,6 @@ export function getFlavourForGame(game: DailyGameSlug): Record<string, string[]>
     case 'game-sense': return GAME_SENSE_FLAVOUR
     case 'street-date': return STREET_DATE_FLAVOUR
     case 'shelf-price': return SHELF_PRICE_FLAVOUR
+    case 'box-set': return BOX_SET_FLAVOUR
   }
 }
