@@ -14,7 +14,7 @@ import {
   isPlayableDate,
   isToday,
 } from '../lib/dateUtils'
-import { calculateRank, getGameAtRank } from '../lib/scoring'
+import { calculateRank } from '../lib/scoring'
 import { loadDayState, saveDayState, type DayState } from '../lib/storage'
 import { formatElapsed } from '@/lib/game-shell/formatElapsed'
 import { buildShareText } from '@/lib/game-shell/buildShareText'
@@ -33,7 +33,12 @@ import GuessList from '../components/GuessList'
 import SentenceClue, { type BlankDef, BLANK_COSTS } from '../components/SentenceClue'
 import BoxArtReveal from '../components/BoxArtReveal'
 import { hashDateSeed } from '@/lib/game-shell/seededRng'
-import { GAME_SENSE_REVEAL_THRESHOLDS } from '@/lib/gameConstants'
+import {
+  GAME_SENSE_REVEAL_THRESHOLDS,
+  GAME_SENSE_LETTER_PATTERN_COST,
+  GAME_SENSE_FIRST_LETTER_COST,
+  GAME_SENSE_GIVE_UP_MIN_GUESSES,
+} from '@/lib/gameConstants'
 
 import { igdbCoverUrl } from '@/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
@@ -42,8 +47,7 @@ import PostGameLeftColumn from '@/components/games/PostGameLeftColumn'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import { SPRING_EASING, POSTGAME_GAPS } from '@/lib/gameConstants'
 
-const GUESS_COST = 1
-const HINT_COST = 250
+const GUESS_COST = 1 // legacy — replaced by guess decay in phase 5
 
 export default function GameSenseDayPage({
   params,
@@ -56,20 +60,10 @@ export default function GameSenseDayPage({
   const [showRules, setShowRules] = useState(false)
   const [floatingCost, setFloatingCost] = useState<{ key: string; cost: number } | null>(null)
   const [scorePulse, setScorePulse] = useState(false)
-  // Hint tooltip — spring physics (inertia tooltip)
-  const hintBtnRef = useRef<HTMLDivElement>(null)
-  const hintTipPosRef = useRef({ x: 0, y: 0 })
-  const hintTipTargetRef = useRef({ x: 0, y: 0 })
-  const hintTipVelRef = useRef({ x: 0, y: 0 })
-  const hintTipRafRef = useRef<number>(0)
-  const [hintTipPos, setHintTipPos] = useState({ x: 0, y: 0 })
-  const [showHintTooltip, setShowHintTooltip] = useState(false)
-  const [hintTipExiting, setHintTipExiting] = useState(false)
-  const hintTipExitTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const [hintJustUsed, setHintJustUsed] = useState(false)
-  const [hintPressed, setHintPressed] = useState(false)
-  const hintUsedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const hasInteractedRef = useRef(false)
+  // v2 layout state
+  const [inputFocused, setInputFocused] = useState(false)
+  const [logOpen, setLogOpen] = useState(false)
+  const [giveUpArmed, setGiveUpArmed] = useState(false)
 
   // Entrance animation — step machine shared via useGameEntrance
   const isGameOver = state ? (state.won || state.score <= 0) : false
@@ -110,25 +104,6 @@ export default function GameSenseDayPage({
     setState(loaded)
   }, [date])
 
-  // Hint tooltip spring physics
-  useEffect(() => {
-    if (!showHintTooltip) return
-    const stiffness = 0.12
-    const damping = 0.7
-    const tick = () => {
-      const dx = hintTipTargetRef.current.x - hintTipPosRef.current.x
-      const dy = hintTipTargetRef.current.y - hintTipPosRef.current.y
-      hintTipVelRef.current.x = hintTipVelRef.current.x * damping + dx * stiffness
-      hintTipVelRef.current.y = hintTipVelRef.current.y * damping + dy * stiffness
-      hintTipPosRef.current.x += hintTipVelRef.current.x
-      hintTipPosRef.current.y += hintTipVelRef.current.y
-      setHintTipPos({ x: hintTipPosRef.current.x, y: hintTipPosRef.current.y })
-      hintTipRafRef.current = requestAnimationFrame(tick)
-    }
-    hintTipRafRef.current = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(hintTipRafRef.current)
-  }, [showHintTooltip])
-
   // Stamp endedAt when the game finishes (win or loss)
   useEffect(() => {
     if (!state) return
@@ -142,7 +117,6 @@ export default function GameSenseDayPage({
   const handleGuess = useCallback(
     (game: GameSenseGame) => {
       if (!state || gameOver || pendingGuess) return
-      hasInteractedRef.current = true
 
       const proximity = calculateRank(game, answer)
 
@@ -190,7 +164,6 @@ export default function GameSenseDayPage({
     (blank: BlankDef) => {
       if (!state || gameOver || pendingGuess) return
       if (state.blanksRevealed.includes(blank.key)) return
-      hasInteractedRef.current = true
 
       const cost = BLANK_COSTS[blank.key] ?? 0
       const newState: DayState = {
@@ -213,60 +186,49 @@ export default function GameSenseDayPage({
     [state, date, pendingGuess, gameOver],
   )
 
-  const handleHint = useCallback(() => {
-    if (!state || gameOver || pendingGuess || state.guesses.length === 0) return
-    hasInteractedRef.current = true
+  // v2: the midpoint hint is RETIRED. Points buy facts (note blanks + spine
+  // hints); skill earns art. Give-up is a standalone control.
 
-    // Find best (lowest) proximity from guesses
-    const bestProximity = Math.min(...state.guesses.map((g) => g.proximity))
-    if (bestProximity <= 1) return
+  /** Spine hints — paid facts rendered on/near the box spine. */
+  const handleSpineHint = useCallback(
+    (kind: 'pattern' | 'firstLetter') => {
+      if (!state || gameOver || pendingGuess) return
+      const cost = kind === 'pattern' ? GAME_SENSE_LETTER_PATTERN_COST : GAME_SENSE_FIRST_LETTER_COST
+      const hints = state.spineHints ?? { pattern: false, firstLetter: false }
+      if (hints[kind] || state.score < cost) return
 
-    // "Give up" mode — best proximity is already 2, so the answer is rank 1
-    if (bestProximity <= 2) {
-      // Forfeit all remaining points and reveal the answer — this is a loss
       const newState: DayState = {
         ...state,
-        score: 0,
-        guesses: [...state.guesses, { gameId: answer.id, proximity: 1, isHint: true }],
-        won: false,
+        score: Math.max(0, state.score - cost),
+        spineHints: { ...hints, [kind]: true },
       }
       setState(newState)
       saveDayState(date, newState)
-      return
-    }
 
-    // Each hint halves the distance from the best guess so far
-    const hintCount = state.guesses.filter((g) => g.isHint).length
-    const divisor = Math.pow(2, hintCount + 1)
-    const targetRank = Math.max(2, Math.round(bestProximity / divisor))
+      setFloatingCost({ key: `spine-${kind}`, cost })
+      setScorePulse(true)
+      setTimeout(() => {
+        setFloatingCost(null)
+        setScorePulse(false)
+      }, 1200)
+    },
+    [state, gameOver, pendingGuess, date],
+  )
 
-    const excludeIds = state.guesses.map((g) => g.gameId)
-    const hintGame = getGameAtRank(answer, targetRank, excludeIds)
-    if (!hintGame) return
-
-    const hintProximity = calculateRank(hintGame, answer)
-
+  /** Standalone give-up — unlocks after GAME_SENSE_GIVE_UP_MIN_GUESSES real
+   *  guesses (the stuck player at proximity 1588 is exactly who needs it). */
+  const handleGiveUp = useCallback(() => {
+    if (!state || gameOver || pendingGuess) return
     const newState: DayState = {
       ...state,
-      score: Math.max(0, state.score - HINT_COST),
-      guesses: [...state.guesses, { gameId: hintGame.id, proximity: hintProximity, isHint: true }],
+      score: 0,
+      won: false,
+      guesses: [...state.guesses, { gameId: answer.id, proximity: 1, isHint: true }],
     }
     setState(newState)
     saveDayState(date, newState)
-
-    // Trigger score deduction animation
-    setFloatingCost({ key: `hint-${hintCount}`, cost: HINT_COST })
-    setScorePulse(true)
-    setTimeout(() => {
-      setFloatingCost(null)
-      setScorePulse(false)
-    }, 1200)
-
-    // Flash hint button red with cost text
-    setHintJustUsed(true)
-    if (hintUsedTimer.current) clearTimeout(hintUsedTimer.current)
-    hintUsedTimer.current = setTimeout(() => setHintJustUsed(false), 2000)
-  }, [state, pendingGuess, answer, date, gameOver])
+    setGiveUpArmed(false)
+  }, [state, gameOver, pendingGuess, answer, date])
 
   // Share text for the post-game share button
   const shareText = useMemo(() => {
@@ -322,7 +284,7 @@ export default function GameSenseDayPage({
         shouldAnimate={shouldAnimate}
         className="game-container mx-4 -mt-16 flex flex-1 flex-col rounded-2xl sm:mt-4 sm:rounded-[20px]"
       >
-        <main className={`font-game mx-auto flex flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 ${isPostGame ? 'w-full max-w-7xl lg:px-8' : 'max-w-2xl sm:justify-center'}`}>
+        <main className={`font-game mx-auto flex flex-1 flex-col px-4 pb-8 pt-4 sm:py-8 ${isPostGame ? 'w-full max-w-7xl lg:px-8' : 'w-full max-w-6xl sm:justify-center lg:px-8'}`}>
           {/* Title bar — normal flow, scrolls with page */}
           <div
             className="text-center"
@@ -372,103 +334,9 @@ export default function GameSenseDayPage({
                         : undefined)
               }
             >
-              {/* Hint (left) | Score pill (center) | ? (right) — grid keeps score dead center */}
+              {/* Score pill (center) | ? (right) — midpoint hint RETIRED in v2 */}
               {!isPostGame && <div className="mt-2 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-3 sm:mt-3 sm:gap-6">
-                {/* Left cell — hint button with inertia tooltip */}
-                <div className={`flex ${hintPressed ? 'pr-2' : 'justify-start'}`}>
-                  {!gameOver && state.guesses.length > 0 && (() => {
-                    const bestProximity = Math.min(...state.guesses.map((g) => g.proximity))
-                    const isGiveUp = bestProximity <= 2
-                    return (
-                      <div
-                        ref={hintBtnRef}
-                        className={`relative ${hintPressed && !isGiveUp ? 'w-full sm:w-auto' : ''}`}
-                        onMouseMove={(e) => {
-                          if (isGiveUp) return
-                          const rect = hintBtnRef.current?.getBoundingClientRect()
-                          if (!rect) return
-                          hintTipTargetRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
-                          if (!showHintTooltip || hintTipExiting) {
-                            if (hintTipExitTimer.current) clearTimeout(hintTipExitTimer.current)
-                            setHintTipExiting(false)
-                            hintTipPosRef.current = { ...hintTipTargetRef.current }
-                            hintTipVelRef.current = { x: 0, y: 0 }
-                            setShowHintTooltip(true)
-                          }
-                        }}
-                        onMouseLeave={() => {
-                          if (showHintTooltip && !hintTipExiting) {
-                            setHintTipExiting(true)
-                            if (hintTipExitTimer.current) clearTimeout(hintTipExitTimer.current)
-                            hintTipExitTimer.current = setTimeout(() => {
-                              setShowHintTooltip(false)
-                              setHintTipExiting(false)
-                            }, 150)
-                          }
-                        }}
-                      >
-                        <button
-                          type="button"
-                          onClick={handleHint}
-                          onTouchStart={() => setHintPressed(true)}
-                          onTouchEnd={() => setHintPressed(false)}
-                          onTouchCancel={() => setHintPressed(false)}
-                          className={`inline-flex items-center rounded-full border-2 font-heading text-[13px] font-[900] tracking-wide text-white transition-[transform,box-shadow,background-color,border-color,width,padding] duration-200 ${
-                            /* Circle on mobile (expand full-width when pressed), pill on sm+ */
-                            hintPressed && !isGiveUp
-                              ? 'h-11 w-full justify-between px-4 sm:w-auto sm:justify-center sm:gap-2 sm:px-6 sm:py-3'
-                              : 'h-11 w-11 justify-center sm:h-auto sm:w-auto sm:gap-2 sm:px-6 sm:py-3'
-                          } ${
-                            isGiveUp || hintJustUsed
-                              ? 'border-[hsl(7_62%_35%)] bg-[hsl(var(--game-red))] shadow-[0_6px_0_hsl(7_62%_35%),0_8px_20px_rgba(200,50,50,0.28)] hover:-translate-y-[3px] hover:shadow-[0_9px_0_hsl(7_62%_35%),0_12px_24px_rgba(200,50,50,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_hsl(7_62%_35%)]'
-                              : 'border-[#2d6bc4] bg-[hsl(var(--game-blue))] shadow-[0_6px_0_#2d6bc4,0_8px_20px_rgba(45,107,196,0.28)] hover:-translate-y-[3px] hover:shadow-[0_9px_0_#2d6bc4,0_12px_24px_rgba(45,107,196,0.35)] active:translate-y-[4px] active:shadow-[0_1px_0_#2d6bc4]'
-                          }`}
-                        >
-                          {hintJustUsed ? (
-                            <span>&minus;{HINT_COST} pts</span>
-                          ) : (
-                            <>
-                              <svg className="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                              </svg>
-                              {/* Press-hold on mobile: show cost next to icon */}
-                              {hintPressed && !isGiveUp && (
-                                <span className="text-[11px] sm:hidden">&minus;{HINT_COST}</span>
-                              )}
-                              {/* Text label hidden on mobile, visible on sm+ */}
-                              <span className="hidden sm:inline">{isGiveUp ? 'Give up' : 'Hint'}</span>
-                            </>
-                          )}
-                        </button>
-                        {/* Inertia tooltip — desktop only */}
-                        {showHintTooltip && !isGiveUp && (
-                          <div
-                            className="pointer-events-none absolute z-20 hidden whitespace-nowrap px-3 py-1.5 shadow-lg sm:block"
-                            style={{
-                              background: 'hsl(var(--game-ink))',
-                              left: hintTipPos.x,
-                              top: hintTipPos.y,
-                              transformOrigin: 'center bottom',
-                              animation: hintTipExiting
-                                ? 'gs-tip-out 150ms cubic-bezier(0.4, 0, 1, 1) forwards'
-                                : 'gs-tip-in 200ms cubic-bezier(0.34, 1.5, 0.64, 1) forwards',
-                              translate: '-50% calc(-100% - 14px)',
-                            }}
-                          >
-                            <span className="text-[13px] font-black text-white">
-                              &minus;{HINT_COST}{' '}
-                              <span className="text-[10px] text-white/65">pts</span>
-                            </span>
-                            <span
-                              className="absolute top-full left-1/2 -translate-x-1/2 border-[5px] border-transparent"
-                              style={{ borderTopColor: 'hsl(var(--game-ink))' }}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })()}
-                </div>
+                <div />
                 {/* Center cell — score pill */}
                 <ScorePill
                   score={state.score}
@@ -498,84 +366,164 @@ export default function GameSenseDayPage({
           {/* Not playable message */}
           {!playable && <PlayableGuard todayHref="/play/game-sense" />}
 
-          {/* Game area — white container for clarity on blue bg */}
+          {/* Game area — v2 three columns: guess log | the customer's note + input | mystery box.
+              Mobile stack: box (hero) → note → input → collapsible log. */}
           {playable && !gameOver && (
             <div
-              className="relative z-10 mb-4 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out sm:mb-8 sm:p-6"
+              className="relative z-10 mb-4 sm:mb-8"
               style={entranceStep < 2 ? { opacity: 0, transform: 'scale(0)' } : entranceStep < 6 ? { animation: 'gs-box-in 0.7s cubic-bezier(0.34,1.5,0.64,1) both' } : undefined}
             >
-              {/* Mystery box — minimal mount for block-out; Phase 4 gives it
-                  its own column. Reveal driven by bestProximity only. */}
-              <div
-                className="mb-4 flex justify-center transition-opacity duration-300 ease-out"
-                style={{ opacity: entranceStep < 3 ? 0 : 1 }}
-              >
-                {answer.igdbImageId && (
-                  <BoxArtReveal
-                    src={igdbCoverUrl(answer.igdbImageId)}
-                    daySeed={hashDateSeed(date)}
-                    revealLevel={revealLevel}
-                    width={180}
-                    height={240}
-                  />
-                )}
-              </div>
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-[3fr_4fr_3fr] lg:items-start">
 
-              {/* Sentence clue — always mounted so box knows its final size */}
-              <div
-                className="mb-4 transition-opacity duration-300 ease-out sm:mb-6"
-                style={{ opacity: entranceStep < 3 ? 0 : 1 }}
-              >
-                <SentenceClue
-                  answer={answer}
-                  blanksRevealed={state.blanksRevealed}
-                  score={state.score}
-                  onRevealBlank={handleRevealBlank}
-                  disabled={gameOver || isAnimating}
-                  skipEntrance={entranceStep < 3}
-                />
-              </div>
-
-              {/* Proximity countdown animation */}
-              {pendingGuess && (
-                <div className="mb-6">
-                  <ProximityCounter
-                    gameTitle={pendingGuess.game.title}
-                    targetRank={pendingGuess.proximity}
-                    onComplete={handleCountdownComplete}
-                  />
-                </div>
-              )}
-
-              {/* Guess input — hidden when animating */}
-              {!isAnimating && (
+                {/* LEFT — guess log (mobile: collapsible, last in stack) */}
                 <div
-                  className="transition-opacity duration-300 ease-out"
+                  className="order-3 transition-opacity duration-300 ease-out lg:order-1"
                   style={{ opacity: entranceStep < 4 ? 0 : 1 }}
                 >
-                  <GuessInput
-                    onGuess={handleGuess}
-                    guessedIds={guessedIds}
-                    disabled={false}
-                  />
-                </div>
-              )}
-
-              {/* Guess list — scrollable container on mobile, grid row transition for smooth height */}
-              {!isAnimating && (
-                <div
-                  className="grid transition-[grid-template-rows] duration-300 ease-in-out"
-                  style={{ gridTemplateRows: state.guesses.length > 0 && entranceStep >= 4 ? '1fr' : '0fr' }}
-                >
-                  <div className="overflow-hidden">
-                    {state.guesses.length > 0 && entranceStep >= 4 && (
-                      <div className="mt-4 max-h-[30vh] overflow-y-auto overscroll-contain sm:mt-6 sm:max-h-none sm:overflow-y-visible">
-                        <GuessList guesses={state.guesses} entranceDelay={entranceStep < 6 ? 100 : 0} />
-                      </div>
+                  <button
+                    type="button"
+                    onClick={() => setLogOpen((o) => !o)}
+                    className="mb-2 w-full rounded-full border-2 border-white/25 py-2 text-center font-heading text-[13px] font-[800] text-white/80 lg:hidden"
+                  >
+                    Your guesses ({state.guesses.length}) {logOpen ? '▴' : '▾'}
+                  </button>
+                  <div className={`${logOpen ? 'block' : 'hidden'} rounded-2xl bg-white/95 p-3 shadow-lg backdrop-blur-sm lg:block lg:max-h-[480px] lg:overflow-y-auto lg:overscroll-contain`}>
+                    {state.guesses.length > 0 ? (
+                      <GuessList guesses={state.guesses} />
+                    ) : (
+                      <p className="py-6 text-center text-sm font-semibold text-[hsl(var(--game-ink-light))]">
+                        No guesses yet.
+                      </p>
                     )}
                   </div>
                 </div>
-              )}
+
+                {/* MIDDLE — the customer's note, input directly below, nothing else */}
+                <div className="order-2 flex flex-col gap-4 lg:order-2">
+                  <div
+                    className="rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm transition-opacity duration-300 ease-out sm:p-6"
+                    style={{ opacity: entranceStep < 3 ? 0 : 1 }}
+                  >
+                    <p className="mb-3 text-center font-heading text-[10px] font-extrabold uppercase tracking-[0.24em] text-[hsl(var(--game-ink-light))]">
+                      The customer&apos;s note
+                    </p>
+                    <SentenceClue
+                      answer={answer}
+                      blanksRevealed={state.blanksRevealed}
+                      score={state.score}
+                      onRevealBlank={handleRevealBlank}
+                      disabled={gameOver || isAnimating}
+                      skipEntrance={entranceStep < 3}
+                    />
+                  </div>
+
+                  {/* Proximity countdown animation */}
+                  {pendingGuess && (
+                    <div className="rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm">
+                      <ProximityCounter
+                        gameTitle={pendingGuess.game.title}
+                        targetRank={pendingGuess.proximity}
+                        onComplete={handleCountdownComplete}
+                      />
+                    </div>
+                  )}
+
+                  {/* Guess input — hidden when animating */}
+                  {!isAnimating && (
+                    <div
+                      className="rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm transition-opacity duration-300 ease-out"
+                      style={{ opacity: entranceStep < 4 ? 0 : 1 }}
+                      onFocusCapture={() => setInputFocused(true)}
+                      onBlurCapture={() => setInputFocused(false)}
+                    >
+                      <GuessInput
+                        onGuess={handleGuess}
+                        guessedIds={guessedIds}
+                        disabled={false}
+                      />
+                      {/* Standalone give-up — two-tap arm, unlocks after N real guesses */}
+                      {state.guesses.filter((g) => !g.isHint).length >= GAME_SENSE_GIVE_UP_MIN_GUESSES && (
+                        <div className="mt-2 text-center">
+                          {giveUpArmed ? (
+                            <button
+                              type="button"
+                              onClick={handleGiveUp}
+                              className="font-heading text-xs font-bold text-[hsl(var(--game-red))]"
+                            >
+                              Sure? Reveal the answer and end the day
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setGiveUpArmed(true)}
+                              className="font-heading text-xs font-semibold text-[hsl(var(--game-ink-light))] transition-colors hover:text-[hsl(var(--game-ink))]"
+                            >
+                              Give up?
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* RIGHT — the mystery box on a flat ground + spine hints.
+                    Mobile: hero at top; scales down while the input is focused
+                    so the reveal state stays visible. */}
+                <div
+                  className="order-1 transition-opacity duration-300 ease-out lg:order-3"
+                  style={{ opacity: entranceStep < 3 ? 0 : 1 }}
+                >
+                  <div className="flex flex-col items-center gap-3 rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
+                    <div className={`origin-top transition-transform duration-200 ${inputFocused ? 'max-lg:scale-75' : ''}`}>
+                      {answer.igdbImageId && (
+                        <BoxArtReveal
+                          src={igdbCoverUrl(answer.igdbImageId)}
+                          daySeed={hashDateSeed(date)}
+                          revealLevel={revealLevel}
+                          width={200}
+                          height={266}
+                        />
+                      )}
+                    </div>
+
+                    {/* Spine hints — points buy facts; art is never purchasable */}
+                    <div className="flex w-full flex-col gap-2">
+                      {state.spineHints?.pattern ? (
+                        <p className="text-center font-heading text-[15px] font-[800] tracking-[0.2em] text-white">
+                          {answer.title.split(/\s+/).map((w) => w.replace(/[A-Za-z0-9]/g, '_').split('').join(' ')).join('   ')}
+                          <span className="mt-0.5 block text-[10px] font-semibold tracking-normal text-white/60">
+                            {answer.title.split(/\s+/).length} word{answer.title.split(/\s+/).length === 1 ? '' : 's'}
+                          </span>
+                        </p>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleSpineHint('pattern')}
+                          disabled={state.score < GAME_SENSE_LETTER_PATTERN_COST}
+                          className="rounded-full border-2 border-white/25 py-1.5 font-heading text-[11px] font-[800] text-white/80 transition-colors hover:border-white/50 hover:text-white disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/30"
+                        >
+                          Letter pattern &minus;{GAME_SENSE_LETTER_PATTERN_COST}
+                        </button>
+                      )}
+                      {state.spineHints?.firstLetter ? (
+                        <p className="text-center font-heading text-[13px] font-[800] text-white">
+                          Starts with &lsquo;{(answer.title.match(/[A-Za-z0-9]/)?.[0] ?? '?').toUpperCase()}&rsquo;
+                        </p>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleSpineHint('firstLetter')}
+                          disabled={state.score < GAME_SENSE_FIRST_LETTER_COST}
+                          className="rounded-full border-2 border-white/25 py-1.5 font-heading text-[11px] font-[800] text-white/80 transition-colors hover:border-white/50 hover:text-white disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/30"
+                        >
+                          First letter &minus;{GAME_SENSE_FIRST_LETTER_COST}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

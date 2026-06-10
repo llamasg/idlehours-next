@@ -36,8 +36,10 @@ export const BLANK_COSTS: Record<string, number> = Object.fromEntries(
 
 type Segment = { type: 'text'; text: string } | { type: 'blank'; index: number }
 
+// v2 customer-voice framing — MINIMAL template change, copy flagged for
+// editorial review (the sentence is now "the customer's note").
 const SEGMENTS: Segment[] = [
-  { type: 'text', text: 'A ' },
+  { type: 'text', text: 'I’m looking for a ' },
   { type: 'blank', index: 0 },
   { type: 'text', text: ' about ' },
   { type: 'blank', index: 1 },

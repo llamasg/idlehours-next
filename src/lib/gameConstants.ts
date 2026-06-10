@@ -22,3 +22,14 @@ export const GAME_SENSE_MAX_PATCHES = 6
  * need retuning against its distribution.
  */
 export const GAME_SENSE_REVEAL_THRESHOLDS = [1500, 600, 250, 100, 40, 12] as const
+
+// ── Game Sense v2 — spine hints + give-up (TUNING CONSTANTS) ─────────────────
+
+/** Letter pattern spine hint (word count + blanks). */
+export const GAME_SENSE_LETTER_PATTERN_COST = 100
+
+/** First-letter spine hint. */
+export const GAME_SENSE_FIRST_LETTER_COST = 200
+
+/** Standalone give-up unlocks after this many real (non-hint) guesses. */
+export const GAME_SENSE_GIVE_UP_MIN_GUESSES = 5
