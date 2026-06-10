@@ -19,7 +19,7 @@ import { loadDayState, saveDayState, type DayState } from '../lib/storage'
 import { formatElapsed } from '@/lib/game-shell/formatElapsed'
 import { buildShareText } from '@/lib/game-shell/buildShareText'
 import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
-import { GAME_COLORS } from '@/lib/ranks'
+import { GAME_THEME } from '@/lib/ranks'
 import PlayableGuard from '@/components/games/shell/PlayableGuard'
 import SplitShareButton from '@/components/games/SplitShareButton'
 import PostGameAnalysisCard, { StatPillRow, CardDivider } from '@/components/games/shell/PostGameAnalysisCard'
@@ -81,7 +81,7 @@ export default function GameSenseDayPage({
 
 
   // Force blue status bar on mobile only — solid bg-color for iOS safe-area + theme-color meta
-  useMobileThemeColor('#2D6BC4')
+  useMobileThemeColor(GAME_THEME['game-sense'].statusBarHex)
 
   // Countdown animation state
   const [pendingGuess, setPendingGuess] = useState<{
@@ -302,7 +302,7 @@ export default function GameSenseDayPage({
 
       {/* Blue game world — full-width gradient, content constrained inside */}
       <GameWorld
-        gradient="linear-gradient(to bottom, #2D6BC4, #1a2a4a)"
+        gradient={GAME_THEME['game-sense'].worldGradient}
         wipeStarted={wipeStarted}
         shouldAnimate={shouldAnimate}
         className="game-container mx-4 -mt-16 flex flex-1 flex-col rounded-2xl sm:mt-4 sm:rounded-[20px]"
@@ -560,7 +560,7 @@ export default function GameSenseDayPage({
                     shareText={shareText}
                     shareUrl="https://idlehours.co.uk/play/game-sense"
                     isWin={state.won}
-                    accentColor={GAME_COLORS['game-sense'].accent}
+                    accentColor={GAME_THEME['game-sense'].accent}
                   />
                 }
               />

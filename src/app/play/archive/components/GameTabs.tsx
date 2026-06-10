@@ -1,14 +1,14 @@
 'use client'
 
 import { useRef, useEffect, useState, useCallback } from 'react'
-import { type GameSlug } from '@/lib/ranks'
+import { type DailyGameSlug } from '@/lib/ranks'
 import { GAME_CONFIGS, type GameConfig } from '../lib/archiveAdapter'
 
 const spring = 'cubic-bezier(0.34,1.5,0.64,1)'
 
 interface GameTabsProps {
-  activeGame: GameSlug
-  onSelect: (slug: GameSlug) => void
+  activeGame: DailyGameSlug
+  onSelect: (slug: DailyGameSlug) => void
 }
 
 export default function GameTabs({ activeGame, onSelect }: GameTabsProps) {

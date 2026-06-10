@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import type { GameSlug } from '@/lib/ranks'
+import type { DailyGameSlug } from '@/lib/ranks'
 import { entrance } from '@/lib/animations'
 
 // "Today's game" / "View past games" pill pair, previously copied six times
@@ -12,7 +12,7 @@ import { entrance } from '@/lib/animations'
 // /archive redirect page), all pills carry icons (street-date's lacked them),
 // and "Today's game" is hidden when already on today's puzzle.
 
-function Pills({ slug, today }: { slug: GameSlug; today: boolean }) {
+function Pills({ slug, today }: { slug: DailyGameSlug; today: boolean }) {
   return (
     <>
       {!today && (
@@ -37,7 +37,7 @@ export function PostGameNavPills({
   share,
   className = 'mb-6 flex flex-wrap items-center justify-center gap-4',
 }: {
-  slug: GameSlug
+  slug: DailyGameSlug
   today: boolean
   pgStep: number
   share?: ReactNode
@@ -65,6 +65,6 @@ export function PostGameNavPills({
 }
 
 /** In-game variant: plain pill pair — the caller's wrapper owns entrance styling. */
-export default function GameNavPills({ slug, today }: { slug: GameSlug; today: boolean }) {
+export default function GameNavPills({ slug, today }: { slug: DailyGameSlug; today: boolean }) {
   return <Pills slug={slug} today={today} />
 }

@@ -30,7 +30,7 @@ import GameNavPills, { PostGameNavPills } from '@/components/games/shell/GameNav
 import { useGameEntrance } from '@/lib/game-shell/useGameEntrance'
 import { buildShareText } from '@/lib/game-shell/buildShareText'
 import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
-import { GAME_COLORS } from '@/lib/ranks'
+import { GAME_THEME } from '@/lib/ranks'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import { SPRING_EASING, POSTGAME_GAPS } from '@/lib/gameConstants'
 
@@ -62,7 +62,7 @@ export default function ShelfPriceDayPage({
   const today = isToday(date)
 
   // Purple status bar on mobile (game-sense and street-date already do this)
-  useMobileThemeColor('#5B4FCF')
+  useMobileThemeColor(GAME_THEME['shelf-price'].statusBarHex)
 
   // Pre-compute — skip animation if game already finished
   const shouldAnimate = state ? !state.finished : true
@@ -188,7 +188,7 @@ export default function ShelfPriceDayPage({
 
       {/* Purple game world */}
       <GameWorld
-        gradient="linear-gradient(155deg, #5B4FCF, #1a1040)"
+        gradient={GAME_THEME['shelf-price'].worldGradient}
         wipeStarted={wipeStarted}
         shouldAnimate={shouldAnimate}
         style={{
@@ -313,7 +313,7 @@ export default function ShelfPriceDayPage({
                   shareText={shareText}
                   shareUrl="https://idlehours.co.uk/play/shelf-price"
                   isWin={state.won}
-                  accentColor={GAME_COLORS['shelf-price'].accent}
+                  accentColor={GAME_THEME['shelf-price'].accent}
                 />
               }
             />

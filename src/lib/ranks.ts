@@ -39,7 +39,12 @@ const SHELF_PRICE_LADDER: RankThreshold[] = [
   { name: 'Head of Sales', label: '1000 pts' },
 ]
 
-export type GameSlug = 'game-sense' | 'street-date' | 'shelf-price'
+/** The three daily games — rank ladders, badges, and themes exist for these. */
+export type DailyGameSlug = 'game-sense' | 'street-date' | 'shelf-price'
+
+/** Every game on the site. Type-level prep for the badges/accounts work —
+ *  session games have no rank ladder or theme yet. */
+export type GameSlug = DailyGameSlug | 'blitz' | 'jigsaw' | 'ship-it'
 
 /** Badge artwork per rank name — single source of truth (was duplicated
  *  verbatim in DailyBadgeShelf and ResultCard). */
@@ -63,30 +68,44 @@ export const BADGE_IMAGES: Record<string, string> = {
   'Head of Sales': '/images/badges/Shelf Price_04_head of sales.png',
 }
 
-/** Per-game accent colours for badges, scores, and highlights */
-export const GAME_COLORS: Record<GameSlug, {
+/** Full per-game theme: accents, badge glow, confetti, world chrome. */
+export interface GameTheme {
   accent: string       // CSS colour for text/bg accents
+  accentDark: string   // darker shade for 3D button shadows
   shadow: string       // rgba shadow for badge glow
   confetti: string[]   // confetti palette
-}> = {
+  worldGradient: string // the game world background
+  statusBarHex: string  // mobile status-bar / theme-color hex
+}
+
+export const GAME_THEME: Record<DailyGameSlug, GameTheme> = {
   'game-sense': {
     accent: 'hsl(var(--game-blue))',
+    accentDark: '#2d6bc4',
     shadow: 'rgba(74,143,232,0.35)',
     confetti: ['#4A8FE8', '#C8873A', '#27A85A', '#F0EBE0', '#2D6BC4'],
+    worldGradient: 'linear-gradient(to bottom, #2D6BC4, #1a2a4a)',
+    statusBarHex: '#2D6BC4',
   },
   'street-date': {
     accent: 'hsl(var(--game-green))',
+    accentDark: '#1A7A40',
     shadow: 'rgba(39,168,90,0.35)',
     confetti: ['#27A85A', '#1A7A40', '#C8873A', '#F0EBE0', '#4A8FE8'],
+    worldGradient: 'linear-gradient(155deg, #1A7A40, #0d1f12)',
+    statusBarHex: '#1A7A40',
   },
   'shelf-price': {
-    accent: '#5B4FCF',
+    accent: 'hsl(var(--game-purple))', // = #5B4FCF
+    accentDark: '#3D35A0',
     shadow: 'rgba(91,79,207,0.35)',
     confetti: ['#5B4FCF', '#7B6FE8', '#C8873A', '#F0EBE0', '#4A8FE8'],
+    worldGradient: 'linear-gradient(155deg, #5B4FCF, #1a1040)',
+    statusBarHex: '#5B4FCF',
   },
 }
 
-export function getLadderForGame(game: GameSlug): RankThreshold[] {
+export function getLadderForGame(game: DailyGameSlug): RankThreshold[] {
   switch (game) {
     case 'game-sense': return GAME_SENSE_LADDER
     case 'street-date': return STREET_DATE_LADDER
@@ -94,7 +113,7 @@ export function getLadderForGame(game: GameSlug): RankThreshold[] {
   }
 }
 
-export function getRankForGame(game: GameSlug, score: number, streak: number): string {
+export function getRankForGame(game: DailyGameSlug, score: number, streak: number): string {
   switch (game) {
     case 'game-sense': return getGameSenseRank(score)
     case 'street-date': return getStreetDateRank(score)
@@ -102,7 +121,7 @@ export function getRankForGame(game: GameSlug, score: number, streak: number): s
   }
 }
 
-export function getFlavourForGame(game: GameSlug): Record<string, string[]> {
+export function getFlavourForGame(game: DailyGameSlug): Record<string, string[]> {
   switch (game) {
     case 'game-sense': return GAME_SENSE_FLAVOUR
     case 'street-date': return STREET_DATE_FLAVOUR

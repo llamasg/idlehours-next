@@ -1,33 +1,18 @@
 // ---------------------------------------------------------------------------
-// Shelf Price – localStorage helpers (higher-or-lower version)
+// Shelf Price – localStorage helpers (state shape + store live in the
+// game-shell registry; this module binds them with the game's defaults)
 // ---------------------------------------------------------------------------
 
-import { createDayStore } from '@/lib/game-shell/dayStore'
+import { shelfPriceStore, type ShelfPriceDayState } from '@/lib/game-shell/registry'
 
-export interface DayState {
-  score: number
-  correctCount: number
-  round: number
-  won: boolean
-  finished: boolean
-  choices: ('left' | 'right')[]
-}
+export type DayState = ShelfPriceDayState
 
 export const WRONG_PENALTY = 100
 export const TARGET_ROUNDS = 10
 
-const store = createDayStore<DayState>('shelf_price_v2_', (parsed) => {
-  // Migration: add score if missing (old saves)
-  if (parsed.score === undefined) {
-    parsed.score = 1000 - ((parsed.choices?.length ?? 0) - (parsed.correctCount ?? 0)) * WRONG_PENALTY
-    parsed.round = parsed.choices?.length ?? 0
-  }
-  return parsed
-})
-
 export function loadDayState(dateStr: string): DayState {
   return (
-    store.load(dateStr) ?? {
+    shelfPriceStore.load(dateStr) ?? {
       score: 1000,
       correctCount: 0,
       round: 0,
@@ -39,5 +24,5 @@ export function loadDayState(dateStr: string): DayState {
 }
 
 export function saveDayState(dateStr: string, state: DayState): void {
-  store.save(dateStr, state)
+  shelfPriceStore.save(dateStr, state)
 }

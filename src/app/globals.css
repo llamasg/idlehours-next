@@ -41,6 +41,7 @@
     --game-ink-light: 60 10% 49%;
     --game-amber: 30 55% 50%;
     --game-green: 147 61% 41%;
+    --game-purple: 246 57% 56%; /* Shelf Price #5B4FCF */
     --game-red: 7 62% 47%;
     --game-white: 0 0% 100%;
     --game-cream: 40 30% 95%;
@@ -83,6 +84,7 @@
     --game-ink-light: 30 10% 50%;
     --game-amber: 30 55% 55%;
     --game-green: 147 61% 45%;
+    --game-purple: 246 57% 56%;
     --game-red: 7 62% 52%;
     --game-white: 20 14% 14%;
     --game-cream: 20 12% 18%;
@@ -123,6 +125,7 @@
     --game-ink-light: 60 10% 49%;
     --game-amber: 30 55% 50%;
     --game-green: 147 61% 41%;
+    --game-purple: 246 57% 56%;
     --game-red: 7 62% 47%;
     --game-white: 0 0% 100%;
     --game-cream: 40 30% 95%;

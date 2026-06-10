@@ -7,7 +7,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Header from '@/components/Header'
 // Footer intentionally omitted — this is a full-viewport immersive page
-import { type GameSlug } from '@/lib/ranks'
+import { type DailyGameSlug } from '@/lib/ranks'
 import { getArchiveForGame, GAME_CONFIGS, type ArchiveEntry } from './lib/archiveAdapter'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import GameTabs from './components/GameTabs'
@@ -19,13 +19,13 @@ import EntryCard from './components/EntryCard'
 
 interface HSL { h: number; s: number; l: number }
 
-const GAME_GRADIENTS: Record<GameSlug, { start: HSL; end: HSL }> = {
+const GAME_GRADIENTS: Record<DailyGameSlug, { start: HSL; end: HSL }> = {
   'game-sense':  { start: { h: 215, s: 63, l: 47 }, end: { h: 224, s: 62, l: 27 } },
   'street-date': { start: { h: 148, s: 65, l: 29 }, end: { h: 148, s: 41, l: 9 } },
   'shelf-price': { start: { h: 246, s: 55, l: 56 }, end: { h: 260, s: 60, l: 16 } },
 }
 
-const CALENDAR_BG: Record<GameSlug, string> = {
+const CALENDAR_BG: Record<DailyGameSlug, string> = {
   'game-sense':  '#132251',
   'street-date': '#081e0f',
   'shelf-price': '#1a1040',
@@ -61,19 +61,19 @@ function easeInOut(t: number): number {
 
 const TRANSITION_DURATION = 1200
 
-function useGradientTransition(gameSlug: GameSlug): string {
-  const target = GAME_GRADIENTS[gameSlug]
+function useGradientTransition(DailyGameSlug: DailyGameSlug): string {
+  const target = GAME_GRADIENTS[DailyGameSlug]
   const currentRef = useRef({ start: { ...target.start }, end: { ...target.end } })
   const [gradient, setGradient] = useState(buildGradient(target.start, target.end))
   const rafRef = useRef(0)
-  const prevSlugRef = useRef(gameSlug)
+  const prevSlugRef = useRef(DailyGameSlug)
 
   useEffect(() => {
-    if (gameSlug === prevSlugRef.current) return
-    prevSlugRef.current = gameSlug
+    if (DailyGameSlug === prevSlugRef.current) return
+    prevSlugRef.current = DailyGameSlug
 
     const from = { start: { ...currentRef.current.start }, end: { ...currentRef.current.end } }
-    const to = GAME_GRADIENTS[gameSlug]
+    const to = GAME_GRADIENTS[DailyGameSlug]
     const startTime = performance.now()
 
     const animate = (now: number) => {
@@ -95,7 +95,7 @@ function useGradientTransition(gameSlug: GameSlug): string {
     cancelAnimationFrame(rafRef.current)
     rafRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(rafRef.current)
-  }, [gameSlug])
+  }, [DailyGameSlug])
 
   return gradient
 }
@@ -123,8 +123,8 @@ function ArchiveInner() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  const gameParam = searchParams.get('game') as GameSlug | null
-  const [activeGame, setActiveGame] = useState<GameSlug>(gameParam || 'game-sense')
+  const gameParam = searchParams.get('game') as DailyGameSlug | null
+  const [activeGame, setActiveGame] = useState<DailyGameSlug>(gameParam || 'game-sense')
   const [entries, setEntries] = useState<ArchiveEntry[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [displayMonth, setDisplayMonth] = useState('')
@@ -154,7 +154,7 @@ function ArchiveInner() {
     setLoaded(true)
   }, [activeGame])
 
-  const handleTabSelect = useCallback((slug: GameSlug) => {
+  const handleTabSelect = useCallback((slug: DailyGameSlug) => {
     setActiveGame(slug)
     setLoaded(false)
     router.replace(`/play/archive?game=${slug}`, { scroll: false })
@@ -243,7 +243,7 @@ function ArchiveInner() {
                     entries={entries}
                     selectedIndex={selectedIndex}
                     onSelect={handleSelectIndex}
-                    gameSlug={activeGame}
+                    DailyGameSlug={activeGame}
                     animateIn={step >= 6}
                   />
                 ) : loaded ? (
@@ -276,7 +276,7 @@ function ArchiveInner() {
                     {showCard && selectedEntry && (
                       <EntryCard
                         entry={selectedEntry}
-                        gameSlug={activeGame}
+                        DailyGameSlug={activeGame}
                         gameLabel={activeConfig.label}
                         playUrl={activeConfig.playUrl(selectedEntry.date)}
                       />

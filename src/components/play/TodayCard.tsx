@@ -2,11 +2,11 @@
 
 import { useMemo } from 'react'
 import Link from 'next/link'
-import { type GameSlug, GAME_COLORS } from '@/lib/ranks'
+import { type DailyGameSlug, GAME_THEME } from '@/lib/ranks'
 import { getDailyCompletion } from '@/lib/game-shell/completion'
 import { getTodayDateString } from '@/lib/dateUtils'
 
-const DAILY_GAMES: { slug: GameSlug; label: string; emoji: string; href: string }[] = [
+const DAILY_GAMES: { slug: DailyGameSlug; label: string; emoji: string; href: string }[] = [
   { slug: 'game-sense', label: 'Game Sense', emoji: '🎮', href: '/play/game-sense' },
   { slug: 'street-date', label: 'Street Date', emoji: '📅', href: '/play/street-date' },
   { slug: 'shelf-price', label: 'Shelf Price', emoji: '💰', href: '/play/shelf-price' },
@@ -40,7 +40,7 @@ export default function TodayCard() {
               className={`flex h-[42px] w-[42px] items-center justify-center rounded-full text-base transition-transform duration-200 group-hover:scale-110 group-hover:rotate-6 ${
                 slot.completed ? 'shadow-[0_0_0_3px_hsl(var(--background))]' : 'border-2 border-dashed border-border'
               }`}
-              style={slot.completed ? { backgroundColor: GAME_COLORS[slot.slug].accent } : undefined}
+              style={slot.completed ? { backgroundColor: GAME_THEME[slot.slug].accent } : undefined}
             >
               {slot.completed ? slot.emoji : ''}
             </div>

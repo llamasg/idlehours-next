@@ -2,9 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { getTodayDateString as getGameSenseToday } from '@/app/play/game-sense/lib/dateUtils'
-import { getTodayDateString as getStreetDateToday } from '@/app/play/street-date/lib/dateUtils'
-import { getTodayDateString as getShelfPriceToday } from '@/app/play/shelf-price/lib/dateUtils'
+import { getTodayDateString } from '@/lib/dateUtils'
 
 const CYCLE_MS = 10_000
 
@@ -24,7 +22,7 @@ const GAMES: Array<{
     type: 'image' as const,
     bg: '#5B5BEB',
     playTime: '3 min',
-    getHref: () => `/play/game-sense/${getGameSenseToday()}`,
+    getHref: () => `/play/game-sense/${getTodayDateString()}`,
   },
   {
     title: 'Street Date',
@@ -32,7 +30,7 @@ const GAMES: Array<{
     src: '/videos/box art.gif',
     type: 'gif' as const,
     playTime: '2 min',
-    getHref: () => `/play/street-date/${getStreetDateToday()}`,
+    getHref: () => `/play/street-date/${getTodayDateString()}`,
   },
   {
     title: 'Shelf Price',
@@ -41,7 +39,7 @@ const GAMES: Array<{
     type: 'image' as const,
     bg: '#555B6E',
     playTime: '2 min',
-    getHref: () => `/play/shelf-price/${getShelfPriceToday()}`,
+    getHref: () => `/play/shelf-price/${getTodayDateString()}`,
   },
   {
     title: 'Ship It',

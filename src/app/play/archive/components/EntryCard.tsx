@@ -3,13 +3,13 @@
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { type GameSlug } from '@/lib/ranks'
+import { type DailyGameSlug } from '@/lib/ranks'
 import { type ArchiveEntry } from '../lib/archiveAdapter'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 
 interface EntryCardProps {
   entry: ArchiveEntry
-  gameSlug: GameSlug
+  DailyGameSlug: DailyGameSlug
   gameLabel: string
   playUrl: string
 }
@@ -92,7 +92,7 @@ function Roller({
 
 const FIRST_MOUNT_GAPS = [0, 100, 100, 100]
 
-export default function EntryCard({ entry, gameSlug, gameLabel, playUrl }: EntryCardProps) {
+export default function EntryCard({ entry, DailyGameSlug, gameLabel, playUrl }: EntryCardProps) {
   const [hasInitialized, setHasInitialized] = useState(false)
   const prevEntryRef = useRef(entry)
 
@@ -125,7 +125,7 @@ export default function EntryCard({ entry, gameSlug, gameLabel, playUrl }: Entry
       : '#6c63d4'
 
   // Unified score display — always same layout, only numbers change
-  const isShelfPrice = gameSlug === 'shelf-price'
+  const isShelfPrice = DailyGameSlug === 'shelf-price'
   const scoreNum = isShelfPrice
     ? String(entry.played && entry.finished ? entry.streak : 0)
     : String(entry.score || 0)

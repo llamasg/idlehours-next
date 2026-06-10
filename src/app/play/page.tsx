@@ -10,9 +10,7 @@ import BlitzSection from '@/components/play/BlitzSection'
 import ShipItSection from '@/components/play/ShipItSection'
 import JigsawSection from '@/components/play/JigsawSection'
 import DailyBadgeShelf from '@/components/games/DailyBadgeShelf'
-import { getTodayDateString as getGameSenseToday } from './game-sense/lib/dateUtils'
-import { getTodayDateString as getStreetDateToday } from './street-date/lib/dateUtils'
-import { getTodayDateString as getShelfPriceToday } from './shelf-price/lib/dateUtils'
+import { getTodayDateString } from '@/lib/dateUtils'
 
 function SectionHeader({
   number,
@@ -79,7 +77,7 @@ export default function PlayHubPage() {
               title="Game Sense"
               subtitle="Guess the game"
               description="We describe it. You name it. The gap between &ldquo;I know this one&rdquo; and actually knowing it is where the game lives."
-              href={`/play/game-sense/${getGameSenseToday()}`}
+              href={`/play/game-sense/${getTodayDateString()}`}
               imageBg="bg-[#EEEAF8]"
               btnClass="bg-blue-500"
               imageSrc="/images/game banner/game sense logo-03.png"
@@ -88,7 +86,7 @@ export default function PlayHubPage() {
               title="Street Date"
               subtitle="Guess the year"
               description="Match a game to its release year from the box art alone. Some you&rsquo;ll know instantly. Some will humble you."
-              href={`/play/street-date/${getStreetDateToday()}`}
+              href={`/play/street-date/${getTodayDateString()}`}
               imageBg="bg-[#EAEBF0]"
               btnClass="bg-blue-500"
             />
@@ -96,7 +94,7 @@ export default function PlayHubPage() {
               title="Shelf Price"
               subtitle="Guess the price"
               description="Higher or lower. Five rounds. Turns out your instinct about what games cost is either better or worse than you&rsquo;d expect."
-              href={`/play/shelf-price/${getShelfPriceToday()}`}
+              href={`/play/shelf-price/${getTodayDateString()}`}
               imageBg="bg-amber-100"
               btnClass="bg-amber-600"
               stickerClass="bg-amber-600 text-white"

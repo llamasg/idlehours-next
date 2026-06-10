@@ -2,13 +2,13 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
-import { type GameSlug, GAME_COLORS, BADGE_IMAGES } from '@/lib/ranks'
+import { type DailyGameSlug, GAME_THEME, BADGE_IMAGES } from '@/lib/ranks'
 import { getDailyCompletion } from '@/lib/game-shell/completion'
 import { getTodayDateString } from '@/lib/dateUtils'
 import { entrance, useEntranceSteps } from '@/lib/animations'
 import BadgeLightbox, { isHoloRank, HoloBadgeWrapper } from '@/components/games/BadgeLightbox'
 
-const GAMES: { slug: GameSlug; label: string; href: string }[] = [
+const GAMES: { slug: DailyGameSlug; label: string; href: string }[] = [
   { slug: 'shelf-price', label: 'Shelf Price', href: '/play/shelf-price' },
   { slug: 'street-date', label: 'Street Date', href: '/play/street-date' },
   { slug: 'game-sense', label: 'Game Sense', href: '/play/game-sense' },
@@ -31,7 +31,7 @@ const BADGE_ROTATIONS = ['-3deg', '2deg', '-1deg']
 
 interface DailyBadgeShelfProps {
   /** The game the player just completed — triggers stamp animation */
-  currentGame: GameSlug
+  currentGame: DailyGameSlug
   animateStamp?: boolean
 }
 
@@ -152,8 +152,8 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
                     <div
                       className="badge-shimmer flex h-[120px] w-[120px] items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-[0.04em] text-white/30"
                       style={{
-                        backgroundColor: GAME_COLORS[slot.slug].accent,
-                        boxShadow: `0 0 0 4px white, 0 4px 12px ${GAME_COLORS[slot.slug].shadow}`,
+                        backgroundColor: GAME_THEME[slot.slug].accent,
+                        boxShadow: `0 0 0 4px white, 0 4px 12px ${GAME_THEME[slot.slug].shadow}`,
                         transform: justCompleted ? undefined : `rotate(${BADGE_ROTATIONS[slotIndex]})`,
                         ...entrance('pop', step >= 3, badgeDelay),
                       }}
@@ -165,8 +165,8 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
                   {/* Ink rings — only on just-completed */}
                   {justCompleted && step >= 3 && (
                     <>
-                      <div className="absolute inset-0 rounded-full border-2 animate-[ink-ring_0.6s_ease-out_0.3s_both]" style={{ borderColor: `color-mix(in srgb, ${GAME_COLORS[slot.slug].accent} 50%, transparent)` }} />
-                      <div className="absolute inset-0 rounded-full border-2 animate-[ink-ring_0.7s_ease-out_0.4s_both]" style={{ borderColor: `color-mix(in srgb, ${GAME_COLORS[slot.slug].accent} 50%, transparent)` }} />
+                      <div className="absolute inset-0 rounded-full border-2 animate-[ink-ring_0.6s_ease-out_0.3s_both]" style={{ borderColor: `color-mix(in srgb, ${GAME_THEME[slot.slug].accent} 50%, transparent)` }} />
+                      <div className="absolute inset-0 rounded-full border-2 animate-[ink-ring_0.7s_ease-out_0.4s_both]" style={{ borderColor: `color-mix(in srgb, ${GAME_THEME[slot.slug].accent} 50%, transparent)` }} />
                     </>
                   )}
 

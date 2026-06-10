@@ -29,7 +29,7 @@ import { formatGameNumber, formatDisplayDate, isPlayableDate, isToday } from '..
 import { formatElapsed } from '@/lib/game-shell/formatElapsed'
 import { buildShareText } from '@/lib/game-shell/buildShareText'
 import { useMobileThemeColor } from '@/lib/game-shell/useMobileThemeColor'
-import { GAME_COLORS } from '@/lib/ranks'
+import { GAME_THEME } from '@/lib/ranks'
 import RulesModal from '../components/RulesModal'
 import PlayableGuard from '@/components/games/shell/PlayableGuard'
 import SplitShareButton from '@/components/games/SplitShareButton'
@@ -94,7 +94,7 @@ export default function StreetDateV2DayPage({
   const { entranceStep, wipeStarted } = useGameEntrance(!!state, state ? state.finished : false)
 
   // Force green status bar on mobile
-  useMobileThemeColor('#1A7A40')
+  useMobileThemeColor(GAME_THEME['street-date'].statusBarHex)
 
   const playable = isPlayableDate(date)
   const today = isToday(date)
@@ -532,7 +532,7 @@ export default function StreetDateV2DayPage({
       <div className="flex min-h-screen flex-col">
         {/* Green game world */}
         <GameWorld
-          gradient="linear-gradient(155deg, #1A7A40, #0d1f12)"
+          gradient={GAME_THEME['street-date'].worldGradient}
           wipeStarted={wipeStarted}
           shouldAnimate={shouldAnimate}
         >
@@ -914,7 +914,7 @@ export default function StreetDateV2DayPage({
                       shareText={shareText}
                       shareUrl="https://idlehours.co.uk/play/street-date"
                       isWin={state.won}
-                      accentColor={GAME_COLORS['street-date'].accent}
+                      accentColor={GAME_THEME['street-date'].accent}
                     />
                   }
                 />

@@ -3,11 +3,11 @@
 import { useMemo, useState } from 'react'
 import { pickDayFlavour } from '@/lib/dayFlavour'
 import {
-  type GameSlug,
+  type DailyGameSlug,
   getLadderForGame,
   getRankForGame,
   getFlavourForGame,
-  GAME_COLORS,
+  GAME_THEME,
   BADGE_IMAGES,
 } from '@/lib/ranks'
 import { COPY, pickRandom } from '@/components/games/GameEndModal.copy'
@@ -17,7 +17,7 @@ import BadgeLightbox, { isHoloRank, HoloBadgeWrapper } from '@/components/games/
 // ── Types ───────────────────────────────────────────────────────────────────
 
 interface ResultCardProps {
-  game: GameSlug
+  game: DailyGameSlug
   score: number
   streak: number
   won: boolean
@@ -81,7 +81,7 @@ export default function ResultCard({
   const ladder = getLadderForGame(game)
   const currentRankIndex = ladder.findIndex((t) => t.name === rankName)
   const currentTier = ladder[currentRankIndex]
-  const colors = GAME_COLORS[game]
+  const colors = GAME_THEME[game]
 
   const displayScore = String(score)
   const scoreLabel = 'pts'

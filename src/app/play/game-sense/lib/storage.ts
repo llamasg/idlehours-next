@@ -1,42 +1,22 @@
 // ---------------------------------------------------------------------------
-// Game Sense – localStorage helpers
+// Game Sense – localStorage helpers (state shape + store live in the
+// game-shell registry; this module binds them with the game's defaults)
 // ---------------------------------------------------------------------------
 
-import { createDayStore } from '@/lib/game-shell/dayStore'
+import {
+  gameSenseStore,
+  type GameSenseDayState,
+  type GameSenseGuessRecord,
+} from '@/lib/game-shell/registry'
 
-export interface GuessRecord {
-  gameId: string;
-  proximity: number;
-  isHint?: boolean;
-}
-
-export interface DayState {
-  guesses: GuessRecord[];
-  won: boolean;
-  score: number;
-  blanksRevealed: string[];
-  /** Epoch ms when the player first loaded the puzzle */
-  startedAt?: number;
-  /** Epoch ms when the game ended (won or lost) */
-  endedAt?: number;
-}
+export type DayState = GameSenseDayState
+export type GuessRecord = GameSenseGuessRecord
 
 const STARTING_SCORE = 1000;
 
-const store = createDayStore<DayState>('game_sense_', (parsed) => {
-  // Migrate old lifeline-based state to new blanks-based state
-  const legacy = parsed as DayState & { lifelinesUsed?: string[]; lifelinesRevealed?: unknown };
-  if (legacy.lifelinesUsed && !legacy.blanksRevealed) {
-    legacy.blanksRevealed = legacy.lifelinesUsed;
-    delete legacy.lifelinesUsed;
-    delete legacy.lifelinesRevealed;
-  }
-  return legacy;
-});
-
 export function loadDayState(dateStr: string): DayState {
   return (
-    store.load(dateStr) ?? {
+    gameSenseStore.load(dateStr) ?? {
       guesses: [],
       won: false,
       score: STARTING_SCORE,
@@ -46,5 +26,5 @@ export function loadDayState(dateStr: string): DayState {
 }
 
 export function saveDayState(dateStr: string, state: DayState): void {
-  store.save(dateStr, state);
+  gameSenseStore.save(dateStr, state);
 }

@@ -1,11 +1,11 @@
 'use client'
 
-import type { GameSlug } from '@/lib/ranks'
+import type { DailyGameSlug } from '@/lib/ranks'
 import DailyBadgeShelf from './DailyBadgeShelf'
 import ResultCard from './ResultCard'
 
 interface PostGameLeftColumnProps {
-  game: GameSlug
+  game: DailyGameSlug
   score: number
   /** Passed to ResultCard as `streak`. 0 for Game Sense/Street Date, correctCount for Shelf Price. */
   secondaryStat: number

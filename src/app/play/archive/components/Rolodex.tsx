@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useEffect, useCallback, useState } from 'react'
-import { type GameSlug } from '@/lib/ranks'
+import { type DailyGameSlug } from '@/lib/ranks'
 import { type ArchiveEntry } from '../lib/archiveAdapter'
 import { entrance } from '@/lib/animations'
 
@@ -31,7 +31,7 @@ interface RolodexProps {
   entries: ArchiveEntry[]
   selectedIndex: number
   onSelect: (idx: number) => void
-  gameSlug: GameSlug
+  DailyGameSlug: DailyGameSlug
   animateIn?: boolean
 }
 
@@ -47,7 +47,7 @@ function taperStyle(distance: number): React.CSSProperties {
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export default function Rolodex({ entries, selectedIndex, onSelect, gameSlug, animateIn = true }: RolodexProps) {
+export default function Rolodex({ entries, selectedIndex, onSelect, DailyGameSlug, animateIn = true }: RolodexProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const scrollTargetRef = useRef(selectedIndex)

@@ -1,29 +1,8 @@
-interface V2Guess {
-  order: string[]
-  correctCount: number
-  results: ('exact' | 'close' | 'wrong')[]
-  score: number
-}
+// State shape + store live in the game-shell registry; this module binds
+// them with the game's scoring helpers.
+import { streetDateStore, type StreetDateDayState } from '@/lib/game-shell/registry'
 
-export interface V2DayState {
-  gameIds: string[]
-  shuffledIds: string[]
-  slots: (string | null)[]
-  pool: string[]
-  guesses: V2Guess[]
-  score: number
-  won: boolean
-  finished: boolean
-  hintOneUsed: boolean
-  hintAllUsed: boolean
-  /** Key is "gameId:slotIndex", value is the result at time of reveal */
-  revealedPairs: Record<string, 'exact' | 'close' | 'wrong'>
-  revealedYearIds: string[]
-  startedAt: number | null
-  endedAt: number | null
-}
-
-import { createDayStore } from '@/lib/game-shell/dayStore'
+export type V2DayState = StreetDateDayState
 
 const MAX_GUESSES = 5
 const BASE_SCORE = 1000
@@ -52,14 +31,12 @@ export function createInitialState(gameIds: string[], shuffledIds: string[]): V2
   }
 }
 
-const store = createDayStore<V2DayState>('street_date_v3_')
-
 export function loadState(dateStr: string): V2DayState | null {
-  return store.load(dateStr)
+  return streetDateStore.load(dateStr)
 }
 
 export function saveState(dateStr: string, state: V2DayState): void {
-  store.save(dateStr, state)
+  streetDateStore.save(dateStr, state)
 }
 
 export function calcSlotResult(
