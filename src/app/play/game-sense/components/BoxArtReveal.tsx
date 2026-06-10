@@ -46,29 +46,46 @@ function blobPath(
   return d + 'Z'
 }
 
-type Patch = { d: string; cx: number; cy: number }
+type Patch = { paths: string[] }
 
-// Patch placement: jittered grid cells so patches spread across the
-// art (sampling sky/character/terrain) instead of clustering.
+// ── Placement v2: FIXED outside-in zone sequence ─────────────────────────────
+// Cover art carries the answer's logo, so reveal order is information-aware:
+// weakest regions (corners) first, title zones (centre-top / centre-bottom)
+// last BY CONSTRUCTION — patches 5–6 are the only ones touching them.
+// The per-day seed only jitters blob position WITHIN its zone (±5%) and blob
+// shape; the zone ORDER never varies. Corner/edge centres stay inset ≥15%
+// from the boundary (blunts platform-banner / rating-logo strips on scanned
+// covers). A patch may be composed of two blobs (paired corners/edges).
+//
+// TODO: a future batch job (local OCR/text-detect pass over the ~4k covers)
+// will store per-cover title bounding boxes for per-cover exclusions — it
+// REFINES this zone heuristic; it never replaces the outside-in ordering.
+
+const ZONE_SEQUENCE: { blobs: { fx: number; fy: number; scale: number }[] }[] = [
+  { blobs: [{ fx: 0.20, fy: 0.20, scale: 0.6 }, { fx: 0.80, fy: 0.80, scale: 0.6 }] }, // 1: TL + BR corners, small
+  { blobs: [{ fx: 0.80, fy: 0.20, scale: 0.6 }, { fx: 0.20, fy: 0.80, scale: 0.6 }] }, // 2: TR + BL corners, small
+  { blobs: [{ fx: 0.16, fy: 0.50, scale: 0.8 }, { fx: 0.84, fy: 0.50, scale: 0.8 }] }, // 3: left + right edge strips, mid-height
+  { blobs: [{ fx: 0.50, fy: 0.50, scale: 1.2 }] },                                     // 4: centre blob — the recognition moment
+  { blobs: [{ fx: 0.50, fy: 0.30, scale: 1.2 }] },                                     // 5: upper-centre band
+  { blobs: [{ fx: 0.50, fy: 0.72, scale: 1.25 }] },                                    // 6: lower-centre band — effectively full
+]
+
+const JITTER = 0.05      // ±5% of each dimension, within the zone
+const EDGE_INSET = 0.15  // blob centres never closer than 15% to the boundary
+const BASE_RADIUS = 0.17 // × min(w,h), scaled per zone
+
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
+
 function generatePatches(seed: number, w: number, h: number): Patch[] {
   const rng = mulberry32(seed)
-  const cells: [number, number][] = [
-    [0.25, 0.22], [0.75, 0.22],
-    [0.5, 0.5],
-    [0.25, 0.78], [0.75, 0.78],
-    [0.5, 0.85],
-  ]
-  // shuffle so the unlock ORDER varies per day too
-  for (let i = cells.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1))
-    ;[cells[i], cells[j]] = [cells[j], cells[i]]
-  }
-  return cells.slice(0, MAX_PATCHES).map(([fx, fy]) => {
-    const cx = fx * w + (rng() - 0.5) * w * 0.18
-    const cy = fy * h + (rng() - 0.5) * h * 0.18
-    const r = Math.min(w, h) * (0.13 + rng() * 0.09)
-    return { d: blobPath(cx, cy, r, rng), cx, cy }
-  })
+  return ZONE_SEQUENCE.slice(0, MAX_PATCHES).map((zone) => ({
+    paths: zone.blobs.map(({ fx, fy, scale }) => {
+      const cx = clamp(fx + (rng() - 0.5) * 2 * JITTER, EDGE_INSET, 1 - EDGE_INSET) * w
+      const cy = clamp(fy + (rng() - 0.5) * 2 * JITTER, EDGE_INSET, 1 - EDGE_INSET) * h
+      const r = Math.min(w, h) * BASE_RADIUS * scale * (0.92 + rng() * 0.16)
+      return blobPath(cx, cy, r, rng)
+    }),
+  }))
 }
 
 export default function BoxArtReveal({
@@ -106,18 +123,20 @@ export default function BoxArtReveal({
         <mask id={maskId} maskUnits="userSpaceOnUse">
           <rect width={width} height={height} fill="black" />
           <g filter={`url(#${roughId})`}>
-            {patches.map((p, i) => (
-              <path
+            {patches.map((patch, i) => (
+              <g
                 key={i}
-                d={p.d}
-                fill="white"
                 style={{
                   transformBox: 'fill-box',
                   transformOrigin: 'center',
                   transform: i < revealLevel ? 'scale(1)' : 'scale(0)',
                   transition: `transform 650ms cubic-bezier(0.34, 1.5, 0.64, 1) ${i < revealLevel ? 80 : 0}ms`,
                 }}
-              />
+              >
+                {patch.paths.map((d, j) => (
+                  <path key={j} d={d} fill="white" />
+                ))}
+              </g>
             ))}
           </g>
         </mask>
