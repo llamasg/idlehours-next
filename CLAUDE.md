@@ -68,6 +68,9 @@ src/
       game-sense/         — Daily word puzzle (fill-in-the-blank)
       street-date/        — Daily chronological sorting puzzle (7 games)
       shelf-price/        — Daily price comparison game (higher/lower)
+      box-set/            — Daily grouping puzzle (Connections-style;
+                            puzzles pre-assembled + committed, see its
+                            data/ and scripts/assemble-box-set.mjs)
       blitz/              — Rapid-fire title guessing (timed)
       jigsaw/             — Multiplayer collaborative jigsaw (Supabase)
       ship-it/            — Publishing deal negotiation game
@@ -145,13 +148,15 @@ public/
 - **Play Hub** (`/play`) — games dashboard with today's badges and
   game cards
 
-### Games (6 active)
+### Games (7 active)
 - **Game Sense** (`/play/game-sense/[date]`) — daily fill-in-the-blank,
   guess the game from clues
 - **Street Date** (`/play/street-date/[date]`) — daily sort 7 games
   chronologically, Wordle-style feedback
 - **Shelf Price** (`/play/shelf-price/[date]`) — daily higher/lower
   price comparison, 10 rounds
+- **Box Set** (`/play/box-set/[date]`) — daily Connections-style
+  grouping puzzle (block-out; playtest pending)
 - **Blitz** (`/play/blitz`) — rapid-fire title guessing by topic,
   timed with medals
 - **Jigsaw** (`/play/jigsaw`) — collaborative multiplayer puzzle via
@@ -193,7 +198,24 @@ public/
   Head of Sales
 - localStorage: `shelf_price_v2_YYYY-MM-DD`
 
-### Post-game flow (all 3 daily games)
+### Box Set (block-out — playtest pending)
+- 16 games, four hidden groups of four; select 4 → submit. Correct
+  group collapses to a tier-coloured banner; 3-of-4 = "one away",
+  still a mistake; 4 mistakes = fail (Bust), remaining groups revealed
+- 1000pts base, −250pts per mistake; fail = 0
+- Ranks: Bust → Shovelware → Starter Pack → Limited Edition →
+  Collector's Edition (holo)
+- localStorage: `box_set_YYYY-MM-DD` (prefix frozen)
+- Puzzles are NOT generated at runtime: pre-assembled from the concept
+  bank (`box-set/data/concepts.json`), human-reviewed, committed as
+  `box-set/data/puzzles/puzzles.json`. Refill:
+  `node scripts/assemble-box-set.mjs` (tests warn under 14 days of
+  buffer). Concept bank seeding: `scripts/seed-box-set-concepts.mjs`.
+  Tiers: yellow broad procedural · green narrow procedural · blue
+  thematic (tags) · purple title wordplay — zero external facts; every
+  claim verifies against GAMES_DB fields or the title string
+
+### Post-game flow (all daily games)
 - Games render an inline post-game screen (no modal). The old
   GameEndModal was removed in commit 584970e and deleted in the
   June 2026 cleanup.
