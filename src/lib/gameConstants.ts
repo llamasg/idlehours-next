@@ -8,3 +8,17 @@ export const ENTRANCE_TIMINGS = [350, 1700, 2400, 3100, 3400, 3900] as const
 
 /** Post-game entrance step gaps (ms) — drives ResultCard/badge cascade */
 export const POSTGAME_GAPS = [0, 3500, 400, 300, 300, 400, 500] as const
+
+// ── Game Sense v2 — box reveal (TUNING CONSTANTS, playtest will move these) ──
+
+/** Number of organic reveal patches on the mystery box. */
+export const GAME_SENSE_MAX_PATCHES = 6
+
+/**
+ * Best-proximity thresholds that unlock patches: best ≤ value unlocks patch N.
+ * Step function of BEST guess so far — never cumulative across guesses.
+ * NOTE: tuned against the METADATA distance distribution (RANKINGS is null —
+ * the semantic precompute never shipped). If a semantic scorer lands, these
+ * need retuning against its distribution.
+ */
+export const GAME_SENSE_REVEAL_THRESHOLDS = [1500, 600, 250, 100, 40, 12] as const

@@ -39,6 +39,11 @@ export interface GameSenseDayState {
   startedAt?: number
   /** Epoch ms when the game ended (won or lost) */
   endedAt?: number
+  /** v2: lowest NON-HINT proximity so far — drives the box-art reveal.
+   *  Revealed patches are DERIVED from this, never stored. */
+  bestProximity?: number
+  /** v2: paid spine hints (points buy facts; skill earns art). */
+  spineHints?: { pattern: boolean; firstLetter: boolean }
 }
 
 export interface StreetDateGuess {
@@ -97,6 +102,12 @@ export const gameSenseStore = createDayStore<GameSenseDayState>('game_sense_', (
     legacy.blanksRevealed = legacy.lifelinesUsed
     delete legacy.lifelinesUsed
     delete legacy.lifelinesRevealed
+  }
+  // v2 backfill: derive bestProximity for days saved before the box reveal
+  // existed (lowest non-hint guess proximity).
+  if (legacy.bestProximity === undefined && legacy.guesses?.length) {
+    const nonHint = legacy.guesses.filter((g) => !g.isHint).map((g) => g.proximity)
+    if (nonHint.length) legacy.bestProximity = Math.min(...nonHint)
   }
   return legacy
 })

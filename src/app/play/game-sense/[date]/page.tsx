@@ -31,6 +31,9 @@ import { useGameEntrance } from '@/lib/game-shell/useGameEntrance'
 import GuessInput from '../components/GuessInput'
 import GuessList from '../components/GuessList'
 import SentenceClue, { type BlankDef, BLANK_COSTS } from '../components/SentenceClue'
+import BoxArtReveal from '../components/BoxArtReveal'
+import { hashDateSeed } from '@/lib/game-shell/seededRng'
+import { GAME_SENSE_REVEAL_THRESHOLDS } from '@/lib/gameConstants'
 
 import { igdbCoverUrl } from '@/lib/imageUtils'
 import RulesModal from '../components/RulesModal'
@@ -166,6 +169,12 @@ export default function GameSenseDayPage({
       ...state,
       guesses: [...state.guesses, { gameId: game.id, proximity }],
       won,
+      // Box reveal driver: best NON-HINT proximity only — hint rows must
+      // never open the box (points buy facts; skill earns art)
+      bestProximity:
+        state.bestProximity === undefined
+          ? proximity
+          : Math.min(state.bestProximity, proximity),
     }
 
     setState(newState)
@@ -292,6 +301,12 @@ export default function GameSenseDayPage({
   const guessedIds = state.guesses.map((g) => g.gameId)
   const isAnimating = pendingGuess !== null
   const isPostGame = (state.won || state.score <= 0) && !isAnimating
+
+  // Patches are a step function of best proximity — derived, never stored
+  const revealLevel =
+    state.bestProximity === undefined
+      ? 0
+      : GAME_SENSE_REVEAL_THRESHOLDS.filter((t) => state.bestProximity! <= t).length
 
   return (
     <>
@@ -489,6 +504,23 @@ export default function GameSenseDayPage({
               className="relative z-10 mb-4 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out sm:mb-8 sm:p-6"
               style={entranceStep < 2 ? { opacity: 0, transform: 'scale(0)' } : entranceStep < 6 ? { animation: 'gs-box-in 0.7s cubic-bezier(0.34,1.5,0.64,1) both' } : undefined}
             >
+              {/* Mystery box — minimal mount for block-out; Phase 4 gives it
+                  its own column. Reveal driven by bestProximity only. */}
+              <div
+                className="mb-4 flex justify-center transition-opacity duration-300 ease-out"
+                style={{ opacity: entranceStep < 3 ? 0 : 1 }}
+              >
+                {answer.igdbImageId && (
+                  <BoxArtReveal
+                    src={igdbCoverUrl(answer.igdbImageId)}
+                    daySeed={hashDateSeed(date)}
+                    revealLevel={revealLevel}
+                    width={180}
+                    height={240}
+                  />
+                )}
+              </div>
+
               {/* Sentence clue — always mounted so box knows its final size */}
               <div
                 className="mb-4 transition-opacity duration-300 ease-out sm:mb-6"
