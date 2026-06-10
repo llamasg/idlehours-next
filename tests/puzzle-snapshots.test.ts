@@ -12,7 +12,7 @@
 
 import { describe, it, expect } from 'vitest'
 
-import { getGameIndexForDate } from '@/app/play/game-sense/lib/dateUtils'
+import { getGameIndexForDate, bandForDate } from '@/app/play/game-sense/lib/dateUtils'
 import { GAMES as GAME_SENSE_GAMES } from '@/app/play/game-sense/data/games'
 import { generatePuzzle } from '@/app/play/street-date/lib/puzzleGen'
 import { getPairsForDate } from '@/app/play/shelf-price/lib/dateUtils'
@@ -43,6 +43,26 @@ describe('game-sense daily selection', () => {
       GAME_SENSE_DATES.map((date) => {
         const index = getGameIndexForDate(date)
         return [date, { index, id: GAME_SENSE_GAMES[index].id }]
+      }),
+    )
+    expect(result).toMatchSnapshot()
+  })
+
+  // Selection V2 (weekday popularity banding) — 14 consecutive post-cutover
+  // dates = exactly two of each weekday. Pins band routing AND the
+  // rendezvous-hash pick per date.
+  it('V2 banded selection per date (post-cutover)', () => {
+    const dates = Array.from({ length: 14 }, (_, i) => {
+      const d = new Date('2026-06-15T00:00:00Z')
+      d.setUTCDate(d.getUTCDate() + i)
+      return d.toISOString().slice(0, 10)
+    })
+    const result = Object.fromEntries(
+      dates.map((date) => {
+        const index = getGameIndexForDate(date)
+        const game = GAME_SENSE_GAMES[index]
+        const weekday = new Date(`${date}T00:00:00Z`).getUTCDay()
+        return [date, { weekday, band: bandForDate(date).name, id: game.id, rank: game.popularityRank }]
       }),
     )
     expect(result).toMatchSnapshot()

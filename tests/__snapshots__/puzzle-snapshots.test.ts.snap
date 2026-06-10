@@ -1,5 +1,94 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`game-sense daily selection > V2 banded selection per date (post-cutover) 1`] = `
+{
+  "2026-06-15": {
+    "band": "mon-tue",
+    "id": "age-of-mythology",
+    "rank": 9,
+    "weekday": 1,
+  },
+  "2026-06-16": {
+    "band": "mon-tue",
+    "id": "hotline-miami",
+    "rank": 8,
+    "weekday": 2,
+  },
+  "2026-06-17": {
+    "band": "wed",
+    "id": "colin-mcrae-rally",
+    "rank": 29,
+    "weekday": 3,
+  },
+  "2026-06-18": {
+    "band": "thu",
+    "id": "mega-man-battle-network",
+    "rank": 65,
+    "weekday": 4,
+  },
+  "2026-06-19": {
+    "band": "fri",
+    "id": "warioware-inc",
+    "rank": 99,
+    "weekday": 5,
+  },
+  "2026-06-20": {
+    "band": "weekend",
+    "id": "zombiu",
+    "rank": 142,
+    "weekday": 6,
+  },
+  "2026-06-21": {
+    "band": "weekend",
+    "id": "five-nights-at-freddys-sister-location",
+    "rank": 213,
+    "weekday": 0,
+  },
+  "2026-06-22": {
+    "band": "mon-tue",
+    "id": "what-remains-of-edith-finch",
+    "rank": 9,
+    "weekday": 1,
+  },
+  "2026-06-23": {
+    "band": "mon-tue",
+    "id": "the-legend-of-zelda-a-link-between-worlds",
+    "rank": 15,
+    "weekday": 2,
+  },
+  "2026-06-24": {
+    "band": "wed",
+    "id": "grand-theft-auto-iv-the-lost-and-damned",
+    "rank": 24,
+    "weekday": 3,
+  },
+  "2026-06-25": {
+    "band": "thu",
+    "id": "condemned-2-bloodshot",
+    "rank": 76,
+    "weekday": 4,
+  },
+  "2026-06-26": {
+    "band": "fri",
+    "id": "transformers-devastation",
+    "rank": 93,
+    "weekday": 5,
+  },
+  "2026-06-27": {
+    "band": "weekend",
+    "id": "radiation-island",
+    "rank": 207,
+    "weekday": 6,
+  },
+  "2026-06-28": {
+    "band": "weekend",
+    "id": "marvels-spider-man-silver-lining",
+    "rank": 151,
+    "weekday": 0,
+  },
+}
+`;
+
 exports[`game-sense daily selection > selects the same game id per date 1`] = `
 {
   "2026-02-22": {
@@ -31,32 +120,32 @@ exports[`game-sense daily selection > selects the same game id per date 1`] = `
     "index": 434,
   },
   "2026-07-04": {
-    "id": "swat-4",
-    "index": 960,
+    "id": "no-more-room-in-hell",
+    "index": 2073,
   },
   "2026-08-30": {
-    "id": "metro-exodus",
-    "index": 3055,
+    "id": "marvel-ultimate-alliance-3-the-black-order",
+    "index": 3197,
   },
   "2026-10-31": {
-    "id": "lego-fortnite",
-    "index": 3770,
+    "id": "unity-of-command-ii",
+    "index": 3225,
   },
   "2026-12-25": {
-    "id": "kirby-squeak-squad",
-    "index": 1107,
+    "id": "shin-megami-tensei-iv",
+    "index": 2023,
   },
   "2027-01-01": {
-    "id": "subsistence",
-    "index": 2654,
+    "id": "harry-potter-and-the-goblet-of-fire",
+    "index": 1032,
   },
   "2027-02-22": {
-    "id": "ratchet-and-clank-2016",
-    "index": 2661,
+    "id": "heretic",
+    "index": 177,
   },
   "2027-06-09": {
-    "id": "pikuniku",
-    "index": 3094,
+    "id": "the-medium",
+    "index": 3424,
   },
 }
 `;
