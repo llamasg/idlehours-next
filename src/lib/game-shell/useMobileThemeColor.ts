@@ -5,9 +5,12 @@ import { useEffect } from 'react'
 // line-for-line in the game-sense and street-date pages (bar the hex);
 // shelf-price lacked it entirely.
 //
-// One fix over the originals: the media-query listener is now removed with
-// the same function reference it was added with (the originals passed a
-// fresh arrow function to removeEventListener, so the listener leaked).
+// IMPORTANT: Next.js renders and OWNS the <meta name="theme-color"> node
+// (viewport.themeColor in the root/game layouts). This hook must only update
+// that node's content attribute IN PLACE — removing or replacing the node
+// breaks Next's head reconciliation on navigation with
+// "Cannot read properties of null (reading 'removeChild')", which surfaced
+// as nav-pill clicks needing a double click.
 
 const RESTORE_HEX = '#f5f0e8'
 
@@ -24,21 +27,28 @@ export function useMobileThemeColor(hex: string) {
     applyMobileBg(mq.matches)
     mq.addEventListener('change', onChange)
 
-    // Theme-color meta for iOS status bar (always set — only iOS uses it)
-    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.remove())
-    const meta = document.createElement('meta')
-    meta.name = 'theme-color'
-    meta.content = hex
-    document.head.appendChild(meta)
+    // Update the existing Next-managed meta in place; only create one if
+    // somehow absent (root layout always renders one), and only ever remove
+    // a node this hook itself created.
+    let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+    let created = false
+    if (!meta) {
+      meta = document.createElement('meta')
+      meta.name = 'theme-color'
+      document.head.appendChild(meta)
+      created = true
+    }
+    const prevContent = meta.getAttribute('content')
+    meta.setAttribute('content', hex)
 
     return () => {
       document.body.style.backgroundColor = prevBg
       mq.removeEventListener('change', onChange)
-      meta.remove()
-      const restore = document.createElement('meta')
-      restore.name = 'theme-color'
-      restore.content = RESTORE_HEX
-      document.head.appendChild(restore)
+      if (created) {
+        meta.remove()
+      } else if (document.head.contains(meta)) {
+        meta.setAttribute('content', prevContent ?? RESTORE_HEX)
+      }
     }
   }, [hex])
 }
