@@ -82,8 +82,12 @@ src/
                             limit before launch — see Known issues)
   components/             — Shared React components
     games/                — ResultCard, DailyBadgeShelf, SplitShareButton,
-                            Confetti, GameEndModal.copy.ts (rank flavour
-                            text — live and load-bearing)
+                            Confetti, BadgeLightbox, PostGameLeftColumn,
+                            GameEndModal.copy.ts (rank flavour text —
+                            live and load-bearing)
+      shell/              — Game shell UI: GameWorld, GameTitle, ScorePill,
+                            GameNavPills, RulesModal, PlayableGuard,
+                            PostGameAnalysisCard (see Game shell section)
     homepage/             — Homepage section components
     jobs/                 — Job board components
     play/                 — Play hub cards and sections
@@ -92,8 +96,14 @@ src/
     sanity.ts             — Sanity client config
     supabase.ts           — Supabase client (nullable singleton)
     queries.ts            — All Sanity GROQ queries
-    ranks.ts              — Rank ladders for all 3 daily games (SOURCE OF TRUTH)
+    ranks.ts              — Rank ladders + GAME_THEME for the 3 daily
+                            games (SOURCE OF TRUTH)
     animations.ts         — 9 entrance animation presets + useEntranceSteps
+    game-shell/           — Game shell logic: registry.ts (per-game
+                            manifests — THE integration surface),
+                            dayStore, completion, gameDates, seededRng,
+                            useGameEntrance, useMobileThemeColor,
+                            buildShareText, formatElapsed
     jobs.ts               — Supabase CRUD for /jobs board
     dateUtils.ts          — Shared date logic (Europe/London) — the only
                             date module games should import
@@ -189,11 +199,62 @@ public/
   June 2026 cleanup.
 - `GameEndModal.copy.ts` survives it and is live: it holds rank
   flavour text consumed by ResultCard and the game pages.
-- `SplitShareButton` and `Confetti` were extracted as standalone
-  components; share UI is not currently wired into any game and is
-  planned to return with the game-shell work.
+- `SplitShareButton` is live again: it sits in every daily game's
+  post-game nav row (via `PostGameNavPills`), with per-game share text
+  built through `buildShareText`. `Confetti` remains extracted and
+  unwired.
 - Rank names + thresholds: `src/lib/ranks.ts`. Flavour text:
   `GameEndModal.copy.ts`. Changing ranks means updating BOTH.
+
+## Game shell — the shared structural layer for daily games
+
+Built June 2026. The three daily games share one implementation of
+everything structural; a game's own folder contains only its identity
+(core interaction, puzzle generation, bespoke visuals).
+
+**Logic** (`src/lib/game-shell/`): `registry.ts` defines a
+`DailyGameManifest` per game — slug, label, launchDate,
+storageKeyPrefix, dates, theme, store, `toDayResult()` (normalises the
+won/finished asymmetry into a `DayResult`), playUrl. Every shared
+consumer (archive viewer, DailyBadgeShelf, TodayCard,
+`getDailyCompletion`) iterates the registry. The persisted day-state
+shapes and their migrations live in the registry; game storage modules
+are thin bindings over the registry stores. Also here: `createDayStore`,
+`makeGameDates`, `seededRng` (mulberry32 + Street Date's LCG — both on
+purpose, outputs pinned by tests/puzzle-snapshots.test.ts),
+`useGameEntrance`, `useMobileThemeColor`, `buildShareText`,
+`formatElapsed`, `getDailyCompletion`.
+
+**UI** (`src/components/games/shell/`): `GameWorld` (gradient +
+circle-wipe), `GameTitle` (word-pop title), `ScorePill` (md/lg),
+`GameNavPills`/`PostGameNavPills`, `RulesModal` (shell; copy lives per
+game), `PlayableGuard`, `PostGameAnalysisCard` (+ `StatPillRow`,
+`CardDivider`). Theming comes from `GAME_THEME` in `src/lib/ranks.ts`
+(accent, accentDark, shadow, confetti, worldGradient, statusBarHex) —
+divergence between games happens via theme values and children/slots,
+NEVER by forking a shell component.
+
+**Share text is the one exception**: pages own their share-text memos
+(Shelf Price's emoji row needs the day's pair data, which is game
+identity). See the registry header comment before "fixing" this.
+
+**New daily game checklist** (how Memo Board / Crossword ship):
+1. Add the slug to `DailyGameSlug` in `src/lib/ranks.ts`; add its rank
+   ladder, flavour text (GameEndModal.copy.ts), badges, and GAME_THEME
+   entry.
+2. Add a `DailyGameManifest` in `src/lib/game-shell/registry.ts`
+   (state shape, store with key prefix, toDayResult, launch date).
+3. Build the game folder: `src/app/play/<slug>/` with `[date]/page.tsx`
+   composing the shell components + the game's identity components,
+   `page.tsx` today-redirect, rules copy wrapping the RulesModal shell.
+4. Add snapshot tests for its puzzle generation in tests/.
+Rules modal, playable guard, score pill, nav pills, post-game layout,
+archive integration, badge shelf, and today-card completion are
+inherited — do not rebuild them.
+
+NOT yet adopted by Blitz / Jigsaw / Ship It — their structural layers
+are still forked (a later, separate job; see audit/game-architecture.md
+table rows 1, 18, 19).
 
 ## Component rules — read before writing any UI code
 
@@ -209,9 +270,37 @@ component if an existing one can be extended or composed. If genuinely
 nothing fits, state in one sentence why before building.
 
 ### Component manifest
-<!-- GENERATE ME: walk /staging and src/components, output
-     | Component | Path | Variants/notes | — then keep in sync:
-     adding a component = adding a manifest row in the same commit -->
+
+Keep in sync: adding a component = adding a manifest row in the same
+commit. `/staging` remains the visual reference for tokens + patterns.
+
+| Component | Path (under src/components/) | Notes |
+|---|---|---|
+| Button, Badge, Input, Separator | ui/ | shadcn primitives — the building blocks |
+| Header / SiteFooter | Header.tsx, SiteFooter.tsx | global chrome |
+| ClientProviders | ClientProviders.tsx | provider stack (theme, lightbox, ClickSpark) — auth provider slots in here |
+| HomepageClient + homepage/* | HomepageClient.tsx, homepage/ | hardcoded homepage: ParallaxHero, PlayOurGames, LatestPosts, TodaysPick, WhatWerePlaying, LongRead, HomepageNewsletter, HomepageFooter |
+| GameLightbox | GameLightbox.tsx | game detail overlay (GameLightboxContext) |
+| GameTileCard, FeaturedBanner, BrowseView | (root), games/BrowseView.tsx | game library surfaces |
+| DiscoverMore | DiscoverMore.tsx | post-game "you might like" row (uses /api/featured-content) |
+| AnimatedScore | AnimatedScore.tsx | odometer-style score counter |
+| AffiliateCTA, ProductCallout, DisclosureBanner, PullQuote, StickyNote, SectionLabel, GameReferenceBlock | (root) | editorial/blog blocks |
+| BlogEngagement, NewsletterForm, ContactForm | (root) | forms + blog footer |
+| ResultCard | games/ResultCard.tsx | post-game left card: rank, badge, ladder |
+| DailyBadgeShelf | games/DailyBadgeShelf.tsx | today's three badges (reads manifest registry) |
+| PostGameLeftColumn | games/PostGameLeftColumn.tsx | badge shelf + ResultCard column |
+| BadgeLightbox | games/BadgeLightbox.tsx | badge zoom + holo effects (isHoloRank, HoloBadgeWrapper) |
+| SplitShareButton | games/SplitShareButton.tsx | copy/Twitter/Discord/email share split button |
+| Confetti | games/Confetti.tsx | win confetti (currently unwired) |
+| GameWorld | games/shell/GameWorld.tsx | game-world gradient + circle-wipe container |
+| GameTitle | games/shell/GameTitle.tsx | word-pop title/subtitle (timing knobs per game) |
+| ScorePill | games/shell/ScorePill.tsx | in-game score + pulse + floating cost (md/lg) |
+| GameNavPills / PostGameNavPills | games/shell/GameNavPills.tsx | Today's game / past games pills (+share slot) |
+| RulesModal (shell) | games/shell/RulesModal.tsx | how-to-play shell; copy lives per game |
+| PlayableGuard | games/shell/PlayableGuard.tsx | future-date guard |
+| PostGameAnalysisCard (+StatPillRow, CardDivider) | games/shell/PostGameAnalysisCard.tsx | post-game right column card |
+| TodayCard, PlayGameCard, BlitzSection, ShipItSection, JigsawSection | play/ | /play hub cards + sections |
+| JobBoard (+JobColumn, JobCard, JobModal, JobArchive) | jobs/ | internal Kanban |
 
 If a new component is genuinely needed:
 - It must be styled using existing CSS variables from globals.css
@@ -263,8 +352,9 @@ weight and size, never from typeface changes.
 - `public/fonts/Striker PersonalUseOnly.woff` is pending a licensing
   decision — do not use it in new work (see Open decisions).
 - All colour values come from CSS variables in globals.css. Never
-  inline a hex value. (Known violation to fix: Shelf Price purple
-  #5B4FCF — promote to --game-purple.)
+  inline a hex value. (`--game-purple` now exists and GAME_THEME uses
+  it; remaining inline #5B4FCF in shelf-price's RulesModal copy/hint
+  buttons sweeps with the font-consolidation pass.)
 
 ### Key conventions
 - Card shadow: `shadow-[0_3px_0_hsl(var(--game-cream-dark)),0_6px_20px_rgba(0,0,0,0.06)]`
@@ -392,6 +482,11 @@ Use these before writing new animation code.
   files.
 - **Changing game scoring/ranks:** Update `src/lib/ranks.ts` AND
   `src/components/games/GameEndModal.copy.ts`.
+- **Anything reading daily-game completion/archive state:** go through
+  the manifest registry (`src/lib/game-shell/registry.ts`) or
+  `getDailyCompletion` — never read game localStorage keys directly.
+  No file outside `src/app/play/<game>/` may import from a game folder
+  (grep-enforced invariant since the game-shell work).
 - **Modifying the games database:** Edit `src/data/games-db.ts`. Each
   game has: id, title, year, genres, platforms, igdbImageId, vibe,
   launchPriceUsd, popularityRank.
@@ -455,8 +550,16 @@ One name per concept. Use these exact terms.
 - **Flavour text** — per-rank copy in `GameEndModal.copy.ts`
 - **Post-game screen** — the inline results view shown after a daily
   game ends (there is no modal)
-- **Game shell** — (planned) the shared structural layer for all
-  games: intro/rules, post-game, streaks, share, "next game in X"
+- **Game shell** — the shared structural layer for the daily games:
+  `src/lib/game-shell/` (logic) + `src/components/games/shell/` (UI).
+  See the Game shell section.
+- **Manifest** — a game's `DailyGameManifest` entry in
+  `src/lib/game-shell/registry.ts`; the only integration surface
+  between shared code and a game
+- **Day state** — the one localStorage JSON blob per game per date
+  (shapes defined in the registry)
+- **Day result** — the normalised `DayResult` a manifest's
+  `toDayResult()` produces (played/completed/finished/won/score/rank)
 - **Shockwave / radial entrance ordering** — the page-entrance
   pattern: focal element first, then groups in increasing distance
 - **The Idle Hours Test** — coverage criteria in NORTH-STAR.md
@@ -487,11 +590,18 @@ flag it as stale.
   `pip-v1-final`; rebuild planned post-auth with real session gating.
   Do not recreate Pip routes, imports, or env vars.
 - Hostinger FTP deploy (deploy.js) → Vercel auto-deploy from `main`
+- GAME_COLORS → GAME_THEME (June 2026, game shell: extended with
+  accentDark, worldGradient, statusBarHex)
+- GameSlug (when meaning the three daily games) → DailyGameSlug;
+  GameSlug now means all six games
+- Per-game dateUtils wrapper modules → `makeGameDates(launchDate)`
+  from `src/lib/game-shell/gameDates` (the per-game files remain as
+  thin bindings)
+- /play/game-sense/archive as a link target → /play/archive?game=
+  game-sense (the redirect page remains; nav pills link directly)
 
 ## Known issues (do not "discover" these — they are known)
 
-- `TodayCard.tsx` read the dead `street_date_` v1 localStorage key —
-  fix pending (use `street_date_v3_` and `@/lib/dateUtils`)
 - `ParallaxHero.tsx` and footer link to `/posts` (404) — should be
   `/blog`
 - `/disclosure` is linked from DisclosureBanner and SiteFooter but
@@ -585,6 +695,22 @@ why things are structured the way they are.
 - This CLAUDE.md rewritten from the drift report; GLOSSARY and
   RENAME LEDGER added
 
+### June 2026 — Game shell extraction
+- Snapshot tests pin puzzle generation per date (tests/
+  puzzle-snapshots.test.ts — the refactor contract; vitest added)
+- The triplicated structural layer of the three daily games extracted
+  into src/lib/game-shell/ + src/components/games/shell/ (phases 1–6,
+  one commit each; puzzle output byte-identical throughout)
+- Per-game manifest registry created; archiveAdapter, DailyBadgeShelf,
+  TodayCard, /play, and PlayOurGames rewired through it — no shared
+  code imports from game folders any more
+- Share UI returned to all three daily games (SplitShareButton in the
+  post-game nav row); Street Date gained its missing rules modal
+  (copy pending editorial review) and playable-date guard; Shelf Price
+  gained the missing mobile status-bar treatment
+- Fixed: TodayCard v1-key bug + machine-local timezone bug
+- GAME_COLORS → GAME_THEME; --game-purple token added
+
 ## Do not change without explicit instruction
 
 1. **Games database structure** (`src/data/games-db.ts`) — the
@@ -598,8 +724,9 @@ why things are structured the way they are.
    redeployment and content migration.
 5. **Puzzle generation algorithms** — deterministic by date. Changing
    the algorithm changes every puzzle retroactively.
-6. **DailyBadgeShelf localStorage lookups** — must match the key
-   patterns used by each game's state storage.
+6. **The manifest registry** (`src/lib/game-shell/registry.ts`) — key
+   prefixes and day-state shapes are the localStorage contract; all
+   shared completion/archive reads flow through it.
 7. **The `game-container` CSS class** — forces light mode tokens
    inside game areas. Removing it breaks all game styling.
 8. **Environment variable names** — referenced across multiple files

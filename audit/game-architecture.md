@@ -85,6 +85,27 @@ Reading: the three daily games have converged on a real shared layer; **blitz an
 
 ## 3. Near-duplicate similarity table (core deliverable)
 
+> **STATUS — game-shell extraction executed 2026-06-10** (commits
+> `e559c60`…`dae71e5`, snapshot tests green throughout).
+> **RESOLVED for the daily trio:** rows 1 (PostGameAnalysisCard +
+> StatPillRow + CardDivider), 2 (shared RulesModal; Street Date gained
+> rules), 5 (buildShareText + SplitShareButton live in all three),
+> 6 (seededRng), 7 (makeGameDates), 8 (createDayStore), 9
+> (getDailyCompletion via manifest registry — both bugs fixed), 10
+> (useGameEntrance/GameWorld/GameTitle), 11 (ScorePill), 12
+> (GameNavPills, links normalised), 14 (useMobileThemeColor; Shelf
+> Price gained it), 15 (BADGE_IMAGES in ranks.ts), 16 (PlayableGuard;
+> Street Date gained it), 17 (dead modal state deleted), 20
+> (formatElapsed). §4's cross-contamination is gone — all consumers go
+> through `src/lib/game-shell/registry.ts` (grep-verified).
+> **STILL OPEN:** row 3 (next-game countdown — still unbuilt), row 4
+> (real streaks — a shell feature for the badges work), row 13
+> (today-redirect pages remain three client redirects), row 18 (toasts),
+> row 19 (blitz medal ladder), and blitz/ship-it adoption of the shell
+> (rows 1/18/19 — a later, separate job). The manifest's shareRows was
+> deliberately omitted (Shelf Price's rows need pair data — see the
+> registry header comment).
+
 | # | Structural job | Games with their own version (files) | Overlap | Unification difficulty |
 |---|---|---|---|---|
 | 1 | Post-game results screen | Daily trio share `PostGameLeftColumn` but fork the right-hand analysis card: game-sense `[date]/page.tsx:714-804`, street-date `:1027-1173`, shelf-price `:414-478` (stat-pill rows ~95% identical incl. the same time-format IIFE). Blitz `EndScreen.tsx` (347) re-implements `ResultCard` wholesale. Ship-it `EndScreen.tsx` (347) bespoke | trio ~60%; blitz-vs-ResultCard ~75% | **MEDIUM** — extract `PostGameAnalysisCard` (header + stat pills + children slot); blitz needs ResultCard to accept a custom ladder + footer slot |
