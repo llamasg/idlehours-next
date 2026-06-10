@@ -300,7 +300,7 @@ commit. `/staging` remains the visual reference for tokens + patterns.
 |---|---|---|
 | Button, Badge, Input, Separator | ui/ | shadcn primitives — the building blocks |
 | Header / SiteFooter | Header.tsx, SiteFooter.tsx | global chrome |
-| ClientProviders | ClientProviders.tsx | provider stack (theme, lightbox, ClickSpark) — auth provider slots in here |
+| ClientProviders | ClientProviders.tsx | provider stack (theme, lightbox) — auth provider slots in here |
 | HomepageClient + homepage/* | HomepageClient.tsx, homepage/ | hardcoded homepage: ParallaxHero, PlayOurGames, LatestPosts, TodaysPick, WhatWerePlaying, LongRead, HomepageNewsletter, HomepageFooter |
 | GameLightbox | GameLightbox.tsx | game detail overlay (GameLightboxContext) |
 | GameTileCard, FeaturedBanner, BrowseView | (root), games/BrowseView.tsx | game library surfaces |
@@ -621,6 +621,10 @@ flag it as stale.
   thin bindings)
 - /play/game-sense/archive as a link target → /play/archive?game=
   game-sense (the redirect page remains; nav pills link directly)
+- ClickSpark (global click-particle effect) → REMOVED June 2026: its
+  document-level click interception broke single clicks site-wide
+  (buttons needed double clicks). Do not reintroduce a global click
+  wrapper; any future spark effect must be opt-in per element.
 
 ## Known issues (do not "discover" these — they are known)
 
