@@ -1,6 +1,7 @@
 import { GAMES } from '../data/games';
 
 import { makeGameDates } from '@/lib/game-shell/gameDates';
+import { mulberry32 } from '@/lib/game-shell/seededRng';
 
 // TODO: STABILITY — daily game selection is derived from GAMES.length and array
 // shuffling. Adding games changes past date assignments. This is acceptable pre-launch
@@ -22,18 +23,6 @@ export const isPlayableDate = dates.isPlayableDate;
 export const getArchiveDates = dates.getArchiveDates;
 
 // ── Game-specific functions ────────────────────────────────────────────────
-
-/**
- * Simple seeded PRNG (mulberry32) for deterministic shuffling.
- */
-function mulberry32(seed: number) {
-  return () => {
-    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
 
 /**
  * Compute a popularity weight for a game. Higher = more likely to appear

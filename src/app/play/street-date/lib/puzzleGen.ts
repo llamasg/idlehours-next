@@ -1,4 +1,5 @@
 import { GAMES, type StreetDateGame } from '../data/games'
+import { lcgNext, lcgShuffle, lcgRandom, hashDateSeed } from '@/lib/game-shell/seededRng'
 
 // ── Named constants ──────────────────────────────────────────────────────────
 const YEAR_MIN = 1992
@@ -18,31 +19,11 @@ const POPULARITY_TIERS = [
   { min: 81, max: 999 }, // obscure
 ]
 
-// Reuse the existing seeded shuffle LCG
-function seededShuffle<T>(arr: T[], seed: number): T[] {
-  const result = [...arr]
-  let s = seed
-  for (let i = result.length - 1; i > 0; i--) {
-    s = (s * 1664525 + 1013904223) & 0x7fffffff
-    const j = s % (i + 1)
-    ;[result[i], result[j]] = [result[j], result[i]]
-  }
-  return result
-}
-
-function seededRandom(seed: number): { value: number; next: number } {
-  const next = (seed * 1664525 + 1013904223) & 0x7fffffff
-  return { value: next / 0x7fffffff, next }
-}
-
-function dateToSeed(dateStr: string): number {
-  // Simple hash from date string
-  let hash = 0
-  for (let i = 0; i < dateStr.length; i++) {
-    hash = ((hash << 5) - hash + dateStr.charCodeAt(i)) & 0x7fffffff
-  }
-  return hash || 1
-}
+// Seeded shuffle/random/hash all come from the shared LCG in
+// @/lib/game-shell/seededRng — same constants, byte-identical output.
+const seededShuffle = lcgShuffle
+const seededRandom = lcgRandom
+const dateToSeed = hashDateSeed
 
 const HAS_YEAR_IN_TITLE = /\b(19|20)\d{2}\b/
 
@@ -67,7 +48,7 @@ export function generatePuzzle(dateStr: string): PuzzleResult {
   const availableYears = [...byYear.keys()].filter(y => y >= YEAR_MIN && y <= YEAR_MAX).sort()
 
   for (let attempt = 0; attempt < MAX_GENERATION_ATTEMPTS; attempt++) {
-    seed = (seed * 1664525 + 1013904223) & 0x7fffffff
+    seed = lcgNext(seed)
     const picked = pickYearsAndGames(seed, availableYears, byYear)
     if (picked) {
       // Sort by year for correct order
@@ -111,7 +92,7 @@ function pickYearsAndGames(
   const clusterYears: number[] = []
   const clusterCandidates = availableYears.filter(y => Math.abs(y - clusterCenter) <= CLUSTER_VARIANCE)
   const shuffledCluster = seededShuffle(clusterCandidates, s)
-  s = (s * 1664525 + 1013904223) & 0x7fffffff
+  s = lcgNext(s)
   for (const y of shuffledCluster) {
     if (clusterYears.length >= 3) break
     if (!clusterYears.includes(y)) clusterYears.push(y)
@@ -123,7 +104,7 @@ function pickYearsAndGames(
   const remainingNeeded = 7 - clusterYears.length
   const spreadCandidates = availableYears.filter(y => !usedYears.has(y))
   const shuffledSpread = seededShuffle(spreadCandidates, s)
-  s = (s * 1664525 + 1013904223) & 0x7fffffff
+  s = lcgNext(s)
 
   const spreadYears: number[] = []
   for (const y of shuffledSpread) {
@@ -143,7 +124,7 @@ function pickYearsAndGames(
   const tierTargets = [...POPULARITY_TIERS]
   // Shuffle tier assignments so popular/obscure slots aren't predictable
   const shuffledTiers = seededShuffle(tierTargets, s)
-  s = (s * 1664525 + 1013904223) & 0x7fffffff
+  s = lcgNext(s)
 
   const pickedGames: StreetDateGame[] = []
 
