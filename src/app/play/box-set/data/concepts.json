@@ -2747,7 +2747,7 @@
         "star-wars-outlaws",
         "death-stranding-directors-cut"
       ],
-      "usedOn": "2026-06-10"
+      "usedOn": null
     },
     {
       "id": "yellow-strategy-1990s",
@@ -5571,7 +5571,7 @@
         "naraka-bladepoint",
         "crab-game"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-09"
     },
     {
       "id": "yellow-sport-1990s",
@@ -6272,7 +6272,7 @@
         "curse-of-the-dead-gods",
         "deep-rock-galactic-survivor"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-10"
     },
     {
       "id": "yellow-arcade-era",
@@ -6488,7 +6488,7 @@
         "sonic-cd",
         "pok-mon-firered-version"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-09"
     },
     {
       "id": "green-pegi-7",
@@ -6713,8 +6713,8 @@
       "usedOn": null
     },
     {
-      "id": "green-opencritic-rough",
-      "label": "CRITICS WERE NOT KIND (60 OR BELOW)",
+      "id": "green-critics-panned-modern",
+      "label": "MODERN GAMES THE CRITICS PANNED",
       "tier": "green",
       "type": "procedural",
       "predicate": {
@@ -6728,72 +6728,53 @@
             "field": "openCritic",
             "op": "lte",
             "value": 60
+          },
+          {
+            "field": "year",
+            "op": "gte",
+            "value": 2012
           }
         ]
       },
       "gameIds": [
-        "mario-bros",
-        "double-dragon",
-        "altered-beast",
-        "castlevania-the-adventure",
-        "street-fighter",
-        "flashback-the-quest-for-identity",
-        "spider-man",
-        "devil-may-cry-2",
-        "hexen-beyond-heretic",
-        "dungeon-keeper",
         "my-hero-ultra-rumble",
-        "sonic-3d-blast",
-        "samurai-shodown",
-        "enter-the-matrix",
         "call-of-duty-black-ops-7",
-        "primal-rage",
         "fallout-76",
         "where-winds-meet",
-        "prince-of-persia-2-the-shadow-and-the-flame",
-        "dragon-ball-z-ultimate-battle-22",
         "diablo-immortal",
-        "dragon-ball-gt-final-bout",
-        "duke-nukem-forever",
-        "shadow-the-hedgehog",
         "goat-simulator",
-        "medal-of-honor-rising-sun",
         "need-for-speed-payback",
         "smuta",
-        "vigilante-8",
-        "resident-evil-survivor",
-        "pok-mon-xd-gale-of-darkness",
-        "mario-party-5",
-        "spider-man-2-enter-electro",
-        "south-park",
-        "star-wars-episode-i-the-phantom-menace",
         "chained-together",
-        "assassins-creed-bloodlines",
         "medal-of-honor-warfighter",
-        "sonic-r",
-        "mortal-kombat-mythologies-sub-zero",
-        "driv3r",
-        "sniper-ghost-warrior",
         "suicide-squad-kill-the-justice-league",
-        "duke-nukem-manhattan-project",
         "tom-clancys-ghost-recon-breakpoint",
-        "the-simpsons-road-rage",
-        "mario-party-7",
         "shadow-warrior-3",
-        "arma-2",
         "sonic-forces",
-        "bloodrayne-2",
-        "crash-mind-over-mutant",
         "skull-and-bones",
-        "super-monkey-ball",
-        "star-fox-assault",
-        "brink",
-        "arcania-gothic-4",
-        "dragon-ball-z-sagas",
         "jump-force",
-        "medal-of-honor-allied-assault-breakthrough"
+        "hello-neighbor",
+        "crab-game",
+        "aliens-colonial-marines",
+        "nightingale",
+        "assassins-creed-liberation-hd",
+        "redfall",
+        "brawl-stars",
+        "torchlight-iii",
+        "warcraft-iii-reforged",
+        "dagon",
+        "contrast",
+        "ark-survival-ascended",
+        "resident-evil-operation-raccoon-city",
+        "a-memoir-blue",
+        "sniper-ghost-warrior-2",
+        "war-hospital",
+        "for-the-king-ii",
+        "homefront-the-revolution",
+        "the-elder-scrolls-blades",
+        "grand-theft-auto-iii-the-definitive-edition"
       ],
-      "usedOn": "2026-06-10"
+      "usedOn": null
     },
     {
       "id": "green-console-snes",
@@ -8067,7 +8048,7 @@
         "sid-meiers-alpha-centauri",
         "garou-mark-of-the-wolves"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-10"
     },
     {
       "id": "green-year-2000",
@@ -10177,6 +10158,272 @@
       "note": "shipped games that began as mods of other games"
     },
     {
+      "id": "blue-curated-battle-royale",
+      "label": "BATTLE ROYALE GIANTS",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "fortnite",
+          "pubg-battlegrounds",
+          "apex-legends",
+          "fall-guys",
+          "call-of-duty-warzone",
+          "tetris-99"
+        ]
+      },
+      "gameIds": [
+        "fortnite",
+        "apex-legends",
+        "fall-guys",
+        "pubg-battlegrounds",
+        "call-of-duty-warzone",
+        "tetris-99"
+      ],
+      "usedOn": null,
+      "note": "the big last-one-standing games"
+    },
+    {
+      "id": "blue-curated-kickstarter",
+      "label": "KICKSTARTER SUCCESS STORIES",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "shovel-knight",
+          "hollow-knight",
+          "pillars-of-eternity",
+          "divinity-original-sin",
+          "bloodstained-ritual-of-the-night",
+          "undertale",
+          "broken-age",
+          "yooka-laylee",
+          "wasteland-2",
+          "darkest-dungeon"
+        ]
+      },
+      "gameIds": [
+        "undertale",
+        "hollow-knight",
+        "shovel-knight",
+        "darkest-dungeon",
+        "pillars-of-eternity",
+        "bloodstained-ritual-of-the-night",
+        "divinity-original-sin",
+        "broken-age",
+        "yooka-laylee",
+        "wasteland-2"
+      ],
+      "usedOn": null,
+      "note": "famously crowdfunded and actually shipped"
+    },
+    {
+      "id": "blue-curated-solo-dev",
+      "label": "MADE (MOSTLY) BY ONE PERSON",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "stardew-valley",
+          "undertale",
+          "cave-story",
+          "papers-please",
+          "rollercoaster-tycoon",
+          "minecraft-java-edition",
+          "braid",
+          "fez",
+          "dust-an-elysian-tail",
+          "axiom-verge",
+          "banished"
+        ]
+      },
+      "gameIds": [
+        "undertale",
+        "stardew-valley",
+        "minecraft-java-edition",
+        "braid",
+        "papers-please",
+        "fez",
+        "rollercoaster-tycoon",
+        "axiom-verge",
+        "dust-an-elysian-tail",
+        "banished",
+        "cave-story"
+      ],
+      "usedOn": null,
+      "note": "famous solo or near-solo developed games"
+    },
+    {
+      "id": "blue-curated-pack-in",
+      "label": "CAME FREE WITH THE CONSOLE",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "wii-sports",
+          "tetris",
+          "super-mario-world",
+          "astros-playroom",
+          "wii-play",
+          "nintendo-land",
+          "duck-hunt",
+          "sonic-the-hedgehog"
+        ]
+      },
+      "gameIds": [
+        "duck-hunt",
+        "super-mario-world",
+        "wii-sports",
+        "tetris",
+        "astros-playroom",
+        "sonic-the-hedgehog",
+        "wii-play",
+        "nintendo-land"
+      ],
+      "usedOn": null,
+      "note": "famous pack-in titles (Wii Sports, GB Tetris, Genesis Sonic...)"
+    },
+    {
+      "id": "blue-curated-dev-hell",
+      "label": "ESCAPED DEVELOPMENT HELL",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "duke-nukem-forever",
+          "the-last-guardian",
+          "final-fantasy-xv",
+          "cyberpunk-2077",
+          "dead-island-2",
+          "owlboy",
+          "alan-wake",
+          "spore"
+        ]
+      },
+      "gameIds": [
+        "cyberpunk-2077",
+        "alan-wake",
+        "final-fantasy-xv",
+        "spore",
+        "dead-island-2",
+        "duke-nukem-forever",
+        "the-last-guardian",
+        "owlboy"
+      ],
+      "usedOn": null,
+      "note": "famously long/troubled development before finally shipping"
+    },
+    {
+      "id": "blue-curated-couch-coop",
+      "label": "COUCH CO-OP CLASSICS",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "overcooked",
+          "it-takes-two",
+          "castle-crashers",
+          "gang-beasts",
+          "moving-out",
+          "lovers-in-a-dangerous-spacetime",
+          "towerfall-ascension",
+          "cuphead",
+          "a-way-out",
+          "rayman-legends"
+        ]
+      },
+      "gameIds": [
+        "it-takes-two",
+        "cuphead",
+        "a-way-out",
+        "castle-crashers",
+        "rayman-legends",
+        "overcooked",
+        "gang-beasts",
+        "moving-out",
+        "lovers-in-a-dangerous-spacetime",
+        "towerfall-ascension"
+      ],
+      "usedOn": null,
+      "note": "best played on one sofa"
+    },
+    {
+      "id": "blue-curated-remakes",
+      "label": "REMADE FROM THE GROUND UP",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "resident-evil-2-remake",
+          "final-fantasy-vii-remake",
+          "demons-souls-remake",
+          "shadow-of-the-colossus-2018",
+          "mafia-definitive-edition",
+          "crash-bandicoot-n-sane-trilogy",
+          "spyro-reignited-trilogy",
+          "metroid-zero-mission"
+        ]
+      },
+      "gameIds": [
+        "final-fantasy-vii-remake",
+        "mafia-definitive-edition",
+        "metroid-zero-mission",
+        "shadow-of-the-colossus-2018",
+        "crash-bandicoot-n-sane-trilogy",
+        "demons-souls-remake",
+        "spyro-reignited-trilogy",
+        "resident-evil-2-remake"
+      ],
+      "usedOn": null,
+      "note": "full remakes, not remasters"
+    },
+    {
+      "id": "blue-curated-banned",
+      "label": "BANNED SOMEWHERE IN THE WORLD",
+      "tier": "blue",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "manhunt",
+          "manhunt-2",
+          "grand-theft-auto-san-andreas",
+          "mortal-kombat-ii",
+          "carmageddon",
+          "postal-2",
+          "hatred",
+          "wolfenstein-3d"
+        ]
+      },
+      "gameIds": [
+        "grand-theft-auto-san-andreas",
+        "postal-2",
+        "manhunt",
+        "wolfenstein-3d",
+        "mortal-kombat-ii",
+        "manhunt-2",
+        "carmageddon",
+        "hatred"
+      ],
+      "usedOn": null,
+      "note": "banned or refused classification in at least one country"
+    },
+    {
       "id": "blue-tag-magic",
       "label": "GAMES FULL OF MAGIC",
       "tier": "blue",
@@ -11439,7 +11686,7 @@
         "army-of-two-the-40th-day",
         "red-orchestra-2-heroes-of-stalingrad"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-09"
     },
     {
       "id": "blue-tag-dark-fantasy",
@@ -12564,9 +12811,20 @@
       "tier": "blue",
       "type": "tag",
       "predicate": {
-        "field": "tags",
-        "op": "includes",
-        "value": "pirates"
+        "all": [
+          {
+            "field": "tags",
+            "op": "includes",
+            "value": "pirates"
+          },
+          {
+            "field": "id",
+            "op": "notMemberOf",
+            "value": [
+              "dlc-quest"
+            ]
+          }
+        ]
       },
       "gameIds": [
         "the-secret-of-monkey-island",
@@ -12602,11 +12860,10 @@
         "croc-2",
         "risen-2-dark-waters",
         "rogue-galaxy",
-        "dlc-quest",
         "shantae-and-the-pirates-curse",
         "stacking"
       ],
-      "usedOn": "2026-06-10"
+      "usedOn": null
     },
     {
       "id": "blue-tag-dinosaurs",
@@ -13202,7 +13459,7 @@
         "wwe-smackdown-vs-raw-2011",
         "wwe-smackdown-vs-raw-2010"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-10"
     },
     {
       "id": "blue-tag-skateboarding",
@@ -16471,7 +16728,7 @@
         "diplomacy-is-not-an-option",
         "james-bond-007-everything-or-nothing"
       ],
-      "usedOn": null
+      "usedOn": "2026-06-09"
     },
     {
       "id": "purple-contains-new-old",

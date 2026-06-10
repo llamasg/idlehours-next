@@ -120,6 +120,54 @@ const CURATED = [
     note: 'shipped games that began as mods of other games',
     gameIds: ['counter-strike', 'dota-2', 'dayz', 'team-fortress-2', 'garrys-mod', 'pubg-battlegrounds', 'team-fortress-classic'],
   },
+  {
+    id: 'blue-curated-battle-royale',
+    label: 'BATTLE ROYALE GIANTS',
+    note: 'the big last-one-standing games',
+    gameIds: ['fortnite', 'pubg-battlegrounds', 'apex-legends', 'fall-guys', 'call-of-duty-warzone', 'tetris-99'],
+  },
+  {
+    id: 'blue-curated-kickstarter',
+    label: 'KICKSTARTER SUCCESS STORIES',
+    note: 'famously crowdfunded and actually shipped',
+    gameIds: ['shovel-knight', 'hollow-knight', 'pillars-of-eternity', 'divinity-original-sin', 'bloodstained-ritual-of-the-night', 'undertale', 'broken-age', 'yooka-laylee', 'wasteland-2', 'darkest-dungeon'],
+  },
+  {
+    id: 'blue-curated-solo-dev',
+    label: 'MADE (MOSTLY) BY ONE PERSON',
+    note: 'famous solo or near-solo developed games',
+    gameIds: ['stardew-valley', 'undertale', 'cave-story', 'papers-please', 'rollercoaster-tycoon', 'minecraft-java-edition', 'braid', 'fez', 'dust-an-elysian-tail', 'axiom-verge', 'banished'],
+  },
+  {
+    id: 'blue-curated-pack-in',
+    label: 'CAME FREE WITH THE CONSOLE',
+    note: 'famous pack-in titles (Wii Sports, GB Tetris, Genesis Sonic...)',
+    gameIds: ['wii-sports', 'tetris', 'super-mario-world', 'astros-playroom', 'wii-play', 'nintendo-land', 'duck-hunt', 'sonic-the-hedgehog'],
+  },
+  {
+    id: 'blue-curated-dev-hell',
+    label: 'ESCAPED DEVELOPMENT HELL',
+    note: 'famously long/troubled development before finally shipping',
+    gameIds: ['duke-nukem-forever', 'the-last-guardian', 'final-fantasy-xv', 'cyberpunk-2077', 'dead-island-2', 'owlboy', 'alan-wake', 'spore'],
+  },
+  {
+    id: 'blue-curated-couch-coop',
+    label: 'COUCH CO-OP CLASSICS',
+    note: 'best played on one sofa',
+    gameIds: ['overcooked', 'it-takes-two', 'castle-crashers', 'gang-beasts', 'moving-out', 'lovers-in-a-dangerous-spacetime', 'towerfall-ascension', 'cuphead', 'a-way-out', 'rayman-legends'],
+  },
+  {
+    id: 'blue-curated-remakes',
+    label: 'REMADE FROM THE GROUND UP',
+    note: 'full remakes, not remasters',
+    gameIds: ['resident-evil-2-remake', 'final-fantasy-vii-remake', 'demons-souls-remake', 'shadow-of-the-colossus-2018', 'mafia-definitive-edition', 'crash-bandicoot-n-sane-trilogy', 'spyro-reignited-trilogy', 'metroid-zero-mission'],
+  },
+  {
+    id: 'blue-curated-banned',
+    label: 'BANNED SOMEWHERE IN THE WORLD',
+    note: 'banned or refused classification in at least one country',
+    gameIds: ['manhunt', 'manhunt-2', 'grand-theft-auto-san-andreas', 'mortal-kombat-ii', 'carmageddon', 'postal-2', 'hatred', 'wolfenstein-3d'],
+  },
 ]
 
 // Blue tier: tag → human label. Only tags listed here are eligible — quality
@@ -362,12 +410,18 @@ bank(concepts, {
   type: 'procedural',
   predicate: { field: 'openCritic', op: 'gte', value: 90 },
 }, MIN_MATCHES) && report.green++
+// Playtest feedback: critic-reception concepts only work for games people
+// remember the discourse around — modern era only, and never pre-2012.
 bank(concepts, {
-  id: 'green-opencritic-rough',
-  label: 'CRITICS WERE NOT KIND (60 OR BELOW)',
+  id: 'green-critics-panned-modern',
+  label: 'MODERN GAMES THE CRITICS PANNED',
   tier: 'green',
   type: 'procedural',
-  predicate: { all: [{ field: 'openCritic', op: 'gte', value: 1 }, { field: 'openCritic', op: 'lte', value: 60 }] },
+  predicate: { all: [
+    { field: 'openCritic', op: 'gte', value: 1 },
+    { field: 'openCritic', op: 'lte', value: 60 },
+    { field: 'year', op: 'gte', value: 2012 },
+  ] },
 }, MIN_MATCHES) && report.green++
 for (const [consoleId, c] of Object.entries(RETRO_PLATFORMS)) {
   const r = bank(concepts, {
@@ -416,14 +470,22 @@ for (const c of CURATED) {
   r.banked ? report.blue++ : report.rejected.push(`${c.id} (${r.popular})`)
 }
 
-// BLUE — thematic via tags
+// BLUE — thematic via tags. TAG_EXCLUDES holds human-review exclusions:
+// games that technically carry the tag but make the group feel cheap.
+const TAG_EXCLUDES = {
+  pirates: ['dlc-quest'], // playtest: "a bit of everything" game, stinker pick
+}
 for (const [tag, label] of Object.entries(TAG_LABELS)) {
+  const excludes = TAG_EXCLUDES[tag]
+  const tagClause = { field: 'tags', op: 'includes', value: tag }
   const r = bank(concepts, {
     id: `blue-tag-${tag}`,
     label,
     tier: 'blue',
     type: 'tag',
-    predicate: { field: 'tags', op: 'includes', value: tag },
+    predicate: excludes
+      ? { all: [tagClause, { field: 'id', op: 'notMemberOf', value: excludes }] }
+      : tagClause,
   }, MIN_MATCHES)
   r.banked ? report.blue++ : report.rejected.push(`blue-tag-${tag} (${r.popular})`)
 }

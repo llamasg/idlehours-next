@@ -2,49 +2,164 @@
 
 exports[`box-set committed puzzles > committed puzzle data snapshot 1`] = `
 {
+  "2026-06-09": {
+    "date": "2026-06-09",
+    "groups": [
+      {
+        "conceptId": "yellow-fighting-2020s",
+        "gameIds": [
+          "tekken-8",
+          "sifu",
+          "my-hero-ultra-rumble",
+          "party-animals",
+        ],
+        "label": "2020s FIGHTING GAMES",
+        "tier": "yellow",
+      },
+      {
+        "conceptId": "green-pegi-3",
+        "gameIds": [
+          "super-mario-bros",
+          "ms-pac-man",
+          "super-mario-land-2-6-golden-coins",
+          "crash-bandicoot-2-cortex-strikes-back",
+        ],
+        "label": "RATED PEGI 3",
+        "tier": "green",
+      },
+      {
+        "conceptId": "blue-tag-war",
+        "gameIds": [
+          "halo-3-odst",
+          "hogs-of-war",
+          "call-of-duty-wwii",
+          "resistance-2",
+        ],
+        "label": "GAMES SET AT WAR",
+        "tier": "blue",
+      },
+      {
+        "conceptId": "purple-contains-negation",
+        "gameIds": [
+          "i-have-no-mouth-and-i-must-scream",
+          "ni-no-kuni-ii-revenant-kingdom",
+          "the-operative-no-one-lives-forever",
+          "diplomacy-is-not-an-option",
+        ],
+        "label": "TITLES SAYING NO",
+        "tier": "purple",
+      },
+    ],
+    "tiles": [
+      {
+        "id": "sifu",
+        "title": "Sifu",
+      },
+      {
+        "id": "ms-pac-man",
+        "title": "Ms. Pac-Man",
+      },
+      {
+        "id": "crash-bandicoot-2-cortex-strikes-back",
+        "title": "Crash Bandicoot 2: Cortex Strikes Back",
+      },
+      {
+        "id": "ni-no-kuni-ii-revenant-kingdom",
+        "title": "Ni no Kuni II: Revenant Kingdom",
+      },
+      {
+        "id": "super-mario-bros",
+        "title": "Super Mario Bros.",
+      },
+      {
+        "id": "super-mario-land-2-6-golden-coins",
+        "title": "Super Mario Land 2: 6 Golden Coins",
+      },
+      {
+        "id": "call-of-duty-wwii",
+        "title": "Call of Duty: WWII",
+      },
+      {
+        "id": "party-animals",
+        "title": "Party Animals",
+      },
+      {
+        "id": "diplomacy-is-not-an-option",
+        "title": "Diplomacy is Not an Option",
+      },
+      {
+        "id": "tekken-8",
+        "title": "Tekken 8",
+      },
+      {
+        "id": "halo-3-odst",
+        "title": "Halo 3: ODST",
+      },
+      {
+        "id": "i-have-no-mouth-and-i-must-scream",
+        "title": "I Have No Mouth, and I Must Scream",
+      },
+      {
+        "id": "resistance-2",
+        "title": "Resistance 2",
+      },
+      {
+        "id": "hogs-of-war",
+        "title": "Hogs of War",
+      },
+      {
+        "id": "the-operative-no-one-lives-forever",
+        "title": "The Operative: No One Lives Forever",
+      },
+      {
+        "id": "my-hero-ultra-rumble",
+        "title": "My Hero Ultra Rumble",
+      },
+    ],
+  },
   "2026-06-10": {
     "date": "2026-06-10",
     "groups": [
       {
-        "conceptId": "yellow-shooter-2020s",
+        "conceptId": "yellow-roguelike-2020s",
         "gameIds": [
-          "doom-the-dark-ages",
-          "xdefiant",
-          "mass-effect-legendary-edition",
-          "escape-from-tarkov",
+          "hades",
+          "balatro",
+          "returnal",
+          "slay-the-spire-2",
         ],
-        "label": "2020s SHOOTERS",
+        "label": "2020s ROGUELIKES",
         "tier": "yellow",
       },
       {
-        "conceptId": "green-opencritic-rough",
+        "conceptId": "green-year-1999",
         "gameIds": [
-          "mario-bros",
-          "south-park",
-          "chained-together",
-          "mortal-kombat-mythologies-sub-zero",
+          "driver",
+          "half-life-opposing-force",
+          "pharaoh",
+          "unreal-tournament",
         ],
-        "label": "CRITICS WERE NOT KIND (60 OR BELOW)",
+        "label": "RELEASED IN 1999",
         "tier": "green",
       },
       {
-        "conceptId": "blue-tag-pirates",
+        "conceptId": "blue-tag-wrestling",
         "gameIds": [
-          "dlc-quest",
-          "steamworld-heist",
-          "croc-2",
-          "final-fantasy-xii",
+          "wwe-smackdown-vs-raw-2007",
+          "wwe-smackdown-here-comes-the-pain",
+          "wwe-smackdown-vs-raw-2010",
+          "wwf-smackdown",
         ],
-        "label": "PIRATES INVOLVED",
+        "label": "WRESTLING GAMES",
         "tier": "blue",
       },
       {
         "conceptId": "purple-contains-cold",
         "gameIds": [
-          "horizon-zero-dawn-the-frozen-wilds",
           "ice-climber",
           "operation-flashpoint-cold-war-crisis",
-          "donkey-kong-country-tropical-freeze",
+          "cold-fear",
+          "horizon-zero-dawn-the-frozen-wilds",
         ],
         "label": "COLD TITLES",
         "tier": "purple",
@@ -52,68 +167,68 @@ exports[`box-set committed puzzles > committed puzzle data snapshot 1`] = `
     ],
     "tiles": [
       {
-        "id": "doom-the-dark-ages",
-        "title": "Doom: The Dark Ages",
+        "id": "half-life-opposing-force",
+        "title": "Half-Life: Opposing Force",
+      },
+      {
+        "id": "balatro",
+        "title": "Balatro",
+      },
+      {
+        "id": "driver",
+        "title": "Driver",
+      },
+      {
+        "id": "wwe-smackdown-here-comes-the-pain",
+        "title": "WWE Smackdown! Here Comes the Pain",
       },
       {
         "id": "horizon-zero-dawn-the-frozen-wilds",
         "title": "Horizon Zero Dawn: The Frozen Wilds",
       },
       {
-        "id": "mass-effect-legendary-edition",
-        "title": "Mass Effect Legendary Edition",
-      },
-      {
-        "id": "chained-together",
-        "title": "Chained Together",
-      },
-      {
-        "id": "steamworld-heist",
-        "title": "SteamWorld Heist",
-      },
-      {
-        "id": "dlc-quest",
-        "title": "DLC Quest",
-      },
-      {
-        "id": "escape-from-tarkov",
-        "title": "Escape from Tarkov",
-      },
-      {
-        "id": "xdefiant",
-        "title": "XDefiant",
-      },
-      {
-        "id": "south-park",
-        "title": "South Park",
-      },
-      {
-        "id": "donkey-kong-country-tropical-freeze",
-        "title": "Donkey Kong Country: Tropical Freeze",
-      },
-      {
-        "id": "final-fantasy-xii",
-        "title": "Final Fantasy XII",
-      },
-      {
-        "id": "mortal-kombat-mythologies-sub-zero",
-        "title": "Mortal Kombat Mythologies: Sub-Zero",
+        "id": "wwf-smackdown",
+        "title": "WWF SmackDown!",
       },
       {
         "id": "operation-flashpoint-cold-war-crisis",
         "title": "Operation Flashpoint: Cold War Crisis",
       },
       {
-        "id": "mario-bros",
-        "title": "Mario Bros.",
+        "id": "cold-fear",
+        "title": "Cold Fear",
+      },
+      {
+        "id": "slay-the-spire-2",
+        "title": "Slay the Spire 2",
+      },
+      {
+        "id": "wwe-smackdown-vs-raw-2007",
+        "title": "WWE SmackDown vs. Raw 2007",
+      },
+      {
+        "id": "returnal",
+        "title": "Returnal",
+      },
+      {
+        "id": "unreal-tournament",
+        "title": "Unreal Tournament",
+      },
+      {
+        "id": "wwe-smackdown-vs-raw-2010",
+        "title": "WWE SmackDown vs. Raw 2010",
+      },
+      {
+        "id": "hades",
+        "title": "Hades",
+      },
+      {
+        "id": "pharaoh",
+        "title": "Pharaoh",
       },
       {
         "id": "ice-climber",
         "title": "Ice Climber",
-      },
-      {
-        "id": "croc-2",
-        "title": "Croc 2",
       },
     ],
   },

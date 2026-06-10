@@ -93,6 +93,10 @@ export function evaluatePredicate(spec, game) {
       )
     case 'memberOf':
       return Array.isArray(spec.value) && spec.value.includes(game.id)
+    case 'notMemberOf':
+      // Human-review exclusions: technically-matching games that make a
+      // group feel cheap (e.g. DLC Quest matching the pirates tag).
+      return Array.isArray(spec.value) && !spec.value.includes(game.id)
     default:
       throw new Error(`Unknown predicate op: ${spec.op}`)
   }

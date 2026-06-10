@@ -18,7 +18,7 @@ export type ConceptType = 'procedural' | 'tag' | 'wordplay' | 'curated'
 
 export interface PredicateLeaf {
   field?: keyof GameEntry
-  op: 'includes' | 'eq' | 'gte' | 'lte' | 'between' | 'only' | 'memberOf' | 'wordplay'
+  op: 'includes' | 'eq' | 'gte' | 'lte' | 'between' | 'only' | 'memberOf' | 'notMemberOf' | 'wordplay'
   value?: unknown
   matcher?: string
 }

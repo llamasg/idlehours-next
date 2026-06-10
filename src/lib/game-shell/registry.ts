@@ -250,9 +250,9 @@ export const boxSetManifest: DailyGameManifest<BoxSetDayState> = {
   label: 'Box Set',
   emoji: '📦',
   // PROVISIONAL — first committed puzzle date; confirm before launch.
-  launchDate: '2026-06-10',
+  launchDate: '2026-06-09',
   storageKeyPrefix: 'box_set_',
-  dates: makeGameDates('2026-06-10'),
+  dates: makeGameDates('2026-06-09'),
   theme: GAME_THEME['box-set'],
   store: boxSetStore,
   loadDayState: (date) => boxSetStore.load(date),
