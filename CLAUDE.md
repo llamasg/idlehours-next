@@ -107,6 +107,10 @@ src/
                             dayStore, completion, gameDates, seededRng,
                             useGameEntrance, useMobileThemeColor,
                             buildShareText, formatElapsed
+    answerPool.ts         — answer-grade resolution: hand curation >
+                            overrides > rank mapping (pure logic in
+                            answerPool.core.mjs, shared with seeders;
+                            data in src/data/curation/)
     jobs.ts               — Supabase CRUD for /jobs board
     dateUtils.ts          — Shared date logic (Europe/London) — the only
                             date module games should import
@@ -213,9 +217,16 @@ public/
   `box-set/data/puzzles/puzzles.json`. Refill:
   `node scripts/assemble-box-set.mjs` (tests warn under 14 days of
   buffer). Concept bank seeding: `scripts/seed-box-set-concepts.mjs`.
-  Tiers: yellow broad procedural · green narrow procedural · blue
-  thematic (tags) · purple title wordplay — zero external facts; every
-  claim verifies against GAMES_DB fields or the title string
+  Tiers grade by TITLE-VISIBILITY (June 2026 re-tier): yellow franchise
+  groups + sight-obvious themes (solvable on sight) · green clear
+  genre/theme groups (vague knowledge) · blue title wordplay · purple
+  compound/attribute concepts with a cultural angle. Bare release-year
+  and bare-decade groups are retired (usedOn: 'retired'). Misdirection
+  targets the blue/purple boundary; yellow members must never
+  surface-match another group (hard assembly constraint). Franchise
+  field enriched via scripts/enrich-franchises.mjs; franchise concepts
+  seeded via scripts/seed-franchise-concepts.mjs — zero external facts;
+  every claim verifies against GAMES_DB fields or the title string
 
 ### Stock Room (block-out — playtest in progress; v2 arrange-then-check)
 - 3×3 grid: 3 row criteria × 3 column criteria; name ANY GAMES_DB game
