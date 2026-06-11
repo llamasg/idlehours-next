@@ -17183,6 +17183,1280 @@
         "pokemon-firered-leafgreen"
       ],
       "usedOn": "2026-06-24"
+    },
+    {
+      "id": "yellow-franchise-mario",
+      "label": "MARIO GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Mario"
+      },
+      "gameIds": [
+        "donkey-kong",
+        "mario-bros",
+        "super-mario-all-stars",
+        "super-smash-bros-melee",
+        "super-mario-odyssey",
+        "paper-mario",
+        "mario-paint",
+        "paper-mario-the-thousand-year-door",
+        "dr-mario",
+        "mario-kart-8-deluxe",
+        "super-mario-bros-3",
+        "super-mario-bros-wonder",
+        "mario-luigi-superstar-saga",
+        "new-super-mario-bros-wii",
+        "super-paper-mario",
+        "mario-tennis",
+        "super-mario-64-ds",
+        "mario-luigi-partners-in-time",
+        "luigis-mansion-3",
+        "super-mario-maker-2",
+        "super-mario-maker",
+        "super-mario-3d-world-bowsers-fury",
+        "super-mario-party",
+        "mario-luigi-bowsers-inside-story",
+        "mario-rabbids-kingdom-battle",
+        "new-super-mario-bros-u",
+        "super-smash-bros-for-nintendo-3ds",
+        "super-mario-world-super-mario-advance-2",
+        "mario-party-superstars",
+        "mario-sonic-at-the-olympic-games",
+        "yoshis-island-super-mario-advance-3",
+        "captain-toad-treasure-tracker",
+        "super-mario-bros-deluxe",
+        "super-mario-run",
+        "bowsers-fury",
+        "mario-power-tennis",
+        "mario-tennis-aces",
+        "paper-mario-the-origami-king",
+        "mario-golf",
+        "new-super-mario-bros-u-deluxe",
+        "mario-party-4",
+        "super-mario-advance-4-super-mario-bros-3",
+        "super-mario-3d-all-stars",
+        "nintendo-land",
+        "mario-rabbids-sparks-of-hope",
+        "super-mario-strikers",
+        "paper-mario-sticker-star",
+        "mario-luigi-dream-team",
+        "super-mario-bros-35",
+        "mario-party-10",
+        "paper-mario-color-splash",
+        "mario-kart-tour"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-mario-bros",
+      "label": "MARIO BROS. GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Mario Bros."
+      },
+      "gameIds": [
+        "super-mario-bros",
+        "super-mario-bros-2",
+        "super-mario-land",
+        "super-mario-world",
+        "super-mario-kart",
+        "super-mario-64",
+        "super-mario-world-2-yoshis-island",
+        "super-mario-bros-the-lost-levels",
+        "super-mario-land-2-6-golden-coins",
+        "mario-kart-64",
+        "super-smash-bros",
+        "new-super-mario-bros",
+        "super-mario-galaxy",
+        "super-mario-sunshine",
+        "mario-kart-double-dash",
+        "mario-kart-ds",
+        "mario-kart-wii",
+        "mario-kart-8",
+        "super-mario-rpg-legend-of-the-seven-stars",
+        "super-mario-galaxy-2",
+        "wario-land-super-mario-land-3",
+        "luigis-mansion",
+        "mario-party",
+        "mario-kart-super-circuit",
+        "super-mario-3d-land",
+        "mario-party-3",
+        "mario-kart-7",
+        "mario-party-2",
+        "mario-party-8",
+        "mario-party-5",
+        "warioware-smooth-moves",
+        "wario-land-ii",
+        "new-super-mario-bros-2",
+        "mario-party-ds",
+        "wario-land-3",
+        "warioware-touched",
+        "wario-land-4",
+        "mario-strikers-charged",
+        "mario-party-7",
+        "mario-party-6",
+        "luigis-mansion-dark-moon",
+        "mario-party-9"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-the-legend-of-zelda",
+      "label": "THE LEGEND OF ZELDA GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "The Legend of Zelda"
+      },
+      "gameIds": [
+        "the-legend-of-zelda",
+        "zelda-ii-the-adventure-of-link",
+        "the-legend-of-zelda-a-link-to-the-past",
+        "the-legend-of-zelda-breath-of-the-wild",
+        "the-legend-of-zelda-ocarina-of-time",
+        "the-legend-of-zelda-majora-s-mask",
+        "the-legend-of-zelda-tears-of-the-kingdom",
+        "the-legend-of-zelda-the-wind-waker",
+        "the-legend-of-zelda-links-awakening",
+        "the-legend-of-zelda-links-awakening-dx",
+        "the-legend-of-zelda-a-link-between-worlds",
+        "the-legend-of-zelda-the-minish-cap",
+        "the-legend-of-zelda-phantom-hourglass",
+        "the-legend-of-zelda-oracle-of-seasons",
+        "the-legend-of-zelda-ocarina-of-time-3d",
+        "the-legend-of-zelda-skyward-sword",
+        "the-legend-of-zelda-oracle-of-ages",
+        "the-legend-of-zelda-the-wind-waker-hd",
+        "the-legend-of-zelda-spirit-tracks",
+        "the-legend-of-zelda-majoras-mask-3d",
+        "the-legend-of-zelda-echoes-of-wisdom",
+        "the-legend-of-zelda-twilight-princess",
+        "the-legend-of-zelda-skyward-sword-hd",
+        "the-legend-of-zelda-four-swords-adventures",
+        "hyrule-warriors",
+        "hyrule-warriors-age-of-calamity",
+        "the-legend-of-zelda-twilight-princess-hd",
+        "cadence-of-hyrule-crypt-of-the-necrodancer-featuring-the-legend-of-zelda",
+        "the-legend-of-zelda-tri-force-heroes",
+        "the-legend-of-zelda-breath-of-the-wild-the-champions-ballad",
+        "hyrule-warriors-definitive-edition"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-assassin-s-creed",
+      "label": "ASSASSIN'S CREED GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Assassin's Creed"
+      },
+      "gameIds": [
+        "assassin-s-creed-ii",
+        "assassins-creed",
+        "assassins-creed-brotherhood",
+        "assassins-creed-iv-black-flag",
+        "assassin-s-creed-iii",
+        "assassin-s-creed-odyssey",
+        "assassin-s-creed-origins",
+        "assassins-creed-revelations",
+        "assassins-creed-unity",
+        "assassins-creed-syndicate",
+        "assassin-s-creed-shadows",
+        "assassins-creed-rogue",
+        "assassins-creed-valhalla",
+        "assassins-creed-iii-liberation",
+        "assassins-creed-freedom-cry",
+        "assassins-creed-bloodlines",
+        "assassins-creed-chronicles-china",
+        "assassins-creed-directors-cut-edition",
+        "assassins-creed-iii-remastered",
+        "assassins-creed-liberation-hd",
+        "assassins-creed-mirage",
+        "assassins-creed-unity-dead-kings",
+        "assassins-creed-chronicles-india",
+        "assassins-creed-origins-the-hidden-ones",
+        "assassins-creed-origins-the-curse-of-the-pharaohs",
+        "assassins-creed-odyssey-legacy-of-the-first-blade",
+        "assassins-creed-chronicles-russia",
+        "assassins-creed-odyssey-the-fate-of-atlantis",
+        "assassins-creed-the-ezio-collection",
+        "assassins-creed-iii-the-tyranny-of-king-washington"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-star-wars",
+      "label": "STAR WARS GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Star Wars"
+      },
+      "gameIds": [
+        "star-wars-knights-of-the-old-republic",
+        "star-wars-jedi-fallen-order",
+        "star-wars-knights-of-the-old-republic-ii-the-sith-lords",
+        "star-wars-battlefront-ii",
+        "star-wars-jedi-knight-jedi-academy",
+        "star-wars-dark-forces",
+        "star-wars-the-force-unleashed",
+        "star-wars-jedi-survivor",
+        "super-star-wars",
+        "star-wars-jedi-knight-ii-jedi-outcast",
+        "star-wars-republic-commando",
+        "star-wars-battlefront",
+        "star-wars-rogue-squadron",
+        "star-wars-jedi-knight-dark-forces-ii",
+        "star-wars-episode-i-racer",
+        "star-wars-shadows-of-the-empire",
+        "star-wars-the-force-unleashed-ii",
+        "star-wars-tie-fighter",
+        "star-wars-outlaws",
+        "star-wars-x-wing",
+        "star-wars-the-old-republic",
+        "star-wars-empire-at-war",
+        "star-wars-squadrons",
+        "star-wars-episode-i-the-phantom-menace",
+        "star-wars-galactic-battlegrounds",
+        "star-wars-rogue-squadron-ii-rogue-leader",
+        "lego-star-wars-the-force-awakens",
+        "star-wars-episode-iii-revenge-of-the-sith",
+        "angry-birds-star-wars"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-call-of-duty",
+      "label": "CALL OF DUTY GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Call of Duty"
+      },
+      "gameIds": [
+        "call-of-duty-2",
+        "call-of-duty",
+        "call-of-duty-world-at-war",
+        "call-of-duty-modern-warfare-2",
+        "call-of-duty-black-ops",
+        "call-of-duty-modern-warfare-3",
+        "call-of-duty-black-ops-6",
+        "call-of-duty-3",
+        "call-of-duty-black-ops-ii",
+        "call-of-duty-ghosts",
+        "call-of-duty-advanced-warfare",
+        "call-of-duty-modern-warfare",
+        "call-of-duty-wwii",
+        "call-of-duty-modern-warfare-ii",
+        "call-of-duty-modern-warfare-iii",
+        "call-of-duty-black-ops-7",
+        "call-of-duty-black-ops-cold-war",
+        "call-of-duty-infinite-warfare",
+        "call-of-duty-warzone",
+        "call-of-duty-united-offensive",
+        "call-of-duty-black-ops-4",
+        "call-of-duty-vanguard",
+        "call-of-duty-mobile",
+        "call-of-duty-modern-warfare-remastered",
+        "call-of-duty-modern-warfare-2-campaign-remastered",
+        "call-of-duty-2-big-red-one",
+        "call-of-duty-finest-hour",
+        "call-of-duty-4-modern-warfare",
+        "call-of-duty-black-ops-iii"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-resident-evil",
+      "label": "RESIDENT EVIL GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Resident Evil"
+      },
+      "gameIds": [
+        "resident-evil-requiem",
+        "resident-evil-village",
+        "resident-evil-3-nemesis",
+        "resident-evil-7-biohazard",
+        "resident-evil-5",
+        "resident-evil-3",
+        "resident-evil-6",
+        "resident-evil-4",
+        "resident-evil",
+        "resident-evil-zero",
+        "resident-evil-code-veronica-x",
+        "resident-evil-revelations-2",
+        "resident-evil-revelations",
+        "resident-evil-1996",
+        "resident-evil-directors-cut",
+        "resident-evil-survivor",
+        "resident-evil-0",
+        "resident-evil-2",
+        "resident-evil-outbreak",
+        "resident-evil-the-umbrella-chronicles",
+        "resident-evil-4-separate-ways",
+        "resident-evil-operation-raccoon-city",
+        "resident-evil-the-darkside-chronicles",
+        "resident-evil-7-biohazard-not-a-hero"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-castlevania",
+      "label": "CASTLEVANIA GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Castlevania"
+      },
+      "gameIds": [
+        "castlevania-symphony-of-the-night",
+        "castlevania",
+        "castlevania-iii-dracula-s-curse",
+        "castlevania-ii-simons-quest",
+        "super-castlevania-iv",
+        "castlevania-the-adventure",
+        "castlevania-rondo-of-blood",
+        "castlevania-aria-of-sorrow",
+        "castlevania-bloodlines",
+        "castlevania-ii-belmonts-revenge",
+        "castlevania-dracula-x",
+        "castlevania-lords-of-shadow",
+        "castlevania-harmony-of-dissonance",
+        "castlevania-dawn-of-sorrow",
+        "castlevania-circle-of-the-moon",
+        "castlevania-portrait-of-ruin",
+        "castlevania-order-of-ecclesia",
+        "castlevania-lament-of-innocence",
+        "castlevania-lords-of-shadow-2",
+        "castlevania-curse-of-darkness",
+        "castlevania-the-dracula-x-chronicles",
+        "castlevania-lords-of-shadow-mirror-of-fate-hd",
+        "castlevania-lords-of-shadow-mirror-of-fate"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-fallout",
+      "label": "FALLOUT GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Fallout"
+      },
+      "gameIds": [
+        "fallout-3",
+        "fallout-a-post-nuclear-role-playing-game",
+        "fallout-new-vegas",
+        "fallout-2",
+        "fallout-4",
+        "fallout-shelter",
+        "fallout-76",
+        "fallout-3-game-of-the-year-edition",
+        "fallout-tactics-brotherhood-of-steel",
+        "fallout-3-operation-anchorage",
+        "fallout-new-vegas-dead-money",
+        "fallout-3-point-lookout",
+        "fallout-new-vegas-old-world-blues",
+        "fallout-3-mothership-zeta",
+        "fallout-3-the-pitt",
+        "fallout-3-broken-steel",
+        "fallout-new-vegas-honest-hearts",
+        "fallout-new-vegas-lonesome-road",
+        "fallout-new-vegas-ultimate-edition",
+        "fallout-4-game-of-the-year-edition",
+        "fallout-4-far-harbor",
+        "fallout-4-automatron",
+        "fallout-4-nuka-world"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-grand-theft-auto",
+      "label": "GRAND THEFT AUTO GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Grand Theft Auto"
+      },
+      "gameIds": [
+        "grand-theft-auto-vice-city",
+        "grand-theft-auto-san-andreas",
+        "grand-theft-auto-iv",
+        "grand-theft-auto-v",
+        "grand-theft-auto-iii",
+        "grand-theft-auto",
+        "grand-theft-auto-liberty-city-stories",
+        "grand-theft-auto-vice-city-stories",
+        "grand-theft-auto-iv-the-lost-and-damned",
+        "grand-theft-auto-iv-the-ballad-of-gay-tony",
+        "grand-theft-auto-chinatown-wars",
+        "grand-theft-auto-episodes-from-liberty-city",
+        "grand-theft-auto-iv-complete-edition",
+        "grand-theft-auto-london-1969",
+        "grand-theft-auto-san-andreas-the-definitive-edition",
+        "grand-theft-auto-2",
+        "grand-theft-auto-iii-the-definitive-edition",
+        "grand-theft-auto-v-special-edition",
+        "grand-theft-auto-online",
+        "grand-theft-auto-v-premium-online-edition"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-the-elder-scrolls",
+      "label": "THE ELDER SCROLLS GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "The Elder Scrolls"
+      },
+      "gameIds": [
+        "the-elder-scrolls-iv-oblivion",
+        "the-elder-scrolls-v-skyrim",
+        "the-elder-scrolls-iii-morrowind",
+        "the-elder-scrolls-iv-oblivion-remastered",
+        "the-elder-scrolls-ii-daggerfall",
+        "the-elder-scrolls-arena",
+        "the-elder-scrolls-v-skyrim-special-edition",
+        "the-elder-scrolls-online",
+        "the-elder-scrolls-iv-shivering-isles",
+        "the-elder-scrolls-v-skyrim-anniversary-edition",
+        "the-elder-scrolls-iii-tribunal",
+        "the-elder-scrolls-iv-knights-of-the-nine",
+        "the-elder-scrolls-v-skyrim-dragonborn",
+        "the-elder-scrolls-iii-bloodmoon",
+        "the-elder-scrolls-v-skyrim-dawnguard",
+        "the-elder-scrolls-iv-oblivion-game-of-the-year-edition",
+        "the-elder-scrolls-v-skyrim-hearthfire",
+        "the-elder-scrolls-legends"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-warcraft",
+      "label": "WARCRAFT GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Warcraft"
+      },
+      "gameIds": [
+        "warcraft-iii-reign-of-chaos",
+        "warcraft-ii-tides-of-darkness",
+        "world-of-warcraft",
+        "warcraft-iii-the-frozen-throne",
+        "warcraft-orcs-humans",
+        "hearthstone",
+        "world-of-warcraft-the-burning-crusade",
+        "warcraft-ii-beyond-the-dark-portal",
+        "world-of-warcraft-wrath-of-the-lich-king",
+        "world-of-warcraft-cataclysm",
+        "world-of-warcraft-mists-of-pandaria",
+        "world-of-warcraft-warlords-of-draenor",
+        "world-of-warcraft-legion",
+        "world-of-warcraft-classic",
+        "world-of-warcraft-battle-for-azeroth",
+        "warcraft-iii-reforged",
+        "world-of-warcraft-shadowlands"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-batman",
+      "label": "BATMAN GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Batman"
+      },
+      "gameIds": [
+        "batman-arkham-asylum",
+        "batman-arkham-city",
+        "batman-returns",
+        "lego-batman-the-videogame",
+        "multiversus",
+        "batman-the-telltale-series",
+        "batman-arkham-asylum-game-of-the-year-edition",
+        "gotham-knights",
+        "batman-the-enemy-within",
+        "batman-arkham-city-game-of-the-year-edition",
+        "batman-arkham-city-harley-quinns-revenge",
+        "gotham-city-impostors",
+        "batman-arkham-origins-blackgate",
+        "batman-arkham-origins",
+        "batman-arkham-knight",
+        "batman-arkham-vr"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-mass-effect",
+      "label": "MASS EFFECT GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Mass Effect"
+      },
+      "gameIds": [
+        "mass-effect-2",
+        "mass-effect",
+        "mass-effect-3",
+        "mass-effect-legendary-edition",
+        "mass-effect-trilogy",
+        "mass-effect-andromeda",
+        "mass-effect-2-lair-of-the-shadow-broker",
+        "mass-effect-2-overlord",
+        "mass-effect-bring-down-the-sky",
+        "mass-effect-2-kasumi-stolen-memory",
+        "mass-effect-3-citadel",
+        "mass-effect-2-zaeed-the-price-of-revenge",
+        "mass-effect-2-arrival",
+        "mass-effect-3-leviathan",
+        "mass-effect-3-from-ashes",
+        "mass-effect-3-omega"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-halo",
+      "label": "HALO GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Halo"
+      },
+      "gameIds": [
+        "halo-2",
+        "halo-combat-evolved",
+        "halo-infinite",
+        "halo-3",
+        "halo-3-odst",
+        "halo-reach",
+        "halo-4",
+        "halo-5-guardians",
+        "halo-combat-evolved-anniversary",
+        "halo-the-master-chief-collection",
+        "halo-wars",
+        "halo-wars-2",
+        "halo-2-anniversary",
+        "halo-spartan-assault"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-half-life",
+      "label": "HALF-LIFE GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Half-Life"
+      },
+      "gameIds": [
+        "half-life",
+        "half-life-2",
+        "half-life-2-episode-one",
+        "counter-strike",
+        "half-life-2-episode-two",
+        "half-life-blue-shift",
+        "black-mesa",
+        "half-life-opposing-force",
+        "half-life-alyx",
+        "half-life-2-lost-coast",
+        "the-orange-box",
+        "half-life-source",
+        "half-life-2-deathmatch"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-uncharted",
+      "label": "UNCHARTED GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Uncharted"
+      },
+      "gameIds": [
+        "uncharted-4-a-thief-s-end",
+        "uncharted-2-among-thieves",
+        "uncharted-3-drake-s-deception",
+        "uncharted-drakes-fortune",
+        "uncharted-the-lost-legacy",
+        "uncharted-the-nathan-drake-collection",
+        "uncharted-legacy-of-thieves-collection",
+        "uncharted-4-a-thiefs-end-remastered",
+        "uncharted-2-among-thieves-remastered",
+        "uncharted-golden-abyss",
+        "uncharted-drakes-fortune-remastered",
+        "uncharted-3-drakes-deception-remastered"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-the-witcher",
+      "label": "THE WITCHER GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "The Witcher"
+      },
+      "gameIds": [
+        "the-witcher-3-wild-hunt",
+        "the-witcher-2-assassins-of-kings",
+        "the-witcher",
+        "the-witcher-3-wild-hunt-hearts-of-stone",
+        "the-witcher-3-wild-hunt-game-of-the-year-edition",
+        "the-witcher-3-wild-hunt-blood-and-wine",
+        "the-witcher-enhanced-edition",
+        "the-witcher-2-assassins-of-kings-enhanced-edition",
+        "gwent-the-witcher-card-game",
+        "thronebreaker-the-witcher-tales",
+        "the-witcher-enhanced-edition-directors-cut",
+        "the-witcher-3-wild-hunt-complete-edition"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-forza",
+      "label": "FORZA GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Forza"
+      },
+      "gameIds": [
+        "forza-horizon-5",
+        "forza-horizon-4",
+        "forza-motorsport",
+        "forza-horizon-3",
+        "forza-horizon",
+        "forza-motorsport-3",
+        "forza-horizon-2",
+        "forza-motorsport-2",
+        "forza-motorsport-4",
+        "forza-motorsport-7",
+        "forza-motorsport-6",
+        "forza-motorsport-5"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-dark-souls",
+      "label": "DARK SOULS GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Dark Souls"
+      },
+      "gameIds": [
+        "dark-souls-iii",
+        "dark-souls",
+        "dark-souls-ii",
+        "dark-souls-remastered",
+        "dark-souls-ii-scholar-of-the-first-sin",
+        "dark-souls-prepare-to-die-edition",
+        "dark-souls-iii-the-ringed-city",
+        "dark-souls-iii-ashes-of-ariandel",
+        "dark-souls-artorias-of-the-abyss",
+        "dark-souls-iii-the-fire-fades-edition",
+        "dark-souls-ii-crown-of-the-sunken-king",
+        "dark-souls-ii-crown-of-the-ivory-king"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-sid-meier",
+      "label": "SID MEIER GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Sid Meier"
+      },
+      "gameIds": [
+        "sid-meiers-civilization-v",
+        "sid-meiers-civilization-vi",
+        "civilization-iv",
+        "sid-meiers-civilization-ii",
+        "sid-meiers-civilization-iv",
+        "civilization-iii",
+        "sid-meiers-civilization-iii",
+        "sid-meiers-colonization",
+        "civilization-vii",
+        "sid-meiers-pirates",
+        "sid-meiers-civilization-beyond-earth"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-diablo",
+      "label": "DIABLO GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Diablo"
+      },
+      "gameIds": [
+        "diablo-ii",
+        "diablo",
+        "diablo-iv",
+        "diablo-iii",
+        "diablo-ii-lord-of-destruction",
+        "diablo-ii-resurrected",
+        "diablo-iii-reaper-of-souls",
+        "diablo-immortal",
+        "diablo-hellfire",
+        "diablo-iii-eternal-collection",
+        "diablo-iii-reaper-of-souls-ultimate-evil-edition"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-silent-hill",
+      "label": "SILENT HILL GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Silent Hill"
+      },
+      "gameIds": [
+        "silent-hill-2",
+        "silent-hill",
+        "silent-hill-3",
+        "silent-hill-f",
+        "silent-hill-4-the-room",
+        "silent-hill-origins",
+        "silent-hill-homecoming",
+        "silent-hill-shattered-memories",
+        "silent-hill-2-restless-dreams",
+        "silent-hill-downpour",
+        "p-t"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-hitman",
+      "label": "HITMAN GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Hitman"
+      },
+      "gameIds": [
+        "hitman-blood-money",
+        "hitman-codename-47",
+        "hitman-2-silent-assassin",
+        "hitman-absolution",
+        "hitman",
+        "hitman-3",
+        "hitman-contracts",
+        "hitman-2",
+        "hitman-world-of-assassination",
+        "hitman-go",
+        "hitman-sniper-challenge"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-battlefield",
+      "label": "BATTLEFIELD GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Battlefield"
+      },
+      "gameIds": [
+        "battlefield-4",
+        "battlefield-1",
+        "battlefield-6",
+        "battlefield-3",
+        "battlefield-2",
+        "battlefield-bad-company-2",
+        "battlefield-v",
+        "battlefield-1942",
+        "battlefield-hardline",
+        "battlefield-2042",
+        "battlefield-bad-company"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-bioshock",
+      "label": "BIOSHOCK GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Bioshock"
+      },
+      "gameIds": [
+        "bioshock",
+        "bioshock-infinite",
+        "bioshock-2",
+        "bioshock-remastered",
+        "bioshock-2-remastered",
+        "bioshock-infinite-burial-at-sea-episode-1",
+        "bioshock-2-minervas-den",
+        "bioshock-the-collection",
+        "bioshock-infinite-burial-at-sea-episode-2",
+        "bioshock-infinite-the-complete-edition",
+        "bioshock-infinite-burial-at-sea"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-doom",
+      "label": "DOOM GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Doom"
+      },
+      "gameIds": [
+        "doom",
+        "doom-ii-hell-on-earth",
+        "doom-eternal",
+        "doom-the-dark-ages",
+        "the-ultimate-doom",
+        "doom-3",
+        "doom-64",
+        "final-doom",
+        "doom-3-resurrection-of-evil",
+        "doom-3-bfg-edition"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-pok-mon",
+      "label": "POKÉMON GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Pokémon"
+      },
+      "gameIds": [
+        "pok-mon-red-version",
+        "pok-mon-blue-version",
+        "pok-mon-yellow-version-special-pikachu-edition",
+        "pokemon-emerald",
+        "pok-mon-emerald-version",
+        "pok-mon-diamond-version",
+        "pok-mon-firered-version",
+        "pok-mon-silver-version",
+        "pok-mon-gold-version",
+        "pok-mon-ruby-version"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-far-cry",
+      "label": "FAR CRY GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Far Cry"
+      },
+      "gameIds": [
+        "far-cry-3",
+        "far-cry-4",
+        "far-cry-5",
+        "far-cry-2",
+        "far-cry",
+        "far-cry-6",
+        "far-cry-primal",
+        "far-cry-3-blood-dragon",
+        "far-cry-new-dawn"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-metal-gear",
+      "label": "METAL GEAR GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Metal Gear"
+      },
+      "gameIds": [
+        "metal-gear-solid",
+        "metal-gear-solid-3-snake-eater",
+        "metal-gear-2-solid-snake",
+        "metal-gear-solid-2-sons-of-liberty",
+        "metal-gear-solid-4-guns-of-the-patriots",
+        "metal-gear-solid-v-the-phantom-pain",
+        "metal-gear-solid-delta-snake-eater",
+        "metal-gear-solid-the-twin-snakes"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-mortal-kombat",
+      "label": "MORTAL KOMBAT GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Mortal Kombat"
+      },
+      "gameIds": [
+        "ultimate-mortal-kombat-3",
+        "mortal-kombat-4",
+        "mortal-kombat-11",
+        "mortal-kombat-trilogy",
+        "mortal-kombat-x",
+        "mortal-kombat",
+        "mortal-kombat-armageddon",
+        "mortal-kombat-1"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-tekken",
+      "label": "TEKKEN GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Tekken"
+      },
+      "gameIds": [
+        "tekken-3",
+        "tekken-2",
+        "tekken-4",
+        "tekken-8",
+        "tekken-7",
+        "tekken-tag-tournament-2",
+        "tekken-5"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-gran-turismo",
+      "label": "GRAN TURISMO GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Gran Turismo"
+      },
+      "gameIds": [
+        "gran-turismo",
+        "gran-turismo-2",
+        "gran-turismo-7",
+        "gran-turismo-3-a-spec",
+        "gran-turismo-4",
+        "gran-turismo-5",
+        "gran-turismo-6"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-god-of-war",
+      "label": "GOD OF WAR GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "God of War"
+      },
+      "gameIds": [
+        "god-of-war",
+        "god-of-war-ragnarok",
+        "god-of-war-2005",
+        "god-of-war-ragnar-k",
+        "god-of-war-ii",
+        "god-of-war-iii",
+        "god-of-war-chains-of-olympus"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-the-walking-dead",
+      "label": "THE WALKING DEAD GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "The Walking Dead"
+      },
+      "gameIds": [
+        "the-walking-dead",
+        "the-walking-dead-season-two",
+        "the-walking-dead-the-final-season",
+        "the-walking-dead-a-new-frontier",
+        "the-walking-dead-400-days",
+        "the-walking-dead-the-telltale-definitive-series",
+        "the-walking-dead-survival-instinct"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-street-fighter",
+      "label": "STREET FIGHTER GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Street Fighter"
+      },
+      "gameIds": [
+        "street-fighter",
+        "street-fighter-ii-turbo",
+        "street-fighter-6",
+        "street-fighter-iv",
+        "street-fighter-v",
+        "ultra-street-fighter-iv"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-tomb-raider",
+      "label": "TOMB RAIDER GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Tomb Raider"
+      },
+      "gameIds": [
+        "tomb-raider",
+        "tomb-raider-1996",
+        "rise-of-the-tomb-raider",
+        "tomb-raider-ii",
+        "shadow-of-the-tomb-raider",
+        "tomb-raider-legend"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-marvel",
+      "label": "MARVEL GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Marvel"
+      },
+      "gameIds": [
+        "marvel-rivals",
+        "marvels-guardians-of-the-galaxy",
+        "marvels-spider-man-2",
+        "marvel-snap",
+        "marvels-avengers",
+        "lego-marvel-super-heroes-2"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-soulcalibur",
+      "label": "SOULCALIBUR GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "SoulCalibur"
+      },
+      "gameIds": [
+        "soulcalibur",
+        "soulcalibur-ii",
+        "soulcalibur-iii",
+        "soulcalibur-iv",
+        "soulcalibur-vi",
+        "soulcalibur-v"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-lego",
+      "label": "LEGO GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "LEGO"
+      },
+      "gameIds": [
+        "lego-star-wars-the-complete-saga",
+        "lego-star-wars-the-skywalker-saga",
+        "lego-star-wars-iii-the-clone-wars",
+        "lego-star-wars-ii-the-original-trilogy",
+        "lego-star-wars-the-video-game",
+        "lego-harry-potter-years-1-4"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-devil-may-cry",
+      "label": "DEVIL MAY CRY GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Devil May Cry"
+      },
+      "gameIds": [
+        "devil-may-cry",
+        "devil-may-cry-3-dantes-awakening",
+        "devil-may-cry-4",
+        "devil-may-cry-5",
+        "devil-may-cry-2",
+        "dmc-devil-may-cry"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-mafia",
+      "label": "MAFIA GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Mafia"
+      },
+      "gameIds": [
+        "mafia",
+        "mafia-ii",
+        "mafia-definitive-edition",
+        "mafia-iii",
+        "mafia-the-old-country",
+        "mafia-ii-definitive-edition"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-metro",
+      "label": "METRO GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Metro"
+      },
+      "gameIds": [
+        "metro-exodus",
+        "metro-2033",
+        "metro-last-light",
+        "metro-2033-redux",
+        "metro-last-light-redux",
+        "metro-exodus-the-two-colonels"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-darksiders",
+      "label": "DARKSIDERS GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "Darksiders"
+      },
+      "gameIds": [
+        "darksiders",
+        "darksiders-ii",
+        "darksiders-iii",
+        "darksiders-genesis",
+        "darksiders-ii-deathinitive-edition",
+        "darksiders-warmastered-edition"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-franchise-the-last-of-us",
+      "label": "THE LAST OF US GAMES",
+      "tier": "yellow",
+      "type": "procedural",
+      "predicate": {
+        "field": "franchise",
+        "op": "eq",
+        "value": "The Last of Us"
+      },
+      "gameIds": [
+        "the-last-of-us-remastered",
+        "the-last-of-us-part-ii",
+        "the-last-of-us",
+        "the-last-of-us-part-i",
+        "the-last-of-us-part-ii-remastered",
+        "the-last-of-us-left-behind"
+      ],
+      "usedOn": null
     }
   ]
 }

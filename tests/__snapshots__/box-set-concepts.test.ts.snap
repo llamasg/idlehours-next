@@ -15,7 +15,7 @@ exports[`box-set concept bank > bank composition snapshot (totals per tier) 1`] 
     "used": 12,
   },
   "yellow": {
-    "available": 0,
+    "available": 45,
     "used": 9,
   },
 }
