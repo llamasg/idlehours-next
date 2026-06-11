@@ -17252,7 +17252,7 @@
     },
     {
       "id": "yellow-franchise-mario-bros",
-      "label": "MARIO BROS. GAMES",
+      "label": "MARIO GAMES",
       "tier": "yellow",
       "type": "procedural",
       "predicate": {
@@ -17660,52 +17660,31 @@
       "usedOn": null
     },
     {
-      "id": "yellow-franchise-warcraft",
-      "label": "WARCRAFT GAMES",
-      "tier": "yellow",
-      "type": "procedural",
-      "predicate": {
-        "field": "franchise",
-        "op": "eq",
-        "value": "Warcraft"
-      },
-      "gameIds": [
-        "warcraft-iii-reign-of-chaos",
-        "warcraft-ii-tides-of-darkness",
-        "world-of-warcraft",
-        "warcraft-iii-the-frozen-throne",
-        "warcraft-orcs-humans",
-        "hearthstone",
-        "world-of-warcraft-the-burning-crusade",
-        "warcraft-ii-beyond-the-dark-portal",
-        "world-of-warcraft-wrath-of-the-lich-king",
-        "world-of-warcraft-cataclysm",
-        "world-of-warcraft-mists-of-pandaria",
-        "world-of-warcraft-warlords-of-draenor",
-        "world-of-warcraft-legion",
-        "world-of-warcraft-classic",
-        "world-of-warcraft-battle-for-azeroth",
-        "warcraft-iii-reforged",
-        "world-of-warcraft-shadowlands"
-      ],
-      "usedOn": null
-    },
-    {
       "id": "yellow-franchise-batman",
       "label": "BATMAN GAMES",
       "tier": "yellow",
       "type": "procedural",
       "predicate": {
-        "field": "franchise",
-        "op": "eq",
-        "value": "Batman"
+        "all": [
+          {
+            "field": "franchise",
+            "op": "eq",
+            "value": "Batman"
+          },
+          {
+            "field": "id",
+            "op": "notMemberOf",
+            "value": [
+              "multiversus"
+            ]
+          }
+        ]
       },
       "gameIds": [
         "batman-arkham-asylum",
         "batman-arkham-city",
         "batman-returns",
         "lego-batman-the-videogame",
-        "multiversus",
         "batman-the-telltale-series",
         "batman-arkham-asylum-game-of-the-year-edition",
         "gotham-knights",
@@ -17775,33 +17754,6 @@
         "halo-wars-2",
         "halo-2-anniversary",
         "halo-spartan-assault"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "yellow-franchise-half-life",
-      "label": "HALF-LIFE GAMES",
-      "tier": "yellow",
-      "type": "procedural",
-      "predicate": {
-        "field": "franchise",
-        "op": "eq",
-        "value": "Half-Life"
-      },
-      "gameIds": [
-        "half-life",
-        "half-life-2",
-        "half-life-2-episode-one",
-        "counter-strike",
-        "half-life-2-episode-two",
-        "half-life-blue-shift",
-        "black-mesa",
-        "half-life-opposing-force",
-        "half-life-alyx",
-        "half-life-2-lost-coast",
-        "the-orange-box",
-        "half-life-source",
-        "half-life-2-deathmatch"
       ],
       "usedOn": null
     },
@@ -17906,31 +17858,6 @@
         "dark-souls-iii-the-fire-fades-edition",
         "dark-souls-ii-crown-of-the-sunken-king",
         "dark-souls-ii-crown-of-the-ivory-king"
-      ],
-      "usedOn": null
-    },
-    {
-      "id": "yellow-franchise-sid-meier",
-      "label": "SID MEIER GAMES",
-      "tier": "yellow",
-      "type": "procedural",
-      "predicate": {
-        "field": "franchise",
-        "op": "eq",
-        "value": "Sid Meier"
-      },
-      "gameIds": [
-        "sid-meiers-civilization-v",
-        "sid-meiers-civilization-vi",
-        "civilization-iv",
-        "sid-meiers-civilization-ii",
-        "sid-meiers-civilization-iv",
-        "civilization-iii",
-        "sid-meiers-civilization-iii",
-        "sid-meiers-colonization",
-        "civilization-vii",
-        "sid-meiers-pirates",
-        "sid-meiers-civilization-beyond-earth"
       ],
       "usedOn": null
     },
@@ -18455,6 +18382,208 @@
         "the-last-of-us-part-i",
         "the-last-of-us-part-ii-remastered",
         "the-last-of-us-left-behind"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-curated-blizzard",
+      "label": "BLIZZARD GAMES",
+      "tier": "yellow",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "blackthorne",
+          "diablo",
+          "diablo-hellfire",
+          "diablo-ii",
+          "diablo-ii-lord-of-destruction",
+          "diablo-ii-resurrected",
+          "diablo-iii",
+          "diablo-iii-eternal-collection",
+          "diablo-iii-reaper-of-souls",
+          "diablo-iii-reaper-of-souls-ultimate-evil-edition",
+          "diablo-immortal",
+          "diablo-iv",
+          "hearthstone",
+          "heroes-of-the-storm",
+          "overwatch",
+          "rock-n-roll-racing",
+          "starcraft",
+          "starcraft-brood-war",
+          "starcraft-ii-heart-of-the-swarm",
+          "starcraft-ii-legacy-of-the-void",
+          "starcraft-ii-wings-of-liberty",
+          "the-lost-vikings",
+          "warcraft-ii-beyond-the-dark-portal",
+          "warcraft-ii-tides-of-darkness",
+          "warcraft-iii-reforged",
+          "warcraft-iii-reign-of-chaos",
+          "warcraft-iii-the-frozen-throne",
+          "warcraft-orcs-humans",
+          "world-of-warcraft",
+          "world-of-warcraft-battle-for-azeroth",
+          "world-of-warcraft-cataclysm",
+          "world-of-warcraft-classic",
+          "world-of-warcraft-legion",
+          "world-of-warcraft-mists-of-pandaria",
+          "world-of-warcraft-shadowlands",
+          "world-of-warcraft-the-burning-crusade",
+          "world-of-warcraft-warlords-of-draenor",
+          "world-of-warcraft-wrath-of-the-lich-king"
+        ]
+      },
+      "gameIds": [
+        "diablo-ii",
+        "warcraft-iii-reign-of-chaos",
+        "warcraft-ii-tides-of-darkness",
+        "world-of-warcraft",
+        "starcraft",
+        "warcraft-iii-the-frozen-throne",
+        "diablo",
+        "diablo-iv",
+        "overwatch",
+        "warcraft-orcs-humans",
+        "hearthstone",
+        "starcraft-ii-wings-of-liberty",
+        "diablo-iii",
+        "diablo-ii-lord-of-destruction",
+        "world-of-warcraft-the-burning-crusade",
+        "warcraft-ii-beyond-the-dark-portal",
+        "world-of-warcraft-wrath-of-the-lich-king",
+        "heroes-of-the-storm",
+        "diablo-ii-resurrected",
+        "diablo-iii-reaper-of-souls",
+        "diablo-immortal",
+        "world-of-warcraft-cataclysm",
+        "diablo-hellfire",
+        "world-of-warcraft-mists-of-pandaria",
+        "world-of-warcraft-warlords-of-draenor",
+        "world-of-warcraft-legion",
+        "world-of-warcraft-classic",
+        "world-of-warcraft-battle-for-azeroth",
+        "warcraft-iii-reforged",
+        "world-of-warcraft-shadowlands",
+        "diablo-iii-eternal-collection",
+        "diablo-iii-reaper-of-souls-ultimate-evil-edition"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-curated-valve",
+      "label": "VALVE GAMES",
+      "tier": "yellow",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "alien-swarm",
+          "aperture-desk-job",
+          "counter-strike",
+          "counter-strike-2",
+          "counter-strike-condition-zero",
+          "counter-strike-global-offensive",
+          "counter-strike-source",
+          "day-of-defeat",
+          "day-of-defeat-source",
+          "dota-2",
+          "dota-underlords",
+          "half-life",
+          "half-life-2",
+          "half-life-2-deathmatch",
+          "half-life-2-episode-one",
+          "half-life-2-episode-two",
+          "half-life-2-lost-coast",
+          "half-life-alyx",
+          "half-life-blue-shift",
+          "half-life-opposing-force",
+          "half-life-source",
+          "left-4-dead",
+          "left-4-dead-2",
+          "poker-night-at-the-inventory",
+          "portal",
+          "portal-2",
+          "team-fortress-2",
+          "team-fortress-classic",
+          "the-orange-box"
+        ]
+      },
+      "gameIds": [
+        "half-life",
+        "portal",
+        "portal-2",
+        "half-life-2",
+        "half-life-2-episode-one",
+        "counter-strike",
+        "half-life-2-episode-two",
+        "left-4-dead",
+        "left-4-dead-2",
+        "counter-strike-global-offensive",
+        "counter-strike-2",
+        "team-fortress-2",
+        "half-life-blue-shift",
+        "dota-2",
+        "half-life-opposing-force",
+        "counter-strike-source",
+        "half-life-alyx",
+        "half-life-2-lost-coast",
+        "counter-strike-condition-zero",
+        "the-orange-box",
+        "aperture-desk-job",
+        "half-life-source",
+        "team-fortress-classic",
+        "half-life-2-deathmatch",
+        "dota-underlords"
+      ],
+      "usedOn": null
+    },
+    {
+      "id": "yellow-curated-sid-meier",
+      "label": "SID MEIER GAMES",
+      "tier": "yellow",
+      "type": "curated",
+      "predicate": {
+        "field": "id",
+        "op": "memberOf",
+        "value": [
+          "civilization-iii",
+          "civilization-iv",
+          "civilization-v",
+          "civilization-vi",
+          "civilization-vii",
+          "sid-meiers-alpha-centauri",
+          "sid-meiers-civilization",
+          "sid-meiers-civilization-beyond-earth",
+          "sid-meiers-civilization-ii",
+          "sid-meiers-civilization-iii",
+          "sid-meiers-civilization-iv",
+          "sid-meiers-civilization-iv-beyond-the-sword",
+          "sid-meiers-civilization-revolution",
+          "sid-meiers-civilization-v",
+          "sid-meiers-civilization-v-brave-new-world",
+          "sid-meiers-civilization-v-gods-kings",
+          "sid-meiers-civilization-vi",
+          "sid-meiers-colonization",
+          "sid-meiers-pirates"
+        ]
+      },
+      "gameIds": [
+        "sid-meiers-civilization",
+        "sid-meiers-civilization-v",
+        "sid-meiers-civilization-vi",
+        "civilization-iv",
+        "sid-meiers-civilization-ii",
+        "sid-meiers-civilization-iv",
+        "civilization-iii",
+        "sid-meiers-civilization-iii",
+        "sid-meiers-colonization",
+        "civilization-vii",
+        "sid-meiers-pirates",
+        "sid-meiers-civilization-beyond-earth",
+        "civilization-v",
+        "civilization-vi"
       ],
       "usedOn": null
     }
