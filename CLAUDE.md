@@ -148,7 +148,7 @@ public/
 - **Play Hub** (`/play`) — games dashboard with today's badges and
   game cards
 
-### Games (7 active)
+### Games (8 active)
 - **Game Sense** (`/play/game-sense/[date]`) — daily fill-in-the-blank,
   guess the game from clues
 - **Street Date** (`/play/street-date/[date]`) — daily sort 7 games
@@ -157,6 +157,8 @@ public/
   price comparison, 10 rounds
 - **Box Set** (`/play/box-set/[date]`) — daily Connections-style
   grouping puzzle (block-out; playtest pending)
+- **Stock Room** (`/play/stock-room/[date]`) — daily 3×3 criteria grid,
+  Immaculate-Grid-style (block-out; playtest in progress)
 - **Blitz** (`/play/blitz`) — rapid-fire title guessing by topic,
   timed with medals
 - **Jigsaw** (`/play/jigsaw`) — collaborative multiplayer puzzle via
@@ -214,6 +216,27 @@ public/
   Tiers: yellow broad procedural · green narrow procedural · blue
   thematic (tags) · purple title wordplay — zero external facts; every
   claim verifies against GAMES_DB fields or the title string
+
+### Stock Room (block-out — playtest in progress; v2 arrange-then-check)
+- 3×3 grid: 3 row criteria × 3 column criteria; name ANY GAMES_DB game
+  that fits both axes of a cell. Platforms count ports/remasters (the
+  rules copy must keep saying so — players dispute platform answers)
+- Arrange-then-check: placements are free and rearrangeable (tap-to-
+  move/swap/remove, Street Date grammar); no-reuse — a game appears at
+  most once per board. CHECK (at 9/9 placed) marks wrong cells red;
+  rearrange and check again. There are NO per-placement penalties
+- 1000pts − 250 per extra check, floor 250 for any completed board;
+  give-up is the only Bust. Rarity (mean answer obscurity, 0–100,
+  population-percentile) is the style stat; time displayed, never scored
+- End screen always shows a fully finished board — `solveBoard()` fills
+  unfinished cells with valid answers (italic)
+- Ranks: Bust → Work Experience → Shelf Stacker → Keyholder →
+  Franchise Owner (holo, first-check 1000)
+- localStorage: `stock_room_YYYY-MM-DD` (prefix frozen)
+- Boards generated at runtime, seeded per date: `lib/criteria.ts`
+  (32-criterion catalog) + `lib/boardGen.ts` (variety rules, every cell
+  ≥15 answers, full no-reuse assignment verified). Zero external facts —
+  every criterion tests GAMES_DB fields
 
 ### Post-game flow (all daily games)
 - Games render an inline post-game screen (no modal). The old
