@@ -297,9 +297,9 @@ export const stockRoomManifest: DailyGameManifest<StockRoomDayState> = {
   label: 'Stock Room',
   emoji: '🛒',
   // PROVISIONAL — confirm before launch.
-  launchDate: '2026-06-15',
+  launchDate: '2026-06-11',
   storageKeyPrefix: 'stock_room_',
-  dates: makeGameDates('2026-06-15'),
+  dates: makeGameDates('2026-06-11'),
   theme: GAME_THEME['stock-room'],
   store: stockRoomStore,
   loadDayState: (date) => stockRoomStore.load(date),

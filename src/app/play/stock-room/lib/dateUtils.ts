@@ -3,7 +3,7 @@
 
 import { makeGameDates } from '@/lib/game-shell/gameDates'
 
-const dates = makeGameDates('2026-06-15') // PROVISIONAL launch date
+const dates = makeGameDates('2026-06-11') // PROVISIONAL launch date
 
 export const LAUNCH_DATE = dates.LAUNCH_DATE
 export { getTodayDateString, formatDisplayDate, isToday } from '@/lib/dateUtils'
