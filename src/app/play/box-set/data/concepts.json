@@ -3,7 +3,7 @@
     {
       "id": "yellow-genre-adventure",
       "label": "ADVENTURE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -77,7 +77,7 @@
     {
       "id": "yellow-genre-rpg",
       "label": "RPGS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -151,7 +151,7 @@
     {
       "id": "yellow-genre-shooter",
       "label": "SHOOTERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -225,7 +225,7 @@
     {
       "id": "yellow-genre-strategy",
       "label": "STRATEGY GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -299,7 +299,7 @@
     {
       "id": "yellow-genre-action",
       "label": "ACTION GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -373,7 +373,7 @@
     {
       "id": "yellow-genre-puzzle",
       "label": "PUZZLE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -447,7 +447,7 @@
     {
       "id": "yellow-genre-indie",
       "label": "INDIE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -521,7 +521,7 @@
     {
       "id": "yellow-genre-platform",
       "label": "PLATFORMERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -595,7 +595,7 @@
     {
       "id": "yellow-genre-simulator",
       "label": "SIMULATORS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -669,7 +669,7 @@
     {
       "id": "yellow-genre-racing",
       "label": "RACING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -743,7 +743,7 @@
     {
       "id": "yellow-genre-arcade",
       "label": "ARCADE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -817,7 +817,7 @@
     {
       "id": "yellow-genre-fighting",
       "label": "FIGHTING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -891,7 +891,7 @@
     {
       "id": "yellow-genre-sport",
       "label": "SPORTS GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -965,7 +965,7 @@
     {
       "id": "yellow-genre-survival",
       "label": "SURVIVAL GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -1039,7 +1039,7 @@
     {
       "id": "yellow-genre-horror",
       "label": "HORROR GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -1113,7 +1113,7 @@
     {
       "id": "yellow-genre-sandbox",
       "label": "SANDBOX GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -1163,7 +1163,7 @@
     {
       "id": "yellow-genre-music",
       "label": "MUSIC GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -1206,7 +1206,7 @@
     {
       "id": "yellow-genre-roguelike",
       "label": "ROGUELIKES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -1235,7 +1235,7 @@
     {
       "id": "yellow-genre-metroidvania",
       "label": "METROIDVANIAS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "field": "genres",
@@ -1324,7 +1324,7 @@
         "metal-gear",
         "california-games"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "yellow-decade-1990s",
@@ -1401,7 +1401,7 @@
         "crash-bandicoot-warped",
         "super-smash-bros"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "yellow-decade-2000s",
@@ -1478,7 +1478,7 @@
         "left-4-dead",
         "left-4-dead-2"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "yellow-decade-2010s",
@@ -1555,7 +1555,7 @@
         "assassin-s-creed-odyssey",
         "outer-wilds"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "yellow-decade-2020s",
@@ -1632,12 +1632,12 @@
         "the-quarry",
         "alan-wake-2"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "yellow-adventure-1980s",
       "label": "1980s ADVENTURE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -1684,7 +1684,7 @@
     {
       "id": "yellow-adventure-1990s",
       "label": "1990s ADVENTURE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -1770,7 +1770,7 @@
     {
       "id": "yellow-adventure-2000s",
       "label": "2000s ADVENTURE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -1856,7 +1856,7 @@
     {
       "id": "yellow-adventure-2010s",
       "label": "2010s ADVENTURE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -1942,7 +1942,7 @@
     {
       "id": "yellow-adventure-2020s",
       "label": "2020s ADVENTURE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2028,7 +2028,7 @@
     {
       "id": "yellow-rpg-1990s",
       "label": "1990s RPGS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2114,7 +2114,7 @@
     {
       "id": "yellow-rpg-2000s",
       "label": "2000s RPGS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2200,7 +2200,7 @@
     {
       "id": "yellow-rpg-2010s",
       "label": "2010s RPGS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2286,7 +2286,7 @@
     {
       "id": "yellow-rpg-2020s",
       "label": "2020s RPGS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2372,7 +2372,7 @@
     {
       "id": "yellow-shooter-1980s",
       "label": "1980s SHOOTERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2408,7 +2408,7 @@
     {
       "id": "yellow-shooter-1990s",
       "label": "1990s SHOOTERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2494,7 +2494,7 @@
     {
       "id": "yellow-shooter-2000s",
       "label": "2000s SHOOTERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2580,7 +2580,7 @@
     {
       "id": "yellow-shooter-2010s",
       "label": "2010s SHOOTERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2666,7 +2666,7 @@
     {
       "id": "yellow-shooter-2020s",
       "label": "2020s SHOOTERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2752,7 +2752,7 @@
     {
       "id": "yellow-strategy-1990s",
       "label": "1990s STRATEGY GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2838,7 +2838,7 @@
     {
       "id": "yellow-strategy-2000s",
       "label": "2000s STRATEGY GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -2924,7 +2924,7 @@
     {
       "id": "yellow-strategy-2010s",
       "label": "2010s STRATEGY GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3010,7 +3010,7 @@
     {
       "id": "yellow-strategy-2020s",
       "label": "2020s STRATEGY GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3096,7 +3096,7 @@
     {
       "id": "yellow-action-1980s",
       "label": "1980s ACTION GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3133,7 +3133,7 @@
     {
       "id": "yellow-action-1990s",
       "label": "1990s ACTION GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3219,7 +3219,7 @@
     {
       "id": "yellow-action-2000s",
       "label": "2000s ACTION GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3305,7 +3305,7 @@
     {
       "id": "yellow-action-2010s",
       "label": "2010s ACTION GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3391,7 +3391,7 @@
     {
       "id": "yellow-action-2020s",
       "label": "2020s ACTION GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3477,7 +3477,7 @@
     {
       "id": "yellow-puzzle-1980s",
       "label": "1980s PUZZLE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3509,7 +3509,7 @@
     {
       "id": "yellow-puzzle-1990s",
       "label": "1990s PUZZLE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3585,7 +3585,7 @@
     {
       "id": "yellow-puzzle-2000s",
       "label": "2000s PUZZLE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3671,7 +3671,7 @@
     {
       "id": "yellow-puzzle-2010s",
       "label": "2010s PUZZLE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3757,7 +3757,7 @@
     {
       "id": "yellow-puzzle-2020s",
       "label": "2020s PUZZLE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3843,7 +3843,7 @@
     {
       "id": "yellow-indie-2000s",
       "label": "2000s INDIE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3899,7 +3899,7 @@
     {
       "id": "yellow-indie-2010s",
       "label": "2010s INDIE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -3985,7 +3985,7 @@
     {
       "id": "yellow-indie-2020s",
       "label": "2020s INDIE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4071,7 +4071,7 @@
     {
       "id": "yellow-platform-1980s",
       "label": "1980s PLATFORMERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4120,7 +4120,7 @@
     {
       "id": "yellow-platform-1990s",
       "label": "1990s PLATFORMERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4206,7 +4206,7 @@
     {
       "id": "yellow-platform-2000s",
       "label": "2000s PLATFORMERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4292,7 +4292,7 @@
     {
       "id": "yellow-platform-2010s",
       "label": "2010s PLATFORMERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4378,7 +4378,7 @@
     {
       "id": "yellow-platform-2020s",
       "label": "2020s PLATFORMERS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4450,7 +4450,7 @@
     {
       "id": "yellow-simulator-1990s",
       "label": "1990s SIMULATORS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4511,7 +4511,7 @@
     {
       "id": "yellow-simulator-2000s",
       "label": "2000s SIMULATORS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4597,7 +4597,7 @@
     {
       "id": "yellow-simulator-2010s",
       "label": "2010s SIMULATORS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4683,7 +4683,7 @@
     {
       "id": "yellow-simulator-2020s",
       "label": "2020s SIMULATORS",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4766,7 +4766,7 @@
     {
       "id": "yellow-racing-1990s",
       "label": "1990s RACING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4827,7 +4827,7 @@
     {
       "id": "yellow-racing-2000s",
       "label": "2000s RACING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4913,7 +4913,7 @@
     {
       "id": "yellow-racing-2010s",
       "label": "2010s RACING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -4991,7 +4991,7 @@
     {
       "id": "yellow-racing-2020s",
       "label": "2020s RACING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5030,7 +5030,7 @@
     {
       "id": "yellow-arcade-1980s",
       "label": "1980s ARCADE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5079,7 +5079,7 @@
     {
       "id": "yellow-arcade-1990s",
       "label": "1990s ARCADE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5143,7 +5143,7 @@
     {
       "id": "yellow-arcade-2000s",
       "label": "2000s ARCADE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5199,7 +5199,7 @@
     {
       "id": "yellow-arcade-2010s",
       "label": "2010s ARCADE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5285,7 +5285,7 @@
     {
       "id": "yellow-arcade-2020s",
       "label": "2020s ARCADE GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5326,7 +5326,7 @@
     {
       "id": "yellow-fighting-1990s",
       "label": "1990s FIGHTING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5389,7 +5389,7 @@
     {
       "id": "yellow-fighting-2000s",
       "label": "2000s FIGHTING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5466,7 +5466,7 @@
     {
       "id": "yellow-fighting-2010s",
       "label": "2010s FIGHTING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5534,7 +5534,7 @@
     {
       "id": "yellow-fighting-2020s",
       "label": "2020s FIGHTING GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5576,7 +5576,7 @@
     {
       "id": "yellow-sport-1990s",
       "label": "1990s SPORTS GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5615,7 +5615,7 @@
     {
       "id": "yellow-sport-2000s",
       "label": "2000s SPORTS GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5692,7 +5692,7 @@
     {
       "id": "yellow-sport-2010s",
       "label": "2010s SPORTS GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5755,7 +5755,7 @@
     {
       "id": "yellow-sport-2020s",
       "label": "2020s SPORTS GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5796,7 +5796,7 @@
     {
       "id": "yellow-survival-2010s",
       "label": "2010s SURVIVAL GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5852,7 +5852,7 @@
     {
       "id": "yellow-survival-2020s",
       "label": "2020s SURVIVAL GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5916,7 +5916,7 @@
     {
       "id": "yellow-horror-1990s",
       "label": "1990s HORROR GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5948,7 +5948,7 @@
     {
       "id": "yellow-horror-2000s",
       "label": "2000s HORROR GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -5985,7 +5985,7 @@
     {
       "id": "yellow-horror-2010s",
       "label": "2010s HORROR GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -6035,7 +6035,7 @@
     {
       "id": "yellow-horror-2020s",
       "label": "2020s HORROR GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -6080,7 +6080,7 @@
     {
       "id": "yellow-sandbox-2010s",
       "label": "2010s SANDBOX GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -6119,7 +6119,7 @@
     {
       "id": "yellow-sandbox-2020s",
       "label": "2020s SANDBOX GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -6165,7 +6165,7 @@
     {
       "id": "yellow-music-2000s",
       "label": "2000s MUSIC GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -6208,7 +6208,7 @@
     {
       "id": "yellow-music-2010s",
       "label": "2010s MUSIC GAMES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -6241,7 +6241,7 @@
     {
       "id": "yellow-roguelike-2020s",
       "label": "2020s ROGUELIKES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -6277,7 +6277,7 @@
     {
       "id": "yellow-arcade-era",
       "label": "STARTED IN THE ARCADES",
-      "tier": "yellow",
+      "tier": "green",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -6345,7 +6345,7 @@
     {
       "id": "green-price-free",
       "label": "FREE AT LAUNCH",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "launchPriceUsd",
@@ -6562,12 +6562,12 @@
         "myst",
         "journey"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-pegi-18",
       "label": "STRICTLY FOR ADULTS (PEGI 18)",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "pegi",
@@ -6641,7 +6641,7 @@
     {
       "id": "green-opencritic-90s",
       "label": "CRITICS SCORED THESE 90+",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "openCritic",
@@ -6715,7 +6715,7 @@
     {
       "id": "green-critics-panned-modern",
       "label": "MODERN GAMES THE CRITICS PANNED",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -6779,7 +6779,7 @@
     {
       "id": "green-console-snes",
       "label": "PLAYABLE ON THE SNES",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
@@ -6839,7 +6839,7 @@
     {
       "id": "green-console-n64",
       "label": "PLAYABLE ON THE N64",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
@@ -6892,7 +6892,7 @@
     {
       "id": "green-console-gamecube",
       "label": "PLAYABLE ON THE GAMECUBE",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
@@ -6966,7 +6966,7 @@
     {
       "id": "green-console-gameboy",
       "label": "PLAYABLE ON THE GAME BOY",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
@@ -7040,7 +7040,7 @@
     {
       "id": "green-console-ps1",
       "label": "PLAYABLE ON THE PS1",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
@@ -7114,7 +7114,7 @@
     {
       "id": "green-console-psp",
       "label": "PLAYABLE ON THE PSP",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
@@ -7188,7 +7188,7 @@
     {
       "id": "green-console-ds",
       "label": "PLAYABLE ON THE DS",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
@@ -7257,7 +7257,7 @@
     {
       "id": "green-console-wii",
       "label": "PLAYABLE ON THE WII",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
@@ -7331,7 +7331,7 @@
     {
       "id": "green-console-3ds",
       "label": "PLAYABLE ON THE 3DS",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "field": "platforms",
@@ -7405,7 +7405,7 @@
     {
       "id": "green-ps5-early",
       "label": "EARLY PS5 GAMES (2020-21)",
-      "tier": "green",
+      "tier": "purple",
       "type": "procedural",
       "predicate": {
         "all": [
@@ -7717,7 +7717,7 @@
         "disneys-the-jungle-book",
         "mortal-kombat-ii"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-1995",
@@ -7974,7 +7974,7 @@
         "turok-2-seeds-of-evil",
         "sonic-r"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-1999",
@@ -8196,7 +8196,7 @@
         "ssx-tricky",
         "cossacks-european-wars"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-2002",
@@ -8344,7 +8344,7 @@
         "alien-shooter",
         "wolfenstein-enemy-territory"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-2004",
@@ -8492,7 +8492,7 @@
         "call-of-duty-2-big-red-one",
         "yakuza"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-2006",
@@ -9084,7 +9084,7 @@
         "guacamelee",
         "project-zomboid"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-2014",
@@ -9158,7 +9158,7 @@
         "sherlock-holmes-crimes-punishments",
         "the-crew"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-2015",
@@ -9232,7 +9232,7 @@
         "mini-metro",
         "assassins-creed-chronicles-china"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-2016",
@@ -9602,7 +9602,7 @@
         "mortal-shell",
         "trackmania"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-2021",
@@ -9750,7 +9750,7 @@
         "xenoblade-chronicles-3",
         "sniper-elite-5"
       ],
-      "usedOn": null
+      "usedOn": "retired"
     },
     {
       "id": "green-year-2023",
@@ -9964,7 +9964,7 @@
     {
       "id": "blue-curated-tga-goty",
       "label": "WON GAME OF THE YEAR AT THE GAME AWARDS",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10002,7 +10002,7 @@
     {
       "id": "blue-curated-mmo",
       "label": "FAMOUS MMOS",
-      "tier": "blue",
+      "tier": "green",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10036,7 +10036,7 @@
     {
       "id": "blue-curated-esports",
       "label": "ESPORTS MAINSTAYS",
-      "tier": "blue",
+      "tier": "green",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10072,7 +10072,7 @@
     {
       "id": "blue-curated-rough-launch",
       "label": "NOTORIOUSLY ROUGH LAUNCHES",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10102,7 +10102,7 @@
     {
       "id": "blue-curated-controversial-sequel",
       "label": "SEQUELS THAT SPLIT THE FANBASE",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10130,7 +10130,7 @@
     {
       "id": "blue-curated-started-as-mods",
       "label": "STARTED LIFE AS A MOD",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10160,7 +10160,7 @@
     {
       "id": "blue-curated-battle-royale",
       "label": "BATTLE ROYALE GIANTS",
-      "tier": "blue",
+      "tier": "green",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10188,7 +10188,7 @@
     {
       "id": "blue-curated-kickstarter",
       "label": "KICKSTARTER SUCCESS STORIES",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10224,7 +10224,7 @@
     {
       "id": "blue-curated-solo-dev",
       "label": "MADE (MOSTLY) BY ONE PERSON",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10262,7 +10262,7 @@
     {
       "id": "blue-curated-pack-in",
       "label": "CAME FREE WITH THE CONSOLE",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10294,7 +10294,7 @@
     {
       "id": "blue-curated-dev-hell",
       "label": "ESCAPED DEVELOPMENT HELL",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10326,7 +10326,7 @@
     {
       "id": "blue-curated-couch-coop",
       "label": "COUCH CO-OP CLASSICS",
-      "tier": "blue",
+      "tier": "green",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10362,7 +10362,7 @@
     {
       "id": "blue-curated-remakes",
       "label": "REMADE FROM THE GROUND UP",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10394,7 +10394,7 @@
     {
       "id": "blue-curated-banned",
       "label": "BANNED SOMEWHERE IN THE WORLD",
-      "tier": "blue",
+      "tier": "purple",
       "type": "curated",
       "predicate": {
         "field": "id",
@@ -10426,7 +10426,7 @@
     {
       "id": "blue-tag-magic",
       "label": "GAMES FULL OF MAGIC",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -10500,7 +10500,7 @@
     {
       "id": "blue-tag-atmospheric",
       "label": "ATMOSPHERE IS THE POINT",
-      "tier": "blue",
+      "tier": "purple",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -10574,7 +10574,7 @@
     {
       "id": "blue-tag-military",
       "label": "MILITARY OPERATIONS",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -10648,7 +10648,7 @@
     {
       "id": "blue-tag-crafting",
       "label": "GAMES WHERE YOU CRAFT",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -10722,7 +10722,7 @@
     {
       "id": "blue-tag-martial-arts",
       "label": "MARTIAL ARTS GAMES",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -10796,7 +10796,7 @@
     {
       "id": "blue-tag-medieval",
       "label": "SET IN MEDIEVAL TIMES",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -10870,7 +10870,7 @@
     {
       "id": "blue-tag-post-apocalyptic",
       "label": "AFTER THE APOCALYPSE",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -10944,7 +10944,7 @@
     {
       "id": "blue-tag-sci-fi",
       "label": "SCIENCE FICTION",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11018,7 +11018,7 @@
     {
       "id": "blue-tag-aliens",
       "label": "ALIENS INVOLVED",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11092,7 +11092,7 @@
     {
       "id": "blue-tag-stealth",
       "label": "GAMES WHERE YOU SNEAK",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11166,7 +11166,7 @@
     {
       "id": "blue-tag-zombies",
       "label": "ZOMBIES INVOLVED",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11240,7 +11240,7 @@
     {
       "id": "blue-tag-crime",
       "label": "A LIFE OF CRIME",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11314,7 +11314,7 @@
     {
       "id": "blue-tag-robots",
       "label": "ROBOTS INVOLVED",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11383,7 +11383,7 @@
     {
       "id": "blue-tag-cyberpunk",
       "label": "CYBERPUNK WORLDS",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11449,7 +11449,7 @@
     {
       "id": "blue-tag-ninja",
       "label": "NINJA GAMES",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11510,7 +11510,7 @@
     {
       "id": "blue-tag-superhero",
       "label": "SUPERHERO GAMES",
-      "tier": "blue",
+      "tier": "yellow",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11571,7 +11571,7 @@
     {
       "id": "blue-tag-detective",
       "label": "GAMES WHERE YOU INVESTIGATE",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11630,7 +11630,7 @@
     {
       "id": "blue-tag-war",
       "label": "GAMES SET AT WAR",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11691,7 +11691,7 @@
     {
       "id": "blue-tag-dark-fantasy",
       "label": "DARK FANTASY WORLDS",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11753,7 +11753,7 @@
     {
       "id": "blue-tag-ghosts",
       "label": "GHOSTS INVOLVED",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11807,7 +11807,7 @@
     {
       "id": "blue-tag-pixel-art",
       "label": "PIXEL ART GAMES",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11881,7 +11881,7 @@
     {
       "id": "blue-tag-female-protagonist",
       "label": "YOU PLAY AS A WOMAN",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -11955,7 +11955,7 @@
     {
       "id": "blue-tag-multiple-endings",
       "label": "MORE THAN ONE ENDING",
-      "tier": "blue",
+      "tier": "purple",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12029,7 +12029,7 @@
     {
       "id": "blue-tag-anime",
       "label": "ANIME STYLE",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12103,7 +12103,7 @@
     {
       "id": "blue-tag-open-world",
       "label": "OPEN WORLDS",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12177,7 +12177,7 @@
     {
       "id": "blue-tag-co-op",
       "label": "BETTER WITH A FRIEND (CO-OP)",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12251,7 +12251,7 @@
     {
       "id": "blue-tag-survival-horror",
       "label": "SURVIVAL HORROR",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12323,7 +12323,7 @@
     {
       "id": "blue-tag-horror",
       "label": "HORROR GAMES",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12390,7 +12390,7 @@
     {
       "id": "blue-tag-free-to-play",
       "label": "FREE TO PLAY",
-      "tier": "blue",
+      "tier": "purple",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12464,7 +12464,7 @@
     {
       "id": "blue-tag-jrpg",
       "label": "JRPGS",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12538,7 +12538,7 @@
     {
       "id": "blue-tag-metroidvania",
       "label": "METROIDVANIAS",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12612,7 +12612,7 @@
     {
       "id": "blue-tag-roguelike",
       "label": "ROGUELIKES",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12660,7 +12660,7 @@
     {
       "id": "blue-tag-side-scrolling",
       "label": "SIDE SCROLLERS",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12734,7 +12734,7 @@
     {
       "id": "blue-tag-turn-based",
       "label": "YOU TAKE TURNS",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12808,7 +12808,7 @@
     {
       "id": "blue-tag-pirates",
       "label": "PIRATES INVOLVED",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "all": [
@@ -12868,7 +12868,7 @@
     {
       "id": "blue-tag-dinosaurs",
       "label": "DINOSAURS INVOLVED",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12907,7 +12907,7 @@
     {
       "id": "blue-tag-fantasy",
       "label": "FANTASY WORLDS",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -12976,7 +12976,7 @@
     {
       "id": "blue-tag-space",
       "label": "SET IN SPACE",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13013,7 +13013,7 @@
     {
       "id": "blue-tag-racing",
       "label": "GAMES ABOUT GOING FAST",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13087,7 +13087,7 @@
     {
       "id": "blue-tag-farming",
       "label": "GAMES WHERE YOU FARM",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13115,7 +13115,7 @@
     {
       "id": "blue-tag-cooking",
       "label": "GAMES WHERE YOU COOK",
-      "tier": "blue",
+      "tier": "yellow",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13137,7 +13137,7 @@
     {
       "id": "blue-tag-time-travel",
       "label": "TIME TRAVEL INVOLVED",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13195,7 +13195,7 @@
     {
       "id": "blue-tag-dystopian",
       "label": "DYSTOPIAN FUTURES",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13245,7 +13245,7 @@
     {
       "id": "blue-tag-mythology",
       "label": "BUILT ON MYTHOLOGY",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13278,7 +13278,7 @@
     {
       "id": "blue-tag-samurai",
       "label": "SAMURAI GAMES",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13312,7 +13312,7 @@
     {
       "id": "blue-tag-building",
       "label": "GAMES WHERE YOU BUILD",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13357,7 +13357,7 @@
     {
       "id": "blue-tag-underwater",
       "label": "SET UNDERWATER",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13382,7 +13382,7 @@
     {
       "id": "blue-tag-boss-fight",
       "label": "BIG BOSS FIGHTS",
-      "tier": "blue",
+      "tier": "purple",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13441,7 +13441,7 @@
     {
       "id": "blue-tag-wrestling",
       "label": "WRESTLING GAMES",
-      "tier": "blue",
+      "tier": "yellow",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13464,7 +13464,7 @@
     {
       "id": "blue-tag-skateboarding",
       "label": "SKATEBOARDING GAMES",
-      "tier": "blue",
+      "tier": "yellow",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13488,7 +13488,7 @@
     {
       "id": "blue-tag-cars",
       "label": "CARS INVOLVED",
-      "tier": "blue",
+      "tier": "green",
       "type": "tag",
       "predicate": {
         "field": "tags",
@@ -13519,7 +13519,7 @@
     {
       "id": "purple-one-word-title",
       "label": "ONE-WORD TITLES",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -13592,7 +13592,7 @@
     {
       "id": "purple-exactly-two-words",
       "label": "EXACTLY TWO WORDS",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -13665,7 +13665,7 @@
     {
       "id": "purple-five-plus-words",
       "label": "TITLES OF FIVE WORDS OR MORE",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -13738,7 +13738,7 @@
     {
       "id": "purple-title-with-colon",
       "label": "TITLES WITH A COLON",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -13811,7 +13811,7 @@
     {
       "id": "purple-title-with-digit",
       "label": "TITLES CONTAINING A NUMBER",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -13884,7 +13884,7 @@
     {
       "id": "purple-roman-numeral",
       "label": "ROMAN NUMERALS",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -13957,7 +13957,7 @@
     {
       "id": "purple-starts-with-the",
       "label": "TITLES STARTING WITH 'THE'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14030,7 +14030,7 @@
     {
       "id": "purple-of-the-title",
       "label": "TITLES CONTAINING 'OF THE'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14103,7 +14103,7 @@
     {
       "id": "purple-possessive-title",
       "label": "SOMEBODY OWNS THIS GAME (POSSESSIVE TITLES)",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14176,7 +14176,7 @@
     {
       "id": "purple-alliterative-title",
       "label": "ALLITERATIVE TITLES",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14246,7 +14246,7 @@
     {
       "id": "purple-one-word-gerund",
       "label": "ONE WORD, ENDS IN -ING",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14263,7 +14263,7 @@
     {
       "id": "purple-title-with-ampersand",
       "label": "TITLES WITH AN AMPERSAND",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14336,7 +14336,7 @@
     {
       "id": "purple-title-with-exclamation",
       "label": "TITLES WITH AN EXCLAMATION MARK",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14384,7 +14384,7 @@
     {
       "id": "purple-one-word-verb",
       "label": "ONE-WORD TITLES THAT ARE VERBS",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14405,7 +14405,7 @@
     {
       "id": "purple-repeated-word-title",
       "label": "TITLES THAT REPEAT A WORD",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14478,7 +14478,7 @@
     {
       "id": "purple-starts-and-ends-same-letter",
       "label": "START AND END WITH THE SAME LETTER",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14514,7 +14514,7 @@
     {
       "id": "purple-hyphenated-title",
       "label": "HYPHENATED TITLES",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14587,7 +14587,7 @@
     {
       "id": "purple-long-single-word",
       "label": "ONE LONG WORD (9+ LETTERS)",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14660,7 +14660,7 @@
     {
       "id": "purple-contains-colour",
       "label": "TITLES CONTAINING A COLOUR",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14728,7 +14728,7 @@
     {
       "id": "purple-contains-number-word",
       "label": "TITLES SPELLING OUT A NUMBER",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14798,7 +14798,7 @@
     {
       "id": "purple-contains-animal",
       "label": "TITLES CONTAINING AN ANIMAL",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14871,7 +14871,7 @@
     {
       "id": "purple-contains-body-part",
       "label": "TITLES CONTAINING A BODY PART",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14923,7 +14923,7 @@
     {
       "id": "purple-contains-weather",
       "label": "TITLES CONTAINING WEATHER",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -14956,7 +14956,7 @@
     {
       "id": "purple-contains-celestial",
       "label": "TITLES IN THE SKY (CELESTIAL WORDS)",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15029,7 +15029,7 @@
     {
       "id": "purple-contains-time-of-day",
       "label": "TITLES CONTAINING A TIME OF DAY",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15090,7 +15090,7 @@
     {
       "id": "purple-contains-element",
       "label": "TITLES CONTAINING AN ELEMENT",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15139,7 +15139,7 @@
     {
       "id": "purple-contains-metal-or-gem",
       "label": "TITLES CONTAINING A METAL OR GEM",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15185,7 +15185,7 @@
     {
       "id": "purple-contains-royalty",
       "label": "TITLES FIT FOR ROYALTY",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15258,7 +15258,7 @@
     {
       "id": "purple-contains-death",
       "label": "TITLES ABOUT DEATH",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15331,7 +15331,7 @@
     {
       "id": "purple-contains-war",
       "label": "TITLES READY FOR WAR",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15404,7 +15404,7 @@
     {
       "id": "purple-contains-creature",
       "label": "TITLES CONTAINING A MONSTER",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15477,7 +15477,7 @@
     {
       "id": "purple-contains-divine",
       "label": "HEAVENLY (OR HELLISH) TITLES",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15521,7 +15521,7 @@
     {
       "id": "purple-contains-water-body",
       "label": "TITLES CONTAINING A BODY OF WATER",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15566,7 +15566,7 @@
     {
       "id": "purple-contains-structure",
       "label": "TITLES CONTAINING A BUILDING",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15639,7 +15639,7 @@
     {
       "id": "purple-contains-direction",
       "label": "TITLES POINTING SOMEWHERE",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15683,7 +15683,7 @@
     {
       "id": "purple-contains-journey",
       "label": "TITLES ABOUT A JOURNEY",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15739,7 +15739,7 @@
     {
       "id": "purple-contains-profession",
       "label": "TITLES CONTAINING A JOB",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15812,7 +15812,7 @@
     {
       "id": "purple-contains-family",
       "label": "TITLES CONTAINING FAMILY MEMBERS",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15835,7 +15835,7 @@
     {
       "id": "purple-contains-emotion",
       "label": "TITLES WITH STRONG FEELINGS",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15886,7 +15886,7 @@
     {
       "id": "purple-contains-dark-light",
       "label": "TITLES OF DARKNESS AND LIGHT",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15959,7 +15959,7 @@
     {
       "id": "purple-contains-fortune",
       "label": "TITLES ABOUT GETTING RICH",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -15987,7 +15987,7 @@
     {
       "id": "purple-contains-legend",
       "label": "TITLES OF LEGEND",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16060,7 +16060,7 @@
     {
       "id": "purple-contains-world",
       "label": "TITLES CONTAINING A WORLD",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16133,7 +16133,7 @@
     {
       "id": "purple-contains-music",
       "label": "MUSICAL TITLES",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16167,7 +16167,7 @@
     {
       "id": "purple-contains-sports-gear",
       "label": "TITLES CONTAINING SPORTS WORDS",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16233,7 +16233,7 @@
     {
       "id": "purple-contains-vehicle",
       "label": "TITLES CONTAINING A VEHICLE",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16266,7 +16266,7 @@
     {
       "id": "purple-contains-time",
       "label": "TITLES ABOUT TIME",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16319,7 +16319,7 @@
     {
       "id": "purple-contains-weapon",
       "label": "TITLES CONTAINING A WEAPON",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16366,7 +16366,7 @@
     {
       "id": "purple-contains-magic",
       "label": "MAGICAL TITLES",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16399,7 +16399,7 @@
     {
       "id": "purple-contains-cold",
       "label": "COLD TITLES",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16419,7 +16419,7 @@
     {
       "id": "purple-contains-fire",
       "label": "TITLES ON FIRE",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16460,7 +16460,7 @@
     {
       "id": "purple-contains-space",
       "label": "TITLES IN SPACE",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16533,7 +16533,7 @@
     {
       "id": "purple-contains-us-place",
       "label": "TITLES CONTAINING AN AMERICAN PLACE",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16564,7 +16564,7 @@
     {
       "id": "purple-contains-single-letter",
       "label": "TITLES WITH A SINGLE-LETTER WORD",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16633,7 +16633,7 @@
     {
       "id": "purple-contains-superlative",
       "label": "OVERSELLING IT (SUPER/MEGA/ULTRA…)",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16706,7 +16706,7 @@
     {
       "id": "purple-contains-negation",
       "label": "TITLES SAYING NO",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16733,7 +16733,7 @@
     {
       "id": "purple-contains-new-old",
       "label": "TITLES ABOUT NEW AND OLD",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16806,7 +16806,7 @@
     {
       "id": "purple-hides-hero",
       "label": "TITLES HIDING 'HERO'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16848,7 +16848,7 @@
     {
       "id": "purple-hides-king",
       "label": "TITLES HIDING 'KING'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16899,7 +16899,7 @@
     {
       "id": "purple-hides-star",
       "label": "TITLES HIDING 'STAR'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16935,7 +16935,7 @@
     {
       "id": "purple-hides-ring",
       "label": "TITLES HIDING 'RING'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16967,7 +16967,7 @@
     {
       "id": "purple-hides-gold",
       "label": "TITLES HIDING 'GOLD'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -16992,7 +16992,7 @@
     {
       "id": "purple-hides-wind",
       "label": "TITLES HIDING 'WIND'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -17011,7 +17011,7 @@
     {
       "id": "purple-hides-mine",
       "label": "TITLES HIDING 'MINE'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -17030,7 +17030,7 @@
     {
       "id": "purple-hides-port",
       "label": "TITLES HIDING 'PORT'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -17061,7 +17061,7 @@
     {
       "id": "purple-hides-over",
       "label": "TITLES HIDING 'OVER'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -17092,7 +17092,7 @@
     {
       "id": "purple-hides-land",
       "label": "TITLES HIDING 'LAND'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -17137,7 +17137,7 @@
     {
       "id": "purple-hides-lord",
       "label": "TITLES HIDING 'LORD'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",
@@ -17164,7 +17164,7 @@
     {
       "id": "purple-hides-fire",
       "label": "TITLES HIDING 'FIRE'",
-      "tier": "purple",
+      "tier": "blue",
       "type": "wordplay",
       "predicate": {
         "op": "wordplay",

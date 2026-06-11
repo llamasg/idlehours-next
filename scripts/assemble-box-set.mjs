@@ -9,9 +9,13 @@
  *                  predicate (every game checked against all four).
  *   RECOGNISABLE — picks are popularity-biased; difficulty comes from the
  *                  concept, not obscurity.
- *   MISDIRECTION — ≥3 games share a surface attribute (genre/decade) with
- *                  another group WITHOUT satisfying its predicate (soft:
- *                  best-of after max attempts, noted in the review doc).
+ *   MISDIRECTION — ≥3 games share a surface attribute (genre/decade) ACROSS
+ *                  THE BLUE/PURPLE BOUNDARY without satisfying the other
+ *                  group's predicate (soft: best-of after max attempts,
+ *                  noted in the review doc). June 2026 re-tier: misdirection
+ *                  lives between blue and purple; yellow must NEVER be
+ *                  ambiguous — any surface link FROM a yellow member rejects
+ *                  the candidate outright (hard).
  *   FRESHNESS    — no game repeated within a 30-day window; concepts retire
  *                  permanently (usedOn written back to concepts.json).
  *
@@ -179,9 +183,20 @@ function buildDay(date, used30) {
     }
     if (ambiguous) continue
 
-    // MISDIRECTION: ≥3 distinct games with a surface link to another group
     const links = surfaceLinks(groups)
-    const misdirectionCount = new Set(links.map((l) => l.gameId)).size
+
+    // YELLOW NEVER AMBIGUOUS (hard): no yellow member may surface-match
+    // another group — a casual player must be able to bank yellow on sight.
+    if (links.some((l) => l.fromTier === 'yellow')) continue
+
+    // MISDIRECTION: ≥3 distinct games with a surface link ACROSS the
+    // blue/purple boundary — that's where the difficulty should live.
+    const boundaryLinks = links.filter(
+      (l) =>
+        (l.fromTier === 'blue' && l.toTier === 'purple') ||
+        (l.fromTier === 'purple' && l.toTier === 'blue'),
+    )
+    const misdirectionCount = new Set(boundaryLinks.map((l) => l.gameId)).size
     const candidate = { groups, links, misdirectionCount }
     if (!best || misdirectionCount > best.misdirectionCount) best = candidate
     if (misdirectionCount >= MIN_MISDIRECTION) break
