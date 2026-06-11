@@ -15792,5 +15792,52 @@
   "pok-mon-go": {
     "verdict": "yes",
     "tier": 1
+  },
+  "centipede": {
+    "verdict": "yes",
+    "tier": 2
+  },
+  "excitebike": {
+    "verdict": "yes",
+    "tier": 3
+  },
+  "ice-climber": {
+    "verdict": "no"
+  },
+  "super-contra": {
+    "verdict": "no"
+  },
+  "golden-axe": {
+    "verdict": "no"
+  },
+  "golden-axe-ii": {
+    "verdict": "no"
+  },
+  "golden-axe-iii": {
+    "verdict": "no"
+  },
+  "contra-iii-the-alien-wars": {
+    "verdict": "no"
+  },
+  "heroes-of-might-and-magic-a-strategic-quest": {
+    "verdict": "no"
+  },
+  "heroes-of-might-and-magic-ii-the-succession-wars": {
+    "verdict": "no"
+  },
+  "heroes-of-might-and-magic-iii-the-restoration-of-erathia": {
+    "verdict": "no"
+  },
+  "heroes-of-might-and-magic-iii-the-shadow-of-death": {
+    "verdict": "no"
+  },
+  "heroes-of-might-and-magic-iv": {
+    "verdict": "no"
+  },
+  "dark-messiah-of-might-and-magic": {
+    "verdict": "no"
+  },
+  "heroes-of-might-and-magic-v-hammers-of-fate": {
+    "verdict": "no"
   }
 }
