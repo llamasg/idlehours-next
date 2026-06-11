@@ -225,18 +225,26 @@ public/
   move/swap/remove, Street Date grammar); no-reuse — a game appears at
   most once per board. CHECK (at 9/9 placed) marks wrong cells red;
   rearrange and check again. There are NO per-placement penalties
-- 1000pts − 250 per extra check, floor 250 for any completed board;
-  give-up is the only Bust. Rarity (mean answer obscurity, 0–100,
-  population-percentile) is the style stat; time displayed, never scored
+- Scoring v3: 111pts × correct cells at final state (+1 if all 9),
+  −50 per check after the first, floor 0. Wrong/empty cells just
+  forfeit their points; give-up banks the correct cells. Bust =
+  give-up with zero correct only. 9/9 first check = 1000 (holo).
+  Known exploit: check-spam as binary search — raise CHECK_PENALTY
+  first, count-only feedback second
+- Rarity (mean answer obscurity, 0–100, population-percentile) is the
+  style stat; time displayed, never scored
 - End screen always shows a fully finished board — `solveBoard()` fills
   unfinished cells with valid answers (italic)
 - Ranks: Bust → Work Experience → Shelf Stacker → Keyholder →
   Franchise Owner (holo, first-check 1000)
 - localStorage: `stock_room_YYYY-MM-DD` (prefix frozen)
 - Boards generated at runtime, seeded per date: `lib/criteria.ts`
-  (32-criterion catalog) + `lib/boardGen.ts` (variety rules, every cell
-  ≥15 answers, full no-reuse assignment verified). Zero external facts —
-  every criterion tests GAMES_DB fields
+  (32-criterion catalog) + `lib/boardGen.ts` (variety rules; every cell
+  ≥15 answers AND ≥8 recognisable ones at popularityRank ≤60; axis-pair
+  blocklist; full no-reuse assignment verified). Zero external facts —
+  every criterion tests GAMES_DB fields. Board review:
+  `npx tsx scripts/preview-stock-room.ts` flags THIN INTERSECTION cells
+  (<12 recognisable) — confirmed stinkers go in AXIS_PAIR_BLOCKLIST
 
 ### Post-game flow (all daily games)
 - Games render an inline post-game screen (no modal). The old

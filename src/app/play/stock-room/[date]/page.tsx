@@ -172,7 +172,7 @@ export default function StockRoomDayPage({
         lastCheckResult: results,
         finished: true,
         won: true,
-        score: computeScore(checks),
+        score: computeScore(CELL_COUNT, checks),
         rarity: boardRarity(state.board.map((c) => c!.gameId)),
         endedAt: Date.now(),
       })
@@ -202,7 +202,8 @@ export default function StockRoomDayPage({
       lastCheckResult: results,
       finished: true,
       won: false,
-      score: 0,
+      // v3: correct cells score normally on give-up; zero correct = Bust.
+      score: computeScore(correctIds.length, state.checks),
       rarity: boardRarity(correctIds),
       endedAt: Date.now(),
     })
@@ -300,9 +301,9 @@ export default function StockRoomDayPage({
                 className="mt-3 text-center"
                 style={entranceStep < 4 ? { opacity: 0 } : entranceStep < 6 ? { animation: `gs-fade-in 0.5s ${SPRING_EASING} both` } : undefined}
               >
-                {/* Displayed score = what the board banks if the NEXT check passes */}
+                {/* Displayed score = what a clean board banks if the NEXT check passes */}
                 <ScorePill
-                  score={computeScore(state.checks + 1)}
+                  score={computeScore(CELL_COUNT, state.checks + 1)}
                   pulse={scorePulse}
                   floatingCost={floatingCost}
                   accentClassName="text-[hsl(var(--game-ink))]"
@@ -407,7 +408,7 @@ export default function StockRoomDayPage({
                         onClick={handleGiveUp}
                         className="font-heading text-xs font-bold text-[hsl(var(--game-red))]"
                       >
-                        Sure? That&apos;s a Bust — the answers get revealed
+                        Sure? Bank what&apos;s right — the rest gets revealed
                       </button>
                     ) : (
                       <button

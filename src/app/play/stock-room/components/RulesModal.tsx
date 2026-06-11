@@ -48,9 +48,12 @@ export default function RulesModal({ onClose }: { onClose: () => void }) {
       <div>
         <p className="mb-1 font-bold text-[hsl(var(--game-ink))]">Scoring</p>
         <p>
-          Pass on your <strong>first check</strong> for the full{' '}
-          <strong>1,000</strong>. Every extra check costs 250, but any board
-          you finish is worth at least 250. Giving up is the only Bust.
+          <strong>111 pts</strong> per correct shelf, +1 for a perfect board —
+          9/9 on your <strong>first check</strong> is exactly{' '}
+          <strong>1,000</strong>. Every check after the first costs 50. Wrong
+          or empty shelves just forfeit their points, and giving up banks
+          whatever you got right. Walking away with{' '}
+          <strong>nothing</strong> right is the only Bust.
         </p>
       </div>
 

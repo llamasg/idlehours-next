@@ -16,10 +16,31 @@ import { mulberry32, hashDateSeed } from '@/lib/game-shell/seededRng'
 import { CRITERIA, type Criterion } from './criteria'
 
 export const MIN_CELL_ANSWERS = 15
+// Quality floor (playtest #2): a cell must ALSO have enough answers a normal
+// player might actually think of — cells solvable only via deep cuts or tag
+// technicalities are generation failures, re-roll the axis pairing.
+export const RECOGNISABLE_RANK = 60
+export const RECOGNISABLE_FLOOR = 8
+// Preview-script review threshold: recognisable-count < this flags the cell
+// as THIN INTERSECTION (scripts/preview-stock-room.ts) — feeds the blocklist.
+export const THIN_INTERSECTION = 12
 const BOARD_ATTEMPTS = 400
 const ASSIGNMENT_RETRIES = 25
 const MIN_TYPE_SPREAD = 3
 const MAX_PER_TYPE_PER_SIDE = 2
+
+// Axis pairings rejected outright — human-reviewed, fed from the preview
+// script's THIN INTERSECTION flags. Order-insensitive (row×col or col×row).
+const AXIS_PAIR_BLOCKLIST: [string, string][] = [
+  ['genre-fighting', 'genre-adventure'], // playtest #2: 38 answers, all tag technicalities
+]
+const BLOCKED_PAIR_KEYS = new Set(
+  AXIS_PAIR_BLOCKLIST.map((pair) => [...pair].sort().join('|')),
+)
+
+export function isBlockedPair(a: string, b: string): boolean {
+  return BLOCKED_PAIR_KEYS.has([a, b].sort().join('|'))
+}
 
 export interface Board {
   date: string
@@ -45,6 +66,14 @@ function cellCandidates(row: Criterion, col: Criterion): number[] {
   const out: number[] = []
   for (const i of small) if (large.has(i)) out.push(i)
   return out
+}
+
+/** How many of these candidates a normal player might actually think of. */
+export function recognisableCount(candidates: number[]): number {
+  return candidates.filter((i) => {
+    const rank = GAMES_DB[i].popularityRank
+    return rank != null && rank <= RECOGNISABLE_RANK
+  }).length
 }
 
 function shuffled<T>(arr: T[], rng: () => number): T[] {
@@ -103,8 +132,15 @@ export function generateBoard(dateStr: string): Board {
     let solvable = true
     for (let r = 0; r < 3 && solvable; r++) {
       for (let c = 0; c < 3; c++) {
+        if (isBlockedPair(rows[r].id, cols[c].id)) {
+          solvable = false
+          break
+        }
         const candidates = cellCandidates(rows[r], cols[c])
-        if (candidates.length < MIN_CELL_ANSWERS) {
+        if (
+          candidates.length < MIN_CELL_ANSWERS ||
+          recognisableCount(candidates) < RECOGNISABLE_FLOOR
+        ) {
           solvable = false
           break
         }
@@ -123,6 +159,11 @@ export function generateBoard(dateStr: string): Board {
   }
 
   throw new Error(`stock-room: could not generate a solvable board for ${dateStr}`)
+}
+
+/** Candidate GAMES_DB indices for a cell — for the preview script and tests. */
+export function boardCellCandidates(board: Board, cell: number): number[] {
+  return cellCandidates(board.rows[Math.floor(cell / 3)], board.cols[cell % 3])
 }
 
 /** Does this game satisfy both axes of the given cell? */

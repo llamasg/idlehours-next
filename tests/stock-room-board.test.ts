@@ -4,7 +4,16 @@
 // (update snapshot in the same commit, explained).
 
 import { describe, it, expect } from 'vitest'
-import { generateBoard, solveBoard, gameFitsCell, MIN_CELL_ANSWERS } from '@/app/play/stock-room/lib/boardGen'
+import {
+  generateBoard,
+  solveBoard,
+  gameFitsCell,
+  boardCellCandidates,
+  recognisableCount,
+  isBlockedPair,
+  MIN_CELL_ANSWERS,
+  RECOGNISABLE_FLOOR,
+} from '@/app/play/stock-room/lib/boardGen'
 import { GAMES_DB } from '@/data/games-db'
 
 const DATES = Array.from({ length: 14 }, (_, i) => {
@@ -31,10 +40,18 @@ describe('stock-room board generation', () => {
     expect(result).toMatchSnapshot()
   })
 
-  it('every cell on every board meets the solvability floor', () => {
+  it('every cell on every board meets the solvability + quality floors', () => {
     for (const date of DATES) {
       const board = generateBoard(date)
       expect(Math.min(...board.cellCounts)).toBeGreaterThanOrEqual(MIN_CELL_ANSWERS)
+      for (let cell = 0; cell < 9; cell++) {
+        expect(
+          recognisableCount(boardCellCandidates(board, cell)),
+        ).toBeGreaterThanOrEqual(RECOGNISABLE_FLOOR)
+        expect(
+          isBlockedPair(board.rows[Math.floor(cell / 3)].id, board.cols[cell % 3].id),
+        ).toBe(false)
+      }
     }
   })
 

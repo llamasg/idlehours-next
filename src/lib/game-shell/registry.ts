@@ -339,7 +339,9 @@ export const stockRoomManifest: DailyGameManifest<StockRoomDayState> = {
       secondaryStat: state.rarity,
       rank,
       archiveRank: rank,
-      scoreDisplay: !played ? '' : state.finished ? (state.won ? `${state.score} pts` : 'Gave up') : 'In progress',
+      // v3 scoring: give-up banks the correct cells, so the score is always
+      // meaningful once finished (0 = the give-up-with-nothing Bust).
+      scoreDisplay: !played ? '' : state.finished ? `${state.score} pts` : 'In progress',
     }
   },
   playUrl: (date) => `/play/stock-room/${date}`,
