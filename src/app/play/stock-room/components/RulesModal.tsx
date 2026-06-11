@@ -12,17 +12,27 @@ export default function RulesModal({ onClose }: { onClose: () => void }) {
     <RulesModalShell accent="hsl(var(--game-teal))" onClose={onClose}>
       <p>
         <strong>Stock Room</strong> is a daily grid. Nine cells, each with a
-        row and a column condition — name <strong>any game</strong> that fits
+        row and a column condition — stock every shelf with a game that fits
         both. Your shelves, your picks.
       </p>
 
       <div>
-        <p className="mb-2 font-bold text-[hsl(var(--game-ink))]">Filling the grid</p>
+        <p className="mb-2 font-bold text-[hsl(var(--game-ink))]">Stocking the shelves</p>
         <p>
-          Tap a cell, type a game, submit. A right answer locks the cell. A
-          wrong one costs <strong>50 pts</strong> and the cell stays open —
-          guess again. Each game can only be used <strong>once</strong>{' '}
-          across the whole board.
+          Tap a cell, type a game, place it. Placements are{' '}
+          <strong>free</strong> — move them, swap them, take them back off,
+          as much as you like. Each game can only appear <strong>once</strong>{' '}
+          across the whole board, so spend your big hitters wisely.
+        </p>
+      </div>
+
+      <div>
+        <p className="mb-2 font-bold text-[hsl(var(--game-ink))]">The check</p>
+        <p>
+          When all nine shelves are stocked, hit{' '}
+          <strong>Check the shelves</strong>. Wrong cells get marked in red —
+          rearrange and check again. The run ends when a check comes back
+          clean.
         </p>
       </div>
 
@@ -38,10 +48,9 @@ export default function RulesModal({ onClose }: { onClose: () => void }) {
       <div>
         <p className="mb-1 font-bold text-[hsl(var(--game-ink))]">Scoring</p>
         <p>
-          <strong>111 pts</strong> per filled cell, +1 for the full board
-          (a clean sweep is exactly 1,000). Misses cost 50. You can{' '}
-          <strong>finish early</strong> any time and bank what you&apos;ve
-          filled.
+          Pass on your <strong>first check</strong> for the full{' '}
+          <strong>1,000</strong>. Every extra check costs 250, but any board
+          you finish is worth at least 250. Giving up is the only Bust.
         </p>
       </div>
 

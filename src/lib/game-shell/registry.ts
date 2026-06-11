@@ -76,14 +76,18 @@ export interface ShelfPriceDayState {
 }
 
 export interface StockRoomDayState {
-  /** 9 cells, row-major; null while open. */
-  cells: ({ gameId: string } | null)[]
-  misses: number
-  guesses: { gameId: string; cell: number; ok: boolean }[]
+  /** 9 cells, row-major; null while open. Placements are tentative until checked. */
+  board: ({ gameId: string } | null)[]
+  /** CHECK presses so far — the only scored action. */
+  checks: number
+  /** Per-cell verdict from the last check; a null entry = cell changed since
+   *  (mark cleared). null overall = no check yet. */
+  lastCheckResult: (boolean | null)[] | null
   finished: boolean
+  /** Won = a check passed 9/9. Give-up is the only Bust. */
   won: boolean
   score: number
-  /** Mean obscurity (0–100) of the filled answers — style, not competence. */
+  /** Mean obscurity (0–100) of the correct answers — style, not competence. */
   rarity: number
   startedAt?: number
   endedAt?: number
@@ -121,7 +125,25 @@ export const streetDateStore = createDayStore<StreetDateDayState>('street_date_v
 export const boxSetStore = createDayStore<BoxSetDayState>('box_set_')
 
 // Prefix FROZEN since the first Stock Room commit.
-export const stockRoomStore = createDayStore<StockRoomDayState>('stock_room_')
+export const stockRoomStore = createDayStore<StockRoomDayState>('stock_room_', (parsed) => {
+  // Migration: v1 (per-cell instant validation, misses) → v2 (arrange-then-
+  // check). v1 existed for one playtest day pre-launch; convert rather than
+  // discard so a finished day stays finished.
+  const v1 = parsed as StockRoomDayState & {
+    cells?: ({ gameId: string } | null)[]
+    misses?: number
+    guesses?: unknown[]
+  }
+  if (v1.board === undefined && v1.cells !== undefined) {
+    v1.board = v1.cells
+    v1.checks = v1.finished ? 1 : 0
+    v1.lastCheckResult = null
+    delete v1.cells
+    delete v1.misses
+    delete v1.guesses
+  }
+  return parsed
+})
 
 export const shelfPriceStore = createDayStore<ShelfPriceDayState>('shelf_price_v2_', (parsed) => {
   // Migration: add score if missing (old saves; 100 = wrong-answer penalty)
@@ -305,20 +327,19 @@ export const stockRoomManifest: DailyGameManifest<StockRoomDayState> = {
   loadDayState: (date) => stockRoomStore.load(date),
   toDayResult(state) {
     if (!state) return NOT_PLAYED
-    const played = state.guesses.length > 0
+    const played = state.checks > 0 || state.board.some(Boolean)
     const rank = state.finished ? getRankForGame('stock-room', state.score, 0) : ''
     return {
       played,
       completed: state.finished,
       finished: state.finished,
-      // Won = the board was completed (all 9 filled); finishing early with
-      // open cells is a finish, not a win.
+      // Won = a check passed 9/9. Give-up is the only Bust.
       won: state.won,
       score: state.score,
       secondaryStat: state.rarity,
       rank,
       archiveRank: rank,
-      scoreDisplay: !played ? '' : state.finished ? `${state.score} pts` : 'In progress',
+      scoreDisplay: !played ? '' : state.finished ? (state.won ? `${state.score} pts` : 'Gave up') : 'In progress',
     }
   },
   playUrl: (date) => `/play/stock-room/${date}`,

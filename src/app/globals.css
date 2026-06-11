@@ -43,6 +43,7 @@
     --game-green: 147 61% 41%;
     --game-purple: 246 57% 56%; /* Shelf Price #5B4FCF */
     --game-teal: 174 62% 33%; /* Stock Room #20887E — block-out proposal, review */
+    --game-teal-dark: 174 62% 23%; /* Stock Room button 3D shadow */
     --game-red: 7 62% 47%;
     --game-white: 0 0% 100%;
     --game-cream: 40 30% 95%;
@@ -87,6 +88,7 @@
     --game-green: 147 61% 45%;
     --game-purple: 246 57% 56%;
     --game-teal: 174 62% 36%;
+    --game-teal-dark: 174 62% 26%;
     --game-red: 7 62% 52%;
     --game-white: 20 14% 14%;
     --game-cream: 20 12% 18%;
@@ -129,6 +131,7 @@
     --game-green: 147 61% 41%;
     --game-purple: 246 57% 56%;
     --game-teal: 174 62% 33%;
+    --game-teal-dark: 174 62% 23%;
     --game-red: 7 62% 47%;
     --game-white: 0 0% 100%;
     --game-cream: 40 30% 95%;

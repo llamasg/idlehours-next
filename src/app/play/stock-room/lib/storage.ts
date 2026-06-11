@@ -11,9 +11,9 @@ export type DayState = StockRoomDayState
 export function loadDayState(dateStr: string): DayState {
   return (
     stockRoomStore.load(dateStr) ?? {
-      cells: Array(CELL_COUNT).fill(null),
-      misses: 0,
-      guesses: [],
+      board: Array(CELL_COUNT).fill(null),
+      checks: 0,
+      lastCheckResult: null,
       finished: false,
       won: false,
       score: 0,

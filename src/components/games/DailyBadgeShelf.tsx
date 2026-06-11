@@ -106,17 +106,11 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
         </Link>
       </div>
 
-      {/* Badge row */}
-      {/* SHELL LAYOUT QUESTION (flagged for paint): the shelf was designed for
-          3 badges; at 5 it wraps 3+2 on mobile and runs 5-up on sm+. A real
-          5-game layout decision is needed before launch. */}
-      <div className={`grid gap-6 ${
-        slots.length >= 5
-          ? 'grid-cols-3 gap-4 sm:grid-cols-5'
-          : slots.length === 4
-            ? 'grid-cols-2 sm:grid-cols-4'
-            : 'grid-cols-3'
-      }`}>
+      {/* Badge row — horizontal slider: 3.5 slots visible, the half-badge
+          peeking past the clipped edge signals there's more; scroll for the
+          rest. (Slot width = (100% − 3 gaps) / 3.5; min-w keeps the fixed
+          120px badges intact on small screens, where fewer fit.) */}
+      <div className="flex snap-x gap-4 overflow-x-auto pb-2">
         {slots.map((slot, slotIndex) => {
           const justCompleted = slot.slug === currentGame && slot.completed
           // Stagger badges 200ms apart within step 3
@@ -124,7 +118,7 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
 
           if (slot.completed) {
             return (
-              <div key={slot.slug} className="group flex flex-col items-center gap-3">
+              <div key={slot.slug} className="group flex w-[calc((100%-48px)/3.5)] min-w-[150px] flex-none snap-start flex-col items-center gap-3">
                 {/* Game label */}
                 <span
                   className="font-heading text-[12px] font-extrabold uppercase tracking-[0.16em] text-[hsl(var(--game-ink))]"
@@ -210,7 +204,7 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
               key={slot.slug}
               href={slot.href}
               prefetch={false}
-              className="group flex flex-col items-center gap-3 cursor-pointer"
+              className="group flex w-[calc((100%-48px)/3.5)] min-w-[150px] flex-none snap-start cursor-pointer flex-col items-center gap-3"
               onClick={(e) => { e.stopPropagation() }}
             >
               {/* Game label */}

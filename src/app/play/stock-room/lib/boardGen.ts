@@ -129,3 +129,54 @@ export function gameFitsCell(board: Board, cell: number, game: GameEntry): boole
   const col = board.cols[cell % 3]
   return row.test(game) && col.test(game)
 }
+
+/**
+ * Complete the board: a full no-reuse assignment of 9 game ids, keeping the
+ * player's correct placements (`fixed`) where given. Open/incorrect cells are
+ * filled famous-first (low popularityRank) so the end screen shows answers
+ * people recognise. Deterministic backtracking — no rng.
+ *
+ * Returns null only if no completion extends `fixed` (caller should retry
+ * with no fixed cells — generation guarantees the unconstrained solve).
+ */
+export function solveBoard(
+  board: Board,
+  fixed: ({ gameId: string } | null)[],
+): string[] | null {
+  const idToIndex = new Map(GAMES_DB.map((g, i) => [g.id, i]))
+  const fixedIndices = fixed.map((f) => (f ? (idToIndex.get(f.gameId) ?? -1) : -1))
+  const fixedSet = new Set(fixedIndices.filter((i) => i >= 0))
+
+  const openCells: { cell: number; candidates: number[] }[] = []
+  for (let cell = 0; cell < 9; cell++) {
+    if (fixedIndices[cell] >= 0) continue
+    const candidates = cellCandidates(board.rows[Math.floor(cell / 3)], board.cols[cell % 3])
+      .filter((i) => !fixedSet.has(i))
+      .sort(
+        (a, b) =>
+          (GAMES_DB[a].popularityRank ?? Number.MAX_SAFE_INTEGER) -
+          (GAMES_DB[b].popularityRank ?? Number.MAX_SAFE_INTEGER),
+      )
+    openCells.push({ cell, candidates })
+  }
+  openCells.sort((a, b) => a.candidates.length - b.candidates.length)
+
+  const result = [...fixedIndices]
+  const used = new Set<number>(fixedSet)
+  function fill(k: number): boolean {
+    if (k === openCells.length) return true
+    const { cell, candidates } = openCells[k]
+    for (const i of candidates) {
+      if (used.has(i)) continue
+      used.add(i)
+      result[cell] = i
+      if (fill(k + 1)) return true
+      used.delete(i)
+      result[cell] = -1
+    }
+    return false
+  }
+
+  if (!fill(0)) return null
+  return result.map((i) => GAMES_DB[i].id)
+}
