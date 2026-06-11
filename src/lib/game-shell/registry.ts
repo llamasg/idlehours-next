@@ -75,6 +75,20 @@ export interface ShelfPriceDayState {
   choices: ('left' | 'right')[]
 }
 
+export interface StockRoomDayState {
+  /** 9 cells, row-major; null while open. */
+  cells: ({ gameId: string } | null)[]
+  misses: number
+  guesses: { gameId: string; cell: number; ok: boolean }[]
+  finished: boolean
+  won: boolean
+  score: number
+  /** Mean obscurity (0–100) of the filled answers — style, not competence. */
+  rarity: number
+  startedAt?: number
+  endedAt?: number
+}
+
 export interface BoxSetDayState {
   /** Concept ids of solved groups, in solve order. */
   groupsSolved: string[]
@@ -105,6 +119,9 @@ export const streetDateStore = createDayStore<StreetDateDayState>('street_date_v
 
 // Prefix FROZEN since the first Box Set commit.
 export const boxSetStore = createDayStore<BoxSetDayState>('box_set_')
+
+// Prefix FROZEN since the first Stock Room commit.
+export const stockRoomStore = createDayStore<StockRoomDayState>('stock_room_')
 
 export const shelfPriceStore = createDayStore<ShelfPriceDayState>('shelf_price_v2_', (parsed) => {
   // Migration: add score if missing (old saves; 100 = wrong-answer penalty)
@@ -275,6 +292,38 @@ export const boxSetManifest: DailyGameManifest<BoxSetDayState> = {
   playUrl: (date) => `/play/box-set/${date}`,
 }
 
+export const stockRoomManifest: DailyGameManifest<StockRoomDayState> = {
+  slug: 'stock-room',
+  label: 'Stock Room',
+  emoji: '🛒',
+  // PROVISIONAL — confirm before launch.
+  launchDate: '2026-06-15',
+  storageKeyPrefix: 'stock_room_',
+  dates: makeGameDates('2026-06-15'),
+  theme: GAME_THEME['stock-room'],
+  store: stockRoomStore,
+  loadDayState: (date) => stockRoomStore.load(date),
+  toDayResult(state) {
+    if (!state) return NOT_PLAYED
+    const played = state.guesses.length > 0
+    const rank = state.finished ? getRankForGame('stock-room', state.score, 0) : ''
+    return {
+      played,
+      completed: state.finished,
+      finished: state.finished,
+      // Won = the board was completed (all 9 filled); finishing early with
+      // open cells is a finish, not a win.
+      won: state.won,
+      score: state.score,
+      secondaryStat: state.rarity,
+      rank,
+      archiveRank: rank,
+      scoreDisplay: !played ? '' : state.finished ? `${state.score} pts` : 'In progress',
+    }
+  },
+  playUrl: (date) => `/play/stock-room/${date}`,
+}
+
 // ── Registry ─────────────────────────────────────────────────────────────────
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -283,6 +332,7 @@ export const DAILY_GAMES: DailyGameManifest<any>[] = [
   streetDateManifest,
   shelfPriceManifest,
   boxSetManifest,
+  stockRoomManifest,
 ]
 
 export const MANIFESTS: Record<DailyGameSlug, DailyGameManifest<any>> = {
@@ -290,5 +340,6 @@ export const MANIFESTS: Record<DailyGameSlug, DailyGameManifest<any>> = {
   'street-date': streetDateManifest,
   'shelf-price': shelfPriceManifest,
   'box-set': boxSetManifest,
+  'stock-room': stockRoomManifest,
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */

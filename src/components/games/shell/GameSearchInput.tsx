@@ -1,0 +1,320 @@
+'use client'
+
+import { useState, useRef, useEffect, useCallback, type TouchEvent as ReactTouchEvent } from 'react'
+import { GAMES_DB, type GameEntry } from '@/data/games-db'
+
+// Games-db typeahead — promoted from Game Sense's GuessInput when Stock Room
+// became its second consumer (identity → structural). Fuzzy matching, ghost
+// completion (Tab / ArrowRight / swipe-right accept), keyboard navigation.
+// Per-game flavour comes in via props: placeholder, exclusions, an optional
+// pool filter, famous-first ordering, and the focus ring class.
+
+interface GameSearchInputProps {
+  onSelect: (game: GameEntry) => void
+  /** Ids that cannot be selected (already guessed / already used). */
+  excludeIds?: string[]
+  placeholder?: string
+  /** Optional pool restriction applied before matching. */
+  filter?: (game: GameEntry) => boolean
+  /** Tie-break equal-quality matches by popularityRank (Stock Room). */
+  famousFirst?: boolean
+  disabled?: boolean
+  /** Focus ring class — per-game accent. */
+  ringClassName?: string
+}
+
+// ── Fuzzy matching ──────────────────────────────────────────────────────────
+
+/** Normalize text for fuzzy comparison: lowercase, strip accents, collapse punctuation */
+function normalize(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')  // strip accents (é→e, ü→u)
+    .toLowerCase()
+    .replace(/&/g, 'and')             // & → and
+    .replace(/[:;\-–—]/g, ' ')        // punctuation → space
+    .replace(/['']/g, '')             // remove apostrophes
+    .replace(/\s+/g, ' ')            // collapse whitespace
+    .trim()
+}
+
+function fuzzyMatch(query: string, title: string): boolean {
+  const nq = normalize(query)
+  const nt = normalize(title)
+  if (nt.includes(nq)) return true
+  const words = nq.split(' ')
+  let pos = 0
+  for (const word of words) {
+    const idx = nt.indexOf(word, pos)
+    if (idx === -1) return false
+    pos = idx + word.length
+  }
+  return true
+}
+
+function matchScore(query: string, title: string): number {
+  const nq = normalize(query)
+  const nt = normalize(title)
+  if (nt === nq) return 0
+  if (nt.startsWith(nq)) return 1
+  const idx = nt.indexOf(nq)
+  if (idx >= 0) return 2 + idx
+  return 100
+}
+
+// ── Component ───────────────────────────────────────────────────────────────
+
+export default function GameSearchInput({
+  onSelect,
+  excludeIds = [],
+  placeholder = 'Type a game title...',
+  filter,
+  famousFirst = false,
+  disabled = false,
+  ringClassName = 'focus-within:ring-[hsl(var(--game-blue))]/30',
+}: GameSearchInputProps) {
+  const [query, setQuery] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
+  const [highlightIndex, setHighlightIndex] = useState(0)
+
+  const inputRef = useRef<HTMLInputElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLUListElement>(null)
+  const touchStartX = useRef<number | null>(null)
+  const touchStartY = useRef<number | null>(null)
+
+  const eligible = (g: GameEntry) =>
+    !excludeIds.includes(g.id) && (!filter || filter(g))
+
+  // Filter matches based on what the user actually typed
+  const matches =
+    query.length >= 2
+      ? GAMES_DB.filter((g) => eligible(g) && fuzzyMatch(query, g.title)).sort((a, b) => {
+          const diff = matchScore(query, a.title) - matchScore(query, b.title)
+          if (diff !== 0 || !famousFirst) return diff
+          return (a.popularityRank ?? 999) - (b.popularityRank ?? 999)
+        })
+      : []
+
+  const showDropdown = isOpen && query.length >= 2
+
+  // Ghost suggestion: the highlighted match's title (shown as greyed-out completion)
+  const ghostTitle = showDropdown && matches[highlightIndex] ? matches[highlightIndex].title : ''
+  // Only show ghost if the title starts with the query (case-insensitive)
+  const showGhost = ghostTitle && normalize(ghostTitle).startsWith(normalize(query))
+  // Build the ghost text: user's typed text + the remaining completion in grey
+  const ghostSuffix = showGhost ? ghostTitle.slice(query.length) : ''
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Scroll highlighted item into view
+  useEffect(() => {
+    if (highlightIndex >= 0 && listRef.current) {
+      const items = listRef.current.children
+      if (items[highlightIndex]) {
+        ;(items[highlightIndex] as HTMLElement).scrollIntoView({ block: 'nearest' })
+      }
+    }
+  }, [highlightIndex])
+
+  const submitGuess = useCallback(() => {
+    // Try exact match on query first, then on ghost suggestion
+    const trimmed = query.trim()
+    const exact = GAMES_DB.find(
+      (g) => eligible(g) && normalize(g.title) === normalize(trimmed),
+    )
+    // If no exact match but ghost is showing, try submitting the ghost title
+    const target = exact ?? (ghostTitle ? GAMES_DB.find(
+      (g) => eligible(g) && normalize(g.title) === normalize(ghostTitle),
+    ) : undefined)
+    if (target) {
+      onSelect(target)
+      setQuery('')
+      setIsOpen(false)
+      setHighlightIndex(0)
+      setTimeout(() => inputRef.current?.focus(), 0)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, ghostTitle, excludeIds, filter, onSelect])
+
+  function acceptGhost() {
+    if (ghostTitle) {
+      setQuery(ghostTitle)
+      setIsOpen(false)
+      setHighlightIndex(0)
+    }
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      submitGuess()
+      return
+    }
+
+    if (e.key === 'Escape') {
+      setIsOpen(false)
+      return
+    }
+
+    // Tab: accept ghost suggestion if showing, otherwise cycle highlights
+    if (e.key === 'Tab') {
+      if (!showDropdown || matches.length === 0) return
+      e.preventDefault()
+      if (ghostSuffix) {
+        acceptGhost()
+      } else {
+        setHighlightIndex((prev) => (prev + 1) % matches.length)
+      }
+      return
+    }
+
+    // ArrowRight at end of input: accept ghost suggestion
+    if (e.key === 'ArrowRight') {
+      const input = inputRef.current
+      if (input && input.selectionStart === input.value.length && ghostSuffix) {
+        e.preventDefault()
+        acceptGhost()
+      }
+      return
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (!showDropdown) {
+        setIsOpen(true)
+        return
+      }
+      setHighlightIndex((prev) => (prev < matches.length - 1 ? prev + 1 : 0))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      if (!showDropdown) return
+      setHighlightIndex((prev) => (prev > 0 ? prev - 1 : matches.length - 1))
+    }
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value
+    setQuery(value)
+    setIsOpen(true)
+    setHighlightIndex(0)
+  }
+
+  // Swipe right on input to accept ghost suggestion
+  function handleTouchStart(e: ReactTouchEvent) {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+  }
+  function handleTouchEnd(e: ReactTouchEvent) {
+    if (touchStartX.current === null || touchStartY.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current)
+    touchStartX.current = null
+    touchStartY.current = null
+    // Require horizontal swipe: >60px right, not too vertical
+    if (dx > 60 && dy < 40 && ghostSuffix) {
+      acceptGhost()
+    }
+  }
+
+  return (
+    <div ref={containerRef} className="relative w-full">
+      <form
+        onSubmit={(e) => { e.preventDefault(); submitGuess() }}
+        autoComplete="off"
+        className={`relative flex items-stretch gap-0 rounded-lg border border-[hsl(var(--game-ink))]/15 bg-[hsl(var(--game-cream))] focus-within:ring-2 ${ringClassName}`}
+      >
+        {/* Ghost suggestion layer — sits behind the real input */}
+        <div className="pointer-events-none absolute inset-0 flex items-center px-4 py-3 text-[16px]">
+          <span className="text-transparent">{query}</span>
+          {ghostSuffix && (
+            <span className="text-[hsl(var(--game-ink))]/30">{ghostSuffix}</span>
+          )}
+        </div>
+        <input
+          ref={inputRef}
+          type="text"
+          name="game-guess"
+          value={query}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          onFocus={() => query.length >= 2 && setIsOpen(true)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          placeholder={placeholder}
+          disabled={disabled}
+          autoComplete="one-time-code"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          inputMode="search"
+          enterKeyHint="send"
+          data-1p-ignore=""
+          data-lpignore="true"
+          data-form-type="other"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={showDropdown}
+          className="relative min-w-0 flex-1 rounded-l-lg bg-transparent px-4 py-3 text-[16px] text-[hsl(var(--game-ink))] placeholder:text-[hsl(var(--game-ink-light))] focus:outline-none disabled:opacity-50"
+        />
+        <button
+          type="submit"
+          disabled={disabled || !query.trim()}
+          className="flex w-12 flex-shrink-0 items-center justify-center rounded-r-lg border-l border-[hsl(var(--game-ink))]/15 text-[hsl(var(--game-ink-light))] transition-colors hover:bg-[hsl(var(--game-ink))]/5 hover:text-[hsl(var(--game-ink))] disabled:opacity-30"
+          aria-label="Submit"
+        >
+          <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+          </svg>
+        </button>
+      </form>
+
+      {showDropdown && (
+        <ul
+          ref={listRef}
+          className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-[hsl(var(--game-ink))]/15 bg-white shadow-lg"
+          role="listbox"
+        >
+          {matches.length > 0 ? (
+            matches.map((game, i) => (
+              <li
+                key={game.id}
+                role="option"
+                aria-selected={i === highlightIndex}
+                className={`cursor-pointer px-4 py-2 text-[16px] transition-colors ${
+                  i === highlightIndex
+                    ? 'bg-[hsl(var(--game-blue))]/10 text-[hsl(var(--game-ink))]'
+                    : 'text-[hsl(var(--game-ink-mid))] hover:bg-[hsl(var(--game-blue))]/5 hover:text-[hsl(var(--game-ink))]'
+                }`}
+                onMouseEnter={() => setHighlightIndex(i)}
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  setQuery(game.title)
+                  setIsOpen(false)
+                  setHighlightIndex(0)
+                  setTimeout(() => inputRef.current?.focus(), 0)
+                }}
+              >
+                {game.title}{' '}
+                <span className="opacity-60">({game.year})</span>
+              </li>
+            ))
+          ) : (
+            <li className="px-4 py-2 text-[16px] text-[hsl(var(--game-ink-light))]">
+              No matching games found
+            </li>
+          )}
+        </ul>
+      )}
+    </div>
+  )
+}

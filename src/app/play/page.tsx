@@ -109,6 +109,15 @@ export default function PlayHubPage() {
               imageBg="bg-orange-50"
               btnClass="bg-amber-600"
             />
+            {/* Stock Room — block-out card; copy + artwork pending editorial review */}
+            <PlayGameCard
+              title="Stock Room"
+              subtitle="Fill the grid"
+              description="Nine cells, two criteria each. Name any game that fits both. Easy until you realise you already used Skyrim."
+              href={`/play/stock-room/${getTodayDateString()}`}
+              imageBg="bg-teal-50"
+              btnClass="bg-teal-700"
+            />
           </div>
           <div className="mt-4">
             <DailyBadgeShelf currentGame="game-sense" animateStamp={false} />

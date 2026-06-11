@@ -6,10 +6,12 @@ import {
   getStreetDateRank,
   getShelfPriceRank,
   getBoxSetRank,
+  getStockRoomRank,
   GAME_SENSE_FLAVOUR,
   STREET_DATE_FLAVOUR,
   SHELF_PRICE_FLAVOUR,
   BOX_SET_FLAVOUR,
+  STOCK_ROOM_FLAVOUR,
 } from '@/components/games/GameEndModal.copy'
 
 export interface RankThreshold {
@@ -49,8 +51,16 @@ const BOX_SET_LADDER: RankThreshold[] = [
   { name: "Collector's Edition", label: '1000 pts' },
 ]
 
+const STOCK_ROOM_LADDER: RankThreshold[] = [
+  { name: 'Bust', label: '0 pts' },
+  { name: 'Work Experience', label: '1–333 pts' },
+  { name: 'Shelf Stacker', label: '334–666 pts' },
+  { name: 'Keyholder', label: '667–999 pts' },
+  { name: 'Franchise Owner', label: '1000 pts' },
+]
+
 /** The daily games — rank ladders, badges, and themes exist for these. */
-export type DailyGameSlug = 'game-sense' | 'street-date' | 'shelf-price' | 'box-set'
+export type DailyGameSlug = 'game-sense' | 'street-date' | 'shelf-price' | 'box-set' | 'stock-room'
 
 /** Every game on the site. Type-level prep for the badges/accounts work —
  *  session games have no rank ladder or theme yet. */
@@ -122,6 +132,15 @@ export const GAME_THEME: Record<DailyGameSlug, GameTheme> = {
     worldGradient: 'linear-gradient(155deg, #C8873A, #2b1d0e)',
     statusBarHex: '#C8873A',
   },
+  // Stock Room block-out theme — new --game-teal token, FLAGGED FOR REVIEW
+  'stock-room': {
+    accent: 'hsl(var(--game-teal))', // ≈ #20887E
+    accentDark: '#14544e',
+    shadow: 'rgba(32,136,126,0.35)',
+    confetti: ['#20887E', '#4AB3A8', '#C8873A', '#F0EBE0', '#4A8FE8'],
+    worldGradient: 'linear-gradient(155deg, #20887E, #08201d)',
+    statusBarHex: '#20887E',
+  },
 }
 
 export function getLadderForGame(game: DailyGameSlug): RankThreshold[] {
@@ -130,6 +149,7 @@ export function getLadderForGame(game: DailyGameSlug): RankThreshold[] {
     case 'street-date': return STREET_DATE_LADDER
     case 'shelf-price': return SHELF_PRICE_LADDER
     case 'box-set': return BOX_SET_LADDER
+    case 'stock-room': return STOCK_ROOM_LADDER
   }
 }
 
@@ -139,6 +159,7 @@ export function getRankForGame(game: DailyGameSlug, score: number, streak: numbe
     case 'street-date': return getStreetDateRank(score)
     case 'shelf-price': return getShelfPriceRank(score)
     case 'box-set': return getBoxSetRank(score)
+    case 'stock-room': return getStockRoomRank(score)
   }
 }
 
@@ -148,5 +169,6 @@ export function getFlavourForGame(game: DailyGameSlug): Record<string, string[]>
     case 'street-date': return STREET_DATE_FLAVOUR
     case 'shelf-price': return SHELF_PRICE_FLAVOUR
     case 'box-set': return BOX_SET_FLAVOUR
+    case 'stock-room': return STOCK_ROOM_FLAVOUR
   }
 }

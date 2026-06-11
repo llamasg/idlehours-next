@@ -103,6 +103,22 @@ export const BOX_SET_FLAVOUR: Record<string, string[]> = {
   'Bust': ['Recalled from shelves.', 'The groups got away from you.', "Tomorrow's a fresh box."],
 }
 
+export function getStockRoomRank(score: number) {
+  if (score >= 1000) return 'Franchise Owner'
+  if (score >= 667) return 'Keyholder'
+  if (score >= 334) return 'Shelf Stacker'
+  if (score >= 1) return 'Work Experience'
+  return 'Bust'
+}
+
+export const STOCK_ROOM_FLAVOUR: Record<string, string[]> = {
+  'Franchise Owner': ["It's all yours now.", 'A full board, run clean.', 'Head office is asking how you did it.'],
+  'Keyholder': ['Trusted with the alarm code.', 'Nearly a perfect shift.', 'The stock room respects you.'],
+  'Shelf Stacker': ['Knows every aisle.', 'Solid shift. A few gaps on the shelves.', 'The back room holds no fear.'],
+  'Work Experience': ['Unpaid, but learning.', 'Everyone starts on the shop floor.', "Tomorrow's shift might go better."],
+  'Bust': ['Sent home early.', 'The shelves stay empty today.', 'Stock takes practice.'],
+}
+
 export function getShelfPriceRank(score: number) {
   if (score >= 1000) return 'Head of Sales'
   if (score >= 700) return 'Secret Shopper'

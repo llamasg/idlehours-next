@@ -321,6 +321,7 @@ commit. `/staging` remains the visual reference for tokens + patterns.
 | RulesModal (shell) | games/shell/RulesModal.tsx | how-to-play shell; copy lives per game |
 | PlayableGuard | games/shell/PlayableGuard.tsx | future-date guard |
 | PostGameAnalysisCard (+StatPillRow, CardDivider) | games/shell/PostGameAnalysisCard.tsx | post-game right column card |
+| GameSearchInput | games/shell/GameSearchInput.tsx | games-db typeahead (fuzzy match, ghost completion); per-game flavour via props — consumed by Game Sense (via GuessInput binding) and Stock Room |
 | TodayCard, PlayGameCard, BlitzSection, ShipItSection, JigsawSection | play/ | /play hub cards + sections |
 | JobBoard (+JobColumn, JobCard, JobModal, JobArchive) | jobs/ | internal Kanban |
 
@@ -625,6 +626,10 @@ flag it as stale.
   document-level click interception broke single clicks site-wide
   (buttons needed double clicks). Do not reintroduce a global click
   wrapper; any future spark effect must be opt-in per element.
+- GuessInput (game-sense typeahead, as an identity component) →
+  GameSearchInput in games/shell/ (June 2026, promoted when Stock Room
+  became its second consumer). game-sense/components/GuessInput.tsx
+  remains as a thin binding — game pages keep importing it.
 
 ## Known issues (do not "discover" these — they are known)
 

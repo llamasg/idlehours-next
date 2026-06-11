@@ -29,7 +29,7 @@ const STEP_GAPS = [
 
 // ── Badge rotations per slot position ────────────────────────────────────────
 
-const BADGE_ROTATIONS = ['-3deg', '2deg', '-1deg', '2.5deg']
+const BADGE_ROTATIONS = ['-3deg', '2deg', '-1deg', '2.5deg', '-2deg']
 
 // ── Component ───────────────────────────────────────────────────────────────
 
@@ -107,7 +107,16 @@ export default function DailyBadgeShelf({ currentGame, animateStamp = false }: D
       </div>
 
       {/* Badge row */}
-      <div className={`grid gap-6 ${slots.length === 4 ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'}`}>
+      {/* SHELL LAYOUT QUESTION (flagged for paint): the shelf was designed for
+          3 badges; at 5 it wraps 3+2 on mobile and runs 5-up on sm+. A real
+          5-game layout decision is needed before launch. */}
+      <div className={`grid gap-6 ${
+        slots.length >= 5
+          ? 'grid-cols-3 gap-4 sm:grid-cols-5'
+          : slots.length === 4
+            ? 'grid-cols-2 sm:grid-cols-4'
+            : 'grid-cols-3'
+      }`}>
         {slots.map((slot, slotIndex) => {
           const justCompleted = slot.slug === currentGame && slot.completed
           // Stagger badges 200ms apart within step 3

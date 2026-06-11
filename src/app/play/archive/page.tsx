@@ -25,6 +25,8 @@ const GAME_GRADIENTS: Record<DailyGameSlug, { start: HSL; end: HSL }> = {
   'shelf-price': { start: { h: 246, s: 55, l: 56 }, end: { h: 260, s: 60, l: 16 } },
   // Box Set block-out amber — review with GAME_THEME['box-set']
   'box-set':     { start: { h: 30, s: 55, l: 50 }, end: { h: 28, s: 52, l: 11 } },
+  // Stock Room block-out teal — review with GAME_THEME['stock-room']
+  'stock-room':  { start: { h: 174, s: 62, l: 33 }, end: { h: 172, s: 55, l: 9 } },
 }
 
 const CALENDAR_BG: Record<DailyGameSlug, string> = {
@@ -32,6 +34,7 @@ const CALENDAR_BG: Record<DailyGameSlug, string> = {
   'street-date': '#081e0f',
   'shelf-price': '#1a1040',
   'box-set':     '#2b1d0e',
+  'stock-room':  '#08201d',
 }
 
 function hslStr(c: HSL): string {
