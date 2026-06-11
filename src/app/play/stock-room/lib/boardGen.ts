@@ -89,7 +89,9 @@ function assignmentExists(cells: number[][], rng: () => number): boolean {
 }
 
 export function generateBoard(dateStr: string): Board {
-  const rng = mulberry32(hashDateSeed(`stock-room:${dateStr}`))
+  // Seed namespace bumped to v2 at the arrange-then-check redesign (the v1
+  // playtest board for 2026-06-11 was already seen; fresh boards from here).
+  const rng = mulberry32(hashDateSeed(`stock-room:v2:${dateStr}`))
 
   for (let attempt = 0; attempt < BOARD_ATTEMPTS; attempt++) {
     const pool = shuffled(CRITERIA, rng)
